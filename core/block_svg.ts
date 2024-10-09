@@ -336,7 +336,6 @@ export class BlockSvg
    * May be called more than once.
    */
   initSvg() {
-    if (this.initialized) return;
     for (const input of this.inputList) {
       input.init();
     }
@@ -388,7 +387,6 @@ export class BlockSvg
       this.getParent()?.select();
       return;
     }
-
     if (!this.inActiveModule()) return;
 
     this.addSelect();
@@ -809,7 +807,8 @@ export class BlockSvg
     // display parent context menu for argument local
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const block = this;
-    // @ts-ignore:next-line
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (this.parentBlock_ && this.isShadow_ && !isShadowArgumentLocal(block)) {
       this.parentBlock_.showContextMenu(e);
       return;
@@ -1305,9 +1304,9 @@ export class BlockSvg
 
       this.tempRootDiv = document.createElement('div') as HTMLElement;
       this.tempRootDiv.classList.add('blocklyTempBlockRoot');
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`;
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`;
 
       const tempSVGRoot = document.createElementNS(
@@ -1327,12 +1326,12 @@ export class BlockSvg
       this.previousNextSibling = this.getSvgRoot().nextSibling;
       tempSVGRoot.appendChild(this.getSvgRoot());
 
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.tempRootDiv.onmouseleave = () => {
         this.backToWorkspace();
       };
 
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.tempRootDiv.onwheel = () => {
         this.backToWorkspace();
       };
@@ -1882,7 +1881,7 @@ export class BlockSvg
     // Clear pending warnings.
     if (this.warningTextDb) {
       for (const n in this.warningTextDb) {
-        // @ts-ignore:next-line
+        // @ts-expect-error:next-line
         clearTimeout(this.warningTextDb[n]);
       }
       this.warningTextDb = new Map<string, ReturnType<typeof setTimeout>>();

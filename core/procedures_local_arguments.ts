@@ -82,12 +82,14 @@ export function allProcedures(
   const proceduresLocalNoReturn = root
     .getBlocksByType('procedures_with_argument_defnoreturn', false)
     .map(function (block: Block) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       return block.getProcedureDef();
     });
   const proceduresLocalReturn = root
     .getBlocksByType('procedures_with_argument_defreturn', false)
     .map(function (block: Block) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       return block.getProcedureDef();
     });
@@ -283,8 +285,10 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     templateName: string,
   ) {
     for (let i = 0; i < procedureList.length; i++) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       const name = procedureList[i][0];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       const args = procedureList[i][1];
       // <block type="procedures_callnoreturn" gap="16">
@@ -400,8 +404,10 @@ export function updateFlyout(e: Abstract) {
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore:next-line
   const workspaceId = e.workspaceId;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore:next-line
   const workspace = common.getWorkspaceById(workspaceId)! as WorkspaceSvg;
 

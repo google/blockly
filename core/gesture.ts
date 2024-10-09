@@ -35,13 +35,11 @@ import {isShadowArgumentLocal} from './utils/argument_local.js';
 import {Block} from './block.js';
 import * as Events from '../core/events/events.js';
 import {FieldLabelHover} from './field_label_hover.js';
-import {Workspace} from './workspace.js';
 import * as Xml from './xml.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import * as registry from './registry.js';
 import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
 import {RenderedWorkspaceComment} from './comments.js';
-
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -1041,7 +1039,11 @@ export class Gesture {
         !block.isInFlyout &&
         isShadowArgumentLocal(block);
 
-      common.setSelected(this.startBlock);
+      if (this.shouldDuplicateOnDrag_) {
+        this.duplicateOnDrag_(this.startBlock);
+      } else {
+        common.setSelected(this.startBlock);
+      }
 
       if (block.isInFlyout && block !== block.getRootBlock()) {
         this.setTargetBlock(block.getRootBlock());
@@ -1202,38 +1204,32 @@ export class Gesture {
    * Duplicate the target block and start dragging the duplicated block.
    * This should be done once we are sure that it is a block drag, and no earlier.
    * Specifically for argument reporters in custom block defintions.
-   * @private
    */
-  duplicateOnDrag_() {
-    if (!this.targetBlock) {
-      return;
-    }
+  duplicateOnDrag_(block?: BlockSvg) {
+    if (!this.targetBlock && !block) return;
 
     let newBlock = null;
+    const sourceBlock = this.targetBlock || block!;
+    const workspace = sourceBlock.workspace;
+
     Events.disable();
 
     try {
       // Note: targetBlock_ should have no children.
-      this.startWorkspace_?.setResizesEnabled(false);
+      workspace.setResizesEnabled(false);
 
-      const xmlBlock = Xml.blockToDom(this.targetBlock);
+      const xmlBlock = Xml.blockToDom(sourceBlock);
       if (
-        this.targetBlock.inputList[0] &&
-        this.targetBlock.inputList[0].fieldRow[0] &&
-        (this.targetBlock.inputList[0].fieldRow[0] as FieldLabelHover)
-          .clearHover
+        sourceBlock.inputList[0] &&
+        sourceBlock.inputList[0].fieldRow[0] &&
+        (sourceBlock.inputList[0].fieldRow[0] as FieldLabelHover).clearHover
       ) {
-        (
-          this.targetBlock.inputList[0].fieldRow[0] as FieldLabelHover
-        ).clearHover();
+        (sourceBlock.inputList[0].fieldRow[0] as FieldLabelHover).clearHover();
       }
-      newBlock = Xml.domToBlock(
-        xmlBlock as Element,
-        this.startWorkspace_ as Workspace,
-      );
+      newBlock = Xml.domToBlock(xmlBlock as Element, workspace);
 
       // Move the duplicate to original position.
-      const xy = this.targetBlock.getRelativeToSurfaceXY();
+      const xy = sourceBlock.getRelativeToSurfaceXY();
       newBlock.moveBy(xy.x, xy.y);
       newBlock.setShadow(false);
       newBlock.setMovable(true);
@@ -1248,8 +1244,9 @@ export class Gesture {
     if (Events.isEnabled()) {
       Events.fire(new Events.BlockCreate(newBlock));
     }
-    (newBlock as BlockSvg).select();
-    this.targetBlock = newBlock as BlockSvg;
+
+    this.setTargetBlock(newBlock as BlockSvg);
+    common.setSelected(newBlock as BlockSvg);
   }
 
   /**

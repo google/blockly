@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Serialized label field.  Behaves like a normal label but is
+ * @file Serialized label field.  Behaves like a normal label but is
  *     always serialized to XML.  It may only be edited programmatically.
  * @author fenichel@google.com (Rachel Fenichel)
  */
@@ -36,9 +36,10 @@ import {BlockSvg} from './block_svg';
 
 /**
  * Non-editable, serializable text field. Behaves like a
- *    normal label but is serialized to XML. It may only be
- *    edited programmatically.
- * @extends {Blockly.FieldLabel}
+ * normal label but is serialized to XML. It may only be
+ * edited programmatically.
+ *
+ * @augments {Blockly.FieldLabel}
  * @alias Blockly.FieldLabelHover
  */
 export class FieldLabelHover extends FieldLabel {
@@ -49,6 +50,7 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Class for a variable getter field.
+   *
    * @param {string} text The initial content of the field.
    * @param {string} opt_class Optional CSS class for the field's text.
    */
@@ -63,6 +65,7 @@ export class FieldLabelHover extends FieldLabel {
     /**
      * Editable fields usually show some sort of UI for the user to change them.
      * This field should be serialized, but only edited programmatically.
+     *
      * @type {boolean}
      * @public
      */
@@ -71,6 +74,7 @@ export class FieldLabelHover extends FieldLabel {
     /**
      * Serializable fields are saved by the XML renderer, non-serializable fields
      * are not.  This field should be serialized, but only edited programmatically.
+     *
      * @type {boolean}
      * @public
      */
@@ -103,6 +107,7 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Handle a mouse over event on a input field.
+   *
    * @param {!Event} e Mouse over event.
    * @private
    */
@@ -114,17 +119,18 @@ export class FieldLabelHover extends FieldLabel {
       e as PointerEvent,
     );
     if (gesture && gesture.isDragging()) return;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     if (this.sourceBlock_?.pathObject.svgPath) {
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       dom.addClass(this.sourceBlock_?.pathObject.svgPath, 'editing');
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.sourceBlock_.pathObject.svgPath.style.strokeDasharray = '2';
     }
   }
 
   /**
    * Clear hover effect on the block
+   *
    * @param {!Event} e Clear hover effect
    */
   clearHover() {
@@ -140,7 +146,8 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Get the text from this field, which is the selected name.
-   * @return {string} The selected name, or value.
+   *
+   * @returns {string} The selected name, or value.
    */
   getText(): string {
     return this.name_ || this.getValue() || ' ';
@@ -148,6 +155,7 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Set the new text on field, which is the selected name.
+   *
    * @param {string} text New text.
    */
   setText(text: Text) {
@@ -160,6 +168,7 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Handle a mouse out event on a input field.
+   *
    * @param {!Event} e Mouse out event.
    * @private
    */
@@ -174,9 +183,10 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Serialize this field to XML.
+   *
    * @param {!Element} fieldElement The element to populate with info about the
    *    field's state.
-   * @return {!Element} The element containing info about the field's state.
+   * @returns {!Element} The element containing info about the field's state.
    */
   toXml(fieldElement: Element) {
     const value = this.getValue() || '';
@@ -187,6 +197,7 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Initialize this field based on the given XML.
+   *
    * @param {!Element} fieldElement The element containing information about the
    *    field's state.
    */
@@ -207,6 +218,7 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Dispose of this field.
+   *
    * @public
    */
   dispose() {
@@ -223,6 +235,7 @@ export class FieldLabelHover extends FieldLabel {
 
   /**
    * Updates text field to match the colour/style of the block.
+   *
    * @package
    */
   applyColour() {
@@ -233,23 +246,23 @@ export class FieldLabelHover extends FieldLabel {
 
     (this.sourceBlock_ as BlockSvg).pathObject.svgPath.setAttribute(
       'fill',
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.sourceBlock_?.style.colourPrimary,
     );
     if (renderer.name === 'geras') {
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.sourceBlock_.pathObject.svgPathLight.setAttribute(
         'stroke',
-        // @ts-ignore:next-line
+        // @ts-expect-error:next-line
         this.sourceBlock_.style.colourTertiary,
       );
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.sourceBlock_.pathObject.svgPathDark.setAttribute(
         'fill',
-        // @ts-ignore:next-line
+        // @ts-expect-error:next-line
         this.sourceBlock_.style.colourTertiary,
       );
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.sourceBlock_.pathObject.svgPathLight.style.display = 'inline';
     }
   }

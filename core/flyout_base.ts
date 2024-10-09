@@ -281,6 +281,7 @@ export abstract class Flyout
   /**
    * Disable mouse events above flyout. It's needed for prevent bugs when user
    * dragging resizer or move some block above flyout
+   *
    * @type {boolean}
    */
   protected disableBlocksMouseEvents = false;
@@ -348,8 +349,9 @@ export abstract class Flyout
 
     /**
      * Margin before first block or button in flyout
+     *
      * @type {number}
-     * @const
+     * @constant
      */
     this.START_MARGIN = 60;
 
@@ -370,6 +372,7 @@ export abstract class Flyout
 
     /**
      * The SVG group containt close flyout button.
+     *
      * @type {?SVGElement}
      * @private
      */
@@ -377,13 +380,15 @@ export abstract class Flyout
 
     /**
      * Width SVG group closeButtonSVG_.
+     *
      * @type {number}
-     * @const
+     * @constant
      */
     this.WIDTH_CLOSE_BUTTON = 40;
 
     /**
      * Mouse down on closeButtonSVG_ event data.
+     *
      * @type {?browserEvents.Data}
      * @private
      */
@@ -677,6 +682,7 @@ export abstract class Flyout
 
   /**
    * The function to be called when close button is clicked.
+   *
    * @private
    */
   onCloseHandler_() {
@@ -685,6 +691,7 @@ export abstract class Flyout
 
   /**
    * Create close button for flyout.
+   *
    * @protected
    */
   createCloseButton_() {
@@ -699,14 +706,16 @@ export abstract class Flyout
 
     const flyoutSVG = this.workspace_.getParentSvg();
     const flyoutParentEl = flyoutSVG.parentElement;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore:next-line
     const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore:next-line
     const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
 
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const top = flyoutClientRect.top - flyoutParentClientRect?.top;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const left = flyoutClientRect.right - flyoutParentClientRect?.left;
 
     this.closeButtonSVG_.style.top = `${top}px`;
@@ -785,15 +794,15 @@ export abstract class Flyout
 
     const flyoutClientRect = flyoutSVG.getBoundingClientRect();
     const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const top = flyoutClientRect.top - flyoutParentClientRect?.top;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const left = flyoutClientRect.right - flyoutParentClientRect?.left - 10; // 10px width of shadow, see css.js
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     this.flyoutEndShadowDiv_.style.top = `${top}px`;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     this.flyoutEndShadowDiv_.style.left = `${left}px`;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     this.flyoutEndShadowDiv_.style.height = `${flyoutSVG.getBBox().height}px`;
 
     // insert close button after the flyout svg
@@ -827,18 +836,18 @@ export abstract class Flyout
     const flyoutClientRect = flyoutSVG.getBoundingClientRect();
     const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
 
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const top = flyoutClientRect.top - flyoutParentClientRect.top;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const left = flyoutClientRect.left - flyoutParentClientRect.left;
 
     this.flyoutTopPanel_ = document.createElement('div');
     this.flyoutTopPanel_.classList.add('blocklyFlyoutZoomControlContainer');
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     this.flyoutTopPanel_.style.top = `${top}px`;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     this.flyoutTopPanel_.style.left = `${left}px`;
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     this.flyoutTopPanel_.style.width = `${this.width_}px`;
 
     // insert close button after the flyout svg
@@ -989,12 +998,13 @@ export abstract class Flyout
   resizeZoomControls_() {
     if (!this.flyoutTopPanel_) return;
 
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     this.flyoutTopPanel_.style.width = `${this.width_}px`;
   }
 
   /**
    * zoomIn_
+   *
    * @param {Event} e event
    */
   zoomIn_(e: Event) {
@@ -1014,6 +1024,7 @@ export abstract class Flyout
 
   /**
    * zoomOut_
+   *
    * @param {Event} e event
    */
   zoomOut_(e: Event) {
@@ -1522,6 +1533,7 @@ export abstract class Flyout
 
   /**
    * blockMouseEnter_
+   *
    * @param {!Event} e event
    * @param {!BlockSvg} block The flyout block
    */
@@ -1535,6 +1547,7 @@ export abstract class Flyout
 
   /**
    * blockMouseLeave_
+   *
    * @param {!BlockSvg} block The flyout block
    */
   blockMouseLeave_(block: BlockSvg) {

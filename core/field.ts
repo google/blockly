@@ -389,7 +389,7 @@ export abstract class Field<T = any>
       },
       this.fieldGroup_,
     );
-    if (this.getConstants()!.FIELD_TEXT_BASELINE_CENTER) {
+    if (this.getConstants()?.FIELD_TEXT_BASELINE_CENTER) {
       this.textElement_.setAttribute('dominant-baseline', 'central');
     }
     this.textContent_ = document.createTextNode('');

@@ -13,9 +13,10 @@
 import * as dialog from '../core/dialog.js';
 import * as Extensions from '../core/extensions.js';
 import * as Events from '../core/events/events.js';
+import type {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import {Msg} from '../core/msg.js';
 import {defineBlocks} from '../core/common.js';
-import {BLOCK_MOVE} from '../core/events/utils.js';
+import type {WorkspaceSvg} from '../core/workspace_svg.js';
 import {BlockDefinition} from '../core/blocks';
 import {Block} from '../core/block';
 import {
@@ -55,7 +56,6 @@ const ARGUMENT_LOCAL = {
     newName: string,
     isRenameValue: boolean,
   ) {
-    console.log('rename filed', block, newName, isRenameValue);
     if (isRenameValue) {
       block.setFieldValue(newName, 'VALUE');
     }
@@ -70,7 +70,6 @@ const ARGUMENT_LOCAL = {
     newName: string,
     parentBlock: Block | null,
   ) {
-    console.log(`changeArgumentName`, this, newName);
     const argumentField = this.getField('VALUE');
     const argumentFieldText = argumentField?.getText();
 
@@ -121,23 +120,33 @@ blocks['argument_local'] = {
       'extensions': ['contextMenu'],
     });
   },
-  onchange: function (event: Event) {
-    if (event.type !== BLOCK_MOVE) {
+  onchange: function (this: ArgumentLocalBlock, event: AbstractEvent) {
+    if (event.type !== Events.BLOCK_MOVE) {
       return;
     }
 
-    if (!this.workspace.isDragging || this.workspace.isDragging()) {
+    if (
+      ((this.workspace as WorkspaceSvg).isDragging &&
+        (this.workspace as WorkspaceSvg).isDragging()) ||
+      (event.type !== Events.BLOCK_MOVE && event.type !== Events.BLOCK_CREATE)
+    ) {
       return; // Don't change state at the start of a drag.
     }
 
-    let enable = true;
+    let legal = false;
+    // Is the block nested in a procedure?
+    let block = this; // eslint-disable-line @typescript-eslint/no-this-alias
 
-    if (!this.getParent()) {
-      enable = false;
-    }
+    do {
+      if (blockTypesRenameValue.includes(block.type)) {
+        legal = true;
+        break;
+      }
+      block = block.getSurroundParent()!;
+    } while (block);
 
     Events.disable();
-    if (enable) {
+    if (legal) {
       this.setEnabled(true);
     } else {
       if (!this.isInFlyout && !this.getInheritedDisabled()) {
@@ -173,10 +182,7 @@ const CUSTOM_CONTEXT_MENU = {
       return;
     }
 
-    // Disable rename variable with context menu for procedures block.
-    const block = this;
-
-    const parentBlock = block.getParent();
+    const parentBlock = this.getParent();
     if (
       parentBlock &&
       (parentBlock.type === 'procedures_with_argument_defnoreturn' ||

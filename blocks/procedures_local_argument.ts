@@ -269,29 +269,26 @@ const PROCEDURES_WITH_ARGUMENT = {
       return;
     }
 
-    for (
-      let i = 0, argumentBlock: ArgumentLocalBlock;
-      // @ts-ignore:next-line
-      (argumentBlock = argumentsInProcedures[i] as ArgumentLocalBlock);
-      i++
-    ) {
+    for (let i = 0; i < argumentsInProcedures.length; i++) {
       const argumentShouldRename = shouldRename.find(
-        (a) => a.id === argumentBlock.data,
+        (a) => a.id === argumentsInProcedures[i].data,
       );
+
       if (shouldRename.length && argumentShouldRename) {
-        const parentBlock = argumentBlock.getRootBlock();
-        argumentBlock.changeArgumentName.call(
-          argumentBlock,
+        const parentBlock = argumentsInProcedures[i].getRootBlock();
+        argumentsInProcedures[i].changeArgumentName.call(
+          argumentsInProcedures[i],
           argumentShouldRename.name || '',
           parentBlock,
         );
       }
 
       const argumentShouldRemove = shouldRemove.find(
-        (f) => f.id === argumentBlock.data,
+        (f) => f.id === argumentsInProcedures[i].data,
       );
+
       if (shouldRemove.length && argumentShouldRemove) {
-        argumentBlock.dispose(false);
+        argumentsInProcedures[i].dispose(false);
       }
     }
   },
@@ -365,10 +362,10 @@ const PROCEDURES_WITH_ARGUMENT = {
     this.updatedArguments_ = [];
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === 'arg') {
-        // @ts-ignore:next-line
+        // @ts-expect-error:next-line
         const varName = childNode.getAttribute('name');
         const varId =
-          // @ts-ignore:next-line
+          // @ts-expect-error:next-line
           childNode.getAttribute('varid') || childNode.getAttribute('varId');
         if (varName !== null && varId !== null) {
           this.arguments_.push(varName);
@@ -1053,8 +1050,10 @@ const PROCEDURE_CALL_COMMON = {
     const paramIds = [];
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === 'arg') {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore:next-line
         args.push(childNode.getAttribute('name'));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore:next-line
         paramIds.push(childNode.getAttribute('varid'));
       }
@@ -1242,6 +1241,7 @@ const PROCEDURE_CALL_COMMON = {
               def = workspace.getBlockById(def.id);
             }
           }
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore:next-line
           (workspace as WorkspaceSvg).centerOnBlock(def.id);
           (def as BlockSvg).select();

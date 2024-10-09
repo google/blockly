@@ -743,7 +743,9 @@ export class Toolbox
         : workspace.scrollX;
     const newY =
       this.toolboxPosition === toolbox.Position.TOP
-        ? workspace.scrollY + rect.height
+        ? workspace.scrollY +
+          rect.height +
+          (flyout?.isVisible() ? flyout.getHeight() : 0)
         : workspace.scrollY;
     workspace.translate(newX, newY);
 

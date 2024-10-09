@@ -372,10 +372,6 @@ export class Gesture {
     draggable: IDraggable,
     workspace: WorkspaceSvg,
   ): IDragger {
-    if (this.shouldDuplicateOnDrag_) {
-      this.duplicateOnDrag_();
-    }
-
     const DraggerClass = registry.getClassFromOptions(
       registry.Type.BLOCK_DRAGGER,
       this.creatorWorkspace.options,
@@ -1205,12 +1201,9 @@ export class Gesture {
    * This should be done once we are sure that it is a block drag, and no earlier.
    * Specifically for argument reporters in custom block defintions.
    */
-  duplicateOnDrag_(block?: BlockSvg) {
-    if (!this.targetBlock && !block) return;
-
+  duplicateOnDrag_(block: BlockSvg) {
     let newBlock = null;
-    const sourceBlock = this.targetBlock || block!;
-    const workspace = sourceBlock.workspace;
+    const workspace = block.workspace;
 
     Events.disable();
 
@@ -1218,18 +1211,18 @@ export class Gesture {
       // Note: targetBlock_ should have no children.
       workspace.setResizesEnabled(false);
 
-      const xmlBlock = Xml.blockToDom(sourceBlock);
+      const xmlBlock = Xml.blockToDom(block);
       if (
-        sourceBlock.inputList[0] &&
-        sourceBlock.inputList[0].fieldRow[0] &&
-        (sourceBlock.inputList[0].fieldRow[0] as FieldLabelHover).clearHover
+        block.inputList[0] &&
+        block.inputList[0].fieldRow[0] &&
+        (block.inputList[0].fieldRow[0] as FieldLabelHover).clearHover
       ) {
-        (sourceBlock.inputList[0].fieldRow[0] as FieldLabelHover).clearHover();
+        (block.inputList[0].fieldRow[0] as FieldLabelHover).clearHover();
       }
       newBlock = Xml.domToBlock(xmlBlock as Element, workspace);
 
       // Move the duplicate to original position.
-      const xy = sourceBlock.getRelativeToSurfaceXY();
+      const xy = block.getRelativeToSurfaceXY();
       newBlock.moveBy(xy.x, xy.y);
       newBlock.setShadow(false);
       newBlock.setMovable(true);

@@ -154,7 +154,11 @@ const PROCEDURES_WITH_ARGUMENT = {
         if (saveInfo) {
           const block = saveInfo['block'];
           if (block && block.isShadow()) {
-            block.dispose(false);
+            try {
+              block.dispose(true);
+            } catch {
+              //
+            }
             delete connectionMap[id];
           }
         }
@@ -197,7 +201,7 @@ const PROCEDURES_WITH_ARGUMENT = {
    * @private
    * @this Block
    */
-  buildArgumentBlock_: function (name: string, argId: string) {
+  buildArgumentBlock_: function (name: string, argId: string): Element {
     const block = xmlUtils.createElement('shadow');
     block.setAttribute('type', 'argument_local');
 

@@ -52,7 +52,7 @@ export class CommentView implements IRenderedElement {
   private textArea: HTMLTextAreaElement;
 
   /** The current size of the comment in workspace units. */
-  private size: Size = new Size(120, 100);
+  private size: Size;
 
   /** Whether the comment is collapsed or not. */
   private collapsed: boolean = false;
@@ -102,6 +102,9 @@ export class CommentView implements IRenderedElement {
   /** Size of this comment when the resize drag was initiated. */
   private preResizeSize?: Size;
 
+  /** The default size of newly created comments. */
+  static defaultCommentSize = new Size(120, 100);
+
   constructor(private readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable blocklyDraggable',
@@ -128,6 +131,7 @@ export class CommentView implements IRenderedElement {
     workspace.getLayerManager()?.append(this, layers.BLOCK);
 
     // Set size to the default size.
+    this.size = CommentView.defaultCommentSize;
     this.setSizeWithoutFiringEvents(this.size);
 
     // Set default transform (including inverted scale for RTL).

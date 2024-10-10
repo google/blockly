@@ -11,6 +11,7 @@ import * as idGenerator from '../utils/idgenerator.js';
 import * as eventUtils from '../events/utils.js';
 import {CommentMove} from '../events/events_comment_move.js';
 import {CommentResize} from '../events/events_comment_resize.js';
+import {CommentView} from './comment_view.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -20,7 +21,7 @@ export class WorkspaceComment {
   private text = '';
 
   /** The size of the comment in workspace units. */
-  private size = new Size(120, 100);
+  private size: Size;
 
   /** Whether the comment is collapsed or not. */
   private collapsed = false;
@@ -55,6 +56,7 @@ export class WorkspaceComment {
     id?: string,
   ) {
     this.id = id && !workspace.getCommentById(id) ? id : idGenerator.genUid();
+    this.size = CommentView.defaultCommentSize;
 
     workspace.addTopComment(this);
 

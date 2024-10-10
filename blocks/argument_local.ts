@@ -155,6 +155,7 @@ blocks['argument_local'] = {
     }
     Events.enable();
   },
+  ...ARGUMENT_LOCAL,
 };
 
 /**

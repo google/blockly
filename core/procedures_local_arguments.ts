@@ -232,8 +232,8 @@ export function rename(this: Field, name: string): string {
 /**
  * Construct the blocks required by the flyout for the procedure category.
  *
- * @param {!WorkspaceSvg} workspace The workspace containing procedures.
- * @returns {!Array<!Element>} Array of XML block elements.
+ * @param workspace The workspace containing procedures.
+ * @returns Array of XML block elements.
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   const xmlList = [];
@@ -285,11 +285,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     templateName: string,
   ) {
     for (let i = 0; i < procedureList.length; i++) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore:next-line
       const name = procedureList[i][0];
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore:next-line
       const args = procedureList[i][1];
       // <block type="procedures_callnoreturn" gap="16">
       //   <mutation name="do something">
@@ -312,7 +308,6 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
       xmlList.push(block);
     }
   }
-
   const tuple = allProcedures(workspace);
   populateProcedures(tuple[0], 'procedures_with_argument_callnoreturn');
   populateProcedures(tuple[1], 'procedures_with_argument_callreturn');
@@ -350,7 +345,6 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
   nameField.appendChild(fieldContent);
   argBlock.appendChild(nameField);
   xmlElement.appendChild(argBlock);
-
   workspace.updateToolbox(xmlElement);
 }
 
@@ -404,12 +398,8 @@ export function updateFlyout(e: Abstract) {
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore:next-line
-  const workspaceId = e.workspaceId;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore:next-line
-  const workspace = common.getWorkspaceById(workspaceId)! as WorkspaceSvg;
+  const workspaceId = e.workspaceId as string;
+  const workspace = common.getWorkspaceById(workspaceId) as WorkspaceSvg;
 
   if (!workspace || !workspace.getToolbox()) {
     return;

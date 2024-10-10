@@ -1038,6 +1038,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * flyoutListener
+   *
    * @param {Event} event flyout event
    */
   flyoutListener(event: Abstract) {
@@ -1069,7 +1070,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Getter for the moduleBar associated with this workspace, if one exists.
-   * @return {ModuleBar} The moduleBar on this workspace.
+   *
+   * @returns {ModuleBar} The moduleBar on this workspace.
    * @package
    */
   getModuleBar() {

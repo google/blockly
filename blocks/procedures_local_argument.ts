@@ -320,10 +320,6 @@ const PROCEDURES_WITH_ARGUMENT = {
    * Create XML to represent the argument inputs.
    * Backwards compatible serialization implementation.
    *
-   * @param {boolean=} optParamIds If true include the IDs of the parameter
-   *     quarks.  Used by Blockly.ProceduresLocalArgument.mutateCallers for reconnection.
-   * @returns {!Element} XML storage element.
-   * @this {Block}
    */
   mutationToDom: function (
     this: ProceduresLocalArgumentsBlock,
@@ -585,7 +581,7 @@ const PROCEDURES_WITH_ARGUMENT = {
    * @this {Block}
    */
   customContextMenu: function (
-    this: CallBlock,
+    this: ProceduresLocalArgumentsBlock,
     options: Array<ContextMenuOption | LegacyContextMenuOption>,
   ) {
     if (this.isInFlyout) {
@@ -604,7 +600,7 @@ const PROCEDURES_WITH_ARGUMENT = {
       xmlMutation.appendChild(xmlArg);
     }
     const xmlBlock = xmlUtils.createElement('block');
-    xmlBlock.setAttribute('type', this.defType_);
+    xmlBlock.setAttribute('type', this.callType_);
     xmlBlock.appendChild(xmlMutation);
     option.callback = ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
@@ -613,11 +609,6 @@ const PROCEDURES_WITH_ARGUMENT = {
   /**
    * Return the signature of this procedure definition.
    *
-   * @returns {!Array} Tuple containing three elements:
-   *     - the name of the defined procedure,
-   *     - a list of all its arguments,
-   *     - that it DOES NOT have a return value.
-   * @this {Block}
    */
   getProcedureDef: function (this: ProceduresLocalArgumentsBlock) {
     return [this.getFieldValue('NAME'), this.arguments_, false];
@@ -835,9 +826,6 @@ type CallExtraState = {
 const PROCEDURE_CALL_COMMON = {
   /**
    * Returns the name of the procedure this block calls.
-   *
-   * @returns {string} Procedure name.
-   * @this {Block}
    */
   getProcedureCall: function (this: CallBlock) {
     // The NAME field is guaranteed to exist, null will never be returned.
@@ -867,12 +855,10 @@ const PROCEDURE_CALL_COMMON = {
   /**
    * Notification that the procedure's parameters have changed.
    *
-   * @param {!Array<string>} paramNames New param names, e.g. ['x', 'y', 'z'].
-   * @param {!Array<string>} paramIds IDs of params (consistent for each
+   * @param paramNames New param names, e.g. ['x', 'y', 'z'].
+   * @param paramIds IDs of params (consistent for each
    *     parameter through the life of a mutator, regardless of param renaming),
    *     e.g. ['piua', 'f8b_', 'oi.o'].
-   * @private
-   * @this {Block}
    */
   setProcedureParameters_: function (
     this: CallBlock,
@@ -897,11 +883,8 @@ const PROCEDURE_CALL_COMMON = {
     if (!mutatorOpen) {
       this.quarkConnections_ = {};
       this.quarkIds_ = null;
-    } else {
-      // fix #6091 - this call could cause an error when outside if-else
-      // expanding block while mutating prevents another error (ancient fix)
-      this.setCollapsed(false);
     }
+
     if (!paramIds) {
       // Reset the quarks (a mutator is about to open).
       return;
@@ -922,8 +905,6 @@ const PROCEDURE_CALL_COMMON = {
       this.quarkConnections_ = {};
       this.quarkIds_ = [];
     }
-    // Switch off rendering while the block is rebuilt.
-    this.dispose(false);
     // Update the quarkConnections_ with existing connections.
     for (let i = 0; i < this.arguments_.length; i++) {
       const input = this.getInput('ARG' + i);
@@ -933,7 +914,7 @@ const PROCEDURE_CALL_COMMON = {
         if (
           mutatorOpen &&
           connection &&
-          paramIds.indexOf(this.quarkIds_[i]) === -1
+          !paramIds.includes(this.quarkIds_[i])
         ) {
           // This connection should no longer be attached to this block.
           connection.disconnect();
@@ -967,11 +948,6 @@ const PROCEDURE_CALL_COMMON = {
         }
       }
     }
-    // // Restore rendering and show the changes.
-    // this.rendered = savedRendered;
-    // if (this.rendered) {
-    //   this.render();
-    // }
   },
   /**
    * Modify this block to have the correct number of arguments.
@@ -1024,8 +1000,6 @@ const PROCEDURE_CALL_COMMON = {
    * Create XML to represent the (non-editable) name and arguments.
    * Backwards compatible serialization implementation.
    *
-   * @returns {!Element} XML storage element.
-   * @this {Block}
    */
   mutationToDom: function (this: CallBlock) {
     const container = xmlUtils.createElement('mutation');
@@ -1043,9 +1017,6 @@ const PROCEDURE_CALL_COMMON = {
   /**
    * Parse XML to restore the (non-editable) name and parameters.
    * Backwards compatible serialization implementation.
-   *
-   * @param {!Element} xmlElement XML storage element.
-   * @this {Block}
    */
   domToMutation: function (this: CallBlock, xmlElement: Element) {
     const name = xmlElement.getAttribute('name') || '';
@@ -1054,12 +1025,8 @@ const PROCEDURE_CALL_COMMON = {
     const paramIds = [];
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === 'arg') {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore:next-line
-        args.push(childNode.getAttribute('name'));
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore:next-line
-        paramIds.push(childNode.getAttribute('varid'));
+        args.push((childNode as Element).getAttribute('name')!);
+        paramIds.push((childNode as Element).getAttribute('varid')!);
       }
     }
     this.setProcedureParameters_(args, paramIds);
@@ -1067,8 +1034,6 @@ const PROCEDURE_CALL_COMMON = {
   /**
    * Returns the state of this block as a JSON serializable object.
    *
-   * @returns {{name: string, params:(!Array<string>|undefined)}} The state of
-   *     this block, ie the params and procedure name.
    */
   saveExtraState: function (this: CallBlock): CallExtraState {
     const state = Object.create(null);

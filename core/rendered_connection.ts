@@ -114,12 +114,12 @@ export class RenderedConnection extends Connection {
   }
 
   /**
-   * Move the block(s) associated with either this connection or the provided
-   * connection such that there is a visually clear gap between them.
+   * Move the block(s) belonging to the connection to a point where they don't
+   * visually interfere with the specified connection.
    *
-   * @param superiorConnection The other connection. The provided connection
-   *     should be the superior connection and should not be connected to this
-   *     connection.
+   * @param superiorConnection The connection to move away from. The provided
+   *     connection should be the superior connection and should not be
+   *     connected to this connection.
    * @param initiatedByThis Whether or not the block group that was manipulated
    *     recently causing bump checks is associated with the inferior
    *     connection. Defaults to false.

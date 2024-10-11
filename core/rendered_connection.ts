@@ -120,9 +120,15 @@ export class RenderedConnection extends Connection {
    * @param superiorConnection The other connection. The provided connection
    *     should be the superior connection and should not be connected to this
    *     connection.
+   * @param initiatedByThis Whether or not the block group that was manipulated
+   *     recently causing bump checks is associated with the inferior
+   *     connection. Defaults to false.
    * @internal
    */
-  bumpAwayFrom(superiorConnection: RenderedConnection) {
+  bumpAwayFrom(
+    superiorConnection: RenderedConnection,
+    initiatedByThis = false,
+  ) {
     if (this.sourceBlock_.workspace.isDragging()) {
       // Don't move blocks around while the user is doing the same.
       return;
@@ -148,35 +154,27 @@ export class RenderedConnection extends Connection {
         // Neither block is movable, abort operation.
         return;
       } else {
-        // Only the superior block is movable.
+        // Only the superior block group is movable.
         moveInferior = false;
-        // The superior block moves in the opposite direction.
+        // The superior block group moves in the opposite direction.
         offsetX = -offsetX;
         offsetY = -offsetY;
       }
-    } else {
-      if (!superiorRootBlock.isMovable()) {
-        // Only the inferior block is movable.
-        moveInferior = true;
-      } else {
-        // Both blocks are movable. Typically, it is expected that the inferior
-        // one is the one that will be moved to make space for the superior one,
-        // leaving a gap between them. However, if the inferior connection is
-        // connected to another block, then it feels a little "heavier" and no
-        // horizontal gap is possible anyway. More importantly, it's possible
-        // for two overlapping groups of connected blocks to have multiple
-        // neighboring connections of different types, and it's important to not
-        // accidentally cancel out the movement of a previous bump when
-        // performing the current bump. So as a useful heuristic, in the case
-        // where the inferior connection is connected, move the superior block
-        // diagonally up and right, otherwise move the inferior block diagonally
-        // down and right.
-        if (inferiorConnection.isConnected()) {
-          moveInferior = false;
-          offsetY = -offsetY;
-        } else {
-          moveInferior = true;
-        }
+    } else if (superiorRootBlock.isMovable()) {
+      // Both block groups are movable. The one on the inferior side will be
+      // moved to make space for the superior one. However, it's possible that
+      // both groups of blocks have an inferior connection that bumps into a
+      // superior connection on the other group, which could result in both
+      // groups moving in the same direction and eventually bumping each other
+      // again. It would be better if one group of blocks could consistently
+      // move in an orthogonal direction from the other, so that they become
+      // separated in the end. We can designate one group the "initiator" if
+      // it's the one that was most recently manipulated, causing inputs to be
+      // checked for bumpable neighbors. As a useful heuristic, in the case
+      // where the inferior connection belongs to the initiator group, moving it
+      // in the orthogonal direction will separate the blocks better.
+      if (initiatedByThis) {
+        offsetY = -offsetY;
       }
     }
     const staticConnection = moveInferior

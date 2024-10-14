@@ -232,7 +232,6 @@ export class RenderInfo {
     if (hasHat) {
       const hat = new Hat(this.constants_);
       this.topRow.elements.push(hat);
-      this.topRow.capline = hat.ascenderHeight;
     } else if (hasPrevious) {
       this.topRow.hasPreviousConnection = true;
       this.topRow.connection = new PreviousConnection(

@@ -290,7 +290,10 @@ export class ConstantProvider extends BaseConstantProvider {
       svgPaths.point(71, -height),
       svgPaths.point(width, 0),
     ]);
-    return {height, width, path: mainPath};
+    // Height is actually the Y position of the control points defining the
+    // curve of the hat; the hat's actual rendered height is 3/4 of the control
+    // points' Y position, per https://stackoverflow.com/a/5327329
+    return {height: height * 0.75, width, path: mainPath};
   }
 
   /**

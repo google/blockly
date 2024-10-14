@@ -65,7 +65,7 @@ exports.setRecordUndo = setRecordUndo;
 
 /**
  * Returns whether or not events will be added to the undo stack.
- * @returns {boolean} True if events will be added to the undo stack.
+ * @return {boolean} True if events will be added to the undo stack.
  * @alias Blockly.Events.utils.getRecordUndo
  */
 const getRecordUndo = function() {

@@ -26,7 +26,6 @@
 	"VARIABLE_ALREADY_EXISTS": "'%1' nomli o'zgaruvchi mavjud.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%1' nomli o'zgaruvchi boshqa tur uchun allaqachon mavjud: '%2'.",
 	"DELETE_VARIABLE": "'%1' o'zgaruvchisini o'chirib tashlang",
-	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_RANDOM_TITLE": "tasodifiy rang",
 	"COLOUR_RANDOM_TOOLTIP": "Tasodifiy rangni tanlang.",
 	"COLOUR_RGB_RED": "qizil",

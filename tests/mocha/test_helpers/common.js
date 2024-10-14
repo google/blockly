@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.common');
-
 /**
  * Test case configuration.
  * @record
  */
-class TestCase {
+export class TestCase {
   /**
    * Class for a test case configuration.
    */
@@ -31,7 +29,6 @@ class TestCase {
     this.only;
   }
 }
-exports.TestCase = TestCase;
 
 /**
  * Test suite configuration.
@@ -39,7 +36,7 @@ exports.TestCase = TestCase;
  * @template {TestCase} T
  * @template {TestSuite} U
  */
-class TestSuite {
+export class TestSuite {
   /**
    * Class for a test suite configuration.
    */
@@ -68,7 +65,6 @@ class TestSuite {
     this.only;
   }
 }
-exports.TestSuite = TestSuite;
 
 /**
  * Runs provided test cases.
@@ -77,14 +73,13 @@ exports.TestSuite = TestSuite;
  * @param {function(T):Function} createTestCallback Creates test
  *    callback using given test case.
  */
-function runTestCases(testCases, createTestCallback) {
+export function runTestCases(testCases, createTestCallback) {
   testCases.forEach((testCase) => {
-    let testCall = (testCase.skip ? test.skip : test);
-    testCall = (testCase.only ? test.only : testCall);
+    let testCall = testCase.skip ? test.skip : test;
+    testCall = testCase.only ? test.only : testCall;
     testCall(testCase.title, createTestCallback(testCase));
   });
 }
-exports.runTestCases = runTestCases;
 
 /**
  * Runs provided test suite.
@@ -95,11 +90,11 @@ exports.runTestCases = runTestCases;
  *    } createTestCaseCallback Creates test case callback using given test
  *    suite.
  */
-function runTestSuites(testSuites, createTestCaseCallback) {
+export function runTestSuites(testSuites, createTestCaseCallback) {
   testSuites.forEach((testSuite) => {
-    let suiteCall = (testSuite.skip ? suite.skip : suite);
-    suiteCall = (testSuite.only ? suite.only : suiteCall);
-    suiteCall(testSuite.title, function() {
+    let suiteCall = testSuite.skip ? suite.skip : suite;
+    suiteCall = testSuite.only ? suite.only : suiteCall;
+    suiteCall(testSuite.title, function () {
       if (testSuite.testSuites && testSuite.testSuites.length) {
         runTestSuites(testSuite.testSuites, createTestCaseCallback);
       }
@@ -109,4 +104,3 @@ function runTestSuites(testSuites, createTestCaseCallback) {
     });
   });
 }
-exports.runTestSuites = runTestSuites;

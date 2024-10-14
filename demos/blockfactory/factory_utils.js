@@ -80,10 +80,10 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     return '  var ' + root + '_' + name;
   }
   // The makevar function lives in the original update generator.
-  var language = generatorLanguage;
+  var language = generatorLanguage.toLowerCase();
   var code = [];
-  code.push("Blockly." + language + "['" + block.type +
-            "'] = function(block) {");
+  code.push(`${language}.${language}Generator.forBlock['${block.type}'] = ` +
+            'function(block, generator) {');
 
   // Generate getters for any fields or inputs.
   for (var i = 0, input; input = block.inputList[i]; i++) {
@@ -93,42 +93,34 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
         continue;
       }
       if (field instanceof Blockly.FieldVariable) {
-        // Subclass of Blockly.FieldDropdown, must test first.
-        code.push(makeVar('variable', name) +
-                  " = Blockly." + language +
-                  ".nameDB_.getName(block.getFieldValue('" + name +
-                  "'), Blockly.Variables.NAME_TYPE);");
-      } else if (field instanceof Blockly.FieldAngle) {
-        // Subclass of Blockly.FieldTextInput, must test first.
-        code.push(makeVar('angle', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (field instanceof Blockly.FieldColour) {
-        code.push(makeVar('colour', name) +
-                  " = block.getFieldValue('" + name + "');");
+        // FieldVariable is subclass of FieldDropdown; must test first.
+        code.push(`${makeVar('variable', name)} = ` +
+                  `generator.nameDB_.getName(block.getFieldValue('${name}'), ` +
+                  `Blockly.Variables.NAME_TYPE);`);
       } else if (field instanceof Blockly.FieldCheckbox) {
-        code.push(makeVar('checkbox', name) +
-                  " = block.getFieldValue('" + name + "') === 'TRUE';");
-      } else if (field instanceof Blockly.FieldDropdown) {
-        code.push(makeVar('dropdown', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (field instanceof Blockly.FieldNumber) {
-        code.push(makeVar('number', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (field instanceof Blockly.FieldTextInput) {
-        code.push(makeVar('text', name) +
-                  " = block.getFieldValue('" + name + "');");
+        code.push(`${makeVar('checkbox', name)} = ` +
+                  `block.getFieldValue('${name}') === 'TRUE';`);
+      } else {
+        let prefix =
+            // Angle is subclass of FieldTextInput; must test first.
+            field instanceof Blockly.FieldAngle ? 'angle' :
+            field instanceof Blockly.FieldColour ? 'colour' :
+            field instanceof Blockly.FieldDropdown ? 'dropdown' :
+            field instanceof Blockly.FieldNumber ? 'number' :
+            field instanceof Blockly.FieldTextInput ? 'text' :
+            'field';  // Default if subclass not found.
+        code.push(`${makeVar(prefix, name)} = block.getFieldValue('${name}');`);
       }
     }
     var name = input.name;
     if (name) {
       if (input.type === Blockly.INPUT_VALUE) {
-        code.push(makeVar('value', name) +
-                  " = Blockly." + language + ".valueToCode(block, '" + name +
-                  "', Blockly." + language + ".ORDER_ATOMIC);");
+        code.push(`${makeVar('value', name)} = ` +
+                  `generator.valueToCode(block, '${name}', ` +
+                  `${language}.Order.ATOMIC);`);
       } else if (input.type === Blockly.NEXT_STATEMENT) {
-        code.push(makeVar('statements', name) +
-                  " = Blockly." + language + ".statementToCode(block, '" +
-                  name + "');");
+        code.push(`${makeVar('statements', name)} = ` +
+                  `generator.statementToCode(block, '${name}');`);
       }
     }
   }
@@ -171,7 +163,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   var lastInput = null;
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (contentsBlock.isEnabled() && !contentsBlock.getInheritedDisabled()) {
       var fields = FactoryUtils.getFieldsJson_(
           contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
@@ -185,7 +177,8 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
 
       var input = {type: contentsBlock.type};
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type !== 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy' &&
+          contentsBlock.type !== 'input_end_row') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
       var check = JSON.parse(
@@ -210,7 +203,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     if (fields && FactoryUtils.getFieldsJson_(fields).join('').trim() !== '') {
       var align = lastInput.getFieldValue('ALIGN');
       if (align !== 'LEFT') {
-        JS.lastDummyAlign0 = align;
+        JS.implicitAlign0 = align;
       }
       args.pop();
       message.pop();
@@ -254,7 +247,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
   }
   // Generate colour.
   var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
-  if (colourBlock && !colourBlock.disabled) {
+  if (colourBlock && colourBlock.isEnabled()) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     JS.colour = hue;
   }
@@ -280,13 +273,15 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   // Generate inputs.
   var TYPES = {'input_value': 'appendValueInput',
                'input_statement': 'appendStatementInput',
-               'input_dummy': 'appendDummyInput'};
+               'input_dummy': 'appendDummyInput',
+               'input_end_row': 'appendEndRowInput'};
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (contentsBlock.isEnabled() && !contentsBlock.getInheritedDisabled()) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type !== 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy' &&
+          contentsBlock.type !== 'input_end_row') {
         name =
             JSON.stringify(contentsBlock.getFieldValue('INPUTNAME'));
       }
@@ -338,7 +333,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   }
   // Generate colour.
   var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
-  if (colourBlock && !colourBlock.disabled) {
+  if (colourBlock && colourBlock.isEnabled()) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     if (!isNaN(hue)) {
       code.push('    this.setColour(' + hue + ');');
@@ -382,7 +377,7 @@ FactoryUtils.connectionLineJs_ = function(functionName, typeName, workspace) {
 FactoryUtils.getFieldsJs_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (block.isEnabled() && !block.getInheritedDisabled()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
@@ -489,7 +484,7 @@ FactoryUtils.getFieldsJs_ = function(block) {
 FactoryUtils.getFieldsJson_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (block.isEnabled() && !block.getInheritedDisabled()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
@@ -599,7 +594,7 @@ FactoryUtils.getOptTypesFrom = function(block, name) {
   var types = FactoryUtils.getTypesFrom_(block, name);
   if (types.length === 0) {
     return undefined;
-  } else if (types.indexOf('null') !== -1) {
+  } else if (types.includes('null')) {
     return 'null';
   } else if (types.length === 1) {
     return types[0];
@@ -619,7 +614,7 @@ FactoryUtils.getOptTypesFrom = function(block, name) {
 FactoryUtils.getTypesFrom_ = function(block, name) {
   var typeBlock = block.getInputTargetBlock(name);
   var types;
-  if (!typeBlock || typeBlock.disabled) {
+  if (!typeBlock || !typeBlock.isEnabled()) {
     types = [];
   } else if (typeBlock.type === 'type_other') {
     types = [JSON.stringify(typeBlock.getFieldValue('TYPE'))];
@@ -776,7 +771,7 @@ FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
   var defStart = blockDefsString.indexOf('Blockly.Blocks');
 
-  while (blockDefsString.indexOf('Blockly.Blocks', defStart) !== -1) {
+  while (blockDefsString.includes('Blockly.Blocks', defStart)) {
     var nextStart = blockDefsString.indexOf('Blockly.Blocks', defStart + 1);
     if (nextStart === -1) {
       // This is the last block definition.
@@ -1020,7 +1015,7 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
  */
 FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
   var tooltipBlock = rootBlock.getInputTargetBlock('TOOLTIP');
-  if (tooltipBlock && !tooltipBlock.disabled) {
+  if (tooltipBlock && tooltipBlock.isEnabled()) {
     return tooltipBlock.getFieldValue('TEXT');
   }
   return '';
@@ -1034,7 +1029,7 @@ FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
  */
 FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
   var helpUrlBlock = rootBlock.getInputTargetBlock('HELPURL');
-  if (helpUrlBlock && !helpUrlBlock.disabled) {
+  if (helpUrlBlock && helpUrlBlock.isEnabled()) {
     return helpUrlBlock.getFieldValue('TEXT');
   }
   return '';

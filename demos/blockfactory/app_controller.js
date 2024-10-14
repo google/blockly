@@ -8,7 +8,6 @@
  * @fileoverview The AppController Class brings together the Block
  * Factory, Block Library, and Block Exporter functionality into a single web
  * app.
- *
  */
 
 /**
@@ -121,10 +120,20 @@ AppController.prototype.exportBlockLibraryToFile = function() {
         { format: BlocklyDevTools.Analytics.FORMAT_XML });
   } else {
     var msg = 'Could not export Block Library without file name under which ' +
-      'to save library.';
+        'to save library.';
     BlocklyDevTools.Analytics.onWarning(msg);
     alert(msg);
   }
+};
+
+AppController.prototype.exportBlockLibraryAsJson = function() {
+  const blockJson = this.blockLibraryController.getBlockLibraryAsJson();
+  if (blockJson.length === 0) {
+    alert('No blocks in library to export');
+    return;
+  }
+  const filename = 'legacy_block_factory_export.txt';
+  FactoryUtils.createAndDownloadFile(JSON.stringify(blockJson), filename, 'plain');
 };
 
 /**
@@ -139,7 +148,7 @@ AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
 
   // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {
-    var blockXmlDom = Blockly.Xml.textToDom(blockXmlMap[blockType]);
+    var blockXmlDom = Blockly.utils.xml.textToDom(blockXmlMap[blockType]);
     var blockNode = blockXmlDom.firstElementChild;
     xmlDom.appendChild(blockNode);
   }
@@ -156,7 +165,7 @@ AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
  * @private
  */
 AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
-  var inputXml = Blockly.Xml.textToDom(xmlText);
+  var inputXml = Blockly.utils.xml.textToDom(xmlText);
   // Convert the live HTMLCollection of child Elements into a static array,
   // since the addition to editorWorkspaceXml below removes it from inputXml.
   var inputChildren = Array.from(inputXml.children);
@@ -193,7 +202,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
  * @private
  */
 AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
-  var xmlDom = Blockly.Xml.textToDom(xmlText);
+  var xmlDom = Blockly.utils.xml.textToDom(xmlText);
   // Find factory base block.
   var factoryBaseBlockXml = xmlDom.getElementsByTagName('block')[0];
   // Get field elements from factory base.
@@ -491,6 +500,10 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
       .addEventListener('click', function() {
         self.exportBlockLibraryToFile();
       });
+
+  document.getElementById('exportAsJson').addEventListener('click', function() {
+    self.exportBlockLibraryAsJson();
+  });
 
   document.getElementById('helpButton').addEventListener('click',
       function() {

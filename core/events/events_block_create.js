@@ -52,7 +52,7 @@ class BlockCreate extends BlockBase {
     }
 
     this.xml = Xml.blockToDomWithXY(opt_block);
-    this.ids = eventUtils.getDescendantIds(opt_block);
+    this.ids = []
 
     const typesSet = new Set()
     const descendants = opt_block.getDescendants(false);

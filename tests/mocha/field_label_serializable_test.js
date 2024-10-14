@@ -4,18 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldLabelSerialization');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {
+  assertFieldValue,
+  runConstructorSuiteTests,
+  runFromJsonSuiteTests,
+  runSetValueTests,
+} from './test_helpers/fields.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+  workspaceTeardown,
+} from './test_helpers/setup_teardown.js';
+import {
+  createTestBlock,
+  defineRowBlock,
+} from './test_helpers/block_definitions.js';
 
-const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-
-
-suite('Label Serializable Fields', function() {
-  setup(function() {
+suite('Label Serializable Fields', function () {
+  setup(function () {
     sharedTestSetup.call(this);
   });
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
   /**
@@ -38,7 +48,7 @@ suite('Label Serializable Fields', function() {
     {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
     {title: 'NaN', value: NaN, expectedValue: 'NaN'},
   ];
-  const addArgsAndJson = function(testCase) {
+  const addArgsAndJson = function (testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'text': testCase.value};
   };
@@ -54,7 +64,7 @@ suite('Label Serializable Fields', function() {
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldLabelSerializable} field The field to check.
    */
-  const assertFieldDefault = function(field) {
+  const assertFieldDefault = function (field) {
     assertFieldValue(field, defaultFieldValue);
   };
   /**
@@ -62,39 +72,53 @@ suite('Label Serializable Fields', function() {
    * @param {!Blockly.FieldLabelSerializable} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  const validTestCaseAssertField = function(field, testCase) {
+  const validTestCaseAssertField = function (field, testCase) {
     assertFieldValue(field, testCase.expectedValue);
   };
 
   runConstructorSuiteTests(
-      Blockly.FieldLabelSerializable, validValueTestCases,
-      invalidValueTestCases, validTestCaseAssertField, assertFieldDefault);
+    Blockly.FieldLabelSerializable,
+    validValueTestCases,
+    invalidValueTestCases,
+    validTestCaseAssertField,
+    assertFieldDefault,
+  );
 
   runFromJsonSuiteTests(
-      Blockly.FieldLabelSerializable, validValueTestCases, invalidValueTestCases,
-      validTestCaseAssertField, assertFieldDefault);
+    Blockly.FieldLabelSerializable,
+    validValueTestCases,
+    invalidValueTestCases,
+    validTestCaseAssertField,
+    assertFieldDefault,
+  );
 
-  suite('setValue', function() {
-    suite('Empty -> New Value', function() {
-      setup(function() {
+  suite('setValue', function () {
+    suite('Empty -> New Value', function () {
+      setup(function () {
         this.field = new Blockly.FieldLabelSerializable();
       });
       runSetValueTests(
-          validValueTestCases, invalidValueTestCases, defaultFieldValue);
-      test('With source block', function() {
+        validValueTestCases,
+        invalidValueTestCases,
+        defaultFieldValue,
+      );
+      test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
         assertFieldValue(this.field, 'value');
       });
     });
-    suite('Value -> New Value', function() {
+    suite('Value -> New Value', function () {
       const initialValue = 'oldValue';
-      setup(function() {
+      setup(function () {
         this.field = new Blockly.FieldLabelSerializable(initialValue);
       });
       runSetValueTests(
-          validValueTestCases, invalidValueTestCases, initialValue);
-      test('With source block', function() {
+        validValueTestCases,
+        invalidValueTestCases,
+        initialValue,
+      );
+      test('With source block', function () {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
         assertFieldValue(this.field, 'value');
@@ -102,98 +126,111 @@ suite('Label Serializable Fields', function() {
     });
   });
 
-  suite('Customizations', function() {
+  suite('Customizations', function () {
     function assertHasClass(labelField, cssClass) {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-          Blockly.utils.Svg.G, {}, null);
+        Blockly.utils.Svg.G,
+        {},
+        null,
+      );
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
-      chai.assert.isTrue(Blockly.utils.dom.hasClass(
-          labelField.textElement_, cssClass));
+      chai.assert.isTrue(
+        Blockly.utils.dom.hasClass(labelField.textElement_, cssClass),
+      );
     }
     function assertDoesNotHaveClass(labelField, cssClass) {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-          Blockly.utils.Svg.G, {}, null);
+        Blockly.utils.Svg.G,
+        {},
+        null,
+      );
       labelField.constants_ = {
         FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
-      chai.assert.isFalse(Blockly.utils.dom.hasClass(
-          labelField.textElement_, cssClass));
+      chai.assert.isFalse(
+        Blockly.utils.dom.hasClass(labelField.textElement_, cssClass),
+      );
     }
-    test('JS Constructor', function() {
+    test('JS Constructor', function () {
       const field = new Blockly.FieldLabelSerializable('text', 'testClass');
       assertHasClass(field, 'testClass');
     });
-    test('JSON Definition', function() {
+    test('JSON Definition', function () {
       const field = Blockly.FieldLabelSerializable.fromJson({
         class: 'testClass',
       });
       assertHasClass(field, 'testClass');
     });
-    test('JS Configuration - Simple', function() {
+    test('JS Configuration - Simple', function () {
       const field = new Blockly.FieldLabelSerializable('text', null, {
         class: 'testClass',
       });
       assertHasClass(field, 'testClass');
     });
-    test('JS Configuration - Ignore', function() {
+    test('JS Configuration - Ignore', function () {
       const field = new Blockly.FieldLabelSerializable('text', 'paramClass', {
         class: 'configClass',
       });
       assertDoesNotHaveClass(field, 'paramClass');
       assertHasClass(field, 'configClass');
     });
-    test('JS Configuration - Ignore - \'\'', function() {
+    test("JS Configuration - Ignore - ''", function () {
       const field = new Blockly.FieldLabelSerializable('text', '', {
         class: 'configClass',
       });
       assertHasClass(field, 'configClass');
     });
-    test('JS Configuration - Ignore - Config \'\'', function() {
+    test("JS Configuration - Ignore - Config ''", function () {
       const field = new Blockly.FieldLabelSerializable('text', 'paramClass', {
         class: '',
       });
       assertDoesNotHaveClass(field, 'paramClass');
     });
-    suite('setClass', function() {
-      test('setClass', function() {
+    suite('setClass', function () {
+      test('setClass', function () {
         const field = new Blockly.FieldLabelSerializable();
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-            Blockly.utils.Svg.G, {}, null);
+          Blockly.utils.Svg.G,
+          {},
+          null,
+        );
         field.constants_ = {
           FIELD_TEXT_BASELINE_Y: 13,
         };
         field.initView();
         field.setClass('testClass');
         // Don't call assertHasClass b/c we don't want to re-initialize.
-        chai.assert.isTrue(Blockly.utils.dom.hasClass(
-            field.textElement_, 'testClass'));
+        chai.assert.isTrue(
+          Blockly.utils.dom.hasClass(field.textElement_, 'testClass'),
+        );
       });
-      test('setClass Before Initialization', function() {
+      test('setClass Before Initialization', function () {
         const field = new Blockly.FieldLabelSerializable();
         field.setClass('testClass');
         assertHasClass(field, 'testClass');
       });
-      test('Remove Class', function() {
+      test('Remove Class', function () {
         const field = new Blockly.FieldLabelSerializable('text', null, {
           class: 'testClass',
         });
         assertHasClass(field, 'testClass');
         field.setClass(null);
-        chai.assert.isFalse(Blockly.utils.dom.hasClass(
-            field.textElement_, 'testClass'));
+        chai.assert.isFalse(
+          Blockly.utils.dom.hasClass(field.textElement_, 'testClass'),
+        );
       });
     });
   });
 
-  suite('Serialization', function() {
-    setup(function() {
+  suite('Serialization', function () {
+    setup(function () {
       this.workspace = new Blockly.Workspace();
       defineRowBlock();
-      
+
       this.assertValue = (value) => {
         const block = this.workspace.newBlock('row_block');
         const field = new Blockly.FieldLabelSerializable(value);
@@ -203,11 +240,11 @@ suite('Label Serializable Fields', function() {
       };
     });
 
-    teardown(function() {
+    teardown(function () {
       workspaceTeardown.call(this, this.workspace);
     });
 
-    test('Simple', function() {
+    test('Simple', function () {
       this.assertValue('test label');
     });
   });

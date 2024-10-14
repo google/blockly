@@ -12,5 +12,5 @@
   }
 }(this, function() {
 <%= contents %>
-return messages;
-})); 
+return Blockly.Msg;
+}));

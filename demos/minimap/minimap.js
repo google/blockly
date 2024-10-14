@@ -198,7 +198,7 @@ Minimap.scaleMinimap = function() {
   var workspaceMetrics = Minimap.workspace.getMetrics();
   var minimapMetrics = Minimap.minimap.getMetrics();
 
-  // Scaling the mimimap such that all the blocks can be seen in the viewport.
+  // Scaling the minimap such that all the blocks can be seen in the viewport.
   // This padding is default because this is how to scrollbar(in main workspace)
   // is implemented.
   var topPadding = (workspaceMetrics.viewHeight) * Minimap.minimap.scale /

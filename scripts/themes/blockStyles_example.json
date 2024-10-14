@@ -1,11 +1,11 @@
 {
-  "colour":"#A5745B",
-  "lists":"260",
-  "logic":"210",
-  "loops":"120",
-  "math":"230",
-  "procedure":"290",
-  "text":"160",
-  "variables":"310",
-  "variables_dynamic":"310"
+  "colour": "#A5745B",
+  "lists": "260",
+  "logic": "210",
+  "loops": "120",
+  "math": "230",
+  "procedure": "290",
+  "text": "160",
+  "variables": "310",
+  "variables_dynamic": "310"
 }

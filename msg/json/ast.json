@@ -1,9 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Fitoschido"
+			"Fitoschido",
+			"YoaR"
 		]
 	},
 	"DIALOG_OK": "Aceutar",
-	"DIALOG_CANCEL": "Encaboxar"
+	"DIALOG_CANCEL": "Zarrar"
 }

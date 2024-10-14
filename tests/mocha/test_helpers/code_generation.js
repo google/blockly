@@ -5,17 +5,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.codeGeneration');
-
-const {runTestSuites} = goog.require('Blockly.test.helpers.common');
-
+import {runTestSuites} from './common.js';
 
 /**
  * Code generation test case configuration.
  * @implements {TestCase}
  * @record
  */
-class CodeGenerationTestCase {
+export class CodeGenerationTestCase {
   /**
    * Class for a code generation test case.
    */
@@ -43,37 +40,35 @@ class CodeGenerationTestCase {
    */
   createBlock(workspace) {}
 }
-exports.CodeGenerationTestCase = CodeGenerationTestCase;
 
 /**
  * Code generation test suite.
  * @extends {TestSuite<CodeGenerationTestCase, CodeGenerationTestSuite>}
  * @record
  */
-class CodeGenerationTestSuite {
+export class CodeGenerationTestSuite {
   /**
    * Class for a code generation test suite.
    */
   constructor() {
     /**
-     * @type {!Blockly.Generator} The generator to use for running test cases.
+     * @type {!Blockly.CodeGenerator} The generator to use for running test cases.
      */
     this.generator;
   }
 }
-exports.CodeGenerationTestSuite = CodeGenerationTestSuite;
 
 /**
  * Returns mocha test callback for code generation based on provided
  *    generator.
- * @param {!Blockly.Generator} generator The generator to use in test.
+ * @param {!Blockly.CodeGenerator} generator The generator to use in test.
  * @return {function(!CodeGenerationTestCase):!Function} Function that
  *    returns mocha test callback based on test case.
  * @private
  */
 const createCodeGenerationTestFn_ = (generator) => {
   return (testCase) => {
-    return function() {
+    return function () {
       const block = testCase.createBlock(this.workspace);
       let code;
       let innerOrder;
@@ -87,11 +82,15 @@ const createCodeGenerationTestFn_ = (generator) => {
           code = code[0];
         }
       }
-      const assertFunc = (typeof testCase.expectedCode === 'string') ?
-          chai.assert.equal : chai.assert.match;
+      const assertFunc =
+        typeof testCase.expectedCode === 'string'
+          ? chai.assert.equal
+          : chai.assert.match;
       assertFunc(code, testCase.expectedCode);
-      if (!testCase.useWorkspaceToCode &&
-          testCase.expectedInnerOrder !== undefined) {
+      if (
+        !testCase.useWorkspaceToCode &&
+        testCase.expectedInnerOrder !== undefined
+      ) {
         chai.assert.equal(innerOrder, testCase.expectedInnerOrder);
       }
     };
@@ -102,7 +101,7 @@ const createCodeGenerationTestFn_ = (generator) => {
  * Runs blockToCode test suites.
  * @param {!Array<!CodeGenerationTestSuite>} testSuites The test suites to run.
  */
-const runCodeGenerationTestSuites = (testSuites) => {
+export const runCodeGenerationTestSuites = (testSuites) => {
   /**
    * Creates function used to generate mocha test callback.
    * @param {!CodeGenerationTestSuite} suiteInfo The test suite information.
@@ -115,4 +114,3 @@ const runCodeGenerationTestSuites = (testSuites) => {
 
   runTestSuites(testSuites, createTestFn);
 };
-exports.runCodeGenerationTestSuites = runCodeGenerationTestSuites;

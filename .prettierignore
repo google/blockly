@@ -1,0 +1,30 @@
+# Build Artifacts
+/msg/*
+/build/*
+/dist/*
+/typings/*
+/docs/*
+
+# Tests other than mocha unit tests
+/tests/blocks/*
+/tests/themes/*
+/tests/compile/*
+/tests/jsunit/*
+/tests/generators/*
+/tests/mocha/webdriver.js
+/tests/screenshot/*
+/tests/test_runner.js
+/tests/workspace_svg/*
+
+# Demos, scripts, misc
+/node_modules/*
+/demos/*
+/appengine/*
+/externs/*
+/closure/*
+/scripts/gulpfiles/*
+CHANGELOG.md
+PULL_REQUEST_TEMPLATE.md
+
+# Don't bother formatting JavaScript files we're about to migrate:
+/generators/**/*.js

@@ -7,7 +7,6 @@
 /**
  * @fileoverview Javascript for Block Library's Storage Class.
  * Depends on Block Library for its namespace.
- *
  */
 
 'use strict';
@@ -90,7 +89,7 @@ BlockLibraryStorage.prototype.removeBlock = function(blockType) {
 BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
   var xml = this.blocks[blockType] || null;
   if (xml) {
-    var xml = Blockly.Xml.textToDom(xml);
+    var xml = Blockly.utils.xml.textToDom(xml);
   }
   return xml;
 };

@@ -12,7 +12,6 @@
  * move categories easily. Keeps track of the currently selected list
  * element. Also keeps track of all the user-created shadow blocks and
  * manipulates them as necessary.
- *
  */
 
 /**
@@ -396,7 +395,7 @@ WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
     // Add block types if not already in list.
     for (var i = 0; i < blocks.length; i++) {
       var type = blocks[i].getAttribute('type');
-      if (list.indexOf(type) === -1) {
+      if (!list.includes(type)) {
         list.push(type);
       }
     }
@@ -445,9 +444,9 @@ WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
  */
 WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
   var isStandardBlock =
-      StandardCategories.coreBlockTypes.indexOf(blockType) !== -1;
-  var isLibBlock = this.libBlockTypes.indexOf(blockType) !== -1;
-  var isImportedBlock = this.importedBlockTypes.indexOf(blockType) !== -1;
+      StandardCategories.coreBlockTypes.includes(blockType);
+  var isLibBlock = this.libBlockTypes.includes(blockType);
+  var isImportedBlock = this.importedBlockTypes.includes(blockType);
   return (isStandardBlock || isLibBlock || isImportedBlock);
 };
 
@@ -477,7 +476,7 @@ ListElement = function(type, opt_name) {
   // Name of category. Can be changed by user. Null if separator.
   this.name = opt_name ? opt_name : null;
   // Unique ID of element. Does not change.
-  this.id = Blockly.utils.genUid();
+  this.id = Blockly.utils.idGenerator.genUid();
   // Colour of category. Default is no colour. Null if separator.
   this.colour = null;
   // Stores a custom tag, if necessary. Null if no custom tag or separator.
@@ -538,7 +537,7 @@ ListElement.prototype.changeColour = function(colour) {
 ListElement.prototype.copy = function() {
   copy = new ListElement(this.type);
   // Generate a unique ID for the element.
-  copy.id = Blockly.utils.genUid();
+  copy.id = Blockly.utils.idGenerator.genUid();
   // Copy all attributes except ID.
   copy.name = this.name;
   copy.xml = this.xml;

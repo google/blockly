@@ -56,7 +56,6 @@
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Mag dagdag ng condition sa if block.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Mag Add ng final, kunin lahat ng condition sa if block.",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Nag babalik ng true kung ang pinasok ay parehong magkatumbas.",
-	"LOGIC_COMPARE_TOOLTIP_NEQ": "Return true if both inputs are not equal to each other.",
 	"LOGIC_COMPARE_TOOLTIP_LT": "Nag babalik ng true kung ang unang pinasok ay maliit kaysa sa pangalawang pinasok.",
 	"LOGIC_COMPARE_TOOLTIP_LTE": "Nag babalik ng true kung ang unang pinasok ay maliit sa o katumbas sa pangalawang pinasok.",
 	"LOGIC_COMPARE_TOOLTIP_GT": "Nagbabalik ng true kung ang unang pinasok ay mas malaki kaysa pangalawang pinasok.",

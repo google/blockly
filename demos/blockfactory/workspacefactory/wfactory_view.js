@@ -10,7 +10,6 @@
  * Depends on WorkspaceFactoryController (for adding mouse listeners). Tabs for
  * each category are stored in tab map, which associates a unique ID for a
  * category with a particular tab.
- *
  */
 
 
@@ -122,7 +121,7 @@ WorkspaceFactoryView.prototype.createCategoryIdName = function(name) {
 WorkspaceFactoryView.prototype.setCategoryTabSelection =
     function(id, selected) {
   if (!this.tabMap[id]) {
-    return;   // Exit if tab does not exist.
+    return;  // Exit if tab does not exist.
   }
   this.tabMap[id].className = selected ? 'tabon' : 'taboff';
 };
@@ -144,8 +143,8 @@ WorkspaceFactoryView.prototype.bindClick = function(el, func) {
 /**
  * Creates a file and downloads it. In some browsers downloads, and in other
  * browsers, opens new tab with contents.
- * @param {string} filename Name of file
- * @param {!Blob} data Blob containing contents to download
+ * @param {string} filename Name of file.
+ * @param {!Blob} data Blob containing contents to download.
  */
 WorkspaceFactoryView.prototype.createAndDownloadFile =
     function(filename, data) {
@@ -164,8 +163,8 @@ WorkspaceFactoryView.prototype.createAndDownloadFile =
 /**
  * Given the ID of a certain category, updates the corresponding tab in
  * the DOM to show a new name.
- * @param {string} newName Name of string to be displayed on tab
- * @param {string} id ID of category to be updated
+ * @param {string} newName Name of string to be displayed on tab.
+ * @param {string} id ID of category to be updated.
  */
 WorkspaceFactoryView.prototype.updateCategoryName = function(newName, id) {
   this.tabMap[id].textContent = newName;
@@ -311,7 +310,7 @@ WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {
  */
 WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
   // Add Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.dom.addClass(block.svgGroup_, 'shadowBlock');
+  block.getSvgRoot().classList.add('shadowBlock');
   // If not a valid shadow block, add a warning message.
   if (!block.getSurroundParent()) {
       block.setWarningText('Shadow blocks must be nested inside' +
@@ -329,7 +328,7 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
  */
 WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
   // Remove Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.dom.removeClass(block.svgGroup_, 'shadowBlock');
+  block.getSvgRoot().classList.remove('shadowBlock');
 };
 
 /**
@@ -387,8 +386,7 @@ WorkspaceFactoryView.prototype.setBaseOptions = function() {
 
   // Check infinite blocks and hide suboption.
   document.getElementById('option_infiniteBlocks_checkbox').checked = true;
-  document.getElementById('maxBlockNumber_option').style.display =
-      'none';
+  document.getElementById('maxBlockNumber_option').style.display = 'none';
 
   // Uncheck grid and zoom options and hide suboptions.
   document.getElementById('option_grid_checkbox').checked = false;

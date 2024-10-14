@@ -7,7 +7,6 @@
 /**
  * @fileoverview Javascript for the Block Exporter View class. Reads from and
  * manages a block selector through which users select blocks to export.
- *
  */
 
 'use strict';

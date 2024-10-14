@@ -4,13 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Type definitions for Blockly Blocks.
- * @author samelh@google.com (Sam El-Husseini)
- */
-
-/// <reference path="core.d.ts" />
-
 export const colour: any;
 export const lists: any;
 export const logic: any;

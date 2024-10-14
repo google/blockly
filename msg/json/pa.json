@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"AnupamM",
+			"Cabal",
 			"Jimidar",
 			"Tow",
 			"ਪ੍ਰਚਾਰਕ"
@@ -25,7 +26,7 @@
 	"DISABLE_BLOCK": "ਬਲਾਕ ਬੰਦ ਕਰੋ",
 	"ENABLE_BLOCK": "ਬਲਾਕ ਚਾਲੂ ਕਰੋ",
 	"HELP": "ਮਦਦ",
-	"UNDO": "ਅਣਕੀਤਾ ਕਰੋ",
+	"UNDO": "ਰੱਦ ਕਰੋ",
 	"REDO": "ਮੁੜ ਕਰੋ",
 	"CHANGE_VALUE_TITLE": "ਮੁੱਲ ਬਦਲੋ:",
 	"COLOUR_PICKER_TOOLTIP": "ਰੰਗ-ਫੱਟੀ ਵਿੱਚੋਂ ਰੰਗ ਚੁਣੋ",

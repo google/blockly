@@ -734,13 +734,18 @@ export class Toolbox
     // relative to the new absolute edge (ie toolbox edge).
     const workspace = this.workspace_;
     const rect = this.HtmlDiv!.getBoundingClientRect();
+    const flyout = this.getFlyout();
     const newX =
       this.toolboxPosition === toolbox.Position.LEFT
-        ? workspace.scrollX + rect.width
+        ? workspace.scrollX +
+          rect.width +
+          (flyout?.isVisible() ? flyout.getWidth() : 0)
         : workspace.scrollX;
     const newY =
       this.toolboxPosition === toolbox.Position.TOP
-        ? workspace.scrollY + rect.height
+        ? workspace.scrollY +
+          rect.height +
+          (flyout?.isVisible() ? flyout.getHeight() : 0)
         : workspace.scrollY;
     workspace.translate(newX, newY);
 

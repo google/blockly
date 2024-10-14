@@ -360,7 +360,8 @@ input[type=number] {
 .blocklyMainWorkspaceScrollbar {
   z-index: 20;
 }
-  .blocklyFlyoutCloseButton {
+
+.blocklyFlyoutCloseButton {
   position: absolute;
   z-index: 20;
   width: 30px;

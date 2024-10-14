@@ -45,6 +45,8 @@ enum FlyoutItemType {
   BUTTON = 'button',
 }
 
+const RESIZER_WIDTH = 5;
+
 /**
  * The language-neutral ID for when the reason why a block is disabled is
  * because the workspace is at block capacity.
@@ -706,17 +708,14 @@ export abstract class Flyout
 
     const flyoutSVG = this.workspace_.getParentSvg();
     const flyoutParentEl = flyoutSVG.parentElement;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore:next-line
     const flyoutClientRect = flyoutSVG.getBoundingClientRect();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore:next-line
     const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
 
-    // @ts-expect-error:next-line
-    const top = flyoutClientRect.top - flyoutParentClientRect?.top;
-    // @ts-expect-error:next-line
-    const left = flyoutClientRect.right - flyoutParentClientRect?.left;
+    const top = flyoutClientRect.top - (flyoutParentClientRect?.top ?? 0);
+    const left =
+      flyoutClientRect.right -
+      (flyoutParentClientRect?.left ?? 0) +
+      RESIZER_WIDTH;
 
     this.closeButtonSVG_.style.top = `${top}px`;
     this.closeButtonSVG_.style.left = `${left}px`;
@@ -794,10 +793,11 @@ export abstract class Flyout
 
     const flyoutClientRect = flyoutSVG.getBoundingClientRect();
     const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
-    // @ts-expect-error:next-line
-    const top = flyoutClientRect.top - flyoutParentClientRect?.top;
-    // @ts-expect-error:next-line
-    const left = flyoutClientRect.right - flyoutParentClientRect?.left - 10; // 10px width of shadow, see css.js
+
+    const top = flyoutClientRect.top - (flyoutParentClientRect?.top ?? 0);
+    const left =
+      flyoutClientRect.right - (flyoutParentClientRect?.left ?? 0) - 10; // 10px width of shadow, see css.js
+
     // @ts-expect-error:next-line
     this.flyoutEndShadowDiv_.style.top = `${top}px`;
     // @ts-expect-error:next-line
@@ -836,10 +836,8 @@ export abstract class Flyout
     const flyoutClientRect = flyoutSVG.getBoundingClientRect();
     const flyoutParentClientRect = flyoutParentEl?.getBoundingClientRect();
 
-    // @ts-expect-error:next-line
-    const top = flyoutClientRect.top - flyoutParentClientRect.top;
-    // @ts-expect-error:next-line
-    const left = flyoutClientRect.left - flyoutParentClientRect.left;
+    const top = flyoutClientRect.top - (flyoutParentClientRect?.top ?? 0);
+    const left = flyoutClientRect.left - (flyoutParentClientRect?.left ?? 0);
 
     this.flyoutTopPanel_ = document.createElement('div');
     this.flyoutTopPanel_.classList.add('blocklyFlyoutZoomControlContainer');

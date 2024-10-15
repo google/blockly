@@ -371,7 +371,14 @@ export class Workspace implements IASTNodeLocation {
         this.topComments[this.topComments.length - 1].dispose();
       }
       eventUtils.setGroup(existingGroup);
-      this.variableMap.clear();
+      // If this is a flyout workspace, its variable map is shared with the
+      // parent workspace, so we either don't want to disturb it if we're just
+      // disposing the flyout, or if the flyout is being disposed because the
+      // main workspace is being disposed, then the main workspace will handle
+      // cleaning it up.
+      if (!this.isFlyout) {
+        this.variableMap.clear();
+      }
       if (this.potentialVariableMap) {
         this.potentialVariableMap.clear();
       }

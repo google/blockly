@@ -23,6 +23,7 @@ import {
   ContextMenuOption,
   LegacyContextMenuOption,
 } from '../core/contextmenu_registry.js';
+import * as constants from '../core/constants.js';
 
 // For local argument block of this block type should rename label and value equally.
 const blockTypesRenameValue = [
@@ -126,31 +127,24 @@ blocks['argument_local'] = {
     }
 
     if (
-      ((this.workspace as WorkspaceSvg).isDragging &&
-        (this.workspace as WorkspaceSvg).isDragging()) ||
-      (event.type !== Events.BLOCK_MOVE && event.type !== Events.BLOCK_CREATE)
+      (this.workspace as WorkspaceSvg).isDragging &&
+      (this.workspace as WorkspaceSvg).isDragging()
     ) {
       return; // Don't change state at the start of a drag.
     }
 
-    let legal = false;
-    // Is the block nested in a procedure?
-    let block = this; // eslint-disable-line @typescript-eslint/no-this-alias
+    let enable = true;
 
-    do {
-      if (blockTypesRenameValue.includes(block.type)) {
-        legal = true;
-        break;
-      }
-      block = block.getSurroundParent()!;
-    } while (block);
+    if (!this.getParent()) {
+      enable = false;
+    }
 
     Events.disable();
-    if (legal) {
-      this.setEnabled(true);
+    if (enable) {
+      this.setDisabledReason(false, constants.MANUALLY_DISABLED);
     } else {
       if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setEnabled(false);
+        this.setDisabledReason(true, constants.MANUALLY_DISABLED);
       }
     }
     Events.enable();

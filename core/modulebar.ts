@@ -712,7 +712,7 @@ export class ModuleBar {
       return;
     }
 
-    if (workspace.getTopBlocks(false).length > 0) {
+    if (workspace.getTopBlocks(false, true).length > 0) {
       dialog.alert(Msg['NOT_EMPTY_MODULE_DELETE_RESTRICTION']);
       return;
     }

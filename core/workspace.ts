@@ -243,7 +243,7 @@ export class Workspace implements IASTNodeLocation {
     if (ordered && blocks.length > 1) {
       blocks.sort(this.sortObjects_.bind(this));
     }
-    console.log('this.topBlocks', this.topBlocks);
+
     return blocks;
   }
 

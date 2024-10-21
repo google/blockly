@@ -214,11 +214,11 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Called when an attempted connection fails. NOP by default (i.e. for
    * headless workspaces).
    *
-   * @param _otherConnection Connection that this connection failed to connect
-   *     to.
+   * @param _superiorConnection Connection that this connection failed to connect
+   *     to. The provided connection should be the superior connection.
    * @internal
    */
-  onFailedConnect(_otherConnection: Connection) {}
+  onFailedConnect(_superiorConnection: Connection) {}
   // NOP
 
   /**

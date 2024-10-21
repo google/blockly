@@ -1472,9 +1472,9 @@ export class BlockSvg
         if (conn.isConnected() && neighbour.isConnected()) continue;
 
         if (conn.isSuperior()) {
-          neighbour.bumpAwayFrom(conn);
+          neighbour.bumpAwayFrom(conn, /* initiatedByThis = */ false);
         } else {
-          conn.bumpAwayFrom(neighbour);
+          conn.bumpAwayFrom(neighbour, /* initiatedByThis = */ true);
         }
       }
     }

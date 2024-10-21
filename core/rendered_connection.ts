@@ -117,59 +117,85 @@ export class RenderedConnection extends Connection {
    * Move the block(s) belonging to the connection to a point where they don't
    * visually interfere with the specified connection.
    *
-   * @param staticConnection The connection to move away from.
+   * @param superiorConnection The connection to move away from. The provided
+   *     connection should be the superior connection and should not be
+   *     connected to this connection.
+   * @param initiatedByThis Whether or not the block group that was manipulated
+   *     recently causing bump checks is associated with the inferior
+   *     connection. Defaults to false.
    * @internal
    */
-  bumpAwayFrom(staticConnection: RenderedConnection) {
+  bumpAwayFrom(
+    superiorConnection: RenderedConnection,
+    initiatedByThis = false,
+  ) {
     if (this.sourceBlock_.workspace.isDragging()) {
       // Don't move blocks around while the user is doing the same.
       return;
     }
-    // Move the root block.
-    let rootBlock = this.sourceBlock_.getRootBlock();
-    if (rootBlock.isInFlyout) {
+    let offsetX =
+      config.snapRadius + Math.floor(Math.random() * BUMP_RANDOMNESS);
+    let offsetY =
+      config.snapRadius + Math.floor(Math.random() * BUMP_RANDOMNESS);
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
+    const inferiorConnection = this;
+    const superiorRootBlock = superiorConnection.sourceBlock_.getRootBlock();
+    const inferiorRootBlock = inferiorConnection.sourceBlock_.getRootBlock();
+
+    if (superiorRootBlock.isInFlyout || inferiorRootBlock.isInFlyout) {
       // Don't move blocks around in a flyout.
       return;
     }
-    let reverse = false;
-    if (!rootBlock.isMovable()) {
-      // Can't bump an uneditable block away.
+    let moveInferior = true;
+    if (!inferiorRootBlock.isMovable()) {
+      // Can't bump an immovable block away.
       // Check to see if the other block is movable.
-      rootBlock = staticConnection.getSourceBlock().getRootBlock();
-      if (!rootBlock.isMovable()) {
+      if (!superiorRootBlock.isMovable()) {
+        // Neither block is movable, abort operation.
         return;
+      } else {
+        // Only the superior block group is movable.
+        moveInferior = false;
+        // The superior block group moves in the opposite direction.
+        offsetX = -offsetX;
+        offsetY = -offsetY;
       }
-      // Swap the connections and move the 'static' connection instead.
-      /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-      staticConnection = this;
-      reverse = true;
+    } else if (superiorRootBlock.isMovable()) {
+      // Both block groups are movable. The one on the inferior side will be
+      // moved to make space for the superior one. However, it's possible that
+      // both groups of blocks have an inferior connection that bumps into a
+      // superior connection on the other group, which could result in both
+      // groups moving in the same direction and eventually bumping each other
+      // again. It would be better if one group of blocks could consistently
+      // move in an orthogonal direction from the other, so that they become
+      // separated in the end. We can designate one group the "initiator" if
+      // it's the one that was most recently manipulated, causing inputs to be
+      // checked for bumpable neighbors. As a useful heuristic, in the case
+      // where the inferior connection belongs to the initiator group, moving it
+      // in the orthogonal direction will separate the blocks better.
+      if (initiatedByThis) {
+        offsetY = -offsetY;
+      }
     }
+    const staticConnection = moveInferior
+      ? superiorConnection
+      : inferiorConnection;
+    const dynamicConnection = moveInferior
+      ? inferiorConnection
+      : superiorConnection;
+    const dynamicRootBlock = moveInferior
+      ? inferiorRootBlock
+      : superiorRootBlock;
     // Raise it to the top for extra visibility.
-    const selected = common.getSelected() == rootBlock;
-    if (!selected) rootBlock.addSelect();
-    let dx =
-      staticConnection.x +
-      config.snapRadius +
-      Math.floor(Math.random() * BUMP_RANDOMNESS) -
-      this.x;
-    let dy =
-      staticConnection.y +
-      config.snapRadius +
-      Math.floor(Math.random() * BUMP_RANDOMNESS) -
-      this.y;
-    if (reverse) {
-      // When reversing a bump due to an uneditable block, bump up.
-      dy = -dy;
+    const selected = common.getSelected() == dynamicRootBlock;
+    if (!selected) dynamicRootBlock.addSelect();
+    if (dynamicRootBlock.RTL) {
+      offsetX = -offsetX;
     }
-    if (rootBlock.RTL) {
-      dx =
-        staticConnection.x -
-        config.snapRadius -
-        Math.floor(Math.random() * BUMP_RANDOMNESS) -
-        this.x;
-    }
-    rootBlock.moveBy(dx, dy, ['bump']);
-    if (!selected) rootBlock.removeSelect();
+    const dx = staticConnection.x + offsetX - dynamicConnection.x;
+    const dy = staticConnection.y + offsetY - dynamicConnection.y;
+    dynamicRootBlock.moveBy(dx, dy, ['bump']);
+    if (!selected) dynamicRootBlock.removeSelect();
   }
 
   /**
@@ -413,11 +439,11 @@ export class RenderedConnection extends Connection {
    * Bumps this connection away from the other connection. Called when an
    * attempted connection fails.
    *
-   * @param otherConnection Connection that this connection failed to connect
-   *     to.
+   * @param superiorConnection Connection that this connection failed to connect
+   *     to. The provided connection should be the superior connection.
    * @internal
    */
-  override onFailedConnect(otherConnection: Connection) {
+  override onFailedConnect(superiorConnection: Connection) {
     const block = this.getSourceBlock();
     if (eventUtils.getRecordUndo()) {
       const group = eventUtils.getGroup();
@@ -425,7 +451,7 @@ export class RenderedConnection extends Connection {
         function (this: RenderedConnection) {
           if (!block.isDisposed() && !block.getParent()) {
             eventUtils.setGroup(group);
-            this.bumpAwayFrom(otherConnection as RenderedConnection);
+            this.bumpAwayFrom(superiorConnection as RenderedConnection);
             eventUtils.setGroup(false);
           }
         }.bind(this),

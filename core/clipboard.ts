@@ -7,6 +7,7 @@
 // Former goog.module ID: Blockly.clipboard
 
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {BlockSvg} from './block_svg.js';
 import {BlockPaster} from './clipboard/block_paster.js';
 import * as globalRegistry from './registry.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -92,7 +93,7 @@ function pasteFromData<T extends ICopyData>(
 /**
  * Private version of duplicate for stubbing in tests.
  */
-function duplicateInternal<
+export function duplicateInternal<
   U extends ICopyData,
   T extends ICopyable<U> & IHasWorkspace,
 >(toDuplicate: T): T | null {
@@ -102,12 +103,22 @@ function duplicateInternal<
 }
 
 /**
+ * Duplicate this block and its children, or a workspace comment.
+ */
+export function duplicate(block: BlockSvg | undefined) {
+  if (!block) return;
+  const data = block.toCopyData();
+  if (!data) return;
+  paste(data, block.workspace);
+}
+
+/**
  * Clear the clipboard
  *
  * @package
  */
 export function clear() {
-  stashedCopyData = null
+  stashedCopyData = null;
 }
 
 interface IHasWorkspace {

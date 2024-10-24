@@ -31,6 +31,8 @@ export enum names {
   PASTE = 'paste',
   UNDO = 'undo',
   REDO = 'redo',
+  DUPLICATE = 'duplicate',
+  NEW_MODULE = 'new module',
 }
 
 /**
@@ -51,6 +53,49 @@ export function registerEscape() {
     keyCodes: [KeyCodes.ESC],
   };
   ShortcutRegistry.registry.register(escapeAction);
+}
+
+/**
+ * Keyboard shortcut to duplicate block on ctrl+d, cmd+d, or alt+d.
+ */
+export function registerDuplicate() {
+  const duplicateShortcut: KeyboardShortcut = {
+    name: names.DUPLICATE,
+    preconditionFn(workspace) {
+      const selected = common.getSelected();
+      return (
+        !workspace.options.readOnly &&
+        !Gesture.inProgress() &&
+        isDeletable(selected) &&
+        selected.isDeletable() &&
+        isDraggable(selected) &&
+        selected.isMovable()
+      );
+    },
+    callback: function (workspace, e) {
+      e.preventDefault();
+      workspace.hideChaff();
+      clipboard.duplicate(common.getSelected() as BlockSvg);
+      return true;
+    },
+  };
+
+  ShortcutRegistry.registry.register(duplicateShortcut);
+
+  const ctrlD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [
+    KeyCodes.CTRL,
+  ]);
+  ShortcutRegistry.registry.addKeyMapping(ctrlD, duplicateShortcut.name);
+
+  const altD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [
+    KeyCodes.ALT,
+  ]);
+  ShortcutRegistry.registry.addKeyMapping(altD, duplicateShortcut.name);
+
+  const metaD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [
+    KeyCodes.META,
+  ]);
+  ShortcutRegistry.registry.addKeyMapping(metaD, duplicateShortcut.name);
 }
 
 /**
@@ -320,6 +365,30 @@ export function registerRedo() {
 }
 
 /**
+ * Keyboard shortcut to create new module.
+ */
+export function registerNewModule() {
+  const newModuleAction: KeyboardShortcut = {
+    name: names.NEW_MODULE,
+    preconditionFn: function (workspace) {
+      return !workspace.options.readOnly;
+    },
+    callback: function (workspace) {
+      workspace.hideChaff();
+      workspace.getModuleBar()!.handleCreateModule_();
+
+      return true;
+    },
+  };
+  ShortcutRegistry.registry.register(newModuleAction);
+
+  const ctrlT = ShortcutRegistry.registry.createSerializedKey(KeyCodes.T, [
+    KeyCodes.CTRL,
+  ]);
+  ShortcutRegistry.registry.addKeyMapping(ctrlT, newModuleAction.name);
+}
+
+/**
  * Registers all default keyboard shortcut item. This should be called once per
  * instance of KeyboardShortcutRegistry.
  *
@@ -333,6 +402,7 @@ export function registerDefaultShortcuts() {
   registerPaste();
   registerUndo();
   registerRedo();
+  registerDuplicate();
 }
 
 registerDefaultShortcuts();

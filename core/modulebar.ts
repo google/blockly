@@ -324,7 +324,7 @@ export class ModuleBar {
       this.onMouseWheel_,
     );
     this.onWorkspaceChangeWrapper_ = this.workspace.addChangeListener(
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       this.onWorkspaceChange_.bind(this),
     );
   }
@@ -376,7 +376,7 @@ export class ModuleBar {
       return;
     }
 
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const role = e.target.getAttribute('role');
 
     switch (role) {
@@ -398,7 +398,7 @@ export class ModuleBar {
    * @private
    */
   onMouseDown_(e: Event) {
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     const role = e.target.getAttribute('role');
     if (role === 'module-menu-control') {
       return;
@@ -522,7 +522,7 @@ export class ModuleBar {
 
     if ('scrollBy' in this.ulContainer_) {
       this.ulContainer_.scrollBy({
-        // @ts-ignore:next-line
+        // @ts-expect-error:next-line
         left: e.deltaY < 0 ? -30 : 30,
       });
     }
@@ -549,7 +549,7 @@ export class ModuleBar {
     }
 
     if (
-      // @ts-ignore:next-line
+      // @ts-expect-error:next-line
       ulElem.offsetWidth + Math.round(ulElem.scrollLeft) + DEAD_ZONE <=
       ulElem.scrollWidth
     ) {

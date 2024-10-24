@@ -623,6 +623,7 @@ export class CommentView implements IRenderedElement {
    * event on the foldout icon.
    */
   private onFoldoutDown(e: PointerEvent) {
+    touch.clearTouchIdentifier();
     this.bringToFront();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
@@ -738,6 +739,7 @@ export class CommentView implements IRenderedElement {
    * delete icon.
    */
   private onDeleteDown(e: PointerEvent) {
+    touch.clearTouchIdentifier();
     if (browserEvents.isRightButton(e)) {
       e.stopPropagation();
       return;

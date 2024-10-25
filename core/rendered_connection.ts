@@ -187,7 +187,7 @@ export class RenderedConnection extends Connection {
       ? inferiorRootBlock
       : superiorRootBlock;
     // Raise it to the top for extra visibility.
-    const selected = common.getSelected() == dynamicRootBlock;
+    const selected = common.getSelected() === dynamicRootBlock;
     if (!selected) dynamicRootBlock.addSelect();
     if (dynamicRootBlock.RTL) {
       offsetX = -offsetX;

@@ -373,9 +373,9 @@ input[type=number] {
   display: block;
   position: absolute;
   width: 10px;
-  background-color: #eee;
+  background-color: #dddddd22;
   z-index: 21;
-  box-shadow: -2px 0 5px #eee;
+  box-shadow: -2px 0 5px #dddddd22;
 }
 
 .blocklyFlyoutBookmarks {
@@ -442,7 +442,7 @@ input[type=number] {
   height: 28px;
   padding: 4px;
   padding-right: 22px;
-  background-color: #eee;
+  background-color: transparent;
   z-index: 21;
   box-sizing: border-box;
 }

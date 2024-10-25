@@ -403,6 +403,7 @@ export function registerDefaultShortcuts() {
   registerUndo();
   registerRedo();
   registerDuplicate();
+  registerNewModule();
 }
 
 registerDefaultShortcuts();

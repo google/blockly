@@ -60,6 +60,7 @@ import {
   FieldDropdownConfig,
   FieldDropdownFromJsonConfig,
   FieldDropdownValidator,
+  ImageProperties,
   MenuGenerator,
   MenuGeneratorFunction,
   MenuOption,
@@ -94,7 +95,7 @@ import {
   FieldVariableFromJsonConfig,
   FieldVariableValidator,
 } from './field_variable.js';
-import {Flyout} from './flyout_base.js';
+import {Flyout, FlyoutItem} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutSeparator} from './flyout_separator.js';
 import {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
@@ -156,7 +157,7 @@ import {IStyleable} from './interfaces/i_styleable.js';
 import {IToolbox} from './interfaces/i_toolbox.js';
 import {IToolboxItem} from './interfaces/i_toolbox_item.js';
 import {IVariableMap} from './interfaces/i_variable_map.js';
-import {IVariableModel} from './interfaces/i_variable_model.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import {
   IVariableBackedParameterModel,
   isVariableBackedParameterModel,
@@ -488,6 +489,7 @@ export {
   FieldDropdownConfig,
   FieldDropdownFromJsonConfig,
   FieldDropdownValidator,
+  ImageProperties,
   MenuGenerator,
   MenuGeneratorFunction,
   MenuOption,
@@ -513,7 +515,7 @@ export {
   FieldVariableFromJsonConfig,
   FieldVariableValidator,
 };
-export {Flyout};
+export {Flyout, FlyoutItem};
 export {FlyoutButton};
 export {FlyoutMetricsManager};
 export {FlyoutSeparator};
@@ -568,6 +570,7 @@ export {IToolbox};
 export {IToolboxItem};
 export {IVariableMap};
 export {IVariableModel};
+export {IVariableState};
 export {IVariableBackedParameterModel, isVariableBackedParameterModel};
 export {Marker};
 export {MarkerManager};

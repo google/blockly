@@ -304,7 +304,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     this.createBubble();
     this.textInputBubble?.setEditable(false);
   }
-  
+
   protected createBubble() {
     this.textInputBubble = new TextInputBubble(
       this.sourceBlock.workspace as WorkspaceSvg,

@@ -62,7 +62,7 @@ export class TextInputBubble extends Bubble {
     45 + Bubble.DOUBLE_BORDER,
     20 + Bubble.DOUBLE_BORDER,
   );
-  
+
   private editable = true;
 
   /**
@@ -107,7 +107,7 @@ export class TextInputBubble extends Bubble {
       this.textArea.setAttribute('readonly', '');
     }
   }
-  
+
   /** Returns whether or not the text in the bubble is editable. */
   isEditable(): boolean {
     return this.editable;

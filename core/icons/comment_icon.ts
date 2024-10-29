@@ -8,7 +8,6 @@
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
-import {TextBubble} from '../bubbles/text_bubble.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
@@ -47,11 +46,8 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    */
   static readonly WEIGHT = 3;
 
-  /** The bubble used to show editable text to the user. */
+  /** The bubble used to show comment text to the user. */
   private textInputBubble: TextInputBubble | null = null;
-
-  /** The bubble used to show non-editable text to the user. */
-  private textBubble: TextBubble | null = null;
 
   /** The text of this comment. */
   private text = '';
@@ -118,7 +114,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   override dispose() {
     super.dispose();
     this.textInputBubble?.dispose();
-    this.textBubble?.dispose();
   }
 
   override getWeight(): number {
@@ -133,7 +128,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     super.applyColour();
     const colour = (this.sourceBlock as BlockSvg).style.colourPrimary;
     this.textInputBubble?.setColour(colour);
-    this.textBubble?.setColour(colour);
   }
 
   /**
@@ -153,7 +147,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     super.onLocationChange(blockOrigin);
     const anchorLocation = this.getAnchorLocation();
     this.textInputBubble?.setAnchorLocation(anchorLocation);
-    this.textBubble?.setAnchorLocation(anchorLocation);
   }
 
   /** Sets the text of this comment. Updates any bubbles if they are visible. */
@@ -170,7 +163,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     );
     this.text = text;
     this.textInputBubble?.setText(this.text);
-    this.textBubble?.setText(this.text);
   }
 
   /** Returns the text of this comment. */
@@ -302,6 +294,18 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    * to update the state of this icon in response to changes in the bubble.
    */
   private showEditableBubble() {
+    this.createBubble();
+    this.textInputBubble?.addTextChangeListener(() => this.onTextChange());
+    this.textInputBubble?.addSizeChangeListener(() => this.onSizeChange());
+  }
+
+  /** Shows the non editable text bubble for this comment. */
+  private showNonEditableBubble() {
+    this.createBubble();
+    this.textInputBubble?.setEditable(false);
+  }
+  
+  protected createBubble() {
     this.textInputBubble = new TextInputBubble(
       this.sourceBlock.workspace as WorkspaceSvg,
       this.getAnchorLocation(),
@@ -309,8 +313,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     );
     this.textInputBubble.setText(this.getText());
     this.textInputBubble.setSize(this.bubbleSize, true);
-    this.textInputBubble.addTextChangeListener(() => this.onTextChange());
-    this.textInputBubble.addSizeChangeListener(() => this.onSizeChange());
   }
 
   /** Shows the non editable text bubble for this comment. */
@@ -327,8 +329,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   private hideBubble() {
     this.textInputBubble?.dispose();
     this.textInputBubble = null;
-    this.textBubble?.dispose();
-    this.textBubble = null;
   }
 
   /**

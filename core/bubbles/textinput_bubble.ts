@@ -62,6 +62,8 @@ export class TextInputBubble extends Bubble {
     45 + Bubble.DOUBLE_BORDER,
     20 + Bubble.DOUBLE_BORDER,
   );
+  
+  private editable = true;
 
   /**
    * @param workspace The workspace this bubble belongs to.
@@ -94,6 +96,21 @@ export class TextInputBubble extends Bubble {
     this.text = text;
     this.textArea.value = text;
     this.onTextChange();
+  }
+
+  /** Sets whether or not the text in the bubble is editable. */
+  setEditable(editable: boolean) {
+    this.editable = editable;
+    if (this.editable) {
+      this.textArea.removeAttribute('readonly');
+    } else {
+      this.textArea.setAttribute('readonly', '');
+    }
+  }
+  
+  /** Returns whether or not the text in the bubble is editable. */
+  isEditable(): boolean {
+    return this.editable;
   }
 
   /** Adds a change listener to be notified when this bubble's text changes. */

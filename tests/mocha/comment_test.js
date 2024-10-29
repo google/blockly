@@ -41,12 +41,12 @@ suite('Comments', function () {
     });
 
     function assertEditable(comment) {
-      assert.isNotOk(comment.textBubble);
       assert.isOk(comment.textInputBubble);
+      assert.isTrue(comment.textInputBubble.isEditable());
     }
     function assertNotEditable(comment) {
-      assert.isNotOk(comment.textInputBubble);
-      assert.isOk(comment.textBubble);
+      assert.isOk(comment.textInputBubble);
+      assert.isFalse(comment.textInputBubble.isEditable());
     }
     test('Editable', async function () {
       await this.comment.setBubbleVisible(true);

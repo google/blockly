@@ -4,10 +4,6 @@
   "extends": ["@microsoft/api-extractor/extends/tsdoc-base.json"],
   "tagDefinitions": [
     {
-      "tagName": "@alias",
-      "syntaxKind": "block"
-    },
-    {
       "tagName": "@define",
       "syntaxKind": "block"
     },
@@ -18,18 +14,12 @@
     {
       "tagName": "@nocollapse",
       "syntaxKind": "modifier"
-    },
-    {
-      "tagName": "@suppress",
-      "syntaxKind": "modifier"
     }
   ],
 
   "supportForTags": {
-    "@alias": true,
     "@define": true,
     "@license": true,
-    "@nocollapse": true,
-    "@suppress": true
+    "@nocollapse": true
   }
 }

@@ -160,7 +160,7 @@ export function getOwner(): Field | null {
  *
  * @returns Div to populate with content.
  */
-export function getContentDiv(): Element {
+export function getContentDiv(): HTMLDivElement {
   return content;
 }
 

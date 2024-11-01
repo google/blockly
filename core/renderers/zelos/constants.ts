@@ -151,8 +151,18 @@ export class ConstantProvider extends BaseConstantProvider {
    */
   SQUARED: Shape | null = null;
 
-  constructor() {
+  /**
+   * Creates a new ConstantProvider.
+   *
+   * @param gridUnit If set, defines the base unit used to calculate other
+   *     constants.
+   */
+  constructor(gridUnit?: number) {
     super();
+
+    if (gridUnit) {
+      this.GRID_UNIT = gridUnit;
+    }
 
     this.SMALL_PADDING = this.GRID_UNIT;
 

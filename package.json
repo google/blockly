@@ -115,7 +115,7 @@
     "eslint": "^8.4.1",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-jsdoc": "^48.0.2",
+    "eslint-plugin-jsdoc": "^50.4.3",
     "glob": "^10.3.4",
     "google-closure-compiler": "^20240317.0.0",
     "gulp": "^5.0.0",

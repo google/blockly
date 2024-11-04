@@ -315,16 +315,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     this.textInputBubble.setSize(this.bubbleSize, true);
   }
 
-  /** Shows the non editable text bubble for this comment. */
-  private showNonEditableBubble() {
-    this.textBubble = new TextBubble(
-      this.getText(),
-      this.sourceBlock.workspace as WorkspaceSvg,
-      this.getAnchorLocation(),
-      this.getBubbleOwnerRect(),
-    );
-  }
-
   /** Hides any open bubbles owned by this comment. */
   private hideBubble() {
     this.textInputBubble?.dispose();

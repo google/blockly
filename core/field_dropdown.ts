@@ -99,10 +99,10 @@ export class FieldDropdown extends Field<string> {
    * The y offset from the top of the field to the top of the image, if an image
    * is selected.
    */
-  protected IMAGE_Y_OFFSET = 5;
+  protected static IMAGE_Y_OFFSET = 5;
 
   /** The total vertical padding above and below an image. */
-  protected IMAGE_Y_PADDING = this.IMAGE_Y_OFFSET * 2;
+  protected static IMAGE_Y_PADDING = FieldDropdown.IMAGE_Y_OFFSET * 2;
 
   /**
    * @param menuGenerator A non-empty array of options for a dropdown list, or a
@@ -529,7 +529,7 @@ export class FieldDropdown extends Field<string> {
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
       hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-      imageHeight + this.IMAGE_Y_PADDING,
+      imageHeight + FieldDropdown.IMAGE_Y_PADDING,
     );
     const xPadding = hasBorder
       ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING

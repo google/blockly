@@ -766,22 +766,14 @@ export class FieldDropdown extends Field<string> {
       if (!Array.isArray(tuple)) {
         foundError = true;
         console.error(
-          'Invalid option[' +
-            i +
-            ']: Each FieldDropdown option must be an ' +
-            'array. Found: ',
-          tuple,
+          `Invalid option[${i}]: Each FieldDropdown option must be an array.
+          Found: ${tuple}`,
         );
       } else if (typeof tuple[1] !== 'string') {
         foundError = true;
         console.error(
-          'Invalid option[' +
-            i +
-            ']: Each FieldDropdown option id must be ' +
-            'a string. Found ' +
-            tuple[1] +
-            ' in: ',
-          tuple,
+          `Invalid option[${i}]: Each FieldDropdown option id must be a string. 
+          Found ${tuple[1]} in: ${tuple}`,
         );
       } else if (
         tuple[0] &&
@@ -790,13 +782,8 @@ export class FieldDropdown extends Field<string> {
       ) {
         foundError = true;
         console.error(
-          'Invalid option[' +
-            i +
-            ']: Each FieldDropdown option must have a ' +
-            'string label or image description. Found' +
-            tuple[0] +
-            ' in: ',
-          tuple,
+          `Invalid option[${i}]: Each FieldDropdown option must have a string 
+          label or image description. Found ${tuple[0]} in: ${tuple}`,
         );
       }
     }

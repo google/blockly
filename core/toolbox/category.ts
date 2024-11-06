@@ -663,11 +663,11 @@ Css.register(`
   background-color: rgba(255, 255, 255, .2);
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategoryContainer {
+.blocklyToolbox[layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 5px 1px 0;
 }
 
-.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
+.blocklyToolbox[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 0 1px 5px;
 }
 
@@ -679,7 +679,7 @@ Css.register(`
   white-space: nowrap;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxCategory {
+.blocklyToolbox[dir="RTL"] .blocklyToolboxCategory {
   margin-left: 8px;
   padding-right: 0;
 }
@@ -696,7 +696,7 @@ Css.register(`
   background-position: -32px -1px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxCategoryIconClosed {
+.blocklyToolbox[dir="RTL"] .blocklyToolboxCategoryIconClosed {
   background-position: 0 -1px;
 }
 
@@ -704,7 +704,7 @@ Css.register(`
   background-position: -32px -17px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
+.blocklyToolbox[dir="RTL"] .blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
   background-position: 0 -17px;
 }
 

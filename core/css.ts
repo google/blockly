@@ -478,4 +478,17 @@ input[type=number] {
   z-index: 80;
   pointer-events: none;
 }
+
+.blocklyField {
+  cursor: default;
+}
+
+.blocklyInputField {
+  cursor: text;
+}
+
+.blocklyDragging .blocklyField,
+.blocklyDragging .blocklyIconGroup {
+  cursor: grabbing;
+}
 `;

@@ -70,9 +70,6 @@ export class FieldDropdown extends Field<string> {
    */
   override SERIALIZABLE = true;
 
-  /** Mouse cursor style when over the hotspot that initiates the editor. */
-  override CURSOR = 'default';
-
   protected menuGenerator_?: MenuGenerator;
 
   /** A cache of the most recently generated options. */
@@ -203,6 +200,11 @@ export class FieldDropdown extends Field<string> {
 
     if (this.borderRect_) {
       dom.addClass(this.borderRect_, 'blocklyDropdownRect');
+    }
+
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyField');
+      dom.addClass(this.fieldGroup_, 'blocklyDropdownField');
     }
   }
 

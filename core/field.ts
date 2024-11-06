@@ -193,9 +193,6 @@ export abstract class Field<T = any>
    */
   SERIALIZABLE = false;
 
-  /** Mouse cursor style when over the hotspot that initiates the editor. */
-  CURSOR = '';
-
   /**
    * @param value The initial value of the field.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
@@ -536,11 +533,9 @@ export abstract class Field<T = any>
     if (this.enabled_ && block.isEditable()) {
       dom.addClass(group, 'blocklyEditableField');
       dom.removeClass(group, 'blocklyNonEditableField');
-      group.style.cursor = this.CURSOR;
     } else {
       dom.addClass(group, 'blocklyNonEditableField');
       dom.removeClass(group, 'blocklyEditableField');
-      group.style.cursor = '';
     }
   }
 

@@ -139,7 +139,7 @@ export class ToolboxCategory
       'contents': 'blocklyToolboxCategoryGroup',
       'selected': 'blocklyToolboxSelected',
       'openicon': 'blocklyToolboxCategoryIconOpen',
-      'closedicon': 'blocklyTreeIconClosed',
+      'closedicon': 'blocklyToolboxCategoryIconClosed',
     };
   }
 
@@ -692,19 +692,19 @@ Css.register(`
   width: 16px;
 }
 
-.blocklyTreeIconClosed {
+.blocklyToolboxCategoryIconClosed {
   background-position: -32px -1px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {
+.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxCategoryIconClosed {
   background-position: 0 -1px;
 }
 
-.blocklyToolboxSelected>.blocklyTreeIconClosed {
+.blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
   background-position: -32px -17px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxSelected>.blocklyTreeIconClosed {
+.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
   background-position: 0 -17px;
 }
 

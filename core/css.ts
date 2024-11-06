@@ -243,10 +243,6 @@ let content = `
   cursor: inherit;
 }
 
-.blocklyFieldDropdown:not(.blocklyHidden) {
-  display: block;
-}
-
 .blocklyIconGroup {
   cursor: default;
 }

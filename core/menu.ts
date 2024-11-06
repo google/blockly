@@ -12,6 +12,7 @@
 // Former goog.module ID: Blockly.Menu
 
 import * as browserEvents from './browser_events.js';
+import {BLOCKLY_MENU_MAX_HEIGHT} from './css.js';
 import type {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -36,6 +37,8 @@ export class Menu {
    * activating a menu item immediately.
    */
   openingCoords: Coordinate | null = null;
+
+  private safeMargin: number = 5;
 
   /**
    * This is the element that we will listen to the real focus events on.
@@ -462,7 +465,11 @@ export class Menu {
     const menuDom = this.getElement() as HTMLDivElement;
     const menuSize = style.getSize(menuDom);
     // Recalculate height for the total content, not only box height.
-    menuSize.height = menuDom.scrollHeight;
+    menuSize.height =
+      menuDom.scrollHeight > BLOCKLY_MENU_MAX_HEIGHT
+        ? BLOCKLY_MENU_MAX_HEIGHT - this.safeMargin
+        : menuDom.scrollHeight;
+
     return menuSize;
   }
 }

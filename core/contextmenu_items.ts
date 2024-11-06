@@ -20,10 +20,12 @@ import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
 import {CommentIcon} from './icons/comment_icon.js';
 import {Msg} from './msg.js';
+import {getGroup, setGroup} from './events/events.js';
 import {StatementInput} from './renderers/zelos/zelos.js';
 import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as common from './common.js';
+import {ModuleModel} from './module_model.js';
 
 /**
  * Option to undo previous action.
@@ -568,6 +570,95 @@ export function registerHelp() {
   ContextMenuRegistry.registry.register(helpOption);
 }
 
+/**
+ * Make a context menu option for moving the current block on new module.
+ */
+export function registerMoveToNewModule() {
+  const moveToNewModuleOption: RegistryItem = {
+    displayText: () => Msg['BLOCK_MOVE_TO_NEW_MODULE'],
+    preconditionFn(scope: Scope) {
+      return scope.block?.isMovable() ? 'enabled' : 'hidden';
+    },
+    callback(scope: Scope) {
+      const block = scope.block;
+      dialog.prompt(Msg['NEW_MODULE_TITLE'], '', function (moduleName) {
+        if (moduleName) {
+          moduleName = moduleName.replace(/[\s\xa0]+/g, ' ').trim();
+
+          const existingGroup = getGroup();
+
+          if (!existingGroup) {
+            setGroup(true);
+          }
+
+          try {
+            const module = block!.workspace
+              .getModuleManager()
+              .createModule(moduleName);
+
+            if (!module) {
+              return;
+            }
+
+            block!.workspace
+              .getModuleManager()
+              .moveBlockToModule(block!, module);
+          } finally {
+            setGroup(false);
+          }
+        }
+      });
+    },
+    scopeType: ContextMenuRegistry.ScopeType.BLOCK,
+    id: 'moveToNewModule',
+    weight: 5,
+  };
+  ContextMenuRegistry.registry.register(moveToNewModuleOption);
+}
+
+/**
+ * Make a context menu option for moving the current block.
+ */
+export function registerMovingToModule() {
+  const moveToModuleOption = (module: ModuleModel): RegistryItem => {
+    return {
+      displayText: () =>
+        Msg['BLOCK_MOVE_TO_MODULE'].replace('%1', module.getName()),
+      preconditionFn(scope: Scope) {
+        if (scope.block?.getModuleId() === module.getId()) {
+          return 'hidden';
+        }
+
+        return scope.block?.isMovable() ? 'enabled' : 'hidden';
+      },
+      callback(scope: Scope) {
+        const block = scope.block;
+        block!.workspace.getModuleManager().moveBlockToModule(block!, module);
+      },
+      scopeType: ContextMenuRegistry.ScopeType.BLOCK,
+      id: module.getMenuOptionId(),
+      weight: 4,
+    };
+  };
+
+  const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
+  if (!mainWorkspace) {
+    return;
+  }
+
+  if (mainWorkspace.getModuleManager().getAllModules().length > 1) {
+    mainWorkspace
+      .getModuleManager()
+      .getAllModules()
+      .forEach(function (module) {
+        const optionId = module.getMenuOptionId();
+        if (!ContextMenuRegistry.registry.getItem(optionId)) {
+          ContextMenuRegistry.registry.register(moveToModuleOption(module));
+        }
+      });
+  }
+}
+
 /** Registers an option for deleting a workspace comment. */
 export function registerCommentDelete() {
   const deleteOption: RegistryItem = {
@@ -677,6 +768,8 @@ function registerBlockOptions_() {
   registerDisable();
   registerDelete();
   registerHelp();
+  registerMoveToNewModule();
+  registerMovingToModule();
 }
 
 /** Registers all workspace comment related menu items. */

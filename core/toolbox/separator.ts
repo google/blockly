@@ -88,7 +88,7 @@ Css.register(`
   margin: 5px 0;
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
+.blocklyToolbox[layout="h"] .blocklyTreeSeparator {
   border-right: solid #e5e5e5 1px;
   border-bottom: none;
   height: auto;

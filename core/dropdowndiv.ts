@@ -697,19 +697,12 @@ function positionInternal(
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
+    const x = metrics.arrowX;
+    const y = metrics.arrowY;
+    const rotation = metrics.arrowAtTop ? 45 : 225;
     arrow.style.display = '';
-    arrow.style.transform =
-      'translate(' +
-      metrics.arrowX +
-      'px,' +
-      metrics.arrowY +
-      'px) rotate(45deg)';
-    arrow.setAttribute(
-      'class',
-      metrics.arrowAtTop
-        ? 'blocklyDropDownArrow blocklyArrowTop'
-        : 'blocklyDropDownArrow blocklyArrowBottom',
-    );
+    arrow.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+    arrow.setAttribute('class', 'blocklyDropDownArrow');
   } else {
     arrow.style.display = 'none';
   }

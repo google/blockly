@@ -135,11 +135,11 @@ export class ToolboxCategory
       'row': 'blocklyToolboxCategory',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
       'icon': 'blocklyToolboxCategoryIcon',
-      'label': 'blocklyTreeLabel',
+      'label': 'blocklyToolboxCategoryLabel',
       'contents': 'blocklyToolboxCategoryGroup',
       'selected': 'blocklyToolboxSelected',
       'openicon': 'blocklyToolboxCategoryIconOpen',
-      'closedicon': 'blocklyTreeIconClosed',
+      'closedicon': 'blocklyToolboxCategoryIconClosed',
     };
   }
 
@@ -663,11 +663,11 @@ Css.register(`
   background-color: rgba(255, 255, 255, .2);
 }
 
-.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategoryContainer {
+.blocklyToolbox[layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 5px 1px 0;
 }
 
-.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
+.blocklyToolbox[dir="RTL"][layout="h"] .blocklyToolboxCategoryContainer {
   margin: 1px 0 1px 5px;
 }
 
@@ -679,7 +679,7 @@ Css.register(`
   white-space: nowrap;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxCategory {
+.blocklyToolbox[dir="RTL"] .blocklyToolboxCategory {
   margin-left: 8px;
   padding-right: 0;
 }
@@ -692,19 +692,19 @@ Css.register(`
   width: 16px;
 }
 
-.blocklyTreeIconClosed {
+.blocklyToolboxCategoryIconClosed {
   background-position: -32px -1px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {
+.blocklyToolbox[dir="RTL"] .blocklyToolboxCategoryIconClosed {
   background-position: 0 -1px;
 }
 
-.blocklyToolboxSelected>.blocklyTreeIconClosed {
+.blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
   background-position: -32px -17px;
 }
 
-.blocklyToolboxDiv[dir="RTL"] .blocklyToolboxSelected>.blocklyTreeIconClosed {
+.blocklyToolbox[dir="RTL"] .blocklyToolboxSelected>.blocklyToolboxCategoryIconClosed {
   background-position: 0 -17px;
 }
 
@@ -716,18 +716,18 @@ Css.register(`
   background-position: -16px -17px;
 }
 
-.blocklyTreeLabel {
+.blocklyToolboxCategoryLabel {
   cursor: default;
   font: 16px sans-serif;
   padding: 0 3px;
   vertical-align: middle;
 }
 
-.blocklyToolboxDelete .blocklyTreeLabel {
+.blocklyToolboxDelete .blocklyToolboxCategoryLabel {
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
 }
 
-.blocklyToolboxSelected .blocklyTreeLabel {
+.blocklyToolboxSelected .blocklyToolboxCategoryLabel {
   color: #fff;
 }
 `);

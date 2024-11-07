@@ -198,7 +198,7 @@ export class Toolbox
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = document.createElement('div');
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
-    dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
+    dom.addClass(toolboxContainer, 'blocklyToolbox');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     return toolboxContainer;
   }
@@ -1107,7 +1107,7 @@ Css.register(`
 }
 
 /* Category tree in Toolbox. */
-.blocklyToolboxDiv {
+.blocklyToolbox {
   user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;

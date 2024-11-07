@@ -10,13 +10,8 @@ import type {Block} from '../../block.js';
 import type {BlockSvg} from '../../block_svg.js';
 import {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
-import {
-  InsertionMarkerManager,
-  PreviewType,
-} from '../../insertion_marker_manager.js';
 import type {IRegistrable} from '../../interfaces/i_registrable.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
-import type {RenderedConnection} from '../../rendered_connection.js';
 import type {BlockStyle, Theme} from '../../theme.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 
@@ -26,7 +21,6 @@ import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
-import * as deprecation from '../../utils/deprecation.js';
 
 /**
  * The base class for a block renderer.
@@ -222,49 +216,6 @@ export class Renderer implements IRegistrable {
       topBlock as Block,
       orphanConnection as Connection,
     );
-  }
-
-  /**
-   * Chooses a connection preview method based on the available connection, the
-   * current dragged connection, and the block being dragged.
-   *
-   * @param closest The available connection.
-   * @param local The connection currently being dragged.
-   * @param topBlock The block currently being dragged.
-   * @returns The preview type to display.
-   *
-   * @deprecated v10 - This function is no longer respected. A custom
-   *    IConnectionPreviewer may be able to fulfill the functionality.
-   */
-  getConnectionPreviewMethod(
-    closest: RenderedConnection,
-    local: RenderedConnection,
-    topBlock: BlockSvg,
-  ): PreviewType {
-    deprecation.warn(
-      'getConnectionPreviewMethod',
-      'v10',
-      'v12',
-      'an IConnectionPreviewer, if it fulfills your use case.',
-    );
-    if (
-      local.type === ConnectionType.OUTPUT_VALUE ||
-      local.type === ConnectionType.PREVIOUS_STATEMENT
-    ) {
-      if (
-        !closest.isConnected() ||
-        this.orphanCanConnectAtEnd(
-          topBlock,
-          closest.targetBlock() as BlockSvg,
-          local.type,
-        )
-      ) {
-        return InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
-      }
-      return InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
-    }
-
-    return InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
   }
 
   /**

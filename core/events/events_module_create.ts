@@ -47,7 +47,7 @@ export class ModuleCreate extends ModuleBase {
     this.scrollY = module.scrollY;
     this.scale = module.scale;
 
-    this.type = eventUtils.MODULE_DELETE;
+    this.type = eventUtils.MODULE_CREATE;
   }
 
   /**

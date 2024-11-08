@@ -69,14 +69,15 @@ export class ModuleModel {
   /**
    * @returns {string} The ID for the module.
    */
-  getId() {
+  getId(): string {
     return this.id_;
   }
 
-  /**
-   * @returns {string} Translated or raw module name.
-   */
-  getName() {
+  getMenuOptionId(): string {
+    return `moveToModule_${this.getId()}`;
+  }
+
+  getName(): string {
     return this._translationKey ? Msg[this._translationKey] : this.name;
   }
 }

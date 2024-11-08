@@ -759,9 +759,7 @@ export class BlockSvg
    *
    * @returns Context menu options or null if no menu.
    */
-  protected generateContextMenu(): Array<
-    ContextMenuOption | LegacyContextMenuOption
-  > | null {
+  protected generateContextMenu(): Array<ContextMenuOption> | null {
     if (this.workspace.options.readOnly || !this.contextMenu) {
       return null;
     }
@@ -769,25 +767,6 @@ export class BlockSvg
       ContextMenuRegistry.ScopeType.BLOCK,
       {block: this},
     ) as any;
-
-    if (this.workspace.options.showModuleBar && this.isMovable()) {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const block = this;
-      menuOptions.push(ContextMenu.blockMoveToNewModuleOption(this));
-
-      if (this.workspace.getModuleManager().getAllModules().length > 1) {
-        this.workspace
-          .getModuleManager()
-          .getAllModules()
-          .forEach(function (module) {
-            if (block.getModuleId() !== module.getId()) {
-              menuOptions.push(
-                ContextMenu.blockMoveToModuleOption(block, module),
-              );
-            }
-          });
-      }
-    }
 
     // Allow the block to add or modify menuOptions.
     if (this.customContextMenu) {

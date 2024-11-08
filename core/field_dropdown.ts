@@ -96,6 +96,15 @@ export class FieldDropdown extends Field<string> {
   override clickTarget_: SVGElement | null = null;
 
   /**
+   * The y offset from the top of the field to the top of the image, if an image
+   * is selected.
+   */
+  protected static IMAGE_Y_OFFSET = 5;
+
+  /** The total vertical padding above and below an image. */
+  protected static IMAGE_Y_PADDING = FieldDropdown.IMAGE_Y_OFFSET * 2;
+
+  /**
    * @param menuGenerator A non-empty array of options for a dropdown list, or a
    *     function which generates these options. Also accepts Field.SKIP_SETUP
    *     if you wish to skip setup (only used by subclasses that want to handle
@@ -128,8 +137,8 @@ export class FieldDropdown extends Field<string> {
     if (menuGenerator === Field.SKIP_SETUP) return;
 
     if (Array.isArray(menuGenerator)) {
-      validateOptions(menuGenerator);
-      const trimmed = trimOptions(menuGenerator);
+      this.validateOptions(menuGenerator);
+      const trimmed = this.trimOptions(menuGenerator);
       this.menuGenerator_ = trimmed.options;
       this.prefixField = trimmed.prefix || null;
       this.suffixField = trimmed.suffix || null;
@@ -401,7 +410,7 @@ export class FieldDropdown extends Field<string> {
     if (useCache && this.generatedOptions) return this.generatedOptions;
 
     this.generatedOptions = this.menuGenerator_();
-    validateOptions(this.generatedOptions);
+    this.validateOptions(this.generatedOptions);
     return this.generatedOptions;
   }
 
@@ -520,7 +529,7 @@ export class FieldDropdown extends Field<string> {
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
       hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-      imageHeight + IMAGE_Y_PADDING,
+      imageHeight + FieldDropdown.IMAGE_Y_PADDING,
     );
     const xPadding = hasBorder
       ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
@@ -661,6 +670,127 @@ export class FieldDropdown extends Field<string> {
     // override the static fromJson method.
     return new this(options.options, undefined, options);
   }
+
+  /**
+   * Factor out common words in statically defined options.
+   * Create prefix and/or suffix labels.
+   */
+  protected trimOptions(options: MenuOption[]): {
+    options: MenuOption[];
+    prefix?: string;
+    suffix?: string;
+  } {
+    let hasImages = false;
+    const trimmedOptions = options.map(([label, value]): MenuOption => {
+      if (typeof label === 'string') {
+        return [parsing.replaceMessageReferences(label), value];
+      }
+
+      hasImages = true;
+      // Copy the image properties so they're not influenced by the original.
+      // NOTE: No need to deep copy since image properties are only 1 level deep.
+      const imageLabel =
+        label.alt !== null
+          ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
+          : {...label};
+      return [imageLabel, value];
+    });
+
+    if (hasImages || options.length < 2) return {options: trimmedOptions};
+
+    const stringOptions = trimmedOptions as [string, string][];
+    const stringLabels = stringOptions.map(([label]) => label);
+
+    const shortest = utilsString.shortestStringLength(stringLabels);
+    const prefixLength = utilsString.commonWordPrefix(stringLabels, shortest);
+    const suffixLength = utilsString.commonWordSuffix(stringLabels, shortest);
+
+    if (
+      (!prefixLength && !suffixLength) ||
+      shortest <= prefixLength + suffixLength
+    ) {
+      // One or more strings will entirely vanish if we proceed.  Abort.
+      return {options: stringOptions};
+    }
+
+    const prefix = prefixLength
+      ? stringLabels[0].substring(0, prefixLength - 1)
+      : undefined;
+    const suffix = suffixLength
+      ? stringLabels[0].substr(1 - suffixLength)
+      : undefined;
+    return {
+      options: this.applyTrim(stringOptions, prefixLength, suffixLength),
+      prefix,
+      suffix,
+    };
+  }
+
+  /**
+   * Use the calculated prefix and suffix lengths to trim all of the options in
+   * the given array.
+   *
+   * @param options Array of option tuples:
+   *     (human-readable text or image, language-neutral name).
+   * @param prefixLength The length of the common prefix.
+   * @param suffixLength The length of the common suffix
+   * @returns A new array with all of the option text trimmed.
+   */
+  private applyTrim(
+    options: [string, string][],
+    prefixLength: number,
+    suffixLength: number,
+  ): MenuOption[] {
+    return options.map(([text, value]) => [
+      text.substring(prefixLength, text.length - suffixLength),
+      value,
+    ]);
+  }
+
+  /**
+   * Validates the data structure to be processed as an options list.
+   *
+   * @param options The proposed dropdown options.
+   * @throws {TypeError} If proposed options are incorrectly structured.
+   */
+  protected validateOptions(options: MenuOption[]) {
+    if (!Array.isArray(options)) {
+      throw TypeError('FieldDropdown options must be an array.');
+    }
+    if (!options.length) {
+      throw TypeError('FieldDropdown options must not be an empty array.');
+    }
+    let foundError = false;
+    for (let i = 0; i < options.length; i++) {
+      const tuple = options[i];
+      if (!Array.isArray(tuple)) {
+        foundError = true;
+        console.error(
+          `Invalid option[${i}]: Each FieldDropdown option must be an array.
+          Found: ${tuple}`,
+        );
+      } else if (typeof tuple[1] !== 'string') {
+        foundError = true;
+        console.error(
+          `Invalid option[${i}]: Each FieldDropdown option id must be a string. 
+          Found ${tuple[1]} in: ${tuple}`,
+        );
+      } else if (
+        tuple[0] &&
+        typeof tuple[0] !== 'string' &&
+        typeof tuple[0].src !== 'string'
+      ) {
+        foundError = true;
+        console.error(
+          `Invalid option[${i}]: Each FieldDropdown option must have a string 
+          label or image description. Found ${tuple[0]} in: ${tuple}`,
+        );
+      }
+    }
+    if (foundError) {
+      throw TypeError('Found invalid FieldDropdown options.');
+    }
+  }
 }
 
 /**
@@ -720,148 +850,5 @@ export interface FieldDropdownFromJsonConfig extends FieldDropdownConfig {
  * - `undefined` to set `newValue` as is.
  */
 export type FieldDropdownValidator = FieldValidator<string>;
-
-/**
- * The y offset from the top of the field to the top of the image, if an image
- * is selected.
- */
-const IMAGE_Y_OFFSET = 5;
-
-/** The total vertical padding above and below an image. */
-const IMAGE_Y_PADDING: number = IMAGE_Y_OFFSET * 2;
-
-/**
- * Factor out common words in statically defined options.
- * Create prefix and/or suffix labels.
- */
-function trimOptions(options: MenuOption[]): {
-  options: MenuOption[];
-  prefix?: string;
-  suffix?: string;
-} {
-  let hasImages = false;
-  const trimmedOptions = options.map(([label, value]): MenuOption => {
-    if (typeof label === 'string') {
-      return [parsing.replaceMessageReferences(label), value];
-    }
-
-    hasImages = true;
-    // Copy the image properties so they're not influenced by the original.
-    // NOTE: No need to deep copy since image properties are only 1 level deep.
-    const imageLabel =
-      label.alt !== null
-        ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
-        : {...label};
-    return [imageLabel, value];
-  });
-
-  if (hasImages || options.length < 2) return {options: trimmedOptions};
-
-  const stringOptions = trimmedOptions as [string, string][];
-  const stringLabels = stringOptions.map(([label]) => label);
-
-  const shortest = utilsString.shortestStringLength(stringLabels);
-  const prefixLength = utilsString.commonWordPrefix(stringLabels, shortest);
-  const suffixLength = utilsString.commonWordSuffix(stringLabels, shortest);
-
-  if (
-    (!prefixLength && !suffixLength) ||
-    shortest <= prefixLength + suffixLength
-  ) {
-    // One or more strings will entirely vanish if we proceed.  Abort.
-    return {options: stringOptions};
-  }
-
-  const prefix = prefixLength
-    ? stringLabels[0].substring(0, prefixLength - 1)
-    : undefined;
-  const suffix = suffixLength
-    ? stringLabels[0].substr(1 - suffixLength)
-    : undefined;
-  return {
-    options: applyTrim(stringOptions, prefixLength, suffixLength),
-    prefix,
-    suffix,
-  };
-}
-
-/**
- * Use the calculated prefix and suffix lengths to trim all of the options in
- * the given array.
- *
- * @param options Array of option tuples:
- *     (human-readable text or image, language-neutral name).
- * @param prefixLength The length of the common prefix.
- * @param suffixLength The length of the common suffix
- * @returns A new array with all of the option text trimmed.
- */
-function applyTrim(
-  options: [string, string][],
-  prefixLength: number,
-  suffixLength: number,
-): MenuOption[] {
-  return options.map(([text, value]) => [
-    text.substring(prefixLength, text.length - suffixLength),
-    value,
-  ]);
-}
-
-/**
- * Validates the data structure to be processed as an options list.
- *
- * @param options The proposed dropdown options.
- * @throws {TypeError} If proposed options are incorrectly structured.
- */
-function validateOptions(options: MenuOption[]) {
-  if (!Array.isArray(options)) {
-    throw TypeError('FieldDropdown options must be an array.');
-  }
-  if (!options.length) {
-    throw TypeError('FieldDropdown options must not be an empty array.');
-  }
-  let foundError = false;
-  for (let i = 0; i < options.length; i++) {
-    const tuple = options[i];
-    if (!Array.isArray(tuple)) {
-      foundError = true;
-      console.error(
-        'Invalid option[' +
-          i +
-          ']: Each FieldDropdown option must be an ' +
-          'array. Found: ',
-        tuple,
-      );
-    } else if (typeof tuple[1] !== 'string') {
-      foundError = true;
-      console.error(
-        'Invalid option[' +
-          i +
-          ']: Each FieldDropdown option id must be ' +
-          'a string. Found ' +
-          tuple[1] +
-          ' in: ',
-        tuple,
-      );
-    } else if (
-      tuple[0] &&
-      typeof tuple[0] !== 'string' &&
-      typeof tuple[0].src !== 'string'
-    ) {
-      foundError = true;
-      console.error(
-        'Invalid option[' +
-          i +
-          ']: Each FieldDropdown option must have a ' +
-          'string label or image description. Found' +
-          tuple[0] +
-          ' in: ',
-        tuple,
-      );
-    }
-  }
-  if (foundError) {
-    throw TypeError('Found invalid FieldDropdown options.');
-  }
-}
 
 fieldRegistry.register('field_dropdown', FieldDropdown);

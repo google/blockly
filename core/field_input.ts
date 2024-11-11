@@ -28,8 +28,8 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import {Msg} from './msg.js';
+import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
-import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as userAgent from './utils/useragent.js';
@@ -630,22 +630,22 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
   /** Resize the editor to fit the text. */
   protected resizeEditor_() {
-    const block = this.getSourceBlock();
-    if (!block) {
-      throw new UnattachedFieldError();
-    }
-    const div = WidgetDiv.getDiv();
-    const bBox = this.getScaledBBox();
-    div!.style.width = bBox.right - bBox.left + 'px';
-    div!.style.height = bBox.bottom - bBox.top + 'px';
+    renderManagement.finishQueuedRenders().then(() => {
+      const block = this.getSourceBlock();
+      if (!block) throw new UnattachedFieldError();
+      const div = WidgetDiv.getDiv();
+      const bBox = this.getScaledBBox();
+      div!.style.width = bBox.right - bBox.left + 'px';
+      div!.style.height = bBox.bottom - bBox.top + 'px';
 
-    // In RTL mode block fields and LTR input fields the left edge moves,
-    // whereas the right edge is fixed.  Reposition the editor.
-    const x = block.RTL ? bBox.right - div!.offsetWidth : bBox.left;
-    const xy = new Coordinate(x, bBox.top);
+      // In RTL mode block fields and LTR input fields the left edge moves,
+      // whereas the right edge is fixed.  Reposition the editor.
+      const x = block.RTL ? bBox.right - div!.offsetWidth : bBox.left;
+      const y = bBox.top;
 
-    div!.style.left = xy.x + 'px';
-    div!.style.top = xy.y + 'px';
+      div!.style.left = `${x}px`;
+      div!.style.top = `${y}px`;
+    });
   }
 
   /**
@@ -657,7 +657,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     div.
    */
   override repositionForWindowResize(): boolean {
-    const block = this.getSourceBlock();
+    const block = this.getSourceBlock()?.getRootBlock();
     // This shouldn't be possible. We should never have a WidgetDiv if not using
     // rendered blocks.
     if (!(block instanceof BlockSvg)) return false;

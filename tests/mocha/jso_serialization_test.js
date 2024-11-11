@@ -533,7 +533,7 @@ suite('JSO Serialization', function () {
             },
             'block': {
               'type': 'text',
-              'id': 'id3',
+              'id': 'id4',
               'fields': {
                 'TEXT': '',
               },

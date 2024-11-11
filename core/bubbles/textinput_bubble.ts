@@ -9,6 +9,7 @@ import * as touch from '../touch.js';
 import {browserEvents} from '../utils.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as drag from '../utils/drag.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
@@ -62,6 +63,8 @@ export class TextInputBubble extends Bubble {
     20 + Bubble.DOUBLE_BORDER,
   );
 
+  private editable = true;
+
   /**
    * @param workspace The workspace this bubble belongs to.
    * @param anchor The anchor location of the thing this bubble is attached to.
@@ -93,6 +96,21 @@ export class TextInputBubble extends Bubble {
     this.text = text;
     this.textArea.value = text;
     this.onTextChange();
+  }
+
+  /** Sets whether or not the text in the bubble is editable. */
+  setEditable(editable: boolean) {
+    this.editable = editable;
+    if (this.editable) {
+      this.textArea.removeAttribute('readonly');
+    } else {
+      this.textArea.setAttribute('readonly', '');
+    }
+  }
+
+  /** Returns whether or not the text in the bubble is editable. */
+  isEditable(): boolean {
+    return this.editable;
   }
 
   /** Adds a change listener to be notified when this bubble's text changes. */
@@ -224,7 +242,8 @@ export class TextInputBubble extends Bubble {
       return;
     }
 
-    this.workspace.startDrag(
+    drag.start(
+      this.workspace,
       e,
       new Coordinate(
         this.workspace.RTL ? -this.getSize().width : this.getSize().width,
@@ -264,7 +283,7 @@ export class TextInputBubble extends Bubble {
 
   /** Handles pointer move events on the resize target. */
   private onResizePointerMove(e: PointerEvent) {
-    const delta = this.workspace.moveDrag(e);
+    const delta = drag.move(this.workspace, e);
     this.setSize(
       new Size(this.workspace.RTL ? -delta.x : delta.x, delta.y),
       false,

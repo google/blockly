@@ -63,6 +63,7 @@ import type {Trashcan} from './trashcan.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
+import * as drag from './utils/drag.js';
 import type {Metrics} from './utils/metrics.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
@@ -180,9 +181,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /** Vertical scroll value when scrolling started in pixel units. */
   startScrollY = 0;
-
-  /** Distance from mouse to object being dragged. */
-  private dragDeltaXY: Coordinate | null = null;
 
   /** Current scale. */
   scale = 1;
@@ -1447,16 +1445,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param xy Starting location of object.
    */
   startDrag(e: PointerEvent, xy: Coordinate) {
-    // Record the starting offset between the bubble's location and the mouse.
-    const point = browserEvents.mouseToSvg(
-      e,
-      this.getParentSvg(),
-      this.getInverseScreenCTM(),
-    );
-    // Fix scale of mouse event.
-    point.x /= this.scale;
-    point.y /= this.scale;
-    this.dragDeltaXY = Coordinate.difference(xy, point);
+    drag.start(this, e, xy);
   }
 
   /**
@@ -1466,15 +1455,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns New location of object.
    */
   moveDrag(e: PointerEvent): Coordinate {
-    const point = browserEvents.mouseToSvg(
-      e,
-      this.getParentSvg(),
-      this.getInverseScreenCTM(),
-    );
-    // Fix scale of mouse event.
-    point.x /= this.scale;
-    point.y /= this.scale;
-    return Coordinate.sum(this.dragDeltaXY!, point);
+    return drag.move(this, e);
   }
 
   /**
@@ -1645,23 +1626,56 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return boundary;
   }
 
-  /** Clean up the workspace by ordering all the blocks in a column. */
+  /** Clean up the workspace by ordering all the blocks in a column such that none overlap. */
   cleanUp() {
     this.setResizesEnabled(false);
     eventUtils.setGroup(true);
+
     const topBlocks = this.getTopBlocks(true);
-    let cursorY = 0;
-    for (let i = 0, block; (block = topBlocks[i]); i++) {
-      if (!block.isMovable()) {
-        continue;
+    const movableBlocks = topBlocks.filter((block) => block.isMovable());
+    const immovableBlocks = topBlocks.filter((block) => !block.isMovable());
+
+    const immovableBlockBounds = immovableBlocks.map((block) =>
+      block.getBoundingRectangle(),
+    );
+
+    const getNextIntersectingImmovableBlock = function (
+      rect: Rect,
+    ): Rect | null {
+      for (const immovableRect of immovableBlockBounds) {
+        if (rect.intersects(immovableRect)) {
+          return immovableRect;
+        }
       }
-      const xy = block.getRelativeToSurfaceXY();
-      block.moveBy(-xy.x, cursorY - xy.y, ['cleanup']);
+      return null;
+    };
+
+    let cursorY = 0;
+    const minBlockHeight = this.renderer.getConstants().MIN_BLOCK_HEIGHT;
+    for (const block of movableBlocks) {
+      // Make the initial movement of shifting the block to its best possible position.
+      let boundingRect = block.getBoundingRectangle();
+      block.moveBy(-boundingRect.left, cursorY - boundingRect.top, ['cleanup']);
       block.snapToGrid();
+
+      boundingRect = block.getBoundingRectangle();
+      let conflictingRect = getNextIntersectingImmovableBlock(boundingRect);
+      while (conflictingRect != null) {
+        // If the block intersects with an immovable block, move it down past that immovable block.
+        cursorY =
+          conflictingRect.top + conflictingRect.getHeight() + minBlockHeight;
+        block.moveBy(0, cursorY - boundingRect.top, ['cleanup']);
+        block.snapToGrid();
+        boundingRect = block.getBoundingRectangle();
+        conflictingRect = getNextIntersectingImmovableBlock(boundingRect);
+      }
+
+      // Ensure all next blocks start past the most recent (which will also put them past all
+      // previously intersecting immovable blocks).
       cursorY =
         block.getRelativeToSurfaceXY().y +
         block.getHeightWidth().height +
-        this.renderer.getConstants().MIN_BLOCK_HEIGHT;
+        minBlockHeight;
     }
     eventUtils.setGroup(false);
     this.setResizesEnabled(true);

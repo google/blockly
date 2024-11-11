@@ -36,11 +36,6 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   override SERIALIZABLE = true;
 
   /**
-   * Mouse cursor style when over the hotspot that initiates editability.
-   */
-  override CURSOR = 'default';
-
-  /**
    * NOTE: The default value is set in `Field`, so maintain that value instead
    * of overwriting it here or in the constructor.
    */

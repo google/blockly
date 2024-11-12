@@ -128,7 +128,7 @@ export class Row {
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const elem = this.elements[i];
       if (Types.isInput(elem)) {
-        return elem as InputConnection;
+        return elem;
       }
     }
     return null;
@@ -167,8 +167,8 @@ export class Row {
   getFirstSpacer(): InRowSpacer | null {
     for (let i = 0; i < this.elements.length; i++) {
       const elem = this.elements[i];
-      if (Types.isSpacer(elem)) {
-        return elem as InRowSpacer;
+      if (Types.isInRowSpacer(elem)) {
+        return elem;
       }
     }
     return null;
@@ -182,8 +182,8 @@ export class Row {
   getLastSpacer(): InRowSpacer | null {
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const elem = this.elements[i];
-      if (Types.isSpacer(elem)) {
-        return elem as InRowSpacer;
+      if (Types.isInRowSpacer(elem)) {
+        return elem;
       }
     }
     return null;

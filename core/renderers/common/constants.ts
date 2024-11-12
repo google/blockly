@@ -642,7 +642,7 @@ export class ConstantProvider {
    */
   protected validatedBlockStyle_(blockStyle: Partial<BlockStyle>): BlockStyle {
     // Make a new object with all of the same properties.
-    const valid: BlockStyle = {} as BlockStyle;
+    const valid = {} as BlockStyle;
     if (blockStyle) {
       Object.assign(valid, blockStyle);
     }

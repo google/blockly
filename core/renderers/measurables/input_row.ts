@@ -7,10 +7,7 @@
 // Former goog.module ID: Blockly.blockRendering.InputRow
 
 import type {ConstantProvider} from '../common/constants.js';
-import {ExternalValueInput} from './external_value_input.js';
-import {InputConnection} from './input_connection.js';
 import {Row} from './row.js';
-import {StatementInput} from './statement_input.js';
 import {Types} from './types.js';
 
 /**
@@ -40,12 +37,11 @@ export class InputRow extends Row {
     for (let i = 0; i < this.elements.length; i++) {
       const elem = this.elements[i];
       this.width += elem.width;
-      if (Types.isInput(elem) && elem instanceof InputConnection) {
-        if (Types.isStatementInput(elem) && elem instanceof StatementInput) {
+      if (Types.isInput(elem)) {
+        if (Types.isStatementInput(elem)) {
           connectedBlockWidths += elem.connectedBlockWidth;
         } else if (
           Types.isExternalInput(elem) &&
-          elem instanceof ExternalValueInput &&
           elem.connectedBlockWidth !== 0
         ) {
           connectedBlockWidths +=

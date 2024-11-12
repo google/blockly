@@ -20,7 +20,6 @@ import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
-import {InputConnection} from '../measurables/input_connection.js';
 import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
@@ -207,9 +206,8 @@ export class RenderInfo extends BaseRenderInfo {
     }
     // Top and bottom rows act as a spacer so we don't need any extra padding.
     if (Types.isTopRow(prev)) {
-      const topRow = prev as TopRow;
       if (
-        !topRow.hasPreviousConnection &&
+        !prev.hasPreviousConnection &&
         (!this.outputConnection || this.hasStatementInput)
       ) {
         return Math.abs(
@@ -219,7 +217,6 @@ export class RenderInfo extends BaseRenderInfo {
       return this.constants_.NO_PADDING;
     }
     if (Types.isBottomRow(next)) {
-      const bottomRow = next as BottomRow;
       if (!this.outputConnection) {
         const topHeight =
           Math.max(
@@ -230,7 +227,7 @@ export class RenderInfo extends BaseRenderInfo {
             ),
           ) - this.constants_.CORNER_RADIUS;
         return topHeight;
-      } else if (!bottomRow.hasNextConnection && this.hasStatementInput) {
+      } else if (!next.hasNextConnection && this.hasStatementInput) {
         return Math.abs(
           this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS,
         );
@@ -259,7 +256,7 @@ export class RenderInfo extends BaseRenderInfo {
     ) {
       return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
     }
-    if (Types.isInlineInput(elem) && elem instanceof InputConnection) {
+    if (Types.isInlineInput(elem)) {
       const connectedBlock = elem.connectedBlock;
       if (
         connectedBlock &&
@@ -308,7 +305,6 @@ export class RenderInfo extends BaseRenderInfo {
         }
         if (
           Types.isField(elem) &&
-          elem instanceof Field &&
           elem.parentInput === this.rightAlignedDummyInputs.get(row)
         ) {
           break;
@@ -371,7 +367,6 @@ export class RenderInfo extends BaseRenderInfo {
               xCursor < minXPos &&
               !(
                 Types.isField(elem) &&
-                elem instanceof Field &&
                 (elem.field instanceof FieldLabel ||
                   elem.field instanceof FieldImage)
               )
@@ -525,7 +520,7 @@ export class RenderInfo extends BaseRenderInfo {
           return 0;
       }
     }
-    if (Types.isInlineInput(elem) && elem instanceof InputConnection) {
+    if (Types.isInlineInput(elem)) {
       const connectedBlock = elem.connectedBlock;
       const innerShape = connectedBlock
         ? (connectedBlock.pathObject as PathObject).outputShapeType
@@ -552,7 +547,7 @@ export class RenderInfo extends BaseRenderInfo {
         connectionWidth -
         this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape]
       );
-    } else if (Types.isField(elem) && elem instanceof Field) {
+    } else if (Types.isField(elem)) {
       // Special case for text inputs.
       if (
         outerShape === constants.SHAPES.ROUND &&
@@ -616,7 +611,6 @@ export class RenderInfo extends BaseRenderInfo {
           for (let j = 0; j < row.elements.length; j++) {
             const elem = row.elements[j];
             if (
-              elem instanceof InputConnection &&
               Types.isInlineInput(elem) &&
               elem.connectedBlock &&
               !elem.connectedBlock.isShadow() &&

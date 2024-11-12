@@ -9,11 +9,8 @@
 import type {BlockSvg} from '../../block_svg.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
-import type {BottomRow} from '../measurables/bottom_row.js';
-import type {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import type {Row} from '../measurables/row.js';
-import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 import type {Renderer} from './renderer.js';
 
@@ -94,7 +91,7 @@ export class RenderInfo extends BaseRenderInfo {
   override getInRowSpacing_(prev: Measurable | null, next: Measurable | null) {
     if (!prev) {
       // Between an editable field and the beginning of the row.
-      if (next && Types.isField(next) && (next as Field).isEditable) {
+      if (next && Types.isField(next) && next.isEditable) {
         return this.constants_.MEDIUM_PADDING;
       }
       // Inline input at the beginning of the row.
@@ -111,7 +108,7 @@ export class RenderInfo extends BaseRenderInfo {
     // Spacing between a non-input and the end of the row.
     if (!Types.isInput(prev) && !next) {
       // Between an editable field and the end of the row.
-      if (Types.isField(prev) && (prev as Field).isEditable) {
+      if (Types.isField(prev) && prev.isEditable) {
         return this.constants_.MEDIUM_PADDING;
       }
       // Padding at the end of an icon-only row to make the block shape clearer.
@@ -151,7 +148,7 @@ export class RenderInfo extends BaseRenderInfo {
     // Spacing between a non-input and an input.
     if (!Types.isInput(prev) && next && Types.isInput(next)) {
       // Between an editable field and an input.
-      if (Types.isField(prev) && (prev as Field).isEditable) {
+      if (Types.isField(prev) && prev.isEditable) {
         if (Types.isInlineInput(next)) {
           return this.constants_.SMALL_PADDING;
         } else if (Types.isExternalInput(next)) {
@@ -177,7 +174,7 @@ export class RenderInfo extends BaseRenderInfo {
     // Spacing between an inline input and a field.
     if (Types.isInlineInput(prev) && next && Types.isField(next)) {
       // Editable field after inline input.
-      if ((next as Field).isEditable) {
+      if (next.isEditable) {
         return this.constants_.MEDIUM_PADDING;
       } else {
         // Noneditable field after inline input.
@@ -205,7 +202,7 @@ export class RenderInfo extends BaseRenderInfo {
       Types.isField(prev) &&
       next &&
       Types.isField(next) &&
-      (prev as Field).isEditable === (next as Field).isEditable
+      prev.isEditable === next.isEditable
     ) {
       return this.constants_.LARGE_PADDING;
     }
@@ -247,20 +244,17 @@ export class RenderInfo extends BaseRenderInfo {
       return row.yPos + elem.height / 2;
     }
     if (Types.isBottomRow(row)) {
-      const bottomRow = row as BottomRow;
-      const baseline =
-        bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
+      const baseline = row.yPos + row.height - row.descenderHeight;
       if (Types.isNextConnection(elem)) {
         return baseline + elem.height / 2;
       }
       return baseline - elem.height / 2;
     }
     if (Types.isTopRow(row)) {
-      const topRow = row as TopRow;
       if (Types.isHat(elem)) {
-        return topRow.capline - elem.height / 2;
+        return row.capline - elem.height / 2;
       }
-      return topRow.capline + elem.height / 2;
+      return row.capline + elem.height / 2;
     }
 
     let result = row.yPos;

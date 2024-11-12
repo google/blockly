@@ -98,7 +98,7 @@ suite('Toolbox', function () {
           {'kind': 'category', 'contents': []},
         ],
       });
-      assert.lengthOf(this.toolbox.contents_, 2);
+      assert.equal(this.toolbox.contents.size, 2);
       sinon.assert.called(positionStub);
     });
     // TODO: Uncomment once implemented.
@@ -153,7 +153,7 @@ suite('Toolbox', function () {
         ],
       };
       this.toolbox.render(jsonDef);
-      assert.lengthOf(this.toolbox.contents_, 1);
+      assert.equal(this.toolbox.contents.size, 1);
     });
     test('multiple icon classes can be applied', function () {
       const jsonDef = {
@@ -176,7 +176,7 @@ suite('Toolbox', function () {
       assert.doesNotThrow(() => {
         this.toolbox.render(jsonDef);
       });
-      assert.lengthOf(this.toolbox.contents_, 1);
+      assert.equal(this.toolbox.contents.size, 1);
     });
   });
 
@@ -204,7 +204,7 @@ suite('Toolbox', function () {
       const evt = {
         'target': categoryXml,
       };
-      const item = this.toolbox.contentMap_[categoryXml.getAttribute('id')];
+      const item = this.toolbox.contents.get(categoryXml.getAttribute('id'));
       const setSelectedSpy = sinon.spy(this.toolbox, 'setSelectedItem');
       const onClickSpy = sinon.spy(item, 'onClick');
       this.toolbox.onClick_(evt);
@@ -356,14 +356,16 @@ suite('Toolbox', function () {
         assert.isFalse(handled);
       });
       test('Next item is selectable -> Should select next item', function () {
-        const item = this.toolbox.contents_[0];
+        const items = [...this.toolbox.contents.values()];
+        const item = items[0];
         this.toolbox.selectedItem_ = item;
         const handled = this.toolbox.selectNext_();
         assert.isTrue(handled);
-        assert.equal(this.toolbox.selectedItem_, this.toolbox.contents_[1]);
+        assert.equal(this.toolbox.selectedItem_, items[1]);
       });
       test('Selected item is last item -> Should not handle event', function () {
-        const item = this.toolbox.contents_[this.toolbox.contents_.length - 1];
+        const items = [...this.toolbox.contents.values()];
+        const item = items.at(-1);
         this.toolbox.selectedItem_ = item;
         const handled = this.toolbox.selectNext_();
         assert.isFalse(handled);
@@ -387,15 +389,16 @@ suite('Toolbox', function () {
         assert.isFalse(handled);
       });
       test('Selected item is first item -> Should not handle event', function () {
-        const item = this.toolbox.contents_[0];
+        const item = [...this.toolbox.contents.values()][0];
         this.toolbox.selectedItem_ = item;
         const handled = this.toolbox.selectPrevious_();
         assert.isFalse(handled);
         assert.equal(this.toolbox.selectedItem_, item);
       });
       test('Previous item is selectable -> Should select previous item', function () {
-        const item = this.toolbox.contents_[1];
-        const prevItem = this.toolbox.contents_[0];
+        const items = [...this.toolbox.contents.values()];
+        const item = items[1];
+        const prevItem = items[0];
         this.toolbox.selectedItem_ = item;
         const handled = this.toolbox.selectPrevious_();
         assert.isTrue(handled);
@@ -404,9 +407,10 @@ suite('Toolbox', function () {
       test('Previous item is collapsed -> Should skip over children of the previous item', function () {
         const childItem = getChildItem(this.toolbox);
         const parentItem = childItem.getParent();
-        const parentIdx = this.toolbox.contents_.indexOf(parentItem);
+        const items = [...this.toolbox.contents.values()];
+        const parentIdx = items.indexOf(parentItem);
         // Gets the item after the parent.
-        const item = this.toolbox.contents_[parentIdx + 1];
+        const item = items[parentIdx + 1];
         this.toolbox.selectedItem_ = item;
         const handled = this.toolbox.selectPrevious_();
         assert.isTrue(handled);
@@ -728,9 +732,10 @@ suite('Toolbox', function () {
     });
     test('Child categories visible if all ancestors expanded', function () {
       this.toolbox.render(getDeeplyNestedJSON());
-      const outerCategory = this.toolbox.contents_[0];
-      const middleCategory = this.toolbox.contents_[1];
-      const innerCategory = this.toolbox.contents_[2];
+      const items = [...this.toolbox.contents.values()];
+      const outerCategory = items[0];
+      const middleCategory = items[1];
+      const innerCategory = items[2];
 
       outerCategory.toggleExpanded();
       middleCategory.toggleExpanded();
@@ -743,8 +748,9 @@ suite('Toolbox', function () {
     });
     test('Child categories not visible if any ancestor not expanded', function () {
       this.toolbox.render(getDeeplyNestedJSON());
-      const middleCategory = this.toolbox.contents_[1];
-      const innerCategory = this.toolbox.contents_[2];
+      const items = [...this.toolbox.contents.values()];
+      const middleCategory = items[1];
+      const innerCategory = items[2];
 
       // Don't expand the outermost category
       // Even though the direct parent of inner is expanded, it shouldn't be visible

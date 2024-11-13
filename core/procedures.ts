@@ -42,6 +42,7 @@ import {IProcedureModel} from './interfaces/i_procedure_model.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
+import type {FlyoutItemInfo} from './utils/toolbox.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
@@ -236,50 +237,40 @@ export function rename(this: Field, name: string): string {
  * Construct the blocks required by the flyout for the procedure category.
  *
  * @param workspace The workspace containing procedures.
- * @returns Array of XML block elements.
+ * @returns Array of JSON block elements.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
-  const xmlList = [];
+export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
+  const blocks = [];
   if (Blocks['procedures_defnoreturn']) {
-    // <block type="procedures_defnoreturn" gap="16">
-    //     <field name="NAME">do something</field>
-    // </block>
-    const block = utilsXml.createElement('block');
-    block.setAttribute('type', 'procedures_defnoreturn');
-    block.setAttribute('gap', '16');
-    const nameField = utilsXml.createElement('field');
-    nameField.setAttribute('name', 'NAME');
-    nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']),
-    );
-    block.appendChild(nameField);
-    xmlList.push(block);
+    blocks.push({
+      'kind': 'block',
+      'type': 'procedures_defnoreturn',
+      'gap': 16,
+      'fields': {
+        'NAME': Msg['PROCEDURES_DEFNORETURN_PROCEDURE'],
+      },
+    });
   }
   if (Blocks['procedures_defreturn']) {
-    // <block type="procedures_defreturn" gap="16">
-    //     <field name="NAME">do something</field>
-    // </block>
-    const block = utilsXml.createElement('block');
-    block.setAttribute('type', 'procedures_defreturn');
-    block.setAttribute('gap', '16');
-    const nameField = utilsXml.createElement('field');
-    nameField.setAttribute('name', 'NAME');
-    nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']),
-    );
-    block.appendChild(nameField);
-    xmlList.push(block);
+    blocks.push({
+      'kind': 'block',
+      'type': 'procedures_defreturn',
+      'gap': 16,
+      'fields': {
+        'NAME': Msg['PROCEDURES_DEFRETURN_PROCEDURE'],
+      },
+    });
   }
   if (Blocks['procedures_ifreturn']) {
-    // <block type="procedures_ifreturn" gap="16"></block>
-    const block = utilsXml.createElement('block');
-    block.setAttribute('type', 'procedures_ifreturn');
-    block.setAttribute('gap', '16');
-    xmlList.push(block);
+    blocks.push({
+      'kind': 'block',
+      'type': 'procedures_ifreturn',
+      'gap': 16,
+    });
   }
-  if (xmlList.length) {
+  if (blocks.length) {
     // Add slightly larger gap between system blocks and user calls.
-    xmlList[xmlList.length - 1].setAttribute('gap', '24');
+    blocks[blocks.length - 1]['gap'] = 24;
   }
 
   /**
@@ -293,33 +284,23 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     procedureList: ProcedureTuple[],
     templateName: string,
   ) {
-    for (let i = 0; i < procedureList.length; i++) {
-      const name = procedureList[i][0];
-      const args = procedureList[i][1];
-      // <block type="procedures_callnoreturn" gap="16">
-      //   <mutation name="do something">
-      //     <arg name="x"></arg>
-      //   </mutation>
-      // </block>
-      const block = utilsXml.createElement('block');
-      block.setAttribute('type', templateName);
-      block.setAttribute('gap', '16');
-      const mutation = utilsXml.createElement('mutation');
-      mutation.setAttribute('name', name);
-      block.appendChild(mutation);
-      for (let j = 0; j < args.length; j++) {
-        const arg = utilsXml.createElement('arg');
-        arg.setAttribute('name', args[j]);
-        mutation.appendChild(arg);
-      }
-      xmlList.push(block);
+    for (const [name, args] of procedureList) {
+      blocks.push({
+        'kind': 'block',
+        'type': templateName,
+        'gap': 16,
+        'extraState': {
+          'name': name,
+          'params': args,
+        },
+      });
     }
   }
 
   const tuple = allProcedures(workspace);
   populateProcedures(tuple[0], 'procedures_callnoreturn');
   populateProcedures(tuple[1], 'procedures_callreturn');
-  return xmlList;
+  return blocks;
 }
 
 /**

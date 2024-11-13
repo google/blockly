@@ -9,9 +9,8 @@
 import {Blocks} from './blocks.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {Msg} from './msg.js';
-import * as xml from './utils/xml.js';
+import type {FlyoutItemInfo} from './utils/toolbox.js';
 import * as Variables from './variables.js';
-import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -73,27 +72,14 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  * variable category.
  *
  * @param workspace The workspace containing variables.
- * @returns Array of XML elements.
+ * @returns JSON list of flyout contents.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
   if (!Blocks['variables_set_dynamic'] && !Blocks['variables_get_dynamic']) {
     console.warn(
       'There are no dynamic variable blocks, but there is a dynamic variable category.',
     );
   }
-  let xmlList = new Array<Element>();
-  let button = document.createElement('button');
-  button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
-  xmlList.push(button);
-  button = document.createElement('button');
-  button.setAttribute('text', Msg['NEW_NUMBER_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
-  xmlList.push(button);
-  button = document.createElement('button');
-  button.setAttribute('text', Msg['NEW_COLOUR_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
-  xmlList.push(button);
 
   workspace.registerButtonCallback(
     'CREATE_VARIABLE_STRING',
@@ -108,40 +94,28 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     colourButtonClickHandler,
   );
 
-  const blockList = flyoutCategoryBlocks(workspace);
-  xmlList = xmlList.concat(blockList);
-  return xmlList;
-}
-
-/**
- * Construct the blocks required by the flyout for the variable category.
- *
- * @param workspace The workspace containing variables.
- * @returns Array of XML block elements.
- */
-export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
-  const variableModelList = workspace.getAllVariables();
-
-  const xmlList = [];
-  if (variableModelList.length > 0) {
-    if (Blocks['variables_set_dynamic']) {
-      const firstVariable = variableModelList[variableModelList.length - 1];
-      const block = xml.createElement('block');
-      block.setAttribute('type', 'variables_set_dynamic');
-      block.setAttribute('gap', '24');
-      block.appendChild(Variables.generateVariableFieldDom(firstVariable));
-      xmlList.push(block);
-    }
-    if (Blocks['variables_get_dynamic']) {
-      variableModelList.sort(Variables.compareByName);
-      for (let i = 0, variable; (variable = variableModelList[i]); i++) {
-        const block = xml.createElement('block');
-        block.setAttribute('type', 'variables_get_dynamic');
-        block.setAttribute('gap', '8');
-        block.appendChild(Variables.generateVariableFieldDom(variable));
-        xmlList.push(block);
-      }
-    }
-  }
-  return xmlList;
+  return [
+    {
+      'kind': 'button',
+      'text': Msg['NEW_STRING_VARIABLE'],
+      'callbackkey': 'CREATE_VARIABLE_STRING',
+    },
+    {
+      'kind': 'button',
+      'text': Msg['NEW_NUMBER_VARIABLE'],
+      'callbackkey': 'CREATE_VARIABLE_NUMBER',
+    },
+    {
+      'kind': 'button',
+      'text': Msg['NEW_COLOUR_VARIABLE'],
+      'callbackkey': 'CREATE_VARIABLE_COLOUR',
+    },
+    ...Variables.flyoutCategoryBlocks(
+      workspace,
+      workspace.getAllVariables(),
+      false,
+      'variables_get_dynamic',
+      'variables_set_dynamic',
+    ),
+  ];
 }

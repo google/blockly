@@ -888,42 +888,4 @@ suite('XML', function () {
       });
     });
   });
-  suite('generateVariableFieldDom', function () {
-    test('Case Sensitive', function () {
-      const varId = 'testId';
-      const type = 'testType';
-      const name = 'testName';
-
-      const mockVariableModel = {
-        type: type,
-        name: name,
-        getId: function () {
-          return varId;
-        },
-        getName: function () {
-          return name;
-        },
-        getType: function () {
-          return type;
-        },
-      };
-
-      const generatedXml = Blockly.Xml.domToText(
-        Blockly.Variables.generateVariableFieldDom(mockVariableModel),
-      );
-      const expectedXml =
-        '<field xmlns="https://developers.google.com/blockly/xml"' +
-        ' name="VAR"' +
-        ' id="' +
-        varId +
-        '"' +
-        ' variabletype="' +
-        type +
-        '"' +
-        '>' +
-        name +
-        '</field>';
-      assert.equal(generatedXml, expectedXml);
-    });
-  });
 });

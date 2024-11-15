@@ -18,8 +18,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners that a variable model was renamed.
- *
- * @class
  */
 export class VarRename extends VarBase {
   override type = eventUtils.VAR_RENAME;

@@ -1406,7 +1406,7 @@ export class Block implements IASTNodeLocation {
     return this.disabledReasons.size === 0;
   }
 
-  /** @deprecated v11 - Get whether the block is manually disabled. */
+  /** @deprecated v11 - Get or sets whether the block is manually disabled. */
   private get disabled(): boolean {
     deprecation.warn(
       'disabled',
@@ -1417,7 +1417,6 @@ export class Block implements IASTNodeLocation {
     return this.hasDisabledReason(constants.MANUALLY_DISABLED);
   }
 
-  /** @deprecated v11 - Set whether the block is manually disabled. */
   private set disabled(value: boolean) {
     deprecation.warn(
       'disabled',
@@ -2499,7 +2498,7 @@ export class Block implements IASTNodeLocation {
    *
    * Intended to on be used in console logs and errors. If you need a string
    * that uses the user's native language (including block text, field values,
-   * and child blocks), use [toString()]{@link Block#toString}.
+   * and child blocks), use {@link (Block:class).toString | toString()}.
    *
    * @returns The description.
    */

@@ -18,8 +18,6 @@ import type {Workspace} from '../workspace.js';
 
 /**
  * Notifies listeners that a variable model has been deleted.
- *
- * @class
  */
 export class VarDelete extends VarBase {
   override type = eventUtils.VAR_DELETE;

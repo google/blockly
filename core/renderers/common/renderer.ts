@@ -74,7 +74,7 @@ export class Renderer implements IRegistrable {
   /**
    * Create any DOM elements that this renderer needs.
    * If you need to create additional DOM elements, override the
-   * {@link ConstantProvider#createDom} method instead.
+   * {@link blockRendering#ConstantProvider.createDom} method instead.
    *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.

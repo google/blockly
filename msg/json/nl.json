@@ -44,7 +44,7 @@
 	"REDO": "Opnieuw",
 	"CHANGE_VALUE_TITLE": "Waarde wijzigen:",
 	"RENAME_VARIABLE": "Variabele hernoemen...",
-	"RENAME_VARIABLE_TITLE": "Alle variabelen \"%1\" hernoemen naar:",
+	"RENAME_VARIABLE_TITLE": "Alle variabelen “%1” hernoemen tot:",
 	"NEW_VARIABLE": "Variabele maken...",
 	"NEW_STRING_VARIABLE": "Tekstvariabele maken...",
 	"NEW_NUMBER_VARIABLE": "Numeriek variabele maken...",

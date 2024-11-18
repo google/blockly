@@ -392,7 +392,6 @@ export class BlockDragStrategy implements IDragStrategy {
     // Must dispose after connections are applied to not break the dynamic
     // connections plugin. See #7859
     this.connectionPreviewer!.dispose();
-    this.workspace.setResizesEnabled(true);
 
     if (!this.inGroup) {
       eventUtils.setGroup(false);

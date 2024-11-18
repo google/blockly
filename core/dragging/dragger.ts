@@ -125,6 +125,8 @@ export class Dragger implements IDragger {
       eventUtils.setGroup(origGroup);
       root.dispose();
       eventUtils.setGroup(newGroup);
+    } else {
+      this.workspace.setResizesEnabled(true);
     }
   }
 

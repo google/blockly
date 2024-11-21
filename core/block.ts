@@ -1108,6 +1108,11 @@ export class Block implements IASTNodeLocation {
     return null;
   }
 
+  /**
+   * Returns a generator that provides every field on the block.
+   *
+   * @yields A generator that can be used to iterate the fields on the block.
+   */
   *getFields(): Generator<Field> {
     for (const input of this.inputList) {
       for (const field of input.fieldRow) {

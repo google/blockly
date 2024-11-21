@@ -262,13 +262,9 @@ function saveIcons(block: Block, state: State, doFullSerialization: boolean) {
  */
 function saveFields(block: Block, state: State, doFullSerialization: boolean) {
   const fields = Object.create(null);
-  for (let i = 0; i < block.inputList.length; i++) {
-    const input = block.inputList[i];
-    for (let j = 0; j < input.fieldRow.length; j++) {
-      const field = input.fieldRow[j];
-      if (field.isSerializable()) {
-        fields[field.name!] = field.saveState(doFullSerialization);
-      }
+  for (const field of block.getFields()) {
+    if (field.isSerializable()) {
+      fields[field.name!] = field.saveState(doFullSerialization);
     }
   }
   if (Object.keys(fields).length) {

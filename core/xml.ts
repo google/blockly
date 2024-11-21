@@ -167,14 +167,10 @@ function fieldToDom(field: Field): Element | null {
  * @param element The XML element to which the field DOM should be attached.
  */
 function allFieldsToDom(block: Block, element: Element) {
-  for (let i = 0; i < block.inputList.length; i++) {
-    const input = block.inputList[i];
-    for (let j = 0; j < input.fieldRow.length; j++) {
-      const field = input.fieldRow[j];
-      const fieldDom = fieldToDom(field);
-      if (fieldDom) {
-        element.appendChild(fieldDom);
-      }
+  for (const field of block.getFields()) {
+    const fieldDom = fieldToDom(field);
+    if (fieldDom) {
+      element.appendChild(fieldDom);
     }
   }
 }

@@ -887,10 +887,8 @@ export class BlockSvg
       icons[i].applyColour();
     }
 
-    for (let x = 0, input; (input = this.inputList[x]); x++) {
-      for (let y = 0, field; (field = input.fieldRow[y]); y++) {
-        field.applyColour();
-      }
+    for (const field of this.getFields()) {
+      field.applyColour();
     }
   }
 

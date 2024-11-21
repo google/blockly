@@ -338,8 +338,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
    *     I.E. the block that owns this icon.
    */
   private getBubbleOwnerRect(): Rect {
-    const bbox = (this.sourceBlock as BlockSvg).getSvgRoot().getBBox();
-    return new Rect(bbox.y, bbox.y + bbox.height, bbox.x, bbox.x + bbox.width);
+    return (this.sourceBlock as BlockSvg).getBoundingRectangleWithoutChildren();
   }
 }
 

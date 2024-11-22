@@ -79,6 +79,8 @@ let content = `
   position: relative;
   overflow: hidden;  /* So blocks in drag surface disappear at edges */
   touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .blocklyNonSelectable {
@@ -264,17 +266,6 @@ let content = `
 
 .blocklyText text {
   cursor: default;
-}
-
-/*
-  Don't allow users to select text.  It gets annoying when trying to
-  drag a block and selected text moves instead.
-*/
-.blocklySvg text {
-  user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  cursor: inherit;
 }
 
 .blocklyHidden {

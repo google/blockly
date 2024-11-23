@@ -926,8 +926,18 @@ export class ConstantProvider {
    * @param svg The root of the workspace's SVG.
    * @param tagName The name to use for the CSS style tag.
    * @param selector The CSS selector to use.
+   * @param injectionDivIfIsParent The div containing the parent workspace and
+   *   all related workspaces and block containers, if this renderer is for the
+   *   parent workspace. CSS variables representing SVG patterns will be scoped
+   *   to this container. Child workspaces should not override the CSS variables
+   *   created by the parent and thus do not need access to the injection div.
    */
-  createDom(svg: SVGElement, tagName: string, selector: string) {
+  createDom(
+    svg: SVGElement,
+    tagName: string,
+    selector: string,
+    injectionDivIfIsParent?: HTMLElement,
+  ) {
     this.injectCSS_(tagName, selector);
 
     /*
@@ -1034,6 +1044,24 @@ export class ConstantProvider {
     this.disabledPattern = disabledPattern;
 
     this.createDebugFilter();
+
+    if (injectionDivIfIsParent) {
+      // If this renderer is for the parent workspace, add CSS variables scoped
+      // to the injection div referencing the created patterns so that CSS can
+      // apply the patterns to any element in the injection div.
+      injectionDivIfIsParent.style.setProperty(
+        '--blocklyEmbossFilter',
+        `url(#${this.embossFilterId})`,
+      );
+      injectionDivIfIsParent.style.setProperty(
+        '--blocklyDisabledPattern',
+        `url(#${this.disabledPatternId})`,
+      );
+      injectionDivIfIsParent.style.setProperty(
+        '--blocklyDebugFilter',
+        `url(#${this.debugFilterId})`,
+      );
+    }
   }
 
   /**

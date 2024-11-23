@@ -225,7 +225,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * The first parent div with 'injectionDiv' in the name, or null if not set.
    * Access this with getInjectionDiv.
    */
-  private injectionDiv: Element | null = null;
+  private injectionDiv: HTMLElement | null = null;
 
   /**
    * Last known position of the page scroll.
@@ -539,7 +539,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   refreshTheme() {
     if (this.svgGroup_) {
-      this.renderer.refreshDom(this.svgGroup_, this.getTheme());
+      const isParentWorkspace = this.options.parentWorkspace === null;
+      this.renderer.refreshDom(
+        this.svgGroup_,
+        this.getTheme(),
+        isParentWorkspace ? this.getInjectionDiv() : undefined,
+      );
     }
 
     // Update all blocks in workspace that have a style name.
@@ -636,20 +641,24 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // Before the SVG canvas, scale the coordinates.
       scale = this.scale;
     }
+    let ancestor: Element = element;
     do {
       // Loop through this block and every parent.
-      const xy = svgMath.getRelativeXY(element);
-      if (element === this.getCanvas() || element === this.getBubbleCanvas()) {
+      const xy = svgMath.getRelativeXY(ancestor);
+      if (
+        ancestor === this.getCanvas() ||
+        ancestor === this.getBubbleCanvas()
+      ) {
         // After the SVG canvas, don't scale the coordinates.
         scale = 1;
       }
       x += xy.x * scale;
       y += xy.y * scale;
-      element = element.parentNode as SVGElement;
+      ancestor = ancestor.parentNode as Element;
     } while (
-      element &&
-      element !== this.getParentSvg() &&
-      element !== this.getInjectionDiv()
+      ancestor &&
+      ancestor !== this.getParentSvg() &&
+      ancestor !== this.getInjectionDiv()
     );
     return new Coordinate(x, y);
   }
@@ -687,7 +696,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The first parent div with 'injectionDiv' in the name.
    * @internal
    */
-  getInjectionDiv(): Element {
+  getInjectionDiv(): HTMLElement {
     // NB: it would be better to pass this in at createDom, but is more likely
     // to break existing uses of Blockly.
     if (!this.injectionDiv) {
@@ -695,7 +704,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       while (element) {
         const classes = element.getAttribute('class') || '';
         if ((' ' + classes + ' ').includes(' injectionDiv ')) {
-          this.injectionDiv = element;
+          this.injectionDiv = element as HTMLElement;
           break;
         }
         element = element.parentNode as Element;
@@ -739,7 +748,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     'blocklyMutatorBackground'.
    * @returns The workspace's SVG group.
    */
-  createDom(opt_backgroundClass?: string, injectionDiv?: Element): Element {
+  createDom(opt_backgroundClass?: string, injectionDiv?: HTMLElement): Element {
     if (!this.injectionDiv) {
       this.injectionDiv = injectionDiv ?? null;
     }
@@ -765,8 +774,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       );
 
       if (opt_backgroundClass === 'blocklyMainBackground' && this.grid) {
-        this.svgBackground_.style.fill =
-          'url(#' + this.grid.getPatternId() + ')';
+        this.svgBackground_.style.fill = 'var(--blocklyGridPattern)';
       } else {
         this.themeManager_.subscribe(
           this.svgBackground_,
@@ -823,7 +831,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     CursorClass && this.markerManager.setCursor(new CursorClass());
 
-    this.renderer.createDom(this.svgGroup_, this.getTheme());
+    const isParentWorkspace = this.options.parentWorkspace === null;
+    this.renderer.createDom(
+      this.svgGroup_,
+      this.getTheme(),
+      isParentWorkspace ? this.getInjectionDiv() : undefined,
+    );
     return this.svgGroup_;
   }
 

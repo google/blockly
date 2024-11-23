@@ -173,13 +173,8 @@ export class PathObject implements IPathObject {
 
   updateHighlighted(enable: boolean) {
     if (enable) {
-      this.svgPath.setAttribute(
-        'filter',
-        'url(#' + this.constants.embossFilterId + ')',
-      );
       this.setClass_('blocklyHighlighted', true);
     } else {
-      this.svgPath.setAttribute('filter', 'none');
       this.setClass_('blocklyHighlighted', false);
     }
   }
@@ -206,12 +201,6 @@ export class PathObject implements IPathObject {
    */
   protected updateDisabled_(disabled: boolean) {
     this.setClass_('blocklyDisabled', disabled);
-    if (disabled) {
-      this.svgPath.setAttribute(
-        'fill',
-        'url(#' + this.constants.disabledPatternId + ')',
-      );
-    }
   }
 
   /**

@@ -312,6 +312,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "buat sesuatu",
 	"PROCEDURES_BEFORE_PARAMS": "dengan:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "dengan:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Tidak dapat menjalankan fungsi yang ditentukan pengguna '%1' karena blok definisi dinonaktifkan.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Buat sebuah fungsi tanpa output.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Jelaskan fungsi ini...",
 	"PROCEDURES_DEFRETURN_RETURN": "kembali",

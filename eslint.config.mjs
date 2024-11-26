@@ -241,6 +241,9 @@ export default [
         'pythonGenerator': true,
       },
     },
+    rules: {
+      'jsdoc/check-values': ['off'],
+    },
   },
   {
     files: ['tests/browser/**'],

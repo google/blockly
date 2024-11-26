@@ -208,6 +208,17 @@ export default [
         'exports': true,
       },
     },
+    'settings': {
+      // Allowlist some JSDoc tag aliases we use.
+      'jsdoc': {
+        'tagNamePreference': {
+          'return': 'return',
+          'fileoverview': 'fileoverview',
+          'extends': 'extends',
+          'constructor': 'constructor',
+        },
+      },
+    },
     rules,
   },
   {

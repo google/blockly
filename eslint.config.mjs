@@ -222,7 +222,13 @@ export default [
     rules,
   },
   {
-    files: ['eslint.config.mjs'],
+    files: [
+      'eslint.config.mjs',
+      '.prettierrc.js',
+      'gulpfile.js',
+      'scripts/helpers.js',
+      'tests/mocha/.mocharc.js',
+    ],
     languageOptions: {
       globals: {
         ...globals.node,

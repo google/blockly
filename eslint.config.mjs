@@ -1,3 +1,16 @@
+import eslint from '@eslint/js';
+import googleStyle from 'eslint-config-google';
+import jsdoc from 'eslint-plugin-jsdoc';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+// These rules are no longer supported, but the Google style package we depend
+// on hasn't been updated in years to remove them, even though they have been
+// removed from the repo. Manually delete them here to avoid breaking linting.
+delete googleStyle.rules['valid-jsdoc'];
+delete googleStyle.rules['require-jsdoc'];
+
 const rules = {
   'no-unused-vars': [
     'error',
@@ -18,7 +31,6 @@ const rules = {
   'strict': ['off'],
   // Closure style allows redeclarations.
   'no-redeclare': ['off'],
-  'valid-jsdoc': ['error'],
   'no-console': ['off'],
   'spaced-comment': [
     'error',
@@ -55,25 +67,28 @@ const rules = {
 function buildTSOverride({files, tsconfig}) {
   return {
     'files': files,
-    'plugins': ['@typescript-eslint/eslint-plugin', 'jsdoc'],
-    'settings': {
-      'jsdoc': {
-        'mode': 'typescript',
-      },
+    'plugins': {
+      '@typescript-eslint': tseslint.plugin,
+      jsdoc,
     },
-    'parser': '@typescript-eslint/parser',
-    'parserOptions': {
-      'project': tsconfig,
-      'tsconfigRootDir': '.',
+    languageOptions: {
+      parser: tseslint.parser,
       'ecmaVersion': 2020,
       'sourceType': 'module',
+      parserOptions: {
+        'project': tsconfig,
+        'tsconfigRootDir': '.',
+      },
+      globals: {
+        ...globals.browser,
+      },
     },
-    'extends': [
-      'plugin:@typescript-eslint/recommended',
-      'plugin:jsdoc/recommended',
-      'prettier', // Extend again so that these rules are applied last
+    extends: [
+      ...tseslint.configs.recommended,
+      jsdoc.configs['flat/recommended-typescript'],
+      eslintPluginPrettierRecommended,
     ],
-    'rules': {
+    rules: {
       // TS rules
       // Blockly uses namespaces to do declaration merging in some cases.
       '@typescript-eslint/no-namespace': ['off'],
@@ -93,8 +108,6 @@ function buildTSOverride({files, tsconfig}) {
       ],
       // Temporarily disable. 23 problems.
       '@typescript-eslint/no-explicit-any': ['off'],
-      // Temporarily disable. 128 problems.
-      'require-jsdoc': ['off'],
       // Temporarily disable. 55 problems.
       '@typescript-eslint/ban-types': ['off'],
       // Temporarily disable. 33 problems.
@@ -104,9 +117,6 @@ function buildTSOverride({files, tsconfig}) {
       // We use this pattern extensively for block (e.g. controls_if) interfaces.
       '@typescript-eslint/no-empty-object-type': ['off'],
 
-      // TsDoc rules (using JsDoc plugin)
-      // Disable built-in jsdoc verifier.
-      'valid-jsdoc': ['off'],
       // Don't require types in params and returns docs.
       'jsdoc/require-param-type': ['off'],
       'jsdoc/require-returns-type': ['off'],
@@ -154,36 +164,136 @@ function buildTSOverride({files, tsconfig}) {
   };
 }
 
-// NOTE: When this output is put directly in `module.exports`, the formatter
-// does not align with the linter.
-const eslintJSON = {
-  'rules': rules,
-  'env': {
-    'es2020': true,
-    'browser': true,
+export default [
+  {
+    // Note: there should be no other properties in this object
+    ignores: [
+      // Build artifacts
+      'msg/*',
+      'build/*',
+      'dist/*',
+      'typings/*',
+      'docs/*',
+      // Tests other than mocha unit tests
+      'tests/blocks/*',
+      'tests/themes/*',
+      'tests/compile/*',
+      'tests/jsunit/*',
+      'tests/generators/*',
+      'tests/mocha/webdriver.js',
+      'tests/screenshot/*',
+      'tests/test_runner.js',
+      'tests/workspace_svg/*',
+      // Demos, scripts, misc
+      'node_modules/*',
+      'generators/*',
+      'demos/*',
+      'appengine/*',
+      'externs/*',
+      'closure/*',
+      'scripts/gulpfiles/*',
+      'CHANGELOG.md',
+      'PULL_REQUEST_TEMPLATE.md',
+    ],
   },
-  'globals': {
-    'goog': true,
-    'exports': true,
+  eslint.configs.recommended,
+  jsdoc.configs['flat/recommended'],
+  googleStyle,
+  {
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+      globals: {
+        'goog': true,
+        'exports': true,
+      },
+    },
+    rules,
   },
-  'extends': ['eslint:recommended', 'google', 'prettier'],
-  // TypeScript-specific config. Uses above rules plus these.
-  'overrides': [
+  {
+    files: ['eslint.config.mjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['tests/**'],
+    languageOptions: {
+      globals: {
+        'Blockly': true,
+        'dartGenerator': true,
+        'javascriptGenerator': true,
+        'luaGenerator': true,
+        'phpGenerator': true,
+        'pythonGenerator': true,
+      },
+    },
+  },
+  {
+    files: ['tests/browser/**'],
+    languageOptions: {
+      sourceType: 'module',
+      globals: {
+        'chai': false,
+        'sinon': false,
+        ...globals.mocha,
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    rules: {
+      'no-unused-vars': ['off'],
+      // Allow uncommented helper functions in tests.
+      'jsdoc/require-jsdoc': ['off'],
+      'jsdoc/require-returns-type': ['off'],
+      'jsdoc/require-param-type': ['off'],
+      'prefer-rest-params': ['off'],
+      'no-invalid-this': ['off'],
+    },
+  },
+  {
+    files: ['tests/mocha/**'],
+    languageOptions: {
+      sourceType: 'module',
+      globals: {
+        'chai': false,
+        'sinon': false,
+        ...globals.mocha,
+        ...globals.browser,
+      },
+    },
+    rules: {
+      'no-unused-vars': ['off'],
+      // Allow uncommented helper functions in tests.
+      'jsdoc/require-jsdoc': ['off'],
+      'prefer-rest-params': ['off'],
+      'no-invalid-this': ['off'],
+    },
+  },
+  {
+    files: ['tests/node/**'],
+    languageOptions: {
+      globals: {
+        'console': true,
+        'require': true,
+        ...globals.mocha,
+        ...globals.node,
+      },
+    },
+  },
+  ...tseslint.config(
     buildTSOverride({
-      files: ['./**/*.ts', './**/*.tsx'],
+      files: ['**/*.ts', '**/*.tsx'],
       tsconfig: './tsconfig.json',
     }),
     buildTSOverride({
-      files: ['./tests/typescript/**/*.ts', './tests/typescript/**/*.tsx'],
+      files: ['tests/typescript/**/*.ts', 'tests/typescript/**/*.tsx'],
       tsconfig: './tests/typescript/tsconfig.json',
     }),
-    {
-      'files': ['./.eslintrc.js'],
-      'env': {
-        'node': true,
-      },
-    },
-  ],
-};
-
-module.exports = eslintJSON;
+  ),
+  // Per the docs, this should be at the end because it disables rules that
+  // conflict with Prettier.
+  eslintPluginPrettierRecommended,
+];

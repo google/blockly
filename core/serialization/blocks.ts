@@ -32,9 +32,6 @@ import {
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
 
-// TODO(#5160): Remove this once lint is fixed.
-/* eslint-disable no-use-before-define */
-
 /**
  * Represents the state of a connection.
  */
@@ -795,7 +792,6 @@ const saveBlock = save;
 export class BlockSerializer implements ISerializer {
   priority: number;
 
-  /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /** The priority for deserializing blocks. */
     this.priority = priorities.BLOCKS;

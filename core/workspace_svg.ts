@@ -1077,14 +1077,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   updateScreenCalculationsIfScrolled() {
-    /* eslint-disable indent */
     const currScroll = svgMath.getDocumentScroll();
     if (!Coordinate.equals(this.lastRecordedPageScroll, currScroll)) {
       this.lastRecordedPageScroll = currScroll;
       this.updateScreenCalculations_();
     }
   }
-  /* eslint-enable indent */
 
   /**
    * @returns The layer manager for this workspace.

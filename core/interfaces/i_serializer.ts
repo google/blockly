@@ -30,7 +30,6 @@ export interface ISerializer {
    *     state to record.
    */
   save(workspace: Workspace): object | null;
-  /* eslint-enable valid-jsdoc */
 
   /**
    * Loads the state of the plugin or system.

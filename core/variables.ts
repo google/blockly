@@ -202,7 +202,6 @@ export function generateUniqueNameFromOptions(
   let letterIndex = letters.indexOf(startChar);
   let potName = startChar;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     let inUse = false;
     for (let i = 0; i < usedNames.length; i++) {

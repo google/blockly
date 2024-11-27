@@ -40,7 +40,7 @@ function svgToPng_(data, width, height, callback) {
       const dataUri = canvas.toDataURL('image/png');
       callback(dataUri);
     } catch (err) {
-      console.warn('Error converting the workspace svg to a png');
+      console.warn('Error converting the workspace svg to a png: ' + err);
       callback('');
     }
   };

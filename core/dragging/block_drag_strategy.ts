@@ -358,7 +358,7 @@ export class BlockDragStrategy implements IDragStrategy {
    * Cleans up any state at the end of the drag. Applies any pending
    * connections.
    */
-  endDrag(e?: PointerEvent): void {
+  async endDrag(e?: PointerEvent): Promise<void> {
     if (this.block.isShadow()) {
       this.block.getParent()?.endDrag(e);
       return;
@@ -385,13 +385,14 @@ export class BlockDragStrategy implements IDragStrategy {
       // Applying connections also rerenders the relevant blocks.
       this.applyConnections(this.connectionCandidate);
     } else {
-      this.block.queueRender();
+      await this.block.queueRender();
     }
     this.block.snapToGrid();
 
     // Must dispose after connections are applied to not break the dynamic
     // connections plugin. See #7859
     this.connectionPreviewer!.dispose();
+    this.workspace.setResizesEnabled(true);
 
     if (!this.inGroup) {
       eventUtils.setGroup(false);

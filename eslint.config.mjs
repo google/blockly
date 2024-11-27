@@ -12,26 +12,6 @@ delete googleStyle.rules['valid-jsdoc'];
 delete googleStyle.rules['require-jsdoc'];
 
 const rules = {
-  'no-unused-vars': [
-    'error',
-    {
-      'args': 'after-used',
-      // Ignore vars starting with an underscore.
-      'varsIgnorePattern': '^_',
-      // Ignore arguments starting with an underscore.
-      'argsIgnorePattern': '^_',
-    },
-  ],
-  // Blockly uses for exporting symbols. no-self-assign added in eslint 5.
-  'no-self-assign': ['off'],
-  // Blockly uses single quotes except for JSON blobs, which must use double
-  // quotes.
-  'quotes': ['off'],
-  // Blockly uses 'use strict' in files.
-  'strict': ['off'],
-  // Closure style allows redeclarations.
-  'no-redeclare': ['off'],
-  'no-console': ['off'],
   'spaced-comment': [
     'error',
     'always',
@@ -56,7 +36,6 @@ const rules = {
   // Blockly uses objects as maps, but uses Object.create(null) to
   // instantiate them.
   'guard-for-in': ['off'],
-  'prefer-spread': ['off'],
 };
 
 /**
@@ -98,10 +77,6 @@ function buildTSOverride({files, tsconfig}) {
       // Use the updated TypeScript-specific rule.
       'no-invalid-this': ['off'],
       '@typescript-eslint/no-invalid-this': ['error'],
-      // Needs decision. 601 problems.
-      '@typescript-eslint/no-non-null-assertion': ['off'],
-      // Use TS-specific rule.
-      'no-unused-vars': ['off'],
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -111,18 +86,9 @@ function buildTSOverride({files, tsconfig}) {
       ],
       // Temporarily disable. 23 problems.
       '@typescript-eslint/no-explicit-any': ['off'],
-      // Temporarily disable. 55 problems.
-      '@typescript-eslint/ban-types': ['off'],
-      // Temporarily disable. 33 problems.
-      '@typescript-eslint/no-empty-function': ['off'],
-      // Temporarily disable. 3 problems.
-      '@typescript-eslint/no-empty-interface': ['off'],
       // We use this pattern extensively for block (e.g. controls_if) interfaces.
       '@typescript-eslint/no-empty-object-type': ['off'],
 
-      // Don't require types in params and returns docs.
-      'jsdoc/require-param-type': ['off'],
-      'jsdoc/require-returns-type': ['off'],
       // params and returns docs are optional.
       'jsdoc/require-param-description': ['off'],
       'jsdoc/require-returns': ['off'],
@@ -145,15 +111,9 @@ function buildTSOverride({files, tsconfig}) {
             'remarks',
             'define',
             'nocollapse',
-            'suppress',
           ],
         },
       ],
-      // Re-enable after Closure is removed. There shouldn't even be
-      // types in the TsDoc.
-      // These are "types" because of Closure's @suppress {warningName}
-      'jsdoc/no-undefined-types': ['off'],
-      'jsdoc/valid-types': ['off'],
       // Disabled due to not handling `this`. If re-enabled,
       // checkDestructured option
       // should be left as false.
@@ -206,10 +166,6 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
-      globals: {
-        'goog': true,
-        'exports': true,
-      },
     },
     settings: {
       // Allowlist some JSDoc tag aliases we use.
@@ -278,12 +234,10 @@ export default [
       },
     },
     rules: {
-      'no-unused-vars': ['off'],
       // Allow uncommented helper functions in tests.
       'jsdoc/require-jsdoc': ['off'],
       'jsdoc/require-returns-type': ['off'],
       'jsdoc/require-param-type': ['off'],
-      'prefer-rest-params': ['off'],
       'no-invalid-this': ['off'],
     },
   },

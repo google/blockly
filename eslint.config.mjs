@@ -61,13 +61,16 @@ const rules = {
 
 /**
  * Build shared settings for TS linting and add in the config differences.
- * @return {Object} The override TS linting for given files and a given
+ * @param {object} root0 A configuration options struct.
+ * @param {!Array<string>} root0.files List of file globs to apply rules to.
+ * @param {string} root0.tsconfig Path to the tsconfig.json file to use.
+ * @returns {object} The override TS linting for given files and a given
  *     tsconfig.
  */
 function buildTSOverride({files, tsconfig}) {
   return {
-    'files': files,
-    'plugins': {
+    files: files,
+    plugins: {
       '@typescript-eslint': tseslint.plugin,
       jsdoc,
     },
@@ -208,7 +211,7 @@ export default [
         'exports': true,
       },
     },
-    'settings': {
+    settings: {
       // Allowlist some JSDoc tag aliases we use.
       'jsdoc': {
         'tagNamePreference': {
@@ -228,11 +231,15 @@ export default [
       'gulpfile.js',
       'scripts/helpers.js',
       'tests/mocha/.mocharc.js',
+      'tests/migration/validate-renamings.mjs',
     ],
     languageOptions: {
       globals: {
         ...globals.node,
       },
+    },
+    rules: {
+      'jsdoc/check-values': ['off'],
     },
   },
   {
@@ -249,6 +256,13 @@ export default [
     },
     rules: {
       'jsdoc/check-values': ['off'],
+      'jsdoc/require-returns': ['off'],
+      'jsdoc/no-undefined-types': ['off'],
+      'jsdoc/valid-types': ['off'],
+      'jsdoc/check-types': ['off'],
+      'jsdoc/check-tag-names': ['warn', {'definedTags': ['record']}],
+      'jsdoc/tag-lines': ['off'],
+      'jsdoc/no-defaults': ['off'],
     },
   },
   {
@@ -301,6 +315,27 @@ export default [
         ...globals.mocha,
         ...globals.node,
       },
+    },
+  },
+  {
+    files: ['tests/playgrounds/**', 'tests/scripts/**'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+    },
+  },
+  {
+    files: ['scripts/**'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+    },
+    rules: {
+      'jsdoc/check-values': ['off'],
+      'jsdoc/require-returns': ['off'],
+      'jsdoc/tag-lines': ['off'],
     },
   },
   ...tseslint.config(

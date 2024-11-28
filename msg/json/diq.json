@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"1917 Ekim Devrimi",
+			"GolyatGeri",
 			"Gırd",
 			"Kumkumuk",
 			"Marmase",
@@ -77,7 +78,9 @@
 	"CONTROLS_IF_MSG_ELSEIF": "eke nêyo",
 	"CONTROLS_IF_MSG_ELSE": "eke çıniyo",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Bloq da if'i rê yu şert dekerê de.",
+	"CONTROLS_IF_ELSE_TOOLTIP": "Blokê if'i rê mendê weziyeta \"tepêşen\" yaw qediye cıkerê",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Debiyaye dı erci zey pêyêse ercê \"True\" dane.",
+	"LOGIC_COMPARE_TOOLTIP_NEQ": "Debiyaye dı erci zey pê niyê se ercê true yı tadê",
 	"LOGIC_OPERATION_TOOLTIP_AND": "Eger her dı cıkewtışi zi raştê, şıma ageyrê.",
 	"LOGIC_OPERATION_AND": "û",
 	"LOGIC_OPERATION_OR": "ya zi",
@@ -129,11 +132,13 @@
 	"MATH_IS_NEGATIVE": "negatifo",
 	"MATH_IS_DIVISIBLE_BY": "Leteyêno",
 	"MATH_CHANGE_TITLE": "%2, keno %1 vurneno",
+	"MATH_CHANGE_TOOLTIP": "Vurnayoğê %1 rê yew amar dekerê",
 	"MATH_ROUND_TOOLTIP": "Yu amorer loğê cêri yana cori ke",
 	"MATH_ROUND_OPERATOR_ROUND": "gılor ke",
 	"MATH_ROUND_OPERATOR_ROUNDUP": "Loğê cori ke",
 	"MATH_ROUND_OPERATOR_ROUNDDOWN": "Loğê cêri ke",
 	"MATH_ONLIST_OPERATOR_SUM": "koma liste",
+	"MATH_ONLIST_TOOLTIP_SUM": "Lista de arêdê amara pêroyi tadê",
 	"MATH_ONLIST_OPERATOR_MIN": "Tewr qıcê lista",
 	"MATH_ONLIST_TOOLTIP_MIN": "Lista de tewr qıckek amar tadê",
 	"MATH_ONLIST_OPERATOR_MAX": "Tewr gırdê lista",
@@ -253,6 +258,7 @@
 	"PROCEDURES_CREATE_DO": "'%1' vıraze",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Çiyê vace...",
 	"WORKSPACE_ARIA_LABEL": "Blockly Caygurenayışi",
+	"COLLAPSED_WARNINGS_WARNING": "Tengneyaye bloku iqazi ihtiwa kenê.",
 	"DIALOG_OK": "TEMAM",
 	"DIALOG_CANCEL": "Bıtexelne"
 }

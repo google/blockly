@@ -82,7 +82,7 @@ suite('Toolbox', function () {
       const componentManager = this.toolbox.workspace_.getComponentManager();
       sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
-      assert.isDefined(this.toolbox.flyout);
+      assert.isDefined(this.toolbox.getFlyout());
     });
   });
 
@@ -477,7 +477,7 @@ suite('Toolbox', function () {
     });
 
     function testHideFlyout(toolbox, oldItem, newItem) {
-      const updateFlyoutStub = sinon.stub(toolbox.flyout, 'hide');
+      const updateFlyoutStub = sinon.stub(toolbox.getFlyout(), 'hide');
       toolbox.updateFlyout_(oldItem, newItem);
       sinon.assert.called(updateFlyoutStub);
     }
@@ -498,9 +498,9 @@ suite('Toolbox', function () {
       testHideFlyout(this.toolbox, null, newItem);
     });
     test('Select selectable item -> Should open flyout', function () {
-      const showFlyoutstub = sinon.stub(this.toolbox.flyout, 'show');
+      const showFlyoutstub = sinon.stub(this.toolbox.getFlyout(), 'show');
       const scrollToStartFlyout = sinon.stub(
-        this.toolbox.flyout,
+        this.toolbox.getFlyout(),
         'scrollToStart',
       );
       const newItem = getNonCollapsibleItem(this.toolbox);

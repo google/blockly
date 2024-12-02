@@ -626,7 +626,7 @@ suite('Abstract Fields', function () {
         const field = new Blockly.Field('value', null, {
           tooltip: 'test tooltip',
         });
-        assert.equal(field.tooltip, 'test tooltip');
+        assert.equal(field.getTooltip(), 'test tooltip');
       });
       test('JS Constructor - Dynamic', function () {
         const returnTooltip = function () {
@@ -635,13 +635,13 @@ suite('Abstract Fields', function () {
         const field = new Blockly.Field('value', null, {
           tooltip: returnTooltip,
         });
-        assert.equal(field.tooltip, returnTooltip);
+        assert.equal(field.getTooltip(), returnTooltip());
       });
       test('JSON Definition', function () {
         const field = CustomField.fromJson({
           tooltip: 'test tooltip',
         });
-        assert.equal(field.tooltip, 'test tooltip');
+        assert.equal(field.getTooltip(), 'test tooltip');
       });
       suite('W/ Msg References', function () {
         setup(function () {
@@ -652,13 +652,13 @@ suite('Abstract Fields', function () {
           const field = new Blockly.Field('value', null, {
             tooltip: '%{BKY_TOOLTIP}',
           });
-          assert.equal(field.tooltip, 'test tooltip');
+          assert.equal(field.getTooltip(), 'test tooltip');
         });
         test('JSON Definition', function () {
           const field = CustomField.fromJson({
             tooltip: '%{BKY_TOOLTIP}',
           });
-          assert.equal(field.tooltip, 'test tooltip');
+          assert.equal(field.getTooltip(), 'test tooltip');
         });
       });
       suite('setTooltip', function () {

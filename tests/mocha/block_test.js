@@ -2527,12 +2527,12 @@ suite('Blocks', function () {
         this.block.setColour('20');
         assert.equal(this.block.getColour(), '#a5745b');
         assert.equal(this.block.colour_, this.block.getColour());
-        assert.equal(this.block.hue, '20');
+        assert.equal(this.block.getHue(), '20');
       });
       test('Set style', function () {
         this.block.setStyle('styleOne');
         assert.equal(this.block.getStyleName(), 'styleOne');
-        assert.isNull(this.block.hue);
+        assert.isNull(this.block.getHue());
         // Calling setStyle does not update the colour on a headless block.
         assert.equal(this.block.getColour(), '#000000');
       });
@@ -2566,14 +2566,14 @@ suite('Blocks', function () {
         assert.equal(this.block.getStyleName(), 'auto_#a5745b');
         assert.equal(this.block.getColour(), '#a5745b');
         assert.equal(this.block.colour_, this.block.getColour());
-        assert.equal(this.block.hue, '20');
+        assert.equal(this.block.getHue(), '20');
       });
       test('Set colour hex', function () {
         this.block.setColour('#000000');
         assert.equal(this.block.getStyleName(), 'auto_#000000');
         assert.equal(this.block.getColour(), '#000000');
         assert.equal(this.block.colour_, this.block.getColour());
-        assert.isNull(this.block.hue);
+        assert.isNull(this.block.getHue());
       });
       test('Set style', function () {
         this.block.setStyle('styleOne');

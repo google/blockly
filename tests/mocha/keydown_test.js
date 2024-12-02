@@ -68,7 +68,7 @@ suite('Key Down', function () {
       sinon.assert.notCalled(this.hideChaffSpy);
     });
     test('Not called on hidden workspaces', function () {
-      this.workspace.isVisible_ = false;
+      this.workspace.visible = false;
       this.injectionDiv.dispatchEvent(this.event);
       sinon.assert.notCalled(this.hideChaffSpy);
     });

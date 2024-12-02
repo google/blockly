@@ -23,10 +23,10 @@ class Capability<_T> {
   static DRAG_TARGET = new Capability<IDragTarget>('drag_target');
   static DELETE_AREA = new Capability<IDeleteArea>('delete_area');
   static AUTOHIDEABLE = new Capability<IAutoHideable>('autohideable');
-  private readonly name_: string;
+  private readonly name: string;
   /** @param name The name of the component capability. */
   constructor(name: string) {
-    this.name_ = name;
+    this.name = name;
   }
 
   /**
@@ -35,7 +35,7 @@ class Capability<_T> {
    * @returns The name.
    */
   toString(): string {
-    return this.name_;
+    return this.name;
   }
 }
 

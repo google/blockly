@@ -242,7 +242,7 @@ export class ShortcutRegistry {
    * @returns True if the event was handled, false otherwise.
    */
   onKeyDown(workspace: WorkspaceSvg, e: KeyboardEvent): boolean {
-    const key = this.serializeKeyEvent_(e);
+    const key = this.serializeKeyEvent(e);
     const shortcutNames = this.getShortcutNamesByKeyCode(key);
     if (!shortcutNames) return false;
     for (const shortcutName of shortcutNames) {
@@ -294,7 +294,7 @@ export class ShortcutRegistry {
    * @param e A key down event.
    * @returns The serialized key code for the given event.
    */
-  private serializeKeyEvent_(e: KeyboardEvent): string {
+  private serializeKeyEvent(e: KeyboardEvent): string {
     let serializedKey = '';
     for (const modifier in ShortcutRegistry.modifierKeys) {
       if (e.getModifierState(modifier)) {
@@ -318,7 +318,7 @@ export class ShortcutRegistry {
    * @param modifiers List of modifiers to be used with the key.
    * @throws {Error} if the modifier is not in the valid modifiers list.
    */
-  private checkModifiers_(modifiers: KeyCodes[]) {
+  private checkModifiers(modifiers: KeyCodes[]) {
     for (const modifier of modifiers) {
       if (!(modifier in ShortcutRegistry.modifierKeys)) {
         throw new Error(modifier + ' is not a valid modifier key.');
@@ -338,7 +338,7 @@ export class ShortcutRegistry {
     let serializedKey = '';
 
     if (modifiers) {
-      this.checkModifiers_(modifiers);
+      this.checkModifiers(modifiers);
       for (const modifier in ShortcutRegistry.modifierKeys) {
         const modifierKeyCode = (
           ShortcutRegistry.modifierKeys as AnyDuringMigration

@@ -29,7 +29,7 @@ suite('Variable Model', function () {
     );
     assert.equal(variable.name, 'test');
     assert.equal(variable.type, 'test_type');
-    assert.equal(variable.id_, 'test_id');
+    assert.equal(variable.id, 'test_id');
   });
 
   test('Null type', function () {
@@ -61,7 +61,7 @@ suite('Variable Model', function () {
     );
     assert.equal(variable.name, 'test');
     assert.equal(variable.type, 'test_type');
-    assert.exists(variable.id_);
+    assert.exists(variable.id);
   });
 
   test('Undefined id', function () {
@@ -73,13 +73,13 @@ suite('Variable Model', function () {
     );
     assert.equal(variable.name, 'test');
     assert.equal(variable.type, 'test_type');
-    assert.exists(variable.id_);
+    assert.exists(variable.id);
   });
 
   test('Only name provided', function () {
     const variable = new Blockly.VariableModel(this.workspace, 'test');
     assert.equal(variable.name, 'test');
     assert.equal(variable.type, '');
-    assert.exists(variable.id_);
+    assert.exists(variable.id);
   });
 });

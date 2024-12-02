@@ -80,10 +80,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   protected valueWhenEditorWasOpened_: string | T | null = null;
 
   /** Key down event data. */
-  private onKeyDownWrapper_: browserEvents.Data | null = null;
+  private onKeyDownWrapper: browserEvents.Data | null = null;
 
   /** Key input event data. */
-  private onKeyInputWrapper_: browserEvents.Data | null = null;
+  private onKeyInputWrapper: browserEvents.Data | null = null;
 
   /**
    * Whether the field should consider the whole parent block to be its click
@@ -338,9 +338,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       this.workspace_.options.modalInputs &&
       (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)
     ) {
-      this.showPromptEditor_();
+      this.showPromptEditor();
     } else {
-      this.showInlineEditor_(quietInput);
+      this.showInlineEditor(quietInput);
     }
   }
 
@@ -349,7 +349,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Mobile browsers may have issues with in-line textareas (focus and
    * keyboards).
    */
-  private showPromptEditor_() {
+  private showPromptEditor() {
     dialog.prompt(
       Msg['CHANGE_VALUE_TITLE'],
       this.getText(),
@@ -368,7 +368,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @param quietInput True if editor should be created without focus.
    */
-  private showInlineEditor_(quietInput: boolean) {
+  private showInlineEditor(quietInput: boolean) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -518,30 +518,30 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   protected bindInputEvents_(htmlInput: HTMLElement) {
     // Trap Enter without IME and Esc to hide.
-    this.onKeyDownWrapper_ = browserEvents.conditionalBind(
+    this.onKeyDownWrapper = browserEvents.conditionalBind(
       htmlInput,
       'keydown',
       this,
       this.onHtmlInputKeyDown_,
     );
     // Resize after every input change.
-    this.onKeyInputWrapper_ = browserEvents.conditionalBind(
+    this.onKeyInputWrapper = browserEvents.conditionalBind(
       htmlInput,
       'input',
       this,
-      this.onHtmlInputChange_,
+      this.onHtmlInputChange,
     );
   }
 
   /** Unbind handlers for user input and workspace size changes. */
   protected unbindInputEvents_() {
-    if (this.onKeyDownWrapper_) {
-      browserEvents.unbind(this.onKeyDownWrapper_);
-      this.onKeyDownWrapper_ = null;
+    if (this.onKeyDownWrapper) {
+      browserEvents.unbind(this.onKeyDownWrapper);
+      this.onKeyDownWrapper = null;
     }
-    if (this.onKeyInputWrapper_) {
-      browserEvents.unbind(this.onKeyInputWrapper_);
-      this.onKeyInputWrapper_ = null;
+    if (this.onKeyInputWrapper) {
+      browserEvents.unbind(this.onKeyInputWrapper);
+      this.onKeyInputWrapper = null;
     }
   }
 
@@ -574,7 +574,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @param _e Keyboard event.
    */
-  private onHtmlInputChange_(_e: Event) {
+  private onHtmlInputChange(_e: Event) {
     // Intermediate value changes from user input are not confirmed until the
     // user closes the editor, and may be numerous. Inhibit reporting these as
     // normal block change events, and instead report them as special

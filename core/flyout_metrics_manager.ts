@@ -38,7 +38,7 @@ export class FlyoutMetricsManager extends MetricsManager {
    *
    * @returns The bounding box of the blocks on the workspace.
    */
-  private getBoundingBox_():
+  private getBoundingBox():
     | SVGRect
     | {height: number; y: number; width: number; x: number} {
     let blockBoundingBox;
@@ -55,7 +55,7 @@ export class FlyoutMetricsManager extends MetricsManager {
 
   override getContentMetrics(opt_getWorkspaceCoordinates?: boolean) {
     // The bounding box is in workspace coordinates.
-    const blockBoundingBox = this.getBoundingBox_();
+    const blockBoundingBox = this.getBoundingBox();
     const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
     return {

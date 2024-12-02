@@ -347,9 +347,9 @@ export class ToolboxCategory
           '" must not have both a style and a colour',
       );
     } else if (styleName) {
-      return this.getColourfromStyle_(styleName);
+      return this.getColourfromStyle(styleName);
     } else if (colour) {
-      return this.parseColour_(colour);
+      return this.parseColour(colour);
     }
     return '';
   }
@@ -361,12 +361,12 @@ export class ToolboxCategory
    * @param styleName Name of the style.
    * @returns The hex colour for the category.
    */
-  private getColourfromStyle_(styleName: string): string {
+  private getColourfromStyle(styleName: string): string {
     const theme = this.workspace_.getTheme();
     if (styleName && theme) {
       const style = theme.categoryStyles[styleName];
       if (style && style.colour) {
-        return this.parseColour_(style.colour);
+        return this.parseColour(style.colour);
       } else {
         console.warn(
           'Style "' + styleName + '" must exist and contain a colour value',
@@ -395,7 +395,7 @@ export class ToolboxCategory
    *     reference string pointing to one of those two values.
    * @returns The hex colour for the category.
    */
-  private parseColour_(colourValue: number | string): string {
+  private parseColour(colourValue: number | string): string {
     // Decode the colour for any potential message references
     // (eg. `%{BKY_MATH_HUE}`).
     const colour = parsing.replaceMessageReferences(colourValue);
@@ -541,7 +541,7 @@ export class ToolboxCategory
     }
     const className = this.cssConfig_['selected'];
     if (isSelected) {
-      const defaultColour = this.parseColour_(
+      const defaultColour = this.parseColour(
         ToolboxCategory.defaultBackgroundColour,
       );
       this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;

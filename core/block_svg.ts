@@ -145,7 +145,7 @@ export class BlockSvg
   /** Block's mutator icon (if any). */
   mutator: MutatorIcon | null = null;
 
-  private svgGroup_: SVGGElement;
+  private svgGroup: SVGGElement;
   style: BlockStyle;
   /** @internal */
   pathObject: IPathObject;
@@ -154,15 +154,6 @@ export class BlockSvg
   override readonly rendered = true;
 
   private visuallyDisabled = false;
-
-  /**
-   * Is this block currently rendering? Used to stop recursive render calls
-   * from actually triggering a re-render.
-   */
-  private renderIsInProgress_ = false;
-
-  /** Whether mousedown events have been bound yet. */
-  private eventsInit_ = false;
 
   override workspace: WorkspaceSvg;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -201,7 +192,7 @@ export class BlockSvg
       throw TypeError('Cannot create a rendered block in a headless workspace');
     }
     this.workspace = workspace;
-    this.svgGroup_ = dom.createSvgElement(Svg.G, {});
+    this.svgGroup = dom.createSvgElement(Svg.G, {});
 
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
@@ -209,14 +200,14 @@ export class BlockSvg
     /** The renderer's path object. */
     this.pathObject = workspace
       .getRenderer()
-      .makePathObject(this.svgGroup_, this.style);
+      .makePathObject(this.svgGroup, this.style);
 
     const svgPath = this.pathObject.svgPath;
     (svgPath as any).tooltip = this;
     Tooltip.bindMouseEvents(svgPath);
 
     // Expose this block's ID on its top-level SVG group.
-    this.svgGroup_.setAttribute('data-id', this.id);
+    this.svgGroup.setAttribute('data-id', this.id);
 
     this.doInit_();
   }
@@ -238,12 +229,7 @@ export class BlockSvg
     this.pathObject.updateMovable(this.isMovable() || this.isInFlyout);
     const svg = this.getSvgRoot();
     if (!this.workspace.options.readOnly && svg) {
-      browserEvents.conditionalBind(
-        svg,
-        'pointerdown',
-        this,
-        this.onMouseDown_,
-      );
+      browserEvents.conditionalBind(svg, 'pointerdown', this, this.onMouseDown);
     }
 
     if (!svg.parentNode) {
@@ -518,14 +504,14 @@ export class BlockSvg
       return;
     }
     super.setCollapsed(collapsed);
-    this.updateCollapsed_();
+    this.updateCollapsed();
   }
 
   /**
    * Makes sure that when the block is collapsed, it is rendered correctly
    * for that state.
    */
-  private updateCollapsed_() {
+  private updateCollapsed() {
     const collapsed = this.isCollapsed();
     const collapsedInputName = constants.COLLAPSED_INPUT_NAME;
     const collapsedFieldName = constants.COLLAPSED_FIELD_NAME;
@@ -592,7 +578,7 @@ export class BlockSvg
    *
    * @param e Pointer down event.
    */
-  private onMouseDown_(e: PointerEvent) {
+  private onMouseDown(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
@@ -702,10 +688,10 @@ export class BlockSvg
     if (adding) {
       this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));
-      dom.addClass(this.svgGroup_, 'blocklyDragging');
+      dom.addClass(this.svgGroup, 'blocklyDragging');
     } else {
       common.draggingConnections.length = 0;
-      dom.removeClass(this.svgGroup_, 'blocklyDragging');
+      dom.removeClass(this.svgGroup, 'blocklyDragging');
     }
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
@@ -775,7 +761,7 @@ export class BlockSvg
    * @returns The root SVG node (probably a group).
    */
   getSvgRoot(): SVGGElement {
-    return this.svgGroup_;
+    return this.svgGroup;
   }
 
   /**
@@ -817,7 +803,7 @@ export class BlockSvg
     }
 
     super.dispose(!!healStack);
-    dom.removeNode(this.svgGroup_);
+    dom.removeNode(this.svgGroup);
   }
 
   /**
@@ -1565,7 +1551,7 @@ export class BlockSvg
     dom.startTextWidthCache();
 
     if (this.isCollapsed()) {
-      this.updateCollapsed_();
+      this.updateCollapsed();
     }
 
     if (!this.isEnabled()) {

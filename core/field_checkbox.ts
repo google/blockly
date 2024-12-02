@@ -170,7 +170,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    *     that this is a either 'TRUE' or 'FALSE'.
    */
   protected override doValueUpdate_(newValue: BoolString) {
-    this.value_ = this.convertValueToBool_(newValue);
+    this.value_ = this.convertValueToBool(newValue);
     // Update visual.
     if (this.textElement_) {
       this.textElement_.style.display = this.value_ ? 'block' : 'none';
@@ -201,7 +201,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @returns Text representing the value of this field ('true' or 'false').
    */
   override getText(): string {
-    return String(this.convertValueToBool_(this.value_));
+    return String(this.convertValueToBool(this.value_));
   }
 
   /**
@@ -213,7 +213,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    * @param value The value to convert.
    * @returns The converted value.
    */
-  private convertValueToBool_(value: CheckboxBool | null): boolean {
+  private convertValueToBool(value: CheckboxBool | null): boolean {
     if (typeof value === 'string') return value === 'TRUE';
     return !!value;
   }

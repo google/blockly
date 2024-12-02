@@ -21,17 +21,17 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  *
  */
 export class WorkspaceDragger {
-  private readonly horizontalScrollEnabled_: boolean;
-  private readonly verticalScrollEnabled_: boolean;
+  private readonly horizontalScrollEnabled: boolean;
+  private readonly verticalScrollEnabled: boolean;
   protected startScrollXY_: Coordinate;
 
   /** @param workspace The workspace to drag. */
   constructor(private workspace: WorkspaceSvg) {
     /** Whether horizontal scroll is enabled. */
-    this.horizontalScrollEnabled_ = this.workspace.isMovableHorizontally();
+    this.horizontalScrollEnabled = this.workspace.isMovableHorizontally();
 
     /** Whether vertical scroll is enabled. */
-    this.verticalScrollEnabled_ = this.workspace.isMovableVertically();
+    this.verticalScrollEnabled = this.workspace.isMovableVertically();
 
     /**
      * The scroll position of the workspace at the beginning of the drag.
@@ -84,11 +84,11 @@ export class WorkspaceDragger {
   drag(currentDragDeltaXY: Coordinate) {
     const newXY = Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
 
-    if (this.horizontalScrollEnabled_ && this.verticalScrollEnabled_) {
+    if (this.horizontalScrollEnabled && this.verticalScrollEnabled) {
       this.workspace.scroll(newXY.x, newXY.y);
-    } else if (this.horizontalScrollEnabled_) {
+    } else if (this.horizontalScrollEnabled) {
       this.workspace.scroll(newXY.x, this.workspace.scrollY);
-    } else if (this.verticalScrollEnabled_) {
+    } else if (this.verticalScrollEnabled) {
       this.workspace.scroll(this.workspace.scrollX, newXY.y);
     } else {
       throw new TypeError('Invalid state.');

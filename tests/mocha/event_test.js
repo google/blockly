@@ -201,7 +201,7 @@ suite('Events', function () {
       suite('Block Move', function () {
         test('by coordinate', function () {
           const coordinate = new Blockly.utils.Coordinate(3, 4);
-          this.block.xy_ = coordinate;
+          this.block.xy = coordinate;
 
           const event = new Blockly.Events.BlockMove(this.block);
           sinon.assert.calledOnce(this.genUidStub);
@@ -224,7 +224,7 @@ suite('Events', function () {
           try {
             this.parentBlock = createSimpleTestBlock(this.workspace);
             this.block.parentBlock_ = this.parentBlock;
-            this.block.xy_ = new Blockly.utils.Coordinate(3, 4);
+            this.block.xy = new Blockly.utils.Coordinate(3, 4);
             const event = new Blockly.Events.BlockMove(this.block);
             sinon.assert.calledTwice(this.genUidStub);
             assertEventEquals(
@@ -331,7 +331,7 @@ suite('Events', function () {
         try {
           this.parentBlock = createSimpleTestBlock(this.workspace);
           this.block.parentBlock_ = this.parentBlock;
-          this.block.xy_ = new Blockly.utils.Coordinate(3, 4);
+          this.block.xy = new Blockly.utils.Coordinate(3, 4);
           const event = new Blockly.Events.BlockMove(this.block);
           sinon.assert.calledTwice(this.genUidStub);
           assertEventEquals(
@@ -1284,7 +1284,7 @@ suite('Events', function () {
   suite('Filters', function () {
     function addMoveEvent(events, block, newX, newY) {
       events.push(new Blockly.Events.BlockMove(block));
-      block.xy_ = new Blockly.utils.Coordinate(newX, newY);
+      block.xy = new Blockly.utils.Coordinate(newX, newY);
       events[events.length - 1].recordNew();
     }
 

@@ -172,7 +172,7 @@ suite('Text Input Fields', function () {
         test('When Editing', function () {
           this.field.isBeingEdited_ = true;
           this.field.htmlInput_.value = suiteInfo.value;
-          this.field.onHtmlInputChange_(null);
+          this.field.onHtmlInputChange(null);
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,

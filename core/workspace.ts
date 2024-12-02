@@ -167,7 +167,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns The comparison value. This tells Array.sort() how to change object
    *     a's index.
    */
-  private sortObjects_(
+  private sortObjects(
     a: Block | WorkspaceComment,
     b: Block | WorkspaceComment,
   ): number {
@@ -209,7 +209,7 @@ export class Workspace implements IASTNodeLocation {
     // Copy the topBlocks list.
     const blocks = new Array<Block>().concat(this.topBlocks);
     if (ordered && blocks.length > 1) {
-      blocks.sort(this.sortObjects_.bind(this));
+      blocks.sort(this.sortObjects.bind(this));
     }
     return blocks;
   }
@@ -252,7 +252,7 @@ export class Workspace implements IASTNodeLocation {
     }
     const blocks = this.typedBlocksDB.get(type)!.slice(0);
     if (ordered && blocks && blocks.length > 1) {
-      blocks.sort(this.sortObjects_.bind(this));
+      blocks.sort(this.sortObjects.bind(this));
     }
 
     return blocks.filter((block) => !block.isInsertionMarker());
@@ -308,7 +308,7 @@ export class Workspace implements IASTNodeLocation {
     // Copy the topComments list.
     const comments = new Array<WorkspaceComment>().concat(this.topComments);
     if (ordered && comments.length > 1) {
-      comments.sort(this.sortObjects_.bind(this));
+      comments.sort(this.sortObjects.bind(this));
     }
     return comments;
   }

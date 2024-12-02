@@ -303,7 +303,7 @@ suite('Number Fields', function () {
         test('When Editing', function () {
           this.field.isBeingEdited_ = true;
           this.field.htmlInput_.value = String(suiteInfo.value);
-          this.field.onHtmlInputChange_(null);
+          this.field.onHtmlInputChange(null);
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,

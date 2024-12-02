@@ -207,7 +207,7 @@ export abstract class Flyout
   /**
    * Whether the flyout is visible.
    */
-  private isVisible_ = false;
+  private visible = false;
 
   /**
    * Whether the workspace containing this flyout is visible.
@@ -286,7 +286,7 @@ export abstract class Flyout
 
     this.workspace_.internalIsFlyout = true;
     // Keep the workspace visibility consistent with the flyout's visibility.
-    this.workspace_.setVisible(this.isVisible_);
+    this.workspace_.setVisible(this.visible);
 
     /**
      * The unique id for this component that is used to register with the
@@ -532,7 +532,7 @@ export abstract class Flyout
    * @returns True if visible.
    */
   isVisible(): boolean {
-    return this.isVisible_;
+    return this.visible;
   }
 
   /**
@@ -545,7 +545,7 @@ export abstract class Flyout
   setVisible(visible: boolean) {
     const visibilityChanged = visible !== this.isVisible();
 
-    this.isVisible_ = visible;
+    this.visible = visible;
     if (visibilityChanged) {
       if (!this.autoClose) {
         // Auto-close flyouts are ignored as drag targets, so only non

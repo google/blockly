@@ -136,7 +136,7 @@ suite('WorkspaceSvg', function () {
       sinon
         .stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
         .returns(true);
-      this.workspace.toolbox_ = null;
+      this.workspace.toolbox = null;
       assert.throws(
         function () {
           this.workspace.updateToolbox({'contents': []});

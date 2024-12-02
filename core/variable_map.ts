@@ -76,14 +76,9 @@ export class VariableMap {
       // The IDs may match if the rename is a simple case change (name1 ->
       // Name1).
       if (!conflictVar || conflictVar.getId() === variable.getId()) {
-        this.renameVariableAndUses_(variable, newName, blocks);
+        this.renameVariableAndUses(variable, newName, blocks);
       } else {
-        this.renameVariableWithConflict_(
-          variable,
-          newName,
-          conflictVar,
-          blocks,
-        );
+        this.renameVariableWithConflict(variable, newName, conflictVar, blocks);
       }
     } finally {
       eventUtils.setGroup(existingGroup);
@@ -114,7 +109,7 @@ export class VariableMap {
    * @param newName New variable name.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableAndUses_(
+  private renameVariableAndUses(
     variable: VariableModel,
     newName: string,
     blocks: Block[],
@@ -139,7 +134,7 @@ export class VariableMap {
    * @param conflictVar The variable that was already using newName.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableWithConflict_(
+  private renameVariableWithConflict(
     variable: VariableModel,
     newName: string,
     conflictVar: VariableModel,
@@ -150,7 +145,7 @@ export class VariableMap {
 
     if (newName !== oldCase) {
       // Simple rename to change the case and update references.
-      this.renameVariableAndUses_(conflictVar, newName, blocks);
+      this.renameVariableAndUses(conflictVar, newName, blocks);
     }
 
     // These blocks now refer to a different variable.

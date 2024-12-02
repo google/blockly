@@ -85,6 +85,10 @@ let content = `
   transition: transform .5s;
 }
 
+.blocklyEmboss {
+  filter: var(--blocklyEmbossFilter);
+}
+
 .blocklyTooltipDiv {
   background-color: #ffffc7;
   border: 1px solid #ddc;
@@ -138,6 +142,10 @@ let content = `
   border-color: inherit;
 }
 
+.blocklyHighlighted>.blocklyPath {
+  filter: var(--blocklyEmbossFilter);
+}
+
 .blocklyHighlightedConnectionPath {
   fill: none;
   stroke: #fc3;
@@ -189,6 +197,7 @@ let content = `
 }
 
 .blocklyDisabled>.blocklyPath {
+  fill: var(--blocklyDisabledPattern);
   fill-opacity: .5;
   stroke-opacity: .5;
 }

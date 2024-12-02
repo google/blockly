@@ -50,8 +50,12 @@ export class Renderer extends BaseRenderer {
     this.highlightConstants.init();
   }
 
-  override refreshDom(svg: SVGElement, theme: Theme) {
-    super.refreshDom(svg, theme);
+  override refreshDom(
+    svg: SVGElement,
+    theme: Theme,
+    injectionDiv: HTMLElement,
+  ) {
+    super.refreshDom(svg, theme, injectionDiv);
     this.getHighlightConstants().init();
   }
 

@@ -106,11 +106,7 @@ export abstract class Bubble implements IBubble, ISelectable {
     );
     const embossGroup = dom.createSvgElement(
       Svg.G,
-      {
-        'filter': `url(#${
-          this.workspace.getRenderer().getConstants().embossFilterId
-        })`,
-      },
+      {'class': 'blocklyEmboss'},
       this.svgRoot,
     );
     this.tail = dom.createSvgElement(

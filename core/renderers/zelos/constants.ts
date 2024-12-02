@@ -675,8 +675,13 @@ export class ConstantProvider extends BaseConstantProvider {
     return utilsColour.blend('#000', colour, 0.25) || colour;
   }
 
-  override createDom(svg: SVGElement, tagName: string, selector: string) {
-    super.createDom(svg, tagName, selector);
+  override createDom(
+    svg: SVGElement,
+    tagName: string,
+    selector: string,
+    injectionDivIfIsParent?: HTMLElement,
+  ) {
+    super.createDom(svg, tagName, selector, injectionDivIfIsParent);
     /*
         <defs>
           ... filters go here ...
@@ -795,6 +800,20 @@ export class ConstantProvider extends BaseConstantProvider {
     );
     this.replacementGlowFilterId = replacementGlowFilter.id;
     this.replacementGlowFilter = replacementGlowFilter;
+
+    if (injectionDivIfIsParent) {
+      // If this renderer is for the parent workspace, add CSS variables scoped
+      // to the injection div referencing the created patterns so that CSS can
+      // apply the patterns to any element in the injection div.
+      injectionDivIfIsParent.style.setProperty(
+        '--blocklySelectedGlowFilter',
+        `url(#${this.selectedGlowFilterId})`,
+      );
+      injectionDivIfIsParent.style.setProperty(
+        '--blocklyReplacementGlowFilter',
+        `url(#${this.replacementGlowFilterId})`,
+      );
+    }
   }
 
   override getCSS_(selector: string) {
@@ -873,13 +892,22 @@ export class ConstantProvider extends BaseConstantProvider {
 
       // Disabled outline paths.
       `${selector} .blocklyDisabled > .blocklyOutlinePath {`,
-      `fill: url(#blocklyDisabledPattern${this.randomIdentifier})`,
+      `fill: var(--blocklyDisabledPattern)`,
       `}`,
 
       // Insertion marker.
       `${selector} .blocklyInsertionMarker>.blocklyPath {`,
       `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
       `stroke: none;`,
+      `}`,
+
+      `${selector} .blocklySelected>.blocklyPath.blocklyPathSelected {`,
+      `fill: none;`,
+      `filter: var(--blocklySelectedGlowFilter);`,
+      `}`,
+
+      `${selector} .blocklyReplaceable>.blocklyPath {`,
+      `filter: var(--blocklyReplacementGlowFilter);`,
       `}`,
     ];
   }

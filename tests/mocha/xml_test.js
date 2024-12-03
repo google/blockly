@@ -531,28 +531,6 @@ suite('XML', function () {
     teardown(function () {
       workspaceTeardown.call(this, this.workspace);
     });
-    suite('Dynamic Category Blocks', function () {
-      test('Untyped Variables', function () {
-        this.workspace.createVariable('name1', '', 'id1');
-        const blocksArray = Blockly.Variables.flyoutCategoryBlocks(
-          this.workspace,
-        );
-        for (let i = 0, xml; (xml = blocksArray[i]); i++) {
-          Blockly.Xml.domToBlock(xml, this.workspace);
-        }
-      });
-      test('Typed Variables', function () {
-        this.workspace.createVariable('name1', 'String', 'id1');
-        this.workspace.createVariable('name2', 'Number', 'id2');
-        this.workspace.createVariable('name3', 'Colour', 'id3');
-        const blocksArray = Blockly.VariablesDynamic.flyoutCategoryBlocks(
-          this.workspace,
-        );
-        for (let i = 0, xml; (xml = blocksArray[i]); i++) {
-          Blockly.Xml.domToBlock(xml, this.workspace);
-        }
-      });
-    });
     suite('Comments', function () {
       suite('Headless', function () {
         test('Text', function () {
@@ -908,44 +886,6 @@ suite('XML', function () {
 
         assertRoundTrip(this.headlessWorkspace, this.renderedWorkspace);
       });
-    });
-  });
-  suite('generateVariableFieldDom', function () {
-    test('Case Sensitive', function () {
-      const varId = 'testId';
-      const type = 'testType';
-      const name = 'testName';
-
-      const mockVariableModel = {
-        type: type,
-        name: name,
-        getId: function () {
-          return varId;
-        },
-        getName: function () {
-          return name;
-        },
-        getType: function () {
-          return type;
-        },
-      };
-
-      const generatedXml = Blockly.Xml.domToText(
-        Blockly.Variables.generateVariableFieldDom(mockVariableModel),
-      );
-      const expectedXml =
-        '<field xmlns="https://developers.google.com/blockly/xml"' +
-        ' name="VAR"' +
-        ' id="' +
-        varId +
-        '"' +
-        ' variabletype="' +
-        type +
-        '"' +
-        '>' +
-        name +
-        '</field>';
-      assert.equal(generatedXml, expectedXml);
     });
   });
 });

@@ -1099,6 +1099,14 @@ const PROCEDURE_CALL_COMMON = {
         xml.appendChild(block);
         Xml.domToWorkspace(xml, this.workspace);
         Events.setGroup(false);
+      } else if (!def.isEnabled()) {
+        this.setDisabledReason(
+          true,
+          DISABLED_PROCEDURE_DEFINITION_DISABLED_REASON,
+        );
+        this.setWarningText(
+          Msg['PROCEDURES_CALL_DISABLED_DEF_WARNING'].replace('%1', name),
+        );
       }
     } else if (event.type === Events.BLOCK_DELETE) {
       // Look for the case where a procedure definition has been deleted,

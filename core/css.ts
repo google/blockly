@@ -251,10 +251,6 @@ let content = `
   stroke: none;
 }
 
-.blocklyMultilineText {
-  font-family: monospace;
-}
-
 .blocklyNonEditableText>text {
   pointer-events: none;
 }

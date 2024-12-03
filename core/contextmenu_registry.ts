@@ -23,7 +23,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 export class ContextMenuRegistry {
   static registry: ContextMenuRegistry;
   /** Registry of all registered RegistryItems, keyed by ID. */
-  private registry_ = new Map<string, RegistryItem>();
+  private registeredItems = new Map<string, RegistryItem>();
 
   /** Resets the existing singleton instance of ContextMenuRegistry. */
   constructor() {
@@ -32,7 +32,7 @@ export class ContextMenuRegistry {
 
   /** Clear and recreate the registry. */
   reset() {
-    this.registry_.clear();
+    this.registeredItems.clear();
   }
 
   /**
@@ -42,10 +42,10 @@ export class ContextMenuRegistry {
    * @throws {Error} if an item with the given ID already exists.
    */
   register(item: RegistryItem) {
-    if (this.registry_.has(item.id)) {
+    if (this.registeredItems.has(item.id)) {
       throw Error('Menu item with ID "' + item.id + '" is already registered.');
     }
-    this.registry_.set(item.id, item);
+    this.registeredItems.set(item.id, item);
   }
 
   /**
@@ -55,10 +55,10 @@ export class ContextMenuRegistry {
    * @throws {Error} if an item with the given ID does not exist.
    */
   unregister(id: string) {
-    if (!this.registry_.has(id)) {
+    if (!this.registeredItems.has(id)) {
       throw new Error('Menu item with ID "' + id + '" not found.');
     }
-    this.registry_.delete(id);
+    this.registeredItems.delete(id);
   }
 
   /**
@@ -66,7 +66,7 @@ export class ContextMenuRegistry {
    * @returns RegistryItem or null if not found
    */
   getItem(id: string): RegistryItem | null {
-    return this.registry_.get(id) ?? null;
+    return this.registeredItems.get(id) ?? null;
   }
 
   /**
@@ -85,7 +85,7 @@ export class ContextMenuRegistry {
     scope: Scope,
   ): ContextMenuOption[] {
     const menuOptions: ContextMenuOption[] = [];
-    for (const item of this.registry_.values()) {
+    for (const item of this.registeredItems.values()) {
       if (scopeType === item.scopeType) {
         const precondition = item.preconditionFn(scope);
         if (precondition !== 'hidden') {

@@ -29,7 +29,7 @@ export class WorkspaceAudio {
   private sounds = new Map<string, HTMLAudioElement>();
 
   /** Time that the last sound was played. */
-  private lastSound_: Date | null = null;
+  private lastSound: Date | null = null;
 
   /** Whether the audio is muted or not. */
   private muted: boolean = false;
@@ -132,12 +132,12 @@ export class WorkspaceAudio {
       // Don't play one sound on top of another.
       const now = new Date();
       if (
-        this.lastSound_ !== null &&
-        now.getTime() - this.lastSound_.getTime() < SOUND_LIMIT
+        this.lastSound !== null &&
+        now.getTime() - this.lastSound.getTime() < SOUND_LIMIT
       ) {
         return;
       }
-      this.lastSound_ = now;
+      this.lastSound = now;
       let mySound;
       if (userAgent.IPAD || userAgent.ANDROID) {
         // Creating a new audio node causes lag in Android and iPad.  Android

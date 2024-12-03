@@ -38,7 +38,7 @@ suite('Logic ternary', function () {
     const checkList = ifInput.connection.getCheck();
     assert.equal(checkList.length, 1);
     assert.equal(checkList[0], 'Boolean');
-    assert.exists(block.onchangeWrapper_, 'Has onchange handler');
+    assert.exists(block.onchangeWrapper, 'Has onchange handler');
     if (inputsInline) {
       assert.isTrue(block.inputsInline);
     } else {

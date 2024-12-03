@@ -26,7 +26,6 @@ export interface State {
 export class VariableSerializer implements ISerializer {
   priority: number;
 
-  /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /** The priority for deserializing variables. */
     this.priority = priorities.VARIABLES;

@@ -20,6 +20,5 @@ suite('Workspace', function () {
     sharedTestTeardown.call(this);
   });
 
-  // eslint-disable-next-line no-use-before-define
   testAWorkspace();
 });

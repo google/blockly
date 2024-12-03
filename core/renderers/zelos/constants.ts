@@ -786,7 +786,6 @@ export class ConstantProvider extends BaseConstantProvider {
 
   override getCSS_(selector: string) {
     return [
-      /* eslint-disable indent */
       // Text.
       `${selector} .blocklyText,`,
       `${selector} .blocklyFlyoutLabelText {`,
@@ -871,4 +870,3 @@ export class ConstantProvider extends BaseConstantProvider {
     ];
   }
 }
-/* eslint-enable indent */

@@ -25,38 +25,39 @@ const RENAMINGS_URL = new URL(
   import.meta.url,
 );
 
-const renamingsJson5 = await readFile(RENAMINGS_URL);
-const renamings = JSON5.parse(renamingsJson5);
+readFile(RENAMINGS_URL).then((renamingsJson5) => {
+  const renamings = JSON5.parse(renamingsJson5);
 
-const output = await validate(SCHEMA_URL, renamings, BASIC);
-
-if (!output.valid) {
-  console.error(`Renamings file is invalid.  First error occurs at:
+  validate(SCHEMA_URL, renamings, BASIC).then((output) => {
+    if (!output.valid) {
+      console.error(`Renamings file is invalid.  First error occurs at:
     ${output.errors[0].instanceLocation}`);
-  console.info(
-    `Here is the full validator output, in case that helps:\n`,
-    output,
-  );
-  process.exit(1);
-}
-
-// File passed schema validation.  Do some additional checks.
-let ok = true;
-Object.entries(renamings).forEach(([version, modules]) => {
-  // Scan through modules and check for duplicates.
-  const seen = new Set();
-  for (const {oldName} of modules) {
-    if (seen.has(oldName)) {
-      console.error(
-        `Duplicate entry for module ${oldName} ` + `in version ${version}.`,
+      console.info(
+        `Here is the full validator output, in case that helps:\n`,
+        output,
       );
-      ok = false;
+      process.exit(1);
     }
-    seen.add(oldName);
-  }
+
+    // File passed schema validation.  Do some additional checks.
+    let ok = true;
+    Object.entries(renamings).forEach(([version, modules]) => {
+      // Scan through modules and check for duplicates.
+      const seen = new Set();
+      for (const {oldName} of modules) {
+        if (seen.has(oldName)) {
+          console.error(
+            `Duplicate entry for module ${oldName} ` + `in version ${version}.`,
+          );
+          ok = false;
+        }
+        seen.add(oldName);
+      }
+    });
+    if (!ok) {
+      console.error('Renamings file is invalid.');
+      process.exit(1);
+    }
+    // Default is a successful exit 0.
+  });
 });
-if (!ok) {
-  console.error('Renamings file is invalid.');
-  process.exit(1);
-}
-// Default is a successful exit 0.

@@ -48,6 +48,7 @@ export {VarBase, VarBaseJson} from './events_var_base.js';
 export {VarCreate, VarCreateJson} from './events_var_create.js';
 export {VarDelete, VarDeleteJson} from './events_var_delete.js';
 export {VarRename, VarRenameJson} from './events_var_rename.js';
+export {VarTypeChange, VarTypeChangeJson} from './events_var_type_change.js';
 export {ViewportChange, ViewportChangeJson} from './events_viewport.js';
 export {FinishedLoading} from './workspace_events.js';
 

@@ -78,6 +78,8 @@ let content = `
   position: relative;
   overflow: hidden;  /* So blocks in drag surface disappear at edges */
   touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
@@ -212,10 +214,6 @@ let content = `
 .blocklyInsertionMarker>.blocklyPathDark {
   fill-opacity: .2;
   stroke: none;
-}
-
-.blocklyMultilineText {
-  font-family: monospace;
 }
 
 .blocklyNonEditableField>text {

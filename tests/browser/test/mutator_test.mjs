@@ -6,15 +6,15 @@
 
 import * as chai from 'chai';
 import {
-  testSetup,
-  testFileLocations,
-  connect,
-  dragBlockTypeFromFlyout,
-  screenDirection,
   PAUSE_TIME,
-  getBlockElementById,
+  connect,
   dragBlockFromMutatorFlyout,
+  dragBlockTypeFromFlyout,
+  getBlockElementById,
   openMutatorForBlock,
+  screenDirection,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
 
 suite('Mutating a block', function (done) {

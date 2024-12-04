@@ -10,13 +10,13 @@
 
 import * as chai from 'chai';
 import {
-  testSetup,
-  testFileLocations,
-  dragNthBlockFromFlyout,
-  dragBlockTypeFromFlyout,
   connect,
   contextMenuSelect,
+  dragBlockTypeFromFlyout,
+  dragNthBlockFromFlyout,
   PAUSE_TIME,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
 
 async function getIsCollapsed(browser, blockId) {

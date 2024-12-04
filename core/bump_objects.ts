@@ -13,7 +13,8 @@ import type {BlockMove} from './events/events_block_move.js';
 import type {CommentCreate} from './events/events_comment_create.js';
 import type {CommentMove} from './events/events_comment_move.js';
 import type {CommentResize} from './events/events_comment_resize.js';
-import type {ViewportChange} from './events/events_viewport.js';
+import {isViewportChange} from './events/predicates.js';
+import {BUMP_EVENTS, EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {ContainerRegion} from './metrics_manager.js';
@@ -99,7 +100,7 @@ export function bumpIntoBoundsHandler(
       return;
     }
 
-    if (eventUtils.BUMP_EVENTS.includes(e.type ?? '')) {
+    if (BUMP_EVENTS.includes(e.type ?? '')) {
       const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
       // Triggered by move/create event
@@ -127,13 +128,8 @@ export function bumpIntoBoundsHandler(
         );
       }
       eventUtils.setGroup(existingGroup);
-    } else if (e.type === eventUtils.VIEWPORT_CHANGE) {
-      const viewportEvent = e as ViewportChange;
-      if (
-        viewportEvent.scale &&
-        viewportEvent.oldScale &&
-        viewportEvent.scale > viewportEvent.oldScale
-      ) {
+    } else if (isViewportChange(e)) {
+      if (e.scale && e.oldScale && e.scale > e.oldScale) {
         bumpTopObjectsIntoBounds(workspace);
       }
     }
@@ -155,16 +151,16 @@ function extractObjectFromEvent(
 ): IBoundedElement | null {
   let object = null;
   switch (e.type) {
-    case eventUtils.BLOCK_CREATE:
-    case eventUtils.BLOCK_MOVE:
+    case EventType.BLOCK_CREATE:
+    case EventType.BLOCK_MOVE:
       object = workspace.getBlockById((e as BlockCreate | BlockMove).blockId!);
       if (object) {
         object = object.getRootBlock();
       }
       break;
-    case eventUtils.COMMENT_CREATE:
-    case eventUtils.COMMENT_MOVE:
-    case eventUtils.COMMENT_RESIZE:
+    case EventType.COMMENT_CREATE:
+    case EventType.COMMENT_MOVE:
+    case EventType.COMMENT_RESIZE:
       object = workspace.getCommentById(
         (e as CommentCreate | CommentMove | CommentResize).commentId!,
       ) as RenderedWorkspaceComment;

@@ -16,7 +16,6 @@ import type {IToolbox} from '../interfaces/i_toolbox.js';
 import * as registry from '../registry.js';
 import * as dom from '../utils/dom.js';
 import type * as toolbox from '../utils/toolbox.js';
-
 import {ToolboxItem} from './toolbox_item.js';
 
 /**
@@ -30,7 +29,7 @@ export class ToolboxSeparator extends ToolboxItem {
   /** All the CSS class names that are used to create a separator. */
   protected cssConfig_: CssConfig = {'container': 'blocklyTreeSeparator'};
 
-  private htmlDiv_: HTMLDivElement | null = null;
+  private htmlDiv: HTMLDivElement | null = null;
 
   /**
    * @param separatorDef The information needed to create a separator.
@@ -59,16 +58,16 @@ export class ToolboxSeparator extends ToolboxItem {
     if (className) {
       dom.addClass(container, className);
     }
-    this.htmlDiv_ = container;
+    this.htmlDiv = container;
     return container;
   }
 
   override getDiv() {
-    return this.htmlDiv_ as HTMLDivElement;
+    return this.htmlDiv as HTMLDivElement;
   }
 
   override dispose() {
-    dom.removeNode(this.htmlDiv_ as HTMLDivElement);
+    dom.removeNode(this.htmlDiv as HTMLDivElement);
   }
 }
 

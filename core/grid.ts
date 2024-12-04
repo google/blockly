@@ -12,10 +12,10 @@
  */
 // Former goog.module ID: Blockly.Grid
 
-import * as dom from './utils/dom.js';
-import {Coordinate} from './utils/coordinate.js';
-import {Svg} from './utils/svg.js';
 import {GridOptions} from './options.js';
+import {Coordinate} from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import {Svg} from './utils/svg.js';
 
 /**
  * Class for a workspace's grid.

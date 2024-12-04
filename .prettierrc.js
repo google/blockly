@@ -10,4 +10,6 @@ module.exports = {
   bracketSpacing: false,
   // Put HTML tag closing brackets on same line as last attribute.
   bracketSameLine: true,
+  // Organise imports using a plugin.
+  'plugins': ['prettier-plugin-organize-imports'],
 };

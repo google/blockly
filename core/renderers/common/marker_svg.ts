@@ -12,8 +12,10 @@ import '../../events/events_marker_move.js';
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
+import {EventType} from '../../events/type.js';
 import * as eventUtils from '../../events/utils.js';
 import type {Field} from '../../field.js';
+import {FlyoutButton} from '../../flyout_button.js';
 import type {IASTNodeLocationSvg} from '../../interfaces/i_ast_node_location_svg.js';
 import {ASTNode} from '../../keyboard_nav/ast_node.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
@@ -22,9 +24,7 @@ import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
-
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
-import {FlyoutButton} from '../../flyout_button.js';
 
 /** The name of the CSS class for a cursor. */
 const CURSOR_CLASS = 'blocklyCursor';
@@ -47,7 +47,7 @@ export class MarkerSvg {
    * The workspace, field, or block that the marker SVG element should be
    * attached to.
    */
-  private parent: IASTNodeLocationSvg | null = null;
+  protected parent: IASTNodeLocationSvg | null = null;
 
   /** The current SVG element for the marker. */
   currentMarkerSvg: SVGElement | null = null;
@@ -73,9 +73,9 @@ export class MarkerSvg {
    * @param marker The marker to draw.
    */
   constructor(
-    private readonly workspace: WorkspaceSvg,
+    protected readonly workspace: WorkspaceSvg,
     constants: ConstantProvider,
-    private readonly marker: Marker,
+    protected readonly marker: Marker,
   ) {
     this.constants_ = constants;
 
@@ -176,9 +176,11 @@ export class MarkerSvg {
 
     // Ensures the marker will be visible immediately after the move.
     const animate = this.currentMarkerSvg!.childNodes[0];
-    if (animate !== undefined) {
-      (animate as SVGAnimationElement).beginElement &&
-        (animate as SVGAnimationElement).beginElement();
+    if (
+      animate !== undefined &&
+      (animate as SVGAnimationElement).beginElement
+    ) {
+      (animate as SVGAnimationElement).beginElement();
     }
   }
 
@@ -221,7 +223,7 @@ export class MarkerSvg {
    *
    * @param curNode The node to draw the marker for.
    */
-  private showWithBlockPrevOutput(curNode: ASTNode) {
+  protected showWithBlockPrevOutput(curNode: ASTNode) {
     const block = curNode.getSourceBlock() as BlockSvg;
     const width = block.width;
     const height = block.height;
@@ -618,9 +620,9 @@ export class MarkerSvg {
    * @param oldNode The old node the marker used to be on.
    * @param curNode The new node the marker is currently on.
    */
-  private fireMarkerEvent(oldNode: ASTNode, curNode: ASTNode) {
+  protected fireMarkerEvent(oldNode: ASTNode, curNode: ASTNode) {
     const curBlock = curNode.getSourceBlock();
-    const event = new (eventUtils.get(eventUtils.MARKER_MOVE))(
+    const event = new (eventUtils.get(EventType.MARKER_MOVE))(
       curBlock,
       this.isCursor(),
       oldNode,

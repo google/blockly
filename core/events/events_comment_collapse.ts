@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as registry from '../registry.js';
 import {WorkspaceComment} from '../comments/workspace_comment.js';
-import {CommentBase, CommentBaseJson} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
+import {CommentBase, CommentBaseJson} from './events_comment_base.js';
+import {EventType} from './type.js';
 
 export class CommentCollapse extends CommentBase {
-  override type = eventUtils.COMMENT_COLLAPSE;
+  override type = EventType.COMMENT_COLLAPSE;
 
   constructor(
     comment?: WorkspaceComment,
@@ -98,6 +98,6 @@ export interface CommentCollapseJson extends CommentBaseJson {
 
 registry.register(
   registry.Type.EVENT,
-  eventUtils.COMMENT_COLLAPSE,
+  EventType.COMMENT_COLLAPSE,
   CommentCollapse,
 );

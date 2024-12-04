@@ -11,19 +11,19 @@
  */
 // Former goog.module ID: Blockly.FlyoutButton
 
+import type {IASTNodeLocationSvg} from './blockly.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IRenderedElement} from './interfaces/i_rendered_element.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
+import {Rect} from './utils/rect.js';
 import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 import type * as toolbox from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {IRenderedElement} from './interfaces/i_rendered_element.js';
-import {Rect} from './utils/rect.js';
 
 /**
  * Class for a button or label in the flyout.

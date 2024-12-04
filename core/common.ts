@@ -6,14 +6,14 @@
 
 // Former goog.module ID: Blockly.common
 
-/* eslint-disable-next-line no-unused-vars */
 import type {Block} from './block.js';
 import {ISelectable} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
+import {EventType} from './events/type.js';
+import * as eventUtils from './events/utils.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import * as eventUtils from './events/utils.js';
 
 /** Database of all workspaces. */
 const WorkspaceDB_ = Object.create(null);
@@ -108,7 +108,7 @@ export function getSelected(): ISelectable | null {
 export function setSelected(newSelection: ISelectable | null) {
   if (selected === newSelection) return;
 
-  const event = new (eventUtils.get(eventUtils.SELECTED))(
+  const event = new (eventUtils.get(EventType.SELECTED))(
     selected?.id ?? null,
     newSelection?.id ?? null,
     newSelection?.workspace.id ?? selected?.workspace.id ?? '',

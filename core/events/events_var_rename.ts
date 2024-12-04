@@ -6,15 +6,15 @@
 
 // Former goog.module ID: Blockly.Events.VarRename
 
-import * as registry from '../registry.js';
 import type {
   IVariableModel,
   IVariableState,
 } from '../interfaces/i_variable_model.js';
+import * as registry from '../registry.js';
 
-import {VarBase, VarBaseJson} from './events_var_base.js';
-import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
+import {VarBase, VarBaseJson} from './events_var_base.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a variable model was renamed.
@@ -22,7 +22,7 @@ import type {Workspace} from '../workspace.js';
  * @class
  */
 export class VarRename extends VarBase {
-  override type = eventUtils.VAR_RENAME;
+  override type = EventType.VAR_RENAME;
 
   /** The previous name of the variable. */
   oldName?: string;
@@ -130,4 +130,4 @@ export interface VarRenameJson extends VarBaseJson {
   newName: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.VAR_RENAME, VarRename);
+registry.register(registry.Type.EVENT, EventType.VAR_RENAME, VarRename);

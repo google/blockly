@@ -14,11 +14,11 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_create.js';
 
-import * as idGenerator from './utils/idgenerator.js';
 import * as eventUtils from './events/utils.js';
-import * as registry from './registry.js';
-import type {Workspace} from './workspace.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
+import * as registry from './registry.js';
+import * as idGenerator from './utils/idgenerator.js';
+import type {Workspace} from './workspace.js';
 
 /**
  * Class for a variable model.

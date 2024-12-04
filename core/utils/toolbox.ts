@@ -285,9 +285,9 @@ function hasCategoriesInternal(toolboxJson: ToolboxInfo | null): boolean {
     return toolboxKind === CATEGORY_TOOLBOX_KIND;
   }
 
-  const categories = toolboxJson['contents'].filter(function (item) {
-    return item['kind'].toUpperCase() === 'CATEGORY';
-  });
+  const categories = toolboxJson['contents'].filter(
+    (item) => item['kind'].toUpperCase() === 'CATEGORY',
+  );
   return !!categories.length;
 }
 

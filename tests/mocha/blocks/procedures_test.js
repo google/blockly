@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../../node_modules/chai/chai.js';
 import * as Blockly from '../../../build/src/core/blockly.js';
+import {assert} from '../../../node_modules/chai/chai.js';
+import {defineRowBlock} from '../test_helpers/block_definitions.js';
 import {
   assertCallBlockStructure,
   assertDefBlockStructure,
-  createProcDefBlock,
   createProcCallBlock,
+  createProcDefBlock,
   MockProcedureModel,
 } from '../test_helpers/procedures.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
@@ -20,7 +21,6 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from '../test_helpers/setup_teardown.js';
-import {defineRowBlock} from '../test_helpers/block_definitions.js';
 
 suite('Procedures', function () {
   setup(function () {
@@ -862,6 +862,7 @@ suite('Procedures', function () {
       'if a procedure caller block was already disabled before ' +
         'its definition was disabled, it is not reenabled',
       function () {
+        this.workspace.options.disable = true;
         const defBlock = createProcDefBlock(this.workspace);
         const callBlock = createProcCallBlock(this.workspace);
         this.clock.runAll();
@@ -1621,7 +1622,7 @@ suite('Procedures', function () {
           );
 
           defInput.htmlInput_.value = 'proc name2';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name2');
           assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name2');
         });
@@ -1634,7 +1635,7 @@ suite('Procedures', function () {
           );
 
           defInput.htmlInput_.value = 'PROC NAME';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           assert.equal(this.defBlock.getFieldValue('NAME'), 'PROC NAME');
           assert.equal(this.callBlock.getFieldValue('NAME'), 'PROC NAME');
         });
@@ -1649,7 +1650,7 @@ suite('Procedures', function () {
           );
 
           defInput.htmlInput_.value = 'proc name';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name');
           assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name');
         });
@@ -1662,7 +1663,7 @@ suite('Procedures', function () {
           );
 
           defInput.htmlInput_.value = 'proc name ';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name');
           assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name');
         });
@@ -1675,9 +1676,9 @@ suite('Procedures', function () {
           );
 
           defInput.htmlInput_.value = 'proc name ';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           defInput.htmlInput_.value = 'proc name 2';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           assert.equal(this.defBlock.getFieldValue('NAME'), 'proc name 2');
           assert.equal(this.callBlock.getFieldValue('NAME'), 'proc name 2');
         });
@@ -1690,7 +1691,7 @@ suite('Procedures', function () {
           );
 
           defInput.htmlInput_.value = '';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           assert.equal(
             this.defBlock.getFieldValue('NAME'),
             Blockly.Msg['UNNAMED_KEY'],
@@ -1709,7 +1710,7 @@ suite('Procedures', function () {
           );
 
           defInput.htmlInput_.value = '';
-          defInput.onHtmlInputChange_(null);
+          defInput.onHtmlInputChange(null);
           const newDefBlock = this.workspace.newBlock(testSuite.defType);
           newDefBlock.setFieldValue('new name', 'NAME');
           assert.equal(

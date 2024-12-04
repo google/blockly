@@ -6,8 +6,7 @@
 
 import * as chai from 'chai';
 import * as sinon from 'sinon';
-import {Key} from 'webdriverio';
-import {testSetup, testFileLocations} from './test_setup.mjs';
+import {testFileLocations, testSetup} from './test_setup.mjs';
 
 suite('Workspace comments', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time

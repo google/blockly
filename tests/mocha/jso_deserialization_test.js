@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {EventType} from '../../build/src/core/events/type.js';
 import {assert} from '../../node_modules/chai/chai.js';
-import {
-  sharedTestSetup,
-  sharedTestTeardown,
-  workspaceTeardown,
-} from './test_helpers/setup_teardown.js';
 import {assertEventFired} from './test_helpers/events.js';
-import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
   MockParameterModel,
   MockProcedureModel,
 } from './test_helpers/procedures.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
 suite('JSO Deserialization', function () {
   setup(function () {
@@ -67,7 +66,7 @@ suite('JSO Deserialization', function () {
         assertEventFired(
           this.eventsFireStub,
           Blockly.Events.FinishedLoading,
-          {type: eventUtils.FINISHED_LOADING},
+          {type: EventType.FINISHED_LOADING},
           this.workspace.id,
         );
       });
@@ -90,7 +89,7 @@ suite('JSO Deserialization', function () {
         assertEventFired(
           this.eventsFireStub,
           Blockly.Events.FinishedLoading,
-          {'group': 'my group', 'type': eventUtils.FINISHED_LOADING},
+          {'group': 'my group', 'type': EventType.FINISHED_LOADING},
           this.workspace.id,
         );
       });
@@ -145,7 +144,7 @@ suite('JSO Deserialization', function () {
             'varId': 'testId',
             'varType': '',
             'recordUndo': false,
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -171,7 +170,7 @@ suite('JSO Deserialization', function () {
             'varId': 'testId',
             'varType': '',
             'recordUndo': true,
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -196,7 +195,7 @@ suite('JSO Deserialization', function () {
             'varId': 'testId',
             'varType': '',
             'group': 'my group',
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -261,7 +260,7 @@ suite('JSO Deserialization', function () {
             'varName': 'test',
             'varId': 'testId',
             'varType': '',
-            'type': eventUtils.VAR_CREATE,
+            'type': EventType.VAR_CREATE,
           },
           this.workspace.id,
         );
@@ -287,7 +286,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'recordUndo': false, 'type': eventUtils.BLOCK_CREATE},
+            {'recordUndo': false, 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -312,7 +311,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'recordUndo': true, 'type': eventUtils.BLOCK_CREATE},
+            {'recordUndo': true, 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -336,7 +335,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'group': 'my group', 'type': eventUtils.BLOCK_CREATE},
+            {'group': 'my group', 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -398,7 +397,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {type: eventUtils.BLOCK_CREATE},
+            {type: EventType.BLOCK_CREATE},
             this.workspace.id,
             'id1',
           );
@@ -436,7 +435,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'recordUndo': true, 'type': eventUtils.BLOCK_CREATE},
+            {'recordUndo': true, 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );
@@ -454,7 +453,7 @@ suite('JSO Deserialization', function () {
           assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {'group': 'my group', 'type': eventUtils.BLOCK_CREATE},
+            {'group': 'my group', 'type': EventType.BLOCK_CREATE},
             this.workspace.id,
             'testId',
           );

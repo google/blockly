@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {ConnectionType} from '../../../build/src/core/connection_type.js';
 import {assert} from '../../../node_modules/chai/chai.js';
+import {defineStatementBlock} from '../test_helpers/block_definitions.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from '../test_helpers/setup_teardown.js';
-import {ConnectionType} from '../../../build/src/core/connection_type.js';
-import {defineStatementBlock} from '../test_helpers/block_definitions.js';
 
 suite('Lists', function () {
   setup(function () {

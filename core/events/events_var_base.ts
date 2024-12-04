@@ -15,12 +15,11 @@ import type {
   IVariableModel,
   IVariableState,
 } from '../interfaces/i_variable_model.js';
-
+import type {Workspace} from '../workspace.js';
 import {
   Abstract as AbstractEvent,
   AbstractEventJson,
 } from './events_abstract.js';
-import type {Workspace} from '../workspace.js';
 
 /**
  * Abstract class for a variable event.

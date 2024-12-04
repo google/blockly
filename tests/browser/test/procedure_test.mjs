@@ -10,13 +10,13 @@
 
 import * as chai from 'chai';
 import {
-  testSetup,
-  testFileLocations,
-  getSelectedBlockElement,
-  getNthBlockOfCategory,
-  getBlockTypeFromCategory,
   connect,
+  getBlockTypeFromCategory,
+  getNthBlockOfCategory,
+  getSelectedBlockElement,
   PAUSE_TIME,
+  testFileLocations,
+  testSetup,
 } from './test_setup.mjs';
 
 suite('Testing Connecting Blocks', function (done) {

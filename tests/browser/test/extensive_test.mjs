@@ -9,14 +9,14 @@
  */
 
 import * as chai from 'chai';
-import {
-  testSetup,
-  testFileLocations,
-  getBlockElementById,
-  getAllBlocks,
-  PAUSE_TIME,
-} from './test_setup.mjs';
 import {Key} from 'webdriverio';
+import {
+  getAllBlocks,
+  getBlockElementById,
+  PAUSE_TIME,
+  testFileLocations,
+  testSetup,
+} from './test_setup.mjs';
 
 suite('This tests loading Large Configuration and Deletion', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test

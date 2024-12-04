@@ -17,15 +17,16 @@ import './events/events_var_delete.js';
 import './events/events_var_rename.js';
 
 import type {Block} from './block.js';
-import * as deprecation from './utils/deprecation.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
-import * as registry from './registry.js';
-import * as Variables from './variables.js';
-import {Names} from './names.js';
-import * as idGenerator from './utils/idgenerator.js';
-import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
-import type {Workspace} from './workspace.js';
 import type {IVariableMap} from './interfaces/i_variable_map.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
+import {Names} from './names.js';
+import * as registry from './registry.js';
+import * as deprecation from './utils/deprecation.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as Variables from './variables.js';
+import type {Workspace} from './workspace.js';
 
 /**
  * Class for a variable map.  This contains a dictionary data structure with
@@ -148,7 +149,7 @@ export class VariableMap
     blocks: Block[],
   ) {
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName),
+      new (eventUtils.get(EventType.VAR_RENAME))(variable, newName),
     );
     variable.setName(newName);
     for (let i = 0; i < blocks.length; i++) {
@@ -187,7 +188,7 @@ export class VariableMap
       blocks[i].renameVarById(variable.getId(), conflictVar.getId());
     }
     // Finally delete the original variable, which is now unreferenced.
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+    eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
     // And remove it from the map.
     this.variableMap.get(type)?.delete(variable.getId());
   }
@@ -248,7 +249,7 @@ export class VariableMap
     if (!this.variableMap.has(type)) {
       this.variableMap.set(type, variables);
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
+    eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
     return variable;
   }
 
@@ -287,7 +288,7 @@ export class VariableMap
       const variables = this.variableMap.get(variable.getType());
       if (!variables || !variables.has(variable.getId())) return;
       variables.delete(variable.getId());
-      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+      eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
       if (variables.size === 0) {
         this.variableMap.delete(variable.getType());
       }

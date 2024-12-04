@@ -6,6 +6,7 @@
 
 // Former goog.module ID: Blockly.libraryBlocks
 
+import type {BlockDefinition} from '../core/blocks.js';
 import * as lists from './lists.js';
 import * as logic from './logic.js';
 import * as loops from './loops.js';
@@ -14,7 +15,6 @@ import * as procedures from './procedures.js';
 import * as texts from './text.js';
 import * as variables from './variables.js';
 import * as variablesDynamic from './variables_dynamic.js';
-import type {BlockDefinition} from '../core/blocks.js';
 
 export {
   lists,

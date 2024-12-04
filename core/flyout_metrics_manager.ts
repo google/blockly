@@ -38,13 +38,13 @@ export class FlyoutMetricsManager extends MetricsManager {
    *
    * @returns The bounding box of the blocks on the workspace.
    */
-  private getBoundingBox_():
+  private getBoundingBox():
     | SVGRect
     | {height: number; y: number; width: number; x: number} {
     let blockBoundingBox;
     try {
       blockBoundingBox = this.workspace_.getCanvas().getBBox();
-    } catch (e) {
+    } catch {
       // Firefox has trouble with hidden elements (Bug 528969).
       // 2021 Update: It looks like this was fixed around Firefox 77 released in
       // 2020.
@@ -55,7 +55,7 @@ export class FlyoutMetricsManager extends MetricsManager {
 
   override getContentMetrics(opt_getWorkspaceCoordinates?: boolean) {
     // The bounding box is in workspace coordinates.
-    const blockBoundingBox = this.getBoundingBox_();
+    const blockBoundingBox = this.getBoundingBox();
     const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
     return {

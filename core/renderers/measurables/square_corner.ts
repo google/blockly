@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.blockRendering.SquareCorner
 
 import type {ConstantProvider} from '../common/constants.js';
-
 import {Measurable} from './base.js';
 import {Types} from './types.js';
 

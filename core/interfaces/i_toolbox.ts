@@ -6,11 +6,11 @@
 
 // Former goog.module ID: Blockly.IToolbox
 
+import type {ToolboxInfo} from '../utils/toolbox.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
+import type {IFlyout} from './i_flyout.js';
 import type {IRegistrable} from './i_registrable.js';
 import type {IToolboxItem} from './i_toolbox_item.js';
-import type {ToolboxInfo} from '../utils/toolbox.js';
-import type {IFlyout} from './i_flyout.js';
-import type {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Interface for a toolbox.

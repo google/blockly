@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {EventType} from '../../build/src/core/events/type.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {assertEventFired} from './test_helpers/events.js';
-import * as eventUtils from '../../build/src/core/events/utils.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -153,7 +153,7 @@ suite('Theme', function () {
       assertEventFired(
         this.eventsFireStub,
         Blockly.Events.ThemeChange,
-        {themeName: 'themeName', type: eventUtils.THEME_CHANGE},
+        {themeName: 'themeName', type: EventType.THEME_CHANGE},
         workspace.id,
       );
     } finally {

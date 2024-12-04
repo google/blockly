@@ -16,12 +16,20 @@ import './connection_checker.js';
 
 import type {Block} from './block.js';
 import type {BlocklyOptions} from './blockly_options.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
+import * as common from './common.js';
 import type {ConnectionDB} from './connection_db.js';
 import type {Abstract} from './events/events_abstract.js';
-import * as common from './common.js';
 import * as eventUtils from './events/utils.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import {IProcedureMap} from './interfaces/i_procedure_map.js';
+import type {IVariableMap} from './interfaces/i_variable_map.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
+import {ObservableProcedureMap} from './observable_procedure_map.js';
 import {Options} from './options.js';
 import * as registry from './registry.js';
 import * as arrayUtils from './utils/array.js';
@@ -30,14 +38,6 @@ import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
 import * as Variables from './variables.js';
-import type {IVariableMap} from './interfaces/i_variable_map.js';
-import type {
-  IVariableModel,
-  IVariableState,
-} from './interfaces/i_variable_model.js';
-import {WorkspaceComment} from './comments/workspace_comment.js';
-import {IProcedureMap} from './interfaces/i_procedure_map.js';
-import {ObservableProcedureMap} from './observable_procedure_map.js';
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -107,7 +107,7 @@ export class Workspace implements IASTNodeLocation {
   private readonly topBlocks: Block[] = [];
   private readonly topComments: WorkspaceComment[] = [];
   private readonly commentDB = new Map<string, WorkspaceComment>();
-  private readonly listeners: Function[] = [];
+  private readonly listeners: ((e: Abstract) => void)[] = [];
   protected undoStack_: Abstract[] = [];
   protected redoStack_: Abstract[] = [];
   private readonly blockDB = new Map<string, Block>();
@@ -175,7 +175,7 @@ export class Workspace implements IASTNodeLocation {
    * @returns The comparison value. This tells Array.sort() how to change object
    *     a's index.
    */
-  private sortObjects_(
+  private sortObjects(
     a: Block | WorkspaceComment,
     b: Block | WorkspaceComment,
   ): number {
@@ -217,7 +217,7 @@ export class Workspace implements IASTNodeLocation {
     // Copy the topBlocks list.
     const blocks = new Array<Block>().concat(this.topBlocks);
     if (ordered && blocks.length > 1) {
-      blocks.sort(this.sortObjects_.bind(this));
+      blocks.sort(this.sortObjects.bind(this));
     }
     return blocks;
   }
@@ -260,12 +260,10 @@ export class Workspace implements IASTNodeLocation {
     }
     const blocks = this.typedBlocksDB.get(type)!.slice(0);
     if (ordered && blocks && blocks.length > 1) {
-      blocks.sort(this.sortObjects_.bind(this));
+      blocks.sort(this.sortObjects.bind(this));
     }
 
-    return blocks.filter(function (block: Block) {
-      return !block.isInsertionMarker();
-    });
+    return blocks.filter((block) => !block.isInsertionMarker());
   }
 
   /**
@@ -318,7 +316,7 @@ export class Workspace implements IASTNodeLocation {
     // Copy the topComments list.
     const comments = new Array<WorkspaceComment>().concat(this.topComments);
     if (ordered && comments.length > 1) {
-      comments.sort(this.sortObjects_.bind(this));
+      comments.sort(this.sortObjects.bind(this));
     }
     return comments;
   }
@@ -349,11 +347,7 @@ export class Workspace implements IASTNodeLocation {
 
     // Insertion markers exist on the workspace for rendering reasons, but
     // aren't "real" blocks from a developer perspective.
-    const filtered = blocks.filter(function (block) {
-      return !block.isInsertionMarker();
-    });
-
-    return filtered;
+    return blocks.filter((block) => !block.isInsertionMarker());
   }
 
   /** Dispose of all blocks and comments in workspace. */
@@ -715,7 +709,7 @@ export class Workspace implements IASTNodeLocation {
     if (!inputEvent) {
       return;
     }
-    let events = [inputEvent];
+    const events = [inputEvent];
     // Do another undo/redo if the next one is of the same group.
     while (
       inputStack.length &&
@@ -731,7 +725,6 @@ export class Workspace implements IASTNodeLocation {
       const event = events[i];
       outputStack.push(event);
     }
-    events = eventUtils.filter(events, redo);
     eventUtils.setRecordUndo(false);
     try {
       for (let i = 0; i < events.length; i++) {
@@ -760,7 +753,7 @@ export class Workspace implements IASTNodeLocation {
    * @param func Function to call.
    * @returns Obsolete return value, ignore.
    */
-  addChangeListener(func: (e: Abstract) => void): Function {
+  addChangeListener(func: (e: Abstract) => void): (e: Abstract) => void {
     this.listeners.push(func);
     return func;
   }
@@ -770,7 +763,7 @@ export class Workspace implements IASTNodeLocation {
    *
    * @param func Function to stop calling.
    */
-  removeChangeListener(func: Function) {
+  removeChangeListener(func: (e: Abstract) => void) {
     arrayUtils.removeElem(this.listeners, func);
   }
 

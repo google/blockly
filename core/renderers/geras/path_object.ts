@@ -12,7 +12,6 @@ import * as colour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import {PathObject as BasePathObject} from '../common/path_object.js';
-
 import type {ConstantProvider} from './constants.js';
 
 /**

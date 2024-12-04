@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.utils.svgMath
 
 import type {WorkspaceSvg} from '../workspace_svg.js';
-
 import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';
 import * as style from './style.js';

@@ -7,12 +7,12 @@
 // Former goog.module ID: Blockly.VariablesDynamic
 
 import {Blocks} from './blocks.js';
+import type {FlyoutButton} from './flyout_button.js';
 import {Msg} from './msg.js';
 import * as xml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import type {FlyoutButton} from './flyout_button.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.

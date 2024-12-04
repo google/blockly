@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {Rect} from '../utils/rect.js';
-import type {UiMetrics} from '../metrics_manager.js';
 // Former goog.module ID: Blockly.IPositionable
 
+import type {UiMetrics} from '../metrics_manager.js';
+import type {Rect} from '../utils/rect.js';
 import type {IComponent} from './i_component.js';
 
 /**

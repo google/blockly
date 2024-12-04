@@ -6,23 +6,23 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.variablesDynamic
 
-import * as ContextMenu from '../core/contextmenu.js';
-import * as Extensions from '../core/extensions.js';
-import * as Variables from '../core/variables.js';
-import {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
 import type {Block} from '../core/block.js';
-import type {
-  ContextMenuOption,
-  LegacyContextMenuOption,
-} from '../core/contextmenu_registry.js';
-import {FieldVariable} from '../core/field_variable.js';
-import {Msg} from '../core/msg.js';
-import type {WorkspaceSvg} from '../core/workspace_svg.js';
 import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import * as ContextMenu from '../core/contextmenu.js';
+import type {
+  ContextMenuOption,
+  LegacyContextMenuOption,
+} from '../core/contextmenu_registry.js';
+import {Abstract as AbstractEvent} from '../core/events/events_abstract.js';
+import * as Extensions from '../core/extensions.js';
 import '../core/field_label.js';
+import {FieldVariable} from '../core/field_variable.js';
+import {Msg} from '../core/msg.js';
+import * as Variables from '../core/variables.js';
+import type {WorkspaceSvg} from '../core/workspace_svg.js';
 
 /**
  * A dictionary of the block definitions provided by this module.

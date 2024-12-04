@@ -24,7 +24,7 @@ import type {Workspace} from './workspace.js';
  * @deprecated
  * @see {@link https://developers.google.com/blockly/guides/create-custom-blocks/generating-code}
  * @param block The Block instance to generate code for.
- * @param genearator The CodeGenerator calling the function.
+ * @param generator The CodeGenerator calling the function.
  * @returns A string containing the generated code (for statement blocks),
  *     or a [code, precedence] tuple (for value/expression blocks), or
  *     null if no code should be emitted for block.

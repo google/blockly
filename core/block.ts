@@ -43,6 +43,10 @@ import {ValueInput} from './inputs/value_input.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import {type IIcon} from './interfaces/i_icon.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -51,10 +55,6 @@ import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
-import type {
-  IVariableModel, 
-  IVariableState,
-} from './interfaces/i_variable_model.js';
 import type {Workspace} from './workspace.js';
 
 /**

@@ -36,7 +36,6 @@ import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
 
 // TODO(#5160): Remove this once lint is fixed.
-/* eslint-disable no-use-before-define */
 
 /**
  * Represents the state of a connection.

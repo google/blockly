@@ -199,7 +199,6 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   setBubbleLocation(location: Coordinate) {
     this.bubbleLocation = location;
     this.textInputBubble?.moveDuringDrag(location);
-    this.textBubble?.moveDuringDrag(location);
   }
 
   /**

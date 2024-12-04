@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
-import type {SeparatorInfo} from './utils/toolbox.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
+import type {SeparatorInfo} from './utils/toolbox.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class responsible for creating separators for flyouts.
@@ -33,7 +33,7 @@ export class SeparatorFlyoutInflater implements IFlyoutInflater {
    * @param flyoutWorkspace The workspace the separator belongs to.
    * @returns A newly created FlyoutSeparator.
    */
-  load(_state: Object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
+  load(_state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
     const flyoutAxis = flyoutWorkspace.targetWorkspace?.getFlyout()
       ?.horizontalLayout
       ? SeparatorAxis.X
@@ -48,7 +48,7 @@ export class SeparatorFlyoutInflater implements IFlyoutInflater {
    * @param defaultGap The default spacing for flyout items.
    * @returns The desired size of the separator.
    */
-  gapForElement(state: Object, defaultGap: number): number {
+  gapForElement(state: object, defaultGap: number): number {
     const separatorState = state as SeparatorInfo;
     const newGap = parseInt(String(separatorState['gap']));
     return newGap ?? defaultGap;

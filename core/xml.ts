@@ -17,15 +17,15 @@ import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {IconType} from './icons/icon_types.js';
 import {inputTypes} from './inputs/input_types.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import * as renderManagement from './render_management.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';
-import type {
-  IVariableModel,
-  IVariableState,
-} from './interfaces/i_variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import {WorkspaceSvg} from './workspace_svg.js';

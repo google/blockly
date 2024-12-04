@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
 import {FlyoutButton} from './flyout_button.js';
-import {ButtonOrLabelInfo} from './utils/toolbox.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
+import {ButtonOrLabelInfo} from './utils/toolbox.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class responsible for creating buttons for flyouts.
@@ -22,7 +22,7 @@ export class ButtonFlyoutInflater implements IFlyoutInflater {
    * @param flyoutWorkspace The workspace to create the button on.
    * @returns A newly created FlyoutButton.
    */
-  load(state: Object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
+  load(state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
     const button = new FlyoutButton(
       flyoutWorkspace,
       flyoutWorkspace.targetWorkspace!,
@@ -40,7 +40,7 @@ export class ButtonFlyoutInflater implements IFlyoutInflater {
    * @param defaultGap The default spacing for flyout items.
    * @returns The amount of space that should follow this button.
    */
-  gapForElement(state: Object, defaultGap: number): number {
+  gapForElement(state: object, defaultGap: number): number {
     return defaultGap;
   }
 

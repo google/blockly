@@ -6,8 +6,8 @@
 
 import {CommentState} from '../icons/comment_icon.js';
 import {IconType} from '../icons/icon_types.js';
-import {Size} from '../utils/size.js';
 import {Coordinate} from '../utils/coordinate.js';
+import {Size} from '../utils/size.js';
 import {IHasBubble, hasBubble} from './i_has_bubble.js';
 import {IIcon, isIcon} from './i_icon.js';
 import {ISerializable, isSerializable} from './i_serializable.js';

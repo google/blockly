@@ -642,8 +642,8 @@ export abstract class Flyout
     // user typing long strings into fields on the blocks in the flyout.
     this.reflowWrapper = (event) => {
       if (
-        event.type === eventUtils.BLOCK_CHANGE ||
-        event.type === eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE
+        event.type === EventType.BLOCK_CHANGE ||
+        event.type === EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE
       ) {
         this.reflow();
       }

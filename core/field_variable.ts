@@ -22,17 +22,17 @@ import {
   MenuGenerator,
   MenuOption,
 } from './field_dropdown.js';
-import * as dom from './utils/dom.js';
 import * as fieldRegistry from './field_registry.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
 import type {MenuItem} from './menuitem.js';
-import {WorkspaceSvg} from './workspace_svg.js';
 import {Msg} from './msg.js';
+import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
-import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as Variables from './variables.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**

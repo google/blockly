@@ -8,9 +8,9 @@
 
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import type {IVariableState} from '../interfaces/i_variable_model.js';
+import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
 import * as priorities from './priorities.js';
-import * as registry from '../registry.js';
 import * as serializationRegistry from './registry.js';
 
 /**

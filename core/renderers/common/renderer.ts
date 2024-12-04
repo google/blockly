@@ -13,7 +13,6 @@ import {ConnectionType} from '../../connection_type.js';
 import type {IRegistrable} from '../../interfaces/i_registrable.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
 import type {BlockStyle, Theme} from '../../theme.js';
-import * as deprecation from '../../utils/deprecation.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';

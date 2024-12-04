@@ -21,8 +21,8 @@ import {
   FieldInputValidator,
 } from './field_input.js';
 import * as fieldRegistry from './field_registry.js';
-import * as parsing from './utils/parsing.js';
 import * as dom from './utils/dom.js';
+import * as parsing from './utils/parsing.js';
 
 /**
  * Class for an editable text field.

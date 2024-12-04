@@ -107,20 +107,20 @@ export abstract class Field<T = any>
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
    */
-  private tooltip_: Tooltip.TipInfo | null = null;
+  private tooltip: Tooltip.TipInfo | null = null;
   protected size_: Size;
 
   /**
    * Holds the cursors svg element when the cursor is attached to the field.
    * This is null if there is no cursor on the field.
    */
-  private cursorSvg_: SVGElement | null = null;
+  private cursorSvg: SVGElement | null = null;
 
   /**
    * Holds the markers svg element when the marker is attached to the field.
    * This is null if there is no marker on the field.
    */
-  private markerSvg_: SVGElement | null = null;
+  private markerSvg: SVGElement | null = null;
 
   /** The rendered field's SVG group element. */
   protected fieldGroup_: SVGGElement | null = null;
@@ -135,7 +135,7 @@ export abstract class Field<T = any>
   protected textContent_: Text | null = null;
 
   /** Mouse down event listener data. */
-  private mouseDownWrapper_: browserEvents.Data | null = null;
+  private mouseDownWrapper: browserEvents.Data | null = null;
 
   /** Constants associated with the source block's renderer. */
   protected constants_: ConstantProvider | null = null;
@@ -312,7 +312,7 @@ export abstract class Field<T = any>
     sourceBlockSvg.getSvgRoot().appendChild(this.fieldGroup_);
     this.initView();
     this.updateEditable();
-    this.setTooltip(this.tooltip_);
+    this.setTooltip(this.tooltip);
     this.bindEvents_();
     this.initModel();
     this.applyColour();
@@ -393,7 +393,7 @@ export abstract class Field<T = any>
     const clickTarget = this.getClickTarget_();
     if (!clickTarget) throw new Error('A click target has not been set.');
     Tooltip.bindMouseEvents(clickTarget);
-    this.mouseDownWrapper_ = browserEvents.conditionalBind(
+    this.mouseDownWrapper = browserEvents.conditionalBind(
       clickTarget,
       'pointerdown',
       this,
@@ -1095,7 +1095,7 @@ export abstract class Field<T = any>
 
     try {
       const classValidation = this.doClassValidation_(newValue);
-      const classValue = this.processValidation_(
+      const classValue = this.processValidation(
         newValue,
         classValidation,
         fireChangeEvent,
@@ -1106,7 +1106,7 @@ export abstract class Field<T = any>
       }
 
       const localValidation = this.getValidator()?.call(this, classValue);
-      const localValue = this.processValidation_(
+      const localValue = this.processValidation(
         classValue,
         localValidation,
         fireChangeEvent,
@@ -1158,7 +1158,7 @@ export abstract class Field<T = any>
    * @param fireChangeEvent Whether to fire a change event if the value changes.
    * @returns New value, or an Error object.
    */
-  private processValidation_(
+  private processValidation(
     newValue: AnyDuringMigration,
     validatedValue: T | null | undefined,
     fireChangeEvent: boolean,
@@ -1272,7 +1272,7 @@ export abstract class Field<T = any>
       (clickTarget as AnyDuringMigration).tooltip = newTip;
     } else {
       // Field has not been initialized yet.
-      this.tooltip_ = newTip;
+      this.tooltip = newTip;
     }
   }
 
@@ -1286,8 +1286,8 @@ export abstract class Field<T = any>
     if (clickTarget) {
       return Tooltip.getTooltipOfObject(clickTarget);
     }
-    // Field has not been initialized yet. Return stashed this.tooltip_ value.
-    return Tooltip.getTooltipOfObject({tooltip: this.tooltip_});
+    // Field has not been initialized yet. Return stashed this.tooltip value.
+    return Tooltip.getTooltipOfObject({tooltip: this.tooltip});
   }
 
   /**
@@ -1396,7 +1396,7 @@ export abstract class Field<T = any>
    */
   setCursorSvg(cursorSvg: SVGElement) {
     if (!cursorSvg) {
-      this.cursorSvg_ = null;
+      this.cursorSvg = null;
       return;
     }
 
@@ -1404,7 +1404,7 @@ export abstract class Field<T = any>
       throw new Error(`The field group is ${this.fieldGroup_}.`);
     }
     this.fieldGroup_.appendChild(cursorSvg);
-    this.cursorSvg_ = cursorSvg;
+    this.cursorSvg = cursorSvg;
   }
 
   /**
@@ -1415,7 +1415,7 @@ export abstract class Field<T = any>
    */
   setMarkerSvg(markerSvg: SVGElement) {
     if (!markerSvg) {
-      this.markerSvg_ = null;
+      this.markerSvg = null;
       return;
     }
 
@@ -1423,7 +1423,7 @@ export abstract class Field<T = any>
       throw new Error(`The field group is ${this.fieldGroup_}.`);
     }
     this.fieldGroup_.appendChild(markerSvg);
-    this.markerSvg_ = markerSvg;
+    this.markerSvg = markerSvg;
   }
 
   /**
@@ -1437,10 +1437,10 @@ export abstract class Field<T = any>
       throw new UnattachedFieldError();
     }
     const workspace = block.workspace as WorkspaceSvg;
-    if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
+    if (workspace.keyboardAccessibilityMode && this.cursorSvg) {
       workspace.getCursor()!.draw();
     }
-    if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
+    if (workspace.keyboardAccessibilityMode && this.markerSvg) {
       // TODO(#4592): Update all markers on the field.
       workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
     }

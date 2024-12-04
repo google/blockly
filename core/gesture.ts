@@ -146,7 +146,7 @@ export class Gesture {
   private mostRecentEvent: PointerEvent;
 
   /** Boolean for whether or not this gesture is a multi-touch gesture. */
-  private isMultiTouch_ = false;
+  private multiTouch = false;
 
   /** A map of cached points used for tracking multi-touch gestures. */
   private cachedPoints = new Map<string, Coordinate | null>();
@@ -586,7 +586,7 @@ export class Gesture {
       const point0 = this.cachedPoints.get(pointers[0])!;
       const point1 = this.cachedPoints.get(pointers[1])!;
       this.startDistance = Coordinate.distance(point0, point1);
-      this.isMultiTouch_ = true;
+      this.multiTouch = true;
       e.preventDefault();
     }
   }
@@ -691,7 +691,7 @@ export class Gesture {
    * @internal
    */
   isMultiTouch(): boolean {
-    return this.isMultiTouch_;
+    return this.multiTouch;
   }
 
   /**

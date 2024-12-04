@@ -35,7 +35,7 @@ function posixPath(target) {
  * @return {string} The value s as a eval-able string literal.
  */
 function quote(str) {
-  /* eslint-disable no-control-regex, no-multi-spaces */
+  /* eslint-disable no-control-regex */
   /** Regexp for characters to be escaped in a single-quoted string. */
   const singleRE = /[\x00-\x1f\\\u2028\u2029']/g;
 
@@ -63,7 +63,7 @@ function quote(str) {
     '\u2028': '\\u2028',
     '\u2029': '\\u2029',
   };
-  /* eslint-enable no-control-regex, no-multi-spaces */
+  /* eslint-enable no-control-regex */
 
   return "'" + str.replace(singleRE, (c) => replacements[c]) + "'";
 }

@@ -104,7 +104,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Whether the workspace is visible.  False if the workspace has been hidden
    * by calling `setVisible(false)`.
    */
-  private isVisible_ = true;
+  private visible = true;
 
   /**
    * Whether this workspace has resizes enabled.
@@ -209,7 +209,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Category-based toolbox providing blocks which may be dragged into this
    * workspace.
    */
-  private toolbox_: IToolbox | null = null;
+  private toolbox: IToolbox | null = null;
 
   /**
    * The current gesture in progress on this workspace, if any.
@@ -340,7 +340,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     /** Translates the workspace. */
     this.setMetrics =
-      options.setMetrics || WorkspaceSvg.setTopLevelWorkspaceMetrics_;
+      options.setMetrics || WorkspaceSvg.setTopLevelWorkspaceMetrics;
 
     this.componentManager = new ComponentManager();
 
@@ -540,14 +540,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
 
     // Update all blocks in workspace that have a style name.
-    this.updateBlockStyles_(
+    this.updateBlockStyles(
       this.getAllBlocks(false).filter((block) => !!block.getStyleName()),
     );
 
     // Update current toolbox selection.
     this.refreshToolboxSelection();
-    if (this.toolbox_) {
-      this.toolbox_.refreshTheme();
+    if (this.toolbox) {
+      this.toolbox.refreshTheme();
     }
 
     // Re-render if workspace is visible
@@ -567,7 +567,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param blocks List of blocks to update the style on.
    */
-  private updateBlockStyles_(blocks: Block[]) {
+  private updateBlockStyles(blocks: Block[]) {
     for (let i = 0, block; (block = blocks[i]); i++) {
       const blockStyleName = block.getStyleName();
       if (blockStyleName) {
@@ -608,7 +608,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     False if the workspace has been hidden by calling `setVisible(false)`.
    */
   isVisible(): boolean {
-    return this.isVisible_;
+    return this.visible;
   }
 
   /**
@@ -781,7 +781,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.svgGroup_,
         'pointerdown',
         this,
-        this.onMouseDown_,
+        this.onMouseDown,
         false,
       );
       // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
@@ -793,7 +793,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.svgGroup_,
         'wheel',
         this,
-        this.onMouseWheel_,
+        this.onMouseWheel,
       );
     }
 
@@ -805,7 +805,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         this.options,
         true,
       );
-      this.toolbox_ = new ToolboxClass!(this);
+      this.toolbox = new ToolboxClass!(this);
     }
     if (this.grid) {
       this.grid.update(this.scale);
@@ -835,9 +835,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
-    if (this.toolbox_) {
-      this.toolbox_.dispose();
-      this.toolbox_ = null;
+    if (this.toolbox) {
+      this.toolbox.dispose();
+      this.toolbox = null;
     }
     if (this.flyout) {
       this.flyout.dispose();
@@ -994,8 +994,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.flyout || opt_own) {
       return this.flyout;
     }
-    if (this.toolbox_) {
-      return this.toolbox_.getFlyout();
+    if (this.toolbox) {
+      return this.toolbox.getFlyout();
     }
     return null;
   }
@@ -1006,14 +1006,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The toolbox on this workspace.
    */
   getToolbox(): IToolbox | null {
-    return this.toolbox_;
+    return this.toolbox;
   }
 
   /**
    * Update items that use screen coordinate calculations
    * because something has changed (e.g. scroll position, window size).
    */
-  private updateScreenCalculations_() {
+  private updateScreenCalculations() {
     this.updateInverseScreenCTM();
     this.recordDragTargets();
   }
@@ -1043,8 +1043,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * trash, zoom, toolbox, etc. (e.g. window resize).
    */
   resize() {
-    if (this.toolbox_) {
-      this.toolbox_.position();
+    if (this.toolbox) {
+      this.toolbox.position();
     }
     if (this.flyout) {
       this.flyout.position();
@@ -1067,7 +1067,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.scrollbar) {
       this.scrollbar.resize();
     }
-    this.updateScreenCalculations_();
+    this.updateScreenCalculations();
   }
 
   /**
@@ -1077,14 +1077,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   updateScreenCalculationsIfScrolled() {
-    /* eslint-disable indent */
     const currScroll = svgMath.getDocumentScroll();
     if (!Coordinate.equals(this.lastRecordedPageScroll, currScroll)) {
       this.lastRecordedPageScroll = currScroll;
-      this.updateScreenCalculations_();
+      this.updateScreenCalculations();
     }
   }
-  /* eslint-enable indent */
 
   /**
    * @returns The layer manager for this workspace.
@@ -1223,7 +1221,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param isVisible True if workspace should be visible.
    */
   setVisible(isVisible: boolean) {
-    this.isVisible_ = isVisible;
+    this.visible = isVisible;
     if (!this.svgGroup_) {
       return;
     }
@@ -1241,9 +1239,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
 
     this.getParentSvg().style.display = isVisible ? 'block' : 'none';
-    if (this.toolbox_) {
+    if (this.toolbox) {
       // Currently does not support toolboxes in mutators.
-      this.toolbox_.setVisible(isVisible);
+      this.toolbox.setVisible(isVisible);
     }
     if (!isVisible) {
       this.hideChaff(true);
@@ -1310,8 +1308,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   refreshToolboxSelection() {
     const ws = this.isFlyout ? this.targetWorkspace : this;
-    if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.getFlyout()) {
-      ws.toolbox_.refreshSelection();
+    if (ws && !ws.currentGesture_ && ws.toolbox && ws.toolbox.getFlyout()) {
+      ws.toolbox.refreshSelection();
     }
   }
 
@@ -1431,7 +1429,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param e Pointer down event.
    */
-  private onMouseDown_(e: PointerEvent) {
+  private onMouseDown(e: PointerEvent) {
     const gesture = this.getGesture(e);
     if (gesture) {
       gesture.handleWsStart(e, this);
@@ -1530,7 +1528,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param e Mouse wheel event.
    */
-  private onMouseWheel_(e: WheelEvent) {
+  private onMouseWheel(e: WheelEvent) {
     // Don't scroll or zoom anything if drag is in progress.
     if (Gesture.inProgress()) {
       e.preventDefault();
@@ -1724,11 +1722,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
 
     if (toolbox.hasCategories(parsedToolboxDef)) {
-      if (!this.toolbox_) {
+      if (!this.toolbox) {
         throw Error("Existing toolbox has no categories.  Can't change mode.");
       }
       this.options.languageTree = parsedToolboxDef;
-      this.toolbox_.render(parsedToolboxDef);
+      this.toolbox.render(parsedToolboxDef);
     } else {
       if (!this.flyout) {
         throw Error("Existing toolbox has categories.  Can't change mode.");
@@ -2419,7 +2417,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param xyRatio Contains an x and/or y property which is a float between 0
    *     and 1 specifying the degree of scrolling.
    */
-  private static setTopLevelWorkspaceMetrics_(
+  private static setTopLevelWorkspaceMetrics(
     this: WorkspaceSvg,
     xyRatio: {x?: number; y?: number},
   ) {

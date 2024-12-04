@@ -22,7 +22,6 @@ import * as Touch from './touch.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
@@ -337,18 +336,6 @@ function bindDocumentEvents() {
     // should run regardless of what other touch event handlers have run.
     browserEvents.bind(document, 'touchend', null, Touch.longStop);
     browserEvents.bind(document, 'touchcancel', null, Touch.longStop);
-    // Some iPad versions don't fire resize after portrait to landscape change.
-    if (userAgent.IPAD) {
-      browserEvents.conditionalBind(
-        window,
-        'orientationchange',
-        document,
-        function () {
-          // TODO (#397): Fix for multiple Blockly workspaces.
-          common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
-        },
-      );
-    }
   }
   documentEventsBound = true;
 }

@@ -89,7 +89,7 @@ export class BlockMove extends BlockBase {
       this.recordUndo = false;
     }
 
-    const location = this.currentLocation_();
+    const location = this.currentLocation();
     this.oldParentId = location.parentId;
     this.oldInputName = location.inputName;
     this.oldCoordinate = location.coordinate;
@@ -167,7 +167,7 @@ export class BlockMove extends BlockBase {
 
   /** Record the block's new location.  Called after the move. */
   recordNew() {
-    const location = this.currentLocation_();
+    const location = this.currentLocation();
     this.newParentId = location.parentId;
     this.newInputName = location.inputName;
     this.newCoordinate = location.coordinate;
@@ -188,7 +188,7 @@ export class BlockMove extends BlockBase {
    *
    * @returns Collection of location info.
    */
-  private currentLocation_(): BlockLocation {
+  private currentLocation(): BlockLocation {
     const workspace = this.getEventWorkspace_();
     if (!this.blockId) {
       throw new Error(

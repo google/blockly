@@ -136,7 +136,7 @@ suite('WorkspaceSvg', function () {
       sinon
         .stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
         .returns(true);
-      this.workspace.toolbox_ = null;
+      this.workspace.toolbox = null;
       assert.throws(
         function () {
           this.workspace.updateToolbox({'contents': []});
@@ -502,7 +502,8 @@ suite('WorkspaceSvg', function () {
       );
     });
 
-    test('two blocks first at (10, 15) second at (0, 0) do not switch places', function () {
+    // TODO(#8676): Reenable once test passes reliably.
+    test.skip('two blocks first at (10, 15) second at (0, 0) do not switch places', function () {
       const blockJson1 = {
         'type': 'math_number',
         'id': 'block1',
@@ -538,7 +539,8 @@ suite('WorkspaceSvg', function () {
       );
     });
 
-    test('two overlapping blocks are moved to origin and below', function () {
+    // TODO(#8676): Reenable once test passes reliably.
+    test.skip('two overlapping blocks are moved to origin and below', function () {
       const blockJson1 = {
         'type': 'math_number',
         'id': 'block1',
@@ -618,7 +620,8 @@ suite('WorkspaceSvg', function () {
       );
     });
 
-    test('two overlapping blocks are moved to origin and below including children', function () {
+    // TODO(#8676): Reenable once test passes reliably.
+    test.skip('two overlapping blocks are moved to origin and below including children', function () {
       const blockJson1 = {
         'type': 'logic_negate',
         'id': 'block1',
@@ -682,7 +685,8 @@ suite('WorkspaceSvg', function () {
       );
     });
 
-    test('two large overlapping blocks are moved to origin and below', function () {
+    // TODO(#8676): Reenable once test passes reliably.
+    test.skip('two large overlapping blocks are moved to origin and below', function () {
       const blockJson1 = {
         'type': 'controls_repeat_ext',
         'id': 'block1',

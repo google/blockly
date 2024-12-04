@@ -89,7 +89,7 @@ export class Block implements IASTNodeLocation {
    * Colour of the block as HSV hue value (0-360)
    * This may be null if the block colour was not set via a hue number.
    */
-  private hue_: number | null = null;
+  private hue: number | null = null;
 
   /** Colour of the block in '#RRGGBB' format. */
   protected colour_ = '#000000';
@@ -184,13 +184,13 @@ export class Block implements IASTNodeLocation {
 
   protected childBlocks_: this[] = [];
 
-  private deletable_ = true;
+  private deletable = true;
 
-  private movable_ = true;
+  private movable = true;
 
-  private editable_ = true;
+  private editable = true;
 
-  private isShadow_ = false;
+  private shadow = false;
 
   protected collapsed_ = false;
   protected outputShape_: number | null = null;
@@ -207,7 +207,7 @@ export class Block implements IASTNodeLocation {
    */
   initialized = false;
 
-  private readonly xy_: Coordinate;
+  private readonly xy: Coordinate;
   isInFlyout: boolean;
   isInMutator: boolean;
   RTL: boolean;
@@ -227,7 +227,7 @@ export class Block implements IASTNodeLocation {
   helpUrl: string | (() => string) | null = null;
 
   /** A bound callback function to use when the parent workspace changes. */
-  private onchangeWrapper_: ((p1: Abstract) => void) | null = null;
+  private onchangeWrapper: ((p1: Abstract) => void) | null = null;
 
   /**
    * A count of statement inputs on the block.
@@ -260,7 +260,7 @@ export class Block implements IASTNodeLocation {
      * The block's position in workspace units.  (0, 0) is at the workspace's
      * origin; scale does not change this value.
      */
-    this.xy_ = new Coordinate(0, 0);
+    this.xy = new Coordinate(0, 0);
     this.isInFlyout = workspace.isFlyout;
     this.isInMutator = workspace.isMutator;
 
@@ -333,8 +333,8 @@ export class Block implements IASTNodeLocation {
     // Dispose of this change listener before unplugging.
     // Technically not necessary due to the event firing delay.
     // But future-proofing.
-    if (this.onchangeWrapper_) {
-      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    if (this.onchangeWrapper) {
+      this.workspace.removeChangeListener(this.onchangeWrapper);
     }
 
     this.unplug(healStack);
@@ -352,8 +352,8 @@ export class Block implements IASTNodeLocation {
    */
   protected disposeInternal() {
     this.disposing = true;
-    if (this.onchangeWrapper_) {
-      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    if (this.onchangeWrapper) {
+      this.workspace.removeChangeListener(this.onchangeWrapper);
     }
 
     this.workspace.removeTypedBlock(this);
@@ -403,10 +403,10 @@ export class Block implements IASTNodeLocation {
    */
   unplug(opt_healStack?: boolean) {
     if (this.outputConnection) {
-      this.unplugFromRow_(opt_healStack);
+      this.unplugFromRow(opt_healStack);
     }
     if (this.previousConnection) {
-      this.unplugFromStack_(opt_healStack);
+      this.unplugFromStack(opt_healStack);
     }
   }
 
@@ -417,7 +417,7 @@ export class Block implements IASTNodeLocation {
    * @param opt_healStack Disconnect right-side block and connect to left-side
    *     block.  Defaults to false.
    */
-  private unplugFromRow_(opt_healStack?: boolean) {
+  private unplugFromRow(opt_healStack?: boolean) {
     let parentConnection = null;
     if (this.outputConnection?.isConnected()) {
       parentConnection = this.outputConnection.targetConnection;
@@ -430,7 +430,7 @@ export class Block implements IASTNodeLocation {
       return;
     }
 
-    const thisConnection = this.getOnlyValueConnection_();
+    const thisConnection = this.getOnlyValueConnection();
     if (
       !thisConnection ||
       !thisConnection.isConnected() ||
@@ -467,7 +467,7 @@ export class Block implements IASTNodeLocation {
    *
    * @returns The connection on the value input, or null.
    */
-  private getOnlyValueConnection_(): Connection | null {
+  private getOnlyValueConnection(): Connection | null {
     let connection = null;
     for (let i = 0; i < this.inputList.length; i++) {
       const thisConnection = this.inputList[i].connection;
@@ -492,7 +492,7 @@ export class Block implements IASTNodeLocation {
    * @param opt_healStack Disconnect child statement and reconnect stack.
    *     Defaults to false.
    */
-  private unplugFromStack_(opt_healStack?: boolean) {
+  private unplugFromStack(opt_healStack?: boolean) {
     let previousTarget = null;
     if (this.previousConnection?.isConnected()) {
       // Remember the connection that any next statements need to connect to.
@@ -789,8 +789,8 @@ export class Block implements IASTNodeLocation {
    */
   isDeletable(): boolean {
     return (
-      this.deletable_ &&
-      !this.isShadow_ &&
+      this.deletable &&
+      !this.shadow &&
       !this.isDeadOrDying() &&
       !this.workspace.options.readOnly
     );
@@ -802,7 +802,7 @@ export class Block implements IASTNodeLocation {
    * @returns True if the block's deletable property is true, false otherwise.
    */
   isOwnDeletable(): boolean {
-    return this.deletable_;
+    return this.deletable;
   }
 
   /**
@@ -811,7 +811,7 @@ export class Block implements IASTNodeLocation {
    * @param deletable True if deletable.
    */
   setDeletable(deletable: boolean) {
-    this.deletable_ = deletable;
+    this.deletable = deletable;
   }
 
   /**
@@ -822,8 +822,8 @@ export class Block implements IASTNodeLocation {
    */
   isMovable(): boolean {
     return (
-      this.movable_ &&
-      !this.isShadow_ &&
+      this.movable &&
+      !this.shadow &&
       !this.isDeadOrDying() &&
       !this.workspace.options.readOnly
     );
@@ -836,7 +836,7 @@ export class Block implements IASTNodeLocation {
    * @internal
    */
   isOwnMovable(): boolean {
-    return this.movable_;
+    return this.movable;
   }
 
   /**
@@ -845,7 +845,7 @@ export class Block implements IASTNodeLocation {
    * @param movable True if movable.
    */
   setMovable(movable: boolean) {
-    this.movable_ = movable;
+    this.movable = movable;
   }
 
   /**
@@ -871,7 +871,7 @@ export class Block implements IASTNodeLocation {
    * @returns True if a shadow.
    */
   isShadow(): boolean {
-    return this.isShadow_;
+    return this.shadow;
   }
 
   /**
@@ -883,7 +883,7 @@ export class Block implements IASTNodeLocation {
    * @internal
    */
   setShadow(shadow: boolean) {
-    this.isShadow_ = shadow;
+    this.shadow = shadow;
   }
 
   /**
@@ -914,9 +914,7 @@ export class Block implements IASTNodeLocation {
    */
   isEditable(): boolean {
     return (
-      this.editable_ &&
-      !this.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      this.editable && !this.isDeadOrDying() && !this.workspace.options.readOnly
     );
   }
 
@@ -926,7 +924,7 @@ export class Block implements IASTNodeLocation {
    * @returns True if the block's editable property is true, false otherwise.
    */
   isOwnEditable(): boolean {
-    return this.editable_;
+    return this.editable;
   }
 
   /**
@@ -935,7 +933,7 @@ export class Block implements IASTNodeLocation {
    * @param editable True if editable.
    */
   setEditable(editable: boolean) {
-    this.editable_ = editable;
+    this.editable = editable;
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         field.updateEditable();
@@ -1046,7 +1044,7 @@ export class Block implements IASTNodeLocation {
    * @returns Hue value (0-360).
    */
   getHue(): number | null {
-    return this.hue_;
+    return this.hue;
   }
 
   /**
@@ -1057,7 +1055,7 @@ export class Block implements IASTNodeLocation {
    */
   setColour(colour: number | string) {
     const parsed = parsing.parseBlockColour(colour);
-    this.hue_ = parsed.hue;
+    this.hue = parsed.hue;
     this.colour_ = parsed.hex;
   }
 
@@ -1083,12 +1081,12 @@ export class Block implements IASTNodeLocation {
     if (onchangeFn && typeof onchangeFn !== 'function') {
       throw Error('onchange must be a function.');
     }
-    if (this.onchangeWrapper_) {
-      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    if (this.onchangeWrapper) {
+      this.workspace.removeChangeListener(this.onchangeWrapper);
     }
     this.onchange = onchangeFn;
-    this.onchangeWrapper_ = onchangeFn.bind(this);
-    this.workspace.addChangeListener(this.onchangeWrapper_);
+    this.onchangeWrapper = onchangeFn.bind(this);
+    this.workspace.addChangeListener(this.onchangeWrapper);
   }
 
   /**
@@ -1774,15 +1772,15 @@ export class Block implements IASTNodeLocation {
     if (json['style'] && json['colour']) {
       throw Error(warningPrefix + 'Must not have both a colour and a style.');
     } else if (json['style']) {
-      this.jsonInitStyle_(json, warningPrefix);
+      this.jsonInitStyle(json, warningPrefix);
     } else {
-      this.jsonInitColour_(json, warningPrefix);
+      this.jsonInitColour(json, warningPrefix);
     }
 
     // Interpolate the message blocks.
     let i = 0;
     while (json['message' + i] !== undefined) {
-      this.interpolate_(
+      this.interpolate(
         json['message' + i],
         json['args' + i] || [],
         // Backwards compatibility: lastDummyAlign aliases implicitAlign.
@@ -1857,7 +1855,7 @@ export class Block implements IASTNodeLocation {
    * @param json Structured data describing the block.
    * @param warningPrefix Warning prefix string identifying block.
    */
-  private jsonInitColour_(json: AnyDuringMigration, warningPrefix: string) {
+  private jsonInitColour(json: AnyDuringMigration, warningPrefix: string) {
     if ('colour' in json) {
       if (json['colour'] === undefined) {
         console.warn(warningPrefix + 'Undefined colour value.');
@@ -1878,7 +1876,7 @@ export class Block implements IASTNodeLocation {
    * @param json Structured data describing the block.
    * @param warningPrefix Warning prefix string identifying block.
    */
-  private jsonInitStyle_(json: AnyDuringMigration, warningPrefix: string) {
+  private jsonInitStyle(json: AnyDuringMigration, warningPrefix: string) {
     const blockStyleName = json['style'];
     try {
       this.setStyle(blockStyleName);
@@ -1930,21 +1928,21 @@ export class Block implements IASTNodeLocation {
    *     of newline tokens, how should it be aligned?
    * @param warningPrefix Warning prefix string identifying block.
    */
-  private interpolate_(
+  private interpolate(
     message: string,
     args: AnyDuringMigration[],
     implicitAlign: string | undefined,
     warningPrefix: string,
   ) {
     const tokens = parsing.tokenizeInterpolation(message);
-    this.validateTokens_(tokens, args.length);
-    const elements = this.interpolateArguments_(tokens, args, implicitAlign);
+    this.validateTokens(tokens, args.length);
+    const elements = this.interpolateArguments(tokens, args, implicitAlign);
 
     // An array of [field, fieldName] tuples.
     const fieldStack = [];
     for (let i = 0, element; (element = elements[i]); i++) {
-      if (this.isInputKeyword_(element['type'])) {
-        const input = this.inputFromJson_(element, warningPrefix);
+      if (this.isInputKeyword(element['type'])) {
+        const input = this.inputFromJson(element, warningPrefix);
         // Should never be null, but just in case.
         if (input) {
           for (let j = 0, tuple; (tuple = fieldStack[j]); j++) {
@@ -1955,7 +1953,7 @@ export class Block implements IASTNodeLocation {
       } else {
         // All other types, including ones starting with 'input_' get routed
         // here.
-        const field = this.fieldFromJson_(element);
+        const field = this.fieldFromJson(element);
         if (field) {
           fieldStack.push([field, element['name']]);
         }
@@ -1971,7 +1969,7 @@ export class Block implements IASTNodeLocation {
    * @param tokens An array of tokens to validate
    * @param argsCount The number of args that need to be referred to.
    */
-  private validateTokens_(tokens: Array<string | number>, argsCount: number) {
+  private validateTokens(tokens: Array<string | number>, argsCount: number) {
     const visitedArgsHash = [];
     let visitedArgsCount = 0;
     for (let i = 0; i < tokens.length; i++) {
@@ -2026,7 +2024,7 @@ export class Block implements IASTNodeLocation {
    *     or dummy inputs, if necessary.
    * @returns The JSON definitions of field and inputs to add to the block.
    */
-  private interpolateArguments_(
+  private interpolateArguments(
     tokens: Array<string | number>,
     args: Array<AnyDuringMigration | string>,
     implicitAlign: string | undefined,
@@ -2049,7 +2047,7 @@ export class Block implements IASTNodeLocation {
         } else {
           // AnyDuringMigration because:  Type '{ text: string; type: string; }
           // | null' is not assignable to type 'string | number'.
-          element = this.stringToFieldJson_(element) as AnyDuringMigration;
+          element = this.stringToFieldJson(element) as AnyDuringMigration;
           if (!element) {
             continue;
           }
@@ -2061,9 +2059,7 @@ export class Block implements IASTNodeLocation {
     const length = elements.length;
     if (
       length &&
-      !this.isInputKeyword_(
-        (elements as AnyDuringMigration)[length - 1]['type'],
-      )
+      !this.isInputKeyword((elements as AnyDuringMigration)[length - 1]['type'])
     ) {
       const dummyInput = {'type': 'input_dummy'};
       if (implicitAlign) {
@@ -2083,7 +2079,7 @@ export class Block implements IASTNodeLocation {
    * @param element The element to try to turn into a field.
    * @returns The field defined by the JSON, or null if one couldn't be created.
    */
-  private fieldFromJson_(element: {
+  private fieldFromJson(element: {
     alt?: string;
     type: string;
     text?: string;
@@ -2091,10 +2087,10 @@ export class Block implements IASTNodeLocation {
     const field = fieldRegistry.fromJson(element);
     if (!field && element['alt']) {
       if (typeof element['alt'] === 'string') {
-        const json = this.stringToFieldJson_(element['alt']);
-        return json ? this.fieldFromJson_(json) : null;
+        const json = this.stringToFieldJson(element['alt']);
+        return json ? this.fieldFromJson(json) : null;
       }
-      return this.fieldFromJson_(element['alt']);
+      return this.fieldFromJson(element['alt']);
     }
     return field;
   }
@@ -2109,7 +2105,7 @@ export class Block implements IASTNodeLocation {
    * @returns The input that has been created, or null if one could not be
    *     created for some reason (should never happen).
    */
-  private inputFromJson_(
+  private inputFromJson(
     element: AnyDuringMigration,
     warningPrefix: string,
   ): Input | null {
@@ -2167,7 +2163,7 @@ export class Block implements IASTNodeLocation {
    * @returns True if the given string matches one of the input keywords, false
    *     otherwise.
    */
-  private isInputKeyword_(str: string): boolean {
+  private isInputKeyword(str: string): boolean {
     return (
       str === 'input_value' ||
       str === 'input_statement' ||
@@ -2184,7 +2180,7 @@ export class Block implements IASTNodeLocation {
    * @param str String to turn into the JSON definition of a label field.
    * @returns The JSON definition or null.
    */
-  private stringToFieldJson_(str: string): {text: string; type: string} | null {
+  private stringToFieldJson(str: string): {text: string; type: string} | null {
     str = str.trim();
     if (str) {
       return {
@@ -2445,7 +2441,7 @@ export class Block implements IASTNodeLocation {
    * @returns Object with .x and .y properties.
    */
   getRelativeToSurfaceXY(): Coordinate {
-    return this.xy_;
+    return this.xy;
   }
 
   /**
@@ -2461,7 +2457,7 @@ export class Block implements IASTNodeLocation {
     }
     const event = new (eventUtils.get(EventType.BLOCK_MOVE))(this) as BlockMove;
     if (reason) event.setReason(reason);
-    this.xy_.translate(dx, dy);
+    this.xy.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);
   }

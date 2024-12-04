@@ -167,7 +167,7 @@ export class Options {
     this.modalInputs = modalInputs;
     this.pathToMedia = pathToMedia;
     this.hasCategories = hasCategories;
-    this.moveOptions = Options.parseMoveOptions_(options, hasCategories);
+    this.moveOptions = Options.parseMoveOptions(options, hasCategories);
     this.hasScrollbars = !!this.moveOptions.scrollbars;
     this.hasTrashcan = hasTrashcan;
     this.maxTrashcanContents = maxTrashcanContents;
@@ -175,10 +175,10 @@ export class Options {
     this.hasCss = hasCss;
     this.horizontalLayout = horizontalLayout;
     this.languageTree = toolboxJsonDef;
-    this.gridOptions = Options.parseGridOptions_(options);
-    this.zoomOptions = Options.parseZoomOptions_(options);
+    this.gridOptions = Options.parseGridOptions(options);
+    this.zoomOptions = Options.parseZoomOptions(options);
     this.toolboxPosition = toolboxPosition;
-    this.theme = Options.parseThemeOptions_(options);
+    this.theme = Options.parseThemeOptions(options);
     this.renderer = renderer;
     this.rendererOverrides = options['rendererOverrides'] ?? null;
 
@@ -201,7 +201,7 @@ export class Options {
    * @param hasCategories Whether the workspace has categories or not.
    * @returns Normalized move options.
    */
-  private static parseMoveOptions_(
+  private static parseMoveOptions(
     options: BlocklyOptions,
     hasCategories: boolean,
   ): MoveOptions {
@@ -260,7 +260,7 @@ export class Options {
    * @param options Dictionary of options.
    * @returns Normalized zoom options.
    */
-  private static parseZoomOptions_(options: BlocklyOptions): ZoomOptions {
+  private static parseZoomOptions(options: BlocklyOptions): ZoomOptions {
     const zoom = options['zoom'] || {};
     const zoomOptions = {} as ZoomOptions;
     if (zoom['controls'] === undefined) {
@@ -309,7 +309,7 @@ export class Options {
    * @param options Dictionary of options.
    * @returns Normalized grid options.
    */
-  private static parseGridOptions_(options: BlocklyOptions): GridOptions {
+  private static parseGridOptions(options: BlocklyOptions): GridOptions {
     const grid = options['grid'] || {};
     const gridOptions = {} as GridOptions;
     gridOptions.spacing = Number(grid['spacing']) || 0;
@@ -327,7 +327,7 @@ export class Options {
    * @param options Dictionary of options.
    * @returns A Blockly Theme.
    */
-  private static parseThemeOptions_(options: BlocklyOptions): Theme {
+  private static parseThemeOptions(options: BlocklyOptions): Theme {
     const theme = options['theme'] || Classic;
     if (typeof theme === 'string') {
       return registry.getObject(registry.Type.THEME, theme) as Theme;

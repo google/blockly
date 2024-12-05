@@ -388,7 +388,20 @@ export class ASTNode {
 
     if (currentIndex < 0) return null;
 
-    const resultIndex = forward ? currentIndex + 1 : currentIndex - 1;
+    let resultIndex = forward ? currentIndex + 1 : currentIndex - 1;
+    // The flyout may contain non-navigable elements like spacers or custom
+    // items. If the next/previous element is one of those, keep looking until a
+    // block or button is encountered.
+    while (
+      resultIndex >= 0 &&
+      resultIndex < flyoutContents.length &&
+      !(
+        flyoutContents[resultIndex].element instanceof BlockSvg ||
+        flyoutContents[resultIndex].element instanceof FlyoutButton
+      )
+    ) {
+      resultIndex += forward ? 1 : -1;
+    }
     if (resultIndex === -1 || resultIndex === flyoutContents.length) {
       return null;
     }

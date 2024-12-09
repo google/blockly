@@ -41,7 +41,7 @@
 	"COLOUR_BLEND_COLOUR1": "ਰੰਗ 1",
 	"COLOUR_BLEND_COLOUR2": "ਰੰਗ 2",
 	"COLOUR_BLEND_RATIO": "ਅਨੁਪਾਤ",
-	"COLOUR_BLEND_TOOLTIP": "ਦਿੱਤੇ ਅਨੁਪਾਤ (0.0 - 1.0) ਅਨੁਸਾਰ ਦੋ ਰੰਗ ਮਿਲਾਓ।",
+	"COLOUR_BLEND_TOOLTIP": "ਦਿੱਤੇ ਅਨੁਪਾਤ (0.0 - 1.0) ਮੁਤਾਬਕ ਦੋ ਰੰਗ ਮਿਲਾਓ।",
 	"CONTROLS_REPEAT_TITLE": "%1 ਵਾਰੀ ਦੁਹਰਾਉ",
 	"CONTROLS_REPEAT_INPUT_DO": "ਕਰੋ",
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "ਦੁਹਰਾਓ ਜਦੋਂ ਤੱਕ",

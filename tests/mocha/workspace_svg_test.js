@@ -408,6 +408,53 @@ suite('WorkspaceSvg', function () {
   });
 
   suite('cleanUp', function () {
+    assert.blockIsAtOrigin = function (actual, message) {
+      assert.blockHasPosition(actual, 0, 0, message || 'block is at origin');
+    };
+
+    assert.blockHasPositionX = function (actual, expectedX, message) {
+      const position = actual.getRelativeToSurfaceXY();
+      message = message || 'block has x value of ' + expectedX;
+      assert.equal(position.x, expectedX, message);
+    };
+
+    assert.blockHasPositionY = function (actual, expectedY, message) {
+      const position = actual.getRelativeToSurfaceXY();
+      message = message || 'block has y value of ' + expectedY;
+      assert.equal(position.y, expectedY, message);
+    };
+
+    assert.blockHasPosition = function (actual, expectedX, expectedY, message) {
+      assert.blockHasPositionX(actual, expectedX, message);
+      assert.blockHasPositionY(actual, expectedY, message);
+    };
+
+    assert.blockIsAtNotOrigin = function (actual, message) {
+      const position = actual.getRelativeToSurfaceXY();
+      message = message || 'block is not at origin';
+      assert.isTrue(position.x != 0 || position.y != 0, message);
+    };
+
+    assert.blocksDoNotIntersect = function (a, b, message) {
+      const rectA = a.getBoundingRectangle();
+      const rectB = b.getBoundingRectangle();
+      assert.isFalse(rectA.intersects(rectB), message || "a,b don't intersect");
+    };
+
+    assert.blockIsAbove = function (a, b, message) {
+      // Block a is above b iff a's bottom extreme is < b's top extreme.
+      const rectA = a.getBoundingRectangle();
+      const rectB = b.getBoundingRectangle();
+      assert.isBelow(rectA.bottom, rectB.top, message || 'a is above b');
+    };
+
+    assert.blockIsBelow = function (a, b, message) {
+      // Block a is below b iff a's top extreme is > b's bottom extreme.
+      const rectA = a.getBoundingRectangle();
+      const rectB = b.getBoundingRectangle();
+      assert.isAbove(rectA.top, rectB.bottom, message || 'a is below b');
+    };
+
     test('empty workspace does not change', function () {
       this.workspace.cleanUp();
 
@@ -429,13 +476,8 @@ suite('WorkspaceSvg', function () {
       this.workspace.cleanUp();
 
       const blocks = this.workspace.getTopBlocks(true);
-      const origin = new Blockly.utils.Coordinate(0, 0);
       assert.equal(blocks.length, 1, 'workspace has one top-level block');
-      assert.deepEqual(
-        blocks[0].getRelativeToSurfaceXY(),
-        origin,
-        'block is at origin',
-      );
+      assert.blockIsAtOrigin(blocks[0]);
     });
 
     test('single block at (10, 15) is moved to (0, 0)', function () {
@@ -453,14 +495,9 @@ suite('WorkspaceSvg', function () {
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const allBlocks = this.workspace.getAllBlocks(false);
-      const origin = new Blockly.utils.Coordinate(0, 0);
       assert.equal(topBlocks.length, 1, 'workspace has one top-level block');
       assert.equal(allBlocks.length, 1, 'workspace has one block overall');
-      assert.deepEqual(
-        topBlocks[0].getRelativeToSurfaceXY(),
-        origin,
-        'block is at origin',
-      );
+      assert.blockIsAtOrigin(topBlocks[0]);
     });
 
     test('single block at (10, 15) with child is moved as unit to (0, 0)', function () {
@@ -487,19 +524,10 @@ suite('WorkspaceSvg', function () {
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const allBlocks = this.workspace.getAllBlocks(false);
-      const origin = new Blockly.utils.Coordinate(0, 0);
       assert.equal(topBlocks.length, 1, 'workspace has one top-level block');
       assert.equal(allBlocks.length, 2, 'workspace has two blocks overall');
-      assert.deepEqual(
-        topBlocks[0].getRelativeToSurfaceXY(),
-        origin,
-        'block is at origin',
-      );
-      assert.notDeepEqual(
-        allBlocks[1].getRelativeToSurfaceXY(),
-        origin,
-        'child is not at origin',
-      );
+      assert.blockIsAtOrigin(topBlocks[0]); // Parent block.
+      assert.blockIsAtNotOrigin(allBlocks[1]); // Child block.
     });
 
     // TODO(#8676): Reenable once test passes reliably.
@@ -524,19 +552,9 @@ suite('WorkspaceSvg', function () {
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1 = this.workspace.getBlockById('block1');
       const block2 = this.workspace.getBlockById('block2');
-      const origin = new Blockly.utils.Coordinate(0, 0);
-      const belowBlock2 = new Blockly.utils.Coordinate(0, 50);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.deepEqual(
-        block2.getRelativeToSurfaceXY(),
-        origin,
-        'block2 is at origin',
-      );
-      assert.deepEqual(
-        block1.getRelativeToSurfaceXY(),
-        belowBlock2,
-        'block1 is below block2',
-      );
+      assert.blockIsAtOrigin(block2);
+      assert.blockIsBelow(block1, block2);
     });
 
     // TODO(#8676): Reenable once test passes reliably.
@@ -564,19 +582,9 @@ suite('WorkspaceSvg', function () {
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1 = this.workspace.getBlockById('block1');
       const block2 = this.workspace.getBlockById('block2');
-      const origin = new Blockly.utils.Coordinate(0, 0);
-      const belowBlock1 = new Blockly.utils.Coordinate(0, 50);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.deepEqual(
-        block1.getRelativeToSurfaceXY(),
-        origin,
-        'block1 is at origin',
-      );
-      assert.deepEqual(
-        block2.getRelativeToSurfaceXY(),
-        belowBlock1,
-        'block2 is below block1',
-      );
+      assert.blockIsAtOrigin(block1);
+      assert.blockIsBelow(block2, block1);
     });
 
     test('two overlapping blocks with snapping are moved to grid-aligned positions', function () {
@@ -605,19 +613,9 @@ suite('WorkspaceSvg', function () {
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1 = this.workspace.getBlockById('block1');
       const block2 = this.workspace.getBlockById('block2');
-      const snappedOffOrigin = new Blockly.utils.Coordinate(10, 10);
-      const belowBlock1 = new Blockly.utils.Coordinate(10, 70);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.deepEqual(
-        block1.getRelativeToSurfaceXY(),
-        snappedOffOrigin,
-        'block1 is near origin',
-      );
-      assert.deepEqual(
-        block2.getRelativeToSurfaceXY(),
-        belowBlock1,
-        'block2 is below block1',
-      );
+      assert.blockHasPosition(block1, 10, 10, 'block1 is at snapped origin');
+      assert.blockIsBelow(block2, block1);
     });
 
     // TODO(#8676): Reenable once test passes reliably.
@@ -653,36 +651,28 @@ suite('WorkspaceSvg', function () {
       const allBlocks = this.workspace.getAllBlocks(false);
       const block1 = this.workspace.getBlockById('block1');
       const block2 = this.workspace.getBlockById('block2');
-      const origin = new Blockly.utils.Coordinate(0, 0);
-      const belowBlock1 = new Blockly.utils.Coordinate(0, 50);
-      const block1Pos = block1.getRelativeToSurfaceXY();
-      const block2Pos = block2.getRelativeToSurfaceXY();
-      const block1ChildPos = block1.getChildren()[0].getRelativeToSurfaceXY();
-      const block2ChildPos = block2.getChildren()[0].getRelativeToSurfaceXY();
+      const block1Child = block1.getChildren()[0];
+      const block2Child = block2.getChildren()[0];
+
+      // Note that the x position tests below are verifying that each block's
+      // child isn't exactly aligned with it (however, they does overlap since
+      // the child block has an input connection with its parent).
       assert.equal(topBlocks.length, 2, 'workspace has two top-level block2');
       assert.equal(allBlocks.length, 4, 'workspace has four blocks overall');
-      assert.deepEqual(block1Pos, origin, 'block1 is at origin');
-      assert.deepEqual(block2Pos, belowBlock1, 'block2 is below block1');
+      assert.blockIsAtOrigin(block1);
+      assert.blockIsBelow(block2, block1);
       assert.isAbove(
-        block1ChildPos.x,
-        block1Pos.x,
-        "block1's child is right of it",
+        block1.getChildren()[0].getRelativeToSurfaceXY().x,
+        block1.getRelativeToSurfaceXY().x,
+        "block1's child is right of its start",
       );
-      assert.isBelow(
-        block1ChildPos.y,
-        block2Pos.y,
-        "block1's child is above block 2",
-      );
+      assert.blockIsAbove(block1Child, block2);
       assert.isAbove(
-        block2ChildPos.x,
-        block2Pos.x,
-        "block2's child is right of it",
+        block2.getChildren()[0].getRelativeToSurfaceXY().x,
+        block2.getRelativeToSurfaceXY().x,
+        "block2's child is right of its start",
       );
-      assert.isAbove(
-        block2ChildPos.y,
-        block1Pos.y,
-        "block2's child is below block 1",
-      );
+      assert.blockIsBelow(block2Child, block1);
     });
 
     // TODO(#8676): Reenable once test passes reliably.
@@ -742,19 +732,9 @@ suite('WorkspaceSvg', function () {
       const topBlocks = this.workspace.getTopBlocks(true);
       const block1 = this.workspace.getBlockById('block1');
       const block2 = this.workspace.getBlockById('block2');
-      const origin = new Blockly.utils.Coordinate(0, 0);
-      const belowBlock1 = new Blockly.utils.Coordinate(0, 144);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.deepEqual(
-        block1.getRelativeToSurfaceXY(),
-        origin,
-        'block1 is at origin',
-      );
-      assert.deepEqual(
-        block2.getRelativeToSurfaceXY(),
-        belowBlock1,
-        'block2 is below block1',
-      );
+      assert.blockIsAtOrigin(block1);
+      assert.blockIsBelow(block2, block1);
     });
 
     test('five overlapping blocks are moved in-order as one column', function () {
@@ -780,32 +760,21 @@ suite('WorkspaceSvg', function () {
       this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
-      const block1Pos = this.workspace
-        .getBlockById('block1')
-        .getRelativeToSurfaceXY();
-      const block2Pos = this.workspace
-        .getBlockById('block2')
-        .getRelativeToSurfaceXY();
-      const block3Pos = this.workspace
-        .getBlockById('block3')
-        .getRelativeToSurfaceXY();
-      const block4Pos = this.workspace
-        .getBlockById('block4')
-        .getRelativeToSurfaceXY();
-      const block5Pos = this.workspace
-        .getBlockById('block5')
-        .getRelativeToSurfaceXY();
-      const origin = new Blockly.utils.Coordinate(0, 0);
+      const block1 = this.workspace.getBlockById('block1');
+      const block2 = this.workspace.getBlockById('block2');
+      const block3 = this.workspace.getBlockById('block3');
+      const block4 = this.workspace.getBlockById('block4');
+      const block5 = this.workspace.getBlockById('block5');
       assert.equal(topBlocks.length, 5, 'workspace has five top-level blocks');
-      assert.deepEqual(block1Pos, origin, 'block1 is at origin');
-      assert.equal(block2Pos.x, 0, 'block2.x is at 0');
-      assert.equal(block3Pos.x, 0, 'block3.x is at 0');
-      assert.equal(block4Pos.x, 0, 'block4.x is at 0');
-      assert.equal(block5Pos.x, 0, 'block5.x is at 0');
-      assert.isAbove(block2Pos.y, block1Pos.y, 'block2 is below block1');
-      assert.isAbove(block3Pos.y, block2Pos.y, 'block3 is below block2');
-      assert.isAbove(block4Pos.y, block3Pos.y, 'block4 is below block3');
-      assert.isAbove(block5Pos.y, block4Pos.y, 'block5 is below block4');
+      assert.blockIsAtOrigin(block1);
+      assert.blockHasPositionX(block2, 0);
+      assert.blockHasPositionX(block3, 0);
+      assert.blockHasPositionX(block4, 0);
+      assert.blockHasPositionX(block5, 0);
+      assert.blockIsBelow(block2, block1);
+      assert.blockIsBelow(block3, block2);
+      assert.blockIsBelow(block4, block3);
+      assert.blockIsBelow(block5, block4);
     });
 
     test('single immovable block at (10, 15) is not moved', function () {
@@ -824,14 +793,9 @@ suite('WorkspaceSvg', function () {
 
       const topBlocks = this.workspace.getTopBlocks(true);
       const allBlocks = this.workspace.getAllBlocks(false);
-      const origPos = new Blockly.utils.Coordinate(10, 15);
       assert.equal(topBlocks.length, 1, 'workspace has one top-level block');
       assert.equal(allBlocks.length, 1, 'workspace has one block overall');
-      assert.deepEqual(
-        topBlocks[0].getRelativeToSurfaceXY(),
-        origPos,
-        'block is at (10, 15)',
-      );
+      assert.blockHasPosition(topBlocks[0], 10, 15);
     });
 
     test('multiple block types immovable blocks are not moved', function () {
@@ -914,53 +878,29 @@ suite('WorkspaceSvg', function () {
       this.workspace.cleanUp();
 
       const topBlocks = this.workspace.getTopBlocks(true);
-      const block1Rect = this.workspace
-        .getBlockById('block1')
-        .getBoundingRectangle();
-      const block2Rect = this.workspace
-        .getBlockById('block2')
-        .getBoundingRectangle();
-      const block3Rect = this.workspace
-        .getBlockById('block3')
-        .getBoundingRectangle();
-      const block4Rect = this.workspace
-        .getBlockById('block4')
-        .getBoundingRectangle();
-      const block5Rect = this.workspace
-        .getBlockById('block5')
-        .getBoundingRectangle();
+      const block1 = this.workspace.getBlockById('block1');
+      const block2 = this.workspace.getBlockById('block2');
+      const block3 = this.workspace.getBlockById('block3');
+      const block4 = this.workspace.getBlockById('block4');
+      const block5 = this.workspace.getBlockById('block5');
       assert.equal(topBlocks.length, 5, 'workspace has five top-level blocks');
       // Check that immovable blocks haven't moved.
-      assert.equal(block2Rect.left, 10, 'block2.x is at 10');
-      assert.equal(block2Rect.top, 20, 'block2.y is at 20');
-      assert.equal(block5Rect.left, 20, 'block5.x is at 20');
-      assert.equal(block5Rect.top, 200, 'block5.y is at 200');
+      assert.blockHasPosition(block2, 10, 20);
+      assert.blockHasPosition(block5, 20, 200);
       // Check that movable positions have correctly been left-aligned.
-      assert.equal(block1Rect.left, 0, 'block1.x is at 0');
-      assert.equal(block3Rect.left, 0, 'block3.x is at 0');
-      assert.equal(block4Rect.left, 0, 'block4.x is at 0');
+      assert.blockHasPositionX(block1, 0);
+      assert.blockHasPositionX(block3, 0);
+      assert.blockHasPositionX(block4, 0);
       // Block order should be: 2, 1, 3, 5, 4 since 2 and 5 are immovable.
-      assert.isAbove(block1Rect.top, block2Rect.top, 'block1 is below block2');
-      assert.isAbove(block3Rect.top, block1Rect.top, 'block3 is below block1');
-      assert.isAbove(block5Rect.top, block3Rect.top, 'block5 is below block3');
-      assert.isAbove(block4Rect.top, block5Rect.top, 'block4 is below block5');
+      assert.blockIsBelow(block1, block2);
+      assert.blockIsBelow(block3, block1);
+      assert.blockIsBelow(block5, block3);
+      assert.blockIsBelow(block4, block5);
       // Ensure no blocks intersect (can check in order due to the position verification above).
-      assert.isFalse(
-        block2Rect.intersects(block1Rect),
-        'block2/block1 do not intersect',
-      );
-      assert.isFalse(
-        block1Rect.intersects(block3Rect),
-        'block1/block3 do not intersect',
-      );
-      assert.isFalse(
-        block3Rect.intersects(block5Rect),
-        'block3/block5 do not intersect',
-      );
-      assert.isFalse(
-        block5Rect.intersects(block4Rect),
-        'block5/block4 do not intersect',
-      );
+      assert.blocksDoNotIntersect(block2, block1);
+      assert.blocksDoNotIntersect(block1, block3);
+      assert.blocksDoNotIntersect(block3, block5);
+      assert.blocksDoNotIntersect(block5, block4);
     });
   });
 

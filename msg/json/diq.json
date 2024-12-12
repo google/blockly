@@ -78,7 +78,7 @@
 	"CONTROLS_IF_MSG_ELSEIF": "eke nêyo",
 	"CONTROLS_IF_MSG_ELSE": "eke çıniyo",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Bloq da if'i rê yu şert dekerê de.",
-	"CONTROLS_IF_ELSE_TOOLTIP": "Blokê if'i rê mendê weziyeta \"tepêşen\" yaw qediye cıkerê",
+	"CONTROLS_IF_ELSE_TOOLTIP": "Blokê if'i rê yew şerto ke her çi ihtıwa keno, cıkerê.",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Debiyaye dı erci zey pêyêse ercê \"True\" dane.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Dı cıbiyayeyi ke zey yewbini niyê, bıçarne era raşt.",
 	"LOGIC_OPERATION_TOOLTIP_AND": "Eger her dı cıkewtışi zi raştê, şıma ageyrê.",
@@ -258,7 +258,7 @@
 	"PROCEDURES_CREATE_DO": "'%1' vıraze",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Çiyê vace...",
 	"WORKSPACE_ARIA_LABEL": "Blockly Caygurenayışi",
-	"COLLAPSED_WARNINGS_WARNING": "Tengneyaye bloku iqazi ihtiwa kenê.",
+	"COLLAPSED_WARNINGS_WARNING": "Blokê xırabeyi iqazan ihtıwa kenê.",
 	"DIALOG_OK": "TEMAM",
 	"DIALOG_CANCEL": "Bıtexelne"
 }

@@ -20,7 +20,7 @@ import type {Connection} from '../connection.js';
 import type {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
 import * as fieldRegistry from '../field_registry.js';
-import type {RenderedConnection} from '../rendered_connection.js';
+import {RenderedConnection} from '../rendered_connection.js';
 import {Align} from './align.js';
 import {inputTypes} from './input_types.js';
 
@@ -181,15 +181,14 @@ export class Input {
     for (let y = 0, field; (field = this.fieldRow[y]); y++) {
       field.setVisible(visible);
     }
-    if (this.connection) {
-      const renderedConnection = this.connection as RenderedConnection;
+    if (this.connection && this.connection instanceof RenderedConnection) {
       // Has a connection.
       if (visible) {
-        renderList = renderedConnection.startTrackingAll();
+        renderList = this.connection.startTrackingAll();
       } else {
-        renderedConnection.stopTrackingAll();
+        this.connection.stopTrackingAll();
       }
-      const child = renderedConnection.targetBlock();
+      const child = this.connection.targetBlock();
       if (child) {
         child.getSvgRoot().style.display = visible ? 'block' : 'none';
       }

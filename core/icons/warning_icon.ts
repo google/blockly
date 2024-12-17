@@ -7,17 +7,18 @@
 // Former goog.module ID: Blockly.Warning
 
 import type {BlockSvg} from '../block_svg.js';
+import {TextBubble} from '../bubbles/text_bubble.js';
+import {EventType} from '../events/type.js';
+import * as eventUtils from '../events/utils.js';
+import type {IHasBubble} from '../interfaces/i_has_bubble.js';
+import * as renderManagement from '../render_management.js';
+import {Size} from '../utils.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
-import * as eventUtils from '../events/utils.js';
-import {Icon} from './icon.js';
-import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {Rect} from '../utils/rect.js';
-import {Size} from '../utils.js';
 import {Svg} from '../utils/svg.js';
-import {TextBubble} from '../bubbles/text_bubble.js';
+import {Icon} from './icon.js';
 import {IconType} from './icon_types.js';
-import * as renderManagement from '../render_management.js';
 
 /** The size of the warning icon in workspace-scale units. */
 const SIZE = 17;
@@ -188,7 +189,7 @@ export class WarningIcon extends Icon implements IHasBubble {
     }
 
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      new (eventUtils.get(EventType.BUBBLE_OPEN))(
         this.sourceBlock,
         visible,
         'warning',

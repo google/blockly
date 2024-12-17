@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -55,9 +56,9 @@ suite('WidgetDiv', function () {
           rtl,
         );
         const style = Blockly.WidgetDiv.getDiv().style;
-        chai.assert.equal(style.left, expectedX + 'px', 'Left');
-        chai.assert.equal(style.top, expectedY + 'px', 'Top');
-        chai.assert.equal(style.height, expectedHeight + 'px', 'Height');
+        assert.equal(style.left, expectedX + 'px', 'Left');
+        assert.equal(style.top, expectedY + 'px', 'Top');
+        assert.equal(style.height, expectedHeight + 'px', 'Height');
       };
     });
 

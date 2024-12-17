@@ -4,21 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
-  getBasicToolbox,
-  getChildItem,
-  getCollapsibleItem,
-  getDeeplyNestedJSON,
-  getInjectedToolbox,
-  getNonCollapsibleItem,
   getProperSimpleJson,
-  getSeparator,
   getSimpleJson,
   getXmlArray,
 } from './test_helpers/toolbox_definitions.js';
@@ -59,7 +52,7 @@ suite('Flyout', function () {
             this.flyout.targetWorkspace.getMetricsManager();
         });
         test('y is always 0', function () {
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getY(),
             0,
             'y coordinate in vertical flyout should be 0',
@@ -72,7 +65,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.RIGHT;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.RIGHT;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getX(),
             100,
             'x should be right of workspace',
@@ -82,7 +75,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.LEFT;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.LEFT;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getX(),
             0,
             'x should be 0 if the flyout is on the left',
@@ -110,7 +103,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.LEFT;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.LEFT;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getX(),
             20,
             'x should be aligned with toolbox',
@@ -128,7 +121,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.RIGHT;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.RIGHT;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getX(),
             90,
             'x + width should be aligned with toolbox',
@@ -150,7 +143,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.RIGHT;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.LEFT;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getX(),
             0,
             'x should be aligned with left edge',
@@ -169,7 +162,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.LEFT;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.RIGHT;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getX(),
             90,
             'x + width should be aligned with right edge',
@@ -195,7 +188,7 @@ suite('Flyout', function () {
             this.flyout.targetWorkspace.getMetricsManager();
         });
         test('x is always 0', function () {
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getX(),
             0,
             'x coordinate in horizontal flyout should be 0',
@@ -205,7 +198,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.TOP;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.TOP;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getY(),
             0,
             'y should be 0 if flyout is at the top',
@@ -218,7 +211,7 @@ suite('Flyout', function () {
           sinon.stub(this.targetMetricsManager, 'getViewMetrics').returns({
             height: 50,
           });
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getY(),
             50,
             'y should be below the workspace',
@@ -247,7 +240,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.TOP;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.TOP;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getY(),
             20,
             'y should be aligned with toolbox',
@@ -265,7 +258,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.BOTTOM;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.BOTTOM;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getY(),
             70,
             'y + height should be aligned with toolbox',
@@ -284,11 +277,7 @@ suite('Flyout', function () {
           this.flyout.targetWorkspace.toolboxPosition =
             Blockly.utils.toolbox.Position.BOTTOM;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.TOP;
-          chai.assert.equal(
-            this.flyout.getY(),
-            0,
-            'y should be aligned with top',
-          );
+          assert.equal(this.flyout.getY(), 0, 'y should be aligned with top');
         });
         test('trashcan on bottom covers bottom of workspace', function () {
           this.flyout.targetWorkspace.toolboxPosition =
@@ -302,7 +291,7 @@ suite('Flyout', function () {
           });
           this.flyout.setVisible(true);
           this.flyout.height_ = 20;
-          chai.assert.equal(
+          assert.equal(
             this.flyout.getY(),
             40,
             'y + height should be aligned with bottom',
@@ -324,26 +313,26 @@ suite('Flyout', function () {
       const gaps = flyoutInfo.gaps;
 
       const expectedGaps = [20, 24, 24];
-      chai.assert.deepEqual(gaps, expectedGaps);
+      assert.deepEqual(gaps, expectedGaps);
 
-      chai.assert.equal(contents.length, 3, 'Contents');
+      assert.equal(contents.length, 3, 'Contents');
 
-      chai.assert.equal(contents[0].type, 'block', 'Contents');
+      assert.equal(contents[0].type, 'block', 'Contents');
       const block = contents[0]['block'];
-      chai.assert.instanceOf(block, Blockly.BlockSvg);
-      chai.assert.equal(block.getFieldValue('OP'), 'NEQ');
+      assert.instanceOf(block, Blockly.BlockSvg);
+      assert.equal(block.getFieldValue('OP'), 'NEQ');
       const childA = block.getInputTargetBlock('A');
       const childB = block.getInputTargetBlock('B');
-      chai.assert.isTrue(childA.isShadow());
-      chai.assert.isFalse(childB.isShadow());
-      chai.assert.equal(childA.getFieldValue('NUM'), 1);
-      chai.assert.equal(childB.getFieldValue('NUM'), 2);
+      assert.isTrue(childA.isShadow());
+      assert.isFalse(childB.isShadow());
+      assert.equal(childA.getFieldValue('NUM'), 1);
+      assert.equal(childB.getFieldValue('NUM'), 2);
 
-      chai.assert.equal(contents[1].type, 'button', 'Contents');
-      chai.assert.instanceOf(contents[1]['button'], Blockly.FlyoutButton);
+      assert.equal(contents[1].type, 'button', 'Contents');
+      assert.instanceOf(contents[1]['button'], Blockly.FlyoutButton);
 
-      chai.assert.equal(contents[2].type, 'button', 'Contents');
-      chai.assert.instanceOf(contents[2]['button'], Blockly.FlyoutButton);
+      assert.equal(contents[2].type, 'button', 'Contents');
+      assert.instanceOf(contents[2]['button'], Blockly.FlyoutButton);
     }
 
     suite('Direct show', function () {
@@ -391,7 +380,7 @@ suite('Flyout', function () {
       });
 
       test('No category available', function () {
-        chai.assert.throws(
+        assert.throws(
           function () {
             this.flyout.show('someString');
           }.bind(this),
@@ -431,7 +420,7 @@ suite('Flyout', function () {
 
         this.assertDisabled = function (disabled) {
           const block = this.flyout.getWorkspace().getTopBlocks(false)[0];
-          chai.assert.equal(!block.isEnabled(), disabled);
+          assert.equal(!block.isEnabled(), disabled);
         };
       });
 
@@ -630,7 +619,7 @@ suite('Flyout', function () {
         ],
       });
       const block = this.flyout.workspace_.getAllBlocks()[0];
-      chai.assert.equal(block.getFieldValue('NUM'), 321);
+      assert.equal(block.getFieldValue('NUM'), 321);
     });
 
     test('Recycling enabled', function () {
@@ -660,7 +649,7 @@ suite('Flyout', function () {
         ],
       });
       const block = this.flyout.workspace_.getAllBlocks()[0];
-      chai.assert.equal(block.getFieldValue('NUM'), 123);
+      assert.equal(block.getFieldValue('NUM'), 123);
     });
   });
 });

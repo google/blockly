@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -22,19 +23,19 @@ suite('Touch', function () {
   suite('shouldHandleTouch', function () {
     test('handles pointerdown event', function () {
       const pointerEvent = new PointerEvent('pointerdown');
-      chai.assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerEvent));
+      assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerEvent));
     });
 
     test('handles multiple pointerdown events', function () {
       const pointerEvent1 = new PointerEvent('pointerdown');
       const pointerEvent2 = new PointerEvent('pointerdown');
       Blockly.Touch.shouldHandleEvent(pointerEvent1);
-      chai.assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerEvent2));
+      assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerEvent2));
     });
 
     test('does not handle pointerup if not tracking touch', function () {
       const pointerEvent = new PointerEvent('pointerup');
-      chai.assert.isFalse(Blockly.Touch.shouldHandleEvent(pointerEvent));
+      assert.isFalse(Blockly.Touch.shouldHandleEvent(pointerEvent));
     });
 
     test('handles pointerup if already tracking a touch', function () {
@@ -42,7 +43,7 @@ suite('Touch', function () {
       const pointerup = new PointerEvent('pointerup');
       // Register the pointerdown event first
       Blockly.Touch.shouldHandleEvent(pointerdown);
-      chai.assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerup));
+      assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerup));
     });
 
     test('handles pointerdown if this is a new touch', function () {
@@ -50,7 +51,7 @@ suite('Touch', function () {
         pointerId: 1,
         pointerType: 'touch',
       });
-      chai.assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerdown));
+      assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerdown));
     });
 
     test('does not handle pointerdown if part of a different touch', function () {
@@ -63,7 +64,7 @@ suite('Touch', function () {
         pointerType: 'touch',
       });
       Blockly.Touch.shouldHandleEvent(pointerdown1);
-      chai.assert.isFalse(Blockly.Touch.shouldHandleEvent(pointerdown2));
+      assert.isFalse(Blockly.Touch.shouldHandleEvent(pointerdown2));
     });
 
     test('does not handle pointerup if not tracking touch', function () {
@@ -71,7 +72,7 @@ suite('Touch', function () {
         pointerId: 1,
         pointerType: 'touch',
       });
-      chai.assert.isFalse(Blockly.Touch.shouldHandleEvent(pointerup));
+      assert.isFalse(Blockly.Touch.shouldHandleEvent(pointerup));
     });
 
     test('handles pointerup if part of existing touch', function () {
@@ -84,7 +85,7 @@ suite('Touch', function () {
         pointerType: 'touch',
       });
       Blockly.Touch.shouldHandleEvent(pointerdown);
-      chai.assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerup));
+      assert.isTrue(Blockly.Touch.shouldHandleEvent(pointerup));
     });
   });
 
@@ -94,10 +95,7 @@ suite('Touch', function () {
         pointerId: 7,
         pointerType: 'mouse',
       });
-      chai.assert.equal(
-        Blockly.Touch.getTouchIdentifierFromEvent(pointerdown),
-        7,
-      );
+      assert.equal(Blockly.Touch.getTouchIdentifierFromEvent(pointerdown), 7);
     });
 
     test('is pointerId for touch PointerEvents', function () {
@@ -105,10 +103,7 @@ suite('Touch', function () {
         pointerId: 42,
         pointerType: 'touch',
       });
-      chai.assert.equal(
-        Blockly.Touch.getTouchIdentifierFromEvent(pointerdown),
-        42,
-      );
+      assert.equal(Blockly.Touch.getTouchIdentifierFromEvent(pointerdown), 42);
     });
   });
 });

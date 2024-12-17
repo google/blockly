@@ -8,16 +8,16 @@
  * @fileoverview Node.js script to run Automated tests in Chrome, via webdriver.
  */
 
-const chai = require('chai');
-const {
-  testSetup,
-  testFileLocations,
-  getSelectedBlockElement,
-  getNthBlockOfCategory,
-  getBlockTypeFromCategory,
+import * as chai from 'chai';
+import {
   connect,
+  getBlockTypeFromCategory,
+  getNthBlockOfCategory,
+  getSelectedBlockElement,
   PAUSE_TIME,
-} = require('./test_setup');
+  testFileLocations,
+  testSetup,
+} from './test_setup.mjs';
 
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test

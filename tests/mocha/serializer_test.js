@@ -5,6 +5,7 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   TestCase,
   TestSuite,
@@ -483,7 +484,6 @@ Serializer.Fields.TextInput.Simple = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-disable no-tabs */
 Serializer.Fields.TextInput.Tabs = new SerializerTestCase(
   'Tabs',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -492,7 +492,6 @@ Serializer.Fields.TextInput.Tabs = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-enable no-tabs */
 Serializer.Fields.TextInput.Symbols = new SerializerTestCase(
   'Symbols',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -620,7 +619,6 @@ Serializer.Fields.Variable.Types = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-disable no-tabs */
 Serializer.Fields.Variable.Tabs = new SerializerTestCase(
   'Tabs',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -632,7 +630,6 @@ Serializer.Fields.Variable.Tabs = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-enable no-tabs */
 Serializer.Fields.Variable.Symbols = new SerializerTestCase(
   'Symbols',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -2067,7 +2064,7 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
         workspaces.load(deserializer(save), this.workspace);
       }
       const newXml = Blockly.Xml.workspaceToDom(this.workspace);
-      chai.assert.equal(Blockly.Xml.domToText(newXml), test.xml);
+      assert.equal(Blockly.Xml.domToText(newXml), test.xml);
     };
   };
 

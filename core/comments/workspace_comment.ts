@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Workspace} from '../workspace.js';
-import {Size} from '../utils/size.js';
+import {CommentMove} from '../events/events_comment_move.js';
+import {CommentResize} from '../events/events_comment_resize.js';
+import {EventType} from '../events/type.js';
+import * as eventUtils from '../events/utils.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as idGenerator from '../utils/idgenerator.js';
-import * as eventUtils from '../events/utils.js';
-import {CommentMove} from '../events/events_comment_move.js';
+import {Size} from '../utils/size.js';
+import {Workspace} from '../workspace.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -62,13 +64,13 @@ export class WorkspaceComment {
 
   private fireCreateEvent() {
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(this));
+      eventUtils.fire(new (eventUtils.get(EventType.COMMENT_CREATE))(this));
     }
   }
 
   private fireDeleteEvent() {
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
+      eventUtils.fire(new (eventUtils.get(EventType.COMMENT_DELETE))(this));
     }
   }
 
@@ -76,7 +78,7 @@ export class WorkspaceComment {
   private fireChangeEvent(oldText: string, newText: string) {
     if (eventUtils.isEnabled()) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.COMMENT_CHANGE))(this, oldText, newText),
+        new (eventUtils.get(EventType.COMMENT_CHANGE))(this, oldText, newText),
       );
     }
   }
@@ -85,7 +87,7 @@ export class WorkspaceComment {
   private fireCollapseEvent(newCollapsed: boolean) {
     if (eventUtils.isEnabled()) {
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.COMMENT_COLLAPSE))(this, newCollapsed),
+        new (eventUtils.get(EventType.COMMENT_COLLAPSE))(this, newCollapsed),
       );
     }
   }
@@ -104,7 +106,14 @@ export class WorkspaceComment {
 
   /** Sets the comment's size in workspace units. */
   setSize(size: Size) {
+    const event = new (eventUtils.get(EventType.COMMENT_RESIZE))(
+      this,
+    ) as CommentResize;
+
     this.size = size;
+
+    event.recordCurrentSizeAsNewSize();
+    eventUtils.fire(event);
   }
 
   /** Returns the comment's size in workspace units. */
@@ -175,7 +184,11 @@ export class WorkspaceComment {
    * workspace is read-only.
    */
   isDeletable(): boolean {
-    return this.isOwnDeletable() && !this.workspace.options.readOnly;
+    return (
+      this.isOwnDeletable() &&
+      !this.isDeadOrDying() &&
+      !this.workspace.options.readOnly
+    );
   }
 
   /**
@@ -188,7 +201,7 @@ export class WorkspaceComment {
 
   /** Moves the comment to the given location in workspace coordinates. */
   moveTo(location: Coordinate, reason?: string[] | undefined) {
-    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+    const event = new (eventUtils.get(EventType.COMMENT_MOVE))(
       this,
     ) as CommentMove;
     if (reason) event.setReason(reason);
@@ -196,7 +209,7 @@ export class WorkspaceComment {
     this.location = location;
 
     event.recordNew();
-    if (eventUtils.isEnabled()) eventUtils.fire(event);
+    eventUtils.fire(event);
   }
 
   /** Returns the position of the comment in workspace coordinates. */

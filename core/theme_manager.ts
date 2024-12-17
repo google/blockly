@@ -23,7 +23,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class ThemeManager {
   /** A list of workspaces that are subscribed to this theme. */
-  private subscribedWorkspaces_: Workspace[] = [];
+  private subscribedWorkspaces: Workspace[] = [];
   private componentDB = new Map<string, Component[]>();
 
   /**
@@ -73,7 +73,7 @@ export class ThemeManager {
     // Refresh all subscribed workspaces.
     for (
       let i = 0, workspace;
-      (workspace = this.subscribedWorkspaces_[i]);
+      (workspace = this.subscribedWorkspaces[i]);
       i++
     ) {
       (workspace as WorkspaceSvg).refreshTheme();
@@ -89,7 +89,7 @@ export class ThemeManager {
       }
     }
 
-    for (const workspace of this.subscribedWorkspaces_) {
+    for (const workspace of this.subscribedWorkspaces) {
       (workspace as WorkspaceSvg).hideChaff();
     }
   }
@@ -102,7 +102,7 @@ export class ThemeManager {
    * @internal
    */
   subscribeWorkspace(workspace: Workspace) {
-    this.subscribedWorkspaces_.push(workspace);
+    this.subscribedWorkspaces.push(workspace);
   }
 
   /**
@@ -112,7 +112,7 @@ export class ThemeManager {
    * @internal
    */
   unsubscribeWorkspace(workspace: Workspace) {
-    if (!arrayUtils.removeElem(this.subscribedWorkspaces_, workspace)) {
+    if (!arrayUtils.removeElem(this.subscribedWorkspaces, workspace)) {
       throw Error(
         "Cannot unsubscribe a workspace that hasn't been subscribed.",
       );
@@ -176,7 +176,7 @@ export class ThemeManager {
    * @internal
    */
   dispose() {
-    this.subscribedWorkspaces_.length = 0;
+    this.subscribedWorkspaces.length = 0;
     this.componentDB.clear();
   }
 }

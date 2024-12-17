@@ -18,6 +18,7 @@ import './events/events_var_rename.js';
 
 import type {Block} from './block.js';
 import * as dialog from './dialog.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
@@ -75,14 +76,9 @@ export class VariableMap {
       // The IDs may match if the rename is a simple case change (name1 ->
       // Name1).
       if (!conflictVar || conflictVar.getId() === variable.getId()) {
-        this.renameVariableAndUses_(variable, newName, blocks);
+        this.renameVariableAndUses(variable, newName, blocks);
       } else {
-        this.renameVariableWithConflict_(
-          variable,
-          newName,
-          conflictVar,
-          blocks,
-        );
+        this.renameVariableWithConflict(variable, newName, conflictVar, blocks);
       }
     } finally {
       eventUtils.setGroup(existingGroup);
@@ -113,13 +109,13 @@ export class VariableMap {
    * @param newName New variable name.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableAndUses_(
+  private renameVariableAndUses(
     variable: VariableModel,
     newName: string,
     blocks: Block[],
   ) {
     eventUtils.fire(
-      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName),
+      new (eventUtils.get(EventType.VAR_RENAME))(variable, newName),
     );
     variable.name = newName;
     for (let i = 0; i < blocks.length; i++) {
@@ -138,7 +134,7 @@ export class VariableMap {
    * @param conflictVar The variable that was already using newName.
    * @param blocks The list of all blocks in the workspace.
    */
-  private renameVariableWithConflict_(
+  private renameVariableWithConflict(
     variable: VariableModel,
     newName: string,
     conflictVar: VariableModel,
@@ -149,7 +145,7 @@ export class VariableMap {
 
     if (newName !== oldCase) {
       // Simple rename to change the case and update references.
-      this.renameVariableAndUses_(conflictVar, newName, blocks);
+      this.renameVariableAndUses(conflictVar, newName, blocks);
     }
 
     // These blocks now refer to a different variable.
@@ -158,7 +154,7 @@ export class VariableMap {
       blocks[i].renameVarById(variable.getId(), conflictVar.getId());
     }
     // Finally delete the original variable, which is now unreferenced.
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
+    eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
     // And remove it from the list.
     arrayUtils.removeElem(this.variableMap.get(type)!, variable);
   }
@@ -213,7 +209,7 @@ export class VariableMap {
     this.variableMap.delete(type);
     this.variableMap.set(type, variables);
 
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(variable));
+    eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
 
     return variable;
   }
@@ -232,9 +228,7 @@ export class VariableMap {
         const tempVar = variableList[i];
         if (tempVar.getId() === variableId) {
           variableList.splice(i, 1);
-          eventUtils.fire(
-            new (eventUtils.get(eventUtils.VAR_DELETE))(variable),
-          );
+          eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
           if (variableList.length === 0) {
             this.variableMap.delete(variable.type);
           }

@@ -13,15 +13,15 @@
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
+import {MANUALLY_DISABLED} from '../constants.js';
 import {IconType} from '../icons/icon_types.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
-import {MANUALLY_DISABLED} from '../constants.js';
 import * as registry from '../registry.js';
 import * as utilsXml from '../utils/xml.js';
 import {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
-
 import {BlockBase, BlockBaseJson} from './events_block_base.js';
+import {EventType} from './type.js';
 import * as eventUtils from './utils.js';
 
 /**
@@ -29,7 +29,7 @@ import * as eventUtils from './utils.js';
  * field values, comments, etc).
  */
 export class BlockChange extends BlockBase {
-  override type = eventUtils.BLOCK_CHANGE;
+  override type = EventType.BLOCK_CHANGE;
   /**
    * The element that changed; one of 'field', 'comment', 'collapsed',
    * 'disabled', 'inline', or 'mutation'
@@ -256,4 +256,4 @@ export interface BlockChangeJson extends BlockBaseJson {
   disabledReason?: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
+registry.register(registry.Type.EVENT, EventType.BLOCK_CHANGE, BlockChange);

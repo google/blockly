@@ -11,19 +11,22 @@
  */
 // Former goog.module ID: Blockly.Flyout
 
-import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import type {Block} from './block.js';
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
+import {MANUALLY_DISABLED} from './constants.js';
 import {DeleteArea} from './delete_area.js';
+import type {Abstract as AbstractEvent} from './events/events_abstract.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
+import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
-import {MANUALLY_DISABLED} from './constants.js';
 import type {Options} from './options.js';
+import * as renderManagement from './render_management.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as blocks from './serialization/blocks.js';
 import * as Tooltip from './tooltip.js';
@@ -32,12 +35,10 @@ import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
+import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-import * as utilsXml from './utils/xml.js';
 import * as Xml from './xml.js';
-import * as renderManagement from './render_management.js';
-import {IAutoHideable} from './interfaces/i_autohideable.js';
 
 enum FlyoutItemType {
   BLOCK = 'block',
@@ -206,7 +207,7 @@ export abstract class Flyout
   /**
    * Whether the flyout is visible.
    */
-  private isVisible_ = false;
+  private visible = false;
 
   /**
    * Whether the workspace containing this flyout is visible.
@@ -285,7 +286,7 @@ export abstract class Flyout
 
     this.workspace_.internalIsFlyout = true;
     // Keep the workspace visibility consistent with the flyout's visibility.
-    this.workspace_.setVisible(this.isVisible_);
+    this.workspace_.setVisible(this.visible);
 
     /**
      * The unique id for this component that is used to register with the
@@ -427,7 +428,7 @@ export abstract class Flyout
 
     targetWorkspace.getComponentManager().addComponent({
       component: this,
-      weight: 1,
+      weight: ComponentManager.ComponentWeight.FLYOUT_WEIGHT,
       capabilities: [
         ComponentManager.Capability.AUTOHIDEABLE,
         ComponentManager.Capability.DELETE_AREA,
@@ -531,7 +532,7 @@ export abstract class Flyout
    * @returns True if visible.
    */
   isVisible(): boolean {
-    return this.isVisible_;
+    return this.visible;
   }
 
   /**
@@ -544,7 +545,7 @@ export abstract class Flyout
   setVisible(visible: boolean) {
     const visibilityChanged = visible !== this.isVisible();
 
-    this.isVisible_ = visible;
+    this.visible = visible;
     if (visibilityChanged) {
       if (!this.autoClose) {
         // Auto-close flyouts are ignored as drag targets, so only non
@@ -1070,7 +1071,7 @@ export abstract class Flyout
    * @param block The flyout block to copy.
    * @returns Function to call when block is clicked.
    */
-  private blockMouseDown(block: BlockSvg): Function {
+  private blockMouseDown(block: BlockSvg) {
     return (e: PointerEvent) => {
       const gesture = this.targetWorkspace.getGesture(e);
       if (gesture) {
@@ -1138,13 +1139,13 @@ export abstract class Flyout
       for (let i = 0; i < newVariables.length; i++) {
         const thisVariable = newVariables[i];
         eventUtils.fire(
-          new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
+          new (eventUtils.get(EventType.VAR_CREATE))(thisVariable),
         );
       }
 
       // Block events come after var events, in case they refer to newly created
       // variables.
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
+      eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(newBlock));
     }
     if (this.autoClose) {
       this.hide();

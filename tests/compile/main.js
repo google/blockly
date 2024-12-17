@@ -47,7 +47,7 @@ window['healthCheck'] = function() {
     const blockCount =
         getMainWorkspace().getFlyout().getWorkspace().getTopBlocks().length;
     return (blockCount > 5 && blockCount < 100);
-  } catch (_e) {
+  } catch {
     return false;
   }
 };

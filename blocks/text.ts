@@ -6,25 +6,25 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.texts
 
-import * as Extensions from '../core/extensions.js';
-import * as fieldRegistry from '../core/field_registry.js';
-import * as xmlUtils from '../core/utils/xml.js';
-import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import {Connection} from '../core/connection.js';
-import {FieldImage} from '../core/field_image.js';
-import {FieldDropdown} from '../core/field_dropdown.js';
-import {FieldTextInput} from '../core/field_textinput.js';
-import {Msg} from '../core/msg.js';
-import {MutatorIcon} from '../core/icons/mutator_icon.js';
-import type {Workspace} from '../core/workspace.js';
 import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import {Connection} from '../core/connection.js';
+import * as Extensions from '../core/extensions.js';
+import {FieldDropdown} from '../core/field_dropdown.js';
+import {FieldImage} from '../core/field_image.js';
+import * as fieldRegistry from '../core/field_registry.js';
+import {FieldTextInput} from '../core/field_textinput.js';
 import '../core/field_variable.js';
+import {MutatorIcon} from '../core/icons/mutator_icon.js';
+import {Align} from '../core/inputs/align.js';
 import {ValueInput} from '../core/inputs/value_input.js';
+import {Msg} from '../core/msg.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import type {Workspace} from '../core/workspace.js';
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -216,7 +216,30 @@ const GET_SUBSTRING_BLOCK = {
     this.appendValueInput('STRING')
       .setCheck('String')
       .appendField(Msg['TEXT_GET_SUBSTRING_INPUT_IN_TEXT']);
+    const createMenu = (n: 1 | 2): FieldDropdown => {
+      const menu = fieldRegistry.fromJson({
+        type: 'field_dropdown',
+        options:
+          this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
+      }) as FieldDropdown;
+      menu.setValidator(
+        /** @param value The input value. */
+        function (this: FieldDropdown, value: any): null | undefined {
+          const oldValue: string | null = this.getValue();
+          const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';
+          const newAt = value === 'FROM_START' || value === 'FROM_END';
+          if (newAt !== oldAt) {
+            const block = this.getSourceBlock() as GetSubstringBlock;
+            block.updateAt_(n, newAt);
+          }
+          return undefined;
+        },
+      );
+      return menu;
+    };
+    this.appendDummyInput('WHERE1_INPUT').appendField(createMenu(1), 'WHERE1');
     this.appendDummyInput('AT1');
+    this.appendDummyInput('WHERE2_INPUT').appendField(createMenu(2), 'WHERE2');
     this.appendDummyInput('AT2');
     if (Msg['TEXT_GET_SUBSTRING_TAIL']) {
       this.appendDummyInput('TAIL').appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
@@ -288,37 +311,10 @@ const GET_SUBSTRING_BLOCK = {
       this.removeInput('TAIL', true);
       this.appendDummyInput('TAIL').appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
-    const menu = fieldRegistry.fromJson({
-      type: 'field_dropdown',
-      options:
-        this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
-    }) as FieldDropdown;
-    menu.setValidator(
-      /**
-       * @param value The input value.
-       * @returns Null if the field has been replaced; otherwise undefined.
-       */
-      function (this: FieldDropdown, value: any): null | undefined {
-        const newAt = value === 'FROM_START' || value === 'FROM_END';
-        // The 'isAt' variable is available due to this function being a
-        // closure.
-        if (newAt !== isAt) {
-          const block = this.getSourceBlock() as GetSubstringBlock;
-          block.updateAt_(n, newAt);
-          // This menu has been destroyed and replaced.
-          // Update the replacement.
-          block.setFieldValue(value, 'WHERE' + n);
-          return null;
-        }
-        return undefined;
-      },
-    );
-
-    this.getInput('AT' + n)!.appendField(menu, 'WHERE' + n);
     if (n === 1) {
-      this.moveInputBefore('AT1', 'AT2');
+      this.moveInputBefore('AT1', 'WHERE2_INPUT');
       if (this.getInput('ORDINAL1')) {
-        this.moveInputBefore('ORDINAL1', 'AT2');
+        this.moveInputBefore('ORDINAL1', 'WHERE2_INPUT');
       }
     }
   },
@@ -438,6 +434,11 @@ const PROMPT_COMMON = {
   domToMutation: function (this: PromptCommonBlock, xmlElement: Element) {
     this.updateType_(xmlElement.getAttribute('type')!);
   },
+
+  // These blocks do not need JSO serialization hooks (saveExtraState
+  // and loadExtraState) because the state of this object is already
+  // encoded in the dropdown values.
+  // XML hooks are kept for backwards compatibility.
 };
 
 blocks['text_prompt_ext'] = {
@@ -468,16 +469,11 @@ blocks['text_prompt_ext'] = {
         : Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
   },
-
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
 };
 
 type PromptBlock = Block & PromptCommonMixin & QuoteImageMixin;
 
-const TEXT_PROMPT_BLOCK = {
+blocks['text_prompt'] = {
   ...PROMPT_COMMON,
   /**
    * Block for prompt function (internal message).
@@ -519,8 +515,6 @@ const TEXT_PROMPT_BLOCK = {
     });
   },
 };
-
-blocks['text_prompt'] = TEXT_PROMPT_BLOCK;
 
 blocks['text_count'] = {
   /**
@@ -666,7 +660,7 @@ const QUOTE_IMAGE_MIXIN = {
    * closing double quote. The selected quote will be adapted for RTL blocks.
    *
    * @param open If the image should be open quote (“ in LTR).
-   *                       Otherwise, a closing quote is used (” in LTR).
+   *     Otherwise, a closing quote is used (” in LTR).
    * @returns The new field.
    */
   newQuote_: function (this: QuoteImageBlock, open: boolean): FieldImage {

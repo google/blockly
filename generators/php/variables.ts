@@ -11,8 +11,8 @@
 // Former goog.module ID: Blockly.PHP.variables
 
 import type {Block} from '../../core/block.js';
-import {Order} from './php_generator.js';
 import type {PhpGenerator} from './php_generator.js';
+import {Order} from './php_generator.js';
 
 export function variables_get(
   block: Block,

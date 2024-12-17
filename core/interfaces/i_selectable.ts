@@ -24,7 +24,7 @@ export interface ISelectable {
 }
 
 /** Checks whether the given object is an ISelectable. */
-export function isSelectable(obj: Object): obj is ISelectable {
+export function isSelectable(obj: object): obj is ISelectable {
   return (
     typeof (obj as any).id === 'string' &&
     (obj as any).workspace !== undefined &&

@@ -8,7 +8,6 @@
 
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import type {Workspace} from '../workspace.js';
-
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
 
@@ -27,7 +26,6 @@ export interface State {
 export class VariableSerializer implements ISerializer {
   priority: number;
 
-  /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /** The priority for deserializing variables. */
     this.priority = priorities.VARIABLES;

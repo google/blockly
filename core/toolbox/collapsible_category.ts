@@ -18,7 +18,6 @@ import * as registry from '../registry.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
 import * as toolbox from '../utils/toolbox.js';
-
 import {ToolboxCategory} from './category.js';
 import {ToolboxSeparator} from './separator.js';
 
@@ -84,7 +83,7 @@ export class CollapsibleToolboxCategory
           this.flyoutItems_.push(flyoutItem);
           prevIsFlyoutItem = true;
         } else {
-          this.createToolboxItem_(itemDef);
+          this.createToolboxItem(itemDef);
           prevIsFlyoutItem = false;
         }
       }
@@ -96,7 +95,7 @@ export class CollapsibleToolboxCategory
    *
    * @param itemDef The information needed to create a toolbox item.
    */
-  private createToolboxItem_(itemDef: toolbox.ToolboxItemInfo) {
+  private createToolboxItem(itemDef: toolbox.ToolboxItemInfo) {
     let registryName = itemDef['kind'];
     const categoryDef = itemDef as toolbox.CategoryInfo;
     // Categories that are collapsible are created using a class registered

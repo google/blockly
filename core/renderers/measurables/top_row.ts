@@ -8,7 +8,6 @@
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {ConstantProvider} from '../common/constants.js';
-
 import {Hat} from './hat.js';
 import type {PreviousConnection} from './previous_connection.js';
 import {Row} from './row.js';

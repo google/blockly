@@ -11,8 +11,8 @@
 // Former goog.module ID: Blockly.PHP.logic
 
 import type {Block} from '../../core/block.js';
-import {Order} from './php_generator.js';
 import type {PhpGenerator} from './php_generator.js';
+import {Order} from './php_generator.js';
 
 export function controls_if(block: Block, generator: PhpGenerator) {
   // If/elseif/else condition.

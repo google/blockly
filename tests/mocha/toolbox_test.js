@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
@@ -41,15 +42,12 @@ suite('Toolbox', function () {
     });
 
     test('Init called -> HtmlDiv is created', function () {
-      chai.assert.isDefined(this.toolbox.HtmlDiv);
+      assert.isDefined(this.toolbox.HtmlDiv);
     });
     test('Init called -> HtmlDiv is inserted before parent node', function () {
       const toolboxDiv = Blockly.common.getMainWorkspace().getInjectionDiv()
         .childNodes[0];
-      chai.assert.equal(
-        toolboxDiv.className,
-        'blocklyToolboxDiv blocklyNonSelectable',
-      );
+      assert.equal(toolboxDiv.className, 'blocklyToolboxDiv');
     });
     test('Init called -> Toolbox is subscribed to background and foreground colour', function () {
       const themeManager = this.toolbox.workspace_.getThemeManager();
@@ -81,7 +79,7 @@ suite('Toolbox', function () {
       const componentManager = this.toolbox.workspace_.getComponentManager();
       sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
-      chai.assert.isDefined(this.toolbox.flyout_);
+      assert.isDefined(this.toolbox.getFlyout());
     });
   });
 
@@ -100,7 +98,7 @@ suite('Toolbox', function () {
           {'kind': 'category', 'contents': []},
         ],
       });
-      chai.assert.lengthOf(this.toolbox.contents_, 2);
+      assert.lengthOf(this.toolbox.contents_, 2);
       sinon.assert.called(positionStub);
     });
     // TODO: Uncomment once implemented.
@@ -114,7 +112,7 @@ suite('Toolbox', function () {
           'kind': 'category',
         },
       ];
-      chai.assert.throws(function () {
+      assert.throws(function () {
         toolbox.render({'contents': badToolboxDef});
       }, 'Toolbox cannot have both blocks and categories in the root level.');
     });
@@ -122,7 +120,7 @@ suite('Toolbox', function () {
     test.skip('Expanded set to true for a non collapsible toolbox item -> Should open flyout', function () {
       this.toolbox.render(this.toolboxXml);
       const selectedNode = this.toolbox.tree_.children_[0];
-      chai.assert.isTrue(selectedNode.selected_);
+      assert.isTrue(selectedNode.selected_);
     });
     test('JSON toolbox definition -> Should create toolbox with contents', function () {
       const jsonDef = {
@@ -155,7 +153,7 @@ suite('Toolbox', function () {
         ],
       };
       this.toolbox.render(jsonDef);
-      chai.assert.lengthOf(this.toolbox.contents_, 1);
+      assert.lengthOf(this.toolbox.contents_, 1);
     });
     test('multiple icon classes can be applied', function () {
       const jsonDef = {
@@ -175,10 +173,10 @@ suite('Toolbox', function () {
           },
         ],
       };
-      chai.assert.doesNotThrow(() => {
+      assert.doesNotThrow(() => {
         this.toolbox.render(jsonDef);
       });
-      chai.assert.lengthOf(this.toolbox.contents_, 1);
+      assert.lengthOf(this.toolbox.contents_, 1);
     });
   });
 
@@ -238,30 +236,30 @@ suite('Toolbox', function () {
       sinon.assert.called(preventDefaultEvent);
     }
 
-    test('Down button is pushed -> Should call selectNext_', function () {
-      testCorrectFunctionCalled(this.toolbox, 'ArrowDown', 'selectNext_', true);
+    test('Down button is pushed -> Should call selectNext', function () {
+      testCorrectFunctionCalled(this.toolbox, 'ArrowDown', 'selectNext', true);
     });
-    test('Up button is pushed -> Should call selectPrevious_', function () {
+    test('Up button is pushed -> Should call selectPrevious', function () {
       testCorrectFunctionCalled(
         this.toolbox,
         'ArrowUp',
-        'selectPrevious_',
+        'selectPrevious',
         true,
       );
     });
-    test('Left button is pushed -> Should call selectParent_', function () {
+    test('Left button is pushed -> Should call selectParent', function () {
       testCorrectFunctionCalled(
         this.toolbox,
         'ArrowLeft',
-        'selectParent_',
+        'selectParent',
         true,
       );
     });
-    test('Right button is pushed -> Should call selectChild_', function () {
+    test('Right button is pushed -> Should call selectChild', function () {
       testCorrectFunctionCalled(
         this.toolbox,
         'ArrowRight',
-        'selectChild_',
+        'selectChild',
         true,
       );
     });
@@ -294,115 +292,112 @@ suite('Toolbox', function () {
       this.toolbox.dispose();
     });
 
-    suite('selectChild_', function () {
+    suite('selectChild', function () {
       test('No item is selected -> Should not handle event', function () {
         this.toolbox.selectedItem_ = null;
-        const handled = this.toolbox.selectChild_();
-        chai.assert.isFalse(handled);
+        const handled = this.toolbox.selectChild();
+        assert.isFalse(handled);
       });
       test('Selected item is not collapsible -> Should not handle event', function () {
         this.toolbox.selectedItem_ = getNonCollapsibleItem(this.toolbox);
-        const handled = this.toolbox.selectChild_();
-        chai.assert.isFalse(handled);
+        const handled = this.toolbox.selectChild();
+        assert.isFalse(handled);
       });
       test('Selected item is collapsible -> Should expand', function () {
         const collapsibleItem = getCollapsibleItem(this.toolbox);
         this.toolbox.selectedItem_ = collapsibleItem;
-        const handled = this.toolbox.selectChild_();
-        chai.assert.isTrue(handled);
-        chai.assert.isTrue(collapsibleItem.isExpanded());
-        chai.assert.equal(this.toolbox.selectedItem_, collapsibleItem);
+        const handled = this.toolbox.selectChild();
+        assert.isTrue(handled);
+        assert.isTrue(collapsibleItem.isExpanded());
+        assert.equal(this.toolbox.selectedItem_, collapsibleItem);
       });
 
       test('Selected item is expanded -> Should select child', function () {
         const collapsibleItem = getCollapsibleItem(this.toolbox);
         collapsibleItem.expanded_ = true;
-        const selectNextStub = sinon.stub(this.toolbox, 'selectNext_');
+        const selectNextStub = sinon.stub(this.toolbox, 'selectNext');
         this.toolbox.selectedItem_ = collapsibleItem;
-        const handled = this.toolbox.selectChild_();
-        chai.assert.isTrue(handled);
+        const handled = this.toolbox.selectChild();
+        assert.isTrue(handled);
         sinon.assert.called(selectNextStub);
       });
     });
 
-    suite('selectParent_', function () {
+    suite('selectParent', function () {
       test('No item selected -> Should not handle event', function () {
         this.toolbox.selectedItem_ = null;
-        const handled = this.toolbox.selectParent_();
-        chai.assert.isFalse(handled);
+        const handled = this.toolbox.selectParent();
+        assert.isFalse(handled);
       });
       test('Selected item is expanded -> Should collapse', function () {
         const collapsibleItem = getCollapsibleItem(this.toolbox);
         collapsibleItem.expanded_ = true;
         this.toolbox.selectedItem_ = collapsibleItem;
-        const handled = this.toolbox.selectParent_();
-        chai.assert.isTrue(handled);
-        chai.assert.isFalse(collapsibleItem.isExpanded());
-        chai.assert.equal(this.toolbox.selectedItem_, collapsibleItem);
+        const handled = this.toolbox.selectParent();
+        assert.isTrue(handled);
+        assert.isFalse(collapsibleItem.isExpanded());
+        assert.equal(this.toolbox.selectedItem_, collapsibleItem);
       });
       test('Selected item is not expanded -> Should get parent', function () {
         const childItem = getChildItem(this.toolbox);
         this.toolbox.selectedItem_ = childItem;
-        const handled = this.toolbox.selectParent_();
-        chai.assert.isTrue(handled);
-        chai.assert.equal(this.toolbox.selectedItem_, childItem.getParent());
+        const handled = this.toolbox.selectParent();
+        assert.isTrue(handled);
+        assert.equal(this.toolbox.selectedItem_, childItem.getParent());
       });
     });
 
-    suite('selectNext_', function () {
+    suite('selectNext', function () {
       test('No item is selected -> Should not handle event', function () {
         this.toolbox.selectedItem_ = null;
-        const handled = this.toolbox.selectNext_();
-        chai.assert.isFalse(handled);
+        const handled = this.toolbox.selectNext();
+        assert.isFalse(handled);
       });
       test('Next item is selectable -> Should select next item', function () {
         const item = this.toolbox.contents_[0];
         this.toolbox.selectedItem_ = item;
-        const handled = this.toolbox.selectNext_();
-        chai.assert.isTrue(handled);
-        chai.assert.equal(
-          this.toolbox.selectedItem_,
-          this.toolbox.contents_[1],
-        );
+        const handled = this.toolbox.selectNext();
+        assert.isTrue(handled);
+        assert.equal(this.toolbox.selectedItem_, this.toolbox.contents_[1]);
       });
       test('Selected item is last item -> Should not handle event', function () {
         const item = this.toolbox.contents_[this.toolbox.contents_.length - 1];
         this.toolbox.selectedItem_ = item;
-        const handled = this.toolbox.selectNext_();
-        chai.assert.isFalse(handled);
-        chai.assert.equal(this.toolbox.selectedItem_, item);
+        const handled = this.toolbox.selectNext();
+        assert.isFalse(handled);
+        assert.equal(this.toolbox.selectedItem_, item);
       });
       test('Selected item is collapsed -> Should skip over its children', function () {
         const item = getCollapsibleItem(this.toolbox);
         const childItem = item.flyoutItems_[0];
         item.expanded_ = false;
         this.toolbox.selectedItem_ = item;
-        const handled = this.toolbox.selectNext_();
-        chai.assert.isTrue(handled);
-        chai.assert.notEqual(this.toolbox.selectedItem_, childItem);
+        const handled = this.toolbox.selectNext();
+        assert.isTrue(handled);
+        assert.notEqual(this.toolbox.selectedItem_, childItem);
       });
     });
 
     suite('selectPrevious', function () {
       test('No item is selected -> Should not handle event', function () {
         this.toolbox.selectedItem_ = null;
-        const handled = this.toolbox.selectPrevious_();
-        chai.assert.isFalse(handled);
+        const handled = this.toolbox.selectPrevious();
+        assert.isFalse(handled);
       });
       test('Selected item is first item -> Should not handle event', function () {
         const item = this.toolbox.contents_[0];
         this.toolbox.selectedItem_ = item;
-        const handled = this.toolbox.selectPrevious_();
-        chai.assert.isFalse(handled);
-        chai.assert.equal(this.toolbox.selectedItem_, item);
+        const handled = this.toolbox.selectPrevious();
+        assert.isFalse(handled);
+        assert.equal(this.toolbox.selectedItem_, item);
       });
       test('Previous item is selectable -> Should select previous item', function () {
         const item = this.toolbox.contents_[1];
         const prevItem = this.toolbox.contents_[0];
         this.toolbox.selectedItem_ = item;
-        const handled = this.toolbox.selectPrevious_();
-        chai.assert.isTrue(handled);
-        chai.assert.equal(this.toolbox.selectedItem_, prevItem);
+        const handled = this.toolbox.selectPrevious();
+        assert.isTrue(handled);
+        assert.equal(this.toolbox.selectedItem_, prevItem);
       });
       test('Previous item is collapsed -> Should skip over children of the previous item', function () {
         const childItem = getChildItem(this.toolbox);
@@ -411,9 +406,9 @@ suite('Toolbox', function () {
         // Gets the item after the parent.
         const item = this.toolbox.contents_[parentIdx + 1];
         this.toolbox.selectedItem_ = item;
-        const handled = this.toolbox.selectPrevious_();
-        chai.assert.isTrue(handled);
-        chai.assert.notEqual(this.toolbox.selectedItem_, childItem);
+        const handled = this.toolbox.selectPrevious();
+        assert.isTrue(handled);
+        assert.notEqual(this.toolbox.selectedItem_, childItem);
       });
     });
   });
@@ -479,7 +474,7 @@ suite('Toolbox', function () {
     });
 
     function testHideFlyout(toolbox, oldItem, newItem) {
-      const updateFlyoutStub = sinon.stub(toolbox.flyout_, 'hide');
+      const updateFlyoutStub = sinon.stub(toolbox.getFlyout(), 'hide');
       toolbox.updateFlyout_(oldItem, newItem);
       sinon.assert.called(updateFlyoutStub);
     }
@@ -500,9 +495,9 @@ suite('Toolbox', function () {
       testHideFlyout(this.toolbox, null, newItem);
     });
     test('Select selectable item -> Should open flyout', function () {
-      const showFlyoutstub = sinon.stub(this.toolbox.flyout_, 'show');
+      const showFlyoutstub = sinon.stub(this.toolbox.getFlyout(), 'show');
       const scrollToStartFlyout = sinon.stub(
-        this.toolbox.flyout_,
+        this.toolbox.getFlyout(),
         'scrollToStart',
       );
       const newItem = getNonCollapsibleItem(this.toolbox);
@@ -520,64 +515,56 @@ suite('Toolbox', function () {
     });
 
     function checkHorizontalToolbox(toolbox) {
-      chai.assert.equal(
-        toolbox.HtmlDiv.style.left,
-        '0px',
-        'Check left position',
-      );
-      chai.assert.equal(toolbox.HtmlDiv.style.height, 'auto', 'Check height');
-      chai.assert.equal(toolbox.HtmlDiv.style.width, '100%', 'Check width');
-      chai.assert.equal(
+      assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left position');
+      assert.equal(toolbox.HtmlDiv.style.height, 'auto', 'Check height');
+      assert.equal(toolbox.HtmlDiv.style.width, '100%', 'Check width');
+      assert.equal(
         toolbox.height_,
         toolbox.HtmlDiv.offsetHeight,
         'Check height',
       );
     }
     function checkVerticalToolbox(toolbox) {
-      chai.assert.equal(toolbox.HtmlDiv.style.height, '100%', 'Check height');
-      chai.assert.equal(
-        toolbox.width_,
-        toolbox.HtmlDiv.offsetWidth,
-        'Check width',
-      );
+      assert.equal(toolbox.HtmlDiv.style.height, '100%', 'Check height');
+      assert.equal(toolbox.width_, toolbox.HtmlDiv.offsetWidth, 'Check width');
     }
     test('HtmlDiv is not created -> Should not resize', function () {
       const toolbox = this.toolbox;
       toolbox.HtmlDiv = null;
-      toolbox.horizontalLayout_ = true;
+      toolbox.horizontalLayout = true;
       toolbox.position();
-      chai.assert.equal(toolbox.height_, 0);
+      assert.equal(toolbox.height_, 0);
     });
     test('Horizontal toolbox at top -> Should anchor horizontal toolbox to top', function () {
       const toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.TOP;
-      toolbox.horizontalLayout_ = true;
+      toolbox.horizontalLayout = true;
       toolbox.position();
       checkHorizontalToolbox(toolbox);
-      chai.assert.equal(toolbox.HtmlDiv.style.top, '0px', 'Check top');
+      assert.equal(toolbox.HtmlDiv.style.top, '0px', 'Check top');
     });
     test('Horizontal toolbox at bottom -> Should anchor horizontal toolbox to bottom', function () {
       const toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.BOTTOM;
-      toolbox.horizontalLayout_ = true;
+      toolbox.horizontalLayout = true;
       toolbox.position();
       checkHorizontalToolbox(toolbox);
-      chai.assert.equal(toolbox.HtmlDiv.style.bottom, '0px', 'Check bottom');
+      assert.equal(toolbox.HtmlDiv.style.bottom, '0px', 'Check bottom');
     });
     test('Vertical toolbox at right -> Should anchor to right', function () {
       const toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.RIGHT;
-      toolbox.horizontalLayout_ = false;
+      toolbox.horizontalLayout = false;
       toolbox.position();
-      chai.assert.equal(toolbox.HtmlDiv.style.right, '0px', 'Check right');
+      assert.equal(toolbox.HtmlDiv.style.right, '0px', 'Check right');
       checkVerticalToolbox(toolbox);
     });
     test('Vertical toolbox at left -> Should anchor to left', function () {
       const toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.LEFT;
-      toolbox.horizontalLayout_ = false;
+      toolbox.horizontalLayout = false;
       toolbox.position();
-      chai.assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left');
+      assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left');
       checkVerticalToolbox(toolbox);
     });
   });
@@ -591,17 +578,17 @@ suite('Toolbox', function () {
     function checkValue(actual, expected, value) {
       const actualVal = actual[value];
       const expectedVal = expected[value];
-      chai.assert.equal(
+      assert.equal(
         actualVal.toUpperCase(),
         expectedVal.toUpperCase(),
         'Checking value for: ' + value,
       );
     }
     function checkContents(actualContents, expectedContents) {
-      chai.assert.equal(actualContents.length, expectedContents.length);
+      assert.equal(actualContents.length, expectedContents.length);
       for (let i = 0; i < actualContents.length; i++) {
         // TODO: Check the values as well as all the keys.
-        chai.assert.containsAllKeys(
+        assert.containsAllKeys(
           actualContents[i],
           Object.keys(expectedContents[i]),
         );
@@ -610,13 +597,13 @@ suite('Toolbox', function () {
     function checkCategory(actual, expected) {
       checkValue(actual, expected, 'kind');
       checkValue(actual, expected, 'name');
-      chai.assert.deepEqual(actual['cssconfig'], expected['cssconfig']);
+      assert.deepEqual(actual['cssconfig'], expected['cssconfig']);
       checkContents(actual.contents, expected.contents);
     }
     function checkCategoryToolbox(actual, expected) {
       const actualContents = actual['contents'];
       const expectedContents = expected['contents'];
-      chai.assert.equal(actualContents.length, expectedContents.length);
+      assert.equal(actualContents.length, expectedContents.length);
       for (let i = 0; i < expected.length; i++) {
         checkCategory(actualContents[i], expected[i]);
       }
@@ -630,28 +617,28 @@ suite('Toolbox', function () {
         const toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(
           this.categoryToolboxJSON,
         );
-        chai.assert.isNotNull(toolboxDef);
+        assert.isNotNull(toolboxDef);
         checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
       });
       test('Simple Toolbox: JSON', function () {
         const toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(
           this.simpleToolboxJSON,
         );
-        chai.assert.isNotNull(toolboxDef);
+        assert.isNotNull(toolboxDef);
         checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
       });
       test('Category Toolbox: xml', function () {
         const toolboxXml = document.getElementById('toolbox-categories');
         const toolboxDef =
           Blockly.utils.toolbox.convertToolboxDefToJson(toolboxXml);
-        chai.assert.isNotNull(toolboxDef);
+        assert.isNotNull(toolboxDef);
         checkCategoryToolbox(toolboxDef, this.categoryToolboxJSON);
       });
       test('Simple Toolbox: xml', function () {
         const toolboxXml = document.getElementById('toolbox-simple');
         const toolboxDef =
           Blockly.utils.toolbox.convertToolboxDefToJson(toolboxXml);
-        chai.assert.isNotNull(toolboxDef);
+        assert.isNotNull(toolboxDef);
         checkSimpleToolbox(toolboxDef, this.simpleToolboxJSON);
       });
       test('Simple Toolbox: string', function () {
@@ -675,7 +662,7 @@ suite('Toolbox', function () {
 
         const toolboxDef =
           Blockly.utils.toolbox.convertToolboxDefToJson(toolbox);
-        chai.assert.isNotNull(toolboxDef);
+        assert.isNotNull(toolboxDef);
         checkSimpleToolbox(toolboxDef, toolboxJson);
       });
       test('Category Toolbox: string', function () {
@@ -699,7 +686,7 @@ suite('Toolbox', function () {
 
         const toolboxDef =
           Blockly.utils.toolbox.convertToolboxDefToJson(toolbox);
-        chai.assert.isNotNull(toolboxDef);
+        assert.isNotNull(toolboxDef);
         checkSimpleToolbox(toolboxDef, toolboxJson);
       });
     });
@@ -747,7 +734,7 @@ suite('Toolbox', function () {
       middleCategory.toggleExpanded();
       innerCategory.show();
 
-      chai.assert.isTrue(
+      assert.isTrue(
         innerCategory.isVisible(),
         'All ancestors are expanded, so category should be visible',
       );
@@ -763,7 +750,7 @@ suite('Toolbox', function () {
       middleCategory.toggleExpanded();
       innerCategory.show();
 
-      chai.assert.isFalse(
+      assert.isFalse(
         innerCategory.isVisible(),
         'Not all ancestors are expanded, so category should not be visible',
       );

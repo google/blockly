@@ -5,15 +5,16 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import * as registry from './registry.js';
+import * as common from '../common.js';
+import {config} from '../config.js';
+import {EventType} from '../events/type.js';
+import * as eventUtils from '../events/utils.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
 import {IPaster} from '../interfaces/i_paster.js';
 import {State, append} from '../serialization/blocks.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import * as eventUtils from '../events/utils.js';
-import {config} from '../config.js';
-import * as common from '../common.js';
+import * as registry from './registry.js';
 
 export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
   static TYPE = 'block';
@@ -52,7 +53,7 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
     if (!block) return block;
 
     if (eventUtils.isEnabled() && !block.isShadow()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
+      eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(block));
     }
     common.setSelected(block);
     return block;

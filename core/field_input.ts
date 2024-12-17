@@ -15,11 +15,11 @@
 import './events/events_block_change.js';
 
 import {BlockSvg} from './block_svg.js';
-import * as bumpObjects from './bump_objects.js';
 import * as browserEvents from './browser_events.js';
+import * as bumpObjects from './bump_objects.js';
 import * as dialog from './dialog.js';
-import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {
   Field,
@@ -28,12 +28,13 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import {Msg} from './msg.js';
+import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
-import {Coordinate} from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import {Size} from './utils/size.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {Size} from './utils/size.js';
 
 /**
  * Supported types for FieldInput subclasses.
@@ -79,10 +80,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   protected valueWhenEditorWasOpened_: string | T | null = null;
 
   /** Key down event data. */
-  private onKeyDownWrapper_: browserEvents.Data | null = null;
+  private onKeyDownWrapper: browserEvents.Data | null = null;
 
   /** Key input event data. */
-  private onKeyInputWrapper_: browserEvents.Data | null = null;
+  private onKeyInputWrapper: browserEvents.Data | null = null;
 
   /**
    * Whether the field should consider the whole parent block to be its click
@@ -187,7 +188,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
         fireChangeEvent
       ) {
         eventUtils.fire(
-          new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          new (eventUtils.get(EventType.BLOCK_CHANGE))(
             this.sourceBlock_,
             'field',
             this.name || null,
@@ -337,9 +338,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       this.workspace_.options.modalInputs &&
       (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)
     ) {
-      this.showPromptEditor_();
+      this.showPromptEditor();
     } else {
-      this.showInlineEditor_(quietInput);
+      this.showInlineEditor(quietInput);
     }
   }
 
@@ -348,7 +349,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Mobile browsers may have issues with in-line textareas (focus and
    * keyboards).
    */
-  private showPromptEditor_() {
+  private showPromptEditor() {
     dialog.prompt(
       Msg['CHANGE_VALUE_TITLE'],
       this.getText(),
@@ -367,7 +368,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @param quietInput True if editor should be created without focus.
    */
-  private showInlineEditor_(quietInput: boolean) {
+  private showInlineEditor(quietInput: boolean) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -475,7 +476,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       // multiple times while the editor was open, but this will fire an event
       // containing the value when the editor was opened as well as the new one.
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           this.sourceBlock_,
           'field',
           this.name || null,
@@ -517,30 +518,30 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   protected bindInputEvents_(htmlInput: HTMLElement) {
     // Trap Enter without IME and Esc to hide.
-    this.onKeyDownWrapper_ = browserEvents.conditionalBind(
+    this.onKeyDownWrapper = browserEvents.conditionalBind(
       htmlInput,
       'keydown',
       this,
       this.onHtmlInputKeyDown_,
     );
     // Resize after every input change.
-    this.onKeyInputWrapper_ = browserEvents.conditionalBind(
+    this.onKeyInputWrapper = browserEvents.conditionalBind(
       htmlInput,
       'input',
       this,
-      this.onHtmlInputChange_,
+      this.onHtmlInputChange,
     );
   }
 
   /** Unbind handlers for user input and workspace size changes. */
   protected unbindInputEvents_() {
-    if (this.onKeyDownWrapper_) {
-      browserEvents.unbind(this.onKeyDownWrapper_);
-      this.onKeyDownWrapper_ = null;
+    if (this.onKeyDownWrapper) {
+      browserEvents.unbind(this.onKeyDownWrapper);
+      this.onKeyDownWrapper = null;
     }
-    if (this.onKeyInputWrapper_) {
-      browserEvents.unbind(this.onKeyInputWrapper_);
-      this.onKeyInputWrapper_ = null;
+    if (this.onKeyInputWrapper) {
+      browserEvents.unbind(this.onKeyInputWrapper);
+      this.onKeyInputWrapper = null;
     }
   }
 
@@ -573,7 +574,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @param _e Keyboard event.
    */
-  private onHtmlInputChange_(_e: Event) {
+  private onHtmlInputChange(_e: Event) {
     // Intermediate value changes from user input are not confirmed until the
     // user closes the editor, and may be numerous. Inhibit reporting these as
     // normal block change events, and instead report them as special
@@ -592,7 +593,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       // Fire a special event indicating that the value changed but the change
       // isn't complete yet and normal field change listeners can wait.
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_FIELD_INTERMEDIATE_CHANGE))(
           this.sourceBlock_,
           this.name || null,
           oldValue,
@@ -629,22 +630,22 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
   /** Resize the editor to fit the text. */
   protected resizeEditor_() {
-    const block = this.getSourceBlock();
-    if (!block) {
-      throw new UnattachedFieldError();
-    }
-    const div = WidgetDiv.getDiv();
-    const bBox = this.getScaledBBox();
-    div!.style.width = bBox.right - bBox.left + 'px';
-    div!.style.height = bBox.bottom - bBox.top + 'px';
+    renderManagement.finishQueuedRenders().then(() => {
+      const block = this.getSourceBlock();
+      if (!block) throw new UnattachedFieldError();
+      const div = WidgetDiv.getDiv();
+      const bBox = this.getScaledBBox();
+      div!.style.width = bBox.right - bBox.left + 'px';
+      div!.style.height = bBox.bottom - bBox.top + 'px';
 
-    // In RTL mode block fields and LTR input fields the left edge moves,
-    // whereas the right edge is fixed.  Reposition the editor.
-    const x = block.RTL ? bBox.right - div!.offsetWidth : bBox.left;
-    const xy = new Coordinate(x, bBox.top);
+      // In RTL mode block fields and LTR input fields the left edge moves,
+      // whereas the right edge is fixed.  Reposition the editor.
+      const x = block.RTL ? bBox.right - div!.offsetWidth : bBox.left;
+      const y = bBox.top;
 
-    div!.style.left = xy.x + 'px';
-    div!.style.top = xy.y + 'px';
+      div!.style.left = `${x}px`;
+      div!.style.top = `${y}px`;
+    });
   }
 
   /**
@@ -656,7 +657,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     div.
    */
   override repositionForWindowResize(): boolean {
-    const block = this.getSourceBlock();
+    const block = this.getSourceBlock()?.getRootBlock();
     // This shouldn't be possible. We should never have a WidgetDiv if not using
     // rendered blocks.
     if (!(block instanceof BlockSvg)) return false;

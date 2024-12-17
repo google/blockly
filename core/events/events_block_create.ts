@@ -15,18 +15,18 @@ import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as utilsXml from '../utils/xml.js';
-import * as Xml from '../xml.js';
-
-import {BlockBase, BlockBaseJson} from './events_block_base.js';
-import * as eventUtils from './utils.js';
 import {Workspace} from '../workspace.js';
+import * as Xml from '../xml.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
+import {EventType} from './type.js';
+import * as eventUtils from './utils.js';
 
 /**
  * Notifies listeners when a block (or connected stack of blocks) is
  * created.
  */
 export class BlockCreate extends BlockBase {
-  override type = eventUtils.BLOCK_CREATE;
+  override type = EventType.BLOCK_CREATE;
 
   /** The XML representation of the created block(s). */
   xml?: Element | DocumentFragment;
@@ -182,4 +182,4 @@ export interface BlockCreateJson extends BlockBaseJson {
   recordUndo?: boolean;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);
+registry.register(registry.Type.EVENT, EventType.BLOCK_CREATE, BlockCreate);

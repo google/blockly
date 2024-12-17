@@ -41,7 +41,7 @@ export class MenuItem {
   private highlight = false;
 
   /** Bound function to call when this menu item is clicked. */
-  private actionHandler: Function | null = null;
+  private actionHandler: ((obj: this) => void) | null = null;
 
   /**
    * @param content Text caption to display as the content of the item, or a

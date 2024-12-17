@@ -4,15 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  sharedTestSetup,
-  sharedTestTeardown,
-} from './test_helpers/setup_teardown.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   createRenderedBlock,
   defineMutatorBlocks,
 } from './test_helpers/block_definitions.js';
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
 suite('Mutator', function () {
   setup(function () {
@@ -51,7 +52,7 @@ suite('Mutator', function () {
       mutatorWorkspace
         .getBlockById('check_block')
         .setFieldValue('TRUE', 'CHECK');
-      chai.assert.isTrue(
+      assert.isTrue(
         this.eventsFireStub
           .getCalls()
           .some(

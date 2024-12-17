@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  sharedTestSetup,
-  sharedTestTeardown,
-} from './test_helpers/setup_teardown.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   assertEventFired,
   createChangeListenerSpy,
 } from './test_helpers/events.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+} from './test_helpers/setup_teardown.js';
 
 suite('Clipboard', function () {
   setup(function () {
@@ -30,7 +31,7 @@ suite('Clipboard', function () {
     Blockly.clipboard.registry.register('test-paster', paster);
 
     Blockly.clipboard.paste({paster: 'test-paster'}, this.workspace);
-    chai.assert.isTrue(paster.paste.calledOnce);
+    assert.isTrue(paster.paste.calledOnce);
 
     Blockly.clipboard.registry.unregister('test-paster');
   });
@@ -73,7 +74,7 @@ suite('Clipboard', function () {
         const data = block.toCopyData();
 
         const newBlock = Blockly.clipboard.paste(data, this.workspace);
-        chai.assert.deepEqual(
+        assert.deepEqual(
           newBlock.getRelativeToSurfaceXY(),
           new Blockly.utils.Coordinate(66, 69),
         );
@@ -105,7 +106,7 @@ suite('Clipboard', function () {
         const data = this.workspace.getBlockById('sourceBlockId').toCopyData();
 
         const newBlock = Blockly.clipboard.paste(data, this.workspace);
-        chai.assert.deepEqual(
+        assert.deepEqual(
           newBlock.getRelativeToSurfaceXY(),
           new Blockly.utils.Coordinate(94, 125),
         );
@@ -126,7 +127,7 @@ suite('Clipboard', function () {
       const data = comment.toCopyData();
 
       const newComment = Blockly.clipboard.paste(data, this.workspace);
-      chai.assert.deepEqual(
+      assert.deepEqual(
         newComment.getRelativeToSurfaceXY(),
         new Blockly.utils.Coordinate(60, 60),
       );

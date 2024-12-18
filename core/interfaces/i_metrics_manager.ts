@@ -63,7 +63,7 @@ export interface IMetricsManager {
    * Gets the width, height and position of the toolbox on the workspace in
    * pixel coordinates. Returns 0 for the width and height if the workspace has
    * a simple toolbox instead of a category toolbox. To get the width and height
-   * of a simple toolbox, see {@link IMetricsManager#getFlyoutMetrics}.
+   * of a simple toolbox, see {@link IMetricsManager.getFlyoutMetrics}.
    *
    * @returns The object with the width, height and position of the toolbox.
    */

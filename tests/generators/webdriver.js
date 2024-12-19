@@ -78,7 +78,7 @@ async function runGeneratorsInBrowser(outputDir) {
 
   await browser.execute(function() {
     checkAll();
-    loadSelected();
+    return loadSelected();
   });
 
   await runLangGeneratorInBrowser(browser, prefix + '.js',

@@ -38,7 +38,7 @@ function start() {
  * If some tests are failing, load test suites individually to continue
  * debugging.
  */
-function loadSelected() {
+async function loadSelected() {
   var output = document.getElementById('importExport');
   output.style.background = 'gray';
 
@@ -53,9 +53,12 @@ function loadSelected() {
     if (boxList[i].checked) {
       var testUrl = boxList[i].value;
       if (testUrl) {
-        var xmlText = fetchFile(testUrl);
+        var xmlText = await fetchFile(testUrl);
         if (xmlText !== null) {
           fromXml(testUrl, xmlText, /* opt_append */ true);
+          // Clean up the workspace to normalize the position of blocks and
+          // thus the order of functions in the generated code.
+          Blockly.getMainWorkspace().cleanUp();
         }
       }
     }
@@ -67,23 +70,24 @@ function loadSelected() {
 /**
  * Ask the user for a file name, then load that file's contents.
  */
-function loadOther() {
+async function loadOther() {
   var url = window.prompt('Enter URL of test file.');
   if (!url) {
     return;
   }
-  var xmlText = fetchFile(url);
+  var xmlText = await fetchFile(url);
   if (xmlText !== null) {
     fromXml(url, xmlText);
   }
 }
 
-function fetchFile(xmlUrl) {
+async function fetchFile(xmlUrl) {
   try {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open('GET', xmlUrl, false);
-    xmlHttp.setRequestHeader('Content-Type', 'text/xml');
-    xmlHttp.send('');
+    const response = await fetch(xmlUrl);
+    if (!response.ok) {
+      throw new Error(`Got a 404 when loading ${xmlUrl}`);
+    }
+    return response.text();
   } catch (e) {
     // Attempt to diagnose the problem.
     var msg = 'Error: Unable to load XML data.\n';
@@ -95,7 +99,6 @@ function fetchFile(xmlUrl) {
     alert(msg + '\n' + e);
     return null;
   }
-  return xmlHttp.responseText;
 }
 
 /**
@@ -188,7 +191,7 @@ function toDart() {
 function changeIndex() {
   var oneBasedIndex = document.getElementById('indexing').checked;
   demoWorkspace.options.oneBasedIndex = oneBasedIndex;
-  demoWorkspace.getToolbox().flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
+  demoWorkspace.getToolbox().getFlyout().getWorkspace().options.oneBasedIndex = oneBasedIndex;
 }
 </script>
 

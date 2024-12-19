@@ -1046,22 +1046,19 @@ blocks['lists_split'] = {
 
   /**
    * Returns the state of this block as a JSON serializable object.
-   * This block does not need to serialize any specific state as it is already
-   * encoded in the dropdown values, but must have an implementation to avoid
-   * the backward compatible XML mutations being serialized.
    *
    * @returns The state of this block.
    */
-  saveExtraState: function (this: SplitBlock): null {
-    return null;
+  saveExtraState: function (this: SplitBlock): {mode: string} {
+    return {'mode': this.getFieldValue('MODE')};
   },
 
   /**
    * Applies the given state to this block.
-   * No extra state is needed or expected as it is already encoded in the
-   * dropdown values.
    */
-  loadExtraState: function (this: SplitBlock) {},
+  loadExtraState: function (this: SplitBlock, state: {mode: string}) {
+    this.updateType_(state['mode']);
+  },
 };
 
 // Register provided blocks.

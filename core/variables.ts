@@ -92,6 +92,11 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
  * @returns Array of XML elements.
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+  if (!Blocks['variables_set'] && !Blocks['variables_get']) {
+    console.warn(
+      'There are no variable blocks, but there is a variable category.',
+    );
+  }
   let xmlList = new Array<Element>();
   const button = document.createElement('button');
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');

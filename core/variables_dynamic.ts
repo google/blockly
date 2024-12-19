@@ -76,6 +76,11 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  * @returns Array of XML elements.
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+  if (!Blocks['variables_set_dynamic'] && !Blocks['variables_get_dynamic']) {
+    console.warn(
+      'There are no dynamic variable blocks, but there is a dynamic variable category.',
+    );
+  }
   let xmlList = new Array<Element>();
   let button = document.createElement('button');
   button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);

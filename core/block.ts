@@ -937,10 +937,8 @@ export class Block implements IASTNodeLocation {
    */
   setEditable(editable: boolean) {
     this.editable = editable;
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        field.updateEditable();
-      }
+    for (const field of this.getFields()) {
+      field.updateEditable();
     }
   }
 
@@ -1107,14 +1105,25 @@ export class Block implements IASTNodeLocation {
           ' instead',
       );
     }
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.name === name) {
-          return field;
-        }
+    for (const field of this.getFields()) {
+      if (field.name === name) {
+        return field;
       }
     }
     return null;
+  }
+
+  /**
+   * Returns a generator that provides every field on the block.
+   *
+   * @yields A generator that can be used to iterate the fields on the block.
+   */
+  *getFields(): Generator<Field> {
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        yield field;
+      }
+    }
   }
 
   /**
@@ -1124,12 +1133,9 @@ export class Block implements IASTNodeLocation {
    */
   getVars(): string[] {
     const vars: string[] = [];
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.referencesVariables()) {
-          // NOTE: This only applies to `FieldVariable`, a `Field<string>`
-          vars.push(field.getValue() as string);
-        }
+    for (const field of this.getFields()) {
+      if (field.referencesVariables()) {
+        vars.push(field.getValue());
       }
     }
     return vars;
@@ -1143,17 +1149,15 @@ export class Block implements IASTNodeLocation {
    */
   getVarModels(): IVariableModel<IVariableState>[] {
     const vars = [];
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.referencesVariables()) {
-          const model = this.workspace.getVariableById(
-            field.getValue() as string,
-          );
-          // Check if the variable actually exists (and isn't just a potential
-          // variable).
-          if (model) {
-            vars.push(model);
-          }
+    for (const field of this.getFields()) {
+      if (field.referencesVariables()) {
+        const model = this.workspace.getVariableById(
+          field.getValue() as string,
+        );
+        // Check if the variable actually exists (and isn't just a potential
+        // variable).
+        if (model) {
+          vars.push(model);
         }
       }
     }
@@ -1168,14 +1172,12 @@ export class Block implements IASTNodeLocation {
    * @internal
    */
   updateVarName(variable: IVariableModel<IVariableState>) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (
-          field.referencesVariables() &&
-          variable.getId() === field.getValue()
-        ) {
-          field.refreshVariableName();
-        }
+    for (const field of this.getFields()) {
+      if (
+        field.referencesVariables() &&
+        variable.getId() === field.getValue()
+      ) {
+        field.refreshVariableName();
       }
     }
   }
@@ -1189,11 +1191,9 @@ export class Block implements IASTNodeLocation {
    *     updated name.
    */
   renameVarById(oldId: string, newId: string) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.referencesVariables() && oldId === field.getValue()) {
-          field.setValue(newId);
-        }
+    for (const field of this.getFields()) {
+      if (field.referencesVariables() && oldId === field.getValue()) {
+        field.setValue(newId);
       }
     }
   }

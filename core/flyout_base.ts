@@ -634,8 +634,8 @@ export abstract class Flyout
     } else {
       this.width_ = 0;
     }
-    this.workspace_.setResizesEnabled(true);
     this.reflow();
+    this.workspace_.setResizesEnabled(true);
 
     // Listen for block change events, and reflow the flyout in response. This
     // accommodates e.g. resizing a non-autoclosing flyout in response to the

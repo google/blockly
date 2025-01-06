@@ -611,7 +611,9 @@ export function registerCommentDuplicate() {
 export function registerCommentCreate() {
   const createOption: RegistryItem = {
     displayText: () => Msg['ADD_COMMENT'],
-    preconditionFn: () => 'enabled',
+    preconditionFn: (scope: Scope) => {
+      return scope.workspace?.isMutator ? 'hidden' : 'enabled';
+    },
     callback: (scope: Scope, e: PointerEvent) => {
       const workspace = scope.workspace;
       if (!workspace) return;

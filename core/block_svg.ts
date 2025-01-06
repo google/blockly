@@ -1173,6 +1173,15 @@ export class BlockSvg
   }
 
   /**
+   * Returns the BlockStyle object used to style this block.
+   *
+   * @returns This block's style object.
+   */
+  getStyle(): BlockStyle {
+    return this.style;
+  }
+
+  /**
    * Move this block to the front of the visible workspace.
    * <g> tags do not respect z-index so SVG renders them in the
    * order that they are in the DOM.  By placing this block first within the

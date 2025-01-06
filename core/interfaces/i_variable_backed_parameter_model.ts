@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {IVariableModel, IVariableState} from './i_variable_model.js';
 import {IParameterModel} from './i_parameter_model.js';
+import type {IVariableModel, IVariableState} from './i_variable_model.js';
 
 /** Interface for a parameter model that holds a variable model. */
 export interface IVariableBackedParameterModel extends IParameterModel {

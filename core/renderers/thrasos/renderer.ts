@@ -9,7 +9,6 @@
 import type {BlockSvg} from '../../block_svg.js';
 import * as blockRendering from '../common/block_rendering.js';
 import {Renderer as BaseRenderer} from '../common/renderer.js';
-
 import {RenderInfo} from './info.js';
 
 /**

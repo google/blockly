@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   addBlockTypeToCleanup,
   addMessageToCleanup,
@@ -13,7 +13,6 @@ import {
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 
 suite('Abstract Fields', function () {
   setup(function () {
@@ -627,7 +626,7 @@ suite('Abstract Fields', function () {
         const field = new Blockly.Field('value', null, {
           tooltip: 'test tooltip',
         });
-        assert.equal(field.tooltip_, 'test tooltip');
+        assert.equal(field.getTooltip(), 'test tooltip');
       });
       test('JS Constructor - Dynamic', function () {
         const returnTooltip = function () {
@@ -636,13 +635,13 @@ suite('Abstract Fields', function () {
         const field = new Blockly.Field('value', null, {
           tooltip: returnTooltip,
         });
-        assert.equal(field.tooltip_, returnTooltip);
+        assert.equal(field.getTooltip(), returnTooltip());
       });
       test('JSON Definition', function () {
         const field = CustomField.fromJson({
           tooltip: 'test tooltip',
         });
-        assert.equal(field.tooltip_, 'test tooltip');
+        assert.equal(field.getTooltip(), 'test tooltip');
       });
       suite('W/ Msg References', function () {
         setup(function () {
@@ -653,13 +652,13 @@ suite('Abstract Fields', function () {
           const field = new Blockly.Field('value', null, {
             tooltip: '%{BKY_TOOLTIP}',
           });
-          assert.equal(field.tooltip_, 'test tooltip');
+          assert.equal(field.getTooltip(), 'test tooltip');
         });
         test('JSON Definition', function () {
           const field = CustomField.fromJson({
             tooltip: '%{BKY_TOOLTIP}',
           });
-          assert.equal(field.tooltip_, 'test tooltip');
+          assert.equal(field.getTooltip(), 'test tooltip');
         });
       });
       suite('setTooltip', function () {

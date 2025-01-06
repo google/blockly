@@ -4,23 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
+import * as common from '../../build/src/core/common.js';
 import {ConnectionType} from '../../build/src/core/connection_type.js';
-import {createDeprecationWarningStub} from './test_helpers/warnings.js';
-import {createRenderedBlock} from './test_helpers/block_definitions.js';
+import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
 import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {createRenderedBlock} from './test_helpers/block_definitions.js';
+import {
+  createChangeListenerSpy,
+  createMockEvent,
+} from './test_helpers/events.js';
+import {MockBubbleIcon, MockIcon} from './test_helpers/icon_mocks.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
-import {
-  createChangeListenerSpy,
-  createMockEvent,
-} from './test_helpers/events.js';
-import {MockIcon, MockBubbleIcon} from './test_helpers/icon_mocks.js';
-import {IconType} from '../../build/src/core/icons/icon_types.js';
 
 suite('Blocks', function () {
   setup(function () {
@@ -443,6 +443,39 @@ suite('Blocks', function () {
           // healed because shadows always get destroyed.
           assertDisposedNoheal(blocks);
         });
+      });
+    });
+
+    suite('Disposing selected shadow block', function () {
+      setup(function () {
+        this.workspace = Blockly.inject('blocklyDiv');
+        this.parentBlock = this.workspace.newBlock('row_block');
+        this.parentBlock.initSvg();
+        this.parentBlock.render();
+        this.parentBlock.inputList[0].connection.setShadowState({
+          'type': 'row_block',
+          'id': 'shadow_child',
+        });
+        this.shadowChild =
+          this.parentBlock.inputList[0].connection.targetConnection.getSourceBlock();
+      });
+
+      teardown(function () {
+        workspaceTeardown.call(this, this.workspace);
+      });
+
+      test('Disposing selected shadow unhighlights parent', function () {
+        const parentBlock = this.parentBlock;
+        common.setSelected(this.shadowChild);
+        assert.isTrue(
+          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
+          'Expected parent to be highlighted after selecting shadow child',
+        );
+        this.shadowChild.dispose();
+        assert.isFalse(
+          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
+          'Expected parent to be unhighlighted after deleting shadow child',
+        );
       });
     });
   });
@@ -1253,7 +1286,7 @@ suite('Blocks', function () {
       function assertCommentEvent(eventSpy, oldValue, newValue) {
         const calls = eventSpy.getCalls();
         const event = calls[calls.length - 1].args[0];
-        assert.equal(event.type, eventUtils.BLOCK_CHANGE);
+        assert.equal(event.type, EventType.BLOCK_CHANGE);
         assert.equal(
           event.element,
           'comment',
@@ -1273,7 +1306,7 @@ suite('Blocks', function () {
       function assertNoCommentEvent(eventSpy) {
         const calls = eventSpy.getCalls();
         const event = calls[calls.length - 1].args[0];
-        assert.notEqual(event.type, eventUtils.BLOCK_CHANGE);
+        assert.notEqual(event.type, EventType.BLOCK_CHANGE);
       }
       setup(function () {
         this.eventsFireSpy = sinon.spy(eventUtils.TEST_ONLY, 'fireInternal');
@@ -2498,12 +2531,12 @@ suite('Blocks', function () {
         this.block.setColour('20');
         assert.equal(this.block.getColour(), '#a5745b');
         assert.equal(this.block.colour_, this.block.getColour());
-        assert.equal(this.block.hue_, '20');
+        assert.equal(this.block.getHue(), '20');
       });
       test('Set style', function () {
         this.block.setStyle('styleOne');
         assert.equal(this.block.getStyleName(), 'styleOne');
-        assert.isNull(this.block.hue_);
+        assert.isNull(this.block.getHue());
         // Calling setStyle does not update the colour on a headless block.
         assert.equal(this.block.getColour(), '#000000');
       });
@@ -2537,14 +2570,14 @@ suite('Blocks', function () {
         assert.equal(this.block.getStyleName(), 'auto_#a5745b');
         assert.equal(this.block.getColour(), '#a5745b');
         assert.equal(this.block.colour_, this.block.getColour());
-        assert.equal(this.block.hue_, '20');
+        assert.equal(this.block.getHue(), '20');
       });
       test('Set colour hex', function () {
         this.block.setColour('#000000');
         assert.equal(this.block.getStyleName(), 'auto_#000000');
         assert.equal(this.block.getColour(), '#000000');
         assert.equal(this.block.colour_, this.block.getColour());
-        assert.isNull(this.block.hue_);
+        assert.isNull(this.block.getHue());
       });
       test('Set style', function () {
         this.block.setStyle('styleOne');

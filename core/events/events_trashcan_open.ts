@@ -12,11 +12,10 @@
 // Former goog.module ID: Blockly.Events.TrashcanOpen
 
 import * as registry from '../registry.js';
-import {AbstractEventJson} from './events_abstract.js';
-
-import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
+import {AbstractEventJson} from './events_abstract.js';
+import {UiBase} from './events_ui_base.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners when the trashcan is opening or closing.
@@ -27,7 +26,7 @@ export class TrashcanOpen extends UiBase {
    * False if it is currently closing (previously open).
    */
   isOpen?: boolean;
-  override type = eventUtils.TRASHCAN_OPEN;
+  override type = EventType.TRASHCAN_OPEN;
 
   /**
    * @param opt_isOpen Whether the trashcan flyout is opening (false if
@@ -85,4 +84,4 @@ export interface TrashcanOpenJson extends AbstractEventJson {
   isOpen: boolean;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.TRASHCAN_OPEN, TrashcanOpen);
+registry.register(registry.Type.EVENT, EventType.TRASHCAN_OPEN, TrashcanOpen);

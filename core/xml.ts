@@ -8,26 +8,27 @@
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
+import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
+import {WorkspaceComment} from './comments/workspace_comment.js';
 import type {Connection} from './connection.js';
 import {MANUALLY_DISABLED} from './constants.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {IconType} from './icons/icon_types.js';
 import {inputTypes} from './inputs/input_types.js';
-import * as dom from './utils/dom.js';
-import {Size} from './utils/size.js';
-import * as utilsXml from './utils/xml.js';
 import type {
   IVariableModel,
   IVariableState,
 } from './interfaces/i_variable_model.js';
+import * as renderManagement from './render_management.js';
+import {Coordinate} from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import {Size} from './utils/size.js';
+import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-import * as renderManagement from './render_management.js';
-import {WorkspaceComment} from './comments/workspace_comment.js';
-import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
-import {Coordinate} from './utils/coordinate.js';
 
 /**
  * Encode a block tree as XML.
@@ -510,7 +511,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
     dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.
-  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
+  eventUtils.fire(new (eventUtils.get(EventType.FINISHED_LOADING))(workspace));
   return newBlockIds;
 }
 
@@ -679,13 +680,11 @@ export function domToBlockInternal(
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      eventUtils.fire(
-        new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable),
-      );
+      eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.
-    eventUtils.fire(new (eventUtils.get(eventUtils.CREATE))(topBlock));
+    eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(topBlock));
   }
   return topBlock;
 }

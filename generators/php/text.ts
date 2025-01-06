@@ -10,10 +10,10 @@
 
 // Former goog.module ID: Blockly.PHP.texts
 
-import type {Block} from '../../core/block.js';
 import type {JoinMutatorBlock} from '../../blocks/text.js';
-import {Order} from './php_generator.js';
+import type {Block} from '../../core/block.js';
 import type {PhpGenerator} from './php_generator.js';
+import {Order} from './php_generator.js';
 
 export function text(block: Block, generator: PhpGenerator): [string, Order] {
   // Text value.

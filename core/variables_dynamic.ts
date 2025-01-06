@@ -7,12 +7,12 @@
 // Former goog.module ID: Blockly.VariablesDynamic
 
 import {Blocks} from './blocks.js';
+import type {FlyoutButton} from './flyout_button.js';
 import {Msg} from './msg.js';
 import * as xml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import type {FlyoutButton} from './flyout_button.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -76,6 +76,11 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  * @returns Array of XML elements.
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+  if (!Blocks['variables_set_dynamic'] && !Blocks['variables_get_dynamic']) {
+    console.warn(
+      'There are no dynamic variable blocks, but there is a dynamic variable category.',
+    );
+  }
   let xmlList = new Array<Element>();
   let button = document.createElement('button');
   button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);

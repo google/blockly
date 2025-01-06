@@ -12,7 +12,6 @@ import type {BlockStyle} from '../../theme.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import {PathObject as BasePathObject} from '../common/path_object.js';
-
 import type {ConstantProvider} from './constants.js';
 
 /**
@@ -91,11 +90,7 @@ export class PathObject extends BasePathObject {
     if (enable) {
       if (!this.svgPathSelected) {
         this.svgPathSelected = this.svgPath.cloneNode(true) as SVGElement;
-        this.svgPathSelected.setAttribute('fill', 'none');
-        this.svgPathSelected.setAttribute(
-          'filter',
-          'url(#' + this.constants.selectedGlowFilterId + ')',
-        );
+        this.svgPathSelected.classList.add('blocklyPathSelected');
         this.svgRoot.appendChild(this.svgPathSelected);
       }
     } else {
@@ -108,14 +103,6 @@ export class PathObject extends BasePathObject {
 
   override updateReplacementFade(enable: boolean) {
     this.setClass_('blocklyReplaceable', enable);
-    if (enable) {
-      this.svgPath.setAttribute(
-        'filter',
-        'url(#' + this.constants.replacementGlowFilterId + ')',
-      );
-    } else {
-      this.svgPath.removeAttribute('filter');
-    }
   }
 
   override updateShapeForInputHighlight(conn: Connection, enable: boolean) {

@@ -5,15 +5,15 @@
  */
 
 import {BlockSvg} from './block_svg.js';
-import {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
-import {RenderedConnection} from './rendered_connection.js';
-import {WorkspaceSvg} from './workspace_svg.js';
-import * as blocks from './serialization/blocks.js';
-import * as eventUtils from './events/utils.js';
-import * as renderManagement from './render_management.js';
-import * as registry from './registry.js';
-import {Renderer as ZelosRenderer} from './renderers/zelos/renderer.js';
 import {ConnectionType} from './connection_type.js';
+import * as eventUtils from './events/utils.js';
+import {IConnectionPreviewer} from './interfaces/i_connection_previewer.js';
+import * as registry from './registry.js';
+import * as renderManagement from './render_management.js';
+import {RenderedConnection} from './rendered_connection.js';
+import {Renderer as ZelosRenderer} from './renderers/zelos/renderer.js';
+import * as blocks from './serialization/blocks.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 export class InsertionMarkerPreviewer implements IConnectionPreviewer {
   private readonly workspace: WorkspaceSvg;

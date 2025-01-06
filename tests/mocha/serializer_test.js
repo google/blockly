@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   TestCase,
   TestSuite,
@@ -484,7 +484,6 @@ Serializer.Fields.TextInput.Simple = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-disable no-tabs */
 Serializer.Fields.TextInput.Tabs = new SerializerTestCase(
   'Tabs',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -493,7 +492,6 @@ Serializer.Fields.TextInput.Tabs = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-enable no-tabs */
 Serializer.Fields.TextInput.Symbols = new SerializerTestCase(
   'Symbols',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -621,7 +619,6 @@ Serializer.Fields.Variable.Types = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-disable no-tabs */
 Serializer.Fields.Variable.Tabs = new SerializerTestCase(
   'Tabs',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -633,7 +630,6 @@ Serializer.Fields.Variable.Tabs = new SerializerTestCase(
     '</block>' +
     '</xml>',
 );
-/* eslint-enable no-tabs */
 Serializer.Fields.Variable.Symbols = new SerializerTestCase(
   'Symbols',
   '<xml xmlns="https://developers.google.com/blockly/xml">' +

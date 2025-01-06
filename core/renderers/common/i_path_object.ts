@@ -6,11 +6,11 @@
 
 // Former goog.module ID: Blockly.blockRendering.IPathObject
 
-import type {BlockStyle} from '../../theme.js';
 import type {BlockSvg} from '../../block_svg.js';
-import type {ConstantProvider} from './constants.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
+import type {BlockStyle} from '../../theme.js';
 import type {Coordinate} from '../../utils/coordinate.js';
+import type {ConstantProvider} from './constants.js';
 
 /**
  * An interface for a block's path object.

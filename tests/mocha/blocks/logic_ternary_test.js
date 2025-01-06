@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../../node_modules/chai/chai.js';
 import * as eventUtils from '../../../build/src/core/events/utils.js';
+import {assert} from '../../../node_modules/chai/chai.js';
 import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {
   sharedTestSetup,
@@ -38,7 +38,7 @@ suite('Logic ternary', function () {
     const checkList = ifInput.connection.getCheck();
     assert.equal(checkList.length, 1);
     assert.equal(checkList[0], 'Boolean');
-    assert.exists(block.onchangeWrapper_, 'Has onchange handler');
+    assert.exists(block.onchangeWrapper, 'Has onchange handler');
     if (inputsInline) {
       assert.isTrue(block.inputsInline);
     } else {

@@ -10,7 +10,7 @@ import * as Blockly from 'blockly-test/core';
  * Test: should be able to import a generator instance, class, and
  * Order enum.
  */
-import {pythonGenerator, PythonGenerator, Order} from 'blockly-test/python';
+import {Order, pythonGenerator, PythonGenerator} from 'blockly-test/python';
 
 /**
  * Test: should be able to create a simple block generator function,

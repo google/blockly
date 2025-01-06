@@ -6,22 +6,22 @@
 
 // Former goog.module ID: Blockly.libraryBlocks.lists
 
-import * as fieldRegistry from '../core/field_registry.js';
-import * as xmlUtils from '../core/utils/xml.js';
-import {Align} from '../core/inputs/align.js';
 import type {Block} from '../core/block.js';
-import type {Connection} from '../core/connection.js';
 import type {BlockSvg} from '../core/block_svg.js';
-import type {FieldDropdown} from '../core/field_dropdown.js';
-import {Msg} from '../core/msg.js';
-import {MutatorIcon} from '../core/icons/mutator_icon.js';
-import type {Workspace} from '../core/workspace.js';
 import {
   createBlockDefinitionsFromJsonArray,
   defineBlocks,
 } from '../core/common.js';
+import type {Connection} from '../core/connection.js';
 import '../core/field_dropdown.js';
+import type {FieldDropdown} from '../core/field_dropdown.js';
+import * as fieldRegistry from '../core/field_registry.js';
+import {MutatorIcon} from '../core/icons/mutator_icon.js';
+import {Align} from '../core/inputs/align.js';
 import {ValueInput} from '../core/inputs/value_input.js';
+import {Msg} from '../core/msg.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import type {Workspace} from '../core/workspace.js';
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -412,6 +412,24 @@ const LISTS_GETINDEX = {
     this.appendDummyInput()
       .appendField(modeMenu, 'MODE')
       .appendField('', 'SPACE');
+    const menu = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: this.WHERE_OPTIONS,
+    }) as FieldDropdown;
+    menu.setValidator(
+      /** @param value The input value. */
+      function (this: FieldDropdown, value: string) {
+        const oldValue: string | null = this.getValue();
+        const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';
+        const newAt = value === 'FROM_START' || value === 'FROM_END';
+        if (newAt !== oldAt) {
+          const block = this.getSourceBlock() as GetIndexBlock;
+          block.updateAt_(newAt);
+        }
+        return undefined;
+      },
+    );
+    this.appendDummyInput().appendField(menu, 'WHERE');
     this.appendDummyInput('AT');
     if (Msg['LISTS_GET_INDEX_TAIL']) {
       this.appendDummyInput('TAIL').appendField(Msg['LISTS_GET_INDEX_TAIL']);
@@ -577,31 +595,6 @@ const LISTS_GETINDEX = {
     } else {
       this.appendDummyInput('AT');
     }
-    const menu = fieldRegistry.fromJson({
-      type: 'field_dropdown',
-      options: this.WHERE_OPTIONS,
-    }) as FieldDropdown;
-    menu.setValidator(
-      /**
-       * @param value The input value.
-       * @returns Null if the field has been replaced; otherwise undefined.
-       */
-      function (this: FieldDropdown, value: string) {
-        const newAt = value === 'FROM_START' || value === 'FROM_END';
-        // The 'isAt' variable is available due to this function being a
-        // closure.
-        if (newAt !== isAt) {
-          const block = this.getSourceBlock() as GetIndexBlock;
-          block.updateAt_(newAt);
-          // This menu has been destroyed and replaced.  Update the
-          // replacement.
-          block.setFieldValue(value, 'WHERE');
-          return null;
-        }
-        return undefined;
-      },
-    );
-    this.getInput('AT')!.appendField(menu, 'WHERE');
     if (Msg['LISTS_GET_INDEX_TAIL']) {
       this.moveInputBefore('TAIL', null);
     }
@@ -644,6 +637,24 @@ const LISTS_SETINDEX = {
     this.appendDummyInput()
       .appendField(operationDropdown, 'MODE')
       .appendField('', 'SPACE');
+    const menu = fieldRegistry.fromJson({
+      type: 'field_dropdown',
+      options: this.WHERE_OPTIONS,
+    }) as FieldDropdown;
+    menu.setValidator(
+      /** @param value The input value. */
+      function (this: FieldDropdown, value: string) {
+        const oldValue: string | null = this.getValue();
+        const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';
+        const newAt = value === 'FROM_START' || value === 'FROM_END';
+        if (newAt !== oldAt) {
+          const block = this.getSourceBlock() as SetIndexBlock;
+          block.updateAt_(newAt);
+        }
+        return undefined;
+      },
+    );
+    this.appendDummyInput().appendField(menu, 'WHERE');
     this.appendDummyInput('AT');
     this.appendValueInput('TO').appendField(Msg['LISTS_SET_INDEX_INPUT_TO']);
     this.setInputsInline(true);
@@ -756,36 +767,10 @@ const LISTS_SETINDEX = {
     } else {
       this.appendDummyInput('AT');
     }
-    const menu = fieldRegistry.fromJson({
-      type: 'field_dropdown',
-      options: this.WHERE_OPTIONS,
-    }) as FieldDropdown;
-    menu.setValidator(
-      /**
-       * @param value The input value.
-       * @returns Null if the field has been replaced; otherwise undefined.
-       */
-      function (this: FieldDropdown, value: string) {
-        const newAt = value === 'FROM_START' || value === 'FROM_END';
-        // The 'isAt' variable is available due to this function being a
-        // closure.
-        if (newAt !== isAt) {
-          const block = this.getSourceBlock() as SetIndexBlock;
-          block.updateAt_(newAt);
-          // This menu has been destroyed and replaced.  Update the
-          // replacement.
-          block.setFieldValue(value, 'WHERE');
-          return null;
-        }
-        return undefined;
-      },
-    );
     this.moveInputBefore('AT', 'TO');
     if (this.getInput('ORDINAL')) {
       this.moveInputBefore('ORDINAL', 'TO');
     }
-
-    this.getInput('AT')!.appendField(menu, 'WHERE');
   },
 };
 blocks['lists_setIndex'] = LISTS_SETINDEX;
@@ -818,7 +803,30 @@ const LISTS_GETSUBLIST = {
     this.appendValueInput('LIST')
       .setCheck('Array')
       .appendField(Msg['LISTS_GET_SUBLIST_INPUT_IN_LIST']);
+    const createMenu = (n: 1 | 2): FieldDropdown => {
+      const menu = fieldRegistry.fromJson({
+        type: 'field_dropdown',
+        options:
+          this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
+      }) as FieldDropdown;
+      menu.setValidator(
+        /** @param value The input value. */
+        function (this: FieldDropdown, value: string) {
+          const oldValue: string | null = this.getValue();
+          const oldAt = oldValue === 'FROM_START' || oldValue === 'FROM_END';
+          const newAt = value === 'FROM_START' || value === 'FROM_END';
+          if (newAt !== oldAt) {
+            const block = this.getSourceBlock() as GetSublistBlock;
+            block.updateAt_(n, newAt);
+          }
+          return undefined;
+        },
+      );
+      return menu;
+    };
+    this.appendDummyInput('WHERE1_INPUT').appendField(createMenu(1), 'WHERE1');
     this.appendDummyInput('AT1');
+    this.appendDummyInput('WHERE2_INPUT').appendField(createMenu(2), 'WHERE2');
     this.appendDummyInput('AT2');
     if (Msg['LISTS_GET_SUBLIST_TAIL']) {
       this.appendDummyInput('TAIL').appendField(Msg['LISTS_GET_SUBLIST_TAIL']);
@@ -896,35 +904,10 @@ const LISTS_GETSUBLIST = {
     } else {
       this.appendDummyInput('AT' + n);
     }
-    const menu = fieldRegistry.fromJson({
-      type: 'field_dropdown',
-      options:
-        this[('WHERE_OPTIONS_' + n) as 'WHERE_OPTIONS_1' | 'WHERE_OPTIONS_2'],
-    }) as FieldDropdown;
-    menu.setValidator(
-      /**
-       * @param value The input value.
-       * @returns Null if the field has been replaced; otherwise undefined.
-       */
-      function (this: FieldDropdown, value: string) {
-        const newAt = value === 'FROM_START' || value === 'FROM_END';
-        // The 'isAt' variable is available due to this function being a
-        // closure.
-        if (newAt !== isAt) {
-          const block = this.getSourceBlock() as GetSublistBlock;
-          block.updateAt_(n, newAt);
-          // This menu has been destroyed and replaced.
-          // Update the replacement.
-          block.setFieldValue(value, 'WHERE' + n);
-          return null;
-        }
-      },
-    );
-    this.getInput('AT' + n)!.appendField(menu, 'WHERE' + n);
     if (n === 1) {
-      this.moveInputBefore('AT1', 'AT2');
+      this.moveInputBefore('AT1', 'WHERE2_INPUT');
       if (this.getInput('ORDINAL1')) {
-        this.moveInputBefore('ORDINAL1', 'AT2');
+        this.moveInputBefore('ORDINAL1', 'WHERE2_INPUT');
       }
     }
     if (Msg['LISTS_GET_SUBLIST_TAIL']) {

@@ -10,21 +10,21 @@
  * @class
  */
 
-import * as registry from '../registry.js';
 import type {
   IVariableModel,
   IVariableState,
 } from '../interfaces/i_variable_model.js';
+import * as registry from '../registry.js';
 
-import {VarBase, VarBaseJson} from './events_var_base.js';
-import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
+import {VarBase, VarBaseJson} from './events_var_base.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a variable's type has changed.
  */
 export class VarTypeChange extends VarBase {
-  override type = eventUtils.VAR_TYPE_CHANGE;
+  override type = EventType.VAR_TYPE_CHANGE;
 
   /**
    * @param variable The variable whose type changed. Undefined for a blank event.
@@ -117,6 +117,6 @@ export interface VarTypeChangeJson extends VarBaseJson {
 
 registry.register(
   registry.Type.EVENT,
-  eventUtils.VAR_TYPE_CHANGE,
+  EventType.VAR_TYPE_CHANGE,
   VarTypeChange,
 );

@@ -9,11 +9,11 @@
 import type {Block} from './block.js';
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
-import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
-import {Msg} from './msg.js';
 import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
-import * as utilsXml from './utils/xml.js';
+import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
+import {Msg} from './msg.js';
+import * as utilsXml from './utils/xml.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -92,6 +92,11 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
  * @returns Array of XML elements.
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+  if (!Blocks['variables_set'] && !Blocks['variables_get']) {
+    console.warn(
+      'There are no variable blocks, but there is a variable category.',
+    );
+  }
   let xmlList = new Array<Element>();
   const button = document.createElement('button');
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
@@ -205,7 +210,6 @@ export function generateUniqueNameFromOptions(
   let letterIndex = letters.indexOf(startChar);
   let potName = startChar;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     let inUse = false;
     for (let i = 0; i < usedNames.length; i++) {

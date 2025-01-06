@@ -4,15 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Former goog.module ID: Blockly.IMetricsManager
+
 import type {
+  AbsoluteMetrics,
   ContainerRegion,
   ToolboxMetrics,
-  AbsoluteMetrics,
   UiMetrics,
 } from '../metrics_manager.js';
-import type {Size} from '../utils/size.js';
 import type {Metrics} from '../utils/metrics.js';
-// Former goog.module ID: Blockly.IMetricsManager
+import type {Size} from '../utils/size.js';
 
 /**
  * Interface for a metrics manager.
@@ -62,7 +63,7 @@ export interface IMetricsManager {
    * Gets the width, height and position of the toolbox on the workspace in
    * pixel coordinates. Returns 0 for the width and height if the workspace has
    * a simple toolbox instead of a category toolbox. To get the width and height
-   * of a simple toolbox, see {@link IMetricsManager#getFlyoutMetrics}.
+   * of a simple toolbox, see {@link IMetricsManager.getFlyoutMetrics}.
    *
    * @returns The object with the width, height and position of the toolbox.
    */

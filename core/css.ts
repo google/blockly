@@ -78,11 +78,17 @@ let content = `
   position: relative;
   overflow: hidden;  /* So blocks in drag surface disappear at edges */
   touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
 .blocklyBubbleCanvas.blocklyCanvasTransitioning {
   transition: transform .5s;
+}
+
+.blocklyEmboss {
+  filter: var(--blocklyEmbossFilter);
 }
 
 .blocklyTooltipDiv {
@@ -138,6 +144,10 @@ let content = `
   border-color: inherit;
 }
 
+.blocklyHighlighted>.blocklyPath {
+  filter: var(--blocklyEmbossFilter);
+}
+
 .blocklyHighlightedConnectionPath {
   fill: none;
   stroke: #fc3;
@@ -189,6 +199,7 @@ let content = `
 }
 
 .blocklyDisabled>.blocklyPath {
+  fill: var(--blocklyDisabledPattern);
   fill-opacity: .5;
   stroke-opacity: .5;
 }
@@ -203,10 +214,6 @@ let content = `
 .blocklyInsertionMarker>.blocklyPathDark {
   fill-opacity: .2;
   stroke: none;
-}
-
-.blocklyMultilineText {
-  font-family: monospace;
 }
 
 .blocklyNonEditableField>text {

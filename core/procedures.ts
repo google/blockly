@@ -15,29 +15,37 @@ import {Blocks} from './blocks.js';
 import * as common from './common.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
+import {
+  isBlockChange,
+  isBlockCreate,
+  isBlockDelete,
+  isBlockFieldIntermediateChange,
+  isBubbleOpen,
+} from './events/predicates.js';
+import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
-import {Msg} from './msg.js';
-import {Names} from './names.js';
-import {IParameterModel} from './interfaces/i_parameter_model.js';
-import {IProcedureMap} from './interfaces/i_procedure_map.js';
-import {IProcedureModel} from './interfaces/i_procedure_model.js';
-import {
-  IProcedureBlock,
-  isProcedureBlock,
-} from './interfaces/i_procedure_block.js';
+import {MutatorIcon} from './icons.js';
 import {
   isLegacyProcedureCallBlock,
   isLegacyProcedureDefBlock,
   ProcedureBlock,
   ProcedureTuple,
 } from './interfaces/i_legacy_procedure_blocks.js';
+import {IParameterModel} from './interfaces/i_parameter_model.js';
+import {
+  IProcedureBlock,
+  isProcedureBlock,
+} from './interfaces/i_procedure_block.js';
+import {IProcedureMap} from './interfaces/i_procedure_map.js';
+import {IProcedureModel} from './interfaces/i_procedure_model.js';
+import {Msg} from './msg.js';
+import {Names} from './names.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import {MutatorIcon} from './icons.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -354,9 +362,8 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
  * @internal
  */
 export function mutatorOpenListener(e: Abstract) {
-  if (e.type !== eventUtils.BUBBLE_OPEN) {
-    return;
-  }
+  if (!isBubbleOpen(e)) return;
+
   const bubbleEvent = e as BubbleOpen;
   if (
     !(bubbleEvent.bubbleType === 'mutator' && bubbleEvent.isOpen) ||
@@ -386,10 +393,10 @@ export function mutatorOpenListener(e: Abstract) {
  */
 function mutatorChangeListener(e: Abstract) {
   if (
-    e.type !== eventUtils.BLOCK_CREATE &&
-    e.type !== eventUtils.BLOCK_DELETE &&
-    e.type !== eventUtils.BLOCK_CHANGE &&
-    e.type !== eventUtils.BLOCK_FIELD_INTERMEDIATE_CHANGE
+    !isBlockCreate(e) &&
+    !isBlockDelete(e) &&
+    !isBlockChange(e) &&
+    !isBlockFieldIntermediateChange(e)
   ) {
     return;
   }
@@ -454,7 +461,7 @@ export function mutateCallers(defBlock: Block) {
       // definition mutation.
       eventUtils.setRecordUndo(false);
       eventUtils.fire(
-        new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        new (eventUtils.get(EventType.BLOCK_CHANGE))(
           caller,
           'mutation',
           null,
@@ -500,11 +507,11 @@ export function getDefinition(
 }
 
 export {
-  ObservableProcedureMap,
   IParameterModel,
   IProcedureBlock,
-  isProcedureBlock,
   IProcedureMap,
   IProcedureModel,
+  isProcedureBlock,
+  ObservableProcedureMap,
   ProcedureTuple,
 };

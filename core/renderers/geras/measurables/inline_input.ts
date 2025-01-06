@@ -6,7 +6,6 @@
 
 // Former goog.module ID: Blockly.geras.InlineInput
 
-/* eslint-disable-next-line no-unused-vars */
 import type {Input} from '../../../inputs/input.js';
 import type {ConstantProvider as BaseConstantProvider} from '../../../renderers/common/constants.js';
 import {InlineInput as BaseInlineInput} from '../../../renderers/measurables/inline_input.js';

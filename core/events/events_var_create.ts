@@ -11,21 +11,21 @@
  */
 // Former goog.module ID: Blockly.Events.VarCreate
 
-import * as registry from '../registry.js';
 import type {
   IVariableModel,
   IVariableState,
 } from '../interfaces/i_variable_model.js';
+import * as registry from '../registry.js';
 
-import {VarBase, VarBaseJson} from './events_var_base.js';
-import * as eventUtils from './utils.js';
 import type {Workspace} from '../workspace.js';
+import {VarBase, VarBaseJson} from './events_var_base.js';
+import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a variable model has been created.
  */
 export class VarCreate extends VarBase {
-  override type = eventUtils.VAR_CREATE;
+  override type = EventType.VAR_CREATE;
 
   /** The type of the variable that was created. */
   varType?: string;
@@ -126,4 +126,4 @@ export interface VarCreateJson extends VarBaseJson {
   varName: string;
 }
 
-registry.register(registry.Type.EVENT, eventUtils.VAR_CREATE, VarCreate);
+registry.register(registry.Type.EVENT, EventType.VAR_CREATE, VarCreate);

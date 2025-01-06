@@ -11,7 +11,6 @@ import type {BlockStyle, Theme} from '../../theme.js';
 import * as blockRendering from '../common/block_rendering.js';
 import type {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import {Renderer as BaseRenderer} from '../common/renderer.js';
-
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import {HighlightConstantProvider} from './highlight_constants.js';
@@ -50,8 +49,12 @@ export class Renderer extends BaseRenderer {
     this.highlightConstants.init();
   }
 
-  override refreshDom(svg: SVGElement, theme: Theme) {
-    super.refreshDom(svg, theme);
+  override refreshDom(
+    svg: SVGElement,
+    theme: Theme,
+    injectionDiv: HTMLElement,
+  ) {
+    super.refreshDom(svg, theme, injectionDiv);
     this.getHighlightConstants().init();
   }
 

@@ -238,7 +238,7 @@ export function getBasicToolbox() {
   const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
   const toolbox = new Blockly.Toolbox(workspace);
   toolbox.HtmlDiv = document.createElement('div');
-  toolbox.flyout_ = sinon.createStubInstance(Blockly.VerticalFlyout);
+  toolbox.flyout = sinon.createStubInstance(Blockly.VerticalFlyout);
   return toolbox;
 }
 

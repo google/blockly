@@ -7,6 +7,7 @@
 // Former goog.module ID: Blockly.blockRendering.Drawer
 
 import type {BlockSvg} from '../../block_svg.js';
+import {ConnectionType} from '../../connection_type.js';
 import {Coordinate} from '../../utils.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import {Connection} from '../measurables/connection.js';
@@ -17,11 +18,9 @@ import type {InlineInput} from '../measurables/inline_input.js';
 import type {PreviousConnection} from '../measurables/previous_connection.js';
 import type {Row} from '../measurables/row.js';
 import {Types} from '../measurables/types.js';
-
-import {isDynamicShape, isNotch, isPuzzleTab} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
+import {isDynamicShape, isNotch, isPuzzleTab} from './constants.js';
 import type {RenderInfo} from './info.js';
-import {ConnectionType} from '../../connection_type.js';
 
 /**
  * An object that draws a block based on the given rendering information.

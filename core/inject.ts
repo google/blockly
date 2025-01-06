@@ -22,7 +22,6 @@ import * as Touch from './touch.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
@@ -89,7 +88,7 @@ export function inject(
  * @param options Dictionary of options.
  * @returns Newly created SVG image.
  */
-function createDom(container: Element, options: Options): SVGElement {
+function createDom(container: HTMLElement, options: Options): SVGElement {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -132,7 +131,12 @@ function createDom(container: Element, options: Options): SVGElement {
   // https://neil.fraser.name/news/2015/11/01/
   const rnd = String(Math.random()).substring(2);
 
-  options.gridPattern = Grid.createDom(rnd, options.gridOptions, defs);
+  options.gridPattern = Grid.createDom(
+    rnd,
+    options.gridOptions,
+    defs,
+    container,
+  );
   return svg;
 }
 
@@ -144,7 +148,7 @@ function createDom(container: Element, options: Options): SVGElement {
  * @returns Newly created main workspace.
  */
 function createMainWorkspace(
-  injectionDiv: Element,
+  injectionDiv: HTMLElement,
   svg: SVGElement,
   options: Options,
 ): WorkspaceSvg {
@@ -337,18 +341,6 @@ function bindDocumentEvents() {
     // should run regardless of what other touch event handlers have run.
     browserEvents.bind(document, 'touchend', null, Touch.longStop);
     browserEvents.bind(document, 'touchcancel', null, Touch.longStop);
-    // Some iPad versions don't fire resize after portrait to landscape change.
-    if (userAgent.IPAD) {
-      browserEvents.conditionalBind(
-        window,
-        'orientationchange',
-        document,
-        function () {
-          // TODO (#397): Fix for multiple Blockly workspaces.
-          common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
-        },
-      );
-    }
   }
   documentEventsBound = true;
 }

@@ -11,12 +11,12 @@
  */
 // Former goog.module ID: Blockly.Names
 
-import {Msg} from './msg.js';
 import type {IVariableMap} from './interfaces/i_variable_map.js';
 import type {
   IVariableModel,
   IVariableState,
 } from './interfaces/i_variable_model.js';
+import {Msg} from './msg.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 

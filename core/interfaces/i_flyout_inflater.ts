@@ -1,5 +1,5 @@
-import type {IBoundedElement} from './i_bounded_element.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import type {IBoundedElement} from './i_bounded_element.js';
 
 export interface IFlyoutInflater {
   /**
@@ -16,7 +16,7 @@ export interface IFlyoutInflater {
    *    element, however.
    * @returns The newly inflated flyout element.
    */
-  load(state: Object, flyoutWorkspace: WorkspaceSvg): IBoundedElement;
+  load(state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement;
 
   /**
    * Returns the amount of spacing that should follow the element corresponding
@@ -26,7 +26,7 @@ export interface IFlyoutInflater {
    * @param defaultGap The default gap for elements in this flyout.
    * @returns The gap that should follow the given element.
    */
-  gapForElement(state: Object, defaultGap: number): number;
+  gapForElement(state: object, defaultGap: number): number;
 
   /**
    * Disposes of the given element.

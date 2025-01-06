@@ -13,7 +13,6 @@ import type {BlockStyle} from '../../theme.js';
 import {Coordinate} from '../../utils/coordinate.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
-
 import type {ConstantProvider} from './constants.js';
 import type {IPathObject} from './i_path_object.js';
 
@@ -173,13 +172,8 @@ export class PathObject implements IPathObject {
 
   updateHighlighted(enable: boolean) {
     if (enable) {
-      this.svgPath.setAttribute(
-        'filter',
-        'url(#' + this.constants.embossFilterId + ')',
-      );
       this.setClass_('blocklyHighlighted', true);
     } else {
-      this.svgPath.setAttribute('filter', 'none');
       this.setClass_('blocklyHighlighted', false);
     }
   }
@@ -206,12 +200,6 @@ export class PathObject implements IPathObject {
    */
   protected updateDisabled_(disabled: boolean) {
     this.setClass_('blocklyDisabled', disabled);
-    if (disabled) {
-      this.svgPath.setAttribute(
-        'fill',
-        'url(#' + this.constants.disabledPatternId + ')',
-      );
-    }
   }
 
   /**

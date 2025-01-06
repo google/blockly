@@ -9,7 +9,7 @@
  */
 
 import * as chai from 'chai';
-import {testSetup, testFileLocations} from './test_setup.mjs';
+import {testFileLocations, testSetup} from './test_setup.mjs';
 
 suite('Testing Connecting Blocks', function (done) {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test

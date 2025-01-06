@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {
+  createTestBlock,
+  defineRowBlock,
+} from './test_helpers/block_definitions.js';
 import {
   assertFieldValue,
   runConstructorSuiteTests,
   runFromJsonSuiteTests,
   runSetValueTests,
 } from './test_helpers/fields.js';
-import {
-  createTestBlock,
-  defineRowBlock,
-} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -172,7 +172,7 @@ suite('Text Input Fields', function () {
         test('When Editing', function () {
           this.field.isBeingEdited_ = true;
           this.field.htmlInput_.value = suiteInfo.value;
-          this.field.onHtmlInputChange_(null);
+          this.field.onHtmlInputChange(null);
           assertFieldValue(
             this.field,
             suiteInfo.expectedValue,

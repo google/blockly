@@ -14,7 +14,6 @@ import type {IRegistrable} from '../../interfaces/i_registrable.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
 import type {BlockStyle, Theme} from '../../theme.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
-
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
@@ -74,17 +73,27 @@ export class Renderer implements IRegistrable {
   /**
    * Create any DOM elements that this renderer needs.
    * If you need to create additional DOM elements, override the
-   * {@link ConstantProvider#createDom} method instead.
+   * {@link blockRendering#ConstantProvider.createDom} method instead.
    *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
+   * @param injectionDivIfIsParent The div containing the parent workspace and
+   *   all related workspaces and block containers, if this renderer is for the
+   *   parent workspace. CSS variables representing SVG patterns will be scoped
+   *   to this container. Child workspaces should not override the CSS variables
+   *   created by the parent and thus do not need access to the injection div.
    * @internal
    */
-  createDom(svg: SVGElement, theme: Theme) {
+  createDom(
+    svg: SVGElement,
+    theme: Theme,
+    injectionDivIfIsParent?: HTMLElement,
+  ) {
     this.constants_.createDom(
       svg,
       this.name + '-' + theme.name,
       '.' + this.getClassName() + '.' + theme.getClassName(),
+      injectionDivIfIsParent,
     );
   }
 
@@ -93,8 +102,17 @@ export class Renderer implements IRegistrable {
    *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
+   * @param injectionDivIfIsParent The div containing the parent workspace and
+   *   all related workspaces and block containers, if this renderer is for the
+   *   parent workspace. CSS variables representing SVG patterns will be scoped
+   *   to this container. Child workspaces should not override the CSS variables
+   *   created by the parent and thus do not need access to the injection div.
    */
-  refreshDom(svg: SVGElement, theme: Theme) {
+  refreshDom(
+    svg: SVGElement,
+    theme: Theme,
+    injectionDivIfIsParent?: HTMLElement,
+  ) {
     const previousConstants = this.getConstants();
     previousConstants.dispose();
     this.constants_ = this.makeConstants_();
@@ -105,7 +123,7 @@ export class Renderer implements IRegistrable {
     this.constants_.randomIdentifier = previousConstants.randomIdentifier;
     this.constants_.setTheme(theme);
     this.constants_.init();
-    this.createDom(svg, theme);
+    this.createDom(svg, theme, injectionDivIfIsParent);
   }
 
   /**

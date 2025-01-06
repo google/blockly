@@ -4,21 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {IFlyout} from './interfaces/i_flyout.js';
-import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {BlockSvg} from './block_svg.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
-import * as utilsXml from './utils/xml.js';
-import * as eventUtils from './events/utils.js';
-import * as Xml from './xml.js';
-import * as blocks from './serialization/blocks.js';
+import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
-import * as registry from './registry.js';
 import {MANUALLY_DISABLED} from './constants.js';
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
+import {EventType} from './events/type.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
+import * as registry from './registry.js';
+import * as blocks from './serialization/blocks.js';
 import type {BlockInfo} from './utils/toolbox.js';
-import * as browserEvents from './browser_events.js';
+import * as utilsXml from './utils/xml.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
+import * as Xml from './xml.js';
 
 /**
  * The language-neutral ID for when the reason why a block is disabled is
@@ -51,7 +51,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    * @param flyoutWorkspace The workspace to create the block on.
    * @returns A newly created block.
    */
-  load(state: Object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
+  load(state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
     this.setFlyoutWorkspace(flyoutWorkspace);
     this.flyout = flyoutWorkspace.targetWorkspace?.getFlyout() ?? undefined;
     const block = this.createBlock(state as BlockInfo, flyoutWorkspace);
@@ -114,7 +114,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    * @param defaultGap The default spacing for flyout items.
    * @returns The amount of space that should follow this block.
    */
-  gapForElement(state: Object, defaultGap: number): number {
+  gapForElement(state: object, defaultGap: number): number {
     const blockState = state as BlockInfo;
     let gap;
     if (blockState['gap']) {
@@ -245,8 +245,8 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
       !this.flyoutWorkspace ||
       (event &&
         !(
-          event.type === eventUtils.BLOCK_CREATE ||
-          event.type === eventUtils.BLOCK_DELETE
+          event.type === EventType.BLOCK_CREATE ||
+          event.type === EventType.BLOCK_DELETE
         ))
     )
       return;

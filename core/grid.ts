@@ -12,10 +12,10 @@
  */
 // Former goog.module ID: Blockly.Grid
 
-import * as dom from './utils/dom.js';
-import {Coordinate} from './utils/coordinate.js';
-import {Svg} from './utils/svg.js';
 import {GridOptions} from './options.js';
+import {Coordinate} from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import {Svg} from './utils/svg.js';
 
 /**
  * Class for a workspace's grid.
@@ -210,6 +210,9 @@ export class Grid {
    * @param rnd A random ID to append to the pattern's ID.
    * @param gridOptions The object containing grid configuration.
    * @param defs The root SVG element for this workspace's defs.
+   * @param injectionDiv The div containing the parent workspace and all related
+   *   workspaces and block containers. CSS variables representing SVG patterns
+   *   will be scoped to this container.
    * @returns The SVG element for the grid pattern.
    * @internal
    */
@@ -217,6 +220,7 @@ export class Grid {
     rnd: string,
     gridOptions: GridOptions,
     defs: SVGElement,
+    injectionDiv?: HTMLElement,
   ): SVGElement {
     /*
           <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
@@ -247,6 +251,17 @@ export class Grid {
       // Edge 16 doesn't handle empty patterns
       dom.createSvgElement(Svg.LINE, {}, gridPattern);
     }
+
+    if (injectionDiv) {
+      // Add CSS variables scoped to the injection div referencing the created
+      // patterns so that CSS can apply the patterns to any element in the
+      // injection div.
+      injectionDiv.style.setProperty(
+        '--blocklyGridPattern',
+        `url(#${gridPattern.id})`,
+      );
+    }
+
     return gridPattern;
   }
 }

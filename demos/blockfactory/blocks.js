@@ -914,3 +914,7 @@ function inputNameCheck(referenceBlock) {
       'There are ' + count + ' input blocks\n with this name.' : null;
   referenceBlock.setWarningText(msg);
 }
+
+// Make a set of all of block types that are required for the block factory.
+var reservedBlockFactoryBlocks =
+    new Set(Object.getOwnPropertyNames(Blockly.Blocks));

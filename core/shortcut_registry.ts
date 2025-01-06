@@ -45,31 +45,27 @@ export class ShortcutRegistry {
    * Registers a keyboard shortcut.
    *
    * @param shortcut The shortcut for this key code.
-   * @param opt_allowOverrides True to prevent a warning when overriding an
+   * @param allowOverrides True to prevent a warning when overriding an
    *     already registered item.
    * @throws {Error} if a shortcut with the same name already exists.
    */
-  register(shortcut: KeyboardShortcut, opt_allowOverrides?: boolean) {
+  register(shortcut: KeyboardShortcut, allowOverrides?: boolean) {
     const registeredShortcut = this.shortcuts.get(shortcut.name);
-    if (registeredShortcut && !opt_allowOverrides) {
+    if (registeredShortcut && !allowOverrides) {
       throw new Error(`Shortcut named "${shortcut.name}" already exists.`);
     }
     this.shortcuts.set(shortcut.name, shortcut);
 
     const keyCodes = shortcut.keyCodes;
-    if (keyCodes && keyCodes.length > 0) {
-      for (let i = 0; i < keyCodes.length; i++) {
-        this.addKeyMapping(
-          keyCodes[i],
-          shortcut.name,
-          !!shortcut.allowCollision,
-        );
+    if (keyCodes?.length) {
+      for (const keyCode of keyCodes) {
+        this.addKeyMapping(keyCode, shortcut.name, !!shortcut.allowCollision);
       }
     }
   }
 
   /**
-   * Unregisters a keyboard shortcut registered with the given key code. This
+   * Unregisters a keyboard shortcut registered with the given name. This
    * will also remove any key mappings that reference this shortcut.
    *
    * @param shortcutName The name of the shortcut to unregister.
@@ -92,27 +88,34 @@ export class ShortcutRegistry {
   /**
    * Adds a mapping between a keycode and a keyboard shortcut.
    *
+   * Normally only one shortcut can be mapped to any given keycode,
+   * but setting allowCollisions to true allows a keyboard to be
+   * mapped to multiple shortcuts.  In that case, when onKeyDown is
+   * called with the given keystroke, it will process the mapped
+   * shortcuts in reverse order, from the most- to least-recently
+   * mapped).
+   *
    * @param keyCode The key code for the keyboard shortcut. If registering a key
    *     code with a modifier (ex: ctrl+c) use
    *     ShortcutRegistry.registry.createSerializedKey;
    * @param shortcutName The name of the shortcut to execute when the given
    *     keycode is pressed.
-   * @param opt_allowCollision True to prevent an error when adding a shortcut
+   * @param allowCollision True to prevent an error when adding a shortcut
    *     to a key that is already mapped to a shortcut.
    * @throws {Error} if the given key code is already mapped to a shortcut.
    */
   addKeyMapping(
     keyCode: string | number | KeyCodes,
     shortcutName: string,
-    opt_allowCollision?: boolean,
+    allowCollision?: boolean,
   ) {
     keyCode = `${keyCode}`;
     const shortcutNames = this.keyMap.get(keyCode);
-    if (shortcutNames && !opt_allowCollision) {
+    if (shortcutNames && !allowCollision) {
       throw new Error(
         `Shortcut named "${shortcutName}" collides with shortcuts "${shortcutNames}"`,
       );
-    } else if (shortcutNames && opt_allowCollision) {
+    } else if (shortcutNames && allowCollision) {
       shortcutNames.unshift(shortcutName);
     } else {
       this.keyMap.set(keyCode, [shortcutName]);
@@ -127,19 +130,19 @@ export class ShortcutRegistry {
    *     ShortcutRegistry.registry.createSerializedKey;
    * @param shortcutName The name of the shortcut to execute when the given
    *     keycode is pressed.
-   * @param opt_quiet True to not console warn when there is no shortcut to
+   * @param quiet True to not console warn when there is no shortcut to
    *     remove.
    * @returns True if a key mapping was removed, false otherwise.
    */
   removeKeyMapping(
     keyCode: string,
     shortcutName: string,
-    opt_quiet?: boolean,
+    quiet?: boolean,
   ): boolean {
     const shortcutNames = this.keyMap.get(keyCode);
 
     if (!shortcutNames) {
-      if (!opt_quiet) {
+      if (!quiet) {
         console.warn(
           `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`,
         );
@@ -155,7 +158,7 @@ export class ShortcutRegistry {
       }
       return true;
     }
-    if (!opt_quiet) {
+    if (!quiet) {
       console.warn(
         `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`,
       );
@@ -172,7 +175,7 @@ export class ShortcutRegistry {
    */
   removeAllKeyMappings(shortcutName: string) {
     for (const keyCode of this.keyMap.keys()) {
-      this.removeKeyMapping(keyCode, shortcutName, true);
+      this.removeKeyMapping(keyCode, shortcutName, /* quiet= */ true);
     }
   }
 
@@ -219,24 +222,39 @@ export class ShortcutRegistry {
   /**
    * Handles key down events.
    *
+   * - Any `KeyboardShortcut`(s) mapped to the keycodes that cause
+   *   event `e` to be fired will be processed, in order from least-
+   *   to most-recently registered.
+   * - If the shortcut's `preconditionFn` exists it will be called.
+   *   If `preconditionFn` returns false the shortcut's `callback`
+   *   function will be skipped.  Processing will continue with the
+   *   next shortcut, if any.
+   * - The shortcut's `callback` function will then be called.  If it
+   *   returns true, processing will terminate and `onKeyDown` will
+   *   return true.  If it returns false, processing will continue
+   *   with with the next shortcut, if any.
+   * - If all registered shortcuts for the given keycode have been
+   *   processed without any having returned true, `onKeyDown` will
+   *   return false.
+   *
    * @param workspace The main workspace where the event was captured.
    * @param e The key down event.
    * @returns True if the event was handled, false otherwise.
    */
   onKeyDown(workspace: WorkspaceSvg, e: KeyboardEvent): boolean {
-    const key = this.serializeKeyEvent_(e);
+    const key = this.serializeKeyEvent(e);
     const shortcutNames = this.getShortcutNamesByKeyCode(key);
-    if (!shortcutNames) {
-      return false;
-    }
-    for (let i = 0, shortcutName; (shortcutName = shortcutNames[i]); i++) {
+    if (!shortcutNames) return false;
+    for (const shortcutName of shortcutNames) {
       const shortcut = this.shortcuts.get(shortcutName);
-      if (!shortcut?.preconditionFn || shortcut?.preconditionFn(workspace)) {
-        // If the key has been handled, stop processing shortcuts.
-        if (shortcut?.callback && shortcut?.callback(workspace, e, shortcut)) {
-          return true;
-        }
+      if (
+        !shortcut ||
+        (shortcut.preconditionFn && !shortcut.preconditionFn(workspace))
+      ) {
+        continue;
       }
+      // If the key has been handled, stop processing shortcuts.
+      if (shortcut.callback?.(workspace, e, shortcut)) return true;
     }
     return false;
   }
@@ -276,7 +294,7 @@ export class ShortcutRegistry {
    * @param e A key down event.
    * @returns The serialized key code for the given event.
    */
-  private serializeKeyEvent_(e: KeyboardEvent): string {
+  private serializeKeyEvent(e: KeyboardEvent): string {
     let serializedKey = '';
     for (const modifier in ShortcutRegistry.modifierKeys) {
       if (e.getModifierState(modifier)) {
@@ -300,8 +318,8 @@ export class ShortcutRegistry {
    * @param modifiers List of modifiers to be used with the key.
    * @throws {Error} if the modifier is not in the valid modifiers list.
    */
-  private checkModifiers_(modifiers: KeyCodes[]) {
-    for (let i = 0, modifier; (modifier = modifiers[i]); i++) {
+  private checkModifiers(modifiers: KeyCodes[]) {
+    for (const modifier of modifiers) {
       if (!(modifier in ShortcutRegistry.modifierKeys)) {
         throw new Error(modifier + ' is not a valid modifier key.');
       }
@@ -313,14 +331,14 @@ export class ShortcutRegistry {
    *
    * @param keyCode Number code representing the key.
    * @param modifiers List of modifier key codes to be used with the key. All
-   *     valid modifiers can be found in the ShortcutRegistry.modifierKeys.
+   *     valid modifiers can be found in the `ShortcutRegistry.modifierKeys`.
    * @returns The serialized key code for the given modifiers and key.
    */
   createSerializedKey(keyCode: number, modifiers: KeyCodes[] | null): string {
     let serializedKey = '';
 
     if (modifiers) {
-      this.checkModifiers_(modifiers);
+      this.checkModifiers(modifiers);
       for (const modifier in ShortcutRegistry.modifierKeys) {
         const modifierKeyCode = (
           ShortcutRegistry.modifierKeys as AnyDuringMigration
@@ -344,12 +362,59 @@ export class ShortcutRegistry {
 }
 
 export namespace ShortcutRegistry {
+  /** Interface defining a keyboard shortcut. */
   export interface KeyboardShortcut {
-    callback?: (p1: WorkspaceSvg, p2: Event, p3: KeyboardShortcut) => boolean;
+    /**
+     * The function to be called when the shorctut is invoked.
+     *
+     * @param workspace The `WorkspaceSvg` when the shortcut was
+     *     invoked.
+     * @param e The event that caused the shortcut to be activated.
+     * @param shortcut The `KeyboardShortcut` that was activated
+     *     (i.e., the one this callback is attached to).
+     * @returns Returning true ends processing of the invoked keycode.
+     *     Returning false causes processing to continue with the
+     *     next-most-recently registered shortcut for the invoked
+     *     keycode.
+     */
+    callback?: (
+      workspace: WorkspaceSvg,
+      e: Event,
+      shortcut: KeyboardShortcut,
+    ) => boolean;
+
+    /** The name of the shortcut.  Should be unique. */
     name: string;
-    preconditionFn?: (p1: WorkspaceSvg) => boolean;
+
+    /**
+     * A function to be called when the shortcut is invoked, before
+     * calling `callback`, to decide if this shortcut is applicable in
+     * the current situation.
+     *
+     * @param workspace The `WorkspaceSvg` where the shortcut was
+     *     invoked.
+     * @returns True iff `callback` function should be called.
+     */
+    preconditionFn?: (workspace: WorkspaceSvg) => boolean;
+
+    /** Optional arbitray extra data attached to the shortcut. */
     metadata?: object;
+
+    /**
+     * Optional list of key codes to be bound (via
+     * ShortcutRegistry.prototype.addKeyMapping) to this shortcut.
+     */
     keyCodes?: (number | string)[];
+
+    /**
+     * Value of `allowCollision` to pass to `addKeyMapping` when
+     * binding this shortcut's `.keyCodes` (if any).
+     *
+     * N.B.: this is only used for binding keycodes at the time this
+     * shortcut is initially registered, not for any subsequent
+     * `addKeyMapping` calls that happen to reference this shortcut's
+     * name.
+     */
     allowCollision?: boolean;
   }
 

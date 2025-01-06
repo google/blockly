@@ -5,11 +5,11 @@
  */
 
 import {assert} from '../../node_modules/chai/chai.js';
-import {createKeyDownEvent} from './test_helpers/user_input.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
+import {createKeyDownEvent} from './test_helpers/user_input.js';
 
 suite('Keyboard Shortcut Registry Test', function () {
   setup(function () {
@@ -414,19 +414,19 @@ suite('Keyboard Shortcut Registry Test', function () {
   suite('serializeKeyEvent', function () {
     test('Serialize key', function () {
       const mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A);
-      const serializedKey = this.registry.serializeKeyEvent_(mockEvent);
+      const serializedKey = this.registry.serializeKeyEvent(mockEvent);
       assert.equal(serializedKey, '65');
     });
     test('Serialize key code and modifier', function () {
       const mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, [
         Blockly.utils.KeyCodes.CTRL,
       ]);
-      const serializedKey = this.registry.serializeKeyEvent_(mockEvent);
+      const serializedKey = this.registry.serializeKeyEvent(mockEvent);
       assert.equal(serializedKey, 'Control+65');
     });
     test('Serialize only a modifier', function () {
       const mockEvent = createKeyDownEvent(null, [Blockly.utils.KeyCodes.CTRL]);
-      const serializedKey = this.registry.serializeKeyEvent_(mockEvent);
+      const serializedKey = this.registry.serializeKeyEvent(mockEvent);
       assert.equal(serializedKey, 'Control');
     });
     test('Serialize multiple modifiers', function () {
@@ -434,7 +434,7 @@ suite('Keyboard Shortcut Registry Test', function () {
         Blockly.utils.KeyCodes.CTRL,
         Blockly.utils.KeyCodes.SHIFT,
       ]);
-      const serializedKey = this.registry.serializeKeyEvent_(mockEvent);
+      const serializedKey = this.registry.serializeKeyEvent(mockEvent);
       assert.equal(serializedKey, 'Shift+Control');
     });
     test('Throw error when incorrect modifier', function () {

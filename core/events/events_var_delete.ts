@@ -18,8 +18,6 @@ import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a variable model has been deleted.
- *
- * @class
  */
 export class VarDelete extends VarBase {
   override type = EventType.VAR_DELETE;

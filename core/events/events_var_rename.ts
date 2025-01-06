@@ -18,8 +18,6 @@ import {EventType} from './type.js';
 
 /**
  * Notifies listeners that a variable model was renamed.
- *
- * @class
  */
 export class VarRename extends VarBase {
   override type = EventType.VAR_RENAME;

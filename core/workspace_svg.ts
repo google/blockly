@@ -1102,6 +1102,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * @returns The layer manager for this workspace.
+   * @internal
    */
   getLayerManager(): LayerManager | null {
     return this.layerManager;

@@ -243,7 +243,7 @@ export class BlockSvg
    *
    * @returns #RRGGBB string.
    */
-  getColourSecondary(): string | undefined {
+  getColourSecondary(): string {
     return this.style.colourSecondary;
   }
 
@@ -252,7 +252,7 @@ export class BlockSvg
    *
    * @returns #RRGGBB string.
    */
-  getColourTertiary(): string | undefined {
+  getColourTertiary(): string {
     return this.style.colourTertiary;
   }
 

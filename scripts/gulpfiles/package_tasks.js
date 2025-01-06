@@ -159,7 +159,7 @@ module.exports = require('./${bundle}');
  * This task copies all the media/* files into the release directory.
  */
 function packageMedia() {
-  return gulp.src('media/*')
+  return gulp.src('media/*', {encoding: false})
     .pipe(gulp.dest(`${RELEASE_DIR}/media`));
 };
 

@@ -7,24 +7,24 @@
 // Former goog.module ID: Blockly.blockRendering.Types
 
 import type {Measurable} from './base.js';
-import type {Row} from './row.js';
+import type {BottomRow} from './bottom_row.js';
+import type {ExternalValueInput} from './external_value_input.js';
 import type {Field} from './field.js';
 import type {Hat} from './hat.js';
 import type {Icon} from './icon.js';
-import type {SpacerRow} from './spacer_row.js';
 import type {InRowSpacer} from './in_row_spacer.js';
-import type {InputConnection} from './input_connection.js';
-import type {ExternalValueInput} from './external_value_input.js';
 import type {InlineInput} from './inline_input.js';
-import type {StatementInput} from './statement_input.js';
-import type {PreviousConnection} from './previous_connection.js';
-import type {NextConnection} from './next_connection.js';
-import type {RoundCorner} from './round_corner.js';
-import type {SquareCorner} from './square_corner.js';
-import type {JaggedEdge} from './jagged_edge.js';
-import type {TopRow} from './top_row.js';
-import type {BottomRow} from './bottom_row.js';
+import type {InputConnection} from './input_connection.js';
 import type {InputRow} from './input_row.js';
+import type {JaggedEdge} from './jagged_edge.js';
+import type {NextConnection} from './next_connection.js';
+import type {PreviousConnection} from './previous_connection.js';
+import type {RoundCorner} from './round_corner.js';
+import type {Row} from './row.js';
+import type {SpacerRow} from './spacer_row.js';
+import type {SquareCorner} from './square_corner.js';
+import type {StatementInput} from './statement_input.js';
+import type {TopRow} from './top_row.js';
 
 /**
  * Types of rendering elements.

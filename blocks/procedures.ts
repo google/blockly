@@ -629,30 +629,49 @@ type ArgumentBlock = Block & ArgumentMixin;
 interface ArgumentMixin extends ArgumentMixinType {}
 type ArgumentMixinType = typeof PROCEDURES_MUTATORARGUMENT;
 
-// TODO(#6920): This is kludgy.
-type FieldTextInputForArgument = FieldTextInput & {
-  oldShowEditorFn_(_e?: Event, quietInput?: boolean): void;
-  createdVariables_: IVariableModel<IVariableState>[];
-};
+/**
+ * Field responsible for editing procedure argument names.
+ */
+class ProcedureArgumentField extends FieldTextInput {
+  /**
+   * Whether or not this field is currently being edited interactively.
+   */
+  editingInteractively = false;
+
+  /**
+   * The procedure argument variable whose name is being interactively edited.
+   */
+  editingVariable?: IVariableModel<IVariableState>;
+
+  /**
+   * Displays the field editor.
+   *
+   * @param e The event that triggered display of the field editor.
+   */
+  protected override showEditor_(e?: Event) {
+    super.showEditor_(e);
+    this.editingInteractively = true;
+    this.editingVariable = undefined;
+  }
+
+  /**
+   * Handles cleanup when the field editor is dismissed.
+   */
+  override onFinishEditing_(value: string) {
+    super.onFinishEditing_(value);
+    this.editingInteractively = false;
+  }
+}
 
 const PROCEDURES_MUTATORARGUMENT = {
   /**
    * Mutator block for procedure argument.
    */
   init: function (this: ArgumentBlock) {
-    const field = fieldRegistry.fromJson({
-      type: 'field_input',
-      text: Procedures.DEFAULT_ARG,
-    }) as FieldTextInputForArgument;
-    field.setValidator(this.validator_);
-    // Hack: override showEditor to do just a little bit more work.
-    // We don't have a good place to hook into the start of a text edit.
-    field.oldShowEditorFn_ = (field as AnyDuringMigration).showEditor_;
-    const newShowEditorFn = function (this: typeof field) {
-      this.createdVariables_ = [];
-      this.oldShowEditorFn_();
-    };
-    (field as AnyDuringMigration).showEditor_ = newShowEditorFn;
+    const field = new ProcedureArgumentField(
+      Procedures.DEFAULT_ARG,
+      this.validator_,
+    );
 
     this.appendDummyInput()
       .appendField(Msg['PROCEDURES_MUTATORARG_TITLE'])
@@ -662,14 +681,6 @@ const PROCEDURES_MUTATORARGUMENT = {
     this.setStyle('procedure_blocks');
     this.setTooltip(Msg['PROCEDURES_MUTATORARG_TOOLTIP']);
     this.contextMenu = false;
-
-    // Create the default variable when we drag the block in from the flyout.
-    // Have to do this after installing the field on the block.
-    field.onFinishEditing_ = this.deleteIntermediateVars_;
-    // Create an empty list so onFinishEditing_ has something to look at, even
-    // though the editor was never opened.
-    field.createdVariables_ = [];
-    field.onFinishEditing_('x');
   },
 
   /**
@@ -683,11 +694,11 @@ const PROCEDURES_MUTATORARGUMENT = {
    * @returns Valid name, or null if a name was not specified.
    */
   validator_: function (
-    this: FieldTextInputForArgument,
+    this: ProcedureArgumentField,
     varName: string,
   ): string | null {
     const sourceBlock = this.getSourceBlock()!;
-    const outerWs = sourceBlock!.workspace.getRootWorkspace()!;
+    const outerWs = sourceBlock.workspace.getRootWorkspace()!;
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
@@ -716,42 +727,23 @@ const PROCEDURES_MUTATORARGUMENT = {
       return varName;
     }
 
-    let model = outerWs.getVariable(varName, '');
+    const model = outerWs.getVariable(varName, '');
     if (model && model.getName() !== varName) {
       // Rename the variable (case change)
       outerWs.renameVariableById(model.getId(), varName);
     }
     if (!model) {
-      model = outerWs.createVariable(varName, '');
-      if (model && this.createdVariables_) {
-        this.createdVariables_.push(model);
+      if (this.editingInteractively) {
+        if (!this.editingVariable) {
+          this.editingVariable = outerWs.createVariable(varName, '');
+        } else {
+          outerWs.renameVariableById(this.editingVariable.getId(), varName);
+        }
+      } else {
+        outerWs.createVariable(varName, '');
       }
     }
     return varName;
-  },
-
-  /**
-   * Called when focusing away from the text field.
-   * Deletes all variables that were created as the user typed their intended
-   * variable name.
-   *
-   * @internal
-   * @param  newText The new variable name.
-   */
-  deleteIntermediateVars_: function (
-    this: FieldTextInputForArgument,
-    newText: string,
-  ) {
-    const outerWs = this.getSourceBlock()!.workspace.getRootWorkspace();
-    if (!outerWs) {
-      return;
-    }
-    for (let i = 0; i < this.createdVariables_.length; i++) {
-      const model = this.createdVariables_[i];
-      if (model.getName() !== newText) {
-        outerWs.deleteVariableById(model.getId());
-      }
-    }
   },
 };
 blocks['procedures_mutatorarg'] = PROCEDURES_MUTATORARGUMENT;

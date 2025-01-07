@@ -6,7 +6,6 @@
 
 import {callbackFactory} from '../../build/src/core/contextmenu.js';
 import * as xmlUtils from '../../build/src/core/utils/xml.js';
-import * as Variables from '../../build/src/core/variables.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,

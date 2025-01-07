@@ -274,7 +274,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
   }
 
   /**
-   * Add items to xmlList for each listed procedure.
+   * Creates JSON block definitions for each of the given procedures.
    *
    * @param procedureList A list of procedures, each of which is defined by a
    *     three-element list of name, parameter list, and return value boolean.

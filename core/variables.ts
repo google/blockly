@@ -113,9 +113,28 @@ export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
 }
 
 /**
+ * Returns the JSON definition for a variable field.
+ *
+ * @param variable The variable the field should reference.
+ * @returns JSON for a variable field.
+ */
+function generateVariableFieldJson(variable: IVariableModel<IVariableState>) {
+  return {
+    'VAR': {
+      'name': variable.getName(),
+      'type': variable.getType(),
+    },
+  };
+}
+
+/**
  * Construct the blocks required by the flyout for the variable category.
  *
  * @param workspace The workspace containing variables.
+ * @param variables List of variables to create blocks for.
+ * @param includeChangeBlocks True to include `change x by _` blocks.
+ * @param getterType The type of the variable getter block to generate.
+ * @param setterType The type of the variable setter block to generate.
  * @returns JSON list of blocks.
  */
 export function flyoutCategoryBlocks(
@@ -127,20 +146,10 @@ export function flyoutCategoryBlocks(
 ): BlockInfo[] {
   includeChangeBlocks &&= Blocks['math_change'];
 
-  const generateVariableFieldJson = (
-    variable: IVariableModel<IVariableState>,
-  ) => {
-    return {
-      'VAR': {
-        'name': variable.getName(),
-        'type': variable.getType(),
-      },
-    };
-  };
-
   const blocks = [];
   const mostRecentVariable = variables.slice(-1)[0];
   if (mostRecentVariable) {
+    // Show one setter block, with the name of the most recently created variable.
     if (Blocks[setterType]) {
       blocks.push({
         kind: 'block',
@@ -171,6 +180,7 @@ export function flyoutCategoryBlocks(
   }
 
   if (Blocks[getterType]) {
+    // Show one getter block for each variable, sorted in alphabetical order.
     blocks.push(
       ...variables.sort(compareByName).map((variable) => {
         return {

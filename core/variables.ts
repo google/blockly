@@ -14,6 +14,7 @@ import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_par
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import {Msg} from './msg.js';
 import type {BlockInfo, FlyoutItemInfo} from './utils/toolbox.js';
+import * as utilsXml from './utils/xml.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -85,17 +86,45 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
 }
 
 /**
+ * Internal wrapper that returns the contents of the variables category.
+ *
+ * @internal
+ * @param workspace The workspace to populate variable blocks for.
+ */
+export function internalFlyoutCategory(
+  workspace: WorkspaceSvg,
+): FlyoutItemInfo[] {
+  return flyoutCategory(workspace, false);
+}
+
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: true,
+): Element[];
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: false,
+): FlyoutItemInfo[];
+/**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
  *
  * @param workspace The workspace containing variables.
- * @returns JSON list of flyout contents.
+ * @param useXml True to return the contents as XML, false to use JSON.
+ * @returns List of flyout contents as either XML or JSON.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml = true,
+): Element[] | FlyoutItemInfo[] {
   if (!Blocks['variables_set'] && !Blocks['variables_get']) {
     console.warn(
       'There are no variable blocks, but there is a variable category.',
     );
+  }
+
+  if (useXml) {
+    return xmlFlyoutCategory(workspace);
   }
 
   workspace.registerButtonCallback('CREATE_VARIABLE', function (button) {
@@ -108,7 +137,11 @@ export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
       'text': '%{BKY_NEW_VARIABLE}',
       'callbackkey': 'CREATE_VARIABLE',
     },
-    ...flyoutCategoryBlocks(workspace, workspace.getVariablesOfType(''), true),
+    ...jsonFlyoutCategoryBlocks(
+      workspace,
+      workspace.getVariablesOfType(''),
+      true,
+    ),
   ];
 }
 
@@ -130,6 +163,7 @@ function generateVariableFieldJson(variable: IVariableModel<IVariableState>) {
 /**
  * Construct the blocks required by the flyout for the variable category.
  *
+ * @internal
  * @param workspace The workspace containing variables.
  * @param variables List of variables to create blocks for.
  * @param includeChangeBlocks True to include `change x by _` blocks.
@@ -137,7 +171,7 @@ function generateVariableFieldJson(variable: IVariableModel<IVariableState>) {
  * @param setterType The type of the variable setter block to generate.
  * @returns JSON list of blocks.
  */
-export function flyoutCategoryBlocks(
+export function jsonFlyoutCategoryBlocks(
   workspace: Workspace,
   variables: IVariableModel<IVariableState>[],
   includeChangeBlocks: boolean,
@@ -194,6 +228,80 @@ export function flyoutCategoryBlocks(
   }
 
   return blocks;
+}
+
+/**
+ * Construct the elements (blocks and button) required by the flyout for the
+ * variable category.
+ *
+ * @param workspace The workspace containing variables.
+ * @returns Array of XML elements.
+ */
+function xmlFlyoutCategory(workspace: WorkspaceSvg): Element[] {
+  let xmlList = new Array<Element>();
+  const button = document.createElement('button');
+  button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
+  button.setAttribute('callbackKey', 'CREATE_VARIABLE');
+
+  workspace.registerButtonCallback('CREATE_VARIABLE', function (button) {
+    createVariableButtonHandler(button.getTargetWorkspace());
+  });
+
+  xmlList.push(button);
+
+  const blockList = flyoutCategoryBlocks(workspace);
+  xmlList = xmlList.concat(blockList);
+  return xmlList;
+}
+
+/**
+ * Construct the blocks required by the flyout for the variable category.
+ *
+ * @param workspace The workspace containing variables.
+ * @returns Array of XML block elements.
+ */
+export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
+  const variableModelList = workspace.getVariablesOfType('');
+
+  const xmlList = [];
+  if (variableModelList.length > 0) {
+    // New variables are added to the end of the variableModelList.
+    const mostRecentVariable = variableModelList[variableModelList.length - 1];
+    if (Blocks['variables_set']) {
+      const block = utilsXml.createElement('block');
+      block.setAttribute('type', 'variables_set');
+      block.setAttribute('gap', Blocks['math_change'] ? '8' : '24');
+      block.appendChild(generateVariableFieldDom(mostRecentVariable));
+      xmlList.push(block);
+    }
+    if (Blocks['math_change']) {
+      const block = utilsXml.createElement('block');
+      block.setAttribute('type', 'math_change');
+      block.setAttribute('gap', Blocks['variables_get'] ? '20' : '8');
+      block.appendChild(generateVariableFieldDom(mostRecentVariable));
+      const value = utilsXml.textToDom(
+        '<value name="DELTA">' +
+          '<shadow type="math_number">' +
+          '<field name="NUM">1</field>' +
+          '</shadow>' +
+          '</value>',
+      );
+      block.appendChild(value);
+      xmlList.push(block);
+    }
+
+    if (Blocks['variables_get']) {
+      variableModelList.sort(compareByName);
+      for (let i = 0, variable; (variable = variableModelList[i]); i++) {
+        const block = utilsXml.createElement('block');
+        block.setAttribute('type', 'variables_get');
+        block.setAttribute('gap', '8');
+        block.appendChild(generateVariableFieldDom(variable));
+        xmlList.push(block);
+      }
+    }
+  }
+  return xmlList;
 }
 
 export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
@@ -533,6 +641,27 @@ function checkForConflictingParamWithLegacyProcedures(
     if (blockHasOld && blockHasNew) return def[0];
   }
   return null;
+}
+
+/**
+ * Generate DOM objects representing a variable field.
+ *
+ * @param variableModel The variable model to represent.
+ * @returns The generated DOM.
+ */
+export function generateVariableFieldDom(
+  variableModel: IVariableModel<IVariableState>,
+): Element {
+  /* Generates the following XML:
+   * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
+   */
+  const field = utilsXml.createElement('field');
+  field.setAttribute('name', 'VAR');
+  field.setAttribute('id', variableModel.getId());
+  field.setAttribute('variabletype', variableModel.getType());
+  const name = utilsXml.createTextNode(variableModel.getName());
+  field.appendChild(name);
+  return field;
 }
 
 /**

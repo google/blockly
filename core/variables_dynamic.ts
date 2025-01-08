@@ -10,7 +10,9 @@ import {Blocks} from './blocks.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {Msg} from './msg.js';
 import type {FlyoutItemInfo} from './utils/toolbox.js';
+import * as xml from './utils/xml.js';
 import * as Variables from './variables.js';
+import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -68,17 +70,44 @@ function colourButtonClickHandler(button: FlyoutButton) {
 export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 
 /**
- * Construct the elements (blocks and button) required by the flyout for the
- * variable category.
+ * Internal wrapper that returns the contents of the dynamic variables category.
  *
- * @param workspace The workspace containing variables.
- * @returns JSON list of flyout contents.
+ * @internal
+ * @param workspace The workspace to populate variable blocks for.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
+export function internalFlyoutCategory(
+  workspace: WorkspaceSvg,
+): FlyoutItemInfo[] {
+  return flyoutCategory(workspace, false);
+}
+
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: true,
+): Element[];
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: false,
+): FlyoutItemInfo[];
+/**
+ * Construct the elements (blocks and button) required by the flyout for the
+ * dynamic variables category.
+ *
+ * @param useXml True to return the contents as XML, false to use JSON.
+ * @returns List of flyout contents as either XML or JSON.
+ */
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml = true,
+): Element[] | FlyoutItemInfo[] {
   if (!Blocks['variables_set_dynamic'] && !Blocks['variables_get_dynamic']) {
     console.warn(
       'There are no dynamic variable blocks, but there is a dynamic variable category.',
     );
+  }
+
+  if (useXml) {
+    return xmlFlyoutCategory(workspace);
   }
 
   workspace.registerButtonCallback(
@@ -110,7 +139,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
       'text': Msg['NEW_COLOUR_VARIABLE'],
       'callbackkey': 'CREATE_VARIABLE_COLOUR',
     },
-    ...Variables.flyoutCategoryBlocks(
+    ...Variables.jsonFlyoutCategoryBlocks(
       workspace,
       workspace.getAllVariables(),
       false,
@@ -118,4 +147,77 @@ export function flyoutCategory(workspace: WorkspaceSvg): FlyoutItemInfo[] {
       'variables_set_dynamic',
     ),
   ];
+}
+
+/**
+ * Construct the elements (blocks and button) required by the flyout for the
+ * variable category.
+ *
+ * @param workspace The workspace containing variables.
+ * @returns Array of XML elements.
+ */
+function xmlFlyoutCategory(workspace: WorkspaceSvg): Element[] {
+  let xmlList = new Array<Element>();
+  let button = document.createElement('button');
+  button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);
+  button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
+  xmlList.push(button);
+  button = document.createElement('button');
+  button.setAttribute('text', Msg['NEW_NUMBER_VARIABLE']);
+  button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
+  xmlList.push(button);
+  button = document.createElement('button');
+  button.setAttribute('text', Msg['NEW_COLOUR_VARIABLE']);
+  button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
+  xmlList.push(button);
+
+  workspace.registerButtonCallback(
+    'CREATE_VARIABLE_STRING',
+    stringButtonClickHandler,
+  );
+  workspace.registerButtonCallback(
+    'CREATE_VARIABLE_NUMBER',
+    numberButtonClickHandler,
+  );
+  workspace.registerButtonCallback(
+    'CREATE_VARIABLE_COLOUR',
+    colourButtonClickHandler,
+  );
+
+  const blockList = flyoutCategoryBlocks(workspace);
+  xmlList = xmlList.concat(blockList);
+  return xmlList;
+}
+
+/**
+ * Construct the blocks required by the flyout for the variable category.
+ *
+ * @param workspace The workspace containing variables.
+ * @returns Array of XML block elements.
+ */
+export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
+  const variableModelList = workspace.getAllVariables();
+
+  const xmlList = [];
+  if (variableModelList.length > 0) {
+    if (Blocks['variables_set_dynamic']) {
+      const firstVariable = variableModelList[variableModelList.length - 1];
+      const block = xml.createElement('block');
+      block.setAttribute('type', 'variables_set_dynamic');
+      block.setAttribute('gap', '24');
+      block.appendChild(Variables.generateVariableFieldDom(firstVariable));
+      xmlList.push(block);
+    }
+    if (Blocks['variables_get_dynamic']) {
+      variableModelList.sort(Variables.compareByName);
+      for (let i = 0, variable; (variable = variableModelList[i]); i++) {
+        const block = xml.createElement('block');
+        block.setAttribute('type', 'variables_get_dynamic');
+        block.setAttribute('gap', '8');
+        block.appendChild(Variables.generateVariableFieldDom(variable));
+        xmlList.push(block);
+      }
+    }
+  }
+  return xmlList;
 }

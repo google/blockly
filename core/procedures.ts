@@ -42,6 +42,7 @@ import {IProcedureModel} from './interfaces/i_procedure_model.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
+import * as deprecation from './utils/deprecation.js';
 import type {FlyoutItemInfo} from './utils/toolbox.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
@@ -355,6 +356,12 @@ export function flyoutCategory(
   useXml = true,
 ): Element[] | FlyoutItemInfo[] {
   if (useXml) {
+    deprecation.warn(
+      'The XML return value of Blockly.Procedures.flyoutCategory()',
+      'v12',
+      'v13',
+      'the same method, but handle a return type of FlyoutItemInfo[] (JSON) instead.',
+    );
     return xmlFlyoutCategory(workspace);
   }
   const blocks = [];

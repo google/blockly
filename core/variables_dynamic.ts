@@ -9,6 +9,7 @@
 import {Blocks} from './blocks.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {Msg} from './msg.js';
+import * as deprecation from './utils/deprecation.js';
 import type {FlyoutItemInfo} from './utils/toolbox.js';
 import * as xml from './utils/xml.js';
 import * as Variables from './variables.js';
@@ -107,6 +108,12 @@ export function flyoutCategory(
   }
 
   if (useXml) {
+    deprecation.warn(
+      'The XML return value of Blockly.VariablesDynamic.flyoutCategory()',
+      'v12',
+      'v13',
+      'the same method, but handle a return type of FlyoutItemInfo[] (JSON) instead.',
+    );
     return xmlFlyoutCategory(workspace);
   }
 

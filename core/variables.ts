@@ -13,6 +13,7 @@ import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import {Msg} from './msg.js';
+import * as deprecation from './utils/deprecation.js';
 import type {BlockInfo, FlyoutItemInfo} from './utils/toolbox.js';
 import * as utilsXml from './utils/xml.js';
 import type {Workspace} from './workspace.js';
@@ -124,6 +125,12 @@ export function flyoutCategory(
   }
 
   if (useXml) {
+    deprecation.warn(
+      'The XML return value of Blockly.Variables.flyoutCategory()',
+      'v12',
+      'v13',
+      'the same method, but handle a return type of FlyoutItemInfo[] (JSON) instead.',
+    );
     return xmlFlyoutCategory(workspace);
   }
 

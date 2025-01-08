@@ -4,12 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {FlyoutItem} from './flyout_item.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
 import type {SeparatorInfo} from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+
+/**
+ * @internal
+ */
+export const SEPARATOR_TYPE = 'sep';
 
 /**
  * Class responsible for creating separators for flyouts.
@@ -33,12 +38,13 @@ export class SeparatorFlyoutInflater implements IFlyoutInflater {
    * @param flyoutWorkspace The workspace the separator belongs to.
    * @returns A newly created FlyoutSeparator.
    */
-  load(_state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
+  load(_state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem {
     const flyoutAxis = flyoutWorkspace.targetWorkspace?.getFlyout()
       ?.horizontalLayout
       ? SeparatorAxis.X
       : SeparatorAxis.Y;
-    return new FlyoutSeparator(0, flyoutAxis);
+    const separator = new FlyoutSeparator(0, flyoutAxis);
+    return new FlyoutItem(separator, SEPARATOR_TYPE, false);
   }
 
   /**
@@ -48,7 +54,7 @@ export class SeparatorFlyoutInflater implements IFlyoutInflater {
    * @param defaultGap The default spacing for flyout items.
    * @returns The desired size of the separator.
    */
-  gapForElement(state: object, defaultGap: number): number {
+  gapForItem(state: object, defaultGap: number): number {
     const separatorState = state as SeparatorInfo;
     const newGap = parseInt(String(separatorState['gap']));
     return newGap ?? defaultGap;
@@ -57,13 +63,22 @@ export class SeparatorFlyoutInflater implements IFlyoutInflater {
   /**
    * Disposes of the given separator. Intentional no-op.
    *
-   * @param _element The flyout separator to dispose of.
+   * @param _item The flyout separator to dispose of.
    */
-  disposeElement(_element: IBoundedElement): void {}
+  disposeItem(_item: FlyoutItem): void {}
+
+  /**
+   * Returns the type of items this inflater is responsible for creating.
+   *
+   * @returns An identifier for the type of items this inflater creates.
+   */
+  getType() {
+    return SEPARATOR_TYPE;
+  }
 }
 
 registry.register(
   registry.Type.FLYOUT_INFLATER,
-  'sep',
+  SEPARATOR_TYPE,
   SeparatorFlyoutInflater,
 );

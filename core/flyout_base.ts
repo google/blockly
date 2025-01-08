@@ -18,16 +18,17 @@ import {DeleteArea} from './delete_area.js';
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
+import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
+import {SEPARATOR_TYPE} from './separator_flyout_inflater.js';
 import * as blocks from './serialization/blocks.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -677,20 +678,19 @@ export abstract class Flyout
       const type = info['kind'].toLowerCase();
       const inflater = this.getInflaterForType(type);
       if (inflater) {
-        const element = inflater.load(info, this.getWorkspace());
-        contents.push({
-          type,
-          element,
-        });
-        const gap = inflater.gapForElement(info, defaultGap);
+        contents.push(inflater.load(info, this.getWorkspace()));
+        const gap = inflater.gapForItem(info, defaultGap);
         if (gap) {
-          contents.push({
-            type: 'sep',
-            element: new FlyoutSeparator(
-              gap,
-              this.horizontalLayout ? SeparatorAxis.X : SeparatorAxis.Y,
+          contents.push(
+            new FlyoutItem(
+              new FlyoutSeparator(
+                gap,
+                this.horizontalLayout ? SeparatorAxis.X : SeparatorAxis.Y,
+              ),
+              SEPARATOR_TYPE,
+              false,
             ),
-          });
+          );
         }
       }
     }
@@ -711,9 +711,12 @@ export abstract class Flyout
    */
   protected normalizeSeparators(contents: FlyoutItem[]): FlyoutItem[] {
     for (let i = contents.length - 1; i > 0; i--) {
-      const elementType = contents[i].type.toLowerCase();
-      const previousElementType = contents[i - 1].type.toLowerCase();
-      if (elementType === 'sep' && previousElementType === 'sep') {
+      const elementType = contents[i].getType().toLowerCase();
+      const previousElementType = contents[i - 1].getType().toLowerCase();
+      if (
+        elementType === SEPARATOR_TYPE &&
+        previousElementType === SEPARATOR_TYPE
+      ) {
         // Remove previousElement from the array, shifting the current element
         // forward as a result. This preserves the behavior where explicit
         // separator elements override the value of prior implicit (or explicit)
@@ -752,9 +755,9 @@ export abstract class Flyout
    * Delete elements from a previous showing of the flyout.
    */
   private clearOldBlocks() {
-    this.getContents().forEach((element) => {
-      const inflater = this.getInflaterForType(element.type);
-      inflater?.disposeElement(element.element);
+    this.getContents().forEach((item) => {
+      const inflater = this.getInflaterForType(item.getType());
+      inflater?.disposeItem(item);
     });
 
     // Clear potential variables from the previous showing.
@@ -958,12 +961,4 @@ export abstract class Flyout
 
     return null;
   }
-}
-
-/**
- * A flyout content item.
- */
-export interface FlyoutItem {
-  type: string;
-  element: IBoundedElement;
 }

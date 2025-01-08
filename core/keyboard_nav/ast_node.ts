@@ -17,8 +17,8 @@ import {BlockSvg} from '../block_svg.js';
 import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
-import {FlyoutItem} from '../flyout_base.js';
 import {FlyoutButton} from '../flyout_button.js';
+import type {FlyoutItem} from '../flyout_item.js';
 import type {Input} from '../inputs/input.js';
 import type {IASTNodeLocation} from '../interfaces/i_ast_node_location.js';
 import type {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block.js';
@@ -348,10 +348,11 @@ export class ASTNode {
     );
     if (!nextItem) return null;
 
-    if (nextItem.element instanceof FlyoutButton) {
-      return ASTNode.createButtonNode(nextItem.element);
-    } else if (nextItem.element instanceof BlockSvg) {
-      return ASTNode.createStackNode(nextItem.element);
+    const element = nextItem.getElement();
+    if (element instanceof FlyoutButton) {
+      return ASTNode.createButtonNode(element);
+    } else if (element instanceof BlockSvg) {
+      return ASTNode.createStackNode(element);
     }
 
     return null;
@@ -373,13 +374,13 @@ export class ASTNode {
     const currentIndex = flyoutContents.findIndex((item: FlyoutItem) => {
       if (
         currentLocation instanceof BlockSvg &&
-        item.element === currentLocation
+        item.getElement() === currentLocation
       ) {
         return true;
       }
       if (
         currentLocation instanceof FlyoutButton &&
-        item.element === currentLocation
+        item.getElement() === currentLocation
       ) {
         return true;
       }
@@ -389,16 +390,13 @@ export class ASTNode {
     if (currentIndex < 0) return null;
 
     let resultIndex = forward ? currentIndex + 1 : currentIndex - 1;
-    // The flyout may contain non-navigable elements like spacers or custom
+    // The flyout may contain non-focusable elements like spacers or custom
     // items. If the next/previous element is one of those, keep looking until a
-    // block or button is encountered.
+    // focusable element is encountered.
     while (
       resultIndex >= 0 &&
       resultIndex < flyoutContents.length &&
-      !(
-        flyoutContents[resultIndex].element instanceof BlockSvg ||
-        flyoutContents[resultIndex].element instanceof FlyoutButton
-      )
+      !flyoutContents[resultIndex].isFocusable()
     ) {
       resultIndex += forward ? 1 : -1;
     }

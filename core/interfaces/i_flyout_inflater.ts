@@ -1,5 +1,5 @@
+import type {FlyoutItem} from '../flyout_item.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
-import type {IBoundedElement} from './i_bounded_element.js';
 
 export interface IFlyoutInflater {
   /**
@@ -16,7 +16,7 @@ export interface IFlyoutInflater {
    *    element, however.
    * @returns The newly inflated flyout element.
    */
-  load(state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement;
+  load(state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem;
 
   /**
    * Returns the amount of spacing that should follow the element corresponding
@@ -26,7 +26,7 @@ export interface IFlyoutInflater {
    * @param defaultGap The default gap for elements in this flyout.
    * @returns The gap that should follow the given element.
    */
-  gapForElement(state: object, defaultGap: number): number;
+  gapForItem(state: object, defaultGap: number): number;
 
   /**
    * Disposes of the given element.
@@ -37,5 +37,15 @@ export interface IFlyoutInflater {
    *
    * @param element The flyout element to dispose of.
    */
-  disposeElement(element: IBoundedElement): void;
+  disposeItem(item: FlyoutItem): void;
+
+  /**
+   * Returns the type of items that this inflater is responsible for inflating.
+   * This should be the same as the name under which this inflater registers
+   * itself, as well as the value returned by `getType()` on the `FlyoutItem`
+   * objects returned by `load()`.
+   *
+   * @returns The type of items this inflater creates.
+   */
+  getType(): string;
 }

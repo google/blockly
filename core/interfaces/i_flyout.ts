@@ -7,7 +7,7 @@
 // Former goog.module ID: Blockly.IFlyout
 
 import type {BlockSvg} from '../block_svg.js';
-import {FlyoutItem} from '../flyout_base.js';
+import type {FlyoutItem} from '../flyout_item.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {Svg} from '../utils/svg.js';
 import type {FlyoutDefinition} from '../utils/toolbox.js';

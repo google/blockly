@@ -365,24 +365,24 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     /** Manager in charge of markers and cursors. */
     this.markerManager = new MarkerManager(this);
 
-    if (Variables && Variables.flyoutCategory) {
+    if (Variables && Variables.internalFlyoutCategory) {
       this.registerToolboxCategoryCallback(
         Variables.CATEGORY_NAME,
-        Variables.flyoutCategory,
+        Variables.internalFlyoutCategory,
       );
     }
 
-    if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
+    if (VariablesDynamic && VariablesDynamic.internalFlyoutCategory) {
       this.registerToolboxCategoryCallback(
         VariablesDynamic.CATEGORY_NAME,
-        VariablesDynamic.flyoutCategory,
+        VariablesDynamic.internalFlyoutCategory,
       );
     }
 
-    if (Procedures && Procedures.flyoutCategory) {
+    if (Procedures && Procedures.internalFlyoutCategory) {
       this.registerToolboxCategoryCallback(
         Procedures.CATEGORY_NAME,
-        Procedures.flyoutCategory,
+        Procedures.internalFlyoutCategory,
       );
       this.addChangeListener(Procedures.mutatorOpenListener);
     }

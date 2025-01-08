@@ -13,6 +13,8 @@ import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import {Msg} from './msg.js';
+import * as deprecation from './utils/deprecation.js';
+import type {BlockInfo, FlyoutItemInfo} from './utils/toolbox.js';
 import * as utilsXml from './utils/xml.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -85,18 +87,164 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
 }
 
 /**
+ * Internal wrapper that returns the contents of the variables category.
+ *
+ * @internal
+ * @param workspace The workspace to populate variable blocks for.
+ */
+export function internalFlyoutCategory(
+  workspace: WorkspaceSvg,
+): FlyoutItemInfo[] {
+  return flyoutCategory(workspace, false);
+}
+
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: true,
+): Element[];
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: false,
+): FlyoutItemInfo[];
+/**
+ * Construct the elements (blocks and button) required by the flyout for the
+ * variable category.
+ *
+ * @param workspace The workspace containing variables.
+ * @param useXml True to return the contents as XML, false to use JSON.
+ * @returns List of flyout contents as either XML or JSON.
+ */
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml = true,
+): Element[] | FlyoutItemInfo[] {
+  if (!Blocks['variables_set'] && !Blocks['variables_get']) {
+    console.warn(
+      'There are no variable blocks, but there is a variable category.',
+    );
+  }
+
+  if (useXml) {
+    deprecation.warn(
+      'The XML return value of Blockly.Variables.flyoutCategory()',
+      'v12',
+      'v13',
+      'the same method, but handle a return type of FlyoutItemInfo[] (JSON) instead.',
+    );
+    return xmlFlyoutCategory(workspace);
+  }
+
+  workspace.registerButtonCallback('CREATE_VARIABLE', function (button) {
+    createVariableButtonHandler(button.getTargetWorkspace());
+  });
+
+  return [
+    {
+      'kind': 'button',
+      'text': '%{BKY_NEW_VARIABLE}',
+      'callbackkey': 'CREATE_VARIABLE',
+    },
+    ...jsonFlyoutCategoryBlocks(
+      workspace,
+      workspace.getVariablesOfType(''),
+      true,
+    ),
+  ];
+}
+
+/**
+ * Returns the JSON definition for a variable field.
+ *
+ * @param variable The variable the field should reference.
+ * @returns JSON for a variable field.
+ */
+function generateVariableFieldJson(variable: IVariableModel<IVariableState>) {
+  return {
+    'VAR': {
+      'name': variable.getName(),
+      'type': variable.getType(),
+    },
+  };
+}
+
+/**
+ * Construct the blocks required by the flyout for the variable category.
+ *
+ * @internal
+ * @param workspace The workspace containing variables.
+ * @param variables List of variables to create blocks for.
+ * @param includeChangeBlocks True to include `change x by _` blocks.
+ * @param getterType The type of the variable getter block to generate.
+ * @param setterType The type of the variable setter block to generate.
+ * @returns JSON list of blocks.
+ */
+export function jsonFlyoutCategoryBlocks(
+  workspace: Workspace,
+  variables: IVariableModel<IVariableState>[],
+  includeChangeBlocks: boolean,
+  getterType = 'variables_get',
+  setterType = 'variables_set',
+): BlockInfo[] {
+  includeChangeBlocks &&= Blocks['math_change'];
+
+  const blocks = [];
+  const mostRecentVariable = variables.slice(-1)[0];
+  if (mostRecentVariable) {
+    // Show one setter block, with the name of the most recently created variable.
+    if (Blocks[setterType]) {
+      blocks.push({
+        kind: 'block',
+        type: setterType,
+        gap: includeChangeBlocks ? 8 : 24,
+        fields: generateVariableFieldJson(mostRecentVariable),
+      });
+    }
+
+    if (includeChangeBlocks) {
+      blocks.push({
+        'kind': 'block',
+        'type': 'math_change',
+        'gap': Blocks[getterType] ? 20 : 8,
+        'fields': generateVariableFieldJson(mostRecentVariable),
+        'inputs': {
+          'DELTA': {
+            'shadow': {
+              'type': 'math_number',
+              'fields': {
+                'NUM': 1,
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
+  if (Blocks[getterType]) {
+    // Show one getter block for each variable, sorted in alphabetical order.
+    blocks.push(
+      ...variables.sort(compareByName).map((variable) => {
+        return {
+          'kind': 'block',
+          'type': getterType,
+          'gap': 8,
+          'fields': generateVariableFieldJson(variable),
+        };
+      }),
+    );
+  }
+
+  return blocks;
+}
+
+/**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
  *
  * @param workspace The workspace containing variables.
  * @returns Array of XML elements.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
-  if (!Blocks['variables_set'] && !Blocks['variables_get']) {
-    console.warn(
-      'There are no variable blocks, but there is a variable category.',
-    );
-  }
+function xmlFlyoutCategory(workspace: WorkspaceSvg): Element[] {
   let xmlList = new Array<Element>();
   const button = document.createElement('button');
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');

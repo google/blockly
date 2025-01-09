@@ -99,9 +99,10 @@ import {
   FieldVariableFromJsonConfig,
   FieldVariableValidator,
 } from './field_variable.js';
-import {Flyout, FlyoutItem} from './flyout_base.js';
+import {Flyout} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
+import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutSeparator} from './flyout_separator.js';
 import {VerticalFlyout} from './flyout_vertical.js';

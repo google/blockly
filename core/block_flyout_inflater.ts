@@ -10,7 +10,7 @@ import * as common from './common.js';
 import {MANUALLY_DISABLED} from './constants.js';
 import type {Abstract as AbstractEvent} from './events/events_abstract.js';
 import {EventType} from './events/type.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {FlyoutItem} from './flyout_item.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
@@ -26,6 +26,8 @@ import * as Xml from './xml.js';
  */
 const WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON =
   'WORKSPACE_AT_BLOCK_CAPACITY';
+
+const BLOCK_TYPE = 'block';
 
 /**
  * Class responsible for creating blocks for flyouts.
@@ -51,7 +53,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    * @param flyoutWorkspace The workspace to create the block on.
    * @returns A newly created block.
    */
-  load(state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
+  load(state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem {
     this.setFlyoutWorkspace(flyoutWorkspace);
     this.flyout = flyoutWorkspace.targetWorkspace?.getFlyout() ?? undefined;
     const block = this.createBlock(state as BlockInfo, flyoutWorkspace);
@@ -70,7 +72,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     block.getDescendants(false).forEach((b) => (b.isInFlyout = true));
     this.addBlockListeners(block);
 
-    return block;
+    return new FlyoutItem(block, BLOCK_TYPE, true);
   }
 
   /**
@@ -114,7 +116,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    * @param defaultGap The default spacing for flyout items.
    * @returns The amount of space that should follow this block.
    */
-  gapForElement(state: object, defaultGap: number): number {
+  gapForItem(state: object, defaultGap: number): number {
     const blockState = state as BlockInfo;
     let gap;
     if (blockState['gap']) {
@@ -134,9 +136,10 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
   /**
    * Disposes of the given block.
    *
-   * @param element The flyout block to dispose of.
+   * @param item The flyout block to dispose of.
    */
-  disposeElement(element: IBoundedElement): void {
+  disposeItem(item: FlyoutItem): void {
+    const element = item.getElement();
     if (!(element instanceof BlockSvg)) return;
     this.removeListeners(element.id);
     element.dispose(false, false);
@@ -257,6 +260,19 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
       }
     });
   }
+
+  /**
+   * Returns the type of items this inflater is responsible for creating.
+   *
+   * @returns An identifier for the type of items this inflater creates.
+   */
+  getType() {
+    return BLOCK_TYPE;
+  }
 }
 
-registry.register(registry.Type.FLYOUT_INFLATER, 'block', BlockFlyoutInflater);
+registry.register(
+  registry.Type.FLYOUT_INFLATER,
+  BLOCK_TYPE,
+  BlockFlyoutInflater,
+);

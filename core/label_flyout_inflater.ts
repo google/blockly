@@ -5,11 +5,13 @@
  */
 
 import {FlyoutButton} from './flyout_button.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {FlyoutItem} from './flyout_item.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
 import {ButtonOrLabelInfo} from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+
+const LABEL_TYPE = 'label';
 
 /**
  * Class responsible for creating labels for flyouts.
@@ -22,7 +24,7 @@ export class LabelFlyoutInflater implements IFlyoutInflater {
    * @param flyoutWorkspace The workspace to create the label on.
    * @returns A FlyoutButton configured as a label.
    */
-  load(state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
+  load(state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem {
     const label = new FlyoutButton(
       flyoutWorkspace,
       flyoutWorkspace.targetWorkspace!,
@@ -30,7 +32,8 @@ export class LabelFlyoutInflater implements IFlyoutInflater {
       true,
     );
     label.show();
-    return label;
+
+    return new FlyoutItem(label, LABEL_TYPE, true);
   }
 
   /**
@@ -40,20 +43,34 @@ export class LabelFlyoutInflater implements IFlyoutInflater {
    * @param defaultGap The default spacing for flyout items.
    * @returns The amount of space that should follow this label.
    */
-  gapForElement(state: object, defaultGap: number): number {
+  gapForItem(state: object, defaultGap: number): number {
     return defaultGap;
   }
 
   /**
    * Disposes of the given label.
    *
-   * @param element The flyout label to dispose of.
+   * @param item The flyout label to dispose of.
    */
-  disposeElement(element: IBoundedElement): void {
+  disposeItem(item: FlyoutItem): void {
+    const element = item.getElement();
     if (element instanceof FlyoutButton) {
       element.dispose();
     }
   }
+
+  /**
+   * Returns the type of items this inflater is responsible for creating.
+   *
+   * @returns An identifier for the type of items this inflater creates.
+   */
+  getType() {
+    return LABEL_TYPE;
+  }
 }
 
-registry.register(registry.Type.FLYOUT_INFLATER, 'label', LabelFlyoutInflater);
+registry.register(
+  registry.Type.FLYOUT_INFLATER,
+  LABEL_TYPE,
+  LabelFlyoutInflater,
+);

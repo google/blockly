@@ -13,7 +13,8 @@
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Flyout, FlyoutItem} from './flyout_base.js';
+import {Flyout} from './flyout_base.js';
+import type {FlyoutItem} from './flyout_item.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
@@ -263,10 +264,10 @@ export class HorizontalFlyout extends Flyout {
     }
 
     for (const item of contents) {
-      const rect = item.element.getBoundingRectangle();
+      const rect = item.getElement().getBoundingRectangle();
       const moveX = this.RTL ? cursorX + rect.getWidth() : cursorX;
-      item.element.moveBy(moveX, cursorY);
-      cursorX += item.element.getBoundingRectangle().getWidth();
+      item.getElement().moveBy(moveX, cursorY);
+      cursorX += item.getElement().getBoundingRectangle().getWidth();
     }
   }
 
@@ -336,7 +337,7 @@ export class HorizontalFlyout extends Flyout {
     let flyoutHeight = this.getContents().reduce((maxHeightSoFar, item) => {
       return Math.max(
         maxHeightSoFar,
-        item.element.getBoundingRectangle().getHeight(),
+        item.getElement().getBoundingRectangle().getHeight(),
       );
     }, 0);
     flyoutHeight += this.MARGIN * 1.5;

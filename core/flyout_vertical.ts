@@ -13,7 +13,8 @@
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Flyout, FlyoutItem} from './flyout_base.js';
+import {Flyout} from './flyout_base.js';
+import type {FlyoutItem} from './flyout_item.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
@@ -229,8 +230,8 @@ export class VerticalFlyout extends Flyout {
     let cursorY = margin;
 
     for (const item of contents) {
-      item.element.moveBy(cursorX, cursorY);
-      cursorY += item.element.getBoundingRectangle().getHeight();
+      item.getElement().moveBy(cursorX, cursorY);
+      cursorY += item.getElement().getBoundingRectangle().getHeight();
     }
   }
 
@@ -301,7 +302,7 @@ export class VerticalFlyout extends Flyout {
     let flyoutWidth = this.getContents().reduce((maxWidthSoFar, item) => {
       return Math.max(
         maxWidthSoFar,
-        item.element.getBoundingRectangle().getWidth(),
+        item.getElement().getBoundingRectangle().getWidth(),
       );
     }, 0);
     flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
@@ -312,13 +313,13 @@ export class VerticalFlyout extends Flyout {
       if (this.RTL) {
         // With the flyoutWidth known, right-align the flyout contents.
         for (const item of this.getContents()) {
-          const oldX = item.element.getBoundingRectangle().left;
+          const oldX = item.getElement().getBoundingRectangle().left;
           const newX =
             flyoutWidth / this.workspace_.scale -
-            item.element.getBoundingRectangle().getWidth() -
+            item.getElement().getBoundingRectangle().getWidth() -
             this.MARGIN -
             this.tabWidth_;
-          item.element.moveBy(newX - oldX, 0);
+          item.getElement().moveBy(newX - oldX, 0);
         }
       }
 

@@ -5,11 +5,13 @@
  */
 
 import {FlyoutButton} from './flyout_button.js';
-import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {FlyoutItem} from './flyout_item.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
 import {ButtonOrLabelInfo} from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+
+const BUTTON_TYPE = 'button';
 
 /**
  * Class responsible for creating buttons for flyouts.
@@ -22,7 +24,7 @@ export class ButtonFlyoutInflater implements IFlyoutInflater {
    * @param flyoutWorkspace The workspace to create the button on.
    * @returns A newly created FlyoutButton.
    */
-  load(state: object, flyoutWorkspace: WorkspaceSvg): IBoundedElement {
+  load(state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem {
     const button = new FlyoutButton(
       flyoutWorkspace,
       flyoutWorkspace.targetWorkspace!,
@@ -30,7 +32,8 @@ export class ButtonFlyoutInflater implements IFlyoutInflater {
       false,
     );
     button.show();
-    return button;
+
+    return new FlyoutItem(button, BUTTON_TYPE, true);
   }
 
   /**
@@ -40,24 +43,34 @@ export class ButtonFlyoutInflater implements IFlyoutInflater {
    * @param defaultGap The default spacing for flyout items.
    * @returns The amount of space that should follow this button.
    */
-  gapForElement(state: object, defaultGap: number): number {
+  gapForItem(state: object, defaultGap: number): number {
     return defaultGap;
   }
 
   /**
    * Disposes of the given button.
    *
-   * @param element The flyout button to dispose of.
+   * @param item The flyout button to dispose of.
    */
-  disposeElement(element: IBoundedElement): void {
+  disposeItem(item: FlyoutItem): void {
+    const element = item.getElement();
     if (element instanceof FlyoutButton) {
       element.dispose();
     }
+  }
+
+  /**
+   * Returns the type of items this inflater is responsible for creating.
+   *
+   * @returns An identifier for the type of items this inflater creates.
+   */
+  getType() {
+    return BUTTON_TYPE;
   }
 }
 
 registry.register(
   registry.Type.FLYOUT_INFLATER,
-  'button',
+  BUTTON_TYPE,
   ButtonFlyoutInflater,
 );

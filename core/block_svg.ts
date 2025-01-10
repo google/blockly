@@ -246,7 +246,7 @@ export class BlockSvg
    *
    * @returns #RRGGBB string.
    */
-  getColourSecondary(): string | undefined {
+  getColourSecondary(): string {
     return this.style.colourSecondary;
   }
 
@@ -255,7 +255,7 @@ export class BlockSvg
    *
    * @returns #RRGGBB string.
    */
-  getColourTertiary(): string | undefined {
+  getColourTertiary(): string {
     return this.style.colourTertiary;
   }
 
@@ -1219,6 +1219,15 @@ export class BlockSvg
     } else {
       throw Error('Invalid style name: ' + blockStyleName);
     }
+  }
+
+  /**
+   * Returns the BlockStyle object used to style this block.
+   *
+   * @returns This block's style object.
+   */
+  getStyle(): BlockStyle {
+    return this.style;
   }
 
   /**

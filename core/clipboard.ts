@@ -83,7 +83,9 @@ function pasteFromData<T extends ICopyData>(
   workspace: WorkspaceSvg,
   coordinate?: Coordinate,
 ): ICopyable<T> | null {
-  workspace = workspace.getRootWorkspace() ?? workspace;
+  workspace = workspace.isMutator
+    ? workspace
+    : (workspace.getRootWorkspace() ?? workspace);
   return (globalRegistry
     .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
     ?.paste(copyData, workspace, coordinate) ?? null) as ICopyable<T> | null;

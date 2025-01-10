@@ -108,7 +108,7 @@ export class WarningIcon extends Icon implements IHasBubble {
 
   override applyColour(): void {
     super.applyColour();
-    this.textBubble?.setColour(this.sourceBlock.style.colourPrimary);
+    this.textBubble?.setColour(this.sourceBlock.getColour());
   }
 
   override updateCollapsed(): void {

@@ -16,7 +16,7 @@ import {Bubble} from './bubble.js';
  * A bubble that displays non-editable text. Used by the warning icon.
  */
 export class TextBubble extends Bubble {
-  private paragraph: SVGTextElement;
+  private paragraph: SVGGElement;
 
   constructor(
     private text: string,
@@ -55,35 +55,38 @@ export class TextBubble extends Bubble {
   }
 
   /** Creates the paragraph container for this bubble's view's spans. */
-  private createParagraph(container: SVGGElement): SVGTextElement {
+  private createParagraph(container: SVGGElement): SVGGElement {
     return dom.createSvgElement(
-      Svg.TEXT,
+      Svg.G,
       {
         'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
-        'y': Bubble.BORDER_WIDTH,
+        'transform': `translate(0,${Bubble.BORDER_WIDTH})`,
+        'style': `direction: ${this.workspace.RTL ? 'rtl' : 'ltr'}`,
       },
       container,
     );
   }
 
   /** Creates the spans visualizing the text of this bubble. */
-  private createSpans(parent: SVGTextElement, text: string): SVGTSpanElement[] {
+  private createSpans(parent: SVGGElement, text: string): SVGTextElement[] {
+    let lineNum = 1;
     return text.split('\n').map((line) => {
       const tspan = dom.createSvgElement(
-        Svg.TSPAN,
-        {'dy': '1em', 'x': Bubble.BORDER_WIDTH},
+        Svg.TEXT,
+        {'y': `${lineNum}em`, 'x': Bubble.BORDER_WIDTH},
         parent,
       );
       const textNode = document.createTextNode(line);
       tspan.appendChild(textNode);
+      lineNum += 1;
       return tspan;
     });
   }
 
   /** Right aligns the given spans. */
-  private rightAlignSpans(maxWidth: number, spans: SVGTSpanElement[]) {
+  private rightAlignSpans(maxWidth: number, spans: SVGTextElement[]) {
     for (const span of spans) {
-      span.setAttribute('text-anchor', 'end');
+      span.setAttribute('text-anchor', 'start');
       span.setAttribute('x', `${maxWidth + Bubble.BORDER_WIDTH}`);
     }
   }

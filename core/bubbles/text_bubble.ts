@@ -48,13 +48,13 @@ export class TextBubble extends Bubble {
    */
   private stringToSvg(text: string, container: SVGGElement) {
     const paragraph = this.createParagraph(container);
-    const spans = this.createSpans(paragraph, text);
+    const fragments = this.createTextFragments(paragraph, text);
     if (this.workspace.RTL)
-      this.rightAlignSpans(paragraph.getBBox().width, spans);
+      this.rightAlignTextFragments(paragraph.getBBox().width, fragments);
     return paragraph;
   }
 
-  /** Creates the paragraph container for this bubble's view's spans. */
+  /** Creates the paragraph container for this bubble's view's text fragments. */
   private createParagraph(container: SVGGElement): SVGGElement {
     return dom.createSvgElement(
       Svg.G,
@@ -67,27 +67,33 @@ export class TextBubble extends Bubble {
     );
   }
 
-  /** Creates the spans visualizing the text of this bubble. */
-  private createSpans(parent: SVGGElement, text: string): SVGTextElement[] {
+  /** Creates the text fragments visualizing the text of this bubble. */
+  private createTextFragments(
+    parent: SVGGElement,
+    text: string,
+  ): SVGTextElement[] {
     let lineNum = 1;
     return text.split('\n').map((line) => {
-      const tspan = dom.createSvgElement(
+      const fragment = dom.createSvgElement(
         Svg.TEXT,
         {'y': `${lineNum}em`, 'x': Bubble.BORDER_WIDTH},
         parent,
       );
       const textNode = document.createTextNode(line);
-      tspan.appendChild(textNode);
+      fragment.appendChild(textNode);
       lineNum += 1;
-      return tspan;
+      return fragment;
     });
   }
 
-  /** Right aligns the given spans. */
-  private rightAlignSpans(maxWidth: number, spans: SVGTextElement[]) {
-    for (const span of spans) {
-      span.setAttribute('text-anchor', 'start');
-      span.setAttribute('x', `${maxWidth + Bubble.BORDER_WIDTH}`);
+  /** Right aligns the given text fragments. */
+  private rightAlignTextFragments(
+    maxWidth: number,
+    fragments: SVGTextElement[],
+  ) {
+    for (const text of fragments) {
+      text.setAttribute('text-anchor', 'start');
+      text.setAttribute('x', `${maxWidth + Bubble.BORDER_WIDTH}`);
     }
   }
 

@@ -6,12 +6,13 @@
 
 // Former goog.module ID: Blockly.ContextMenu
 
+import * as dialog from '../core/dialog.js';
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import {config} from './config.js';
 import * as dom from './utils/dom.js';
-import {
+import type {
   ContextMenuOption,
   LegacyContextMenuOption,
 } from './contextmenu_registry.js';
@@ -25,9 +26,11 @@ import * as svgMath from './utils/svg_math.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
+import {getGroup, setGroup} from './events/events.js';
 import {ModuleModel} from './module_model.js';
 import {Msg} from '../core/msg.js';
 import * as common from './common.js';
+
 
 /**
  * Which block is the context menu attached to?
@@ -270,11 +273,49 @@ export function callbackFactory(
 }
 
 /**
- * Make a context menu option for duplicating the current block.
- *
+ * Make a context menu option for duplicating the current block on new module.
  * @param {!BlockSvg} block The block where the right-click originated.
  * @param {!ModuleModel} module The module to move block.
- * @returns {!object} A menu option, containing text, enabled, and a callback.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+export function blockMoveToNewModuleOption(
+  block: BlockSvg,
+): LegacyContextMenuOption {
+  return {
+    text: Msg['BLOCK_MOVE_TO_NEW_MODULE'],
+    enabled: block.isMovable(),
+    callback: function () {
+      dialog.prompt(Msg['NEW_MODULE_TITLE'], '', function (moduleName) {
+        if (moduleName) {
+          moduleName = moduleName.replace(/[\s\xa0]+/g, ' ').trim();
+
+          const existingGroup = getGroup();
+          if (!existingGroup) {
+            setGroup(true);
+          }
+          try {
+            const module = block.workspace
+              .getModuleManager()
+              .createModule(moduleName);
+            if (!module) {
+              return;
+            }
+            block.workspace.getModuleManager().moveBlockToModule(block, module);
+          } finally {
+            setGroup(false);
+          }
+        }
+      });
+    },
+  };
+}
+
+/**
+ * Make a context menu option for duplicating the current block.
+ * @param {!BlockSvg} block The block where the right-click originated.
+ * @param {!ModuleModel} module The module to move block.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
  */
 export function blockMoveToModuleOption(

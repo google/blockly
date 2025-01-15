@@ -39,8 +39,6 @@ import {ModuleRename} from './events/events_module_rename.js';
 import {MoveBlockToModule} from './events/events_move_block_to_module.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {ModuleMove} from './events/events_module_move.js';
-import {ContextMenuRegistry} from './contextmenu_registry.js';
-import {registerMovingToModule} from './contextmenu_items.js';
 
 /**
  * Class for a module management.
@@ -184,8 +182,6 @@ export class ModuleManager {
 
     this.fireCreateEvent_(module);
 
-    registerMovingToModule();
-
     return module;
   }
 
@@ -320,6 +316,9 @@ export class ModuleManager {
 
   /**
    * Delete a module and all its top blocks.
+   *
+   * @param {ModuleModel} module Module to delete.
+   * @returns {ModuleModel} previous sibling module
    */
   deleteModule(module: ModuleModel) {
     const optionId = module.getMenuOptionId();

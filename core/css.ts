@@ -9,8 +9,6 @@
 /** Has CSS already been injected? */
 let injected = false;
 
-export const BLOCKLY_MENU_MAX_HEIGHT = 265;
-
 /**
  * Add some CSS to the blob that will be injected later.  Allows optional
  * components such as fields and the toolbox to store separate CSS.
@@ -550,7 +548,7 @@ input[type=number] {
   padding: 4px 0;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: ${BLOCKLY_MENU_MAX_HEIGHT}px;
+  max-height: 265px;
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
 }
 

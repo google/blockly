@@ -43,8 +43,6 @@
   "DELETE_MODULE": "삭제",
   "RENAME_ARGUMENT": "인자 이름 바꾸기...",
   "RENAME_ARGUMENT_TITLE": "'%1' 인자의 이름을 다음으로 변경:",
-  "BLOCK_MOVE_TO_MODULE": "'%1'로 이동",
-  "BLOCK_MOVE_TO_NEW_MODULE": "새 탭으로 이동",
   "OBSOLETE_WARNING": "경고: 이 블록은 오래되었지만 여전히 사용 가능합니다. 새로운 유사한 것으로 교체하는 것이 좋습니다.",
   "REMOVED_WARNING": "오류: 이 블록은 제거되었습니다. 새로운 유사한 것을 사용하세요.",
 

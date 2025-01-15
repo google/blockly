@@ -23,8 +23,6 @@
   "DELETE_MODULE": "Delete",
   "RENAME_ARGUMENT": "Rename argument...",
   "RENAME_ARGUMENT_TITLE": "Rename argument '%1' to:",
-  "BLOCK_MOVE_TO_MODULE": "Move to '%1'",
-  "BLOCK_MOVE_TO_NEW_MODULE": "Move to new tab",
   "OBSOLETE_WARNING": "Warning: This block is obsolete but still usable. Recommended to replace with a new similar.",
   "REMOVED_WARNING": "Error: This block is removed. Use a similar new one.",
 

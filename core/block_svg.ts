@@ -770,25 +770,6 @@ export class BlockSvg
       {block: this},
     ) as any;
 
-    if (this.workspace.options.showModuleBar && this.isMovable()) {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const block = this;
-      menuOptions.push(ContextMenu.blockMoveToNewModuleOption(this));
-
-      if (this.workspace.getModuleManager().getAllModules().length > 1) {
-        this.workspace
-          .getModuleManager()
-          .getAllModules()
-          .forEach(function (module) {
-            if (block.getModuleId() !== module.getId()) {
-              menuOptions.push(
-                ContextMenu.blockMoveToModuleOption(block, module),
-              );
-            }
-          });
-      }
-    }
-
     // Allow the block to add or modify menuOptions.
     if (this.customContextMenu) {
       this.customContextMenu(menuOptions);

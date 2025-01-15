@@ -313,11 +313,6 @@ export class ModuleManager {
         return this.moduleMap_[i - 1] || this.moduleMap_[0];
       }
     }
-
-    const optionId = module.getMenuOptionId();
-    if (ContextMenuRegistry.registry.getItem(optionId)) {
-      ContextMenuRegistry.registry.unregister(optionId);
-    }
   }
 
   /**

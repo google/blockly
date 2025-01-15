@@ -79,6 +79,8 @@ let content = `
   position: relative;
   overflow: hidden;  /* So blocks in drag surface disappear at edges */
   touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .blocklyNonSelectable {
@@ -542,23 +544,17 @@ input[type=number] {
 
 .blocklyWidgetDiv .blocklyMenu {
   background: #fff;
+  border: 1px solid transparent;
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
   font: normal 13px Arial, sans-serif;
   margin: 0;
   outline: none;
   padding: 4px 0;
+  position: absolute;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 265px;
+  max-height: 100%;
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
-}
-
-.blocklyWidgetDiv .blocklyMenuWrapper {
-  border: 1px solid;
-  border-color: #dadce0;
-  background-color: #fff;
-  border-radius: 2px;
-  padding: 4px;
-  box-shadow: 0 0 3px 1px rgb(0 0 0 / 30%);
 }
 
 .blocklyWidgetDiv .blocklyMenu.blocklyFocused {
@@ -567,16 +563,11 @@ input[type=number] {
 
 .blocklyDropDownDiv .blocklyMenu {
   background: inherit;  /* Compatibility with gapi, reset from goog-menu */
-  border: none;  /* Compatibility with gapi, reset from goog-menu */
+  border: inherit;  /* Compatibility with gapi, reset from goog-menu */
   font: normal 13px "Helvetica Neue", Helvetica, sans-serif;
   outline: none;
   position: relative;  /* Compatibility with gapi, reset from goog-menu */
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
-    margin-top: 5px;
-}
-
-.blocklyDropDownDiv .blocklyMenu:empty {
-  margin: 0;
 }
 
 /* State: resting. */
@@ -588,8 +579,7 @@ input[type=number] {
   margin: 0;
   /* 7em on the right for shortcut. */
   min-width: 7em;
-  padding: 5px 15px;
-  margin-bottom: 2px;
+  padding: 6px 15px;
   white-space: nowrap;
 }
 
@@ -609,11 +599,6 @@ input[type=number] {
   height: 16px;
   position: absolute;
   width: 16px;
-}
-
-
-.blocklyMenuItemText {
-  margin-left: 5px;
 }
 
 .blocklyMenuItemSelected .blocklyMenuItemCheckbox {

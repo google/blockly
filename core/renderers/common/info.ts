@@ -457,6 +457,11 @@ export class RenderInfo {
       }
     }
 
+    // Don't add padding after zero-width fields.
+    if (prev && Types.isField(prev) && prev.width === 0) {
+      return this.constants_.NO_PADDING;
+    }
+
     return this.constants_.MEDIUM_PADDING;
   }
 

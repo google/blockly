@@ -83,9 +83,6 @@ export abstract class Field<T = any>
    */
   DEFAULT_VALUE: T | null = null;
 
-  /** Non-breaking space. */
-  static readonly NBSP = '\u00A0';
-
   /**
    * A value used to signal when a field's constructor should *not* set the
    * field's value or run configure_, and should allow a subclass to do that
@@ -905,17 +902,6 @@ export abstract class Field<T = any>
     if (this.isDirty_) {
       this.render_();
       this.isDirty_ = false;
-    } else if (this.visible_ && this.size_.width === 0) {
-      // If the field is not visible the width will be 0 as well, one of the
-      // problems with the old system.
-      this.render_();
-      // Don't issue a warning if the field is actually zero width.
-      if (this.size_.width !== 0) {
-        console.warn(
-          'Deprecated use of setting size_.width to 0 to rerender a' +
-            ' field. Set field.isDirty_ to true instead.',
-        );
-      }
     }
     return this.size_;
   }
@@ -979,16 +965,10 @@ export abstract class Field<T = any>
    */
   protected getDisplayText_(): string {
     let text = this.getText();
-    if (!text) {
-      // Prevent the field from disappearing if empty.
-      return Field.NBSP;
-    }
     if (text.length > this.maxDisplayLength) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 2) + '…';
     }
-    // Replace whitespace with non-breaking spaces so the text doesn't collapse.
-    text = text.replace(/\s/g, Field.NBSP);
     if (this.sourceBlock_ && this.sourceBlock_.RTL) {
       // The SVG is LTR, force text to be RTL by adding an RLM.
       text += '\u200F';

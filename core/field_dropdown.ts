@@ -29,7 +29,6 @@ import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import * as utilsString from './utils/string.js';
-import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 
 /**
@@ -291,7 +290,7 @@ export class FieldDropdown extends Field<string> {
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {
       const primaryColour = block.getColour();
-      const borderColour = (this.sourceBlock_ as BlockSvg).style.colourTertiary;
+      const borderColour = (this.sourceBlock_ as BlockSvg).getColourTertiary();
       dropDownDiv.setColour(primaryColour, borderColour);
     }
 
@@ -304,11 +303,6 @@ export class FieldDropdown extends Field<string> {
 
     if (this.selectedMenuItem) {
       this.menu_!.setHighlighted(this.selectedMenuItem);
-      style.scrollIntoContainerView(
-        this.selectedMenuItem.getElement()!,
-        dropDownDiv.getContentDiv(),
-        true,
-      );
     }
 
     this.applyColour();
@@ -467,21 +461,21 @@ export class FieldDropdown extends Field<string> {
    * Updates the dropdown arrow to match the colour/style of the block.
    */
   override applyColour() {
-    const style = (this.sourceBlock_ as BlockSvg).style;
+    const sourceBlock = this.sourceBlock_ as BlockSvg;
     if (this.borderRect_) {
-      this.borderRect_.setAttribute('stroke', style.colourTertiary);
+      this.borderRect_.setAttribute('stroke', sourceBlock.getColourTertiary());
       if (this.menu_) {
-        this.borderRect_.setAttribute('fill', style.colourTertiary);
+        this.borderRect_.setAttribute('fill', sourceBlock.getColourTertiary());
       } else {
         this.borderRect_.setAttribute('fill', 'transparent');
       }
     }
     // Update arrow's colour.
-    if (this.sourceBlock_ && this.arrow) {
-      if (this.sourceBlock_.isShadow()) {
-        this.arrow.style.fill = style.colourSecondary;
+    if (sourceBlock && this.arrow) {
+      if (sourceBlock.isShadow()) {
+        this.arrow.style.fill = sourceBlock.getColourSecondary();
       } else {
-        this.arrow.style.fill = style.colourPrimary;
+        this.arrow.style.fill = sourceBlock.getColour();
       }
     }
   }

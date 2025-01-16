@@ -395,6 +395,8 @@ export class Trashcan
       'transform',
       'translate(' + this.left + ',' + this.top + ')',
     );
+
+    this.flyout?.position();
   }
 
   /**

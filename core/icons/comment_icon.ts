@@ -126,7 +126,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
 
   override applyColour(): void {
     super.applyColour();
-    const colour = (this.sourceBlock as BlockSvg).style.colourPrimary;
+    const colour = (this.sourceBlock as BlockSvg).getColour();
     this.textInputBubble?.setColour(colour);
   }
 

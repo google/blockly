@@ -226,7 +226,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     if (!this.isFullBlockField() && this.borderRect_) {
       this.borderRect_!.style.display = 'block';
-      this.borderRect_.setAttribute('stroke', block.style.colourTertiary);
+      this.borderRect_.setAttribute('stroke', block.getColourTertiary());
     } else {
       this.borderRect_!.style.display = 'none';
       // In general, do *not* let fields control the color of blocks. Having the
@@ -429,8 +429,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
       // Pull stroke colour from the existing shadow block
       const strokeColour = block.getParent()
-        ? (block.getParent() as BlockSvg).style.colourTertiary
-        : (this.sourceBlock_ as BlockSvg).style.colourTertiary;
+        ? (block.getParent() as BlockSvg).getColourTertiary()
+        : (this.sourceBlock_ as BlockSvg).getColourTertiary();
       htmlInput.style.border = 1 * scale + 'px solid ' + strokeColour;
       div!.style.borderRadius = borderRadius;
       div!.style.transition = 'box-shadow 0.25s ease 0s';

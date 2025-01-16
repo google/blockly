@@ -254,9 +254,9 @@ export async function getCategory(browser, categoryName) {
 export async function getNthBlockOfCategory(browser, categoryName, n) {
   const category = await getCategory(browser, categoryName);
   await category.click();
-  const block = await browser.$(
-    `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + n * 2})`,
-  );
+  const block = (
+    await browser.$$(`.blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable`)
+  )[n];
   return block;
 }
 

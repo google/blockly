@@ -5,7 +5,6 @@
  */
 
 import * as chai from 'chai';
-import * as sinon from 'sinon';
 import {testFileLocations, testSetup} from './test_setup.mjs';
 
 suite('Workspace comments', function () {
@@ -20,8 +19,6 @@ suite('Workspace comments', function () {
   });
 
   teardown(async function () {
-    sinon.restore();
-
     await this.browser.execute(() => {
       Blockly.getMainWorkspace().clear();
     });

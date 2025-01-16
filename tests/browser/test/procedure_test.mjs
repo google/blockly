@@ -26,6 +26,9 @@ suite('Testing Connecting Blocks', function (done) {
   // Setup Selenium for all of the tests
   suiteSetup(async function () {
     this.browser = await testSetup(testFileLocations.CODE_DEMO);
+    // Prevent WebDriver from suppressing alerts
+    // https://github.com/webdriverio/webdriverio/issues/13610#issuecomment-2357768103
+    this.browser.on('dialog', (dialog) => {});
   });
 
   test('Testing Procedure', async function () {

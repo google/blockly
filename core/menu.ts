@@ -264,7 +264,10 @@ export class Menu {
       if (el) {
         aria.setState(el, aria.State.ACTIVEDESCENDANT, item.getId());
       }
-      item.getElement()?.scrollIntoView();
+      item.getElement()?.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
     }
   }
 

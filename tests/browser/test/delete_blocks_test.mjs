@@ -123,10 +123,14 @@ suite('Delete blocks', function (done) {
       )
       .waitForExist({timeout: 2000, reverse: true});
 
-    // Load the start blocks
-    await this.browser.execute((blocks) => {
-      Blockly.serialization.workspaces.load(blocks, Blockly.getMainWorkspace());
-    }, startBlocks);
+    // Load the start blocks. This hangs indefinitely if `startBlocks` is
+    // passed without being stringified.
+    this.browser.execute((blocks) => {
+      Blockly.serialization.workspaces.load(
+        JSON.parse(blocks),
+        Blockly.getMainWorkspace(),
+      );
+    }, JSON.stringify(startBlocks));
     // Wait for there to be a block on the main workspace before continuing
     (await getBlockElementById(this.browser, firstBlockId)).waitForExist({
       timeout: 2000,

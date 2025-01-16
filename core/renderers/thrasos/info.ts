@@ -109,6 +109,9 @@ export class RenderInfo extends BaseRenderInfo {
     if (!Types.isInput(prev) && !next) {
       // Between an editable field and the end of the row.
       if (Types.isField(prev) && prev.isEditable) {
+        if (prev.width === 0) {
+          return this.constants_.NO_PADDING;
+        }
         return this.constants_.MEDIUM_PADDING;
       }
       // Padding at the end of an icon-only row to make the block shape clearer.
@@ -204,6 +207,9 @@ export class RenderInfo extends BaseRenderInfo {
       Types.isField(next) &&
       prev.isEditable === next.isEditable
     ) {
+      if (prev.width === 0) {
+        return this.constants_.NO_PADDING;
+      }
       return this.constants_.LARGE_PADDING;
     }
 

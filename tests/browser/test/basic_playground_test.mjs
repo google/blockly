@@ -137,7 +137,7 @@ suite('Disabling', function () {
         110,
       );
       await connect(this.browser, child, 'OUTPUT', parent, 'IF0');
-
+      await this.browser.pause(PAUSE_TIME);
       await contextMenuSelect(this.browser, parent, 'Disable Block');
 
       chai.assert.isTrue(await getIsDisabled(this.browser, child.id));

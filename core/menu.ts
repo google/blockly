@@ -260,10 +260,14 @@ export class Menu {
       this.highlightedItem = item;
       // Bring the highlighted item into view. This has no effect if the menu is
       // not scrollable.
-      const el = this.getElement() as Element;
-      style.scrollIntoContainerView(item.getElement() as Element, el);
-
-      aria.setState(el, aria.State.ACTIVEDESCENDANT, item.getId());
+      const el = this.getElement();
+      if (el) {
+        aria.setState(el, aria.State.ACTIVEDESCENDANT, item.getId());
+      }
+      item.getElement()?.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
     }
   }
 

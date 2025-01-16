@@ -38,6 +38,7 @@ export async function driverSetup() {
   const options = {
     capabilities: {
       'browserName': 'chrome',
+      'unhandledPromptBehavior': 'ignore',
       'goog:chromeOptions': {
         args: ['--allow-file-access-from-files'],
       },

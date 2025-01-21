@@ -176,7 +176,7 @@ export function disconnectUiEffect(block: BlockSvg) {
   }
   // Start the animation.
   wobblingBlock = block;
-  disconnectUiStep(block, magnitude, new Date());
+  disconnectUiStep(block, magnitude, new Date(), 0);
 }
 
 /**
@@ -184,22 +184,18 @@ export function disconnectUiEffect(block: BlockSvg) {
  *
  * @param block Block to animate.
  * @param magnitude Maximum degrees skew (reversed for RTL).
- * @param start Date of animation's start.
+ * @param start Date of animation's start for deciding when to stop.
+ * @param step Which step of the animation we're on.
  */
-function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date) {
+function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date, step: number) {
   const DURATION = 200; // Milliseconds.
-  const WIGGLES = 3; // Half oscillations.
-
-  const ms = new Date().getTime() - start.getTime();
-  const percent = ms / DURATION;
+  const WIGGLES = [.66, 1, .66, 0, -.66, -1, -.66, 0]; // Single cycle
 
   let skew = '';
-  if (percent <= 1) {
-    const val = Math.round(
-      Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude,
-    );
+  if (start.getTime() + DURATION > new Date().getTime()) {
+    const val = Math.round(WIGGLES[step % WIGGLES.length] * magnitude);
     skew = `skewX(${val})`;
-    disconnectPid = setTimeout(disconnectUiStep, 10, block, magnitude, start);
+    disconnectPid = setTimeout(disconnectUiStep, 15, block, magnitude, start, step + 1);
   }
 
   block

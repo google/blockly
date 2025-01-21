@@ -187,15 +187,27 @@ export function disconnectUiEffect(block: BlockSvg) {
  * @param start Date of animation's start for deciding when to stop.
  * @param step Which step of the animation we're on.
  */
-function disconnectUiStep(block: BlockSvg, magnitude: number, start: Date, step: number) {
+function disconnectUiStep(
+  block: BlockSvg,
+  magnitude: number,
+  start: Date,
+  step: number,
+) {
   const DURATION = 200; // Milliseconds.
-  const WIGGLES = [.66, 1, .66, 0, -.66, -1, -.66, 0]; // Single cycle
+  const WIGGLES = [0.66, 1, 0.66, 0, -0.66, -1, -0.66, 0]; // Single cycle
 
   let skew = '';
   if (start.getTime() + DURATION > new Date().getTime()) {
     const val = Math.round(WIGGLES[step % WIGGLES.length] * magnitude);
     skew = `skewX(${val})`;
-    disconnectPid = setTimeout(disconnectUiStep, 15, block, magnitude, start, step + 1);
+    disconnectPid = setTimeout(
+      disconnectUiStep,
+      15,
+      block,
+      magnitude,
+      start,
+      step + 1,
+    );
   }
 
   block

@@ -396,13 +396,12 @@ export class Menu {
   }
 
   /**
-   * Handles pointer leave events. Blur and clear highlight.
+   * Handles pointer leave events by clearing the active highlight.
    *
    * @param _e Pointer event to handle.
    */
   private handlePointerLeave(_e: PointerEvent) {
     if (this.getElement()) {
-      this.blur();
       this.setHighlighted(null);
     }
   }

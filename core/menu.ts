@@ -31,8 +31,8 @@ export class Menu {
   private readonly menuItems: MenuItem[] = [];
 
   /**
-   * Coordinates of the mousedown event that caused this menu to open. Used to
-   * prevent the consequent mouseup event due to a simple click from
+   * Coordinates of the pointerdown event that caused this menu to open. Used to
+   * prevent the consequent pointerup event due to a simple click from
    * activating a menu item immediately.
    */
   openingCoords: Coordinate | null = null;
@@ -43,17 +43,17 @@ export class Menu {
    */
   private highlightedItem: MenuItem | null = null;
 
-  /** Mouse over event data. */
-  private mouseOverHandler: browserEvents.Data | null = null;
+  /** Pointer over event data. */
+  private pointerOverHandler: browserEvents.Data | null = null;
 
   /** Click event data. */
   private clickHandler: browserEvents.Data | null = null;
 
-  /** Mouse enter event data. */
-  private mouseEnterHandler: browserEvents.Data | null = null;
+  /** Pointer enter event data. */
+  private pointerEnterHandler: browserEvents.Data | null = null;
 
-  /** Mouse leave event data. */
-  private mouseLeaveHandler: browserEvents.Data | null = null;
+  /** Pointer leave event data. */
+  private pointerLeaveHandler: browserEvents.Data | null = null;
 
   /** Key down event data. */
   private onKeyDownHandler: browserEvents.Data | null = null;
@@ -99,11 +99,11 @@ export class Menu {
     }
 
     // Add event handlers.
-    this.mouseOverHandler = browserEvents.conditionalBind(
+    this.pointerOverHandler = browserEvents.conditionalBind(
       element,
       'pointerover',
       this,
-      this.handleMouseOver,
+      this.handlePointerOver,
       true,
     );
     this.clickHandler = browserEvents.conditionalBind(
@@ -113,18 +113,18 @@ export class Menu {
       this.handleClick,
       true,
     );
-    this.mouseEnterHandler = browserEvents.conditionalBind(
+    this.pointerEnterHandler = browserEvents.conditionalBind(
       element,
       'pointerenter',
       this,
-      this.handleMouseEnter,
+      this.handlePointerEnter,
       true,
     );
-    this.mouseLeaveHandler = browserEvents.conditionalBind(
+    this.pointerLeaveHandler = browserEvents.conditionalBind(
       element,
       'pointerleave',
       this,
-      this.handleMouseLeave,
+      this.handlePointerLeave,
       true,
     );
     this.onKeyDownHandler = browserEvents.conditionalBind(
@@ -183,21 +183,21 @@ export class Menu {
   /** Dispose of this menu. */
   dispose() {
     // Remove event handlers.
-    if (this.mouseOverHandler) {
-      browserEvents.unbind(this.mouseOverHandler);
-      this.mouseOverHandler = null;
+    if (this.pointerOverHandler) {
+      browserEvents.unbind(this.pointerOverHandler);
+      this.pointerOverHandler = null;
     }
     if (this.clickHandler) {
       browserEvents.unbind(this.clickHandler);
       this.clickHandler = null;
     }
-    if (this.mouseEnterHandler) {
-      browserEvents.unbind(this.mouseEnterHandler);
-      this.mouseEnterHandler = null;
+    if (this.pointerEnterHandler) {
+      browserEvents.unbind(this.pointerEnterHandler);
+      this.pointerEnterHandler = null;
     }
-    if (this.mouseLeaveHandler) {
-      browserEvents.unbind(this.mouseLeaveHandler);
-      this.mouseLeaveHandler = null;
+    if (this.pointerLeaveHandler) {
+      browserEvents.unbind(this.pointerLeaveHandler);
+      this.pointerLeaveHandler = null;
     }
     if (this.onKeyDownHandler) {
       browserEvents.unbind(this.onKeyDownHandler);
@@ -326,14 +326,15 @@ export class Menu {
     }
   }
 
-  // Mouse events.
+  // Pointer events.
 
   /**
-   * Handles mouseover events. Highlight menuitems as the user hovers over them.
+   * Handles pointerover events. Highlight menuitems as the user hovers over
+   * them.
    *
-   * @param e Mouse event to handle.
+   * @param e Pointer event to handle.
    */
-  private handleMouseOver(e: PointerEvent) {
+  private handlePointerOver(e: PointerEvent) {
     const menuItem = this.getMenuItem(e.target as Element);
 
     if (menuItem) {
@@ -359,11 +360,11 @@ export class Menu {
     if (oldCoords && typeof e.clientX === 'number') {
       const newCoords = new Coordinate(e.clientX, e.clientY);
       if (Coordinate.distance(oldCoords, newCoords) < 1) {
-        // This menu was opened by a mousedown and we're handling the consequent
-        // click event. The coords haven't changed, meaning this was the same
-        // opening event. Don't do the usual behavior because the menu just
-        // popped up under the mouse and the user didn't mean to activate this
-        // item.
+        // This menu was opened by a pointerdown and we're handling the
+        // consequent click event. The coords haven't changed, meaning this was
+        // the same opening event. Don't do the usual behavior because the menu
+        // just popped up under the pointer and the user didn't mean to activate
+        // this item.
         return;
       }
     }
@@ -375,20 +376,20 @@ export class Menu {
   }
 
   /**
-   * Handles mouse enter events. Focus the element.
+   * Handles pointer enter events. Focus the element.
    *
-   * @param _e Mouse event to handle.
+   * @param _e Pointer event to handle.
    */
-  private handleMouseEnter(_e: PointerEvent) {
+  private handlePointerEnter(_e: PointerEvent) {
     this.focus();
   }
 
   /**
-   * Handles mouse leave events. Blur and clear highlight.
+   * Handles pointer leave events. Blur and clear highlight.
    *
-   * @param _e Mouse event to handle.
+   * @param _e Pointer event to handle.
    */
-  private handleMouseLeave(_e: PointerEvent) {
+  private handlePointerLeave(_e: PointerEvent) {
     if (this.getElement()) {
       this.blur();
       this.setHighlighted(null);

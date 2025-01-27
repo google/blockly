@@ -44,7 +44,7 @@ export class Menu {
   private highlightedItem: MenuItem | null = null;
 
   /** Pointer over event data. */
-  private pointerOverHandler: browserEvents.Data | null = null;
+  private pointerMoveHandler: browserEvents.Data | null = null;
 
   /** Click event data. */
   private clickHandler: browserEvents.Data | null = null;
@@ -99,11 +99,11 @@ export class Menu {
     }
 
     // Add event handlers.
-    this.pointerOverHandler = browserEvents.conditionalBind(
+    this.pointerMoveHandler = browserEvents.conditionalBind(
       element,
-      'pointerover',
+      'pointermove',
       this,
-      this.handlePointerOver,
+      this.handlePointerMove,
       true,
     );
     this.clickHandler = browserEvents.conditionalBind(
@@ -183,9 +183,9 @@ export class Menu {
   /** Dispose of this menu. */
   dispose() {
     // Remove event handlers.
-    if (this.pointerOverHandler) {
-      browserEvents.unbind(this.pointerOverHandler);
-      this.pointerOverHandler = null;
+    if (this.pointerMoveHandler) {
+      browserEvents.unbind(this.pointerMoveHandler);
+      this.pointerMoveHandler = null;
     }
     if (this.clickHandler) {
       browserEvents.unbind(this.clickHandler);
@@ -329,12 +329,23 @@ export class Menu {
   // Pointer events.
 
   /**
-   * Handles pointerover events. Highlight menuitems as the user hovers over
+   * Handles pointermove events. Highlight menu items as the user hovers over
    * them.
    *
    * @param e Pointer event to handle.
    */
-  private handlePointerOver(e: PointerEvent) {
+  private handlePointerMove(e: PointerEvent) {
+    // Check whether the pointer actually did move. Move events are triggered if
+    // the element underneath the pointer moves, even if the pointer itself has
+    // remained stationary. In the case where the pointer is hovering over
+    // the menu but the user is navigating through the list of items via the
+    // keyboard and causing items off the end of the menu to scroll into view,
+    // a pointermove event would be triggered due to the pointer now being over
+    // a new child, but we don't want to highlight the item that's now under the
+    // pointer.
+    const delta = Math.max(Math.abs(e.movementX), Math.abs(e.movementY));
+    if (delta === 0) return;
+
     const menuItem = this.getMenuItem(e.target as Element);
 
     if (menuItem) {

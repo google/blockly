@@ -114,7 +114,7 @@ export class Workspace implements IASTNodeLocation {
   private readonly typedBlocksDB = new Map<string, Block[]>();
   private variableMap: IVariableMap<IVariableModel<IVariableState>>;
   private procedureMap: IProcedureMap = new ObservableProcedureMap();
-  private readOnly: boolean;
+  private readOnly = false;
 
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main
@@ -155,7 +155,7 @@ export class Workspace implements IASTNodeLocation {
     const VariableMap = this.getVariableMapClass();
     this.variableMap = new VariableMap(this);
 
-    this.readOnly = this.options.readOnly;
+    this.setIsReadOnly(this.options.readOnly);
   }
 
   /**

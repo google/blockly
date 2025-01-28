@@ -2532,6 +2532,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       dom.removeClass(this.injectionDiv, className);
     }
   }
+
+  override setIsReadOnly(readOnly: boolean) {
+    super.setIsReadOnly(readOnly);
+    readOnly
+      ? this.addClass('blocklyReadOnly')
+      : this.removeClass('blocklyReadOnly');
+  }
 }
 
 /**

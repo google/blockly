@@ -78,7 +78,7 @@ export class BlockDragStrategy implements IDragStrategy {
     return (
       this.block.isOwnMovable() &&
       !this.block.isDeadOrDying() &&
-      !this.workspace.options.readOnly &&
+      !this.workspace.isReadOnly() &&
       // We never drag blocks in the flyout, only create new blocks that are
       // dragged.
       !this.block.isInFlyout

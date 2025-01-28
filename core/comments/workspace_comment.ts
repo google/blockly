@@ -144,7 +144,7 @@ export class WorkspaceComment {
    * workspace is read-only.
    */
   isEditable(): boolean {
-    return this.isOwnEditable() && !this.workspace.options.readOnly;
+    return this.isOwnEditable() && !this.workspace.isReadOnly();
   }
 
   /**
@@ -165,7 +165,7 @@ export class WorkspaceComment {
    * workspace is read-only.
    */
   isMovable() {
-    return this.isOwnMovable() && !this.workspace.options.readOnly;
+    return this.isOwnMovable() && !this.workspace.isReadOnly();
   }
 
   /**
@@ -189,7 +189,7 @@ export class WorkspaceComment {
     return (
       this.isOwnDeletable() &&
       !this.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      !this.workspace.isReadOnly()
     );
   }
 

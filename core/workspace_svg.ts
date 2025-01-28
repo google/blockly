@@ -1703,7 +1703,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   showContextMenu(e: PointerEvent) {
-    if (this.options.readOnly || this.isFlyout) {
+    if (this.isReadOnly() || this.isFlyout) {
       return;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(

@@ -231,7 +231,7 @@ export class BlockSvg
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable() || this.isInFlyout);
     const svg = this.getSvgRoot();
-    if (!this.workspace.options.readOnly && svg) {
+    if (svg) {
       browserEvents.conditionalBind(svg, 'pointerdown', this, this.onMouseDown);
     }
 
@@ -585,6 +585,8 @@ export class BlockSvg
    * @param e Pointer down event.
    */
   private onMouseDown(e: PointerEvent) {
+    if (this.workspace.isReadOnly()) return;
+
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
@@ -612,7 +614,7 @@ export class BlockSvg
   protected generateContextMenu(): Array<
     ContextMenuOption | LegacyContextMenuOption
   > | null {
-    if (this.workspace.options.readOnly || !this.contextMenu) {
+    if (this.workspace.isReadOnly() || !this.contextMenu) {
       return null;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(

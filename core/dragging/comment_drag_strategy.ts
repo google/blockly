@@ -29,7 +29,7 @@ export class CommentDragStrategy implements IDragStrategy {
     return (
       this.comment.isOwnMovable() &&
       !this.comment.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      !this.workspace.isReadOnly()
     );
   }
 

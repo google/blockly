@@ -12,7 +12,6 @@ import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Grid} from './grid.js';
 import {Msg} from './msg.js';
 import {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
@@ -141,7 +140,12 @@ function createDom(container: Element, options: Options): SVGElement {
   // https://neil.fraser.name/news/2015/11/01/
   const rnd = String(Math.random()).substring(2);
 
-  options.gridPattern = Grid.createDom(rnd, options.gridOptions, defs);
+  options.gridPattern = options.gridProvider.createDom(
+    rnd,
+    options.gridOptions,
+    defs,
+  );
+
   return svg;
 }
 

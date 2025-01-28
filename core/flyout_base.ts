@@ -786,7 +786,7 @@ export abstract class Flyout
    * @internal
    */
   isBlockCreatable(block: BlockSvg): boolean {
-    return block.isEnabled();
+    return block.isEnabled() && !this.getTargetWorkspace().isReadOnly();
   }
 
   /**

@@ -894,7 +894,7 @@ export class Gesture {
           'Cannot do a block click because the target block is ' + 'undefined',
         );
       }
-      if (this.targetBlock.isEnabled()) {
+      if (this.flyout.isBlockCreatable(this.targetBlock)) {
         if (!eventUtils.getGroup()) {
           eventUtils.setGroup(true);
         }

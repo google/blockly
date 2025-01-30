@@ -155,9 +155,9 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
   }
 
   /**
-   * Updates this inflater's flyout workspace.
+   * Updates this inflater's flyout.
    *
-   * @param workspace The workspace of the flyout that owns this inflater.
+   * @param flyout The flyout that owns this inflater.
    */
   protected setFlyout(flyout: IFlyout) {
     if (this.flyout === flyout) return;

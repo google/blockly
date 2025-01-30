@@ -2535,7 +2535,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   override setIsReadOnly(readOnly: boolean) {
     super.setIsReadOnly(readOnly);
-    if (readonly) {
+    if (readOnly) {
       this.addClass('blocklyReadOnly');
     } else {
       this.removeClass('blocklyReadOnly');

@@ -40,7 +40,7 @@ export function registerEscape() {
   const escapeAction: KeyboardShortcut = {
     name: names.ESCAPE,
     preconditionFn(workspace) {
-      return !workspace.options.readOnly;
+      return !workspace.isReadOnly();
     },
     callback(workspace) {
       // AnyDuringMigration because:  Property 'hideChaff' does not exist on
@@ -62,7 +62,7 @@ export function registerDelete() {
     preconditionFn(workspace) {
       const selected = common.getSelected();
       return (
-        !workspace.options.readOnly &&
+        !workspace.isReadOnly() &&
         selected != null &&
         isDeletable(selected) &&
         selected.isDeletable() &&
@@ -113,7 +113,7 @@ export function registerCopy() {
     preconditionFn(workspace) {
       const selected = common.getSelected();
       return (
-        !workspace.options.readOnly &&
+        !workspace.isReadOnly() &&
         !Gesture.inProgress() &&
         selected != null &&
         isDeletable(selected) &&
@@ -164,7 +164,7 @@ export function registerCut() {
     preconditionFn(workspace) {
       const selected = common.getSelected();
       return (
-        !workspace.options.readOnly &&
+        !workspace.isReadOnly() &&
         !Gesture.inProgress() &&
         selected != null &&
         isDeletable(selected) &&
@@ -221,7 +221,7 @@ export function registerPaste() {
   const pasteShortcut: KeyboardShortcut = {
     name: names.PASTE,
     preconditionFn(workspace) {
-      return !workspace.options.readOnly && !Gesture.inProgress();
+      return !workspace.isReadOnly() && !Gesture.inProgress();
     },
     callback() {
       if (!copyData || !copyWorkspace) return false;
@@ -269,7 +269,7 @@ export function registerUndo() {
   const undoShortcut: KeyboardShortcut = {
     name: names.UNDO,
     preconditionFn(workspace) {
-      return !workspace.options.readOnly && !Gesture.inProgress();
+      return !workspace.isReadOnly() && !Gesture.inProgress();
     },
     callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
@@ -308,7 +308,7 @@ export function registerRedo() {
   const redoShortcut: KeyboardShortcut = {
     name: names.REDO,
     preconditionFn(workspace) {
-      return !Gesture.inProgress() && !workspace.options.readOnly;
+      return !Gesture.inProgress() && !workspace.isReadOnly();
     },
     callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.

@@ -795,7 +795,7 @@ export class Block implements IASTNodeLocation {
       this.deletable &&
       !this.shadow &&
       !this.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      !this.workspace.isReadOnly()
     );
   }
 
@@ -828,7 +828,7 @@ export class Block implements IASTNodeLocation {
       this.movable &&
       !this.shadow &&
       !this.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      !this.workspace.isReadOnly()
     );
   }
 
@@ -917,7 +917,7 @@ export class Block implements IASTNodeLocation {
    */
   isEditable(): boolean {
     return (
-      this.editable && !this.isDeadOrDying() && !this.workspace.options.readOnly
+      this.editable && !this.isDeadOrDying() && !this.workspace.isReadOnly()
     );
   }
 

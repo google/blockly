@@ -1703,7 +1703,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   showContextMenu(e: PointerEvent) {
-    if (this.options.readOnly || this.isFlyout) {
+    if (this.isReadOnly() || this.isFlyout) {
       return;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
@@ -2530,6 +2530,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   removeClass(className: string) {
     if (this.injectionDiv) {
       dom.removeClass(this.injectionDiv, className);
+    }
+  }
+
+  override setIsReadOnly(readOnly: boolean) {
+    super.setIsReadOnly(readOnly);
+    if (readOnly) {
+      this.addClass('blocklyReadOnly');
+    } else {
+      this.removeClass('blocklyReadOnly');
     }
   }
 }

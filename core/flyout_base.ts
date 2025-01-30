@@ -678,7 +678,7 @@ export abstract class Flyout
       const type = info['kind'].toLowerCase();
       const inflater = this.getInflaterForType(type);
       if (inflater) {
-        contents.push(inflater.load(info, this.getWorkspace()));
+        contents.push(inflater.load(info, this));
         const gap = inflater.gapForItem(info, defaultGap);
         if (gap) {
           contents.push(

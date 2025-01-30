@@ -35,7 +35,6 @@ const BLOCK_TYPE = 'block';
 export class BlockFlyoutInflater implements IFlyoutInflater {
   protected permanentlyDisabledBlocks = new Set<BlockSvg>();
   protected listeners = new Map<string, browserEvents.Data[]>();
-  protected flyoutWorkspace?: WorkspaceSvg;
   protected flyout?: IFlyout;
   private capacityWrapper: (event: AbstractEvent) => void;
 
@@ -50,13 +49,12 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    * Inflates a flyout block from the given state and adds it to the flyout.
    *
    * @param state A JSON representation of a flyout block.
-   * @param flyoutWorkspace The workspace to create the block on.
+   * @param flyout The flyout to create the block on.
    * @returns A newly created block.
    */
-  load(state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem {
-    this.setFlyoutWorkspace(flyoutWorkspace);
-    this.flyout = flyoutWorkspace.targetWorkspace?.getFlyout() ?? undefined;
-    const block = this.createBlock(state as BlockInfo, flyoutWorkspace);
+  load(state: object, flyout: IFlyout): FlyoutItem {
+    this.setFlyout(flyout);
+    const block = this.createBlock(state as BlockInfo, flyout.getWorkspace());
 
     if (!block.isEnabled()) {
       // Record blocks that were initially disabled.
@@ -161,18 +159,14 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    *
    * @param workspace The workspace of the flyout that owns this inflater.
    */
-  protected setFlyoutWorkspace(workspace: WorkspaceSvg) {
-    if (this.flyoutWorkspace === workspace) return;
+  protected setFlyout(flyout: IFlyout) {
+    if (this.flyout === flyout) return;
 
-    if (this.flyoutWorkspace) {
-      this.flyoutWorkspace.targetWorkspace?.removeChangeListener(
-        this.capacityWrapper,
-      );
+    if (this.flyout) {
+      this.flyout.targetWorkspace?.removeChangeListener(this.capacityWrapper);
     }
-    this.flyoutWorkspace = workspace;
-    this.flyoutWorkspace.targetWorkspace?.addChangeListener(
-      this.capacityWrapper,
-    );
+    this.flyout = flyout;
+    this.flyout.targetWorkspace?.addChangeListener(this.capacityWrapper);
   }
 
   /**
@@ -182,7 +176,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    * @param block The block to update the enabled/disabled state of.
    */
   private updateStateBasedOnCapacity(block: BlockSvg) {
-    const enable = this.flyoutWorkspace?.targetWorkspace?.isCapacityAvailable(
+    const enable = this.flyout?.targetWorkspace?.isCapacityAvailable(
       common.getBlockTypeCounts(block),
     );
     let currentBlock: BlockSvg | null = block;
@@ -209,11 +203,10 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
         'pointerdown',
         block,
         (e: PointerEvent) => {
-          const gesture = this.flyoutWorkspace?.targetWorkspace?.getGesture(e);
-          const flyout = this.flyoutWorkspace?.targetWorkspace?.getFlyout();
-          if (gesture && flyout) {
+          const gesture = this.flyout?.targetWorkspace?.getGesture(e);
+          if (gesture && this.flyout) {
             gesture.setStartBlock(block);
-            gesture.handleFlyoutStart(e, flyout);
+            gesture.handleFlyoutStart(e, this.flyout);
           }
         },
       ),
@@ -221,14 +214,14 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
 
     blockListeners.push(
       browserEvents.bind(block.getSvgRoot(), 'pointerenter', null, () => {
-        if (!this.flyoutWorkspace?.targetWorkspace?.isDragging()) {
+        if (!this.flyout?.targetWorkspace?.isDragging()) {
           block.addSelect();
         }
       }),
     );
     blockListeners.push(
       browserEvents.bind(block.getSvgRoot(), 'pointerleave', null, () => {
-        if (!this.flyoutWorkspace?.targetWorkspace?.isDragging()) {
+        if (!this.flyout?.targetWorkspace?.isDragging()) {
           block.removeSelect();
         }
       }),
@@ -245,7 +238,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
    */
   private filterFlyoutBasedOnCapacity(event: AbstractEvent) {
     if (
-      !this.flyoutWorkspace ||
+      !this.flyout ||
       (event &&
         !(
           event.type === EventType.BLOCK_CREATE ||
@@ -254,11 +247,14 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     )
       return;
 
-    this.flyoutWorkspace.getTopBlocks(false).forEach((block) => {
-      if (!this.permanentlyDisabledBlocks.has(block)) {
-        this.updateStateBasedOnCapacity(block);
-      }
-    });
+    this.flyout
+      .getWorkspace()
+      .getTopBlocks(false)
+      .forEach((block) => {
+        if (!this.permanentlyDisabledBlocks.has(block)) {
+          this.updateStateBasedOnCapacity(block);
+        }
+      });
   }
 
   /**

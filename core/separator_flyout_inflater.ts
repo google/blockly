@@ -6,10 +6,10 @@
 
 import {FlyoutItem} from './flyout_item.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
 import type {SeparatorInfo} from './utils/toolbox.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * @internal
@@ -35,12 +35,11 @@ export class SeparatorFlyoutInflater implements IFlyoutInflater {
    * returned by gapForElement, which knows the default gap, unlike this method.
    *
    * @param _state A JSON representation of a flyout separator.
-   * @param flyoutWorkspace The workspace the separator belongs to.
+   * @param flyout The flyout to create the separator for.
    * @returns A newly created FlyoutSeparator.
    */
-  load(_state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem {
-    const flyoutAxis = flyoutWorkspace.targetWorkspace?.getFlyout()
-      ?.horizontalLayout
+  load(_state: object, flyout: IFlyout): FlyoutItem {
+    const flyoutAxis = flyout.horizontalLayout
       ? SeparatorAxis.X
       : SeparatorAxis.Y;
     const separator = new FlyoutSeparator(0, flyoutAxis);

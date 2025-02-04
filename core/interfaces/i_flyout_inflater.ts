@@ -1,5 +1,5 @@
 import type {FlyoutItem} from '../flyout_item.js';
-import type {WorkspaceSvg} from '../workspace_svg.js';
+import type {IFlyout} from './i_flyout.js';
 
 export interface IFlyoutInflater {
   /**
@@ -9,14 +9,14 @@ export interface IFlyoutInflater {
    * allow for code reuse.
    *
    * @param state A JSON representation of an element to inflate on the flyout.
-   * @param flyoutWorkspace The flyout's workspace, where the inflated element
+   * @param flyout The flyout on whose workspace the inflated element
    *    should be created. If the inflated element is an `IRenderedElement` it
    *    itself or the inflater should append it to the workspace; the flyout
    *    will not do so itself. The flyout is responsible for positioning the
    *    element, however.
    * @returns The newly inflated flyout element.
    */
-  load(state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem;
+  load(state: object, flyout: IFlyout): FlyoutItem;
 
   /**
    * Returns the amount of spacing that should follow the element corresponding

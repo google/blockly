@@ -6,10 +6,10 @@
 
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutItem} from './flyout_item.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import * as registry from './registry.js';
 import {ButtonOrLabelInfo} from './utils/toolbox.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
 
 const BUTTON_TYPE = 'button';
 
@@ -21,13 +21,13 @@ export class ButtonFlyoutInflater implements IFlyoutInflater {
    * Inflates a flyout button from the given state and adds it to the flyout.
    *
    * @param state A JSON representation of a flyout button.
-   * @param flyoutWorkspace The workspace to create the button on.
+   * @param flyout The flyout to create the button on.
    * @returns A newly created FlyoutButton.
    */
-  load(state: object, flyoutWorkspace: WorkspaceSvg): FlyoutItem {
+  load(state: object, flyout: IFlyout): FlyoutItem {
     const button = new FlyoutButton(
-      flyoutWorkspace,
-      flyoutWorkspace.targetWorkspace!,
+      flyout.getWorkspace(),
+      flyout.targetWorkspace!,
       state as ButtonOrLabelInfo,
       false,
     );

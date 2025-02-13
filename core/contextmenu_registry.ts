@@ -87,21 +87,37 @@ export class ContextMenuRegistry {
     const menuOptions: ContextMenuOption[] = [];
     for (const item of this.registeredItems.values()) {
       if (scopeType === item.scopeType) {
-        const precondition = item.preconditionFn(scope);
-        if (precondition !== 'hidden') {
+        let menuOption:
+          | ContextMenuRegistry.CoreContextMenuOption
+          | ContextMenuRegistry.SeparatorContextMenuOption
+          | ContextMenuRegistry.ActionableContextMenuOption;
+        menuOption = {
+          scope,
+          weight: item.weight,
+        };
+
+        if (item.separator) {
+          menuOption = {
+            ...menuOption,
+            separator: true,
+          };
+        } else {
+          const precondition = item.preconditionFn(scope);
+          if (precondition === 'hidden') continue;
+
           const displayText =
             typeof item.displayText === 'function'
               ? item.displayText(scope)
               : item.displayText;
-          const menuOption: ContextMenuOption = {
+          menuOption = {
+            ...menuOption,
             text: displayText,
-            enabled: precondition === 'enabled',
             callback: item.callback,
-            scope,
-            weight: item.weight,
+            enabled: precondition === 'enabled',
           };
-          menuOptions.push(menuOption);
         }
+
+        menuOptions.push(menuOption);
       }
     }
     menuOptions.sort(function (a, b) {
@@ -134,9 +150,18 @@ export namespace ContextMenuRegistry {
   }
 
   /**
-   * A menu item as entered in the registry.
+   * Fields common to all context menu registry items.
    */
-  export interface RegistryItem {
+  interface CoreRegistryItem {
+    scopeType: ScopeType;
+    weight: number;
+    id: string;
+  }
+
+  /**
+   * A representation of a normal, clickable menu item in the registry.
+   */
+  interface ActionableRegistryItem extends CoreRegistryItem {
     /**
      * @param scope Object that provides a reference to the thing that had its
      *     context menu opened.
@@ -144,17 +169,38 @@ export namespace ContextMenuRegistry {
      *     the event that triggered the click on the option.
      */
     callback: (scope: Scope, e: PointerEvent) => void;
-    scopeType: ScopeType;
     displayText: ((p1: Scope) => string | HTMLElement) | string | HTMLElement;
     preconditionFn: (p1: Scope) => string;
-    weight: number;
-    id: string;
+    separator?: never;
   }
 
   /**
-   * A menu item as presented to contextmenu.js.
+   * A representation of a menu separator item in the registry.
    */
-  export interface ContextMenuOption {
+  interface SeparatorRegistryItem extends CoreRegistryItem {
+    separator: true;
+    callback?: never;
+    displayText?: never;
+    preconditionFn?: never;
+  }
+
+  /**
+   * A menu item as entered in the registry.
+   */
+  export type RegistryItem = ActionableRegistryItem | SeparatorRegistryItem;
+
+  /**
+   * Fields common to all context menu items as used by contextmenu.ts.
+   */
+  export interface CoreContextMenuOption {
+    scope: Scope;
+    weight: number;
+  }
+
+  /**
+   * A representation of a normal, clickable menu item in contextmenu.ts.
+   */
+  export interface ActionableContextMenuOption extends CoreContextMenuOption {
     text: string | HTMLElement;
     enabled: boolean;
     /**
@@ -164,9 +210,25 @@ export namespace ContextMenuRegistry {
      *     the event that triggered the click on the option.
      */
     callback: (scope: Scope, e: PointerEvent) => void;
-    scope: Scope;
-    weight: number;
+    separator?: never;
   }
+
+  /**
+   * A representation of a menu separator item in contextmenu.ts.
+   */
+  export interface SeparatorContextMenuOption extends CoreContextMenuOption {
+    separator: true;
+    text?: never;
+    enabled?: never;
+    callback?: never;
+  }
+
+  /**
+   * A menu item as presented to contextmenu.ts.
+   */
+  export type ContextMenuOption =
+    | ActionableContextMenuOption
+    | SeparatorContextMenuOption;
 
   /**
    * A subset of ContextMenuOption corresponding to what was publicly
@@ -176,6 +238,7 @@ export namespace ContextMenuRegistry {
     text: string;
     enabled: boolean;
     callback: (p1: Scope) => void;
+    separator?: never;
   }
 
   /**

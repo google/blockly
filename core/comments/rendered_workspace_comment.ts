@@ -208,8 +208,15 @@ export class RenderedWorkspaceComment
   private startGesture(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
-      gesture.handleCommentStart(e, this);
-      this.workspace.getLayerManager()?.append(this, layers.BLOCK);
+      const textArea = this.view.getTextArea();
+      if (e.target === textArea) {
+        // If the text area was the focus, don't allow this event to bubble up
+        // and steal focus away from the editor/comment.
+        e.stopPropagation();
+      } else {
+        gesture.handleCommentStart(e, this);
+        this.workspace.getLayerManager()?.append(this, layers.BLOCK);
+      }
       common.setSelected(this);
     }
   }

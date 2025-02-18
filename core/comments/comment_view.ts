@@ -782,6 +782,10 @@ export class CommentView implements IRenderedElement {
   removeDisposeListener(listener: () => void) {
     this.disposeListeners.splice(this.disposeListeners.indexOf(listener), 1);
   }
+
+  getTextArea() {
+    return this.textArea;
+  }
 }
 
 css.register(`

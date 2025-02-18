@@ -783,6 +783,12 @@ export class CommentView implements IRenderedElement {
     this.disposeListeners.splice(this.disposeListeners.indexOf(listener), 1);
   }
 
+  /**
+   * Returns the textarea used to display and edit comment text.
+   *
+   * @internal
+   * @returns The textarea associated with this comment.
+   */
   getTextArea() {
     return this.textArea;
   }

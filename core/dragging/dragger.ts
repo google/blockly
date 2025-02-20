@@ -31,6 +31,9 @@ export class Dragger implements IDragger {
 
   /** Handles any drag startup. */
   onDragStart(e: PointerEvent) {
+    if (!eventUtils.getGroup()) {
+      eventUtils.setGroup(true);
+    }
     this.draggable.startDrag(e);
   }
 
@@ -119,13 +122,13 @@ export class Dragger implements IDragger {
     this.draggable.endDrag(e);
 
     if (wouldDelete && isDeletable(root)) {
-      // We want to make sure the delete gets grouped with any possible
-      // move event.
-      const newGroup = eventUtils.getGroup();
+      // We want to make sure the delete gets grouped with any possible move
+      // event. In core Blockly this shouldn't happen, but due to a change
+      // in behavior older custom draggables might still clear the group.
       eventUtils.setGroup(origGroup);
       root.dispose();
-      eventUtils.setGroup(newGroup);
     }
+    eventUtils.setGroup(false);
   }
 
   // We need to special case blocks for now so that we look at the root block

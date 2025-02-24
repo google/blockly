@@ -95,10 +95,10 @@ export class CommentView implements IRenderedElement {
   private resizePointerMoveListener: browserEvents.Data | null = null;
 
   /** Whether this comment view is currently being disposed or not. */
-  private disposing = false;
+  protected disposing = false;
 
   /** Whether this comment view has been disposed or not. */
-  private disposed = false;
+  protected disposed = false;
 
   /** Size of this comment when the resize drag was initiated. */
   private preResizeSize?: Size;
@@ -106,7 +106,7 @@ export class CommentView implements IRenderedElement {
   /** The default size of newly created comments. */
   static defaultCommentSize = new Size(120, 100);
 
-  constructor(private readonly workspace: WorkspaceSvg) {
+  constructor(readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable blocklyDraggable',
     });

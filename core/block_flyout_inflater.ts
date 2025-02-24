@@ -101,6 +101,14 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
       ) {
         blockDefinition['disabledReasons'] = [MANUALLY_DISABLED];
       }
+      // These fields used to be allowed and may still be present, but should
+      // now be ignored.
+      if ('x' in blockDefinition) {
+        delete blockDefinition['x'];
+      }
+      if ('y' in blockDefinition) {
+        delete blockDefinition['y'];
+      }
       block = blocks.appendInternal(blockDefinition as blocks.State, workspace);
     }
 

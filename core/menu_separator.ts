@@ -32,6 +32,7 @@ export class MenuSeparator {
    * Disposes of this separator.
    */
   dispose() {
+    this.element?.remove();
     this.element = null;
   }
 }

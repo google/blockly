@@ -797,7 +797,7 @@ export interface ImageProperties {
 
 /**
  * An individual option in the dropdown menu. Can be either the string literal
- * `separator` for a menu separator item, or an array for normal actionable menu
+ * `separator` for a menu separator item, or an array for normal action menu
  * items. In the latter case, the first element is the human-readable value
  * (text or image), and the second element is the language-neutral value.
  */

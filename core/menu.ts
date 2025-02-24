@@ -462,7 +462,7 @@ export class Menu {
   }
 
   /**
-   * Returns the actionable menu items (omitting separators) in this menu.
+   * Returns the action menu items (omitting separators) in this menu.
    *
    * @returns The MenuItem objects displayed in this menu.
    */

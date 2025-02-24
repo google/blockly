@@ -90,7 +90,7 @@ export class ContextMenuRegistry {
         let menuOption:
           | ContextMenuRegistry.CoreContextMenuOption
           | ContextMenuRegistry.SeparatorContextMenuOption
-          | ContextMenuRegistry.ActionableContextMenuOption;
+          | ContextMenuRegistry.ActionContextMenuOption;
         menuOption = {
           scope,
           weight: item.weight,
@@ -161,7 +161,7 @@ export namespace ContextMenuRegistry {
   /**
    * A representation of a normal, clickable menu item in the registry.
    */
-  interface ActionableRegistryItem extends CoreRegistryItem {
+  interface ActionRegistryItem extends CoreRegistryItem {
     /**
      * @param scope Object that provides a reference to the thing that had its
      *     context menu opened.
@@ -187,7 +187,7 @@ export namespace ContextMenuRegistry {
   /**
    * A menu item as entered in the registry.
    */
-  export type RegistryItem = ActionableRegistryItem | SeparatorRegistryItem;
+  export type RegistryItem = ActionRegistryItem | SeparatorRegistryItem;
 
   /**
    * Fields common to all context menu items as used by contextmenu.ts.
@@ -200,7 +200,7 @@ export namespace ContextMenuRegistry {
   /**
    * A representation of a normal, clickable menu item in contextmenu.ts.
    */
-  export interface ActionableContextMenuOption extends CoreContextMenuOption {
+  export interface ActionContextMenuOption extends CoreContextMenuOption {
     text: string | HTMLElement;
     enabled: boolean;
     /**
@@ -227,7 +227,7 @@ export namespace ContextMenuRegistry {
    * A menu item as presented to contextmenu.ts.
    */
   export type ContextMenuOption =
-    | ActionableContextMenuOption
+    | ActionContextMenuOption
     | SeparatorContextMenuOption;
 
   /**

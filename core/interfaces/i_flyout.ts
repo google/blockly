@@ -73,11 +73,25 @@ export interface IFlyout extends IRegistrable {
   getWidth(): number;
 
   /**
+   * Set the width of the flyout.
+   *
+   * @param width
+   */
+  setWidth(width: number): void;
+
+  /**
    * Get the height of the flyout.
    *
    * @returns The height of the flyout.
    */
   getHeight(): number;
+
+  /**
+   * Set the height of the flyout.
+   *
+   * @param height
+   */
+  setHeight(height: number): void;
 
   /**
    * Get the workspace inside the flyout.
@@ -108,6 +122,13 @@ export interface IFlyout extends IRegistrable {
    * @param visible Whether the container is visible.
    */
   setContainerVisible(visible: boolean): void;
+
+  /**
+   * Set disable mouse events above flyout. It's needed for prevent bugs when user dragging resizer or move some block above flyout
+   *
+   * @param disable
+   */
+  setDisableBlocksMouseEvents(disable: boolean): void;
 
   /** Hide and empty the flyout. */
   hide(): void;

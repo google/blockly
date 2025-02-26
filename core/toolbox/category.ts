@@ -638,6 +638,8 @@ export class ToolboxCategory
     if (typeof contents === 'string') {
       const newDefinition: DynamicCategoryInfo = {
         kind: this.toolboxItemDef_.kind,
+        name:
+          'name' in this.toolboxItemDef_ ? this.toolboxItemDef_['name'] : '',
         custom: contents,
         id: this.toolboxItemDef_.id,
         categorystyle: this.toolboxItemDef_.categorystyle,

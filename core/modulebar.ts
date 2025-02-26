@@ -59,7 +59,7 @@ export class ModuleBar {
     | KeyCodes.NINE
   )[];
 
-  constructor(private workspace: WorkspaceSvg) {
+  constructor(private readonly workspace: WorkspaceSvg) {
     this.workspace = workspace;
 
     this.dragDropModuleEl_ = null;
@@ -569,7 +569,7 @@ export class ModuleBar {
     if (e.type === eventUtils.FINISHED_LOADING) {
       this.isFinishedLoading_ = true;
 
-      // this.htmlContainer_?.classList.remove('cursorNotAllowed'); // TODO: uncomment it before release
+      this.htmlContainer_?.classList.remove('cursorNotAllowed');
     }
   }
 

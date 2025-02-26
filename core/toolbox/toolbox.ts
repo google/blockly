@@ -45,6 +45,9 @@ import type {ToolboxCategory} from './category.js';
 import {CollapsibleToolboxCategory} from './collapsible_category.js';
 import {FLYOUT_HIDE, FLYOUT_SHOW} from '../events/events.js';
 import {isDeletable} from '../interfaces/i_deletable.js';
+import {ToolboxResizer} from "./toolbox_resizer.js";
+import {FlyoutResizer} from "../flyout_resizer.js";
+import {ToolboxSearch} from "./toolbox_search.js";
 
 /**
  * Class for a Toolbox.
@@ -83,6 +86,15 @@ export class Toolbox
 
   /** The flyout for the toolbox. */
   private flyout_: IFlyout | null = null;
+
+  /** The resizer for the toolbox. */
+  private toolboxResizer_: ToolboxResizer | null = null;
+
+  /** The resizer for the flyout. */
+  private flyoutResizer_: FlyoutResizer | null = null;
+
+  /** The search for the toolbox. */
+  private toolboxSearch_: ToolboxSearch | null = null;
 
   /** Listener fire event's on flyout. */
   private listenerWrapper_: any = null;
@@ -153,6 +165,16 @@ export class Toolbox
     this.flyout_.init(workspace);
 
     this.render(this.toolboxDef_);
+
+    this.toolboxSearch_ = new ToolboxSearch(this.workspace_, this, this.toolboxDef_);
+    this.toolboxSearch_.init();
+
+    this.toolboxResizer_ = new ToolboxResizer(this.workspace_, this, this.flyout_);
+    this.toolboxResizer_.init();
+
+    this.flyoutResizer_ = new FlyoutResizer(this.workspace_, this.flyout_);
+    this.flyoutResizer_.init();
+
     const themeManager = workspace.getThemeManager();
     themeManager.subscribe(
       this.HtmlDiv,
@@ -1098,8 +1120,29 @@ export class Toolbox
     return false;
   }
 
+  /**
+   * Gets the toolbox search.
+   *
+   * @returns The toolbox search.
+   */
+  getSearch() {
+    return this.toolboxSearch_;
+  }
+
   /** Disposes of this toolbox. */
   dispose() {
+    if (this.toolboxSearch_) {
+      this.toolboxSearch_.dispose();
+    }
+
+    if (this.toolboxResizer_) {
+      this.toolboxResizer_.dispose();
+    }
+
+    if (this.flyoutResizer_) {
+      this.flyoutResizer_.dispose();
+    }
+
     this.workspace_.getComponentManager().removeComponent('toolbox');
     this.flyout_!.dispose();
     for (let i = 0; i < this.contents_.length; i++) {

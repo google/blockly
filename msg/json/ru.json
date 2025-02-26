@@ -54,6 +54,8 @@
 	"HELP": "Справка",
 	"UNDO": "Отменить",
 	"REDO": "Повторить",
+  "TOOLBOX_SEARCH_PLACEHOLDER": "Поиск",
+  "TOOLBOX_SEARCH_NOTHING_FOUND": "Ничего не найдено",
 	"DEFAULT_MODULE_NAME": "Главный",
 	"RENAME_MODULE": "Переименовать",
 	"RENAME_MODULE_TITLE": "Имя:",

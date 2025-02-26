@@ -90,6 +90,7 @@ export interface StaticCategoryInfo {
  */
 export interface DynamicCategoryInfo {
   kind: string;
+  name: string;
   custom: string;
   id: string | undefined;
   categorystyle: string | undefined;

@@ -235,6 +235,10 @@ function init(mainWorkspace: WorkspaceSvg) {
 
   bindDocumentEvents();
 
+  if (mainWorkspace.getModuleBar()) {
+    mainWorkspace.getModuleBar()!.init();
+  }
+
   if (options.languageTree) {
     const toolbox = mainWorkspace.getToolbox();
     const flyout = mainWorkspace.getFlyout(true);
@@ -248,11 +252,6 @@ function init(mainWorkspace: WorkspaceSvg) {
         flyout.scrollToStart();
       }
     }
-  }
-
-  // init module box
-  if (mainWorkspace.getModuleBar()) {
-    mainWorkspace.getModuleBar()!.init();
   }
 
   if (options.hasTrashcan) {

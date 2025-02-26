@@ -42,6 +42,8 @@
 	"HELP": "說明",
 	"UNDO": "還原",
 	"REDO": "重做",
+  "TOOLBOX_SEARCH_PLACEHOLDER": "搜尋",
+  "TOOLBOX_SEARCH_NOTHING_FOUND": "未找到!",
 	"CHANGE_VALUE_TITLE": "修改值：",
 	"RENAME_VARIABLE": "重新命名變數...",
 	"RENAME_VARIABLE_TITLE": "將所有「%1」變數重新命名為：",

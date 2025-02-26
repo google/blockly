@@ -547,12 +547,36 @@ export abstract class Flyout
   }
 
   /**
+   * Set the width of the flyout.
+   *
+   * @param width
+   */
+  setWidth(width: number) {
+    this.width_ = width;
+    if (this.svgGroup_) {
+      this.svgGroup_.style.width = `${width}px`;
+    }
+  }
+
+  /**
    * Get the height of the flyout.
    *
    * @returns The width of the flyout.
    */
   getHeight(): number {
     return this.height_;
+  }
+
+  /**
+   * Set the height of the flyout.
+   *
+   * @param height
+   */
+  setHeight(height: number) {
+    this.height_ = height;
+    if (this.svgGroup_) {
+      this.svgGroup_.style.height = `${height}px`;
+    }
   }
 
   /**
@@ -1098,6 +1122,10 @@ export abstract class Flyout
         );
       }
     }
+  }
+
+  setDisableBlocksMouseEvents(disable: boolean) {
+    this.disableBlocksMouseEvents = disable;
   }
 
   /**

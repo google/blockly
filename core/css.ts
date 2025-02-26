@@ -355,8 +355,7 @@ input[type=number] {
 }
 
 .blocklyFlyoutBackground {
-  fill: #ddd;
-  fill-opacity: .8;
+  fill: #eee;
 }
 
 .blocklyMainWorkspaceScrollbar {
@@ -375,9 +374,9 @@ input[type=number] {
   display: block;
   position: absolute;
   width: 10px;
-  background-color: #dddddd22;
+  background-color: #eee;
   z-index: 21;
-  box-shadow: -2px 0 5px #dddddd22;
+  box-shadow: -2px 0 5px #eee;
 }
 
 .blocklyFlyoutBookmarks {

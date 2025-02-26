@@ -389,7 +389,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       return [...ProcedureXmlList, ...ProceduresLocalXmlList];
     };
 
-    // @ts-ignore:next-line
+    // @ts-expect-error:next-line
     if (Procedures && Procedures.flyoutCategory) {
       this.registerToolboxCategoryCallback(
         Procedures.CATEGORY_NAME,
@@ -755,6 +755,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @param opt_backgroundClass Either 'blocklyMainBackground' or
    *     'blocklyMutatorBackground'.
+   * @param injectionDiv
    * @returns The workspace's SVG group.
    */
   createDom(opt_backgroundClass?: string, injectionDiv?: Element): Element {
@@ -792,6 +793,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
           'fill',
         );
       }
+    }
+
+    if (this.options.showModuleBar) {
+      this.moduleBar_ = new ModuleBar(this);
     }
 
     this.layerManager = new LayerManager(this);
@@ -833,10 +838,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     if (this.toolbox_ && !this.isFlyout) {
       this.addChangeListener(this.flyoutListener.bind(this));
-    }
-
-    if (this.options.showModuleBar) {
-      this.moduleBar_ = new ModuleBar(this);
     }
 
     if (this.grid) {
@@ -1074,7 +1075,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns {ModuleBar} The moduleBar on this workspace.
    * @package
    */
-  getModuleBar() {
+  getModuleBar(): ModuleBar | null {
     return this.moduleBar_;
   }
 

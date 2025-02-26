@@ -136,6 +136,13 @@ Blockly.Msg.UNDO = 'Undo';
 /// context menu - Undo the previous undo action.\n{{Identical|Redo}}
 Blockly.Msg.REDO = 'Redo';
 
+/** @type {string} */
+/// toolbox search - Placeholder text for the toolbox search input field.
+Blockly.Msg.TOOLBOX_SEARCH_PLACEHOLDER = 'Search';
+
+/** @type {string} */
+/// toolbox search - Message to inform the user that no search results were found.
+Blockly.Msg.TOOLBOX_SEARCH_NOTHING_FOUND = 'Nothing found';
 
 /** @type {string} */
 /// default module name.

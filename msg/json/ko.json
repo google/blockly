@@ -68,6 +68,8 @@
 	"HELP": "도움말",
 	"UNDO": "실행 취소",
 	"REDO": "다시 실행",
+  "TOOLBOX_SEARCH_PLACEHOLDER": "검색",
+  "TOOLBOX_SEARCH_NOTHING_FOUND": "찾을 수 없음!",
 	"CHANGE_VALUE_TITLE": "값 바꾸기:",
 	"RENAME_VARIABLE": "변수 이름 바꾸기:",
 	"RENAME_VARIABLE_TITLE": "'%1' 변수 이름을 바꾸기:",

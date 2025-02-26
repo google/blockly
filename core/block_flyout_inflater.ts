@@ -101,8 +101,9 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
       ) {
         blockDefinition['disabledReasons'] = [MANUALLY_DISABLED];
       }
-      // These fields used to be allowed and may still be present, but should
-      // now be ignored.
+      // These fields used to be allowed and may still be present, but are
+      // ignored here since everything in the flyout should always be laid out
+      // linearly.
       if ('x' in blockDefinition) {
         delete blockDefinition['x'];
       }

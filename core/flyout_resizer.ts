@@ -11,8 +11,6 @@
  * @class
  */
 
-// Former goog.module("Blockly.FlyoutResizer");
-
 import * as Blockly from './blockly.js';
 import * as Css from './css.js';
 import {throttle} from "./utils/throttle.js";
@@ -24,7 +22,7 @@ interface InitOptions {
 }
 
 const DefaultInitOptions: InitOptions = {
-  minWidth: 200,
+  minWidth: 100,
   maxWidth: null
 };
 
@@ -39,14 +37,13 @@ export class FlyoutResizer implements Blockly.IComponent {
   private flyoutWorkspace_: Blockly.WorkspaceSvg;
   private flyout_: Blockly.IFlyout;
   public id: string;
-  private div_: HTMLElement | null;
+  private htmlDiv_: HTMLElement | null;
   private minWidth: number | null;
   private maxWidth: number | null;
   private initialWidth: number | null;
   private initialClientX: number | null;
-  private initialWorkspaceDivDragEnter: ((e: DragEvent) => void) | null;
-  private initialWorkspaceDivDragOver: ((e: DragEvent) => void) | null;
   private readonly throttleResizeFlyout: (width: number) => void;
+  private onWorkspaceChangeWrapper: Function | null = null;
 
   constructor(workspace: Blockly.WorkspaceSvg, flyout: Blockly.IFlyout) {
     this.workspace_ = workspace;
@@ -61,13 +58,11 @@ export class FlyoutResizer implements Blockly.IComponent {
     this.flyout_ = flyout;
     this.flyoutWorkspace_ = flyout.getWorkspace();
     this.id = 'flyoutResizer';
-    this.div_ = null;
+    this.htmlDiv_ = null;
     this.minWidth = null;
     this.maxWidth = null;
     this.initialWidth = null;
     this.initialClientX = null;
-    this.initialWorkspaceDivDragEnter = null;
-    this.initialWorkspaceDivDragOver = null;
     this.throttleResizeFlyout = throttle(this.moveFlyout.bind(this), 90, { trailing: true });
   }
 
@@ -88,24 +83,25 @@ export class FlyoutResizer implements Blockly.IComponent {
       this.flyout_.fixedWidth = true;
     }
 
-
     this.createDom_();
     this.flyoutWorkspace_.addChangeListener(this.flyoutEventsListener.bind(this));
   }
 
   dispose(): void {
     this.workspace_.getComponentManager().removeComponent(this.id);
-    this.workspace_.removeChangeListener(this.flyoutEventsListener.bind(this));
+    if (this.onWorkspaceChangeWrapper) {
+      this.workspace_.removeChangeListener(this.onWorkspaceChangeWrapper);
+    }
 
-    if (this.div_) {
-      this.div_.remove();
-      this.div_ = null;
+    if (this.htmlDiv_) {
+      this.htmlDiv_.remove();
+      this.htmlDiv_ = null;
     }
   }
 
   protected createDom_(): void {
-    this.div_ = document.createElement('div');
-    this.div_.classList.add('blocklyFlyoutResizer');
+    this.htmlDiv_ = document.createElement('div');
+    this.htmlDiv_.classList.add('blocklyFlyoutResizer');
 
     const flyoutSVG = this.workspace_.getParentSvg();
     const flyoutParentEl = flyoutSVG.parentElement;
@@ -117,14 +113,11 @@ export class FlyoutResizer implements Blockly.IComponent {
     const flyoutParentClientRect = flyoutParentEl.getBoundingClientRect();
 
     const left = flyoutClientRect.right - flyoutParentClientRect.left;
-    this.div_.style.left = `${left}px`;
+    this.htmlDiv_.style.left = `${left}px`;
 
-    this.div_.setAttribute('draggable', 'true');
-    this.div_.ondragstart = this.onDragStart_.bind(this);
-    this.div_.ondrag = this.onDrag_.bind(this);
-    this.div_.ondragend = this.onDragEnd_.bind(this);
+    this.htmlDiv_.onmousedown = this.onMouseDown_.bind(this);
 
-    flyoutParentEl.insertBefore(this.div_, flyoutSVG.nextSibling);
+    flyoutParentEl.insertBefore(this.htmlDiv_, flyoutSVG.nextSibling);
   }
 
   flyoutEventsListener(event: Blockly.Events.Abstract): void {
@@ -133,14 +126,14 @@ export class FlyoutResizer implements Blockly.IComponent {
   }
 
   hide(): void {
-    if (this.div_) {
-      this.div_.style.display = 'none';
+    if (this.htmlDiv_) {
+      this.htmlDiv_.style.display = 'none';
     }
   }
 
   show(): void {
-    if (this.div_) {
-      this.div_.style.display = 'block';
+    if (this.htmlDiv_) {
+      this.htmlDiv_.style.display = 'block';
       this.position();
     }
   }
@@ -163,90 +156,44 @@ export class FlyoutResizer implements Blockly.IComponent {
   }
 
   position(): void {
-    if (!this.div_) return;
+    if (!this.htmlDiv_) return;
 
     const flyoutWidth = this.flyout_.getWidth();
     const toolboxWidth = (this.toolbox_.HtmlDiv as HTMLElement).offsetWidth;
 
-    this.div_.style.left = `${flyoutWidth + toolboxWidth}px`;
+    this.htmlDiv_.style.left = `${flyoutWidth + toolboxWidth}px`;
   }
 
-  onDragStart_(e: DragEvent): void {
-    if (!e.dataTransfer) return;
-
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setDragImage(e.target as HTMLElement, window.outerWidth, window.outerHeight);
-
+  onMouseDown_(e: MouseEvent): void {
+    e.preventDefault();
     this.initialClientX = e.clientX;
-
-
     this.initialWidth = this.flyout_.getWidth();
 
-    const workspaceInjectionDiv = this.workspace_.getInjectionDiv();
-    if (!(workspaceInjectionDiv instanceof HTMLElement)) {
-      throw new Error('Workspace injection div not found.');
-    }
-
-    if (workspaceInjectionDiv.ondragover) {
-      this.initialWorkspaceDivDragOver = workspaceInjectionDiv.ondragover;
-    }
-
-    workspaceInjectionDiv.ondragover = (e) => e.preventDefault();
-
-    if (workspaceInjectionDiv.ondragenter) {
-      this.initialWorkspaceDivDragEnter = workspaceInjectionDiv.ondragenter;
-    }
-
-    workspaceInjectionDiv.ondragenter = (e) => e.preventDefault();
-
-    this.flyout_.setDisableBlocksMouseEvents(true);
+    document.addEventListener('mousemove', this.onMouseMove_);
+    document.addEventListener('mouseup', this.onMouseUp_);
+    this.htmlDiv_?.classList.add('resizing')
   }
 
-  onDrag_(e: DragEvent): void {
+  onMouseMove_ = (e: MouseEvent): void => {
     const width = this.calculateNewWidth(e);
-
-    if (width < (this.minWidth || 0) || width > this.getMaxWidth()) {
-      if (e.dataTransfer) {
-        e.dataTransfer.effectAllowed = 'uninitialized';
-        e.dataTransfer.dropEffect = 'none';
-      }
-    } else {
-      if (e.dataTransfer) {
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.dropEffect = 'move';
-      }
-    }
-
     this.throttleResizeFlyout(width);
   }
 
-  onDragEnd_(e: DragEvent): void {
+  onMouseUp_ = (e: MouseEvent): void => {
+    document.removeEventListener('mousemove', this.onMouseMove_);
+    document.removeEventListener('mouseup', this.onMouseUp_);
+    this.htmlDiv_?.classList.remove('resizing');
+
     const width = this.calculateNewWidth(e);
     this.moveFlyout(width);
 
-    const workspaceInjectionDiv = this.workspace_.getInjectionDiv();
-    if (!(workspaceInjectionDiv instanceof HTMLElement)) {
-      throw new Error('Workspace injection div not found.');
-    }
-
-    if (workspaceInjectionDiv.ondragenter) {
-      workspaceInjectionDiv.ondragenter = this.initialWorkspaceDivDragEnter;
-      this.initialWorkspaceDivDragEnter = null;
-    }
-
-    if (workspaceInjectionDiv.ondragover) {
-      workspaceInjectionDiv.ondragover = this.initialWorkspaceDivDragOver;
-      this.initialWorkspaceDivDragOver = null;
-    }
-
-    this.flyout_.setDisableBlocksMouseEvents(false);
-    this.initialWidth = null;
     this.initialClientX = null;
+    this.initialWidth = null;
   }
 
-  calculateNewWidth(e: DragEvent): number {
+  calculateNewWidth(e: MouseEvent): number {
     const diff = (e.clientX || 0) - (this.initialClientX || 0);
-    return (this.initialWidth || 0) + diff;
+    return Math.ceil((this.initialWidth || 0) + diff);
   }
 
   moveFlyout(newWidth: number): void {
@@ -264,7 +211,6 @@ export class FlyoutResizer implements Blockly.IComponent {
   }
 }
 
-
 /** CSS for ToolboxResizer.  See css.js for use. */
 Css.register(`
 .blocklyFlyoutResizer {
@@ -274,16 +220,7 @@ Css.register(`
   width: 8px;
   z-index: 20;
   transition: background-color .1s ease-in;
-  background-color: transparent;
-  border-right: 2px solid transparent;
-}
-
-.blocklyFlyoutResizer::before {
-  content: "";
-  width: 8px;
-  height: 100%;
   background-color: #eee;
-  position: absolute;
 }
 
 .blocklyFlyoutResizer::after {
@@ -292,13 +229,13 @@ Css.register(`
   background-repeat: no-repeat;
   background-position: 10% 50%;
   left: 0;
-  width: 14px;
+  width: 8px;
   height: 100%;
   position: absolute;
 }
 
-.blocklyFlyoutResizer:hover {
+.blocklyFlyoutResizer:hover, .blocklyToolboxResizer .resizing {
   cursor: col-resize;
-  border-right: 2px solid #5867dd;
 }
+
 `);

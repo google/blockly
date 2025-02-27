@@ -282,7 +282,10 @@ export class ToolboxSearch implements Blockly.IComponent {
     } else {
       if (item.kind === 'BLOCK') {
         const blockXml = item.blockxml;
-        const blockType = blockXml.attributes.type.value;
+        const blockType = blockXml?.attributes?.type.value;
+        if (!blockType) {
+          return null;
+        }
         const searchBlock = searchWorkspace.newBlock(blockType, Blockly.utils.idGenerator.genUid());
 
         if (searchBlock.isObsolete() || searchBlock.isRemoved()) {

@@ -18,6 +18,7 @@ import type {
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';
+import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
 import * as serializationBlocks from './serialization/blocks.js';
 import * as aria from './utils/aria.js';
@@ -111,6 +112,11 @@ function populate_(
   menu.setRole(aria.Role.MENU);
   for (let i = 0; i < options.length; i++) {
     const option = options[i];
+    if (option.separator) {
+      menu.addChild(new MenuSeparator());
+      continue;
+    }
+
     const menuItem = new MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menuItem.setRole(aria.Role.MENUITEM);

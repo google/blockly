@@ -461,6 +461,14 @@ input[type=number] {
   margin-right: -24px;
 }
 
+.blocklyMenuSeparator {
+  background-color: #ccc; 
+  height: 1px; 
+  border: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
 .blocklyBlockDragSurface, .blocklyAnimationLayer {
   position: absolute;
   top: 0;

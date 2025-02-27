@@ -12,7 +12,8 @@
 // Former goog.module ID: Blockly.Menu
 
 import * as browserEvents from './browser_events.js';
-import type {MenuItem} from './menuitem.js';
+import type {MenuSeparator} from './menu_separator.js';
+import {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import type {Size} from './utils/size.js';
@@ -23,11 +24,9 @@ import * as style from './utils/style.js';
  */
 export class Menu {
   /**
-   * Array of menu items.
-   * (Nulls are never in the array, but typing the array as nullable prevents
-   * the compiler from objecting to .indexOf(null))
+   * Array of menu items and separators.
    */
-  private readonly menuItems: MenuItem[] = [];
+  private readonly menuItems: Array<MenuItem | MenuSeparator> = [];
 
   /**
    * Coordinates of the mousedown event that caused this menu to open. Used to
@@ -69,10 +68,10 @@ export class Menu {
   /**
    * Add a new menu item to the bottom of this menu.
    *
-   * @param menuItem Menu item to append.
+   * @param menuItem Menu item or separator to append.
    * @internal
    */
-  addChild(menuItem: MenuItem) {
+  addChild(menuItem: MenuItem | MenuSeparator) {
     this.menuItems.push(menuItem);
   }
 
@@ -227,7 +226,8 @@ export class Menu {
     while (currentElement && currentElement !== menuElem) {
       if (currentElement.classList.contains('blocklyMenuItem')) {
         // Having found a menu item's div, locate that menu item in this menu.
-        for (let i = 0, menuItem; (menuItem = this.menuItems[i]); i++) {
+        const items = this.getMenuItems();
+        for (let i = 0, menuItem; (menuItem = items[i]); i++) {
           if (menuItem.getElement() === currentElement) {
             return menuItem;
           }
@@ -309,7 +309,8 @@ export class Menu {
   private highlightHelper(startIndex: number, delta: number) {
     let index = startIndex + delta;
     let menuItem;
-    while ((menuItem = this.menuItems[index])) {
+    const items = this.getMenuItems();
+    while ((menuItem = items[index])) {
       if (menuItem.isEnabled()) {
         this.setHighlighted(menuItem);
         break;
@@ -458,5 +459,14 @@ export class Menu {
     // Recalculate height for the total content, not only box height.
     menuSize.height = menuDom.scrollHeight;
     return menuSize;
+  }
+
+  /**
+   * Returns the action menu items (omitting separators) in this menu.
+   *
+   * @returns The MenuItem objects displayed in this menu.
+   */
+  private getMenuItems(): MenuItem[] {
+    return this.menuItems.filter((item) => item instanceof MenuItem);
   }
 }

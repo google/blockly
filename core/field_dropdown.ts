@@ -23,6 +23,7 @@ import {
 } from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
+import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -35,14 +36,10 @@ import {Svg} from './utils/svg.js';
  * Class for an editable dropdown field.
  */
 export class FieldDropdown extends Field<string> {
-  /** Horizontal distance that a checkmark overhangs the dropdown. */
-  static CHECKMARK_OVERHANG = 25;
-
   /**
-   * Maximum height of the dropdown menu, as a percentage of the viewport
-   * height.
+   * Magic constant used to represent a separator in a list of dropdown items.
    */
-  static MAX_MENU_HEIGHT_VH = 0.45;
+  static readonly SEPARATOR = 'separator';
 
   static ARROW_CHAR = '▾';
 
@@ -323,7 +320,13 @@ export class FieldDropdown extends Field<string> {
     const options = this.getOptions(false);
     this.selectedMenuItem = null;
     for (let i = 0; i < options.length; i++) {
-      const [label, value] = options[i];
+      const option = options[i];
+      if (option === FieldDropdown.SEPARATOR) {
+        menu.addChild(new MenuSeparator());
+        continue;
+      }
+
+      const [label, value] = option;
       const content = (() => {
         if (typeof label === 'object') {
           // Convert ImageProperties to an HTMLImageElement.
@@ -667,7 +670,10 @@ export class FieldDropdown extends Field<string> {
     suffix?: string;
   } {
     let hasImages = false;
-    const trimmedOptions = options.map(([label, value]): MenuOption => {
+    const trimmedOptions = options.map((option): MenuOption => {
+      if (option === FieldDropdown.SEPARATOR) return option;
+
+      const [label, value] = option;
       if (typeof label === 'string') {
         return [parsing.replaceMessageReferences(label), value];
       }
@@ -748,28 +754,28 @@ export class FieldDropdown extends Field<string> {
     }
     let foundError = false;
     for (let i = 0; i < options.length; i++) {
-      const tuple = options[i];
-      if (!Array.isArray(tuple)) {
+      const option = options[i];
+      if (!Array.isArray(option) && option !== FieldDropdown.SEPARATOR) {
         foundError = true;
         console.error(
-          `Invalid option[${i}]: Each FieldDropdown option must be an array.
-          Found: ${tuple}`,
+          `Invalid option[${i}]: Each FieldDropdown option must be an array or
+          the string literal 'separator'. Found: ${option}`,
         );
-      } else if (typeof tuple[1] !== 'string') {
+      } else if (typeof option[1] !== 'string') {
         foundError = true;
         console.error(
           `Invalid option[${i}]: Each FieldDropdown option id must be a string. 
-          Found ${tuple[1]} in: ${tuple}`,
+          Found ${option[1]} in: ${option}`,
         );
       } else if (
-        tuple[0] &&
-        typeof tuple[0] !== 'string' &&
-        typeof tuple[0].src !== 'string'
+        option[0] &&
+        typeof option[0] !== 'string' &&
+        typeof option[0].src !== 'string'
       ) {
         foundError = true;
         console.error(
           `Invalid option[${i}]: Each FieldDropdown option must have a string 
-          label or image description. Found ${tuple[0]} in: ${tuple}`,
+          label or image description. Found ${option[0]} in: ${option}`,
         );
       }
     }
@@ -790,11 +796,12 @@ export interface ImageProperties {
 }
 
 /**
- * An individual option in the dropdown menu. The first element is the human-
- * readable value (text or image), and the second element is the language-
- * neutral value.
+ * An individual option in the dropdown menu. Can be either the string literal
+ * `separator` for a menu separator item, or an array for normal action menu
+ * items. In the latter case, the first element is the human-readable value
+ * (text or image), and the second element is the language-neutral value.
  */
-export type MenuOption = [string | ImageProperties, string];
+export type MenuOption = [string | ImageProperties, string] | 'separator';
 
 /**
  * A function that generates an array of menu options for FieldDropdown

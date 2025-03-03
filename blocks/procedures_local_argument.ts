@@ -570,7 +570,7 @@ const PROCEDURES_WITH_ARGUMENT = {
    * @returns {!Array<string>} List of variable names.
    * @this {Block}
    */
-  getArguments: function (this: ProceduresLocalArgumentsBlock) {
+  getVars: function (this: ProceduresLocalArgumentsBlock) {
     return this.arguments_;
   },
 
@@ -937,7 +937,7 @@ const PROCEDURE_CALL_COMMON = {
     // Reconnect any child blocks.
     if (this.quarkIds_) {
       for (let i = 0; i < this.arguments_.length; i++) {
-        const quarkId = this.quarkIds_[i];
+        const quarkId: string = this.quarkIds_[i]; // TODO(#6920)
         if (quarkId in this.quarkConnections_) {
           // TODO(#6920): investigate claimed circular initialisers.
           const connection: Connection = this.quarkConnections_[quarkId];
@@ -1065,7 +1065,7 @@ const PROCEDURE_CALL_COMMON = {
    * @returns {!Array<string>} List of variable names.
    * @this {Block}
    */
-  getArguments: function (this: CallBlock): string[] {
+  getVars: function (this: CallBlock): string[] {
     return this.arguments_;
   },
   /**

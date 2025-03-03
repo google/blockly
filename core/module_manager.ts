@@ -38,6 +38,7 @@ import {ModuleDelete} from './events/events_module_delete.js';
 import {ModuleRename} from './events/events_module_rename.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {ModuleMove} from './events/events_module_move.js';
+import * as common from "./common.js";
 
 /**
  * Class for a module management.
@@ -286,6 +287,9 @@ export class ModuleManager {
       // remove render
       if (this.workspace.rendered) {
         this.workspace.hideChaff(true);
+
+        // clear selection
+        common.setSelected(null);
 
         // Disable workspace resizes as an optimization.
         if (this.workspace.setResizesEnabled) {

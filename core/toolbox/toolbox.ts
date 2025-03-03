@@ -169,11 +169,13 @@ export class Toolbox
     this.toolboxSearch_ = new ToolboxSearch(this.workspace_, this, this.toolboxDef_);
     this.toolboxSearch_.init();
 
-    this.toolboxResizer_ = new ToolboxResizer(this.workspace_, this, this.flyout_);
-    this.toolboxResizer_.init();
+    if (!workspace.options.horizontalLayout) {
+      this.toolboxResizer_ = new ToolboxResizer(this.workspace_, this, this.flyout_);
+      this.toolboxResizer_.init();
 
-    this.flyoutResizer_ = new FlyoutResizer(this.workspace_, this.flyout_);
-    this.flyoutResizer_.init();
+      this.flyoutResizer_ = new FlyoutResizer(this.workspace_, this.flyout_);
+      this.flyoutResizer_.init();
+    }
 
     const themeManager = workspace.getThemeManager();
     themeManager.subscribe(

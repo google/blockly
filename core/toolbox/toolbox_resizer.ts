@@ -53,7 +53,7 @@ export class ToolboxResizer implements Blockly.IComponent {
     this.toolbox = toolbox;
     this.flyoutWorkspace_ = flyout.getWorkspace();
 
-    if (!this.workspace_.options.horizontalLayout) {
+    if (this.workspace_.options.horizontalLayout) {
       throw new Error('ToolboxResizer is only supported in horizontal layout.');
     }
 

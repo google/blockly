@@ -444,19 +444,8 @@ export class ZoomControls implements IPositionable {
   private resetZoom(e: PointerEvent) {
     this.workspace.markFocused();
 
-    // zoom is passed amount and computes the new scale using the formula:
-    // targetScale = currentScale * Math.pow(speed, amount)
-    const targetScale = this.workspace.options.zoomOptions.startScale;
-    const currentScale = this.workspace.scale;
-    const speed = this.workspace.options.zoomOptions.scaleSpeed;
-    // To compute amount:
-    // amount = log(speed, (targetScale / currentScale))
-    // Math.log computes natural logarithm (ln), to change the base, use
-    // formula: log(base, value) = ln(value) / ln(base)
-    const amount = Math.log(targetScale / currentScale) / Math.log(speed);
     this.workspace.beginCanvasTransition();
-    this.workspace.zoomCenter(amount);
-    this.workspace.scrollCenter();
+    this.workspace.zoomToFit();
 
     setTimeout(this.workspace.endCanvasTransition.bind(this.workspace), 500);
     this.fireZoomEvent();

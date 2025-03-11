@@ -249,9 +249,11 @@ export class Menu {
   setHighlighted(item: MenuItem | null) {
     const currentHighlighted = this.highlightedItem;
     if (currentHighlighted) {
+      currentHighlighted.setHighlighted(false);
       this.highlightedItem = null;
     }
     if (item) {
+      item.setHighlighted(true);
       this.highlightedItem = item;
       // Bring the highlighted item into view. This has no effect if the menu is
       // not scrollable.

@@ -50,21 +50,6 @@ export interface IPathObject {
   setPath(pathString: string): void;
 
   /**
-   * Apply the stored colours to the block's path, taking into account whether
-   * the paths belong to a shadow block.
-   *
-   * @param block The source block.
-   */
-  applyColour(block: BlockSvg): void;
-
-  /**
-   * Update the style.
-   *
-   * @param blockStyle The block style to use.
-   */
-  setStyle(blockStyle: BlockStyle): void;
-
-  /**
    * Flip the SVG paths in RTL.
    */
   flipRTL(): void;
@@ -131,7 +116,22 @@ export interface IPathObject {
   ): void;
 
   /**
+   * Apply the stored colours to the block's path, taking into account whether
+   * the paths belong to a shadow block.
+   *
+   * @param block The source block.
+   */
+  applyColour?(block: BlockSvg): void;
+
+  /**
    * Removes any highlight associated with the given connection, if it exists.
    */
   removeConnectionHighlight?(connection: RenderedConnection): void;
+
+  /**
+   * Update the style.
+   *
+   * @param blockStyle The block style to use.
+   */
+  setStyle?(blockStyle: BlockStyle): void;
 }

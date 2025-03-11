@@ -15,10 +15,13 @@ import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../inputs/input_types.js';
 import {isSerializable} from '../interfaces/i_serializable.js';
 import type {ISerializer} from '../interfaces/i_serializer.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../interfaces/i_variable_model.js';
 import * as registry from '../registry.js';
 import * as renderManagement from '../render_management.js';
 import * as utilsXml from '../utils/xml.js';
-import {VariableModel} from '../variable_model.js';
 import * as Variables from '../variables.js';
 import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
@@ -31,6 +34,8 @@ import {
 } from './exceptions.js';
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
+
+// TODO(#5160): Remove this once lint is fixed.
 
 /**
  * Represents the state of a connection.
@@ -256,13 +261,9 @@ function saveIcons(block: Block, state: State, doFullSerialization: boolean) {
  */
 function saveFields(block: Block, state: State, doFullSerialization: boolean) {
   const fields = Object.create(null);
-  for (let i = 0; i < block.inputList.length; i++) {
-    const input = block.inputList[i];
-    for (let j = 0; j < input.fieldRow.length; j++) {
-      const field = input.fieldRow[j];
-      if (field.isSerializable()) {
-        fields[field.name!] = field.saveState(doFullSerialization);
-      }
+  for (const field of block.getFields()) {
+    if (field.isSerializable()) {
+      fields[field.name!] = field.saveState(doFullSerialization);
     }
   }
   if (Object.keys(fields).length) {
@@ -500,7 +501,7 @@ function appendPrivate(
  */
 function checkNewVariables(
   workspace: Workspace,
-  originalVariables: VariableModel[],
+  originalVariables: IVariableModel<IVariableState>[],
 ) {
   if (eventUtils.isEnabled()) {
     const newVariables = Variables.getAddedVariables(

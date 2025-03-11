@@ -12,7 +12,6 @@
 // Former goog.module ID: Blockly.MenuItem
 
 import * as aria from './utils/aria.js';
-import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 
 /**
@@ -64,22 +63,18 @@ export class MenuItem {
     this.element = element;
 
     // Set class and style
-    // goog-menuitem* is deprecated, use blocklyMenuItem*.  May 2020.
     element.className =
-      'blocklyMenuItem goog-menuitem ' +
-      (this.enabled ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
-      (this.checked ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
-      (this.highlight
-        ? 'blocklyMenuItemHighlight goog-menuitem-highlight '
-        : '') +
-      (this.rightToLeft ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
+      'blocklyMenuItem ' +
+      (this.enabled ? '' : 'blocklyMenuItemDisabled ') +
+      (this.checked ? 'blocklyMenuItemSelected ' : '') +
+      (this.rightToLeft ? 'blocklyMenuItemRtl ' : '');
 
     const content = document.createElement('div');
-    content.className = 'blocklyMenuItemContent goog-menuitem-content';
+    content.className = 'blocklyMenuItemContent';
     // Add a checkbox for checkable menu items.
     if (this.checkable) {
       const checkbox = document.createElement('div');
-      checkbox.className = 'blocklyMenuItemCheckbox goog-menuitem-checkbox';
+      checkbox.className = 'blocklyMenuItemCheckbox ';
       content.appendChild(checkbox);
     }
 
@@ -178,31 +173,6 @@ export class MenuItem {
    */
   setChecked(checked: boolean) {
     this.checked = checked;
-  }
-
-  /**
-   * Highlights or unhighlights the component.
-   *
-   * @param highlight Whether to highlight or unhighlight the component.
-   * @internal
-   */
-  setHighlighted(highlight: boolean) {
-    this.highlight = highlight;
-
-    const el = this.getElement();
-    if (el && this.isEnabled()) {
-      // goog-menuitem-highlight is deprecated, use blocklyMenuItemHighlight.
-      // May 2020.
-      const name = 'blocklyMenuItemHighlight';
-      const nameDep = 'goog-menuitem-highlight';
-      if (highlight) {
-        dom.addClass(el, name);
-        dom.addClass(el, nameDep);
-      } else {
-        dom.removeClass(el, name);
-        dom.removeClass(el, nameDep);
-      }
-    }
   }
 
   /**

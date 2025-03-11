@@ -62,8 +62,8 @@ export class BlockDragStrategy implements IDragStrategy {
    */
   private dragOffset = new Coordinate(0, 0);
 
-  /** Was there already an event group in progress when the drag started? */
-  private inGroup: boolean = false;
+  /** Used to persist an event group when snapping is done async. */
+  private originalEventGroup = '';
 
   constructor(private block: BlockSvg) {
     this.workspace = block.workspace;
@@ -78,7 +78,7 @@ export class BlockDragStrategy implements IDragStrategy {
     return (
       this.block.isOwnMovable() &&
       !this.block.isDeadOrDying() &&
-      !this.workspace.options.readOnly &&
+      !this.workspace.isReadOnly() &&
       // We never drag blocks in the flyout, only create new blocks that are
       // dragged.
       !this.block.isInFlyout
@@ -96,10 +96,6 @@ export class BlockDragStrategy implements IDragStrategy {
     }
 
     this.dragging = true;
-    this.inGroup = !!eventUtils.getGroup();
-    if (!this.inGroup) {
-      eventUtils.setGroup(true);
-    }
     this.fireDragStartEvent();
 
     this.startLoc = this.block.getRelativeToSurfaceXY();
@@ -363,6 +359,7 @@ export class BlockDragStrategy implements IDragStrategy {
       this.block.getParent()?.endDrag(e);
       return;
     }
+    this.originalEventGroup = eventUtils.getGroup();
 
     this.fireDragEndEvent();
     this.fireMoveEvent();
@@ -388,20 +385,19 @@ export class BlockDragStrategy implements IDragStrategy {
     } else {
       this.block.queueRender().then(() => this.disposeStep());
     }
-
-    if (!this.inGroup) {
-      eventUtils.setGroup(false);
-    }
   }
 
   /** Disposes of any state at the end of the drag. */
   private disposeStep() {
+    const newGroup = eventUtils.getGroup();
+    eventUtils.setGroup(this.originalEventGroup);
     this.block.snapToGrid();
 
     // Must dispose after connections are applied to not break the dynamic
     // connections plugin. See #7859
     this.connectionPreviewer!.dispose();
     this.workspace.setResizesEnabled(true);
+    eventUtils.setGroup(newGroup);
   }
 
   /** Connects the given candidate connections. */

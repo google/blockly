@@ -83,9 +83,6 @@ export abstract class Field<T = any>
    */
   DEFAULT_VALUE: T | null = null;
 
-  /** Non-breaking space. */
-  static readonly NBSP = '\u00A0';
-
   /**
    * A value used to signal when a field's constructor should *not* set the
    * field's value or run configure_, and should allow a subclass to do that
@@ -193,9 +190,6 @@ export abstract class Field<T = any>
    * case by default so that SERIALIZABLE is backwards compatible.
    */
   SERIALIZABLE = false;
-
-  /** Mouse cursor style when over the hotspot that initiates the editor. */
-  CURSOR = '';
 
   /**
    * @param value The initial value of the field.
@@ -324,6 +318,9 @@ export abstract class Field<T = any>
   protected initView() {
     this.createBorderRect_();
     this.createTextElement_();
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyField');
+    }
   }
 
   /**
@@ -374,7 +371,7 @@ export abstract class Field<T = any>
     this.textElement_ = dom.createSvgElement(
       Svg.TEXT,
       {
-        'class': 'blocklyText',
+        'class': 'blocklyText blocklyFieldText',
       },
       this.fieldGroup_,
     );
@@ -406,7 +403,6 @@ export abstract class Field<T = any>
    * called by Blockly.Xml.
    *
    * @param fieldElement The element containing info about the field's state.
-   * @internal
    */
   fromXml(fieldElement: Element) {
     // Any because gremlins live here. No touchie!
@@ -419,7 +415,6 @@ export abstract class Field<T = any>
    * @param fieldElement The element to populate with info about the field's
    *     state.
    * @returns The element containing info about the field's state.
-   * @internal
    */
   toXml(fieldElement: Element): Element {
     // Any because gremlins live here. No touchie!
@@ -438,7 +433,6 @@ export abstract class Field<T = any>
    *     {@link https://developers.devsite.google.com/blockly/guides/create-custom-blocks/fields/customizing-fields/creating#full_serialization_and_backing_data | field serialization docs}
    *     for more information.
    * @returns JSON serializable state.
-   * @internal
    */
   saveState(_doFullSerialization?: boolean): AnyDuringMigration {
     const legacyState = this.saveLegacyState(Field);
@@ -453,7 +447,6 @@ export abstract class Field<T = any>
    * called by the serialization system.
    *
    * @param state The state we want to apply to the field.
-   * @internal
    */
   loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(Field, state)) {
@@ -516,8 +509,6 @@ export abstract class Field<T = any>
 
   /**
    * Dispose of all DOM objects and events belonging to this editable field.
-   *
-   * @internal
    */
   dispose() {
     dropDownDiv.hideIfOwner(this);
@@ -538,13 +529,11 @@ export abstract class Field<T = any>
       return;
     }
     if (this.enabled_ && block.isEditable()) {
-      dom.addClass(group, 'blocklyEditableText');
-      dom.removeClass(group, 'blocklyNonEditableText');
-      group.style.cursor = this.CURSOR;
+      dom.addClass(group, 'blocklyEditableField');
+      dom.removeClass(group, 'blocklyNonEditableField');
     } else {
-      dom.addClass(group, 'blocklyNonEditableText');
-      dom.removeClass(group, 'blocklyEditableText');
-      group.style.cursor = '';
+      dom.addClass(group, 'blocklyNonEditableField');
+      dom.removeClass(group, 'blocklyEditableField');
     }
   }
 
@@ -833,12 +822,7 @@ export abstract class Field<T = any>
 
     let contentWidth = 0;
     if (this.textElement_) {
-      contentWidth = dom.getFastTextWidth(
-        this.textElement_,
-        constants!.FIELD_TEXT_FONTSIZE,
-        constants!.FIELD_TEXT_FONTWEIGHT,
-        constants!.FIELD_TEXT_FONTFAMILY,
-      );
+      contentWidth = dom.getTextWidth(this.textElement_);
       totalWidth += contentWidth;
     }
     if (!this.isFullBlockField()) {
@@ -918,17 +902,6 @@ export abstract class Field<T = any>
     if (this.isDirty_) {
       this.render_();
       this.isDirty_ = false;
-    } else if (this.visible_ && this.size_.width === 0) {
-      // If the field is not visible the width will be 0 as well, one of the
-      // problems with the old system.
-      this.render_();
-      // Don't issue a warning if the field is actually zero width.
-      if (this.size_.width !== 0) {
-        console.warn(
-          'Deprecated use of setting size_.width to 0 to rerender a' +
-            ' field. Set field.isDirty_ to true instead.',
-        );
-      }
     }
     return this.size_;
   }
@@ -992,16 +965,10 @@ export abstract class Field<T = any>
    */
   protected getDisplayText_(): string {
     let text = this.getText();
-    if (!text) {
-      // Prevent the field from disappearing if empty.
-      return Field.NBSP;
-    }
     if (text.length > this.maxDisplayLength) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 2) + '…';
     }
-    // Replace whitespace with non-breaking spaces so the text doesn't collapse.
-    text = text.replace(/\s/g, Field.NBSP);
     if (this.sourceBlock_ && this.sourceBlock_.RTL) {
       // The SVG is LTR, force text to be RTL by adding an RLM.
       text += '\u200F';
@@ -1057,8 +1024,6 @@ export abstract class Field<T = any>
    * rerender this field and adjust for any sizing changes.
    * Other fields on the same block will not rerender, because their sizes have
    * already been recorded.
-   *
-   * @internal
    */
   forceRerender() {
     this.isDirty_ = true;
@@ -1317,7 +1282,6 @@ export abstract class Field<T = any>
    * Subclasses may override this.
    *
    * @returns True if this field has any variable references.
-   * @internal
    */
   referencesVariables(): boolean {
     return false;
@@ -1326,8 +1290,6 @@ export abstract class Field<T = any>
   /**
    * Refresh the variable name referenced by this field if this field references
    * variables.
-   *
-   * @internal
    */
   refreshVariableName() {}
   // NOP

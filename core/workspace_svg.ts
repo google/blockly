@@ -35,6 +35,7 @@ import {
 import * as dropDownDiv from './dropdowndiv.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
+import {Flyout} from './flyout_base.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
@@ -44,6 +45,10 @@ import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import type {Cursor} from './keyboard_nav/cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
@@ -71,7 +76,6 @@ import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import * as toolbox from './utils/toolbox.js';
 import * as userAgent from './utils/useragent.js';
-import type {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -222,7 +226,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * The first parent div with 'injectionDiv' in the name, or null if not set.
    * Access this with getInjectionDiv.
    */
-  private injectionDiv: Element | null = null;
+  private injectionDiv: HTMLElement | null = null;
 
   /**
    * Last known position of the page scroll.
@@ -361,24 +365,24 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     /** Manager in charge of markers and cursors. */
     this.markerManager = new MarkerManager(this);
 
-    if (Variables && Variables.flyoutCategory) {
+    if (Variables && Variables.internalFlyoutCategory) {
       this.registerToolboxCategoryCallback(
         Variables.CATEGORY_NAME,
-        Variables.flyoutCategory,
+        Variables.internalFlyoutCategory,
       );
     }
 
-    if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
+    if (VariablesDynamic && VariablesDynamic.internalFlyoutCategory) {
       this.registerToolboxCategoryCallback(
         VariablesDynamic.CATEGORY_NAME,
-        VariablesDynamic.flyoutCategory,
+        VariablesDynamic.internalFlyoutCategory,
       );
     }
 
-    if (Procedures && Procedures.flyoutCategory) {
+    if (Procedures && Procedures.internalFlyoutCategory) {
       this.registerToolboxCategoryCallback(
         Procedures.CATEGORY_NAME,
-        Procedures.flyoutCategory,
+        Procedures.internalFlyoutCategory,
       );
       this.addChangeListener(Procedures.mutatorOpenListener);
     }
@@ -536,7 +540,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   refreshTheme() {
     if (this.svgGroup_) {
-      this.renderer.refreshDom(this.svgGroup_, this.getTheme());
+      const isParentWorkspace = this.options.parentWorkspace === null;
+      this.renderer.refreshDom(
+        this.svgGroup_,
+        this.getTheme(),
+        isParentWorkspace ? this.getInjectionDiv() : undefined,
+      );
     }
 
     // Update all blocks in workspace that have a style name.
@@ -631,20 +640,24 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // Before the SVG canvas, scale the coordinates.
       scale = this.scale;
     }
+    let ancestor: Element = element;
     do {
       // Loop through this block and every parent.
-      const xy = svgMath.getRelativeXY(element);
-      if (element === this.getCanvas() || element === this.getBubbleCanvas()) {
+      const xy = svgMath.getRelativeXY(ancestor);
+      if (
+        ancestor === this.getCanvas() ||
+        ancestor === this.getBubbleCanvas()
+      ) {
         // After the SVG canvas, don't scale the coordinates.
         scale = 1;
       }
       x += xy.x * scale;
       y += xy.y * scale;
-      element = element.parentNode as SVGElement;
+      ancestor = ancestor.parentNode as Element;
     } while (
-      element &&
-      element !== this.getParentSvg() &&
-      element !== this.getInjectionDiv()
+      ancestor &&
+      ancestor !== this.getParentSvg() &&
+      ancestor !== this.getInjectionDiv()
     );
     return new Coordinate(x, y);
   }
@@ -682,7 +695,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The first parent div with 'injectionDiv' in the name.
    * @internal
    */
-  getInjectionDiv(): Element {
+  getInjectionDiv(): HTMLElement {
     // NB: it would be better to pass this in at createDom, but is more likely
     // to break existing uses of Blockly.
     if (!this.injectionDiv) {
@@ -690,7 +703,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       while (element) {
         const classes = element.getAttribute('class') || '';
         if ((' ' + classes + ' ').includes(' injectionDiv ')) {
-          this.injectionDiv = element;
+          this.injectionDiv = element as HTMLElement;
           break;
         }
         element = element.parentNode as Element;
@@ -734,7 +747,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     'blocklyMutatorBackground'.
    * @returns The workspace's SVG group.
    */
-  createDom(opt_backgroundClass?: string, injectionDiv?: Element): Element {
+  createDom(opt_backgroundClass?: string, injectionDiv?: HTMLElement): Element {
     if (!this.injectionDiv) {
       this.injectionDiv = injectionDiv ?? null;
     }
@@ -760,8 +773,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       );
 
       if (opt_backgroundClass === 'blocklyMainBackground' && this.grid) {
-        this.svgBackground_.style.fill =
-          'url(#' + this.grid.getPatternId() + ')';
+        this.svgBackground_.style.fill = 'var(--blocklyGridPattern)';
       } else {
         this.themeManager_.subscribe(
           this.svgBackground_,
@@ -818,7 +830,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     if (CursorClass) this.markerManager.setCursor(new CursorClass());
 
-    this.renderer.createDom(this.svgGroup_, this.getTheme());
+    const isParentWorkspace = this.options.parentWorkspace === null;
+    this.renderer.createDom(
+      this.svgGroup_,
+      this.getTheme(),
+      isParentWorkspace ? this.getInjectionDiv() : undefined,
+    );
     return this.svgGroup_;
   }
 
@@ -1045,8 +1062,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   resize() {
     if (this.toolbox) {
       this.toolbox.position();
-    }
-    if (this.flyout) {
+    } else if (this.flyout) {
       this.flyout.position();
     }
 
@@ -1086,6 +1102,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * @returns The layer manager for this workspace.
+   * @internal
    */
   getLayerManager(): LayerManager | null {
     return this.layerManager;
@@ -1351,7 +1368,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     name: string,
     opt_type?: string | null,
     opt_id?: string | null,
-  ): VariableModel {
+  ): IVariableModel<IVariableState> {
     const newVar = super.createVariable(name, opt_type, opt_id);
     this.refreshToolboxSelection();
     return newVar;
@@ -1686,7 +1703,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   showContextMenu(e: PointerEvent) {
-    if (this.options.readOnly || this.isFlyout) {
+    if (this.isReadOnly() || this.isFlyout) {
       return;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
@@ -2033,16 +2050,67 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
-   * Get the workspace's zoom factor.  If the workspace has a parent, we call
-   * into the parent to get the workspace scale.
+   * Get the workspace's zoom factor.
    *
    * @returns The workspace zoom factor. Units: (pixels / workspaceUnit).
    */
   getScale(): number {
-    if (this.options.parentWorkspace) {
-      return this.options.parentWorkspace.getScale();
-    }
     return this.scale;
+  }
+
+  /**
+   * Returns the absolute scale of the workspace.
+   *
+   * Workspace scaling is multiplicative; if a workspace B (e.g. a mutator editor)
+   * with scale Y is nested within a root workspace A with scale X, workspace B's
+   * effective scale is X * Y, because, as a child of A, it is already transformed
+   * by A's scaling factor, and then further transforms itself by its own scaling
+   * factor. Normally this Just Works, but for global elements (e.g. field
+   * editors) that are visually associated with a particular workspace but live at
+   * the top level of the DOM rather than being a child of their associated
+   * workspace, the absolute/effective scale may be needed to render
+   * appropriately.
+   *
+   * @returns The absolute/effective scale of the given workspace.
+   */
+  getAbsoluteScale() {
+    // Returns a workspace's own scale, without regard to multiplicative scaling.
+    const getLocalScale = (workspace: WorkspaceSvg): number => {
+      // Workspaces in flyouts may have a distinct scale; use this if relevant.
+      if (workspace.isFlyout) {
+        const flyout = workspace.targetWorkspace?.getFlyout();
+        if (flyout instanceof Flyout) {
+          return flyout.getFlyoutScale();
+        }
+      }
+
+      return workspace.getScale();
+    };
+
+    const computeScale = (workspace: WorkspaceSvg, scale: number): number => {
+      // If the workspace has no parent, or it does have a parent but is not
+      // actually a child of its parent workspace in the DOM (this is the case for
+      // flyouts in the main workspace), we're done; just return the scale so far
+      // multiplied by the workspace's own scale.
+      if (
+        !workspace.options.parentWorkspace ||
+        !workspace.options.parentWorkspace
+          .getSvgGroup()
+          .contains(workspace.getSvgGroup())
+      ) {
+        return scale * getLocalScale(workspace);
+      }
+
+      // If there is a parent workspace, and this workspace is a child of it in
+      // the DOM, scales are multiplicative, so recurse up the workspace
+      // hierarchy.
+      return computeScale(
+        workspace.options.parentWorkspace,
+        scale * getLocalScale(workspace),
+      );
+    };
+
+    return computeScale(this, 1);
   }
 
   /**
@@ -2441,6 +2509,37 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const y = this.scrollY + metrics.absoluteTop;
     // We could call scroll here, but that has extra checks we don't need to do.
     this.translate(x, y);
+  }
+
+  /**
+   * Adds a CSS class to the workspace.
+   *
+   * @param className Name of class to add.
+   */
+  addClass(className: string) {
+    if (this.injectionDiv) {
+      dom.addClass(this.injectionDiv, className);
+    }
+  }
+
+  /**
+   * Removes a CSS class from the workspace.
+   *
+   * @param className Name of class to remove.
+   */
+  removeClass(className: string) {
+    if (this.injectionDiv) {
+      dom.removeClass(this.injectionDiv, className);
+    }
+  }
+
+  override setIsReadOnly(readOnly: boolean) {
+    super.setIsReadOnly(readOnly);
+    if (readOnly) {
+      this.addClass('blocklyReadOnly');
+    } else {
+      this.removeClass('blocklyReadOnly');
+    }
   }
 }
 

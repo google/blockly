@@ -14,6 +14,10 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_create.js';
 
+import {EventType} from './events/type.js';
+import * as eventUtils from './events/utils.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
+import * as registry from './registry.js';
 import * as idGenerator from './utils/idgenerator.js';
 import type {Workspace} from './workspace.js';
 
@@ -23,8 +27,8 @@ import type {Workspace} from './workspace.js';
  *
  * @see {Blockly.FieldVariable}
  */
-export class VariableModel {
-  type: string;
+export class VariableModel implements IVariableModel<IVariableState> {
+  private type: string;
   private readonly id: string;
 
   /**
@@ -37,8 +41,8 @@ export class VariableModel {
    * @param opt_id The unique ID of the variable. This will default to a UUID.
    */
   constructor(
-    public workspace: Workspace,
-    public name: string,
+    private readonly workspace: Workspace,
+    private name: string,
     opt_type?: string,
     opt_id?: string,
   ) {
@@ -64,16 +68,83 @@ export class VariableModel {
     return this.id;
   }
 
+  /** @returns The name of this variable. */
+  getName(): string {
+    return this.name;
+  }
+
   /**
-   * A custom compare function for the VariableModel objects.
+   * Updates the user-visible name of this variable.
    *
-   * @param var1 First variable to compare.
-   * @param var2 Second variable to compare.
-   * @returns -1 if name of var1 is less than name of var2, 0 if equal, and 1 if
-   *     greater.
-   * @internal
+   * @returns The newly-updated variable.
    */
-  static compareByName(var1: VariableModel, var2: VariableModel): number {
-    return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
+  setName(newName: string): this {
+    this.name = newName;
+    return this;
+  }
+
+  /** @returns The type of this variable. */
+  getType(): string {
+    return this.type;
+  }
+
+  /**
+   * Updates the type of this variable.
+   *
+   * @returns The newly-updated variable.
+   */
+  setType(newType: string): this {
+    this.type = newType;
+    return this;
+  }
+
+  /**
+   * Returns the workspace this VariableModel belongs to.
+   *
+   * @returns The workspace this VariableModel belongs to.
+   */
+  getWorkspace(): Workspace {
+    return this.workspace;
+  }
+
+  /**
+   * Serializes this VariableModel.
+   *
+   * @returns a JSON representation of this VariableModel.
+   */
+  save(): IVariableState {
+    const state: IVariableState = {
+      'name': this.getName(),
+      'id': this.getId(),
+    };
+    const type = this.getType();
+    if (type) {
+      state['type'] = type;
+    }
+
+    return state;
+  }
+
+  /**
+   * Loads the persisted state into a new variable in the given workspace.
+   *
+   * @param state The serialized state of a variable model from save().
+   * @param workspace The workspace to create the new variable in.
+   */
+  static load(state: IVariableState, workspace: Workspace) {
+    const variable = new this(
+      workspace,
+      state['name'],
+      state['type'],
+      state['id'],
+    );
+    workspace.getVariableMap().addVariable(variable);
+    eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
   }
 }
+
+registry.register(
+  registry.Type.VARIABLE_MODEL,
+  registry.DEFAULT,
+  VariableModel,
+);

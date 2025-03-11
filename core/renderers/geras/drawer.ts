@@ -100,7 +100,7 @@ export class Drawer extends BaseDrawer {
   }
 
   override drawInlineInput_(input: InlineInput) {
-    this.highlighter_.drawInlineInput(input as InlineInput);
+    this.highlighter_.drawInlineInput(input);
 
     super.drawInlineInput_(input);
   }

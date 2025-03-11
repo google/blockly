@@ -42,7 +42,7 @@ suite('Key Down', function () {
   function runReadOnlyTest(keyEvent, opt_name) {
     const name = opt_name ? opt_name : 'Not called when readOnly is true';
     test(name, function () {
-      this.workspace.options.readOnly = true;
+      this.workspace.setIsReadOnly(true);
       this.injectionDiv.dispatchEvent(keyEvent);
       sinon.assert.notCalled(this.hideChaffSpy);
     });

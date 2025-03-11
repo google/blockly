@@ -43,6 +43,10 @@ import {ValueInput} from './inputs/value_input.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import {type IIcon} from './interfaces/i_icon.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
@@ -51,7 +55,6 @@ import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
-import type {VariableModel} from './variable_model.js';
 import type {Workspace} from './workspace.js';
 
 /**
@@ -792,7 +795,7 @@ export class Block implements IASTNodeLocation {
       this.deletable &&
       !this.shadow &&
       !this.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      !this.workspace.isReadOnly()
     );
   }
 
@@ -825,7 +828,7 @@ export class Block implements IASTNodeLocation {
       this.movable &&
       !this.shadow &&
       !this.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      !this.workspace.isReadOnly()
     );
   }
 
@@ -914,7 +917,7 @@ export class Block implements IASTNodeLocation {
    */
   isEditable(): boolean {
     return (
-      this.editable && !this.isDeadOrDying() && !this.workspace.options.readOnly
+      this.editable && !this.isDeadOrDying() && !this.workspace.isReadOnly()
     );
   }
 
@@ -934,10 +937,8 @@ export class Block implements IASTNodeLocation {
    */
   setEditable(editable: boolean) {
     this.editable = editable;
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        field.updateEditable();
-      }
+    for (const field of this.getFields()) {
+      field.updateEditable();
     }
   }
 
@@ -1104,14 +1105,25 @@ export class Block implements IASTNodeLocation {
           ' instead',
       );
     }
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.name === name) {
-          return field;
-        }
+    for (const field of this.getFields()) {
+      if (field.name === name) {
+        return field;
       }
     }
     return null;
+  }
+
+  /**
+   * Returns a generator that provides every field on the block.
+   *
+   * @yields A generator that can be used to iterate the fields on the block.
+   */
+  *getFields(): Generator<Field> {
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        yield field;
+      }
+    }
   }
 
   /**
@@ -1121,12 +1133,9 @@ export class Block implements IASTNodeLocation {
    */
   getVars(): string[] {
     const vars: string[] = [];
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.referencesVariables()) {
-          // NOTE: This only applies to `FieldVariable`, a `Field<string>`
-          vars.push(field.getValue() as string);
-        }
+    for (const field of this.getFields()) {
+      if (field.referencesVariables()) {
+        vars.push(field.getValue());
       }
     }
     return vars;
@@ -1138,19 +1147,17 @@ export class Block implements IASTNodeLocation {
    * @returns List of variable models.
    * @internal
    */
-  getVarModels(): VariableModel[] {
+  getVarModels(): IVariableModel<IVariableState>[] {
     const vars = [];
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.referencesVariables()) {
-          const model = this.workspace.getVariableById(
-            field.getValue() as string,
-          );
-          // Check if the variable actually exists (and isn't just a potential
-          // variable).
-          if (model) {
-            vars.push(model);
-          }
+    for (const field of this.getFields()) {
+      if (field.referencesVariables()) {
+        const model = this.workspace.getVariableById(
+          field.getValue() as string,
+        );
+        // Check if the variable actually exists (and isn't just a potential
+        // variable).
+        if (model) {
+          vars.push(model);
         }
       }
     }
@@ -1164,15 +1171,13 @@ export class Block implements IASTNodeLocation {
    * @param variable The variable being renamed.
    * @internal
    */
-  updateVarName(variable: VariableModel) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (
-          field.referencesVariables() &&
-          variable.getId() === field.getValue()
-        ) {
-          field.refreshVariableName();
-        }
+  updateVarName(variable: IVariableModel<IVariableState>) {
+    for (const field of this.getFields()) {
+      if (
+        field.referencesVariables() &&
+        variable.getId() === field.getValue()
+      ) {
+        field.refreshVariableName();
       }
     }
   }
@@ -1186,11 +1191,9 @@ export class Block implements IASTNodeLocation {
    *     updated name.
    */
   renameVarById(oldId: string, newId: string) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (field.referencesVariables() && oldId === field.getValue()) {
-          field.setValue(newId);
-        }
+    for (const field of this.getFields()) {
+      if (field.referencesVariables() && oldId === field.getValue()) {
+        field.setValue(newId);
       }
     }
   }
@@ -1408,7 +1411,7 @@ export class Block implements IASTNodeLocation {
     return this.disabledReasons.size === 0;
   }
 
-  /** @deprecated v11 - Get whether the block is manually disabled. */
+  /** @deprecated v11 - Get or sets whether the block is manually disabled. */
   private get disabled(): boolean {
     deprecation.warn(
       'disabled',
@@ -1419,7 +1422,6 @@ export class Block implements IASTNodeLocation {
     return this.hasDisabledReason(constants.MANUALLY_DISABLED);
   }
 
-  /** @deprecated v11 - Set whether the block is manually disabled. */
   private set disabled(value: boolean) {
     deprecation.warn(
       'disabled',
@@ -2516,7 +2518,7 @@ export class Block implements IASTNodeLocation {
    *
    * Intended to on be used in console logs and errors. If you need a string
    * that uses the user's native language (including block text, field values,
-   * and child blocks), use [toString()]{@link Block#toString}.
+   * and child blocks), use {@link (Block:class).toString | toString()}.
    *
    * @returns The description.
    */

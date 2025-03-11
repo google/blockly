@@ -17,6 +17,7 @@ import './events/events_var_create.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
+import {BlockFlyoutInflater} from './block_flyout_inflater.js';
 import {BlockSvg} from './block_svg.js';
 import {BlocklyOptions} from './blockly_options.js';
 import {Blocks} from './blocks.js';
@@ -24,6 +25,7 @@ import * as browserEvents from './browser_events.js';
 import * as bubbles from './bubbles.js';
 import {MiniWorkspaceBubble} from './bubbles/mini_workspace_bubble.js';
 import * as bumpObjects from './bump_objects.js';
+import {ButtonFlyoutInflater} from './button_flyout_inflater.js';
 import * as clipboard from './clipboard.js';
 import * as comments from './comments.js';
 import * as common from './common.js';
@@ -62,6 +64,7 @@ import {
   FieldDropdownConfig,
   FieldDropdownFromJsonConfig,
   FieldDropdownValidator,
+  ImageProperties,
   MenuGenerator,
   MenuGeneratorFunction,
   MenuOption,
@@ -99,7 +102,9 @@ import {
 import {Flyout} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
+import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
+import {FlyoutSeparator} from './flyout_separator.js';
 import {VerticalFlyout} from './flyout_vertical.js';
 import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
@@ -107,8 +112,11 @@ import {Grid} from './grid.js';
 import * as icons from './icons.js';
 import {inject} from './inject.js';
 import * as inputs from './inputs.js';
+import {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
+import {LabelFlyoutInflater} from './label_flyout_inflater.js';
+import {SeparatorFlyoutInflater} from './separator_flyout_inflater.js';
+
 import {Input} from './inputs/input.js';
-import {InsertionMarkerManager} from './insertion_marker_manager.js';
 import {InsertionMarkerPreviewer} from './insertion_marker_previewer.js';
 import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -132,6 +140,8 @@ import {
 } from './interfaces/i_draggable.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import {IFlyout} from './interfaces/i_flyout.js';
+import {IFocusableNode} from './interfaces/i_focusable_node.js';
+import {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IHasBubble, hasBubble} from './interfaces/i_has_bubble.js';
 import {IIcon, isIcon} from './interfaces/i_icon.js';
 import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
@@ -155,6 +165,8 @@ import {
   IVariableBackedParameterModel,
   isVariableBackedParameterModel,
 } from './interfaces/i_variable_backed_parameter_model.js';
+import {IVariableMap} from './interfaces/i_variable_map.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {BasicCursor} from './keyboard_nav/basic_cursor.js';
@@ -471,6 +483,8 @@ export {
 };
 export const DropDownDiv = dropDownDiv;
 export {
+  BlockFlyoutInflater,
+  ButtonFlyoutInflater,
   CodeGenerator,
   Field,
   FieldCheckbox,
@@ -504,7 +518,9 @@ export {
   FieldVariableValidator,
   Flyout,
   FlyoutButton,
+  FlyoutItem,
   FlyoutMetricsManager,
+  FlyoutSeparator,
   CodeGenerator as Generator,
   Gesture,
   Grid,
@@ -529,6 +545,9 @@ export {
   IDraggable,
   IDragger,
   IFlyout,
+  IFlyoutInflater,
+  IFocusableNode,
+  IFocusableTree,
   IHasBubble,
   IIcon,
   IKeyboardAccessible,
@@ -546,9 +565,13 @@ export {
   IToolbox,
   IToolboxItem,
   IVariableBackedParameterModel,
+  IVariableMap,
+  IVariableModel,
+  IVariableState,
+  ImageProperties,
   Input,
-  InsertionMarkerManager,
   InsertionMarkerPreviewer,
+  LabelFlyoutInflater,
   LayerManager,
   Marker,
   MarkerManager,
@@ -564,6 +587,7 @@ export {
   RenderedConnection,
   Scrollbar,
   ScrollbarPair,
+  SeparatorFlyoutInflater,
   ShortcutRegistry,
   TabNavigateCursor,
   Theme,

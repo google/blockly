@@ -65,6 +65,8 @@ export class PathObject implements IPathObject {
       {'class': 'blocklyPath'},
       this.svgRoot,
     );
+
+    this.setClass_('blocklyBlock', true);
   }
 
   /**
@@ -167,14 +169,12 @@ export class PathObject implements IPathObject {
    *
    * @param enable True if highlighted.
    */
+
   updateHighlighted(enable: boolean) {
     if (enable) {
-      this.svgPath.setAttribute(
-        'filter',
-        'url(#' + this.constants.embossFilterId + ')',
-      );
+      this.setClass_('blocklyHighlighted', true);
     } else {
-      this.svgPath.setAttribute('filter', 'none');
+      this.setClass_('blocklyHighlighted', false);
     }
   }
 
@@ -185,8 +185,11 @@ export class PathObject implements IPathObject {
    */
   protected updateShadow_(shadow: boolean) {
     if (shadow) {
+      this.setClass_('blocklyShadow', true);
       this.svgPath.setAttribute('stroke', 'none');
       this.svgPath.setAttribute('fill', this.style.colourSecondary);
+    } else {
+      this.setClass_('blocklyShadow', false);
     }
   }
 
@@ -197,12 +200,6 @@ export class PathObject implements IPathObject {
    */
   protected updateDisabled_(disabled: boolean) {
     this.setClass_('blocklyDisabled', disabled);
-    if (disabled) {
-      this.svgPath.setAttribute(
-        'fill',
-        'url(#' + this.constants.disabledPatternId + ')',
-      );
-    }
   }
 
   /**

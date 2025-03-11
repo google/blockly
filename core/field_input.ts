@@ -100,9 +100,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   override SERIALIZABLE = true;
 
-  /** Mouse cursor style when over the hotspot that initiates the editor. */
-  override CURSOR = 'text';
-
   /**
    * @param value The initial value of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts
@@ -148,6 +145,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     if (this.isFullBlockField()) {
       this.clickTarget_ = (this.sourceBlock_ as BlockSvg).getSvgRoot();
+    }
+
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyInputField');
     }
   }
 
@@ -406,7 +407,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     const clickTarget = this.getClickTarget_();
     if (!clickTarget) throw new Error('A click target has not been set.');
-    dom.addClass(clickTarget, 'editing');
+    dom.addClass(clickTarget, 'blocklyEditing');
 
     const htmlInput = document.createElement('input');
     htmlInput.className = 'blocklyHtmlInput';
@@ -416,7 +417,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       'spellcheck',
       this.spellcheck_ as AnyDuringMigration,
     );
-    const scale = this.workspace_!.getScale();
+    const scale = this.workspace_!.getAbsoluteScale();
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
     div!.style.fontSize = fontSize;
     htmlInput.style.fontSize = fontSize;
@@ -501,7 +502,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     const clickTarget = this.getClickTarget_();
     if (!clickTarget) throw new Error('A click target has not been set.');
-    dom.removeClass(clickTarget, 'editing');
+    dom.removeClass(clickTarget, 'blocklyEditing');
   }
 
   /**

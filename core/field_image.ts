@@ -151,6 +151,10 @@ export class FieldImage extends Field<string> {
       this.value_ as string,
     );
 
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyImageField');
+    }
+
     if (this.clickHandler) {
       this.imageElement.style.cursor = 'pointer';
     }

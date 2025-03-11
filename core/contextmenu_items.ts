@@ -619,7 +619,7 @@ export function registerCommentCreate() {
       if (!workspace) return;
       eventUtils.setGroup(true);
       const comment = new RenderedWorkspaceComment(workspace);
-      comment.setText(Msg['WORKSPACE_COMMENT_DEFAULT_TEXT']);
+      comment.setPlaceholderText(Msg['WORKSPACE_COMMENT_DEFAULT_TEXT']);
       comment.moveTo(
         pixelsToWorkspaceCoords(
           new Coordinate(e.clientX, e.clientY),

@@ -53,7 +53,7 @@ export class CommentView implements IRenderedElement {
   private textArea: HTMLTextAreaElement;
 
   /** The current size of the comment in workspace units. */
-  private size: Size = new Size(120, 100);
+  private size: Size;
 
   /** Whether the comment is collapsed or not. */
   private collapsed: boolean = false;
@@ -95,15 +95,18 @@ export class CommentView implements IRenderedElement {
   private resizePointerMoveListener: browserEvents.Data | null = null;
 
   /** Whether this comment view is currently being disposed or not. */
-  private disposing = false;
+  protected disposing = false;
 
   /** Whether this comment view has been disposed or not. */
-  private disposed = false;
+  protected disposed = false;
 
   /** Size of this comment when the resize drag was initiated. */
   private preResizeSize?: Size;
 
-  constructor(private readonly workspace: WorkspaceSvg) {
+  /** The default size of newly created comments. */
+  static defaultCommentSize = new Size(120, 100);
+
+  constructor(readonly workspace: WorkspaceSvg) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable blocklyDraggable',
     });
@@ -129,6 +132,7 @@ export class CommentView implements IRenderedElement {
     workspace.getLayerManager()?.append(this, layers.BLOCK);
 
     // Set size to the default size.
+    this.size = CommentView.defaultCommentSize;
     this.setSizeWithoutFiringEvents(this.size);
 
     // Set default transform (including inverted scale for RTL).
@@ -683,6 +687,11 @@ export class CommentView implements IRenderedElement {
   setText(text: string) {
     this.textArea.value = text;
     this.onTextChange();
+  }
+
+  /** Sets the placeholder text displayed for an empty comment. */
+  setPlaceholderText(text: string) {
+    this.textArea.placeholder = text;
   }
 
   /** Registers a callback that listens for text changes. */

@@ -98,7 +98,7 @@ export function inject(
  * @param options Dictionary of options.
  * @returns Newly created SVG image.
  */
-function createDom(container: Element, options: Options): SVGElement {
+function createDom(container: HTMLElement, options: Options): SVGElement {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -141,7 +141,12 @@ function createDom(container: Element, options: Options): SVGElement {
   // https://neil.fraser.name/news/2015/11/01/
   const rnd = String(Math.random()).substring(2);
 
-  options.gridPattern = Grid.createDom(rnd, options.gridOptions, defs);
+  options.gridPattern = Grid.createDom(
+    rnd,
+    options.gridOptions,
+    defs,
+    container,
+  );
   return svg;
 }
 
@@ -153,7 +158,7 @@ function createDom(container: Element, options: Options): SVGElement {
  * @returns Newly created main workspace.
  */
 function createMainWorkspace(
-  injectionDiv: Element,
+  injectionDiv: HTMLElement,
   svg: SVGElement,
   options: Options,
 ): WorkspaceSvg {

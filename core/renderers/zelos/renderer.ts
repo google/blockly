@@ -7,12 +7,8 @@
 // Former goog.module ID: Blockly.zelos.Renderer
 
 import type {BlockSvg} from '../../block_svg.js';
-import {ConnectionType} from '../../connection_type.js';
-import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
-import type {RenderedConnection} from '../../rendered_connection.js';
 import type {BlockStyle} from '../../theme.js';
-import * as deprecation from '../../utils/deprecation.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 import * as blockRendering from '../common/block_rendering.js';
 import type {RenderInfo as BaseRenderInfo} from '../common/info.js';
@@ -106,36 +102,6 @@ export class Renderer extends BaseRenderer {
    */
   override getConstants(): ConstantProvider {
     return this.constants_;
-  }
-
-  /**
-   * @deprecated v10 - This function is no longer respected. A custom
-   *    IConnectionPreviewer may be able to fulfill the functionality.
-   */
-  override getConnectionPreviewMethod(
-    closest: RenderedConnection,
-    local: RenderedConnection,
-    topBlock: BlockSvg,
-  ) {
-    deprecation.warn(
-      'getConnectionPreviewMethod',
-      'v10',
-      'v12',
-      'an IConnectionPreviewer, if it fulfills your use case.',
-    );
-    if (local.type === ConnectionType.OUTPUT_VALUE) {
-      if (!closest.isConnected()) {
-        return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
-      }
-      // TODO: Returning this is a total hack, because we don't want to show
-      //   a replacement fade, we want to show an outline affect.
-      //   Sadly zelos does not support showing an outline around filled
-      //   inputs, so we have to pretend like the connected block is getting
-      //   replaced.
-      return InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
-    }
-
-    return super.getConnectionPreviewMethod(closest, local, topBlock);
   }
 }
 

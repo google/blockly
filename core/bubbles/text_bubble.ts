@@ -27,6 +27,7 @@ export class TextBubble extends Bubble {
     super(workspace, anchor, ownerRect);
     this.paragraph = this.stringToSvg(text, this.contentContainer);
     this.updateBubbleSize();
+    dom.addClass(this.svgRoot, 'blocklyTextBubble');
   }
 
   /** @returns the current text of this text bubble. */

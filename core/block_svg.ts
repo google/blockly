@@ -194,6 +194,9 @@ export class BlockSvg
     this.workspace = workspace;
     this.svgGroup = dom.createSvgElement(Svg.G, {});
 
+    if (prototypeName) {
+      dom.addClass(this.svgGroup, prototypeName);
+    }
     /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
@@ -228,7 +231,7 @@ export class BlockSvg
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable() || this.isInFlyout);
     const svg = this.getSvgRoot();
-    if (!this.workspace.options.readOnly && svg) {
+    if (svg) {
       browserEvents.conditionalBind(svg, 'pointerdown', this, this.onMouseDown);
     }
 
@@ -529,8 +532,11 @@ export class BlockSvg
     if (!collapsed) {
       this.updateDisabled();
       this.removeInput(collapsedInputName);
+      dom.removeClass(this.svgGroup, 'blocklyCollapsed');
       return;
     }
+
+    dom.addClass(this.svgGroup, 'blocklyCollapsed');
 
     const text = this.toString(internalConstants.COLLAPSE_CHARS);
     const field = this.getField(collapsedFieldName);
@@ -579,6 +585,8 @@ export class BlockSvg
    * @param e Pointer down event.
    */
   private onMouseDown(e: PointerEvent) {
+    if (this.workspace.isReadOnly()) return;
+
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
@@ -606,7 +614,7 @@ export class BlockSvg
   protected generateContextMenu(): Array<
     ContextMenuOption | LegacyContextMenuOption
   > | null {
-    if (this.workspace.options.readOnly || !this.contextMenu) {
+    if (this.workspace.isReadOnly() || !this.contextMenu) {
       return null;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
@@ -677,6 +685,24 @@ export class BlockSvg
   }
 
   /**
+   * Add a CSS class to the SVG group of this block.
+   *
+   * @param className
+   */
+  addClass(className: string) {
+    dom.addClass(this.svgGroup, className);
+  }
+
+  /**
+   * Remove a CSS class from the SVG group of this block.
+   *
+   * @param className
+   */
+  removeClass(className: string) {
+    dom.removeClass(this.svgGroup, className);
+  }
+
+  /**
    * Recursively adds or removes the dragging class to this node and its
    * children.
    *
@@ -688,10 +714,10 @@ export class BlockSvg
     if (adding) {
       this.translation = '';
       common.draggingConnections.push(...this.getConnections_(true));
-      dom.addClass(this.svgGroup, 'blocklyDragging');
+      this.addClass('blocklyDragging');
     } else {
       common.draggingConnections.length = 0;
-      dom.removeClass(this.svgGroup, 'blocklyDragging');
+      this.removeClass('blocklyDragging');
     }
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
@@ -716,6 +742,13 @@ export class BlockSvg
    */
   override setEditable(editable: boolean) {
     super.setEditable(editable);
+
+    if (editable) {
+      dom.removeClass(this.svgGroup, 'blocklyNotEditable');
+    } else {
+      dom.addClass(this.svgGroup, 'blocklyNotEditable');
+    }
+
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
       icons[i].updateEditable();
@@ -873,17 +906,15 @@ export class BlockSvg
    * @internal
    */
   applyColour() {
-    this.pathObject.applyColour(this);
+    this.pathObject.applyColour?.(this);
 
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
       icons[i].applyColour();
     }
 
-    for (let x = 0, input; (input = this.inputList[x]); x++) {
-      for (let y = 0, field; (field = input.fieldRow[y]); y++) {
-        field.applyColour();
-      }
+    for (const field of this.getFields()) {
+      field.applyColour();
     }
   }
 
@@ -1076,6 +1107,20 @@ export class BlockSvg
   }
 
   /**
+   * Add blocklyNotDeletable class when block is not deletable
+   * Or remove class when block is deletable
+   */
+  override setDeletable(deletable: boolean) {
+    super.setDeletable(deletable);
+
+    if (deletable) {
+      dom.removeClass(this.svgGroup, 'blocklyNotDeletable');
+    } else {
+      dom.addClass(this.svgGroup, 'blocklyNotDeletable');
+    }
+  }
+
+  /**
    * Set whether the block is highlighted or not.  Block highlighting is
    * often used to visually mark blocks currently being executed.
    *
@@ -1139,7 +1184,7 @@ export class BlockSvg
       .getConstants()
       .getBlockStyleForColour(this.colour_);
 
-    this.pathObject.setStyle(styleObj.style);
+    this.pathObject.setStyle?.(styleObj.style);
     this.style = styleObj.style;
     this.styleName_ = styleObj.name;
 
@@ -1157,16 +1202,22 @@ export class BlockSvg
       .getRenderer()
       .getConstants()
       .getBlockStyle(blockStyleName);
-    this.styleName_ = blockStyleName;
+
+    if (this.styleName_) {
+      dom.removeClass(this.svgGroup, this.styleName_);
+    }
 
     if (blockStyle) {
       this.hat = blockStyle.hat;
-      this.pathObject.setStyle(blockStyle);
+      this.pathObject.setStyle?.(blockStyle);
       // Set colour to match Block.
       this.colour_ = blockStyle.colourPrimary;
       this.style = blockStyle;
 
       this.applyColour();
+
+      dom.addClass(this.svgGroup, blockStyleName);
+      this.styleName_ = blockStyleName;
     } else {
       throw Error('Invalid style name: ' + blockStyleName);
     }
@@ -1735,5 +1786,17 @@ export class BlockSvg
 
     traverseJson(json as unknown as {[key: string]: unknown});
     return [json];
+  }
+
+  override jsonInit(json: AnyDuringMigration): void {
+    super.jsonInit(json);
+
+    if (json['classes']) {
+      this.addClass(
+        Array.isArray(json['classes'])
+          ? json['classes'].join(' ')
+          : json['classes'],
+      );
+    }
   }
 }

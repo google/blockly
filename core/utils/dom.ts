@@ -208,16 +208,14 @@ export function getTextWidth(textElement: SVGTextElement): number {
     }
   }
 
-  // Attempt to compute fetch the width of the SVG text element.
-  try {
-    width = textElement.getComputedTextLength();
-  } catch {
-    // In other cases where we fail to get the computed text. Instead, use an
-    // approximation and do not cache the result. At some later point in time
-    // when the block is inserted into the visible DOM, this method will be
-    // called again and, at that point in time, will not throw an exception.
-    return textElement.textContent!.length * 8;
-  }
+  // Compute the width of the SVG text element.
+  const style = window.getComputedStyle(textElement);
+  width = getFastTextWidthWithSizeString(
+    textElement,
+    style.fontSize,
+    style.fontWeight,
+    style.fontFamily,
+  );
 
   // Cache the computed width and return.
   if (cacheWidths) {

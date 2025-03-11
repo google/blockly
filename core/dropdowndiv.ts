@@ -136,12 +136,6 @@ export function createDom() {
 
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
-  div.addEventListener('focusin', function () {
-    dom.addClass(div, 'blocklyFocused');
-  });
-  div.addEventListener('focusout', function () {
-    dom.removeClass(div, 'blocklyFocused');
-  });
 }
 
 /**
@@ -166,7 +160,7 @@ export function getOwner(): Field | null {
  *
  * @returns Div to populate with content.
  */
-export function getContentDiv(): Element {
+export function getContentDiv(): HTMLDivElement {
   return content;
 }
 
@@ -703,19 +697,12 @@ function positionInternal(
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
+    const x = metrics.arrowX;
+    const y = metrics.arrowY;
+    const rotation = metrics.arrowAtTop ? 45 : 225;
     arrow.style.display = '';
-    arrow.style.transform =
-      'translate(' +
-      metrics.arrowX +
-      'px,' +
-      metrics.arrowY +
-      'px) rotate(45deg)';
-    arrow.setAttribute(
-      'class',
-      metrics.arrowAtTop
-        ? 'blocklyDropDownArrow blocklyArrowTop'
-        : 'blocklyDropDownArrow blocklyArrowBottom',
-    );
+    arrow.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+    arrow.setAttribute('class', 'blocklyDropDownArrow');
   } else {
     arrow.style.display = 'none';
   }

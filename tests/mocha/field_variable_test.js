@@ -388,8 +388,7 @@ suite('Variable Fields', function () {
       fieldVariable.variableTypes = null;
 
       const resultTypes = fieldVariable.getVariableTypes();
-      // The empty string is always one of the options.
-      assert.deepEqual(resultTypes, ['type1', 'type2', '']);
+      assert.deepEqual(resultTypes, ['type1', 'type2']);
     });
     test('variableTypes is the empty list', function () {
       const fieldVariable = new Blockly.FieldVariable('name1');

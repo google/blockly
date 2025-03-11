@@ -21,6 +21,7 @@ import {
   FieldInputValidator,
 } from './field_input.js';
 import * as fieldRegistry from './field_registry.js';
+import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 
 /**
@@ -47,6 +48,13 @@ export class FieldTextInput extends FieldInput<string> {
     config?: FieldTextInputConfig,
   ) {
     super(value, validator, config);
+  }
+
+  override initView() {
+    super.initView();
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyTextInputField');
+    }
   }
 
   /**

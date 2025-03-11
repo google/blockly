@@ -192,7 +192,7 @@ suite('Text Input Fields', function () {
       setup(function () {
         this.prepField = function (field) {
           const workspace = {
-            getScale: function () {
+            getAbsoluteScale: function () {
               return 1;
             },
             getRenderer: function () {

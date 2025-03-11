@@ -14,9 +14,12 @@
 import type {IASTNodeLocationSvg} from './blockly.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IRenderedElement} from './interfaces/i_rendered_element.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
+import {Rect} from './utils/rect.js';
 import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 import type * as toolbox from './utils/toolbox.js';
@@ -25,7 +28,9 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a button or label in the flyout.
  */
-export class FlyoutButton implements IASTNodeLocationSvg {
+export class FlyoutButton
+  implements IASTNodeLocationSvg, IBoundedElement, IRenderedElement
+{
   /** The horizontal margin around the text in the button. */
   static TEXT_MARGIN_X = 5;
 
@@ -41,7 +46,8 @@ export class FlyoutButton implements IASTNodeLocationSvg {
   private readonly cssClass: string | null;
 
   /** Mouse up event data. */
-  private onMouseUpWrapper: browserEvents.Data | null = null;
+  private onMouseDownWrapper: browserEvents.Data;
+  private onMouseUpWrapper: browserEvents.Data;
   info: toolbox.ButtonOrLabelInfo;
 
   /** The width of the button's rect. */
@@ -51,7 +57,7 @@ export class FlyoutButton implements IASTNodeLocationSvg {
   height = 0;
 
   /** The root SVG group for the button or label. */
-  private svgGroup: SVGGElement | null = null;
+  private svgGroup: SVGGElement;
 
   /** The SVG element with the text of the label or button. */
   private svgText: SVGTextElement | null = null;
@@ -92,14 +98,6 @@ export class FlyoutButton implements IASTNodeLocationSvg {
 
     /** The JSON specifying the label / button. */
     this.info = json;
-  }
-
-  /**
-   * Create the button elements.
-   *
-   * @returns The button's SVG group.
-   */
-  createDom(): SVGElement {
     let cssClass = this.isFlyoutLabel
       ? 'blocklyFlyoutLabel'
       : 'blocklyFlyoutButton';
@@ -179,7 +177,7 @@ export class FlyoutButton implements IASTNodeLocationSvg {
       fontWeight,
       fontFamily,
     );
-    this.height = fontMetrics.height;
+    this.height = this.height || fontMetrics.height;
 
     if (!this.isFlyoutLabel) {
       this.width += 2 * FlyoutButton.TEXT_MARGIN_X;
@@ -198,15 +196,24 @@ export class FlyoutButton implements IASTNodeLocationSvg {
 
     this.updateTransform();
 
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'EventTarget'.
+    this.onMouseDownWrapper = browserEvents.conditionalBind(
+      this.svgGroup,
+      'pointerdown',
+      this,
+      this.onMouseDown,
+    );
     this.onMouseUpWrapper = browserEvents.conditionalBind(
-      this.svgGroup as AnyDuringMigration,
+      this.svgGroup,
       'pointerup',
       this,
       this.onMouseUp,
     );
-    return this.svgGroup!;
+  }
+
+  createDom(): SVGElement {
+    // No-op, now handled in constructor. Will be removed in followup refactor
+    // PR that updates the flyout classes to use inflaters.
+    return this.svgGroup;
   }
 
   /** Correctly position the flyout button and make it visible. */
@@ -235,6 +242,17 @@ export class FlyoutButton implements IASTNodeLocationSvg {
     this.updateTransform();
   }
 
+  /**
+   * Move the element by a relative offset.
+   *
+   * @param dx Horizontal offset in workspace units.
+   * @param dy Vertical offset in workspace units.
+   * @param _reason Why is this move happening?  'user', 'bump', 'snap'...
+   */
+  moveBy(dx: number, dy: number, _reason?: string[]) {
+    this.moveTo(this.position.x + dx, this.position.y + dy);
+  }
+
   /** @returns Whether or not the button is a label. */
   isLabel(): boolean {
     return this.isFlyoutLabel;
@@ -248,6 +266,21 @@ export class FlyoutButton implements IASTNodeLocationSvg {
    */
   getPosition(): Coordinate {
     return this.position;
+  }
+
+  /**
+   * Returns the coordinates of a bounded element describing the dimensions of
+   * the element. Coordinate system: workspace coordinates.
+   *
+   * @returns Object with coordinates of the bounded element.
+   */
+  getBoundingRectangle() {
+    return new Rect(
+      this.position.y,
+      this.position.y + this.height,
+      this.position.x,
+      this.position.x + this.width,
+    );
   }
 
   /** @returns Text of the button. */
@@ -275,9 +308,8 @@ export class FlyoutButton implements IASTNodeLocationSvg {
 
   /** Dispose of this button. */
   dispose() {
-    if (this.onMouseUpWrapper) {
-      browserEvents.unbind(this.onMouseUpWrapper);
-    }
+    browserEvents.unbind(this.onMouseDownWrapper);
+    browserEvents.unbind(this.onMouseUpWrapper);
     if (this.svgGroup) {
       dom.removeNode(this.svgGroup);
     }
@@ -341,6 +373,21 @@ export class FlyoutButton implements IASTNodeLocationSvg {
         callback(this);
       }
     }
+  }
+
+  private onMouseDown(e: PointerEvent) {
+    const gesture = this.targetWorkspace.getGesture(e);
+    const flyout = this.targetWorkspace.getFlyout();
+    if (gesture && flyout) {
+      gesture.handleFlyoutStart(e, flyout);
+    }
+  }
+
+  /**
+   * @returns The root SVG element of this rendered element.
+   */
+  getSvgRoot() {
+    return this.svgGroup;
   }
 }
 

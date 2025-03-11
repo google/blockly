@@ -28,6 +28,8 @@ export enum EventType {
   VAR_DELETE = 'var_delete',
   /** Type of event that renames a variable. */
   VAR_RENAME = 'var_rename',
+  /** Type of event that changes the type of a variable. */
+  VAR_TYPE_CHANGE = 'var_type_change',
   /**
    * Type of generic event that records a UI change.
    *

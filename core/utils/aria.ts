@@ -48,6 +48,9 @@ export enum Role {
 
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
   TREEITEM = 'treeitem',
+
+  // ARIA role for a visual separator in e.g. a menu.
+  SEPARATOR = 'separator',
 }
 
 /**

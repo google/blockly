@@ -144,9 +144,9 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
     const id = this.getFieldValue('VAR');
     const variableModel = Variables.getVariable(this.workspace, id)!;
     if (this.type === 'variables_get_dynamic') {
-      this.outputConnection!.setCheck(variableModel.type);
+      this.outputConnection!.setCheck(variableModel.getType());
     } else {
-      this.getInput('VALUE')!.connection!.setCheck(variableModel.type);
+      this.getInput('VALUE')!.connection!.setCheck(variableModel.getType());
     }
   },
 };
@@ -176,11 +176,12 @@ const renameOptionCallbackFactory = function (block: VariableBlock) {
  */
 const deleteOptionCallbackFactory = function (block: VariableBlock) {
   return function () {
-    const workspace = block.workspace;
     const variableField = block.getField('VAR') as FieldVariable;
-    const variable = variableField.getVariable()!;
-    workspace.deleteVariableById(variable.getId());
-    (workspace as WorkspaceSvg).refreshToolboxSelection();
+    const variable = variableField.getVariable();
+    if (variable) {
+      Variables.deleteVariable(variable.getWorkspace(), variable, block);
+    }
+    (block.workspace as WorkspaceSvg).refreshToolboxSelection();
   };
 };
 

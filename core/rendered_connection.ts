@@ -533,6 +533,21 @@ export class RenderedConnection extends Connection {
     childBlock.updateDisabled();
     childBlock.queueRender();
 
+    // If either block being connected was selected, visually un- and reselect
+    // it. This has the effect of moving the selection path to the end of the
+    // list of child nodes in the DOM. Since SVG z-order is determined by node
+    // order in the DOM, this works around an issue where the selection outline
+    // path could be partially obscured by a new block inserted after it in the
+    // DOM.
+    const selection = common.getSelected();
+    const selectedBlock =
+      (selection === parentBlock && parentBlock) ||
+      (selection === childBlock && childBlock);
+    if (selectedBlock) {
+      selectedBlock.removeSelect();
+      selectedBlock.addSelect();
+    }
+
     // The input the child block is connected to (if any).
     const parentInput = parentBlock.getInputWithBlock(childBlock);
     if (parentInput) {

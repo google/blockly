@@ -876,11 +876,11 @@ export class ConstantProvider extends BaseConstantProvider {
       `}`,
 
       // Widget and Dropdown Div
-      `${selector}.blocklyWidgetDiv .goog-menuitem,`,
-      `${selector}.blocklyDropDownDiv .goog-menuitem {`,
+      `${selector}.blocklyWidgetDiv .blocklyMenuItem,`,
+      `${selector}.blocklyDropDownDiv .blocklyMenuItem {`,
       `font-family: ${this.FIELD_TEXT_FONTFAMILY};`,
       `}`,
-      `${selector}.blocklyDropDownDiv .goog-menuitem-content {`,
+      `${selector}.blocklyDropDownDiv .blocklyMenuItemContent {`,
       `color: #fff;`,
       `}`,
 

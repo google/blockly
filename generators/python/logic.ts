@@ -40,7 +40,11 @@ export function controls_if(block: Block, generator: PythonGenerator) {
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || generator.STATEMENT_SUFFIX) {
-    branchCode = generator.statementToCode(block, 'ELSE') || generator.PASS;
+    if (block.getInput('ELSE')) {
+      branchCode = generator.statementToCode(block, 'ELSE') || generator.PASS;
+    } else {
+      branchCode = generator.PASS;
+    }
     if (generator.STATEMENT_SUFFIX) {
       branchCode =
         generator.prefixLines(

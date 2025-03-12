@@ -77,6 +77,16 @@ export function inject(
   });
 
   browserEvents.conditionalBind(subContainer, 'keydown', null, onKeyDown);
+  browserEvents.conditionalBind(
+    dropDownDiv.getContentDiv(),
+    'keydown',
+    null,
+    onKeyDown,
+  );
+  const widgetContainer = WidgetDiv.getDiv();
+  if (widgetContainer) {
+    browserEvents.conditionalBind(widgetContainer, 'keydown', null, onKeyDown);
+  }
 
   return workspace;
 }

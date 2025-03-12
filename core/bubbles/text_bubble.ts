@@ -16,7 +16,7 @@ import {Bubble} from './bubble.js';
  * A bubble that displays non-editable text. Used by the warning icon.
  */
 export class TextBubble extends Bubble {
-  private paragraph: SVGTextElement;
+  private paragraph: SVGGElement;
 
   constructor(
     private text: string,
@@ -49,43 +49,52 @@ export class TextBubble extends Bubble {
    */
   private stringToSvg(text: string, container: SVGGElement) {
     const paragraph = this.createParagraph(container);
-    const spans = this.createSpans(paragraph, text);
+    const fragments = this.createTextFragments(paragraph, text);
     if (this.workspace.RTL)
-      this.rightAlignSpans(paragraph.getBBox().width, spans);
+      this.rightAlignTextFragments(paragraph.getBBox().width, fragments);
     return paragraph;
   }
 
-  /** Creates the paragraph container for this bubble's view's spans. */
-  private createParagraph(container: SVGGElement): SVGTextElement {
+  /** Creates the paragraph container for this bubble's view's text fragments. */
+  private createParagraph(container: SVGGElement): SVGGElement {
     return dom.createSvgElement(
-      Svg.TEXT,
+      Svg.G,
       {
         'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
-        'y': Bubble.BORDER_WIDTH,
+        'transform': `translate(0,${Bubble.BORDER_WIDTH})`,
+        'style': `direction: ${this.workspace.RTL ? 'rtl' : 'ltr'}`,
       },
       container,
     );
   }
 
-  /** Creates the spans visualizing the text of this bubble. */
-  private createSpans(parent: SVGTextElement, text: string): SVGTSpanElement[] {
+  /** Creates the text fragments visualizing the text of this bubble. */
+  private createTextFragments(
+    parent: SVGGElement,
+    text: string,
+  ): SVGTextElement[] {
+    let lineNum = 1;
     return text.split('\n').map((line) => {
-      const tspan = dom.createSvgElement(
-        Svg.TSPAN,
-        {'dy': '1em', 'x': Bubble.BORDER_WIDTH},
+      const fragment = dom.createSvgElement(
+        Svg.TEXT,
+        {'y': `${lineNum}em`, 'x': Bubble.BORDER_WIDTH},
         parent,
       );
       const textNode = document.createTextNode(line);
-      tspan.appendChild(textNode);
-      return tspan;
+      fragment.appendChild(textNode);
+      lineNum += 1;
+      return fragment;
     });
   }
 
-  /** Right aligns the given spans. */
-  private rightAlignSpans(maxWidth: number, spans: SVGTSpanElement[]) {
-    for (const span of spans) {
-      span.setAttribute('text-anchor', 'end');
-      span.setAttribute('x', `${maxWidth + Bubble.BORDER_WIDTH}`);
+  /** Right aligns the given text fragments. */
+  private rightAlignTextFragments(
+    maxWidth: number,
+    fragments: SVGTextElement[],
+  ) {
+    for (const text of fragments) {
+      text.setAttribute('text-anchor', 'start');
+      text.setAttribute('x', `${maxWidth + Bubble.BORDER_WIDTH}`);
     }
   }
 

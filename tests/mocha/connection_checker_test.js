@@ -503,8 +503,9 @@ suite('Connection checker', function () {
       </xml>`),
           this.workspace,
         );
-        [this.blockA, this.blockB, this.blockC] =
-          this.workspace.getAllBlocks(true);
+        this.blockA = this.workspace.getBlockById('A');
+        this.blockB = this.workspace.getBlockById('B');
+        this.blockC = this.workspace.getBlockById('C');
         this.checker = this.workspace.connectionChecker;
       });
 

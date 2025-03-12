@@ -321,6 +321,7 @@ input[type=number] {
 
 .blocklyScrollbarBackground {
   opacity: 0;
+  pointer-events: none;
 }
 
 .blocklyScrollbarHandle {

@@ -30,6 +30,7 @@ import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import * as utilsString from './utils/string.js';
+import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 
 /**
@@ -302,6 +303,11 @@ export class FieldDropdown extends Field<string> {
 
     if (this.selectedMenuItem) {
       this.menu_!.setHighlighted(this.selectedMenuItem);
+      style.scrollIntoContainerView(
+        this.selectedMenuItem.getElement()!,
+        dropDownDiv.getContentDiv(),
+        true,
+      );
     }
 
     this.applyColour();

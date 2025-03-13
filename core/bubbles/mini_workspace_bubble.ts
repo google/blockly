@@ -239,7 +239,7 @@ export class MiniWorkspaceBubble extends Bubble {
 
   /** Reapplies styles to all of the blocks in the mini workspace. */
   updateBlockStyles() {
-    for (const block of this.miniWorkspace.getAllBlocks(false)) {
+    for (const block of this.miniWorkspace.getAllBlocks(false, true)) {
       block.setStyle(block.getStyleName());
     }
 

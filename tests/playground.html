@@ -184,7 +184,8 @@
           Blockly.serialization.workspaces.load(state, workspace);
         } else if (valid.xml) {
           var xml = Blockly.utils.xml.textToDom(input.value);
-          Blockly.Xml.domToWorkspace(xml, workspace);
+          Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, workspace);
+          workspace.clearUndo();
         }
         taChange();
       }

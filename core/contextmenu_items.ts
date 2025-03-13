@@ -83,7 +83,7 @@ export function registerCleanup() {
     },
     preconditionFn(scope: Scope) {
       if (scope.workspace!.isMovable()) {
-        if (scope.workspace!.getTopBlocks(false).length > 1) {
+        if (scope.workspace!.getTopBlocks(false, true).length > 1) {
           return 'enabled';
         }
         return 'disabled';
@@ -138,7 +138,7 @@ export function registerCollapse() {
     },
     preconditionFn(scope: Scope) {
       if (scope.workspace!.options.collapse) {
-        const topBlocks = scope.workspace!.getTopBlocks(false);
+        const topBlocks = scope.workspace!.getTopBlocks(false, true);
         for (let i = 0; i < topBlocks.length; i++) {
           let block: BlockSvg | null = topBlocks[i];
           while (block) {
@@ -153,7 +153,7 @@ export function registerCollapse() {
       return 'hidden';
     },
     callback(scope: Scope) {
-      toggleOption_(true, scope.workspace!.getTopBlocks(true));
+      toggleOption_(true, scope.workspace!.getTopBlocks(true, true));
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'collapseWorkspace',
@@ -172,7 +172,7 @@ export function registerExpand() {
     },
     preconditionFn(scope: Scope) {
       if (scope.workspace!.options.collapse) {
-        const topBlocks = scope.workspace!.getTopBlocks(false);
+        const topBlocks = scope.workspace!.getTopBlocks(false, true);
         for (let i = 0; i < topBlocks.length; i++) {
           let block: BlockSvg | null = topBlocks[i];
           while (block) {
@@ -187,7 +187,7 @@ export function registerExpand() {
       return 'hidden';
     },
     callback(scope: Scope) {
-      toggleOption_(false, scope.workspace!.getTopBlocks(true));
+      toggleOption_(false, scope.workspace!.getTopBlocks(true, true));
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'expandWorkspace',
@@ -221,7 +221,7 @@ function addDeletableBlocks_(block: BlockSvg, deleteList: BlockSvg[]) {
  */
 function getDeletableBlocks_(workspace: WorkspaceSvg): BlockSvg[] {
   const deleteList: BlockSvg[] = [];
-  const topBlocks = workspace.getTopBlocks(true);
+  const topBlocks = workspace.getTopBlocks(true, true);
   for (let i = 0; i < topBlocks.length; i++) {
     addDeletableBlocks_(topBlocks[i], deleteList);
   }

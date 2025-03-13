@@ -558,7 +558,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     // Update all blocks in workspace that have a style name.
     this.updateBlockStyles_(
-      this.getAllBlocks(false).filter(function (block) {
+      this.getAllBlocks(false, true).filter(function (block) {
         return !!block.getStyleName();
       }),
     );
@@ -1330,7 +1330,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   render() {
     // Generate list of all blocks.
-    const blocks = this.getAllBlocks(false);
+    const blocks = this.getAllBlocks(false, true);
     // Render each block.
     for (let i = blocks.length - 1; i >= 0; i--) {
       blocks[i].queueRender();
@@ -2204,10 +2204,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * by position; top to bottom (with slight LTR or RTL bias).
    *
    * @param ordered Sort the list if true.
+   * @param {boolean} [inActiveModule] filter blocks by active module if true.
    * @returns Array of blocks.
    */
-  override getAllBlocks(ordered = false): BlockSvg[] {
-    return super.getAllBlocks(ordered) as BlockSvg[];
+  override getAllBlocks(ordered = false, inActiveModule: boolean = false): BlockSvg[] {
+    return super.getAllBlocks(ordered, inActiveModule) as BlockSvg[];
   }
 
   /**

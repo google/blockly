@@ -9,7 +9,7 @@ name: Assign requested reviewers
 # N.B.: Runs with a read-write repo token.  Do not check out the
 # submitted branch!
 on:
-  pull_request_target:
+  pull_request:
     types: [review_requested]
 
 permissions: write-all

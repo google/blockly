@@ -12,6 +12,7 @@
 // Former goog.module ID: Blockly.Options
 
 import type {BlocklyOptions} from './blockly_options.js';
+import {IGridProvider} from './interfaces/i_grid.js';
 import * as registry from './registry.js';
 import {Theme} from './theme.js';
 import {Classic} from './theme/classic.js';
@@ -59,6 +60,8 @@ export class Options {
   gridPattern: SVGElement | null = null;
   parentWorkspace: WorkspaceSvg | null;
   plugins: {[key: string]: (new (...p1: any[]) => any) | string};
+
+  gridProvider: IGridProvider;
 
   /**
    * If set, sets the translation of the workspace to match the scrollbars.
@@ -175,7 +178,6 @@ export class Options {
     this.hasCss = hasCss;
     this.horizontalLayout = horizontalLayout;
     this.languageTree = toolboxJsonDef;
-    this.gridOptions = Options.parseGridOptions(options);
     this.zoomOptions = Options.parseZoomOptions(options);
     this.toolboxPosition = toolboxPosition;
     this.theme = Options.parseThemeOptions(options);
@@ -191,6 +193,16 @@ export class Options {
 
     /** Map of plugin type to name of registered plugin or plugin class. */
     this.plugins = plugins;
+
+    // This should be safe to call since this.plugins has been set
+    const GridProvider = registry.getClassFromOptions(
+      registry.Type.GRID_PROVIDER,
+      this,
+      true,
+    );
+
+    this.gridProvider = new GridProvider!();
+    this.gridOptions = this.gridProvider.parseGridOptions(options);
   }
 
   /**
@@ -299,25 +311,6 @@ export class Options {
       zoomOptions.pinch = !!zoom['pinch'];
     }
     return zoomOptions;
-  }
-
-  /**
-   * Parse the user-specified grid options, using reasonable defaults where
-   * behaviour is unspecified. See grid documentation:
-   *   https://developers.google.com/blockly/guides/configure/web/grid
-   *
-   * @param options Dictionary of options.
-   * @returns Normalized grid options.
-   */
-  private static parseGridOptions(options: BlocklyOptions): GridOptions {
-    const grid = options['grid'] || {};
-    const gridOptions = {} as GridOptions;
-    gridOptions.spacing = Number(grid['spacing']) || 0;
-    gridOptions.colour = grid['colour'] || '#888';
-    gridOptions.length =
-      grid['length'] === undefined ? 1 : Number(grid['length']);
-    gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
-    return gridOptions;
   }
 
   /**

@@ -14,6 +14,7 @@ import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js'
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDragger} from './interfaces/i_dragger.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import {IGridProvider} from './interfaces/i_grid.js';
 import type {IIcon} from './interfaces/i_icon.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IPaster} from './interfaces/i_paster.js';
@@ -100,6 +101,8 @@ export class Type<_T> {
    * BlockDraggeers, which is why the name is inaccurate.
    */
   static BLOCK_DRAGGER = new Type<IDragger>('blockDragger');
+
+  static GRID_PROVIDER = new Type<IGridProvider>('gridProvider');
 
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');

@@ -103,7 +103,7 @@ import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {VerticalFlyout} from './flyout_vertical.js';
 import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
-import {Grid} from './grid.js';
+import {Grid, GridProvider} from './grid.js';
 import * as icons from './icons.js';
 import {inject} from './inject.js';
 import * as inputs from './inputs.js';
@@ -132,6 +132,7 @@ import {
 } from './interfaces/i_draggable.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import {IFlyout} from './interfaces/i_flyout.js';
+import {IGrid, IGridProvider} from './interfaces/i_grid.js';
 import {IHasBubble, hasBubble} from './interfaces/i_has_bubble.js';
 import {IIcon, isIcon} from './interfaces/i_icon.js';
 import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
@@ -508,6 +509,7 @@ export {
   CodeGenerator as Generator,
   Gesture,
   Grid,
+  GridProvider,
   HorizontalFlyout,
   IASTNodeLocation,
   IASTNodeLocationSvg,
@@ -529,6 +531,8 @@ export {
   IDraggable,
   IDragger,
   IFlyout,
+  IGrid,
+  IGridProvider,
   IHasBubble,
   IIcon,
   IKeyboardAccessible,

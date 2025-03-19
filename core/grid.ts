@@ -12,15 +12,89 @@
  */
 // Former goog.module ID: Blockly.Grid
 
+import {BlocklyOptions} from './blockly_options.js';
+import {IGrid, IGridProvider} from './interfaces/i_grid.js';
 import {GridOptions} from './options.js';
+import * as registry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 
+export class GridProvider implements IGridProvider {
+  /**
+   * Create the DOM for the grid described by options.
+   *
+   * @param rnd A random ID to append to the pattern's ID.
+   * @param gridOptions The object containing grid configuration.
+   * @param defs The root SVG element for this workspace's defs.
+   * @returns The SVG element for the grid pattern.
+   * @internal
+   */
+  createDom(
+    rnd: string,
+    gridOptions: GridOptions,
+    defs: SVGElement,
+  ): SVGElement {
+    /*
+          <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
+            <rect stroke="#888" />
+            <rect stroke="#888" />
+          </pattern>
+        */
+    const gridPattern = dom.createSvgElement(
+      Svg.PATTERN,
+      {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
+      defs,
+    );
+    // x1, y1, x1, x2 properties will be set later in update.
+    if ((gridOptions['length'] ?? 1) > 0 && (gridOptions['spacing'] ?? 0) > 0) {
+      dom.createSvgElement(
+        Svg.LINE,
+        {'stroke': gridOptions['colour']},
+        gridPattern,
+      );
+      if (gridOptions['length'] ?? 1 > 1) {
+        dom.createSvgElement(
+          Svg.LINE,
+          {'stroke': gridOptions['colour']},
+          gridPattern,
+        );
+      }
+    } else {
+      // Edge 16 doesn't handle empty patterns
+      dom.createSvgElement(Svg.LINE, {}, gridPattern);
+    }
+    return gridPattern;
+  }
+
+  /**
+   * Parse the user-specified grid options, using reasonable defaults where
+   * behaviour is unspecified. See grid documentation:
+   *   https://developers.google.com/blockly/guides/configure/web/grid
+   *
+   * @param options Dictionary of options.
+   * @returns Normalized grid options.
+   */
+  parseGridOptions(options: BlocklyOptions): GridOptions {
+    const grid = options['grid'] || {};
+    const gridOptions = {} as GridOptions;
+    gridOptions.spacing = Number(grid['spacing']) || 0;
+    gridOptions.colour = grid['colour'] || '#888';
+    gridOptions.length =
+      grid['length'] === undefined ? 1 : Number(grid['length']);
+    gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
+    return gridOptions;
+  }
+
+  createGrid(pattern: SVGElement, options: GridOptions): IGrid {
+    return new Grid(pattern, options);
+  }
+}
+
 /**
  * Class for a workspace's grid.
  */
-export class Grid {
+export class Grid implements IGrid {
   private spacing: number;
   private length: number;
   private scale: number = 1;
@@ -203,50 +277,6 @@ export class Grid {
     }
     return new Coordinate(x, y);
   }
-
-  /**
-   * Create the DOM for the grid described by options.
-   *
-   * @param rnd A random ID to append to the pattern's ID.
-   * @param gridOptions The object containing grid configuration.
-   * @param defs The root SVG element for this workspace's defs.
-   * @returns The SVG element for the grid pattern.
-   * @internal
-   */
-  static createDom(
-    rnd: string,
-    gridOptions: GridOptions,
-    defs: SVGElement,
-  ): SVGElement {
-    /*
-          <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
-            <rect stroke="#888" />
-            <rect stroke="#888" />
-          </pattern>
-        */
-    const gridPattern = dom.createSvgElement(
-      Svg.PATTERN,
-      {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
-      defs,
-    );
-    // x1, y1, x1, x2 properties will be set later in update.
-    if ((gridOptions['length'] ?? 1) > 0 && (gridOptions['spacing'] ?? 0) > 0) {
-      dom.createSvgElement(
-        Svg.LINE,
-        {'stroke': gridOptions['colour']},
-        gridPattern,
-      );
-      if (gridOptions['length'] ?? 1 > 1) {
-        dom.createSvgElement(
-          Svg.LINE,
-          {'stroke': gridOptions['colour']},
-          gridPattern,
-        );
-      }
-    } else {
-      // Edge 16 doesn't handle empty patterns
-      dom.createSvgElement(Svg.LINE, {}, gridPattern);
-    }
-    return gridPattern;
-  }
 }
+
+registry.register(registry.Type.GRID_PROVIDER, registry.DEFAULT, GridProvider);

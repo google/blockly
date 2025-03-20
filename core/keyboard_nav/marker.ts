@@ -24,23 +24,16 @@ export class Marker {
   colour: string | null = null;
 
   /** The current location of the marker. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'ASTNode'.
-  private curNode: ASTNode = null as AnyDuringMigration;
+  private curNode: ASTNode | null = null;
 
   /**
    * The object in charge of drawing the visual representation of the current
    * node.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'MarkerSvg'.
-  private drawer: MarkerSvg = null as AnyDuringMigration;
+  private drawer: MarkerSvg | null = null;
 
   /** The type of the marker. */
   type = 'marker';
-
-  /** Constructs a new Marker instance. */
-  constructor() {}
 
   /**
    * Sets the object in charge of drawing the marker.
@@ -56,7 +49,7 @@ export class Marker {
    *
    * @returns The object in charge of drawing the marker.
    */
-  getDrawer(): MarkerSvg {
+  getDrawer(): MarkerSvg | null {
     return this.drawer;
   }
 
@@ -65,23 +58,19 @@ export class Marker {
    *
    * @returns The current field, connection, or block the marker is on.
    */
-  getCurNode(): ASTNode {
+  getCurNode(): ASTNode | null {
     return this.curNode;
   }
 
   /**
    * Set the location of the marker and call the update method.
-   * Setting isStack to true will only work if the newLocation is the top most
-   * output or previous connection on a stack.
    *
-   * @param newNode The new location of the marker.
+   * @param newNode The new location of the marker, or null to remove it.
    */
-  setCurNode(newNode: ASTNode) {
+  setCurNode(newNode: ASTNode | null) {
     const oldNode = this.curNode;
     this.curNode = newNode;
-    if (this.drawer) {
-      this.drawer.draw(oldNode, this.curNode);
-    }
+    this.drawer?.draw(oldNode, this.curNode);
   }
 
   /**
@@ -90,22 +79,18 @@ export class Marker {
    * @internal
    */
   draw() {
-    if (this.drawer) {
-      this.drawer.draw(this.curNode, this.curNode);
-    }
+    this.drawer?.draw(this.curNode, this.curNode);
   }
 
   /** Hide the marker SVG. */
   hide() {
-    if (this.drawer) {
-      this.drawer.hide();
-    }
+    this.drawer?.hide();
   }
 
   /** Dispose of this marker. */
   dispose() {
-    if (this.getDrawer()) {
-      this.getDrawer().dispose();
-    }
+    this.drawer?.dispose();
+    this.drawer = null;
+    this.curNode = null;
   }
 }

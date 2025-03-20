@@ -156,7 +156,7 @@ export class MarkerSvg {
    * @param oldNode The previous node the marker was on or null.
    * @param curNode The node that we want to draw the marker for.
    */
-  draw(oldNode: ASTNode, curNode: ASTNode) {
+  draw(oldNode: ASTNode | null, curNode: ASTNode | null) {
     if (!curNode) {
       this.hide();
       return;
@@ -620,7 +620,7 @@ export class MarkerSvg {
    * @param oldNode The old node the marker used to be on.
    * @param curNode The new node the marker is currently on.
    */
-  protected fireMarkerEvent(oldNode: ASTNode, curNode: ASTNode) {
+  protected fireMarkerEvent(oldNode: ASTNode | null, curNode: ASTNode) {
     const curBlock = curNode.getSourceBlock();
     const event = new (eventUtils.get(EventType.MARKER_MOVE))(
       curBlock,

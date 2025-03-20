@@ -67,7 +67,8 @@
 	"LISTS_GET_INDEX_FIRST": "ਪਹਿਲਾ",
 	"LISTS_GET_INDEX_LAST": "ਆਖੀਰਲਾ",
 	"LISTS_GET_INDEX_RANDOM": "ਰਲ਼ਵਾਂ",
-	"LISTS_SORT_ORDER_DESCENDING": "ਘਟਦੇ ਕ੍ਰਮ ਵਿੱਚ",
+	"LISTS_SORT_ORDER_ASCENDING": "ਚੜ੍ਹਦੀ ਤਰਤੀਬ ਵਿੱਚ",
+	"LISTS_SORT_ORDER_DESCENDING": "ਲਹਿੰਦੀ ਤਰਤੀਬ ਵਿੱਚ",
 	"PROCEDURES_DEFRETURN_RETURN": "ਮੋੜੋ",
 	"DIALOG_OK": "ਠੀਕ ਹੈ।",
 	"DIALOG_CANCEL": "ਰੱਦ ਕਰੋ"

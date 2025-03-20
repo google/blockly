@@ -61,6 +61,30 @@ suite('Clipboard', function () {
       );
     });
 
+    test('copied from a mutator pastes them into the mutator', async function () {
+      const block = Blockly.serialization.blocks.append(
+        {
+          'type': 'controls_if',
+          'id': 'blockId',
+          'extraState': {
+            'elseIfCount': 1,
+          },
+        },
+        this.workspace,
+      );
+      const mutatorIcon = block.getIcon(Blockly.icons.IconType.MUTATOR);
+      await mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
+      const elseIf = mutatorWorkspace.getBlocksByType('controls_if_elseif')[0];
+      assert.notEqual(elseIf, undefined);
+      assert.lengthOf(mutatorWorkspace.getAllBlocks(), 2);
+      assert.lengthOf(this.workspace.getAllBlocks(), 1);
+      const data = elseIf.toCopyData();
+      Blockly.clipboard.paste(data, mutatorWorkspace);
+      assert.lengthOf(mutatorWorkspace.getAllBlocks(), 3);
+      assert.lengthOf(this.workspace.getAllBlocks(), 1);
+    });
+
     suite('pasted blocks are placed in unambiguous locations', function () {
       test('pasted blocks are bumped to not overlap', function () {
         const block = Blockly.serialization.blocks.append(

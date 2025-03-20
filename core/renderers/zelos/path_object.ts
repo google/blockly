@@ -68,7 +68,7 @@ export class PathObject extends BasePathObject {
     // Set shadow stroke colour.
     const parent = block.getParent();
     if (block.isShadow() && parent) {
-      this.svgPath.setAttribute('stroke', parent.style.colourTertiary);
+      this.svgPath.setAttribute('stroke', parent.getColourTertiary());
     }
 
     // Apply colour to outlines.

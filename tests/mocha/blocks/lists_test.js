@@ -181,16 +181,58 @@ suite('Lists', function () {
      * Test cases for serialization tests.
      * @type {Array<SerializationTestCase>}
      */
-    const testCases = makeTestCasesForBlockNotNeedingExtraState_(
+    const testCases = [
       {
-        'type': 'lists_split',
-        'id': '1',
-        'fields': {
-          'MODE': 'SPLIT',
+        title: 'JSON for splitting',
+        json: {
+          type: 'lists_split',
+          id: '1',
+          extraState: {mode: 'SPLIT'},
+          fields: {MODE: 'SPLIT'},
+          inputs: {
+            DELIM: {
+              shadow: {
+                type: 'text',
+                id: '2',
+                fields: {
+                  TEXT: ',',
+                },
+              },
+            },
+          },
+        },
+        assertBlockStructure: (block) => {
+          assert.equal(block.type, 'lists_split');
+          assert.deepEqual(block.outputConnection.getCheck(), ['Array']);
+          assert.isTrue(block.getField('MODE').getValue() === 'SPLIT');
         },
       },
-      '<mutation mode="SPLIT"></mutation>',
-    );
+      {
+        title: 'JSON for joining',
+        json: {
+          type: 'lists_split',
+          id: '1',
+          extraState: {mode: 'JOIN'},
+          fields: {MODE: 'JOIN'},
+          inputs: {
+            DELIM: {
+              shadow: {
+                type: 'text',
+                id: '2',
+                fields: {
+                  TEXT: ',',
+                },
+              },
+            },
+          },
+        },
+        assertBlockStructure: (block) => {
+          assert.equal(block.type, 'lists_split');
+          assert.deepEqual(block.outputConnection.getCheck(), ['String']);
+          assert.isTrue(block.getField('MODE').getValue() === 'JOIN');
+        },
+      },
+    ];
     runSerializationTestSuite(testCases);
   });
 });

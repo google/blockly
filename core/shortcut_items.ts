@@ -18,7 +18,7 @@ import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
 import {Rect} from './utils/rect.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Object holding the names of the default shortcut items.
@@ -131,7 +131,10 @@ export function registerCopy() {
       const selected = common.getSelected();
       if (!selected || !isCopyable(selected)) return false;
       copyData = selected.toCopyData();
-      copyWorkspace = workspace;
+      copyWorkspace =
+        selected.workspace instanceof WorkspaceSvg
+          ? selected.workspace
+          : workspace;
       copyCoords = isDraggable(selected)
         ? selected.getRelativeToSurfaceXY()
         : null;

@@ -136,7 +136,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
 
   override applyColour(): void {
     super.applyColour();
-    this.miniWorkspaceBubble?.setColour(this.sourceBlock.style.colourPrimary);
+    this.miniWorkspaceBubble?.setColour(this.sourceBlock.getColour());
     this.miniWorkspaceBubble?.updateBlockStyles();
   }
 

@@ -494,4 +494,13 @@ input[type=number] {
 .blocklyDragging .blocklyIconGroup {
   cursor: grabbing;
 }
+
+.blocklyActiveFocus {
+  outline-color: #2ae;
+  outline-width: 2px;
+}
+.blocklyPassiveFocus {
+  outline-color: #3fdfff;
+  outline-width: 1.5px;
+}
 `;

@@ -562,11 +562,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       );
       WidgetDiv.hideIfOwner(this);
       dropDownDiv.hideWithoutAnimation();
-    } else if (e.key === 'Tab') {
-      WidgetDiv.hideIfOwner(this);
-      dropDownDiv.hideWithoutAnimation();
-      (this.sourceBlock_ as BlockSvg).tab(this, !e.shiftKey);
-      e.preventDefault();
     }
   }
 
@@ -671,15 +666,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     if (!bumped) this.resizeEditor_();
 
-    return true;
-  }
-
-  /**
-   * Returns whether or not the field is tab navigable.
-   *
-   * @returns True if the field is tab navigable.
-   */
-  override isTabNavigable(): boolean {
     return true;
   }
 

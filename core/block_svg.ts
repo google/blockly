@@ -34,7 +34,6 @@ import {BlockDragStrategy} from './dragging/block_drag_strategy.js';
 import type {BlockMove} from './events/events_block_move.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
-import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
 import {IconType} from './icons/icon_types.js';
 import {MutatorIcon} from './icons/mutator_icon.js';
@@ -46,8 +45,6 @@ import type {ICopyable} from './interfaces/i_copyable.js';
 import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
-import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
@@ -548,35 +545,6 @@ export class BlockSvg
       this.getInput(collapsedInputName) ||
       this.appendDummyInput(collapsedInputName);
     input.appendField(new FieldLabel(text), collapsedFieldName);
-  }
-
-  /**
-   * Open the next (or previous) FieldTextInput.
-   *
-   * @param start Current field.
-   * @param forward If true go forward, otherwise backward.
-   */
-  tab(start: Field, forward: boolean) {
-    const tabCursor = new TabNavigateCursor();
-    tabCursor.setCurNode(ASTNode.createFieldNode(start)!);
-    const currentNode = tabCursor.getCurNode();
-
-    if (forward) {
-      tabCursor.next();
-    } else {
-      tabCursor.prev();
-    }
-
-    const nextNode = tabCursor.getCurNode();
-    if (nextNode && nextNode !== currentNode) {
-      const nextField = nextNode.getLocation() as Field;
-      nextField.showEditor();
-
-      // Also move the cursor if we're in keyboard nav mode.
-      if (this.workspace.keyboardAccessibilityMode) {
-        this.workspace.getCursor()!.setCurNode(nextNode);
-      }
-    }
   }
 
   /**

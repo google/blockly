@@ -169,10 +169,8 @@ import {IVariableMap} from './interfaces/i_variable_map.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
-import {BasicCursor} from './keyboard_nav/basic_cursor.js';
 import {Cursor} from './keyboard_nav/cursor.js';
 import {Marker} from './keyboard_nav/marker.js';
-import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
 import type {LayerManager} from './layer_manager.js';
 import * as layers from './layers.js';
 import {MarkerManager} from './marker_manager.js';
@@ -432,7 +430,6 @@ Names.prototype.populateProcedures = function (
 // Re-export submodules that no longer declareLegacyNamespace.
 export {
   ASTNode,
-  BasicCursor,
   Block,
   BlockSvg,
   BlocklyOptions,
@@ -589,7 +586,6 @@ export {
   ScrollbarPair,
   SeparatorFlyoutInflater,
   ShortcutRegistry,
-  TabNavigateCursor,
   Theme,
   ThemeManager,
   Toolbox,

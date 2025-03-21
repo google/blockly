@@ -46,6 +46,8 @@ export interface IFocusableTree {
    *
    * The provided element must have a non-null ID that conforms to the contract
    * mentioned in IFocusableNode.
+   *
+   * This function may match against the root node of the tree.
    */
   findFocusableNodeFor(
     element: HTMLElement | SVGElement,

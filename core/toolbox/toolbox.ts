@@ -333,6 +333,7 @@ export class Toolbox
       'horizontalLayout': workspace.horizontalLayout,
       'renderer': workspace.options.renderer,
       'rendererOverrides': workspace.options.rendererOverrides,
+      'modalInputs': workspace.options.modalInputs,
       'move': {
         'scrollbars': true,
       },

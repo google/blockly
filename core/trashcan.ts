@@ -110,6 +110,7 @@ export class Trashcan
       'oneBasedIndex': this.workspace.options.oneBasedIndex,
       'renderer': this.workspace.options.renderer,
       'rendererOverrides': this.workspace.options.rendererOverrides,
+      'modalInputs': this.workspace.options.modalInputs,
       'move': {
         'scrollbars': true,
       },

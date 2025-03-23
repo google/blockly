@@ -69,5 +69,5 @@ export interface ZoomOptions {
   scaleSpeed?: number;
   startScale?: number;
   wheel?: boolean;
-  flyoutScale: number;
+  storeFlyoutScale: boolean;
 }

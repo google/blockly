@@ -54,6 +54,8 @@ const RESIZER_WIDTH = 5;
 const WORKSPACE_AT_BLOCK_CAPACITY_DISABLED_REASON =
   'WORKSPACE_AT_BLOCK_CAPACITY';
 
+const LocalStorageFlyoutScaleKey = 'blockly-flyout-scale'
+
 /**
  * Class for a flyout.
  */
@@ -253,6 +255,11 @@ export abstract class Flyout
   fixedWidth = false;
 
   /**
+   * Enable(false) / disable(true) store flyout scale.
+   */
+  storeFlyoutScale = false;
+
+  /**
    * Height of flyout.
    */
   protected height_ = 0;
@@ -304,9 +311,16 @@ export abstract class Flyout
    */
   constructor(workspaceOptions: Options) {
     super();
+    this.storeFlyoutScale = workspaceOptions.zoomOptions.storeFlyoutScale && typeof localStorage !== 'undefined';
     workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
     this.workspace_ = new WorkspaceSvg(workspaceOptions);
+    if (this.storeFlyoutScale) {
+      const storedScale = Number(localStorage.getItem(LocalStorageFlyoutScaleKey));
+      if (storedScale) {
+        this.workspace_.scale = storedScale;
+      }
+    }
     this.workspace_.setMetricsManager(
       new FlyoutMetricsManager(this.workspace_, this),
     );
@@ -1033,7 +1047,9 @@ export abstract class Flyout
     e.stopPropagation();
     e.preventDefault();
     const scale = this.workspace_.scale + 0.1;
-
+    if (this.storeFlyoutScale) {
+      localStorage.setItem(LocalStorageFlyoutScaleKey, String(scale));
+    }
     this.workspace_.setScale(scale);
     this.position();
     eventUtils.fire(
@@ -1053,7 +1069,9 @@ export abstract class Flyout
     e.stopPropagation();
     e.preventDefault();
     const scale = this.workspace_.scale - 0.1;
-
+    if (this.storeFlyoutScale) {
+      localStorage.setItem(LocalStorageFlyoutScaleKey, String(scale));
+    }
     this.workspace_.setScale(scale);
     this.position();
     eventUtils.fire(

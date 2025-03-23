@@ -2074,12 +2074,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       return;
     }
 
-    // Record active module scale
-    const activeModule = this.getModuleManager().getActiveModule();
-    if (activeModule) {
-      activeModule.scale = newScale;
-    }
-
     this.hideChaff(false);
     // Get the flyout, if any, whether our own or owned by the toolbox.
     const flyout = this.getFlyout(false);
@@ -2161,13 +2155,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     y = Math.max(y, -maxYScroll);
     this.scrollX = x;
     this.scrollY = y;
-
-    // Record active module workspace coordinates
-    const activeModule = this.getModuleManager().getActiveModule();
-    if (activeModule) {
-      activeModule.scrollX = x;
-      activeModule.scrollY = y;
-    }
 
     if (this.scrollbar) {
       // The content position (displacement from the content's top-left to the

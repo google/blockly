@@ -32,13 +32,9 @@ import {WorkspaceSvg} from './workspace_svg.js';
 import * as ContextMenu from './contextmenu.js';
 import {BlockSvg} from './block_svg.js';
 import * as Events from './events/events.js';
-import {ModuleCreate} from './events/events_module_create.js';
-import {ModuleActivate} from './events/events_module_activate.js';
-import {ModuleDelete} from './events/events_module_delete.js';
-import {ModuleRename} from './events/events_module_rename.js';
 import * as idGenerator from './utils/idgenerator.js';
-import {ModuleMove} from './events/events_module_move.js';
 import * as common from "./common.js";
+import * as Blockly from "./blockly.js";
 
 /**
  * Class for a module management.
@@ -48,6 +44,7 @@ export class ModuleManager {
   private moduleMap_: ModuleModel[];
   private activeModuleId_: string | null;
   private readonly workspace: WorkspaceSvg;
+  private onWorkspaceChangeWrapper: Function | null = null;
 
   constructor(workspace: WorkspaceSvg) {
     this.workspace = workspace;
@@ -58,6 +55,30 @@ export class ModuleManager {
     );
     this.moduleMap_ = [this.defaultModule_];
     this.activeModuleId_ = this.defaultModule_.getId();
+
+    this.onWorkspaceChangeWrapper = this.workspace.addChangeListener(
+      this.onViewportChangeListener.bind(this)
+    );
+  }
+
+  onViewportChangeListener(event: Events.Abstract): void {
+    if (event.type === Events.VIEWPORT_CHANGE) {
+      const activeModule = this.getActiveModule();
+      if (activeModule) {
+        activeModule.scrollX = this.workspace.scrollX || 0;
+        activeModule.scrollY = this.workspace.scrollY || 0;
+        activeModule.scale = this.workspace.scale || 1;
+      }
+    }
+  }
+
+  /**
+   * Dispose ModuleManager
+   */
+  dispose() {
+    if (this.onWorkspaceChangeWrapper) {
+      this.workspace.removeChangeListener(this.onWorkspaceChangeWrapper)
+    }
   }
 
   /**
@@ -117,7 +138,7 @@ export class ModuleManager {
       this.workspace.getModuleBar()?.render();
     }
 
-    Events.fire(new ModuleRename(module, previousName));
+    Events.fire(new Events.ModuleRename(module, previousName));
   }
 
   /**
@@ -139,7 +160,7 @@ export class ModuleManager {
       this.workspace.getModuleBar()?.render();
     }
 
-    Events.fire(new ModuleMove(module, newOrder, previousOrder));
+    Events.fire(new Events.ModuleMove(module, newOrder, previousOrder));
   }
 
   /**
@@ -168,7 +189,7 @@ export class ModuleManager {
     const module = new ModuleModel(this.workspace, name, id);
 
     module.scrollX = scrollX || 0;
-    module.scrollX = scrollY || 0;
+    module.scrollY = scrollY || 0;
 
     if (scale) {
       module.scale = scale;
@@ -197,7 +218,7 @@ export class ModuleManager {
         Events.setGroup(true);
       }
       try {
-        Events.fire(new ModuleCreate(module));
+        Events.fire(new Events.ModuleCreate(module));
       } finally {
         if (!existingGroup) {
           Events.setGroup(false);
@@ -254,7 +275,7 @@ export class ModuleManager {
         Events.setGroup(true);
       }
       try {
-        Events.fire(new ModuleDelete(module));
+        Events.fire(new Events.ModuleDelete(module));
       } finally {
         if (!existingGroup) {
           Events.setGroup(false);
@@ -363,7 +384,7 @@ export class ModuleManager {
       }
 
       Events.enable();
-      Events.fire(new ModuleActivate(module, previousActive));
+      Events.fire(new Events.ModuleActivate(module, previousActive));
     } catch (e) {
       Events.enable();
     } finally {

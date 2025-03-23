@@ -319,11 +319,11 @@ export class Options {
       zoomOptions.pinch = !!zoom['pinch'];
     }
     // @ts-ignore:next-line
-    if (zoom['flyoutScale'] === undefined) {
-      zoomOptions.flyoutScale = 1;
+    if (zoom['storeFlyoutScale'] === undefined) {
+      zoomOptions.storeFlyoutScale = false;
     } else {
       // @ts-ignore:next-line
-      zoomOptions.flyoutScale = Number(zoom['flyoutScale']);
+      zoomOptions.storeFlyoutScale = !!zoom['storeFlyoutScale'];
     }
 
     return zoomOptions;
@@ -396,7 +396,7 @@ export namespace Options {
     scaleSpeed: number;
     startScale: number;
     wheel: boolean;
-    flyoutScale: number;
+    storeFlyoutScale: boolean;
   }
 }
 

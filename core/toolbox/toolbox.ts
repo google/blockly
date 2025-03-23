@@ -367,7 +367,7 @@ export class Toolbox
         'scrollbars': true,
       },
       'zoom': {
-        'flyoutScale': workspace.options.zoomOptions.flyoutScale,
+        'storeFlyoutScale': workspace.options.zoomOptions.storeFlyoutScale,
       },
     } as BlocklyOptions);
     // Options takes in either 'end' or 'start'. This has already been parsed to

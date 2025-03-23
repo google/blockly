@@ -33,10 +33,6 @@ export class VerticalFlyout extends Flyout {
   /** @param workspaceOptions Dictionary of options for the workspace. */
   constructor(workspaceOptions: Options) {
     super(workspaceOptions);
-
-    if (workspaceOptions.zoomOptions.flyoutScale) {
-      this.workspace_.setScale(workspaceOptions.zoomOptions.flyoutScale);
-    }
   }
 
   /**
@@ -233,7 +229,6 @@ export class VerticalFlyout extends Flyout {
    * @param gaps The visible gaps between blocks.
    */
   protected override layout_(contents: FlyoutItem[], gaps: number[]) {
-    this.workspace_.scale = this.targetWorkspace!.scale;
     const margin = this.RTL ? this.MARGIN : this.START_MARGIN;
     const cursorX = this.RTL ? margin : this.MARGIN + this.tabWidth_;
     let cursorY = margin;

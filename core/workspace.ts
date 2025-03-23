@@ -164,6 +164,7 @@ export class Workspace implements IASTNodeLocation {
   dispose() {
     this.listeners.length = 0;
     this.clear();
+    this.moduleManager_.dispose();
     // Remove from workspace database.
     common.unregisterWorkpace(this);
   }

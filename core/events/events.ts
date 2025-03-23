@@ -151,7 +151,6 @@ export const MODULE_DELETE = eventUtils.MODULE_DELETE;
 export const MODULE_ACTIVATE = eventUtils.MODULE_ACTIVATE;
 export const MODULE_RENAME = eventUtils.MODULE_RENAME;
 export const MODULE_MOVE = eventUtils.MODULE_MOVE;
-export const MOVE_BLOCK_TO_MODULE = eventUtils.MOVE_BLOCK_TO_MODULE;
 export const COMMENT_CHANGE = eventUtils.COMMENT_CHANGE;
 export const COMMENT_CREATE = eventUtils.COMMENT_CREATE;
 export const COMMENT_DELETE = eventUtils.COMMENT_DELETE;

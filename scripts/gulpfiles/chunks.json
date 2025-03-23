@@ -226,7 +226,6 @@
     ".\\core\\events\\events_module_activate.js",
     ".\\core\\events\\events_module_rename.js",
     ".\\core\\events\\events_module_move.js",
-    ".\\core\\events\\events_move_block_to_module.js",
     ".\\core\\events\\events_selected.js",
     ".\\core\\events\\events_theme_change.js",
     ".\\core\\events\\events_toolbox_item_select.js",

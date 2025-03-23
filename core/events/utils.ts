@@ -242,11 +242,6 @@ export const MODULE_RENAME = 'module_rename';
  */
 export const MODULE_MOVE = 'module_move';
 
-/**
- * Name of event that module rename.
- */
-export const MOVE_BLOCK_TO_MODULE = 'move_block_to_module';
-
 /*
  * The language-neutral ID for when the reason why a block is disabled is
  * because the block is not descended from a root block.

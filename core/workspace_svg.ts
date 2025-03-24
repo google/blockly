@@ -1727,7 +1727,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   cleanUp() {
     this.setResizesEnabled(false);
     eventUtils.setGroup(true);
-    const topBlocks = this.getTopBlocks(true);
+    const topBlocks = this.getTopBlocks(true, true);
     let cursorY = 0;
     for (let i = 0, block; (block = topBlocks[i]); i++) {
       if (!block.isMovable()) {

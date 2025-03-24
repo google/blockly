@@ -471,8 +471,10 @@ export class RenderedConnection extends Connection {
     if (!blockShadow) {
       return;
     }
-    blockShadow.initSvg();
-    blockShadow.queueRender();
+    if (blockShadow.inActiveModule()) {
+      blockShadow.initSvg();
+      blockShadow.queueRender();
+    }
   }
 
   /**

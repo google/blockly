@@ -346,17 +346,16 @@ export class ModuleManager {
           topBlock.setConnectionTracking(false);
 
           // Render each block.
-          for (let j = blocks.length - 1; j >= 0; j--) {
-            blocks[j].initSvg();
+          for (let i = blocks.length - 1; i >= 0; i--) {
+            (blocks[i] as BlockSvg).initSvg();
           }
-          for (let j = blocks.length - 1; j >= 0; j--) {
-            blocks[j].render();
+          for (let i = blocks.length - 1; i >= 0; i--) {
+            (blocks[i] as BlockSvg).queueRender();
           }
 
           // Populating the connection database may be deferred until after the
           // blocks have rendered.
           enableConnectionTracking(topBlock);
-          topBlock.updateDisabled();
 
           this.workspace.addTopBoundedElement(topBlock);
         }

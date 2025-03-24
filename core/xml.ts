@@ -1122,7 +1122,7 @@ function domToBlockHeadless(
   applyInputTagNodes(xmlChildNameMap.input, workspace, block, prototypeName);
   applyNextTagNodes(xmlChildNameMap.next, workspace, block);
 
-  if (shouldCallInitSvg) {
+  if (shouldCallInitSvg && block.inActiveModule()) {
     // This shouldn't even be called here
     // (ref: https://github.com/google/blockly/pull/4296#issuecomment-884226021
     // But the XML serializer/deserializer is iceboxed so I'm not going to fix

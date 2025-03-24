@@ -69,12 +69,10 @@ export const DEFAULT_ARG = 'x';
 /**
  * Find all user-created procedure definitions in a workspace.
  *
- * @param {!Workspace} root Root workspace.
- * @returns {!Array<!Array<!Array>>} Pair of arrays, the
- *     first contains procedures without return variables, the second with.
- *     Each procedure is defined by a three-element list of name, parameter
- *     list, and return value boolean.
- * @alias Blockly.ProceduresLocalArgument.allProcedures
+ * @param root Root workspace.
+ * @returns Pair of arrays, the first contains procedures without return
+ *     variables, the second with. Each procedure is defined by a three-element
+ *     list of name, parameter list, and return value boolean.
  */
 export function allProcedures(
   root: Workspace,
@@ -102,13 +100,12 @@ export function allProcedures(
  * Comparison function for case-insensitive sorting of the first element of
  * a tuple.
  *
- * @param {!Array} ta First tuple.
- * @param {!Array} tb Second tuple.
- * @returns {number} -1, 0, or 1 to signify greater than, equality, or less than.
+ * @param ta First tuple.
+ * @param tb Second tuple.
+ * @returns -1, 0, or 1 to signify greater than, equality, or less than.
  */
 function procTupleComparator(ta: ProcedureTuple, tb: ProcedureTuple): number {
-  let _;
-  return ta[0].localeCompare(tb[0], _, {sensitivity: 'base'});
+  return ta[0].localeCompare(tb[0], undefined, {sensitivity: 'base'});
 }
 
 /**
@@ -116,12 +113,11 @@ function procTupleComparator(ta: ProcedureTuple, tb: ProcedureTuple): number {
  * Take the proposed procedure name, and return a legal name i.e. one that
  * is not empty and doesn't collide with other procedures.
  *
- * @param {string} name Proposed procedure name.
- * @param {!Block} block Block to disambiguate.
- * @returns {string} Non-colliding name.
- * @alias Blockly.ProceduresLocalArgument.findLegalName
+ * @param name Proposed procedure name.
+ * @param block Block to disambiguate.
+ * @returns Non-colliding name.
  */
-export function findLegalName(name: string, block: Block) {
+export function findLegalName(name: string, block: Block): string {
   if (block.isInFlyout) {
     // Flyouts can have multiple procedures called 'do something'.
     return name;
@@ -133,21 +129,20 @@ export function findLegalName(name: string, block: Block) {
     if (!r) {
       name += '2';
     } else {
-      name = r[1] + (parseInt(r[2], 10) + 1);
+      name = r[1] + (parseInt(r[2]) + 1);
     }
   }
   return name;
 }
-
 /**
  * Does this procedure have a legal name?  Illegal names include names of
  * procedures already defined.
  *
- * @param {string} name The questionable name.
- * @param {!Workspace} workspace The workspace to scan for collisions.
- * @param {Block=} opt_exclude Optional block to exclude from
- *     comparisons (one doesn't want to collide with oneself).
- * @returns {boolean} True if the name is legal.
+ * @param name The questionable name.
+ * @param workspace The workspace to scan for collisions.
+ * @param opt_exclude Optional block to exclude from comparisons (one doesn't
+ *     want to collide with oneself).
+ * @returns True if the name is legal.
  */
 function isLegalName(
   name: string,
@@ -160,12 +155,11 @@ function isLegalName(
 /**
  * Return if the given name is already a procedure name.
  *
- * @param {string} name The questionable name.
- * @param {!Workspace} workspace The workspace to scan for collisions.
- * @param {Block=} opt_exclude Optional block to exclude from
- *     comparisons (one doesn't want to collide with oneself).
- * @returns {boolean} True if the name is used, otherwise return false.
- * @alias Blockly.ProceduresLocalArgument.isNameUsed
+ * @param name The questionable name.
+ * @param workspace The workspace to scan for collisions.
+ * @param opt_exclude Optional block to exclude from comparisons (one doesn't
+ *     want to collide with oneself).
+ * @returns True if the name is used, otherwise return false.
  */
 export function isNameUsed(
   name: string,
@@ -197,9 +191,8 @@ export function isNameUsed(
 /**
  * Rename a procedure.  Called by the editable field.
  *
- * @param {string} name The proposed new name.
- * @returns {string} The accepted name.
- * @this {Field}
+ * @param name The proposed new name.
+ * @returns The accepted name.
  */
 export function rename(this: Field, name: string): string {
   const block = this.getSourceBlock();
@@ -275,10 +268,9 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   /**
    * Add items to xmlList for each listed procedure.
    *
-   * @param {!Array<!Array>} procedureList A list of procedures, each of which
-   *     is defined by a three-element list of name, parameter list, and return
-   *     value boolean.
-   * @param {string} templateName The type of the block to generate.
+   * @param procedureList A list of procedures, each of which is defined by a
+   *     three-element list of name, parameter list, and return value boolean.
+   * @param templateName The type of the block to generate.
    */
   function populateProcedures(
     procedureList: ProcedureTuple[],
@@ -308,6 +300,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
       xmlList.push(block);
     }
   }
+
   const tuple = allProcedures(workspace);
   populateProcedures(tuple[0], 'procedures_with_argument_callnoreturn');
   populateProcedures(tuple[1], 'procedures_with_argument_callreturn');
@@ -318,8 +311,8 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
  * Updates the procedure mutator's flyout so that the arg block is not a
  * duplicate of another arg.
  *
- * @param workspace The procedure mutator's workspace. This
- *     workspace's flyout is what is being updated.
+ * @param workspace The procedure mutator's workspace. This workspace's flyout
+ *     is what is being updated.
  */
 function updateMutatorFlyout(workspace: WorkspaceSvg) {
   const usedNames = [];
@@ -345,6 +338,7 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
   nameField.appendChild(fieldContent);
   argBlock.appendChild(nameField);
   xmlElement.appendChild(argBlock);
+
   workspace.updateToolbox(xmlElement);
 }
 
@@ -366,7 +360,6 @@ export function mutatorOpenListener(e: Abstract) {
   ) {
     return;
   }
-
   const workspaceId = bubbleEvent.workspaceId;
   const block = common
     .getWorkspaceById(workspaceId)!
@@ -445,7 +438,7 @@ function mutatorChangeListener(e: Abstract) {
  * @param workspace The workspace to find callers in.
  * @returns Array of caller blocks.
  */
-export function getCallers(name: string, workspace: Workspace) {
+export function getCallers(name: string, workspace: Workspace): Block[] {
   return workspace.getAllBlocks(false).filter((block) => {
     return (
       blockIsModernCallerFor(block, name) ||
@@ -520,7 +513,7 @@ export function getDefinition(
 ): Block | null {
   // Do not assume procedure is a top block. Some languages allow nested
   // procedures. Also do not assume it is one of the built-in blocks. Only
-  // rely on getProcedureDef.
+  // rely on isProcedureDef and getProcedureDef.
   for (const block of workspace.getAllBlocks(false)) {
     if (
       isProcedureBlock(block) &&

@@ -197,13 +197,15 @@ const PROCEDURES_WITH_ARGUMENT = {
    *
    * @param {string} name Name argument block.
    * @param {string} argId Id argument block.
+   * @param {string} moduleId block module Id
    * @returns {!Element} The DOM node representing the new shadow block.
    * @private
    * @this Block
    */
-  buildArgumentBlock_: function (name: string, argId: string): Element {
+  buildArgumentBlock_: function (name: string, argId: string, moduleId: string): Element {
     const block = xmlUtils.createElement('shadow');
     block.setAttribute('type', 'argument_local');
+    block.setAttribute('module', moduleId);
 
     const data = xmlUtils.createElement('data');
     data.appendChild(xmlUtils.createTextNode(argId));
@@ -227,7 +229,7 @@ const PROCEDURES_WITH_ARGUMENT = {
     for (let i = 0, argument; (argument = this.updatedArguments_[i]); i++) {
       const argumentName = argument.name;
       const argumentId = argument.id;
-      const argumentBlock = this.buildArgumentBlock_(argumentName, argumentId);
+      const argumentBlock = this.buildArgumentBlock_(argumentName, argumentId, this.getModuleId());
 
       this.argumentModels_.push({
         id: argumentId,

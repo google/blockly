@@ -771,7 +771,7 @@ function loadConnection(
  * @param rendered Whether the block is a rendered or headless block.
  */
 function initBlock(block: Block, rendered: boolean) {
-  if (rendered) {
+  if (rendered && block.inActiveModule()) {
     const blockSvg = block as BlockSvg;
     // Adding connections to the connection db is expensive. This defers that
     // operation to decrease load time.

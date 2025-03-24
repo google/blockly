@@ -1793,7 +1793,11 @@ export class BlockSvg
    * @internal
    */
   queueRender(): Promise<void> {
-    return renderManagement.queueRender(this);
+    if (this.inActiveModule()) {
+      return renderManagement.queueRender(this);
+    }
+
+    return Promise.resolve();
   }
 
   /**

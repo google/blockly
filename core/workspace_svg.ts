@@ -953,6 +953,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       'horizontalLayout': this.horizontalLayout,
       'renderer': this.options.renderer,
       'rendererOverrides': this.options.rendererOverrides,
+      'modalInputs': this.options.modalInputs,
       'move': {
         'scrollbars': true,
       },

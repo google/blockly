@@ -469,11 +469,12 @@ export class Connection implements IASTNodeLocationWithBlock {
    *     this connection, this serializes the state of that block and returns it
    *     (so that field values are correct). Otherwise the saved state is just
    *     returned.
+   * @param saveModule
    * @returns Serialized object representation of the block, or null.
    */
-  getShadowState(returnCurrent?: boolean): blocks.State | null {
+  getShadowState(returnCurrent?: boolean, saveModule?: boolean): blocks.State | null {
     if (returnCurrent && this.targetBlock() && this.targetBlock()!.isShadow()) {
-      return blocks.save(this.targetBlock() as Block);
+      return blocks.save(this.targetBlock() as Block, {saveModule});
     }
     return this.shadowState;
   }
@@ -561,7 +562,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     shadowState: blocks.State | null;
   } {
     const shadowDom = this.getShadowDom(true);
-    const shadowState = this.getShadowState(true);
+    const shadowState = this.getShadowState(true, true);
     // Set to null so it doesn't respawn.
     this.shadowDom = null;
     this.shadowState = null;
@@ -636,7 +637,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   private createShadowBlock(attemptToConnect: boolean): Block | null {
     const parentBlock = this.getSourceBlock();
-    const shadowState = this.getShadowState();
+    const shadowState = this.getShadowState(false, true);
     const shadowDom = this.getShadowDom();
     if (parentBlock.isDeadOrDying() || (!shadowState && !shadowDom)) {
       return null;

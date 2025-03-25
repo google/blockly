@@ -1855,7 +1855,7 @@ export abstract class Flyout
    * @returns A serialized representation of the block.
    */
   protected serializeBlock(block: BlockSvg): blocks.State {
-    return blocks.save(block) as blocks.State;
+    return blocks.save(block, {saveModule: false}) as blocks.State;
   }
 
   /**

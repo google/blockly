@@ -50,6 +50,7 @@ export interface ConnectionState {
 export interface State {
   type: string;
   id?: string;
+  module?: string;
   x?: number;
   y?: number;
   collapsed?: boolean;
@@ -93,12 +94,14 @@ export function save(
     addNextBlocks = true,
     doFullSerialization = true,
     saveIds = true,
+    saveModule = true,
   }: {
     addCoordinates?: boolean;
     addInputBlocks?: boolean;
     addNextBlocks?: boolean;
     doFullSerialization?: boolean;
     saveIds?: boolean;
+    saveModule?: boolean;
   } = {},
 ): State | null {
   if (block.isInsertionMarker()) {
@@ -107,6 +110,7 @@ export function save(
   const state = {
     'type': block.type,
     'id': saveIds ? block.id : undefined,
+    'module': saveModule ? block.getModuleId() : undefined,
   };
 
   if (addCoordinates) {
@@ -134,6 +138,7 @@ export function save(
       state as AnyDuringMigration,
       doFullSerialization,
       saveIds,
+      saveModule,
     );
   }
   if (addNextBlocks) {
@@ -144,6 +149,7 @@ export function save(
       state as AnyDuringMigration,
       doFullSerialization,
       saveIds,
+      saveModule,
     );
   }
 
@@ -282,12 +288,15 @@ function saveFields(block: Block, state: State, doFullSerialization: boolean) {
  * @param block The block to serialize the input blocks of.
  * @param state The state object to append to.
  * @param doFullSerialization Whether or not to do full serialization.
+ * @param saveIds
+ * @param saveModule
  */
 function saveInputBlocks(
   block: Block,
   state: State,
   doFullSerialization: boolean,
   saveIds: boolean,
+  saveModule: boolean,
 ) {
   const inputs = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
@@ -297,6 +306,7 @@ function saveInputBlocks(
       input.connection as Connection,
       doFullSerialization,
       saveIds,
+      saveModule,
     );
     if (connectionState) {
       inputs[input.name] = connectionState;
@@ -315,12 +325,15 @@ function saveInputBlocks(
  * @param block The block to serialize the next blocks of.
  * @param state The state object to append to.
  * @param doFullSerialization Whether or not to do full serialization.
+ * @param saveIds
+ * @param saveModule
  */
 function saveNextBlocks(
   block: Block,
   state: State,
   doFullSerialization: boolean,
   saveIds: boolean,
+  saveModule: boolean,
 ) {
   if (!block.nextConnection) {
     return;
@@ -329,6 +342,7 @@ function saveNextBlocks(
     block.nextConnection,
     doFullSerialization,
     saveIds,
+    saveModule,
   );
   if (connectionState) {
     state['next'] = connectionState;
@@ -343,13 +357,16 @@ function saveNextBlocks(
  * @returns An object containing the state of any connected shadow block, or any
  *     connected real block.
  * @param doFullSerialization Whether or not to do full serialization.
+ * @param saveIds
+ * @param saveModule
  */
 function saveConnection(
   connection: Connection,
   doFullSerialization: boolean,
   saveIds: boolean,
+  saveModule: boolean,
 ): ConnectionState | null {
-  const shadow = connection.getShadowState(true);
+  const shadow = connection.getShadowState(true, saveModule);
   const child = connection.targetBlock();
   if (!shadow && !child) {
     return null;
@@ -359,7 +376,7 @@ function saveConnection(
     state['shadow'] = shadow;
   }
   if (child && !child.isShadow()) {
-    state['block'] = save(child, {doFullSerialization, saveIds});
+    state['block'] = save(child, {doFullSerialization, saveIds, saveModule});
   }
   return state;
 }
@@ -479,8 +496,7 @@ function appendPrivate(
   if (!state['type']) {
     throw new MissingBlockType(state);
   }
-
-  const block = workspace.newBlock(state['type'], state['id']);
+  const block = workspace.newBlock(state['type'], state['id'], state['module']);
   block.setShadow(isShadow);
   loadCoords(block, state);
   loadAttributes(block, state);

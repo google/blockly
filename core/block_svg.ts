@@ -1009,6 +1009,7 @@ export class BlockSvg
       blockState: blocks.save(this, {
         addCoordinates: true,
         addNextBlocks,
+        saveModule: false,
       }) as blocks.State,
       typeCounts: common.getBlockTypeCounts(this, true),
     };
@@ -2030,7 +2031,7 @@ export class BlockSvg
   toFlyoutInfo(): FlyoutItemInfo[] {
     const json: FlyoutItemInfo = {
       kind: 'BLOCK',
-      ...blocks.save(this),
+      ...blocks.save(this, {saveModule: false}),
     };
 
     const toRemove = new Set(['id', 'height', 'width', 'pinned', 'enabled']);

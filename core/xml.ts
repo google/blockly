@@ -138,12 +138,14 @@ export function modulesToDom(workspace: Workspace) {
  *
  * @param block The root block to encode.
  * @param opt_noId True if the encoder should skip the block ID.
+ * @param opt_noModule  True if the encoder should skip the block module.
  * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
  */
 export function blockToDomWithXY(
   block: Block,
   opt_noId?: boolean,
+  opt_noModule?: boolean,
 ): Element | DocumentFragment {
   if (block.isInsertionMarker()) {
     // Skip over insertion markers.
@@ -159,7 +161,7 @@ export function blockToDomWithXY(
     width = block.workspace.getWidth();
   }
 
-  const element = blockToDom(block, opt_noId);
+  const element = blockToDom(block, opt_noId, opt_noModule);
   if (isElement(element)) {
     const xy = block.getRelativeToSurfaceXY();
     element.setAttribute(
@@ -224,7 +226,7 @@ export function blockToDom(
   if (block.isInsertionMarker()) {
     const child = block.getChildren(false)[0];
     if (child) {
-      return blockToDom(child);
+      return blockToDom(child, opt_noId, opt_noModule);
     } else {
       // Disappears when appended.
       return new DocumentFragment();
@@ -288,7 +290,7 @@ export function blockToDom(
         container!.appendChild(cloneShadow(childShadow, opt_noId));
       }
       if (childBlock) {
-        const childElem = blockToDom(childBlock, opt_noId);
+        const childElem = blockToDom(childBlock, opt_noId, opt_noModule);
         if (childElem.nodeType === dom.NodeType.ELEMENT_NODE) {
           container!.appendChild(childElem);
           empty = false;

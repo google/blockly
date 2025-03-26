@@ -836,7 +836,7 @@ export class Toolbox
       this.selectedItem_.isSelectable() &&
       this.selectedItem_.getContents().length
     ) {
-      this.flyout_!.show(this.selectedItem_.getContents());
+      this.flyout_!.refreshDefinition(this.selectedItem_.getContents());
     }
   }
 

@@ -1181,6 +1181,43 @@ export abstract class Flyout
   }
 
   /**
+   * Refresh the flyout definition.
+   *
+   * @param flyoutDef The new definition to use.
+   */
+  refreshDefinition(flyoutDef: toolbox.FlyoutDefinition | string) {
+    this.workspace_.setResizesEnabled(false);
+    this.clearOldBlocks();
+
+    // Handle dynamic categories, represented by a name instead of a list.
+    if (typeof flyoutDef === 'string') {
+      flyoutDef = this.getDynamicCategoryContents(flyoutDef);
+    }
+
+    // Parse the Array, Node or NodeList into a a list of flyout items.
+    const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
+    const flyoutInfo = this.createFlyoutInfo(parsedContent);
+
+    renderManagement.triggerQueuedRenders(this.workspace_);
+
+    this.setContents(flyoutInfo.contents);
+
+    this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
+
+    if (this.horizontalLayout) {
+      if (!this.height_) this.height_ = 0;
+    } else {
+      if (!this.width_) this.width_ = 0;
+    }
+
+    this.workspace_.setResizesEnabled(true);
+    this.reflow();
+
+    this.filterForCapacity();
+    this.position();
+  }
+
+  /**
    * Show and populate the flyout.
    *
    * @param flyoutDef Contents to display

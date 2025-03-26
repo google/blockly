@@ -116,8 +116,7 @@ export class Dragger implements IDragger {
       blockAnimations.disposeUiEffect(this.draggable.getRootBlock());
     }
 
-    this.draggable.endDrag(e);
-
+    // first dispose block, then end drag
     if (wouldDelete && isDeletable(root)) {
       // We want to make sure the delete gets grouped with any possible
       // move event.
@@ -126,6 +125,8 @@ export class Dragger implements IDragger {
       root.dispose();
       eventUtils.setGroup(newGroup);
     }
+
+    this.draggable.endDrag(e);
   }
 
   // We need to special case blocks for now so that we look at the root block

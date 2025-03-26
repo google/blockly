@@ -13,6 +13,7 @@ import type {FlyoutDefinition} from '../utils/toolbox.js';
 import type {Svg} from '../utils/svg.js';
 import type {IRegistrable} from './i_registrable.js';
 import {FlyoutItem} from '../flyout_base.js';
+import * as toolbox from "../utils/toolbox";
 
 /**
  * Interface for a flyout.
@@ -132,6 +133,14 @@ export interface IFlyout extends IRegistrable {
 
   /** Hide and empty the flyout. */
   hide(): void;
+
+
+  /**
+   * Refresh the flyout definition.
+   *
+   * @param flyoutDef The new definition to use.
+   */
+  refreshDefinition(flyoutDef: toolbox.FlyoutDefinition | string): void;
 
   /**
    * Show and populate the flyout.

@@ -808,6 +808,16 @@ export class BlockSvg
   override dispose(healStack?: boolean, animate?: boolean) {
     this.disposing = true;
 
+    if (
+      this.workspace
+        .getMarkerManager()
+        .getCursor()
+        ?.getCurNode()
+        ?.getLocation() === this
+    ) {
+      this.workspace.getMarkerManager().getCursor()?.setCurNode(null);
+    }
+
     Tooltip.dispose();
     ContextMenu.hide();
 

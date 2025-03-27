@@ -55,7 +55,7 @@
 	"LOGIC_BOOLEAN_FALSE": "ਝੂਠ",
 	"LOGIC_NULL": "ਨੱਲ",
 	"LOGIC_NULL_TOOLTIP": "ਨੱਲ ਮੋੜਦਾ ਹੈ।",
-	"LOGIC_TERNARY_CONDITION": "ਟੈਸਟ",
+	"LOGIC_TERNARY_CONDITION": "ਪ੍ਰੀਖਿਆ",
 	"LOGIC_TERNARY_IF_TRUE": "ਜੇ ਸੱਚ",
 	"LOGIC_TERNARY_IF_FALSE": "ਜੇ ਝੂਠ",
 	"MATH_NUMBER_TOOLTIP": "ਇੱਕ ਅੰਕ",

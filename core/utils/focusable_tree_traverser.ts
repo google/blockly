@@ -6,6 +6,7 @@
 
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import * as dom from '../utils/dom.js';
 
 /**
  * A helper utility for IFocusableTree implementations to aid with common
@@ -24,20 +25,29 @@ export class FocusableTreeTraverser {
    */
   static findFocusedNode(tree: IFocusableTree): IFocusableNode | null {
     const root = tree.getRootFocusableNode().getFocusableElement();
-    const activeElem = root.querySelector('.blocklyActiveFocus');
-    let active: IFocusableNode | null = null;
-    if (activeElem instanceof HTMLElement || activeElem instanceof SVGElement) {
-      active = tree.findFocusableNodeFor(activeElem);
+    if (
+      dom.hasClass(root, 'blocklyActiveFocus') ||
+      dom.hasClass(root, 'blocklyPassiveFocus')
+    ) {
+      // The root has focus.
+      return tree.getRootFocusableNode();
     }
-    const passiveElems = Array.from(
-      root.querySelectorAll('.blocklyPassiveFocus'),
-    );
-    const passive = passiveElems.map((elem) => {
-      if (elem instanceof HTMLElement || elem instanceof SVGElement) {
-        return tree.findFocusableNodeFor(elem);
-      } else return null;
-    });
-    return active || passive.find((node) => !!node) || null;
+
+    const activeEl = root.querySelector('.blocklyActiveFocus');
+    let active: IFocusableNode | null = null;
+    if (activeEl instanceof HTMLElement || activeEl instanceof SVGElement) {
+      active = tree.findFocusableNodeFor(activeEl);
+    }
+
+    // At most there should be one passive indicator per tree (not considering
+    // subtrees).
+    const passiveEl = root.querySelector('.blocklyPassiveFocus');
+    let passive: IFocusableNode | null = null;
+    if (passiveEl instanceof HTMLElement || passiveEl instanceof SVGElement) {
+      passive = tree.findFocusableNodeFor(passiveEl);
+    }
+
+    return active ?? passive;
   }
 
   /**
@@ -47,38 +57,42 @@ export class FocusableTreeTraverser {
    *
    * If the tree contains another nested IFocusableTree, the nested tree may be
    * traversed but its nodes will never be returned here per the contract of
-   * findChildById.
-   *
-   * findChildById is a provided callback that takes an element ID and maps it
-   * back to the corresponding IFocusableNode within the provided
-   * IFocusableTree. These IDs will match the contract specified in the
-   * documentation for IFocusableNode. This function must not return any node
-   * that doesn't directly belong to the node's nearest parent tree.
+   * IFocusableTree.lookUpFocusableNode.
    *
    * @param element The HTML or SVG element being sought.
    * @param tree The tree under which the provided element may be a descendant.
-   * @param findChildById The ID->IFocusableNode mapping callback that must
-   *     follow the contract mentioned above.
    * @returns The matching IFocusableNode, or null if there is no match.
    */
   static findFocusableNodeFor(
     element: HTMLElement | SVGElement,
     tree: IFocusableTree,
-    findChildById: (id: string) => IFocusableNode | null,
   ): IFocusableNode | null {
+    // First, match against subtrees.
+    const subTreeMatches = tree
+      .getNestedTrees()
+      .map((tree) => tree.findFocusableNodeFor(element));
+    if (subTreeMatches.findIndex((match) => !!match) !== -1) {
+      // At least one subtree has a match for the element so it cannot be part
+      // of the outer tree.
+      return null;
+    }
+
+    // Second, check against the tree's root.
     if (element === tree.getRootFocusableNode().getFocusableElement()) {
       return tree.getRootFocusableNode();
     }
-    const matchedChildNode = findChildById(element.id);
+
+    // Third, check if the element has a node.
+    const matchedChildNode = tree.lookUpFocusableNode(element.id) ?? null;
+    if (matchedChildNode) return matchedChildNode;
+
+    // Fourth, recurse up to find the nearest tree/node if it's possible.
     const elementParent = element.parentElement;
     if (!matchedChildNode && elementParent) {
-      // Recurse up to find the nearest tree/node.
-      return FocusableTreeTraverser.findFocusableNodeFor(
-        elementParent,
-        tree,
-        findChildById,
-      );
+      return FocusableTreeTraverser.findFocusableNodeFor(elementParent, tree);
     }
-    return matchedChildNode;
+
+    // Otherwise, there's no matching node.
+    return null;
   }
 }

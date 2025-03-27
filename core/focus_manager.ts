@@ -62,7 +62,7 @@ export class FocusManager {
       if (newNode) {
         this.focusNode(newNode);
       } else {
-        // TODO: Set previous to passive if all trees are losing active focus.
+        this.defocusCurrentFocusedNode();
       }
     });
   }
@@ -257,6 +257,16 @@ export class FocusManager {
         this.setNodeToActive(this.focusedNode);
       }
     };
+  }
+
+  private defocusCurrentFocusedNode(): void {
+    // The current node will likely be defocused while ephemeral focus is held,
+    // but internal manager state shouldn't change since the node should be
+    // restored upon exiting ephemeral focus mode.
+    if (this.focusedNode && !this.currentlyHoldsEphemeralFocus) {
+      this.setNodeToPassive(this.focusedNode);
+      this.focusedNode = null;
+    }
   }
 
   private setNodeToActive(node: IFocusableNode): void {

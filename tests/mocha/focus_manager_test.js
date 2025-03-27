@@ -1,10 +1,13 @@
 /**
  * @license
- * Copyright 2020 Google LLC
+ * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {FocusManager} from '../../build/src/core/focus_manager.js';
+import {
+  FocusManager,
+  getFocusManager,
+} from '../../build/src/core/focus_manager.js';
 import {FocusableTreeTraverser} from '../../build/src/core/utils/focusable_tree_traverser.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
@@ -33,7 +36,7 @@ suite('FocusManager', function () {
         return tree;
       };
     };
-    const FocusableTreeImpl = function (rootElement) {
+    const FocusableTreeImpl = function (rootElement, nestedTrees) {
       this.idToNodeMap = {};
 
       this.addNode = function (element) {
@@ -50,19 +53,26 @@ suite('FocusManager', function () {
         return this.rootNode;
       };
 
+      this.getNestedTrees = function () {
+        return nestedTrees;
+      };
+
+      this.lookUpFocusableNode = function (id) {
+        return this.idToNodeMap[id];
+      };
+
       this.findFocusableNodeFor = function (element) {
-        return FocusableTreeTraverser.findFocusableNodeFor(
-          element,
-          this,
-          (id) => this.idToNodeMap[id],
-        );
+        return FocusableTreeTraverser.findFocusableNodeFor(element, this);
       };
 
       this.rootNode = this.addNode(rootElement);
     };
 
-    const createFocusableTree = function (rootElementId) {
-      return new FocusableTreeImpl(document.getElementById(rootElementId));
+    const createFocusableTree = function (rootElementId, nestedTrees) {
+      return new FocusableTreeImpl(
+        document.getElementById(rootElementId),
+        nestedTrees || [],
+      );
     };
     const createFocusableNode = function (tree, elementId) {
       return tree.addNode(document.getElementById(elementId));
@@ -81,11 +91,29 @@ suite('FocusManager', function () {
       this.testFocusableTree1,
       'testFocusableTree1.node2',
     );
-    this.testFocusableTree2 = createFocusableTree('testFocusableTree2');
+    this.testFocusableNestedTree4 = createFocusableTree(
+      'testFocusableNestedTree4',
+    );
+    this.testFocusableNestedTree4Node1 = createFocusableNode(
+      this.testFocusableNestedTree4,
+      'testFocusableNestedTree4.node1',
+    );
+    this.testFocusableNestedTree5 = createFocusableTree(
+      'testFocusableNestedTree5',
+    );
+    this.testFocusableNestedTree5Node1 = createFocusableNode(
+      this.testFocusableNestedTree5,
+      'testFocusableNestedTree5.node1',
+    );
+    this.testFocusableTree2 = createFocusableTree('testFocusableTree2', [
+      this.testFocusableNestedTree4,
+      this.testFocusableNestedTree5,
+    ]);
     this.testFocusableTree2Node1 = createFocusableNode(
       this.testFocusableTree2,
       'testFocusableTree2.node1',
     );
+
     this.testFocusableGroup1 = createFocusableTree('testFocusableGroup1');
     this.testFocusableGroup1Node1 = createFocusableNode(
       this.testFocusableGroup1,
@@ -99,7 +127,16 @@ suite('FocusManager', function () {
       this.testFocusableGroup1,
       'testFocusableGroup1.node2',
     );
-    this.testFocusableGroup2 = createFocusableTree('testFocusableGroup2');
+    this.testFocusableNestedGroup4 = createFocusableTree(
+      'testFocusableNestedGroup4',
+    );
+    this.testFocusableNestedGroup4Node1 = createFocusableNode(
+      this.testFocusableNestedGroup4,
+      'testFocusableNestedGroup4.node1',
+    );
+    this.testFocusableGroup2 = createFocusableTree('testFocusableGroup2', [
+      this.testFocusableNestedGroup4,
+    ]);
     this.testFocusableGroup2Node1 = createFocusableNode(
       this.testFocusableGroup2,
       'testFocusableGroup2.node1',
@@ -128,6 +165,10 @@ suite('FocusManager', function () {
     removeFocusIndicators(document.getElementById('testFocusableTree1.node2'));
     removeFocusIndicators(document.getElementById('testFocusableTree2'));
     removeFocusIndicators(document.getElementById('testFocusableTree2.node1'));
+    removeFocusIndicators(document.getElementById('testFocusableNestedTree4'));
+    removeFocusIndicators(
+      document.getElementById('testFocusableNestedTree4.node1'),
+    );
     removeFocusIndicators(document.getElementById('testFocusableGroup1'));
     removeFocusIndicators(document.getElementById('testFocusableGroup1.node1'));
     removeFocusIndicators(
@@ -136,6 +177,13 @@ suite('FocusManager', function () {
     removeFocusIndicators(document.getElementById('testFocusableGroup1.node2'));
     removeFocusIndicators(document.getElementById('testFocusableGroup2'));
     removeFocusIndicators(document.getElementById('testFocusableGroup2.node1'));
+    removeFocusIndicators(document.getElementById('testFocusableNestedGroup4'));
+    removeFocusIndicators(
+      document.getElementById('testFocusableNestedGroup4.node1'),
+    );
+
+    // Reset the current active element.
+    document.body.focus();
   });
 
   /* Basic lifecycle tests. */
@@ -302,6 +350,43 @@ suite('FocusManager', function () {
         () => this.focusManager.focusNode(this.testFocusableTree1Node1),
         errorMsgRegex,
       );
+    });
+
+    test('focuses element', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
+      assert.strictEqual(document.activeElement, nodeElem);
+    });
+
+    test('fires focusin event', function () {
+      let focusCount = 0;
+      const focusListener = () => focusCount++;
+      document.addEventListener('focusin', focusListener);
+      this.focusManager.registerTree(this.testFocusableTree1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+      document.removeEventListener('focusin', focusListener);
+
+      // There should be exactly 1 focus event fired from focusNode().
+      assert.equal(focusCount, 1);
+    });
+  });
+
+  suite('getFocusManager()', function () {
+    test('returns non-null manager', function () {
+      const manager = getFocusManager();
+
+      assert.isNotNull(manager);
+    });
+
+    test('returns the exact same instance in subsequent calls', function () {
+      const manager1 = getFocusManager();
+      const manager2 = getFocusManager();
+
+      assert.strictEqual(manager2, manager1);
     });
   });
 
@@ -477,6 +562,43 @@ suite('FocusManager', function () {
           this.testFocusableTree2,
         );
       });
+
+      test('nested tree focusTree()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        this.focusManager.focusTree(this.testFocusableNestedTree4);
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedTree4,
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedTree4,
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+        this.focusManager.focusNode(this.testFocusableTree2Node1);
+
+        this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedTree4,
+        );
+      });
     });
     suite('getFocusedNode()', function () {
       test('registered tree focusTree()ed no prev focus returns root node', function () {
@@ -647,6 +769,43 @@ suite('FocusManager', function () {
         assert.equal(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
+        );
+      });
+
+      test('nested tree focusTree()ed with no prev focus returns nested root', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        this.focusManager.focusTree(this.testFocusableNestedTree4);
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedTree4.getRootFocusableNode(),
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedTree4Node1,
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+        this.focusManager.focusNode(this.testFocusableTree2Node1);
+
+        this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedTree4Node1,
         );
       });
     });
@@ -990,6 +1149,65 @@ suite('FocusManager', function () {
           'blocklyPassiveFocus',
         );
       });
+
+      test('nested tree focusTree()ed with no prev root has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        this.focusManager.focusTree(this.testFocusableNestedTree4);
+
+        const rootElem = this.testFocusableNestedTree4
+          .getRootFocusableNode()
+          .getFocusableElement();
+        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(rootElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus node has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+
+        const nodeElem =
+          this.testFocusableNestedTree4Node1.getFocusableElement();
+        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(nodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused prev has passive node has active', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+        this.focusManager.focusNode(this.testFocusableTree2Node1);
+
+        this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+
+        const prevNodeElem = this.testFocusableTree2Node1.getFocusableElement();
+        const currNodeElem =
+          this.testFocusableNestedTree4Node1.getFocusableElement();
+        assert.notInclude(
+          Array.from(prevNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.include(
+          Array.from(prevNodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+        assert.include(
+          Array.from(currNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.notInclude(
+          Array.from(currNodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
     });
   });
 
@@ -1092,11 +1310,20 @@ suite('FocusManager', function () {
         assert.isNull(this.focusManager.getFocusedTree());
       });
 
-      test('non-registered tree node focus()ed after registered node focused returns original tree', function () {
+      test('non-registered tree node focus()ed after registered node focused returns null', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         document.getElementById('testFocusableTree1.node1').focus();
 
         document.getElementById('testUnregisteredFocusableTree3.node1').focus();
+
+        assert.isNull(this.focusManager.getFocusedTree());
+      });
+
+      test('unfocusable element focus()ed after registered node focused returns original tree', function () {
+        this.focusManager.registerTree(this.testFocusableTree1);
+        document.getElementById('testFocusableTree1.node1').focus();
+
+        document.getElementById('testUnfocusableElement').focus();
 
         assert.equal(
           this.focusManager.getFocusedTree(),
@@ -1149,7 +1376,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('unregistered tree focus()ed with prev node after unregistering still returns old tree', function () {
+      test('unregistered tree focus()ed with prev node after unregistering returns null', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         this.focusManager.registerTree(this.testFocusableTree2);
         document.getElementById('testFocusableTree1.node1').focus();
@@ -1158,10 +1385,46 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node1').focus();
 
-        // Attempting to focus a now removed tree should have no effect.
+        // Attempting to focus a now removed tree should result in nothing being
+        // focused since the removed tree can have DOM focus, but that focus is
+        // ignored by FocusManager.
+        assert.isNull(this.focusManager.getFocusedTree());
+      });
+
+      test('nested tree focusTree()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        document.getElementById('testFocusableNestedTree4').focus();
+
         assert.equal(
           this.focusManager.getFocusedTree(),
-          this.testFocusableTree2,
+          this.testFocusableNestedTree4,
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        document.getElementById('testFocusableNestedTree4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedTree4,
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+        document.getElementById('testFocusableTree2.node1').focus();
+
+        document.getElementById('testFocusableNestedTree4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedTree4,
         );
       });
     });
@@ -1263,11 +1526,20 @@ suite('FocusManager', function () {
         assert.isNull(this.focusManager.getFocusedNode());
       });
 
-      test('non-registered tree node focus()ed after registered node focused returns original node', function () {
+      test('non-registered tree node focus()ed after registered node focused returns null', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         document.getElementById('testFocusableTree1.node1').focus();
 
         document.getElementById('testUnregisteredFocusableTree3.node1').focus();
+
+        assert.isNull(this.focusManager.getFocusedNode());
+      });
+
+      test('unfocuasble element focus()ed after registered node focused returns original node', function () {
+        this.focusManager.registerTree(this.testFocusableTree1);
+        document.getElementById('testFocusableTree1.node1').focus();
+
+        document.getElementById('testUnfocusableElement').focus();
 
         assert.equal(
           this.focusManager.getFocusedNode(),
@@ -1320,7 +1592,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('unregistered tree focus()ed with prev node after unregistering still returns old node', function () {
+      test('unregistered tree focus()ed with prev node after unregistering returns null', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         this.focusManager.registerTree(this.testFocusableTree2);
         document.getElementById('testFocusableTree1.node1').focus();
@@ -1329,10 +1601,46 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node1').focus();
 
-        // Attempting to focus a now removed tree should have no effect.
+        // Attempting to focus a now removed tree should result in nothing being
+        // focused since the removed tree can have DOM focus, but that focus is
+        // ignored by FocusManager.
+        assert.isNull(this.focusManager.getFocusedNode());
+      });
+
+      test('nested tree focus()ed with no prev focus returns nested root', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        document.getElementById('testFocusableNestedTree4').focus();
+
         assert.equal(
           this.focusManager.getFocusedNode(),
-          this.testFocusableTree2Node1,
+          this.testFocusableNestedTree4.getRootFocusableNode(),
+        );
+      });
+
+      test('nested tree node focus()ed with no prev focus returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        document.getElementById('testFocusableNestedTree4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedTree4Node1,
+        );
+      });
+
+      test('nested tree node focus()ed after parent focused returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+        document.getElementById('testFocusableTree2.node1').focus();
+
+        document.getElementById('testFocusableNestedTree4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedTree4Node1,
         );
       });
     });
@@ -1492,17 +1800,17 @@ suite('FocusManager', function () {
         );
       });
 
-      test('non-registered tree node focus()ed after registered node focused original node has active focus', function () {
+      test('unfocsable element focus()ed after registered node focused original node has active focus', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         document.getElementById('testFocusableTree1.node1').focus();
 
-        document.getElementById('testUnregisteredFocusableTree3.node1').focus();
+        document.getElementById('testUnfocusableElement').focus();
 
         // The original node should be unchanged, and the unregistered node should not have any
         // focus indicators.
         const nodeElem = document.getElementById('testFocusableTree1.node1');
         const attemptedNewNodeElem = document.getElementById(
-          'testUnregisteredFocusableTree3.node1',
+          'testUnfocusableElement',
         );
         assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
         assert.notInclude(
@@ -1615,7 +1923,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('unregistered tree focus()ed with prev node after unregistering does not change indicators', function () {
+      test('unregistered tree focus()ed with prev node after unregistering removes active indicator', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         this.focusManager.registerTree(this.testFocusableTree2);
         document.getElementById('testFocusableTree1.node1').focus();
@@ -1624,16 +1932,16 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node1').focus();
 
-        // Attempting to focus a now removed tree should have no effect.
+        // Attempting to focus a now removed tree should remove active.
         const otherNodeElem =
           this.testFocusableTree2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(
+        assert.notInclude(
           Array.from(otherNodeElem.classList),
           'blocklyActiveFocus',
         );
-        assert.notInclude(
+        assert.include(
           Array.from(otherNodeElem.classList),
           'blocklyPassiveFocus',
         );
@@ -1709,6 +2017,65 @@ suite('FocusManager', function () {
         assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
         assert.notInclude(
           Array.from(rootElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree focus()ed with no prev root has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        document.getElementById('testFocusableNestedTree4').focus();
+
+        const rootElem = this.testFocusableNestedTree4
+          .getRootFocusableNode()
+          .getFocusableElement();
+        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(rootElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focus()ed with no prev focus node has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+
+        document.getElementById('testFocusableNestedTree4.node1').focus();
+
+        const nodeElem =
+          this.testFocusableNestedTree4Node1.getFocusableElement();
+        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(nodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focus()ed after parent focused prev has passive node has active', function () {
+        this.focusManager.registerTree(this.testFocusableTree2);
+        this.focusManager.registerTree(this.testFocusableNestedTree4);
+        document.getElementById('testFocusableTree2.node1').focus();
+
+        document.getElementById('testFocusableNestedTree4.node1').focus();
+
+        const prevNodeElem = this.testFocusableTree2Node1.getFocusableElement();
+        const currNodeElem =
+          this.testFocusableNestedTree4Node1.getFocusableElement();
+        assert.notInclude(
+          Array.from(prevNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.include(
+          Array.from(prevNodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+        assert.include(
+          Array.from(currNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.notInclude(
+          Array.from(currNodeElem.classList),
           'blocklyPassiveFocus',
         );
       });
@@ -1887,6 +2254,43 @@ suite('FocusManager', function () {
           this.testFocusableGroup2,
         );
       });
+
+      test('nested tree focusTree()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        this.focusManager.focusTree(this.testFocusableNestedGroup4);
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedGroup4,
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedGroup4,
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+        this.focusManager.focusNode(this.testFocusableGroup2Node1);
+
+        this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedGroup4,
+        );
+      });
     });
     suite('getFocusedNode()', function () {
       test('registered tree focusTree()ed no prev focus returns root node', function () {
@@ -2057,6 +2461,43 @@ suite('FocusManager', function () {
         assert.equal(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
+        );
+      });
+
+      test('nested tree focusTree()ed with no prev focus returns nested root', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        this.focusManager.focusTree(this.testFocusableNestedGroup4);
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedGroup4.getRootFocusableNode(),
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedGroup4Node1,
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+        this.focusManager.focusNode(this.testFocusableGroup2Node1);
+
+        this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedGroup4Node1,
         );
       });
     });
@@ -2402,6 +2843,66 @@ suite('FocusManager', function () {
           'blocklyPassiveFocus',
         );
       });
+
+      test('nested tree focusTree()ed with no prev root has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        this.focusManager.focusTree(this.testFocusableNestedGroup4);
+
+        const rootElem = this.testFocusableNestedGroup4
+          .getRootFocusableNode()
+          .getFocusableElement();
+        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(rootElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus node has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
+
+        const nodeElem =
+          this.testFocusableNestedGroup4Node1.getFocusableElement();
+        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(nodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused prev has passive node has active', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+        this.focusManager.focusNode(this.testFocusableGroup2Node1);
+
+        this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
+
+        const prevNodeElem =
+          this.testFocusableGroup2Node1.getFocusableElement();
+        const currNodeElem =
+          this.testFocusableNestedGroup4Node1.getFocusableElement();
+        assert.notInclude(
+          Array.from(prevNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.include(
+          Array.from(prevNodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+        assert.include(
+          Array.from(currNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.notInclude(
+          Array.from(currNodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
     });
   });
 
@@ -2506,7 +3007,7 @@ suite('FocusManager', function () {
         assert.isNull(this.focusManager.getFocusedTree());
       });
 
-      test('non-registered tree node focus()ed after registered node focused returns original tree', function () {
+      test('non-registered tree node focus()ed after registered node focused returns null', function () {
         this.focusManager.registerTree(this.testFocusableGroup1);
         document.getElementById('testFocusableGroup1.node1').focus();
 
@@ -2514,10 +3015,10 @@ suite('FocusManager', function () {
           .getElementById('testUnregisteredFocusableGroup3.node1')
           .focus();
 
-        assert.equal(
-          this.focusManager.getFocusedTree(),
-          this.testFocusableGroup1,
-        );
+        // Attempting to focus a now removed tree should result in nothing being
+        // focused since the removed tree can have DOM focus, but that focus is
+        // ignored by FocusManager.
+        assert.isNull(this.focusManager.getFocusedTree());
       });
 
       test('unregistered tree focus()ed with no prev focus returns null', function () {
@@ -2565,7 +3066,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('unregistered tree focus()ed with prev node after unregistering still returns old tree', function () {
+      test('unregistered tree focus()ed with prev node after unregistering returns null', function () {
         this.focusManager.registerTree(this.testFocusableGroup1);
         this.focusManager.registerTree(this.testFocusableGroup2);
         document.getElementById('testFocusableGroup1.node1').focus();
@@ -2574,10 +3075,46 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node1').focus();
 
-        // Attempting to focus a now removed tree should have no effect.
+        // Attempting to focus a now removed tree should result in nothing being
+        // focused since the removed tree can have DOM focus, but that focus is
+        // ignored by FocusManager.
+        assert.isNull(this.focusManager.getFocusedTree());
+      });
+
+      test('nested tree focusTree()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        document.getElementById('testFocusableNestedGroup4').focus();
+
         assert.equal(
           this.focusManager.getFocusedTree(),
-          this.testFocusableGroup2,
+          this.testFocusableNestedGroup4,
+        );
+      });
+
+      test('nested tree node focusNode()ed with no prev focus returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        document.getElementById('testFocusableNestedGroup4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedGroup4,
+        );
+      });
+
+      test('nested tree node focusNode()ed after parent focused returns nested tree', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+        document.getElementById('testFocusableGroup2.node1').focus();
+
+        document.getElementById('testFocusableNestedGroup4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedTree(),
+          this.testFocusableNestedGroup4,
         );
       });
     });
@@ -2681,13 +3218,22 @@ suite('FocusManager', function () {
         assert.isNull(this.focusManager.getFocusedNode());
       });
 
-      test('non-registered tree node focus()ed after registered node focused returns original node', function () {
+      test('non-registered tree node focus()ed after registered node focused returns null', function () {
         this.focusManager.registerTree(this.testFocusableGroup1);
         document.getElementById('testFocusableGroup1.node1').focus();
 
         document
           .getElementById('testUnregisteredFocusableGroup3.node1')
           .focus();
+
+        assert.isNull(this.focusManager.getFocusedNode());
+      });
+
+      test('unfocusable element focus()ed after registered node focused returns original node', function () {
+        this.focusManager.registerTree(this.testFocusableGroup1);
+        document.getElementById('testFocusableGroup1.node1').focus();
+
+        document.getElementById('testUnfocusableElement').focus();
 
         assert.equal(
           this.focusManager.getFocusedNode(),
@@ -2740,7 +3286,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('unregistered tree focus()ed with prev node after unregistering still returns old node', function () {
+      test('unregistered tree focus()ed with prev node after unregistering returns null', function () {
         this.focusManager.registerTree(this.testFocusableGroup1);
         this.focusManager.registerTree(this.testFocusableGroup2);
         document.getElementById('testFocusableGroup1.node1').focus();
@@ -2749,10 +3295,46 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node1').focus();
 
-        // Attempting to focus a now removed tree should have no effect.
+        // Attempting to focus a now removed tree should result in nothing being
+        // focused since the removed tree can have DOM focus, but that focus is
+        // ignored by FocusManager.
+        assert.isNull(this.focusManager.getFocusedNode());
+      });
+
+      test('nested tree focus()ed with no prev focus returns nested root', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        document.getElementById('testFocusableNestedGroup4').focus();
+
         assert.equal(
           this.focusManager.getFocusedNode(),
-          this.testFocusableGroup2Node1,
+          this.testFocusableNestedGroup4.getRootFocusableNode(),
+        );
+      });
+
+      test('nested tree node focus()ed with no prev focus returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        document.getElementById('testFocusableNestedGroup4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedGroup4Node1,
+        );
+      });
+
+      test('nested tree node focus()ed after parent focused returns focused node', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+        document.getElementById('testFocusableGroup2.node1').focus();
+
+        document.getElementById('testFocusableNestedGroup4.node1').focus();
+
+        assert.equal(
+          this.focusManager.getFocusedNode(),
+          this.testFocusableNestedGroup4Node1,
         );
       });
     });
@@ -2916,19 +3498,17 @@ suite('FocusManager', function () {
         );
       });
 
-      test('non-registered tree node focus()ed after registered node focused original node has active focus', function () {
+      test('unfocusable element focus()ed after registered node focused original node has active focus', function () {
         this.focusManager.registerTree(this.testFocusableGroup1);
         document.getElementById('testFocusableGroup1.node1').focus();
 
-        document
-          .getElementById('testUnregisteredFocusableGroup3.node1')
-          .focus();
+        document.getElementById('testUnfocusableElement').focus();
 
         // The original node should be unchanged, and the unregistered node should not have any
         // focus indicators.
         const nodeElem = document.getElementById('testFocusableGroup1.node1');
         const attemptedNewNodeElem = document.getElementById(
-          'testUnregisteredFocusableGroup3.node1',
+          'testUnfocusableElement',
         );
         assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
         assert.notInclude(
@@ -3041,7 +3621,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('unregistered tree focus()ed with prev node after unregistering does not change indicators', function () {
+      test('unregistered tree focus()ed with prev node after unregistering removes active indicator', function () {
         this.focusManager.registerTree(this.testFocusableGroup1);
         this.focusManager.registerTree(this.testFocusableGroup2);
         document.getElementById('testFocusableGroup1.node1').focus();
@@ -3050,16 +3630,16 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node1').focus();
 
-        // Attempting to focus a now removed tree should have no effect.
+        // Attempting to focus a now removed tree should remove active.
         const otherNodeElem =
           this.testFocusableGroup2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(
+        assert.notInclude(
           Array.from(otherNodeElem.classList),
           'blocklyActiveFocus',
         );
-        assert.notInclude(
+        assert.include(
           Array.from(otherNodeElem.classList),
           'blocklyPassiveFocus',
         );
@@ -3138,6 +3718,163 @@ suite('FocusManager', function () {
           'blocklyPassiveFocus',
         );
       });
+
+      test('nested tree focus()ed with no prev root has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        document.getElementById('testFocusableNestedGroup4').focus();
+
+        const rootElem = this.testFocusableNestedGroup4
+          .getRootFocusableNode()
+          .getFocusableElement();
+        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(rootElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focus()ed with no prev focus node has active focus', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+
+        document.getElementById('testFocusableNestedGroup4.node1').focus();
+
+        const nodeElem =
+          this.testFocusableNestedGroup4Node1.getFocusableElement();
+        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+        assert.notInclude(
+          Array.from(nodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+
+      test('nested tree node focus()ed after parent focused prev has passive node has active', function () {
+        this.focusManager.registerTree(this.testFocusableGroup2);
+        this.focusManager.registerTree(this.testFocusableNestedGroup4);
+        document.getElementById('testFocusableGroup2.node1').focus();
+
+        document.getElementById('testFocusableNestedGroup4.node1').focus();
+
+        const prevNodeElem =
+          this.testFocusableGroup2Node1.getFocusableElement();
+        const currNodeElem =
+          this.testFocusableNestedGroup4Node1.getFocusableElement();
+        assert.notInclude(
+          Array.from(prevNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.include(
+          Array.from(prevNodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+        assert.include(
+          Array.from(currNodeElem.classList),
+          'blocklyActiveFocus',
+        );
+        assert.notInclude(
+          Array.from(currNodeElem.classList),
+          'blocklyPassiveFocus',
+        );
+      });
+    });
+  });
+
+  /* High-level focus/defocusing tests. */
+  suite('Defocusing and refocusing', function () {
+    test('Defocusing actively focused root HTML tree switches to passive highlight', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.focusTree(this.testFocusableTree2);
+
+      document.getElementById('testUnregisteredFocusableTree3').focus();
+
+      const rootNode = this.testFocusableTree2.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      assert.isNull(this.focusManager.getFocusedTree());
+      assert.isNull(this.focusManager.getFocusedNode());
+      assert.include(Array.from(rootElem.classList), 'blocklyPassiveFocus');
+      assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
+    });
+
+    test('Defocusing actively focused HTML tree node switches to passive highlight', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.focusNode(this.testFocusableTree2Node1);
+
+      document.getElementById('testUnregisteredFocusableTree3').focus();
+
+      const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
+      assert.isNull(this.focusManager.getFocusedTree());
+      assert.isNull(this.focusManager.getFocusedNode());
+      assert.include(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
+      assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+    });
+
+    test('Defocusing actively focused HTML subtree node switches to passive highlight', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.registerTree(this.testFocusableNestedTree4);
+      this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+
+      document.getElementById('testUnregisteredFocusableTree3').focus();
+
+      const nodeElem = this.testFocusableNestedTree4Node1.getFocusableElement();
+      assert.isNull(this.focusManager.getFocusedTree());
+      assert.isNull(this.focusManager.getFocusedNode());
+      assert.include(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
+      assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+    });
+
+    test('Refocusing actively focused root HTML tree restores to active highlight', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.focusTree(this.testFocusableTree2);
+      document.getElementById('testUnregisteredFocusableTree3').focus();
+
+      document.getElementById('testFocusableTree2').focus();
+
+      const rootNode = this.testFocusableTree2.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      assert.equal(this.focusManager.getFocusedTree(), this.testFocusableTree2);
+      assert.equal(this.focusManager.getFocusedNode(), rootNode);
+      assert.notInclude(Array.from(rootElem.classList), 'blocklyPassiveFocus');
+      assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
+    });
+
+    test('Refocusing actively focused HTML tree node restores to active highlight', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.focusNode(this.testFocusableTree2Node1);
+      document.getElementById('testUnregisteredFocusableTree3').focus();
+
+      document.getElementById('testFocusableTree2.node1').focus();
+
+      const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
+      assert.equal(this.focusManager.getFocusedTree(), this.testFocusableTree2);
+      assert.equal(
+        this.focusManager.getFocusedNode(),
+        this.testFocusableTree2Node1,
+      );
+      assert.notInclude(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
+      assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+    });
+
+    test('Refocusing actively focused HTML subtree node restores to active highlight', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.registerTree(this.testFocusableNestedTree4);
+      this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
+      document.getElementById('testUnregisteredFocusableTree3').focus();
+
+      document.getElementById('testFocusableNestedTree4.node1').focus();
+
+      const nodeElem = this.testFocusableNestedTree4Node1.getFocusableElement();
+      assert.equal(
+        this.focusManager.getFocusedTree(),
+        this.testFocusableNestedTree4,
+      );
+      assert.equal(
+        this.focusManager.getFocusedNode(),
+        this.testFocusableNestedTree4Node1,
+      );
+      assert.notInclude(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
+      assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
     });
   });
 

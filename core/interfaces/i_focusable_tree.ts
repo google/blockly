@@ -41,13 +41,39 @@ export interface IFocusableTree {
   getRootFocusableNode(): IFocusableNode;
 
   /**
+   * Returns all directly nested trees under this tree.
+   *
+   * Note that the returned list of trees doesn't need to be stable, however all
+   * returned trees *do* need to be registered with FocusManager. Additionally,
+   * this must return actual nested trees as omitting a nested tree will affect
+   * how focus changes map to a specific node and its tree, potentially leading
+   * to user confusion.
+   */
+  getNestedTrees(): Array<IFocusableTree>;
+
+  /**
+   * Returns the IFocusableNode corresponding to the specified element ID, or
+   * null if there's no exact node within this tree with that ID or if the ID
+   * corresponds to the root of the tree.
+   *
+   * This will never match against nested trees.
+   *
+   * @param id The ID of the node's focusable HTMLElement or SVGElement.
+   */
+  lookUpFocusableNode(id: string): IFocusableNode | null;
+
+  /**
    * Returns the IFocusableNode corresponding to the select element, or null if
    * the element does not have such a node.
    *
    * The provided element must have a non-null ID that conforms to the contract
    * mentioned in IFocusableNode.
    *
-   * This function may match against the root node of the tree.
+   * This function may match against the root node of the tree. It will also map
+   * against the nearest node to the provided element if the element does not
+   * have an exact matching corresponding node. This function filters out
+   * matches against nested trees, so long as they are represented in the return
+   * value of getNestedTrees.
    */
   findFocusableNodeFor(
     element: HTMLElement | SVGElement,

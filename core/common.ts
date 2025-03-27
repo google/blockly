@@ -292,13 +292,7 @@ export function createBlockDefinitionsFromJsonArray(
 export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
   // Iterate over own enumerable properties.
   for (const type of Object.keys(blocks)) {
-    const definition = blocks[type];
-    if (type in Blocks) {
-      console.warn(
-        `Block definition "${type}" overwrites previous definition.`,
-      );
-    }
-    Blocks[type] = definition;
+    Blocks[type] = blocks[type];
   }
 }
 

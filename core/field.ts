@@ -1332,15 +1332,6 @@ export abstract class Field<T = any>
   }
 
   /**
-   * Returns whether or not the field is tab navigable.
-   *
-   * @returns True if the field is tab navigable.
-   */
-  isTabNavigable(): boolean {
-    return false;
-  }
-
-  /**
    * Handles the given keyboard shortcut.
    *
    * @param _shortcut The shortcut to be handled.

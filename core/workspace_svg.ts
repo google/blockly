@@ -939,6 +939,28 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
+   * Creates a new set of options from this workspace's options with just the
+   * values that are relevant to a flyout.
+   *
+   * @returns A subset of this workspace's options.
+   */
+  copyOptionsForFlyout(): Options {
+    return new Options({
+      'parentWorkspace': this,
+      'rtl': this.RTL,
+      'oneBasedIndex': this.options.oneBasedIndex,
+      'horizontalLayout': this.horizontalLayout,
+      'renderer': this.options.renderer,
+      'rendererOverrides': this.options.rendererOverrides,
+      'plugins': this.options.plugins,
+      'modalInputs': this.options.modalInputs,
+      'move': {
+        'scrollbars': true,
+      },
+    } as BlocklyOptions);
+  }
+
+  /**
    * Add a flyout element in an element with the given tag name.
    *
    * @param tagName What type of tag the flyout belongs in.
@@ -946,18 +968,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   addFlyout(tagName: string | Svg<SVGSVGElement> | Svg<SVGGElement>): Element {
-    const workspaceOptions = new Options({
-      'parentWorkspace': this,
-      'rtl': this.RTL,
-      'oneBasedIndex': this.options.oneBasedIndex,
-      'horizontalLayout': this.horizontalLayout,
-      'renderer': this.options.renderer,
-      'rendererOverrides': this.options.rendererOverrides,
-      'modalInputs': this.options.modalInputs,
-      'move': {
-        'scrollbars': true,
-      },
-    } as BlocklyOptions);
+    const workspaceOptions = this.copyOptionsForFlyout();
     workspaceOptions.toolboxPosition = this.options.toolboxPosition;
     if (this.horizontalLayout) {
       const HorizontalFlyout = registry.getClassFromOptions(

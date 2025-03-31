@@ -828,7 +828,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.options,
     );
 
-    if (CursorClass) this.markerManager.setCursor(new CursorClass());
+    if (CursorClass) this.markerManager.setCursor(new CursorClass(this));
 
     const isParentWorkspace = this.options.parentWorkspace === null;
     this.renderer.createDom(

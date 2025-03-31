@@ -669,7 +669,7 @@ export class LineCursor extends Marker {
         }
       }
     } else {
-      this.setCurNode(null as never, true);
+      this.setCurNode(null, true);
     }
   }
 }

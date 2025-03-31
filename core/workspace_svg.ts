@@ -2551,7 +2551,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @internal
    * @param bounds A rectangle to scroll into view, as best as possible.
-   * @param workspace The workspace to scroll the given bounds into view in.
    */
   scrollBoundsIntoView(bounds: Rect) {
     if (Gesture.inProgress()) {

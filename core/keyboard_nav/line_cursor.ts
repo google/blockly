@@ -98,7 +98,7 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    let newNode = this.getNextNode(curNode, this.validLineNode.bind(this));
+    const newNode = this.getNextNode(curNode, this.validLineNode.bind(this));
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -137,7 +137,10 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    let newNode = this.getPreviousNode(curNode, this.validLineNode.bind(this));
+    const newNode = this.getPreviousNode(
+      curNode,
+      this.validLineNode.bind(this),
+    );
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -215,10 +218,10 @@ export class LineCursor extends Marker {
       case ASTNode.types.BLOCK:
         return !(location as Block).outputConnection?.isConnected();
       case ASTNode.types.INPUT:
-        const connection = location as Connection;
         return (
-          connection.type === ConnectionType.NEXT_STATEMENT &&
-          (this.options.stackConnections || !connection.isConnected())
+          (location as Connection).type === ConnectionType.NEXT_STATEMENT &&
+          (this.options.stackConnections ||
+            !(location as Connection).isConnected())
         );
       case ASTNode.types.NEXT:
         return (

@@ -724,7 +724,7 @@ export class ASTNode {
     const type = connection.type;
     if (
       type === ConnectionType.INPUT_VALUE ||
-      type === ConnectionType.NEXT_STATEMENT
+      (type === ConnectionType.NEXT_STATEMENT && connection.getParentInput())
     ) {
       const parentInput = connection.getParentInput();
       if (!parentInput) return null;

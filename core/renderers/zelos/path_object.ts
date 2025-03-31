@@ -161,10 +161,11 @@ export class PathObject extends BasePathObject {
   /**
    * Create's an outline path for the specified input.
    *
+   * @internal
    * @param name The input name.
    * @returns The SVG outline path.
    */
-  private getOutlinePath(name: string): SVGElement {
+  getOutlinePath(name: string): SVGElement {
     if (!this.outlines.has(name)) {
       this.outlines.set(
         name,

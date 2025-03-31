@@ -11,7 +11,7 @@
  */
 // Former goog.module ID: Blockly.MarkerManager
 
-import type {Cursor} from './keyboard_nav/cursor.js';
+import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -23,7 +23,7 @@ export class MarkerManager {
   static readonly LOCAL_MARKER = 'local_marker_1';
 
   /** The cursor. */
-  private cursor: Cursor | null = null;
+  private cursor: LineCursor | null = null;
 
   /** The cursor's SVG element. */
   private cursorSvg: SVGElement | null = null;
@@ -83,7 +83,7 @@ export class MarkerManager {
    *
    * @returns The cursor for this workspace.
    */
-  getCursor(): Cursor | null {
+  getCursor(): LineCursor | null {
     return this.cursor;
   }
 
@@ -104,7 +104,7 @@ export class MarkerManager {
    *
    * @param cursor The cursor used to move around this workspace.
    */
-  setCursor(cursor: Cursor) {
+  setCursor(cursor: LineCursor) {
     this.cursor?.getDrawer()?.dispose();
     this.cursor = cursor;
     if (this.cursor) {

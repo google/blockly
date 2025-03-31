@@ -194,6 +194,14 @@ suite('Dropdown Fields', function () {
       this.field.setValue('B');
       assertFieldValue(this.field, 'B', 'b');
     });
+    test('After options change', function () {
+      this.field.setOptions([
+        ['d', 'D'],
+        ['e', 'E'],
+        ['f', 'F'],
+      ]);
+      assertFieldValue(this.field, 'D', 'd');
+    });
   });
 
   suite('Validators', function () {

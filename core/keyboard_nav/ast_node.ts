@@ -708,10 +708,7 @@ export class ASTNode {
    * @param field The location of the AST node.
    * @returns An AST node pointing to a field.
    */
-  static createFieldNode(field: Field): ASTNode | null {
-    if (!field) {
-      return null;
-    }
+  static createFieldNode(field: Field): ASTNode {
     return new ASTNode(ASTNode.types.FIELD, field);
   }
 
@@ -724,25 +721,14 @@ export class ASTNode {
    * @returns An AST node pointing to a connection.
    */
   static createConnectionNode(connection: Connection): ASTNode | null {
-    if (!connection) {
-      return null;
-    }
     const type = connection.type;
-    if (type === ConnectionType.INPUT_VALUE) {
-      // AnyDuringMigration because:  Argument of type 'Input | null' is not
-      // assignable to parameter of type 'Input'.
-      return ASTNode.createInputNode(
-        connection.getParentInput() as AnyDuringMigration,
-      );
-    } else if (
-      type === ConnectionType.NEXT_STATEMENT &&
-      connection.getParentInput()
+    if (
+      type === ConnectionType.INPUT_VALUE ||
+      type === ConnectionType.NEXT_STATEMENT
     ) {
-      // AnyDuringMigration because:  Argument of type 'Input | null' is not
-      // assignable to parameter of type 'Input'.
-      return ASTNode.createInputNode(
-        connection.getParentInput() as AnyDuringMigration,
-      );
+      const parentInput = connection.getParentInput();
+      if (!parentInput) return null;
+      return ASTNode.createInputNode(parentInput);
     } else if (type === ConnectionType.NEXT_STATEMENT) {
       return new ASTNode(ASTNode.types.NEXT, connection);
     } else if (type === ConnectionType.OUTPUT_VALUE) {
@@ -761,7 +747,7 @@ export class ASTNode {
    * @returns An AST node pointing to a input.
    */
   static createInputNode(input: Input): ASTNode | null {
-    if (!input || !input.connection) {
+    if (!input.connection) {
       return null;
     }
     return new ASTNode(ASTNode.types.INPUT, input.connection);
@@ -773,10 +759,7 @@ export class ASTNode {
    * @param block The block used to create an AST node.
    * @returns An AST node pointing to a block.
    */
-  static createBlockNode(block: Block): ASTNode | null {
-    if (!block) {
-      return null;
-    }
+  static createBlockNode(block: Block): ASTNode {
     return new ASTNode(ASTNode.types.BLOCK, block);
   }
 
@@ -790,10 +773,7 @@ export class ASTNode {
    * @returns An AST node of type stack that points to the top block on the
    *     stack.
    */
-  static createStackNode(topBlock: Block): ASTNode | null {
-    if (!topBlock) {
-      return null;
-    }
+  static createStackNode(topBlock: Block): ASTNode {
     return new ASTNode(ASTNode.types.STACK, topBlock);
   }
 
@@ -806,10 +786,7 @@ export class ASTNode {
    * @returns An AST node of type stack that points to the top block on the
    *     stack.
    */
-  static createButtonNode(button: FlyoutButton): ASTNode | null {
-    if (!button) {
-      return null;
-    }
+  static createButtonNode(button: FlyoutButton): ASTNode {
     return new ASTNode(ASTNode.types.BUTTON, button);
   }
 
@@ -822,12 +799,9 @@ export class ASTNode {
    *     workspace.
    */
   static createWorkspaceNode(
-    workspace: Workspace | null,
-    wsCoordinate: Coordinate | null,
-  ): ASTNode | null {
-    if (!wsCoordinate || !workspace) {
-      return null;
-    }
+    workspace: Workspace,
+    wsCoordinate: Coordinate,
+  ): ASTNode {
     const params = {wsCoordinate};
     return new ASTNode(ASTNode.types.WORKSPACE, workspace, params);
   }

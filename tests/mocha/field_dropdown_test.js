@@ -194,12 +194,30 @@ suite('Dropdown Fields', function () {
       this.field.setValue('B');
       assertFieldValue(this.field, 'B', 'b');
     });
-    test('After options change', function () {
+  });
+  suite('setOptions', function () {
+    setup(function () {
+      this.field = new Blockly.FieldDropdown([
+        ['a', 'A'],
+        ['b', 'B'],
+        ['c', 'C'],
+      ]);
+    });
+    test('With array updates options', function () {
       this.field.setOptions([
         ['d', 'D'],
         ['e', 'E'],
         ['f', 'F'],
       ]);
+      assertFieldValue(this.field, 'D', 'd');
+    });
+    test('With generator updates options', function () {
+      this.field.setOptions(function () {
+        return [
+        ['d', 'D'],
+        ['e', 'E'],
+        ['f', 'F'],
+      ]});
       assertFieldValue(this.field, 'D', 'd');
     });
   });

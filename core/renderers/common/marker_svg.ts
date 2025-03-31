@@ -287,8 +287,8 @@ export class MarkerSvg {
    */
   protected showWithCoordinates_(curNode: ASTNode) {
     const wsCoordinate = curNode.getWsCoordinate();
-    let x = wsCoordinate.x;
-    const y = wsCoordinate.y;
+    let x = wsCoordinate?.x ?? 0;
+    const y = wsCoordinate?.y ?? 0;
 
     if (this.workspace.RTL) {
       x -= this.constants_.CURSOR_WS_WIDTH;

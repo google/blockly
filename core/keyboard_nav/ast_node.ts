@@ -47,9 +47,7 @@ export class ASTNode {
   private readonly location: IASTNodeLocation;
 
   /** The coordinate on the workspace. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Coordinate'.
-  private wsCoordinate: Coordinate = null as AnyDuringMigration;
+  private wsCoordinate: Coordinate | null = null;
 
   /**
    * @param type The type of the location.
@@ -119,7 +117,7 @@ export class ASTNode {
    * @returns The workspace coordinate or null if the location is not a
    *     workspace.
    */
-  getWsCoordinate(): Coordinate {
+  getWsCoordinate(): Coordinate | null {
     return this.wsCoordinate;
   }
 
@@ -144,12 +142,12 @@ export class ASTNode {
   private findNextForInput(): ASTNode | null {
     const location = this.location as Connection;
     const parentInput = location.getParentInput();
-    const block = parentInput!.getSourceBlock();
-    // AnyDuringMigration because:  Argument of type 'Input | null' is not
-    // assignable to parameter of type 'Input'.
-    const curIdx = block!.inputList.indexOf(parentInput as AnyDuringMigration);
-    for (let i = curIdx + 1; i < block!.inputList.length; i++) {
-      const input = block!.inputList[i];
+    const block = parentInput?.getSourceBlock();
+    if (!block || !parentInput) return null;
+
+    const curIdx = block.inputList.indexOf(parentInput);
+    for (let i = curIdx + 1; i < block.inputList.length; i++) {
+      const input = block.inputList[i];
       const fieldRow = input.fieldRow;
       for (let j = 0; j < fieldRow.length; j++) {
         const field = fieldRow[j];
@@ -209,12 +207,12 @@ export class ASTNode {
   private findPrevForInput(): ASTNode | null {
     const location = this.location as Connection;
     const parentInput = location.getParentInput();
-    const block = parentInput!.getSourceBlock();
-    // AnyDuringMigration because:  Argument of type 'Input | null' is not
-    // assignable to parameter of type 'Input'.
-    const curIdx = block!.inputList.indexOf(parentInput as AnyDuringMigration);
+    const block = parentInput?.getSourceBlock();
+    if (!block || !parentInput) return null;
+
+    const curIdx = block.inputList.indexOf(parentInput);
     for (let i = curIdx; i >= 0; i--) {
-      const input = block!.inputList[i];
+      const input = block.inputList[i];
       if (input.connection && input !== parentInput) {
         return ASTNode.createInputNode(input);
       }
@@ -440,18 +438,11 @@ export class ASTNode {
     // substack.
     const topBlock = block.getTopStackBlock();
     const topConnection = getParentConnection(topBlock);
+    const parentInput = topConnection?.targetConnection?.getParentInput();
     // If the top connection has a parentInput, create an AST node pointing to
     // that input.
-    if (
-      topConnection &&
-      topConnection.targetConnection &&
-      topConnection.targetConnection.getParentInput()
-    ) {
-      // AnyDuringMigration because:  Argument of type 'Input | null' is not
-      // assignable to parameter of type 'Input'.
-      return ASTNode.createInputNode(
-        topConnection.targetConnection.getParentInput() as AnyDuringMigration,
-      );
+    if (parentInput) {
+      return ASTNode.createInputNode(parentInput);
     } else {
       // Go to stack level if you are not underneath an input.
       return ASTNode.createStackNode(topBlock);
@@ -538,7 +529,9 @@ export class ASTNode {
       case ASTNode.types.NEXT: {
         const connection = this.location as Connection;
         const targetConnection = connection.targetConnection;
-        return ASTNode.createConnectionNode(targetConnection!);
+        return targetConnection
+          ? ASTNode.createConnectionNode(targetConnection)
+          : null;
       }
       case ASTNode.types.BUTTON:
         return this.navigateFlyoutContents(true);
@@ -575,7 +568,9 @@ export class ASTNode {
       case ASTNode.types.INPUT: {
         const connection = this.location as Connection;
         const targetConnection = connection.targetConnection;
-        return ASTNode.createConnectionNode(targetConnection!);
+        return targetConnection
+          ? ASTNode.createConnectionNode(targetConnection)
+          : null;
       }
     }
 

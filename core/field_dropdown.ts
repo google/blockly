@@ -136,26 +136,11 @@ export class FieldDropdown extends Field<string> {
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
     if (menuGenerator === Field.SKIP_SETUP) return;
 
-    if (Array.isArray(menuGenerator)) {
-      this.validateOptions(menuGenerator);
-      const trimmed = this.trimOptions(menuGenerator);
-      this.menuGenerator_ = trimmed.options;
-      this.prefixField = trimmed.prefix || null;
-      this.suffixField = trimmed.suffix || null;
-    } else {
-      this.menuGenerator_ = menuGenerator;
-    }
-
-    /**
-     * The currently selected option. The field is initialized with the
-     * first option selected.
-     */
-    this.selectedOption = this.getOptions(false)[0];
+    this.setOptions(menuGenerator);
 
     if (config) {
       this.configure_(config);
     }
-    this.setValue(this.selectedOption[1]);
     if (validator) {
       this.setValidator(validator);
     }
@@ -412,6 +397,30 @@ export class FieldDropdown extends Field<string> {
     this.generatedOptions = this.menuGenerator_();
     this.validateOptions(this.generatedOptions);
     return this.generatedOptions;
+  }
+
+  /**
+   * Update the options on this dropdown. This will reset the selected item to
+   * the first item in the list.
+   *
+   * @param menuGenerator The array of options or a generator function.
+   */
+  setOptions(menuGenerator: MenuGenerator) {
+    if (Array.isArray(menuGenerator)) {
+      this.validateOptions(menuGenerator);
+      const trimmed = this.trimOptions(menuGenerator);
+      this.menuGenerator_ = trimmed.options;
+      this.prefixField = trimmed.prefix || null;
+      this.suffixField = trimmed.suffix || null;
+    } else {
+      this.menuGenerator_ = menuGenerator;
+    }
+    /**
+     * The currently selected option. The field is initialized with the
+     * first option selected.
+     */
+    this.selectedOption = this.getOptions(false)[0];
+    this.setValue(this.selectedOption[1]);
   }
 
   /**

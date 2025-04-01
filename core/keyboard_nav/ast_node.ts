@@ -717,12 +717,12 @@ export class ASTNode {
    */
   static createConnectionNode(connection: Connection): ASTNode | null {
     const type = connection.type;
+    const parentInput = connection.getParentInput();
     if (
-      type === ConnectionType.INPUT_VALUE ||
-      (type === ConnectionType.NEXT_STATEMENT && connection.getParentInput())
+      (type === ConnectionType.INPUT_VALUE ||
+        type === ConnectionType.NEXT_STATEMENT) &&
+      parentInput
     ) {
-      const parentInput = connection.getParentInput();
-      if (!parentInput) return null;
       return ASTNode.createInputNode(parentInput);
     } else if (type === ConnectionType.NEXT_STATEMENT) {
       return new ASTNode(ASTNode.types.NEXT, connection);

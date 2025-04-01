@@ -214,10 +214,11 @@ suite('Dropdown Fields', function () {
     test('With generator updates options', function () {
       this.field.setOptions(function () {
         return [
-        ['d', 'D'],
-        ['e', 'E'],
-        ['f', 'F'],
-      ]});
+          ['d', 'D'],
+          ['e', 'E'],
+          ['f', 'F'],
+        ];
+      });
       assertFieldValue(this.field, 'D', 'd');
     });
     test('With trimmable options gets trimmed', function () {
@@ -233,7 +234,7 @@ suite('Dropdown Fields', function () {
         ['e', 'E'],
         ['f', 'F'],
       ]);
-    })
+    });
     test('With an empty array of options throws', function () {
       assert.throws(function () {
         this.field.setOptions([]);

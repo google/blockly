@@ -274,7 +274,7 @@ export class LineCursor extends Marker {
 
   /**
    * Returns true iff the given node can be visited by the cursor.
-   * Specifically, if the node is any for which validInLineNode woudl
+   * Specifically, if the node is any for which validInLineNode would
    * return true, or if it is a workspace node.
    *
    * @param node The AST node to check whether it is valid.

@@ -2554,7 +2554,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   scrollBoundsIntoView(bounds: Rect) {
     if (Gesture.inProgress()) {
-      // This can cause jumps during a drag and it only suited for keyboard nav.
+      // This can cause jumps during a drag and is only suited for keyboard nav.
       return;
     }
     const scale = this.getScale();

@@ -220,6 +220,25 @@ suite('Dropdown Fields', function () {
       ]});
       assertFieldValue(this.field, 'D', 'd');
     });
+    test('With trimmable options gets trimmed', function () {
+      this.field.setOptions([
+        ['a d b', 'D'],
+        ['a e b', 'E'],
+        ['a f b', 'F'],
+      ]);
+      assert.deepEqual(this.field.prefixField, 'a');
+      assert.deepEqual(this.field.suffixField, 'b');
+      assert.deepEqual(this.field.getOptions(), [
+        ['d', 'D'],
+        ['e', 'E'],
+        ['f', 'F'],
+      ]);
+    })
+    test('With an empty array of options throws', function () {
+      assert.throws(function () {
+        this.field.setOptions([]);
+      });
+    });
   });
 
   suite('Validators', function () {

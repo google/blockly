@@ -415,10 +415,8 @@ export class FieldDropdown extends Field<string> {
     } else {
       this.menuGenerator_ = menuGenerator;
     }
-    /**
-     * The currently selected option. The field is initialized with the
-     * first option selected.
-     */
+    // The currently selected option. The field is initialized with the
+    // first option selected.
     this.selectedOption = this.getOptions(false)[0];
     this.setValue(this.selectedOption[1]);
   }

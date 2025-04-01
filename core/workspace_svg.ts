@@ -2551,8 +2551,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @internal
    * @param bounds A rectangle to scroll into view, as best as possible.
+   * @param padding Amount of spacing to put between the bounds and the edge of
+   *     the workspace's viewport.
    */
-  scrollBoundsIntoView(bounds: Rect) {
+  scrollBoundsIntoView(bounds: Rect, padding = 10) {
     if (Gesture.inProgress()) {
       // This can cause jumps during a drag and is only suited for keyboard nav.
       return;
@@ -2580,10 +2582,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Add some padding to the bounds so the element is scrolled comfortably
     // into view.
     bounds = bounds.clone();
-    bounds.top -= 10;
-    bounds.bottom += 10;
-    bounds.left -= 10;
-    bounds.right += 10;
+    bounds.top -= padding;
+    bounds.bottom += padding;
+    bounds.left -= padding;
+    bounds.right += padding;
 
     let deltaX = 0;
     let deltaY = 0;

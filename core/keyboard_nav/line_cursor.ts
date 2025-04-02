@@ -312,11 +312,11 @@ export class LineCursor extends Marker {
     } else if (newNode) {
       return this.getNextNode(newNode, isValid);
     }
-    const siblingOrParent = this.findSiblingOrParent(node.out());
-    if (isValid(siblingOrParent)) {
-      return siblingOrParent;
-    } else if (siblingOrParent) {
-      return this.getNextNode(siblingOrParent, isValid);
+    const siblingOrParentSibling = this.findSiblingOrParentSibling(node.out());
+    if (isValid(siblingOrParentSibling)) {
+      return siblingOrParentSibling;
+    } else if (siblingOrParentSibling) {
+      return this.getNextNode(siblingOrParentSibling, isValid);
     }
     return null;
   }
@@ -355,12 +355,13 @@ export class LineCursor extends Marker {
   }
 
   /**
-   * From the given node find either the next valid sibling or parent.
+   * From the given node find either the next valid sibling or the parent's
+   * next sibling.
    *
    * @param node The current position in the AST.
-   * @returns The parent AST node or null if there are no valid parents.
+   * @returns The next sibling node, the parent's next sibling, or null.
    */
-  private findSiblingOrParent(node: ASTNode | null): ASTNode | null {
+  private findSiblingOrParentSibling(node: ASTNode | null): ASTNode | null {
     if (!node) {
       return null;
     }
@@ -368,7 +369,7 @@ export class LineCursor extends Marker {
     if (nextNode) {
       return nextNode;
     }
-    return this.findSiblingOrParent(node.out());
+    return this.findSiblingOrParentSibling(node.out());
   }
 
   /**

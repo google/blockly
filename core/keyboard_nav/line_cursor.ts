@@ -527,11 +527,11 @@ export class LineCursor extends Marker {
    * this.drawMarker() instead of this.drawer.draw() directly.
    *
    * @param newNode The new location of the cursor.
-   * @param selectionUpToDate If false (the default) we'll update the selection
+   * @param updateSelection If true (the default) we'll update the selection
    *     too.
    */
-  override setCurNode(newNode: ASTNode | null, selectionUpToDate = false) {
-    if (!selectionUpToDate) {
+  override setCurNode(newNode: ASTNode | null, updateSelection = true) {
+    if (updateSelection) {
       this.updateSelectionFromNode(newNode);
     }
 
@@ -704,7 +704,7 @@ export class LineCursor extends Marker {
     const selected = common.getSelected();
 
     if (selected === null && curNode?.getType() === ASTNode.types.BLOCK) {
-      this.setCurNode(null, true);
+      this.setCurNode(null, false);
       return;
     }
     if (selected?.workspace !== this.workspace) {
@@ -725,7 +725,7 @@ export class LineCursor extends Marker {
         block = block.getParent();
       }
       if (block) {
-        this.setCurNode(ASTNode.createBlockNode(block), true);
+        this.setCurNode(ASTNode.createBlockNode(block), false);
       }
     }
   }

@@ -169,7 +169,7 @@ import {IVariableMap} from './interfaces/i_variable_map.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
-import {LineCursor} from './keyboard_nav/line_cursor.js';
+import {CursorOptions, LineCursor} from './keyboard_nav/line_cursor.js';
 import {Marker} from './keyboard_nav/marker.js';
 import type {LayerManager} from './layer_manager.js';
 import * as layers from './layers.js';
@@ -444,6 +444,7 @@ export {
   ContextMenuItems,
   ContextMenuRegistry,
   Css,
+  CursorOptions,
   DeleteArea,
   DragTarget,
   Events,

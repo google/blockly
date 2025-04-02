@@ -529,6 +529,7 @@ export class BlockSvg
     if (!collapsed) {
       this.updateDisabled();
       this.removeInput(collapsedInputName);
+      this.setWarningText(null, BlockSvg.COLLAPSED_WARNING_ID);
       return;
     }
 

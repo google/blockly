@@ -2594,24 +2594,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       deltaX = viewport.left - bounds.left;
     } else if (bounds.right > viewport.right) {
       deltaX = viewport.right - bounds.right;
-
-      // If scrolling to get the right edge of the target region into bounds
-      // would move the left edge out of bounds, do nothing.
-      if (bounds.left + deltaX < viewport.left) {
-        deltaX = 0;
-      }
     }
 
     if (bounds.top < viewport.top) {
       deltaY = viewport.top - bounds.top;
     } else if (bounds.bottom > viewport.bottom) {
       deltaY = viewport.bottom - bounds.bottom;
-
-      // If scrolling to get the bottom edge of the target region into bounds
-      // would move the top edge out of bounds, do nothing.
-      if (bounds.top + deltaY < viewport.top) {
-        deltaY = 0;
-      }
     }
 
     deltaX *= scale;

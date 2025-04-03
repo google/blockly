@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {FocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import * as dom from '../utils/dom.js';
@@ -13,6 +14,9 @@ import * as dom from '../utils/dom.js';
  * tree traversals.
  */
 export class FocusableTreeTraverser {
+  static readonly ACTIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
+  static readonly PASSIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
+
   /**
    * Returns the current IFocusableNode that either has the CSS class
    * 'blocklyActiveFocus' or 'blocklyPassiveFocus', only considering HTML and
@@ -26,28 +30,28 @@ export class FocusableTreeTraverser {
   static findFocusedNode(tree: IFocusableTree): IFocusableNode | null {
     const root = tree.getRootFocusableNode().getFocusableElement();
     if (
-      dom.hasClass(root, 'blocklyActiveFocus') ||
-      dom.hasClass(root, 'blocklyPassiveFocus')
+      dom.hasClass(root, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME) ||
+      dom.hasClass(root, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME)
     ) {
       // The root has focus.
       return tree.getRootFocusableNode();
     }
 
-    const activeEl = root.querySelector('.blocklyActiveFocus');
-    let active: IFocusableNode | null = null;
+    const activeEl = root.querySelector(this.ACTIVE_FOCUS_NODE_CSS_SELECTOR);
     if (activeEl instanceof HTMLElement || activeEl instanceof SVGElement) {
-      active = tree.findFocusableNodeFor(activeEl);
+      const active = tree.findFocusableNodeFor(activeEl);
+      if (active) return active;
     }
 
     // At most there should be one passive indicator per tree (not considering
     // subtrees).
-    const passiveEl = root.querySelector('.blocklyPassiveFocus');
-    let passive: IFocusableNode | null = null;
+    const passiveEl = root.querySelector(this.PASSIVE_FOCUS_NODE_CSS_SELECTOR);
     if (passiveEl instanceof HTMLElement || passiveEl instanceof SVGElement) {
-      passive = tree.findFocusableNodeFor(passiveEl);
+      const passive = tree.findFocusableNodeFor(passiveEl);
+      if (passive) return passive;
     }
 
-    return active ?? passive;
+    return null;
   }
 
   /**

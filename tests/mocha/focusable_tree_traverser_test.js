@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {FocusManager} from '../../build/src/core/focus_manager.js';
 import {FocusableTreeTraverser} from '../../build/src/core/utils/focusable_tree_traverser.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
@@ -11,50 +12,58 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 
+class FocusableNodeImpl {
+  constructor(element, tree) {
+    this.element = element;
+    this.tree = tree;
+  }
+
+  getFocusableElement() {
+    return this.element;
+  }
+
+  getFocusableTree() {
+    return this.tree;
+  }
+}
+
+class FocusableTreeImpl {
+  constructor(rootElement, nestedTrees) {
+    this.nestedTrees = nestedTrees;
+    this.idToNodeMap = {};
+    this.rootNode = this.addNode(rootElement);
+  }
+
+  addNode(element) {
+    const node = new FocusableNodeImpl(element, this);
+    this.idToNodeMap[element.id] = node;
+    return node;
+  }
+
+  getFocusedNode() {
+    throw Error('Unused in test suite.');
+  }
+
+  getRootFocusableNode() {
+    return this.rootNode;
+  }
+
+  getNestedTrees() {
+    return this.nestedTrees;
+  }
+
+  lookUpFocusableNode(id) {
+    return this.idToNodeMap[id];
+  }
+
+  findFocusableNodeFor(element) {
+    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
+  }
+}
+
 suite('FocusableTreeTraverser', function () {
   setup(function () {
     sharedTestSetup.call(this);
-
-    const FocusableNodeImpl = function (element, tree) {
-      this.getFocusableElement = function () {
-        return element;
-      };
-
-      this.getFocusableTree = function () {
-        return tree;
-      };
-    };
-    const FocusableTreeImpl = function (rootElement, nestedTrees) {
-      this.idToNodeMap = {};
-
-      this.addNode = function (element) {
-        const node = new FocusableNodeImpl(element, this);
-        this.idToNodeMap[element.id] = node;
-        return node;
-      };
-
-      this.getFocusedNode = function () {
-        throw Error('Unused in test suite.');
-      };
-
-      this.getRootFocusableNode = function () {
-        return this.rootNode;
-      };
-
-      this.getNestedTrees = function () {
-        return nestedTrees;
-      };
-
-      this.lookUpFocusableNode = function (id) {
-        return this.idToNodeMap[id];
-      };
-
-      this.findFocusableNodeFor = function (element) {
-        return FocusableTreeTraverser.findFocusableNodeFor(element, this);
-      };
-
-      this.rootNode = this.addNode(rootElement);
-    };
 
     const createFocusableTree = function (rootElementId, nestedTrees) {
       return new FocusableTreeImpl(
@@ -107,7 +116,7 @@ suite('FocusableTreeTraverser', function () {
     sharedTestTeardown.call(this);
 
     const removeFocusIndicators = function (element) {
-      element.classList.remove('blocklyActiveFocus', 'blocklyPassiveFocus');
+      element.classList.remove(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
     };
 
     // Ensure all node CSS styles are reset so that state isn't leaked between tests.
@@ -141,101 +150,101 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with root active highlight returns root node', function () {
       const tree = this.testFocusableTree1;
       const rootNode = tree.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add('blocklyActiveFocus');
+      rootNode.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, rootNode);
+      assert.strictEqual(finding, rootNode);
     });
 
     test('for tree with root passive highlight returns root node', function () {
       const tree = this.testFocusableTree1;
       const rootNode = tree.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add('blocklyPassiveFocus');
+      rootNode.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, rootNode);
+      assert.strictEqual(finding, rootNode);
     });
 
     test('for tree with node active highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1;
-      node.getFocusableElement().classList.add('blocklyActiveFocus');
+      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, node);
+      assert.strictEqual(finding, node);
     });
 
     test('for tree with node passive highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1;
-      node.getFocusableElement().classList.add('blocklyPassiveFocus');
+      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, node);
+      assert.strictEqual(finding, node);
     });
 
     test('for tree with nested node active highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1Child1;
-      node.getFocusableElement().classList.add('blocklyActiveFocus');
+      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, node);
+      assert.strictEqual(finding, node);
     });
 
     test('for tree with nested node passive highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1Child1;
-      node.getFocusableElement().classList.add('blocklyPassiveFocus');
+      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, node);
+      assert.strictEqual(finding, node);
     });
 
-    test('for tree with nested tree root active no parent highlights returns null', function () {
+    test('for tree with nested tree root active no parent highlights returns root', function () {
       const tree = this.testFocusableNestedTree4;
       const rootNode = this.testFocusableNestedTree4.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add('blocklyActiveFocus');
+      rootNode.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, rootNode);
+      assert.strictEqual(finding, rootNode);
+    });
+
+    test('for tree with nested tree root passive no parent highlights returns root', function () {
+      const tree = this.testFocusableNestedTree4;
+      const rootNode = this.testFocusableNestedTree4.getRootFocusableNode();
+      rootNode.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+
+      const finding = FocusableTreeTraverser.findFocusedNode(tree);
+
+      assert.strictEqual(finding, rootNode);
+    });
+
+    test('for tree with nested tree node active no parent highlights returns node', function () {
+      const tree = this.testFocusableNestedTree4;
+      const node = this.testFocusableNestedTree4Node1;
+      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+
+      const finding = FocusableTreeTraverser.findFocusedNode(tree);
+
+      assert.strictEqual(finding, node);
     });
 
     test('for tree with nested tree root passive no parent highlights returns null', function () {
       const tree = this.testFocusableNestedTree4;
-      const rootNode = this.testFocusableNestedTree4.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add('blocklyPassiveFocus');
-
-      const finding = FocusableTreeTraverser.findFocusedNode(tree);
-
-      assert.equal(finding, rootNode);
-    });
-
-    test('for tree with nested tree root active no parent highlights returns null', function () {
-      const tree = this.testFocusableNestedTree4;
       const node = this.testFocusableNestedTree4Node1;
-      node.getFocusableElement().classList.add('blocklyActiveFocus');
+      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
-      assert.equal(finding, node);
-    });
-
-    test('for tree with nested tree root passive no parent highlights returns null', function () {
-      const tree = this.testFocusableNestedTree4;
-      const node = this.testFocusableNestedTree4Node1;
-      node.getFocusableElement().classList.add('blocklyPassiveFocus');
-
-      const finding = FocusableTreeTraverser.findFocusedNode(tree);
-
-      assert.equal(finding, node);
+      assert.strictEqual(finding, node);
     });
 
     test('for tree with nested tree root active parent node passive returns parent node', function () {
@@ -243,14 +252,14 @@ suite('FocusableTreeTraverser', function () {
       const rootNode = this.testFocusableNestedTree4.getRootFocusableNode();
       this.testFocusableTree2Node1
         .getFocusableElement()
-        .classList.add('blocklyPassiveFocus');
-      rootNode.getFocusableElement().classList.add('blocklyActiveFocus');
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,
       );
 
-      assert.equal(finding, this.testFocusableTree2Node1);
+      assert.strictEqual(finding, this.testFocusableTree2Node1);
     });
 
     test('for tree with nested tree root passive parent node passive returns parent node', function () {
@@ -258,14 +267,14 @@ suite('FocusableTreeTraverser', function () {
       const rootNode = this.testFocusableNestedTree4.getRootFocusableNode();
       this.testFocusableTree2Node1
         .getFocusableElement()
-        .classList.add('blocklyPassiveFocus');
-      rootNode.getFocusableElement().classList.add('blocklyPassiveFocus');
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,
       );
 
-      assert.equal(finding, this.testFocusableTree2Node1);
+      assert.strictEqual(finding, this.testFocusableTree2Node1);
     });
 
     test('for tree with nested tree node active parent node passive returns parent node', function () {
@@ -273,14 +282,14 @@ suite('FocusableTreeTraverser', function () {
       const node = this.testFocusableNestedTree4Node1;
       this.testFocusableTree2Node1
         .getFocusableElement()
-        .classList.add('blocklyPassiveFocus');
-      node.getFocusableElement().classList.add('blocklyActiveFocus');
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,
       );
 
-      assert.equal(finding, this.testFocusableTree2Node1);
+      assert.strictEqual(finding, this.testFocusableTree2Node1);
     });
 
     test('for tree with nested tree node passive parent node passive returns parent node', function () {
@@ -288,14 +297,14 @@ suite('FocusableTreeTraverser', function () {
       const node = this.testFocusableNestedTree4Node1;
       this.testFocusableTree2Node1
         .getFocusableElement()
-        .classList.add('blocklyPassiveFocus');
-      node.getFocusableElement().classList.add('blocklyPassiveFocus');
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,
       );
 
-      assert.equal(finding, this.testFocusableTree2Node1);
+      assert.strictEqual(finding, this.testFocusableTree2Node1);
     });
   });
 
@@ -310,7 +319,7 @@ suite('FocusableTreeTraverser', function () {
         tree,
       );
 
-      assert.equal(finding, rootNode);
+      assert.strictEqual(finding, rootNode);
     });
 
     test('for element for different tree root returns null', function () {
@@ -347,7 +356,7 @@ suite('FocusableTreeTraverser', function () {
         tree,
       );
 
-      assert.equal(finding, this.testFocusableTree1Node1);
+      assert.strictEqual(finding, this.testFocusableTree1Node1);
     });
 
     test('for non-node element in tree returns root', function () {
@@ -362,7 +371,7 @@ suite('FocusableTreeTraverser', function () {
       );
 
       // An unregistered element should map to the closest node.
-      assert.equal(finding, this.testFocusableTree1Node2);
+      assert.strictEqual(finding, this.testFocusableTree1Node2);
     });
 
     test('for nested node element in tree returns node', function () {
@@ -375,7 +384,7 @@ suite('FocusableTreeTraverser', function () {
       );
 
       // The nested node should be returned.
-      assert.equal(finding, this.testFocusableTree1Node1Child1);
+      assert.strictEqual(finding, this.testFocusableTree1Node1Child1);
     });
 
     test('for nested node element in tree returns node', function () {
@@ -390,7 +399,7 @@ suite('FocusableTreeTraverser', function () {
       );
 
       // An unregistered element should map to the closest node.
-      assert.equal(finding, this.testFocusableTree1Node1Child1);
+      assert.strictEqual(finding, this.testFocusableTree1Node1Child1);
     });
 
     test('for nested node element in tree returns node', function () {
@@ -405,7 +414,7 @@ suite('FocusableTreeTraverser', function () {
       );
 
       // An unregistered element should map to the closest node (or root).
-      assert.equal(finding, tree.getRootFocusableNode());
+      assert.strictEqual(finding, tree.getRootFocusableNode());
     });
 
     test('for nested tree root returns nested tree root', function () {
@@ -418,7 +427,7 @@ suite('FocusableTreeTraverser', function () {
         tree,
       );
 
-      assert.equal(finding, rootNode);
+      assert.strictEqual(finding, rootNode);
     });
 
     test('for nested tree node returns nested tree node', function () {
@@ -431,7 +440,7 @@ suite('FocusableTreeTraverser', function () {
       );
 
       // The node of the nested tree should be returned.
-      assert.equal(finding, this.testFocusableNestedTree4Node1);
+      assert.strictEqual(finding, this.testFocusableNestedTree4Node1);
     });
 
     test('for nested element in nested tree node returns nearest nested node', function () {
@@ -446,7 +455,7 @@ suite('FocusableTreeTraverser', function () {
       );
 
       // An unregistered element should map to the closest node.
-      assert.equal(finding, this.testFocusableNestedTree4Node1);
+      assert.strictEqual(finding, this.testFocusableNestedTree4Node1);
     });
 
     test('for nested tree node under root with different tree base returns null', function () {

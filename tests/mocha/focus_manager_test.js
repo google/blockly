@@ -15,6 +15,55 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 
+class FocusableNodeImpl {
+  constructor(element, tree) {
+    this.element = element;
+    this.tree = tree;
+  }
+
+  getFocusableElement() {
+    return this.element;
+  }
+
+  getFocusableTree() {
+    return this.tree;
+  }
+}
+
+class FocusableTreeImpl {
+  constructor(rootElement, nestedTrees) {
+    this.nestedTrees = nestedTrees;
+    this.idToNodeMap = {};
+    this.rootNode = this.addNode(rootElement);
+  }
+
+  addNode(element) {
+    const node = new FocusableNodeImpl(element, this);
+    this.idToNodeMap[element.id] = node;
+    return node;
+  }
+
+  getFocusedNode() {
+    return FocusableTreeTraverser.findFocusedNode(this);
+  }
+
+  getRootFocusableNode() {
+    return this.rootNode;
+  }
+
+  getNestedTrees() {
+    return this.nestedTrees;
+  }
+
+  lookUpFocusableNode(id) {
+    return this.idToNodeMap[id];
+  }
+
+  findFocusableNodeFor(element) {
+    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
+  }
+}
+
 suite('FocusManager', function () {
   setup(function () {
     sharedTestSetup.call(this);
@@ -26,47 +75,6 @@ suite('FocusManager', function () {
       document.addEventListener(type, listener);
     };
     this.focusManager = new FocusManager(addDocumentEventListener);
-
-    const FocusableNodeImpl = function (element, tree) {
-      this.getFocusableElement = function () {
-        return element;
-      };
-
-      this.getFocusableTree = function () {
-        return tree;
-      };
-    };
-    const FocusableTreeImpl = function (rootElement, nestedTrees) {
-      this.idToNodeMap = {};
-
-      this.addNode = function (element) {
-        const node = new FocusableNodeImpl(element, this);
-        this.idToNodeMap[element.id] = node;
-        return node;
-      };
-
-      this.getFocusedNode = function () {
-        return FocusableTreeTraverser.findFocusedNode(this);
-      };
-
-      this.getRootFocusableNode = function () {
-        return this.rootNode;
-      };
-
-      this.getNestedTrees = function () {
-        return nestedTrees;
-      };
-
-      this.lookUpFocusableNode = function (id) {
-        return this.idToNodeMap[id];
-      };
-
-      this.findFocusableNodeFor = function (element) {
-        return FocusableTreeTraverser.findFocusableNodeFor(element, this);
-      };
-
-      this.rootNode = this.addNode(rootElement);
-    };
 
     const createFocusableTree = function (rootElementId, nestedTrees) {
       return new FocusableTreeImpl(
@@ -153,7 +161,7 @@ suite('FocusManager', function () {
     document.removeEventListener(eventType, eventListener);
 
     const removeFocusIndicators = function (element) {
-      element.classList.remove('blocklyActiveFocus', 'blocklyPassiveFocus');
+      element.classList.remove(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
     };
 
     // Ensure all node CSS styles are reset so that state isn't leaked between tests.
@@ -185,6 +193,14 @@ suite('FocusManager', function () {
     // Reset the current active element.
     document.body.focus();
   });
+
+  assert.includesClass = function(classList, className) {
+    assert.isTrue(classList.contains(className), 'Expected class list to include: ' + className);
+  };
+
+  assert.notIncludesClass = function(classList, className) {
+    assert.isFalse(classList.contains(className), 'Expected class list to not include: ' + className);
+  };
 
   /* Basic lifecycle tests. */
 
@@ -371,7 +387,7 @@ suite('FocusManager', function () {
       document.removeEventListener('focusin', focusListener);
 
       // There should be exactly 1 focus event fired from focusNode().
-      assert.equal(focusCount, 1);
+      assert.strictEqual(focusCount, 1);
     });
   });
 
@@ -399,7 +415,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableTree1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -411,7 +427,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableTree1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -424,7 +440,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableTree2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -437,7 +453,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableTree2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -450,7 +466,7 @@ suite('FocusManager', function () {
           this.testFocusableTree1.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -461,7 +477,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree1Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -472,7 +488,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree1Node1Child1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -484,7 +500,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree1Node2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -497,7 +513,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree2Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -512,7 +528,7 @@ suite('FocusManager', function () {
           this.testFocusableTree2.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -557,7 +573,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableTree1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -569,7 +585,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableNestedTree4);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedTree4,
         );
@@ -581,7 +597,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedTree4,
         );
@@ -594,7 +610,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedTree4,
         );
@@ -606,7 +622,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableTree1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1.getRootFocusableNode(),
         );
@@ -620,7 +636,7 @@ suite('FocusManager', function () {
 
         // The original node retains focus since the tree already holds focus (per focusTree's
         // contract).
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node1,
         );
@@ -633,7 +649,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableTree2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2.getRootFocusableNode(),
         );
@@ -646,7 +662,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableTree2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2.getRootFocusableNode(),
         );
@@ -659,7 +675,7 @@ suite('FocusManager', function () {
           this.testFocusableTree1.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1.getRootFocusableNode(),
         );
@@ -670,7 +686,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree1Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node1,
         );
@@ -681,7 +697,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree1Node1Child1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node1Child1,
         );
@@ -693,7 +709,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree1Node2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node2,
         );
@@ -706,7 +722,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableTree2Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
@@ -721,7 +737,7 @@ suite('FocusManager', function () {
           this.testFocusableTree2.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2.getRootFocusableNode(),
         );
@@ -766,7 +782,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableTree1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
@@ -778,7 +794,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableNestedTree4);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4.getRootFocusableNode(),
         );
@@ -790,7 +806,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4Node1,
         );
@@ -803,7 +819,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedTree4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4Node1,
         );
@@ -818,10 +834,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -834,10 +850,10 @@ suite('FocusManager', function () {
         // The original node retains active focus since the tree already holds focus (per
         // focusTree's contract).
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -851,10 +867,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -868,10 +884,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -885,10 +901,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -898,10 +914,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree1Node1);
 
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -912,13 +928,13 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree1Node2);
 
         const prevNodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -929,10 +945,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree1Node2);
 
         const newNodeElem = this.testFocusableTree1Node2.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -944,13 +960,13 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree2Node1);
 
         const prevNodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -962,10 +978,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree2Node1);
 
         const newNodeElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -981,10 +997,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -998,10 +1014,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1013,10 +1029,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1034,21 +1050,21 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1066,21 +1082,21 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1096,8 +1112,8 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableTree1Node1.getFocusableElement();
         const node2 = this.testFocusableTree1Node2.getFocusableElement();
-        assert.notInclude(Array.from(node1.classList), 'blocklyPassiveFocus');
-        assert.notInclude(Array.from(node2.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('registered tree focusTree()ed other tree node passively focused tree node now has active property', function () {
@@ -1114,15 +1130,15 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1138,15 +1154,15 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1159,10 +1175,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedTree4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1174,10 +1190,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedTree4Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1191,21 +1207,21 @@ suite('FocusManager', function () {
         const prevNodeElem = this.testFocusableTree2Node1.getFocusableElement();
         const currNodeElem =
           this.testFocusableNestedTree4Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(currNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          currNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(currNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          currNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
     });
@@ -1218,7 +1234,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -1229,7 +1245,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -1240,7 +1256,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node1.child1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -1252,7 +1268,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -1265,7 +1281,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree2.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -1278,7 +1294,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -1292,7 +1308,7 @@ suite('FocusManager', function () {
           .focus();
 
         // The tree of the unregistered child element should take focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -1325,7 +1341,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testUnfocusableElement').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree1,
         );
@@ -1370,7 +1386,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableTree1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
@@ -1397,7 +1413,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedTree4').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedTree4,
         );
@@ -1409,7 +1425,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedTree4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedTree4,
         );
@@ -1422,7 +1438,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedTree4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedTree4,
         );
@@ -1434,7 +1450,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1.getRootFocusableNode(),
         );
@@ -1445,7 +1461,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node1,
         );
@@ -1456,7 +1472,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node1.child1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node1Child1,
         );
@@ -1468,7 +1484,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1.node2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node2,
         );
@@ -1481,7 +1497,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree2.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
@@ -1494,7 +1510,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2.getRootFocusableNode(),
         );
@@ -1508,7 +1524,7 @@ suite('FocusManager', function () {
           .focus();
 
         // The nearest node of the unregistered child element should take focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node2,
         );
@@ -1535,13 +1551,13 @@ suite('FocusManager', function () {
         assert.isNull(this.focusManager.getFocusedNode());
       });
 
-      test('unfocuasble element focus()ed after registered node focused returns original node', function () {
+      test('unfocusable element focus()ed after registered node focused returns original node', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         document.getElementById('testFocusableTree1.node1').focus();
 
         document.getElementById('testUnfocusableElement').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree1Node1,
         );
@@ -1586,7 +1602,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableTree1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
@@ -1613,7 +1629,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedTree4').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4.getRootFocusableNode(),
         );
@@ -1625,7 +1641,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedTree4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4Node1,
         );
@@ -1638,7 +1654,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedTree4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4Node1,
         );
@@ -1653,10 +1669,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1666,10 +1682,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree1.node1').focus();
 
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1680,13 +1696,13 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree1.node2').focus();
 
         const prevNodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1697,10 +1713,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree1.node2').focus();
 
         const newNodeElem = this.testFocusableTree1Node2.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1712,13 +1728,13 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree2.node1').focus();
 
         const prevNodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1730,10 +1746,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree2.node1').focus();
 
         const newNodeElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1747,10 +1763,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1763,10 +1779,10 @@ suite('FocusManager', function () {
 
         // The nearest node of the unregistered child element should be actively focused.
         const nodeElem = this.testFocusableTree1Node2.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1778,10 +1794,10 @@ suite('FocusManager', function () {
         const rootElem = document.getElementById(
           'testUnregisteredFocusableTree3',
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1793,10 +1809,10 @@ suite('FocusManager', function () {
         const nodeElem = document.getElementById(
           'testUnregisteredFocusableTree3.node1',
         );
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1812,18 +1828,18 @@ suite('FocusManager', function () {
         const attemptedNewNodeElem = document.getElementById(
           'testUnfocusableElement',
         );
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(attemptedNewNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          attemptedNewNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(attemptedNewNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          attemptedNewNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1837,10 +1853,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1852,10 +1868,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1873,21 +1889,21 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1905,21 +1921,21 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1937,21 +1953,21 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableTree1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -1967,8 +1983,8 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableTree1Node1.getFocusableElement();
         const node2 = this.testFocusableTree1Node2.getFocusableElement();
-        assert.notInclude(Array.from(node1.classList), 'blocklyPassiveFocus');
-        assert.notInclude(Array.from(node2.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('registered tree focus()ed other tree node passively focused tree root now has active property', function () {
@@ -1985,15 +2001,15 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2009,15 +2025,15 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2030,10 +2046,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedTree4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2045,10 +2061,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedTree4Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2062,21 +2078,21 @@ suite('FocusManager', function () {
         const prevNodeElem = this.testFocusableTree2Node1.getFocusableElement();
         const currNodeElem =
           this.testFocusableNestedTree4Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(currNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          currNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(currNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          currNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
     });
@@ -2091,7 +2107,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableGroup1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2103,7 +2119,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableGroup1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2116,7 +2132,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableGroup2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -2129,7 +2145,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableGroup2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -2142,7 +2158,7 @@ suite('FocusManager', function () {
           this.testFocusableGroup1.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2153,7 +2169,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup1Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2164,7 +2180,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup1Node1Child1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2176,7 +2192,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup1Node2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2189,7 +2205,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup2Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -2204,7 +2220,7 @@ suite('FocusManager', function () {
           this.testFocusableGroup2.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -2249,7 +2265,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableGroup1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -2261,7 +2277,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableNestedGroup4);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedGroup4,
         );
@@ -2273,7 +2289,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedGroup4,
         );
@@ -2286,7 +2302,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedGroup4,
         );
@@ -2298,7 +2314,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableGroup1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1.getRootFocusableNode(),
         );
@@ -2312,7 +2328,7 @@ suite('FocusManager', function () {
 
         // The original node retains focus since the tree already holds focus (per focusTree's
         // contract).
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node1,
         );
@@ -2325,7 +2341,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableGroup2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2.getRootFocusableNode(),
         );
@@ -2338,7 +2354,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableGroup2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2.getRootFocusableNode(),
         );
@@ -2351,7 +2367,7 @@ suite('FocusManager', function () {
           this.testFocusableGroup1.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1.getRootFocusableNode(),
         );
@@ -2362,7 +2378,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup1Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node1,
         );
@@ -2373,7 +2389,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup1Node1Child1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node1Child1,
         );
@@ -2385,7 +2401,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup1Node2);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node2,
         );
@@ -2398,7 +2414,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableGroup2Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
@@ -2413,7 +2429,7 @@ suite('FocusManager', function () {
           this.testFocusableGroup2.getRootFocusableNode(),
         );
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2.getRootFocusableNode(),
         );
@@ -2458,7 +2474,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableGroup1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
@@ -2470,7 +2486,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusTree(this.testFocusableNestedGroup4);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedGroup4.getRootFocusableNode(),
         );
@@ -2482,7 +2498,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedGroup4Node1,
         );
@@ -2495,7 +2511,7 @@ suite('FocusManager', function () {
 
         this.focusManager.focusNode(this.testFocusableNestedGroup4Node1);
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedGroup4Node1,
         );
@@ -2510,10 +2526,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2526,10 +2542,10 @@ suite('FocusManager', function () {
         // The original node retains active focus since the tree already holds focus (per
         // focusTree's contract).
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2543,10 +2559,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2560,10 +2576,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2577,10 +2593,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2590,10 +2606,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableGroup1Node1);
 
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2605,13 +2621,13 @@ suite('FocusManager', function () {
 
         const prevNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2622,10 +2638,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableGroup1Node2);
 
         const newNodeElem = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2638,13 +2654,13 @@ suite('FocusManager', function () {
 
         const prevNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2656,10 +2672,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableGroup2Node1);
 
         const newNodeElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2675,10 +2691,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2692,10 +2708,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2707,10 +2723,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2728,21 +2744,21 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2760,21 +2776,21 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2790,8 +2806,8 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableGroup1Node1.getFocusableElement();
         const node2 = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.notInclude(Array.from(node1.classList), 'blocklyPassiveFocus');
-        assert.notInclude(Array.from(node2.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('registered tree focusTree()ed other tree node passively focused tree node now has active property', function () {
@@ -2808,15 +2824,15 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2832,15 +2848,15 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2853,10 +2869,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedGroup4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2868,10 +2884,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedGroup4Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -2886,21 +2902,21 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1.getFocusableElement();
         const currNodeElem =
           this.testFocusableNestedGroup4Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(currNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          currNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(currNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          currNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
     });
@@ -2913,7 +2929,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2924,7 +2940,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2935,7 +2951,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node1.child1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2947,7 +2963,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -2960,7 +2976,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup2.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -2973,7 +2989,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -2987,7 +3003,7 @@ suite('FocusManager', function () {
           .focus();
 
         // The tree of the unregistered child element should take focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup1,
         );
@@ -3060,7 +3076,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableGroup1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
@@ -3087,7 +3103,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedGroup4').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedGroup4,
         );
@@ -3099,7 +3115,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedGroup4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedGroup4,
         );
@@ -3112,7 +3128,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedGroup4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableNestedGroup4,
         );
@@ -3124,7 +3140,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1.getRootFocusableNode(),
         );
@@ -3135,7 +3151,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node1,
         );
@@ -3146,7 +3162,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node1.child1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node1Child1,
         );
@@ -3158,7 +3174,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1.node2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node2,
         );
@@ -3171,7 +3187,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup2.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
@@ -3184,7 +3200,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup2').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2.getRootFocusableNode(),
         );
@@ -3198,7 +3214,7 @@ suite('FocusManager', function () {
           .focus();
 
         // The nearest node of the unregistered child element should take focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node2,
         );
@@ -3235,7 +3251,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testUnfocusableElement').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup1Node1,
         );
@@ -3280,7 +3296,7 @@ suite('FocusManager', function () {
         this.focusManager.unregisterTree(this.testFocusableGroup1);
 
         // Since the most recent tree still exists, it still has focus.
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
@@ -3307,7 +3323,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedGroup4').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedGroup4.getRootFocusableNode(),
         );
@@ -3319,7 +3335,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedGroup4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedGroup4Node1,
         );
@@ -3332,7 +3348,7 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableNestedGroup4.node1').focus();
 
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedGroup4Node1,
         );
@@ -3347,10 +3363,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3360,10 +3376,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableGroup1.node1').focus();
 
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3375,13 +3391,13 @@ suite('FocusManager', function () {
 
         const prevNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3392,10 +3408,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableGroup1.node2').focus();
 
         const newNodeElem = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3408,13 +3424,13 @@ suite('FocusManager', function () {
 
         const prevNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3426,10 +3442,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableGroup2.node1').focus();
 
         const newNodeElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.include(Array.from(newNodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(newNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          newNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3443,10 +3459,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3459,10 +3475,10 @@ suite('FocusManager', function () {
 
         // The nearest node of the unregistered child element should be actively focused.
         const nodeElem = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3474,10 +3490,10 @@ suite('FocusManager', function () {
         const rootElem = document.getElementById(
           'testUnregisteredFocusableGroup3',
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3491,10 +3507,10 @@ suite('FocusManager', function () {
         const nodeElem = document.getElementById(
           'testUnregisteredFocusableGroup3.node1',
         );
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3510,18 +3526,18 @@ suite('FocusManager', function () {
         const attemptedNewNodeElem = document.getElementById(
           'testUnfocusableElement',
         );
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(attemptedNewNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          attemptedNewNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(attemptedNewNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          attemptedNewNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3535,10 +3551,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3550,10 +3566,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3571,21 +3587,21 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3603,21 +3619,21 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3635,21 +3651,21 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1.getFocusableElement();
         const removedNodeElem =
           this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(otherNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          otherNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(otherNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          otherNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(removedNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          removedNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3665,8 +3681,8 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableGroup1Node1.getFocusableElement();
         const node2 = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.notInclude(Array.from(node1.classList), 'blocklyPassiveFocus');
-        assert.notInclude(Array.from(node2.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('registered tree focus()ed other tree node passively focused tree root now has active property', function () {
@@ -3683,15 +3699,15 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3707,15 +3723,15 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3728,10 +3744,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedGroup4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(rootElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3743,10 +3759,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedGroup4Node1.getFocusableElement();
-        assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(nodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
 
@@ -3761,21 +3777,21 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1.getFocusableElement();
         const currNodeElem =
           this.testFocusableNestedGroup4Node1.getFocusableElement();
-        assert.notInclude(
-          Array.from(prevNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.notIncludesClass(
+          prevNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(prevNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(
+          prevNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.include(
-          Array.from(currNodeElem.classList),
-          'blocklyActiveFocus',
+        assert.includesClass(
+          currNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(
-          Array.from(currNodeElem.classList),
-          'blocklyPassiveFocus',
+        assert.notIncludesClass(
+          currNodeElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
     });
@@ -3793,8 +3809,8 @@ suite('FocusManager', function () {
       const rootElem = rootNode.getFocusableElement();
       assert.isNull(this.focusManager.getFocusedTree());
       assert.isNull(this.focusManager.getFocusedNode());
-      assert.include(Array.from(rootElem.classList), 'blocklyPassiveFocus');
-      assert.notInclude(Array.from(rootElem.classList), 'blocklyActiveFocus');
+      assert.includesClass(rootElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     });
 
     test('Defocusing actively focused HTML tree node switches to passive highlight', function () {
@@ -3806,8 +3822,8 @@ suite('FocusManager', function () {
       const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
       assert.isNull(this.focusManager.getFocusedTree());
       assert.isNull(this.focusManager.getFocusedNode());
-      assert.include(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
-      assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+      assert.includesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     });
 
     test('Defocusing actively focused HTML subtree node switches to passive highlight', function () {
@@ -3820,8 +3836,8 @@ suite('FocusManager', function () {
       const nodeElem = this.testFocusableNestedTree4Node1.getFocusableElement();
       assert.isNull(this.focusManager.getFocusedTree());
       assert.isNull(this.focusManager.getFocusedNode());
-      assert.include(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
-      assert.notInclude(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+      assert.includesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     });
 
     test('Refocusing actively focused root HTML tree restores to active highlight', function () {
@@ -3833,10 +3849,10 @@ suite('FocusManager', function () {
 
       const rootNode = this.testFocusableTree2.getRootFocusableNode();
       const rootElem = rootNode.getFocusableElement();
-      assert.equal(this.focusManager.getFocusedTree(), this.testFocusableTree2);
-      assert.equal(this.focusManager.getFocusedNode(), rootNode);
-      assert.notInclude(Array.from(rootElem.classList), 'blocklyPassiveFocus');
-      assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
+      assert.strictEqual(this.focusManager.getFocusedTree(), this.testFocusableTree2);
+      assert.strictEqual(this.focusManager.getFocusedNode(), rootNode);
+      assert.notIncludesClass(rootElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     });
 
     test('Refocusing actively focused HTML tree node restores to active highlight', function () {
@@ -3847,13 +3863,13 @@ suite('FocusManager', function () {
       document.getElementById('testFocusableTree2.node1').focus();
 
       const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
-      assert.equal(this.focusManager.getFocusedTree(), this.testFocusableTree2);
-      assert.equal(
+      assert.strictEqual(this.focusManager.getFocusedTree(), this.testFocusableTree2);
+      assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableTree2Node1,
       );
-      assert.notInclude(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
-      assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+      assert.notIncludesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     });
 
     test('Refocusing actively focused HTML subtree node restores to active highlight', function () {
@@ -3865,16 +3881,16 @@ suite('FocusManager', function () {
       document.getElementById('testFocusableNestedTree4.node1').focus();
 
       const nodeElem = this.testFocusableNestedTree4Node1.getFocusableElement();
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedTree(),
         this.testFocusableNestedTree4,
       );
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableNestedTree4Node1,
       );
-      assert.notInclude(Array.from(nodeElem.classList), 'blocklyPassiveFocus');
-      assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+      assert.notIncludesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     });
   });
 
@@ -3895,18 +3911,18 @@ suite('FocusManager', function () {
         const currElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML focusTree()ed then SVG focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -3920,18 +3936,18 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const currElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML focusTree()ed then SVG DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -3945,18 +3961,18 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const currElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML focusNode()ed then SVG focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -3970,18 +3986,18 @@ suite('FocusManager', function () {
         const currElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML focusNode()ed then SVG focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -3993,18 +4009,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableTree2Node1.getFocusableElement();
         const currElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML focusNode()ed then SVG DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4016,18 +4032,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableTree2Node1.getFocusableElement();
         const currElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML DOM focus()ed then SVG focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -4041,18 +4057,18 @@ suite('FocusManager', function () {
         const currElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableGroup2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML DOM focus()ed then SVG focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4064,18 +4080,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableTree2Node1.getFocusableElement();
         const currElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('HTML DOM focus()ed then SVG DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4087,18 +4103,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableTree2Node1.getFocusableElement();
         const currElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
     });
     suite('Focus SVG tree then HTML tree', function () {
@@ -4115,18 +4131,18 @@ suite('FocusManager', function () {
         const currElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG focusTree()ed then HTML focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4140,18 +4156,18 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const currElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG focusTree()ed then HTML DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4165,18 +4181,18 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const currElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG focusNode()ed then HTML focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -4190,18 +4206,18 @@ suite('FocusManager', function () {
         const currElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG focusNode()ed then HTML focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4213,18 +4229,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableGroup2Node1.getFocusableElement();
         const currElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG focusNode()ed then HTML DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4236,18 +4252,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableGroup2Node1.getFocusableElement();
         const currElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG DOM focus()ed then HTML focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -4261,18 +4277,18 @@ suite('FocusManager', function () {
         const currElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedTree(),
           this.testFocusableTree2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG DOM focus()ed then HTML focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4284,18 +4300,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableGroup2Node1.getFocusableElement();
         const currElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
 
       test('SVG DOM focus()ed then HTML DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4307,18 +4323,18 @@ suite('FocusManager', function () {
 
         const prevElem = this.testFocusableGroup2Node1.getFocusableElement();
         const currElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.equal(
+        assert.strictEqual(
           this.focusManager.getFocusedNode(),
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.include(Array.from(currElem.classList), 'blocklyActiveFocus');
-        assert.notInclude(
-          Array.from(currElem.classList),
-          'blocklyPassiveFocus',
+        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          currElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notInclude(Array.from(prevElem.classList), 'blocklyActiveFocus');
-        assert.include(Array.from(prevElem.classList), 'blocklyPassiveFocus');
+        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
       });
     });
   });
@@ -4326,10 +4342,6 @@ suite('FocusManager', function () {
   /* Ephemeral focus tests. */
 
   suite('takeEphemeralFocus()', function () {
-    function classListOf(node) {
-      return Array.from(node.getFocusableElement().classList);
-    }
-
     test('with no focused node does not change states', function () {
       this.focusManager.registerTree(this.testFocusableTree2);
       this.focusManager.registerTree(this.testFocusableGroup2);
@@ -4341,10 +4353,12 @@ suite('FocusManager', function () {
 
       // Taking focus without an existing node having focus should change no focus indicators.
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       const passiveElems = Array.from(
-        document.querySelectorAll('.blocklyPassiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.PASSIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
       assert.isEmpty(passiveElems);
@@ -4362,16 +4376,18 @@ suite('FocusManager', function () {
 
       // Taking focus without an existing node having focus should change no focus indicators.
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       const passiveElems = Array.from(
-        document.querySelectorAll('.blocklyPassiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.PASSIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
-      assert.equal(passiveElems.length, 1);
-      assert.include(
-        classListOf(this.testFocusableTree2Node1),
-        'blocklyPassiveFocus',
+      assert.strictEqual(passiveElems.length, 1);
+      assert.includesClass(
+        this.testFocusableTree2Node1.getFocusableElement().classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
       );
     });
 
@@ -4429,12 +4445,13 @@ suite('FocusManager', function () {
 
       this.focusManager.focusTree(this.testFocusableGroup2);
 
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedTree(),
         this.testFocusableGroup2,
       );
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
     });
@@ -4450,12 +4467,13 @@ suite('FocusManager', function () {
 
       this.focusManager.focusNode(this.testFocusableGroup2Node1);
 
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableGroup2Node1,
       );
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
     });
@@ -4474,12 +4492,13 @@ suite('FocusManager', function () {
 
       // The focus() state change will affect getFocusedNode() but it will not cause the node to now
       // be active.
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableGroup2Node1,
       );
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
     });
@@ -4497,10 +4516,12 @@ suite('FocusManager', function () {
 
       // Finishing ephemeral focus without a previously focused node should not change indicators.
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       const passiveElems = Array.from(
-        document.querySelectorAll('.blocklyPassiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.PASSIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
       assert.isEmpty(passiveElems);
@@ -4556,14 +4577,15 @@ suite('FocusManager', function () {
       // The original focused node should be restored.
       const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableTree2Node1,
       );
-      assert.equal(activeElems.length, 1);
-      assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+      assert.strictEqual(activeElems.length, 1);
+      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
       assert.strictEqual(document.activeElement, nodeElem);
     });
 
@@ -4586,14 +4608,15 @@ suite('FocusManager', function () {
         .getRootFocusableNode()
         .getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedTree(),
         this.testFocusableGroup2,
       );
-      assert.equal(activeElems.length, 1);
-      assert.include(Array.from(rootElem.classList), 'blocklyActiveFocus');
+      assert.strictEqual(activeElems.length, 1);
+      assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
       assert.strictEqual(document.activeElement, rootElem);
     });
 
@@ -4614,14 +4637,15 @@ suite('FocusManager', function () {
       // end of the ephemeral flow.
       const nodeElem = this.testFocusableGroup2Node1.getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableGroup2Node1,
       );
-      assert.equal(activeElems.length, 1);
-      assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+      assert.strictEqual(activeElems.length, 1);
+      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
       assert.strictEqual(document.activeElement, nodeElem);
     });
 
@@ -4642,14 +4666,15 @@ suite('FocusManager', function () {
       // end of the ephemeral flow.
       const nodeElem = this.testFocusableGroup2Node1.getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll('.blocklyActiveFocus'),
+        document.querySelectorAll(
+          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
-      assert.equal(
+      assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableGroup2Node1,
       );
-      assert.equal(activeElems.length, 1);
-      assert.include(Array.from(nodeElem.classList), 'blocklyActiveFocus');
+      assert.strictEqual(activeElems.length, 1);
+      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
       assert.strictEqual(document.activeElement, nodeElem);
     });
   });

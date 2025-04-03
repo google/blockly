@@ -6,8 +6,8 @@
 
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
-import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 import * as dom from './utils/dom.js';
+import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 
 /**
  * Type declaration for returning focus to FocusManager upon completing an
@@ -81,7 +81,9 @@ export class FocusManager {
         // should claim the element.
         for (const tree of this.registeredTrees) {
           newNode = FocusableTreeTraverser.findFocusableNodeFor(
-            activeElement, tree);
+            activeElement,
+            tree,
+          );
           if (newNode) break;
         }
       }

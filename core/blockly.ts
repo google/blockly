@@ -106,7 +106,11 @@ import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutSeparator} from './flyout_separator.js';
 import {VerticalFlyout} from './flyout_vertical.js';
-import {FocusManager, getFocusManager, ReturnEphemeralFocus} from './focus_manager.js';
+import {
+  FocusManager,
+  ReturnEphemeralFocus,
+  getFocusManager,
+} from './focus_manager.js';
 import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
@@ -523,7 +527,6 @@ export {
   FlyoutMetricsManager,
   FlyoutSeparator,
   FocusManager,
-  ReturnEphemeralFocus,
   CodeGenerator as Generator,
   Gesture,
   Grid,
@@ -588,6 +591,7 @@ export {
   Names,
   Options,
   RenderedConnection,
+  ReturnEphemeralFocus,
   Scrollbar,
   ScrollbarPair,
   SeparatorFlyoutInflater,

@@ -56,10 +56,8 @@ class FocusableTreeImpl {
 }
 
 suite('FocusManager', function () {
-  const ACTIVE_FOCUS_NODE_CSS_SELECTOR = (
-    `.${FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME}`);
-  const PASSIVE_FOCUS_NODE_CSS_SELECTOR = (
-    `.${FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME}`);
+  const ACTIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
+  const PASSIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
 
   setup(function () {
     sharedTestSetup.call(this);
@@ -157,8 +155,12 @@ suite('FocusManager', function () {
     document.removeEventListener(eventType, eventListener);
 
     // Ensure all node CSS styles are reset so that state isn't leaked between tests.
-    const activeElems = document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR);
-    const passiveElems = document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR);
+    const activeElems = document.querySelectorAll(
+      ACTIVE_FOCUS_NODE_CSS_SELECTOR,
+    );
+    const passiveElems = document.querySelectorAll(
+      PASSIVE_FOCUS_NODE_CSS_SELECTOR,
+    );
     for (const elem of activeElems) {
       elem.classList.remove(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     }
@@ -170,12 +172,18 @@ suite('FocusManager', function () {
     document.body.focus();
   });
 
-  assert.includesClass = function(classList, className) {
-    assert.isTrue(classList.contains(className), 'Expected class list to include: ' + className);
+  assert.includesClass = function (classList, className) {
+    assert.isTrue(
+      classList.contains(className),
+      'Expected class list to include: ' + className,
+    );
   };
 
-  assert.notIncludesClass = function(classList, className) {
-    assert.isFalse(classList.contains(className), 'Expected class list to not include: ' + className);
+  assert.notIncludesClass = function (classList, className) {
+    assert.isFalse(
+      classList.contains(className),
+      'Expected class list to not include: ' + className,
+    );
   };
 
   /* Basic lifecycle tests. */
@@ -810,7 +818,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -826,7 +837,10 @@ suite('FocusManager', function () {
         // The original node retains active focus since the tree already holds focus (per
         // focusTree's contract).
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -843,7 +857,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -860,7 +877,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -877,7 +897,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -890,7 +913,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree1Node1);
 
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -921,7 +947,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree1Node2);
 
         const newNodeElem = this.testFocusableTree1Node2.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -954,7 +983,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableTree2Node1);
 
         const newNodeElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -973,7 +1005,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -990,7 +1025,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1005,7 +1043,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1088,8 +1129,14 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableTree1Node1.getFocusableElement();
         const node2 = this.testFocusableTree1Node2.getFocusableElement();
-        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          node1.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.notIncludesClass(
+          node2.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('registered tree focusTree()ed other tree node passively focused tree node now has active property', function () {
@@ -1106,12 +1153,18 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1130,12 +1183,18 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1151,7 +1210,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedTree4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1166,7 +1228,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedTree4Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1645,7 +1710,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1658,7 +1726,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree1.node1').focus();
 
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1689,7 +1760,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree1.node2').focus();
 
         const newNodeElem = this.testFocusableTree1Node2.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1722,7 +1796,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableTree2.node1').focus();
 
         const newNodeElem = this.testFocusableTree2Node1.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1739,7 +1816,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1755,7 +1835,10 @@ suite('FocusManager', function () {
 
         // The nearest node of the unregistered child element should be actively focused.
         const nodeElem = this.testFocusableTree1Node2.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1770,7 +1853,10 @@ suite('FocusManager', function () {
         const rootElem = document.getElementById(
           'testUnregisteredFocusableTree3',
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1785,7 +1871,10 @@ suite('FocusManager', function () {
         const nodeElem = document.getElementById(
           'testUnregisteredFocusableTree3.node1',
         );
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1804,7 +1893,10 @@ suite('FocusManager', function () {
         const attemptedNewNodeElem = document.getElementById(
           'testUnfocusableElement',
         );
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1829,7 +1921,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1844,7 +1939,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -1959,8 +2057,14 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableTree1Node1.getFocusableElement();
         const node2 = this.testFocusableTree1Node2.getFocusableElement();
-        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          node1.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.notIncludesClass(
+          node2.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('registered tree focus()ed other tree node passively focused tree root now has active property', function () {
@@ -1977,12 +2081,18 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2001,12 +2111,18 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2022,7 +2138,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedTree4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2037,7 +2156,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedTree4Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2502,7 +2624,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2518,7 +2643,10 @@ suite('FocusManager', function () {
         // The original node retains active focus since the tree already holds focus (per
         // focusTree's contract).
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2535,7 +2663,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2552,7 +2683,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2569,7 +2703,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2582,7 +2719,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableGroup1Node1);
 
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2614,7 +2754,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableGroup1Node2);
 
         const newNodeElem = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2648,7 +2791,10 @@ suite('FocusManager', function () {
         this.focusManager.focusNode(this.testFocusableGroup2Node1);
 
         const newNodeElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2667,7 +2813,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2684,7 +2833,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2699,7 +2851,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2782,8 +2937,14 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableGroup1Node1.getFocusableElement();
         const node2 = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          node1.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.notIncludesClass(
+          node2.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('registered tree focusTree()ed other tree node passively focused tree node now has active property', function () {
@@ -2800,12 +2961,18 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2824,12 +2991,18 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2845,7 +3018,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedGroup4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -2860,7 +3036,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedGroup4Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3339,7 +3518,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3352,7 +3534,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableGroup1.node1').focus();
 
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3384,7 +3569,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableGroup1.node2').focus();
 
         const newNodeElem = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3418,7 +3606,10 @@ suite('FocusManager', function () {
         document.getElementById('testFocusableGroup2.node1').focus();
 
         const newNodeElem = this.testFocusableGroup2Node1.getFocusableElement();
-        assert.includesClass(newNodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          newNodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           newNodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3435,7 +3626,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup2
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3451,7 +3645,10 @@ suite('FocusManager', function () {
 
         // The nearest node of the unregistered child element should be actively focused.
         const nodeElem = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3466,7 +3663,10 @@ suite('FocusManager', function () {
         const rootElem = document.getElementById(
           'testUnregisteredFocusableGroup3',
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3483,7 +3683,10 @@ suite('FocusManager', function () {
         const nodeElem = document.getElementById(
           'testUnregisteredFocusableGroup3.node1',
         );
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3502,7 +3705,10 @@ suite('FocusManager', function () {
         const attemptedNewNodeElem = document.getElementById(
           'testUnfocusableElement',
         );
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3527,7 +3733,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3542,7 +3751,10 @@ suite('FocusManager', function () {
 
         // Since the tree was unregistered it no longer has focus indicators.
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3657,8 +3869,14 @@ suite('FocusManager', function () {
         // passive now that the new node is active.
         const node1 = this.testFocusableGroup1Node1.getFocusableElement();
         const node2 = this.testFocusableGroup1Node2.getFocusableElement();
-        assert.notIncludesClass(node1.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.notIncludesClass(node2.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          node1.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.notIncludesClass(
+          node2.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('registered tree focus()ed other tree node passively focused tree root now has active property', function () {
@@ -3675,12 +3893,18 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3699,12 +3923,18 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3720,7 +3950,10 @@ suite('FocusManager', function () {
         const rootElem = this.testFocusableNestedGroup4
           .getRootFocusableNode()
           .getFocusableElement();
-        assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          rootElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3735,7 +3968,10 @@ suite('FocusManager', function () {
 
         const nodeElem =
           this.testFocusableNestedGroup4Node1.getFocusableElement();
-        assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          nodeElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
@@ -3785,8 +4021,14 @@ suite('FocusManager', function () {
       const rootElem = rootNode.getFocusableElement();
       assert.isNull(this.focusManager.getFocusedTree());
       assert.isNull(this.focusManager.getFocusedNode());
-      assert.includesClass(rootElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      assert.notIncludesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(
+        rootElem.classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
+      assert.notIncludesClass(
+        rootElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
     });
 
     test('Defocusing actively focused HTML tree node switches to passive highlight', function () {
@@ -3798,8 +4040,14 @@ suite('FocusManager', function () {
       const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
       assert.isNull(this.focusManager.getFocusedTree());
       assert.isNull(this.focusManager.getFocusedNode());
-      assert.includesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(
+        nodeElem.classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
+      assert.notIncludesClass(
+        nodeElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
     });
 
     test('Defocusing actively focused HTML subtree node switches to passive highlight', function () {
@@ -3812,8 +4060,14 @@ suite('FocusManager', function () {
       const nodeElem = this.testFocusableNestedTree4Node1.getFocusableElement();
       assert.isNull(this.focusManager.getFocusedTree());
       assert.isNull(this.focusManager.getFocusedNode());
-      assert.includesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      assert.notIncludesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(
+        nodeElem.classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
+      assert.notIncludesClass(
+        nodeElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
     });
 
     test('Refocusing actively focused root HTML tree restores to active highlight', function () {
@@ -3825,10 +4079,19 @@ suite('FocusManager', function () {
 
       const rootNode = this.testFocusableTree2.getRootFocusableNode();
       const rootElem = rootNode.getFocusableElement();
-      assert.strictEqual(this.focusManager.getFocusedTree(), this.testFocusableTree2);
+      assert.strictEqual(
+        this.focusManager.getFocusedTree(),
+        this.testFocusableTree2,
+      );
       assert.strictEqual(this.focusManager.getFocusedNode(), rootNode);
-      assert.notIncludesClass(rootElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.notIncludesClass(
+        rootElem.classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
+      assert.includesClass(
+        rootElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
     });
 
     test('Refocusing actively focused HTML tree node restores to active highlight', function () {
@@ -3839,13 +4102,22 @@ suite('FocusManager', function () {
       document.getElementById('testFocusableTree2.node1').focus();
 
       const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
-      assert.strictEqual(this.focusManager.getFocusedTree(), this.testFocusableTree2);
+      assert.strictEqual(
+        this.focusManager.getFocusedTree(),
+        this.testFocusableTree2,
+      );
       assert.strictEqual(
         this.focusManager.getFocusedNode(),
         this.testFocusableTree2Node1,
       );
-      assert.notIncludesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.notIncludesClass(
+        nodeElem.classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
+      assert.includesClass(
+        nodeElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
     });
 
     test('Refocusing actively focused HTML subtree node restores to active highlight', function () {
@@ -3865,8 +4137,14 @@ suite('FocusManager', function () {
         this.focusManager.getFocusedNode(),
         this.testFocusableNestedTree4Node1,
       );
-      assert.notIncludesClass(nodeElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.notIncludesClass(
+        nodeElem.classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
+      assert.includesClass(
+        nodeElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
     });
   });
 
@@ -3892,13 +4170,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML focusTree()ed then SVG focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -3917,13 +4204,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML focusTree()ed then SVG DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -3942,13 +4238,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML focusNode()ed then SVG focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -3967,13 +4272,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML focusNode()ed then SVG focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -3990,13 +4304,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML focusNode()ed then SVG DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4013,13 +4336,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML DOM focus()ed then SVG focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -4038,13 +4370,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML DOM focus()ed then SVG focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4061,13 +4402,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('HTML DOM focus()ed then SVG DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4084,13 +4434,22 @@ suite('FocusManager', function () {
           this.testFocusableGroup2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
     });
     suite('Focus SVG tree then HTML tree', function () {
@@ -4112,13 +4471,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG focusTree()ed then HTML focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4137,13 +4505,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG focusTree()ed then HTML DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4162,13 +4539,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG focusNode()ed then HTML focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -4187,13 +4573,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG focusNode()ed then HTML focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4210,13 +4605,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG focusNode()ed then HTML DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4233,13 +4637,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG DOM focus()ed then HTML focusTree()ed correctly updates getFocusedTree() and indicators', function () {
@@ -4258,13 +4671,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG DOM focus()ed then HTML focusNode()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4281,13 +4703,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
 
       test('SVG DOM focus()ed then HTML DOM focus()ed correctly updates getFocusedNode() and indicators', function () {
@@ -4304,13 +4735,22 @@ suite('FocusManager', function () {
           this.testFocusableTree2Node1,
         );
         assert.strictEqual(document.activeElement, currElem);
-        assert.includesClass(currElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.includesClass(
+          currElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
         assert.notIncludesClass(
           currElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
-        assert.notIncludesClass(prevElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
-        assert.includesClass(prevElem.classList, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+        assert.notIncludesClass(
+          prevElem.classList,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        assert.includesClass(
+          prevElem.classList,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
       });
     });
   });
@@ -4551,7 +4991,10 @@ suite('FocusManager', function () {
         this.testFocusableTree2Node1,
       );
       assert.strictEqual(activeElems.length, 1);
-      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(
+        nodeElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
       assert.strictEqual(document.activeElement, nodeElem);
     });
 
@@ -4581,7 +5024,10 @@ suite('FocusManager', function () {
         this.testFocusableGroup2,
       );
       assert.strictEqual(activeElems.length, 1);
-      assert.includesClass(rootElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(
+        rootElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
       assert.strictEqual(document.activeElement, rootElem);
     });
 
@@ -4609,7 +5055,10 @@ suite('FocusManager', function () {
         this.testFocusableGroup2Node1,
       );
       assert.strictEqual(activeElems.length, 1);
-      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(
+        nodeElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
       assert.strictEqual(document.activeElement, nodeElem);
     });
 
@@ -4637,7 +5086,10 @@ suite('FocusManager', function () {
         this.testFocusableGroup2Node1,
       );
       assert.strictEqual(activeElems.length, 1);
-      assert.includesClass(nodeElem.classList, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      assert.includesClass(
+        nodeElem.classList,
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
       assert.strictEqual(document.activeElement, nodeElem);
     });
   });

@@ -108,7 +108,10 @@ suite('FocusableTreeTraverser', function () {
     sharedTestTeardown.call(this);
 
     const removeFocusIndicators = function (element) {
-      element.classList.remove(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      element.classList.remove(
+        FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
     };
 
     // Ensure all node CSS styles are reset so that state isn't leaked between tests.
@@ -142,7 +145,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with root active highlight returns root node', function () {
       const tree = this.testFocusableTree1;
       const rootNode = tree.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode
+        .getFocusableElement()
+        .classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -152,7 +157,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with root passive highlight returns root node', function () {
       const tree = this.testFocusableTree1;
       const rootNode = tree.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode
+        .getFocusableElement()
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -162,7 +169,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with node active highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1;
-      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -172,7 +181,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with node passive highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1;
-      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -182,7 +193,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with nested node active highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1Child1;
-      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -192,7 +205,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with nested node passive highlight returns node', function () {
       const tree = this.testFocusableTree1;
       const node = this.testFocusableTree1Node1Child1;
-      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -202,7 +217,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with nested tree root active no parent highlights returns root', function () {
       const tree = this.testFocusableNestedTree4;
       const rootNode = this.testFocusableNestedTree4.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode
+        .getFocusableElement()
+        .classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -212,7 +229,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with nested tree root passive no parent highlights returns root', function () {
       const tree = this.testFocusableNestedTree4;
       const rootNode = this.testFocusableNestedTree4.getRootFocusableNode();
-      rootNode.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode
+        .getFocusableElement()
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -222,7 +241,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with nested tree node active no parent highlights returns node', function () {
       const tree = this.testFocusableNestedTree4;
       const node = this.testFocusableNestedTree4Node1;
-      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -232,7 +253,9 @@ suite('FocusableTreeTraverser', function () {
     test('for tree with nested tree root passive no parent highlights returns null', function () {
       const tree = this.testFocusableNestedTree4;
       const node = this.testFocusableNestedTree4Node1;
-      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(tree);
 
@@ -245,7 +268,9 @@ suite('FocusableTreeTraverser', function () {
       this.testFocusableTree2Node1
         .getFocusableElement()
         .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      rootNode.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode
+        .getFocusableElement()
+        .classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,
@@ -260,7 +285,9 @@ suite('FocusableTreeTraverser', function () {
       this.testFocusableTree2Node1
         .getFocusableElement()
         .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      rootNode.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      rootNode
+        .getFocusableElement()
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,
@@ -275,7 +302,9 @@ suite('FocusableTreeTraverser', function () {
       this.testFocusableTree2Node1
         .getFocusableElement()
         .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      node.getFocusableElement().classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,
@@ -290,7 +319,9 @@ suite('FocusableTreeTraverser', function () {
       this.testFocusableTree2Node1
         .getFocusableElement()
         .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-      node.getFocusableElement().classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+      node
+        .getFocusableElement()
+        .classList.add(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
 
       const finding = FocusableTreeTraverser.findFocusedNode(
         this.testFocusableTree2,

@@ -15,10 +15,8 @@ import * as dom from '../utils/dom.js';
 export class FocusableTreeTraverser {
   private static readonly ACTIVE_CLASS_NAME = 'blocklyActiveFocus';
   private static readonly PASSIVE_CSS_CLASS_NAME = 'blocklyPassiveFocus';
-  private static readonly ACTIVE_FOCUS_NODE_CSS_SELECTOR = (
-    `.${FocusableTreeTraverser.ACTIVE_CLASS_NAME}`);
-    private static readonly PASSIVE_FOCUS_NODE_CSS_SELECTOR = (
-    `.${FocusableTreeTraverser.PASSIVE_CSS_CLASS_NAME}`);
+  private static readonly ACTIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusableTreeTraverser.ACTIVE_CLASS_NAME}`;
+  private static readonly PASSIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusableTreeTraverser.PASSIVE_CSS_CLASS_NAME}`;
 
   /**
    * Returns the current IFocusableNode that is styled (and thus represented) as
@@ -46,7 +44,9 @@ export class FocusableTreeTraverser {
     const activeEl = root.querySelector(this.ACTIVE_FOCUS_NODE_CSS_SELECTOR);
     if (activeEl instanceof HTMLElement || activeEl instanceof SVGElement) {
       const active = FocusableTreeTraverser.findFocusableNodeFor(
-        activeEl, tree);
+        activeEl,
+        tree,
+      );
       if (active) return active;
     }
 
@@ -55,7 +55,9 @@ export class FocusableTreeTraverser {
     const passiveEl = root.querySelector(this.PASSIVE_FOCUS_NODE_CSS_SELECTOR);
     if (passiveEl instanceof HTMLElement || passiveEl instanceof SVGElement) {
       const passive = FocusableTreeTraverser.findFocusableNodeFor(
-        passiveEl, tree);
+        passiveEl,
+        tree,
+      );
       if (passive) return passive;
     }
 
@@ -87,11 +89,9 @@ export class FocusableTreeTraverser {
     tree: IFocusableTree,
   ): IFocusableNode | null {
     // First, match against subtrees.
-    const subTreeMatches = tree
-      .getNestedTrees()
-      .map((tree) => {
-        return FocusableTreeTraverser.findFocusableNodeFor(element, tree);
-      });
+    const subTreeMatches = tree.getNestedTrees().map((tree) => {
+      return FocusableTreeTraverser.findFocusableNodeFor(element, tree);
+    });
     if (subTreeMatches.findIndex((match) => !!match) !== -1) {
       // At least one subtree has a match for the element so it cannot be part
       // of the outer tree.

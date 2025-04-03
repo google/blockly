@@ -152,7 +152,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
   }
 
-  protected override isFullBlockField(): boolean {
+  override isFullBlockField(): boolean {
     const block = this.getSourceBlock();
     if (!block) throw new UnattachedFieldError();
 

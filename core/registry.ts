@@ -26,7 +26,7 @@ import type {
   IVariableModelStatic,
   IVariableState,
 } from './interfaces/i_variable_model.js';
-import type {Cursor} from './keyboard_nav/cursor.js';
+import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Options} from './options.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {Theme} from './theme.js';
@@ -78,7 +78,7 @@ export class Type<_T> {
     'connectionPreviewer',
   );
 
-  static CURSOR = new Type<Cursor>('cursor');
+  static CURSOR = new Type<LineCursor>('cursor');
 
   static EVENT = new Type<Abstract>('event');
 

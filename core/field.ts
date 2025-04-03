@@ -336,8 +336,10 @@ export abstract class Field<T = any>
    * intend because the behavior was kind of hacked in. If you are thinking
    * about overriding this function, post on the forum with your intended
    * behavior to see if there's another approach.
+   *
+   * @internal
    */
-  protected isFullBlockField(): boolean {
+  isFullBlockField(): boolean {
     return !this.borderRect_;
   }
 

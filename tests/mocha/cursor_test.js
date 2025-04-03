@@ -21,21 +21,21 @@ suite('Cursor', function () {
         'args0': [
           {
             'type': 'field_input',
-            'name': 'NAME',
+            'name': 'NAME1',
             'text': 'default',
           },
           {
             'type': 'field_input',
-            'name': 'NAME',
+            'name': 'NAME2',
             'text': 'default',
           },
           {
             'type': 'input_value',
-            'name': 'NAME',
+            'name': 'NAME3',
           },
           {
             'type': 'input_statement',
-            'name': 'NAME',
+            'name': 'NAME4',
           },
         ],
         'previousStatement': null,
@@ -84,23 +84,24 @@ suite('Cursor', function () {
     sharedTestTeardown.call(this);
   });
 
-  test('Next - From a Previous skip over next connection and block', function () {
+  test('Next - From a Previous connection go to the next block', function () {
     const prevNode = ASTNode.createConnectionNode(
       this.blocks.A.previousConnection,
     );
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     const curNode = this.cursor.getCurNode();
-    assert.equal(curNode.getLocation(), this.blocks.B.previousConnection);
+    assert.equal(curNode.getLocation(), this.blocks.A);
   });
-  test('Next - From last block in a stack go to next connection', function () {
-    const prevNode = ASTNode.createConnectionNode(
-      this.blocks.B.previousConnection,
-    );
+  test('Next - From a block go to its statement input', function () {
+    const prevNode = ASTNode.createBlockNode(this.blocks.B);
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     const curNode = this.cursor.getCurNode();
-    assert.equal(curNode.getLocation(), this.blocks.B.nextConnection);
+    assert.equal(
+      curNode.getLocation(),
+      this.blocks.B.getInput('NAME4').connection,
+    );
   });
 
   test('In - From output connection', function () {
@@ -111,24 +112,24 @@ suite('Cursor', function () {
     this.cursor.setCurNode(outputNode);
     this.cursor.in();
     const curNode = this.cursor.getCurNode();
-    assert.equal(curNode.getLocation(), fieldBlock.inputList[0].fieldRow[0]);
+    assert.equal(curNode.getLocation(), fieldBlock);
   });
 
-  test('Prev - From previous connection skip over next connection', function () {
+  test('Prev - From previous connection does not skip over next connection', function () {
     const prevConnection = this.blocks.B.previousConnection;
     const prevConnectionNode = ASTNode.createConnectionNode(prevConnection);
     this.cursor.setCurNode(prevConnectionNode);
     this.cursor.prev();
     const curNode = this.cursor.getCurNode();
-    assert.equal(curNode.getLocation(), this.blocks.A.previousConnection);
+    assert.equal(curNode.getLocation(), this.blocks.A.nextConnection);
   });
 
-  test('Out - From field skip over block node', function () {
+  test('Out - From field does not skip over block node', function () {
     const field = this.blocks.E.inputList[0].fieldRow[0];
     const fieldNode = ASTNode.createFieldNode(field);
     this.cursor.setCurNode(fieldNode);
     this.cursor.out();
     const curNode = this.cursor.getCurNode();
-    assert.equal(curNode.getLocation(), this.blocks.E.outputConnection);
+    assert.equal(curNode.getLocation(), this.blocks.E);
   });
 });

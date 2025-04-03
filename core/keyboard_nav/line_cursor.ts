@@ -299,7 +299,7 @@ export class LineCursor extends Marker {
    *     should be traversed.
    * @returns The next node in the traversal.
    */
-  private getNextNode(
+  getNextNode(
     node: ASTNode | null,
     isValid: (p1: ASTNode | null) => boolean,
   ): ASTNode | null {
@@ -332,7 +332,7 @@ export class LineCursor extends Marker {
    * @returns The previous node in the traversal or null if no previous node
    *     exists.
    */
-  private getPreviousNode(
+  getPreviousNode(
     node: ASTNode | null,
     isValid: (p1: ASTNode | null) => boolean,
   ): ASTNode | null {

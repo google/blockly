@@ -8,7 +8,6 @@ import {
   FocusManager,
   getFocusManager,
 } from '../../build/src/core/focus_manager.js';
-import {FocusableTreeTraverser} from '../../build/src/core/utils/focusable_tree_traverser.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
@@ -43,10 +42,6 @@ class FocusableTreeImpl {
     return node;
   }
 
-  getFocusedNode() {
-    return FocusableTreeTraverser.findFocusedNode(this);
-  }
-
   getRootFocusableNode() {
     return this.rootNode;
   }
@@ -58,13 +53,14 @@ class FocusableTreeImpl {
   lookUpFocusableNode(id) {
     return this.idToNodeMap[id];
   }
-
-  findFocusableNodeFor(element) {
-    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
-  }
 }
 
 suite('FocusManager', function () {
+  const ACTIVE_FOCUS_NODE_CSS_SELECTOR = (
+    `.${FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME}`);
+  const PASSIVE_FOCUS_NODE_CSS_SELECTOR = (
+    `.${FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME}`);
+
   setup(function () {
     sharedTestSetup.call(this);
 
@@ -160,35 +156,15 @@ suite('FocusManager', function () {
     const eventListener = this.globalDocumentEventListener;
     document.removeEventListener(eventType, eventListener);
 
-    const removeFocusIndicators = function (element) {
-      element.classList.remove(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-    };
-
     // Ensure all node CSS styles are reset so that state isn't leaked between tests.
-    removeFocusIndicators(document.getElementById('testFocusableTree1'));
-    removeFocusIndicators(document.getElementById('testFocusableTree1.node1'));
-    removeFocusIndicators(
-      document.getElementById('testFocusableTree1.node1.child1'),
-    );
-    removeFocusIndicators(document.getElementById('testFocusableTree1.node2'));
-    removeFocusIndicators(document.getElementById('testFocusableTree2'));
-    removeFocusIndicators(document.getElementById('testFocusableTree2.node1'));
-    removeFocusIndicators(document.getElementById('testFocusableNestedTree4'));
-    removeFocusIndicators(
-      document.getElementById('testFocusableNestedTree4.node1'),
-    );
-    removeFocusIndicators(document.getElementById('testFocusableGroup1'));
-    removeFocusIndicators(document.getElementById('testFocusableGroup1.node1'));
-    removeFocusIndicators(
-      document.getElementById('testFocusableGroup1.node1.child1'),
-    );
-    removeFocusIndicators(document.getElementById('testFocusableGroup1.node2'));
-    removeFocusIndicators(document.getElementById('testFocusableGroup2'));
-    removeFocusIndicators(document.getElementById('testFocusableGroup2.node1'));
-    removeFocusIndicators(document.getElementById('testFocusableNestedGroup4'));
-    removeFocusIndicators(
-      document.getElementById('testFocusableNestedGroup4.node1'),
-    );
+    const activeElems = document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR);
+    const passiveElems = document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR);
+    for (const elem of activeElems) {
+      elem.classList.remove(FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
+    }
+    for (const elem of passiveElems) {
+      elem.classList.remove(FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+    }
 
     // Reset the current active element.
     document.body.focus();
@@ -4353,12 +4329,10 @@ suite('FocusManager', function () {
 
       // Taking focus without an existing node having focus should change no focus indicators.
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       const passiveElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.PASSIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
       assert.isEmpty(passiveElems);
@@ -4376,12 +4350,10 @@ suite('FocusManager', function () {
 
       // Taking focus without an existing node having focus should change no focus indicators.
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       const passiveElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.PASSIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
       assert.strictEqual(passiveElems.length, 1);
@@ -4450,8 +4422,7 @@ suite('FocusManager', function () {
         this.testFocusableGroup2,
       );
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
     });
@@ -4472,8 +4443,7 @@ suite('FocusManager', function () {
         this.testFocusableGroup2Node1,
       );
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
     });
@@ -4497,8 +4467,7 @@ suite('FocusManager', function () {
         this.testFocusableGroup2Node1,
       );
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
     });
@@ -4516,12 +4485,10 @@ suite('FocusManager', function () {
 
       // Finishing ephemeral focus without a previously focused node should not change indicators.
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       const passiveElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.PASSIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.isEmpty(activeElems);
       assert.isEmpty(passiveElems);
@@ -4577,8 +4544,7 @@ suite('FocusManager', function () {
       // The original focused node should be restored.
       const nodeElem = this.testFocusableTree2Node1.getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.strictEqual(
         this.focusManager.getFocusedNode(),
@@ -4608,8 +4574,7 @@ suite('FocusManager', function () {
         .getRootFocusableNode()
         .getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.strictEqual(
         this.focusManager.getFocusedTree(),
@@ -4637,8 +4602,7 @@ suite('FocusManager', function () {
       // end of the ephemeral flow.
       const nodeElem = this.testFocusableGroup2Node1.getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.strictEqual(
         this.focusManager.getFocusedNode(),
@@ -4666,8 +4630,7 @@ suite('FocusManager', function () {
       // end of the ephemeral flow.
       const nodeElem = this.testFocusableGroup2Node1.getFocusableElement();
       const activeElems = Array.from(
-        document.querySelectorAll(
-          FocusableTreeTraverser.ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
       );
       assert.strictEqual(
         this.focusManager.getFocusedNode(),

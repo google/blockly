@@ -6,6 +6,7 @@
 
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 import * as dom from './utils/dom.js';
 
 /**
@@ -30,7 +31,29 @@ export type ReturnEphemeralFocus = () => void;
  * focusNode().
  */
 export class FocusManager {
+  /**
+   * The CSS class assigned to IFocusableNode elements that presently have
+   * active DOM and Blockly focus.
+   *
+   * This should never be used directly. Instead, rely on FocusManager to ensure
+   * nodes have active focus (either automatically through DOM focus or manually
+   * through the various focus* methods provided by this class).
+   *
+   * It's recommended to not query using this class name, either. Instead, use
+   * FocusableTreeTraverser or IFocusableTree's methods to find a specific node.
+   */
   static readonly ACTIVE_FOCUS_NODE_CSS_CLASS_NAME = 'blocklyActiveFocus';
+
+  /**
+   * The CSS class assigned to IFocusableNode elements that presently have
+   * passive focus (that is, they were the most recent node in their relative
+   * tree to have active focus--see ACTIVE_FOCUS_NODE_CSS_CLASS_NAME--and will
+   * receive active focus again if their surrounding tree is requested to become
+   * focused, i.e. using focusTree below).
+   *
+   * See ACTIVE_FOCUS_NODE_CSS_CLASS_NAME for caveats and limitations around
+   * using this constant directly (generally it never should need to be used).
+   */
   static readonly PASSIVE_FOCUS_NODE_CSS_CLASS_NAME = 'blocklyPassiveFocus';
 
   focusedNode: IFocusableNode | null = null;
@@ -57,7 +80,8 @@ export class FocusManager {
         // updated. Per the contract of findFocusableNodeFor only one tree
         // should claim the element.
         for (const tree of this.registeredTrees) {
-          newNode = tree.findFocusableNodeFor(activeElement);
+          newNode = FocusableTreeTraverser.findFocusableNodeFor(
+            activeElement, tree);
           if (newNode) break;
         }
       }
@@ -113,7 +137,7 @@ export class FocusManager {
     const treeIndex = this.registeredTrees.findIndex((tree) => tree === tree);
     this.registeredTrees.splice(treeIndex, 1);
 
-    const focusedNode = tree.getFocusedNode();
+    const focusedNode = FocusableTreeTraverser.findFocusedNode(tree);
     const root = tree.getRootFocusableNode();
     if (focusedNode) this.removeHighlight(focusedNode);
     if (this.focusedNode === focusedNode || this.focusedNode === root) {
@@ -169,9 +193,8 @@ export class FocusManager {
     if (!this.isRegistered(focusableTree)) {
       throw Error(`Attempted to focus unregistered tree: ${focusableTree}.`);
     }
-    this.focusNode(
-      focusableTree.getFocusedNode() ?? focusableTree.getRootFocusableNode(),
-    );
+    const currNode = FocusableTreeTraverser.findFocusedNode(focusableTree);
+    this.focusNode(currNode ?? focusableTree.getRootFocusableNode());
   }
 
   /**
@@ -193,7 +216,7 @@ export class FocusManager {
       this.setNodeToPassive(prevNode);
     }
     // If there's a focused node in the new node's tree, ensure it's reset.
-    const prevNodeNextTree = nextTree.getFocusedNode();
+    const prevNodeNextTree = FocusableTreeTraverser.findFocusedNode(nextTree);
     const nextTreeRoot = nextTree.getRootFocusableNode();
     if (prevNodeNextTree) {
       this.removeHighlight(prevNodeNextTree);

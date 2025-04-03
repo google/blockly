@@ -20,17 +20,14 @@ import type {IFocusableNode} from './i_focusable_node.js';
  * page at any given time). The idea of passive focus is to provide context to
  * users on where their focus will be restored upon navigating back to a
  * previously focused tree.
+ *
+ * Note that if the tree's current focused node (passive or active) is needed,
+ * FocusableTreeTraverser.findFocusedNode can be used.
+ *
+ * Note that if specific nodes are needed to be retrieved for this tree, either
+ * use lookUpFocusableNode or FocusableTreeTraverser.findFocusableNodeFor.
  */
 export interface IFocusableTree {
-  /**
-   * Returns the current node with focus in this tree, or null if none (or if
-   * the root has focus).
-   *
-   * Note that this will never return a node from a nested sub-tree as that tree
-   * should specifically be called in order to retrieve its focused node.
-   */
-  getFocusedNode(): IFocusableNode | null;
-
   /**
    * Returns the top-level focusable node of the tree.
    *
@@ -61,21 +58,4 @@ export interface IFocusableTree {
    * @param id The ID of the node's focusable HTMLElement or SVGElement.
    */
   lookUpFocusableNode(id: string): IFocusableNode | null;
-
-  /**
-   * Returns the IFocusableNode corresponding to the select element, or null if
-   * the element does not have such a node.
-   *
-   * The provided element must have a non-null ID that conforms to the contract
-   * mentioned in IFocusableNode.
-   *
-   * This function may match against the root node of the tree. It will also map
-   * against the nearest node to the provided element if the element does not
-   * have an exact matching corresponding node. This function filters out
-   * matches against nested trees, so long as they are represented in the return
-   * value of getNestedTrees.
-   */
-  findFocusableNodeFor(
-    element: HTMLElement | SVGElement,
-  ): IFocusableNode | null;
 }

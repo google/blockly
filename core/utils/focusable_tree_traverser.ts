@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {FocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import * as dom from '../utils/dom.js';
@@ -14,15 +13,22 @@ import * as dom from '../utils/dom.js';
  * tree traversals.
  */
 export class FocusableTreeTraverser {
-  static readonly ACTIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
-  static readonly PASSIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
+  private static readonly ACTIVE_CLASS_NAME = 'blocklyActiveFocus';
+  private static readonly PASSIVE_CSS_CLASS_NAME = 'blocklyPassiveFocus';
+  private static readonly ACTIVE_FOCUS_NODE_CSS_SELECTOR = (
+    `.${FocusableTreeTraverser.ACTIVE_CLASS_NAME}`);
+    private static readonly PASSIVE_FOCUS_NODE_CSS_SELECTOR = (
+    `.${FocusableTreeTraverser.PASSIVE_CSS_CLASS_NAME}`);
 
   /**
-   * Returns the current IFocusableNode that either has the CSS class
-   * 'blocklyActiveFocus' or 'blocklyPassiveFocus', only considering HTML and
-   * SVG elements.
+   * Returns the current IFocusableNode that is styled (and thus represented) as
+   * having either passive or active focus, only considering HTML and SVG
+   * elements.
    *
    * This can match against the tree's root.
+   *
+   * Note that this will never return a node from a nested sub-tree as that tree
+   * should specifically be used to retrieve its focused node.
    *
    * @param tree The IFocusableTree in which to search for a focused node.
    * @returns The IFocusableNode currently with focus, or null if none.
@@ -30,8 +36,8 @@ export class FocusableTreeTraverser {
   static findFocusedNode(tree: IFocusableTree): IFocusableNode | null {
     const root = tree.getRootFocusableNode().getFocusableElement();
     if (
-      dom.hasClass(root, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME) ||
-      dom.hasClass(root, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME)
+      dom.hasClass(root, FocusableTreeTraverser.ACTIVE_CLASS_NAME) ||
+      dom.hasClass(root, FocusableTreeTraverser.PASSIVE_CSS_CLASS_NAME)
     ) {
       // The root has focus.
       return tree.getRootFocusableNode();
@@ -39,7 +45,8 @@ export class FocusableTreeTraverser {
 
     const activeEl = root.querySelector(this.ACTIVE_FOCUS_NODE_CSS_SELECTOR);
     if (activeEl instanceof HTMLElement || activeEl instanceof SVGElement) {
-      const active = tree.findFocusableNodeFor(activeEl);
+      const active = FocusableTreeTraverser.findFocusableNodeFor(
+        activeEl, tree);
       if (active) return active;
     }
 
@@ -47,7 +54,8 @@ export class FocusableTreeTraverser {
     // subtrees).
     const passiveEl = root.querySelector(this.PASSIVE_FOCUS_NODE_CSS_SELECTOR);
     if (passiveEl instanceof HTMLElement || passiveEl instanceof SVGElement) {
-      const passive = tree.findFocusableNodeFor(passiveEl);
+      const passive = FocusableTreeTraverser.findFocusableNodeFor(
+        passiveEl, tree);
       if (passive) return passive;
     }
 
@@ -59,9 +67,16 @@ export class FocusableTreeTraverser {
    * element iff it's the root element or a descendent of the root element of
    * the specified IFocusableTree.
    *
+   * If the element exists within the specified tree's DOM structure but does
+   * not directly correspond to a node, the nearest parent node (or the tree's
+   * root) will be returned to represent the provided element.
+   *
    * If the tree contains another nested IFocusableTree, the nested tree may be
    * traversed but its nodes will never be returned here per the contract of
    * IFocusableTree.lookUpFocusableNode.
+   *
+   * The provided element must have a non-null ID that conforms to the contract
+   * mentioned in IFocusableNode.
    *
    * @param element The HTML or SVG element being sought.
    * @param tree The tree under which the provided element may be a descendant.
@@ -74,7 +89,9 @@ export class FocusableTreeTraverser {
     // First, match against subtrees.
     const subTreeMatches = tree
       .getNestedTrees()
-      .map((tree) => tree.findFocusableNodeFor(element));
+      .map((tree) => {
+        return FocusableTreeTraverser.findFocusableNodeFor(element, tree);
+      });
     if (subTreeMatches.findIndex((match) => !!match) !== -1) {
       // At least one subtree has a match for the element so it cannot be part
       // of the outer tree.

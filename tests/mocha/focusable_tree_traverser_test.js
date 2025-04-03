@@ -40,10 +40,6 @@ class FocusableTreeImpl {
     return node;
   }
 
-  getFocusedNode() {
-    throw Error('Unused in test suite.');
-  }
-
   getRootFocusableNode() {
     return this.rootNode;
   }
@@ -54,10 +50,6 @@ class FocusableTreeImpl {
 
   lookUpFocusableNode(id) {
     return this.idToNodeMap[id];
-  }
-
-  findFocusableNodeFor(element) {
-    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
   }
 }
 

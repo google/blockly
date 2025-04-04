@@ -996,7 +996,7 @@ function applyInputTagNodes(
           ' in block ' +
           prototypeName,
       );
-      break;
+      continue;
     }
     const childBlockInfo = findChildBlocks(xmlChild);
     if (childBlockInfo.childBlockElement) {
@@ -1036,7 +1036,7 @@ function applyNextTagNodes(
       if (!block.nextConnection) {
         // throw TypeError('Next statement does not exist.');
         console.warn('Next statement does not exist.');
-        return;
+        continue;
       }
       // If there is more than one XML 'next' tag.
       if (block.nextConnection.isConnected()) {

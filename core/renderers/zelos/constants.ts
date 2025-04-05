@@ -890,7 +890,7 @@ export class ConstantProvider extends BaseConstantProvider {
       `}`,
 
       // Disabled outline paths.
-      `${selector} .blocklyDisabled > .blocklyOutlinePath {`,
+      `${selector} .blocklyDisabledPattern > .blocklyOutlinePath {`,
       `fill: var(--blocklyDisabledPattern)`,
       `}`,
 

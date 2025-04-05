@@ -200,6 +200,7 @@ export class PathObject implements IPathObject {
    */
   protected updateDisabled_(disabled: boolean) {
     this.setClass_('blocklyDisabled', disabled);
+    this.setClass_('blocklyDisabledPattern', disabled);
   }
 
   /**

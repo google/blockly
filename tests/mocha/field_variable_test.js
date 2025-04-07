@@ -309,6 +309,24 @@ suite('Variable Fields', function () {
         assert.deepEqual(field.variableTypes, ['Type1']);
         assert.equal(field.defaultType, 'Type1');
       });
+      test('Empty list of types', function () {
+        assert.throws(function () {
+          const fieldVariable = new Blockly.FieldVariable(
+            'name1',
+            undefined,
+            [],
+          );
+        });
+      });
+      test('invalid value for list of types', function () {
+        assert.throws(function () {
+          const fieldVariable = new Blockly.FieldVariable(
+            'name1',
+            undefined,
+            'not an array',
+          );
+        });
+      });
       test('JSON Definition', function () {
         const field = Blockly.FieldVariable.fromJson({
           variable: 'test',
@@ -353,13 +371,6 @@ suite('Variable Fields', function () {
       this.workspace.createVariable('name1', 'type1');
       this.workspace.createVariable('name2', 'type2');
     });
-    test('variableTypes is undefined', function () {
-      // Expect that since variableTypes is undefined, only type empty string
-      // will be returned (regardless of what types are available on the workspace).
-      const fieldVariable = new Blockly.FieldVariable('name1');
-      const resultTypes = fieldVariable.getVariableTypes();
-      assert.deepEqual(resultTypes, ['']);
-    });
     test('variableTypes is explicit', function () {
       // Expect that since variableTypes is defined, it will be the return
       // value, regardless of what types are available on the workspace.
@@ -377,6 +388,17 @@ suite('Variable Fields', function () {
         'Default type was wrong',
       );
     });
+    test('variableTypes is undefined', function () {
+      // Expect all variable types in the workspace to be returned, same
+      // as if variableTypes is null.
+      const fieldVariable = new Blockly.FieldVariable('name1');
+      const mockBlock = createTestBlock();
+      mockBlock.workspace = this.workspace;
+      fieldVariable.setSourceBlock(mockBlock);
+
+      const resultTypes = fieldVariable.getVariableTypes();
+      assert.deepEqual(resultTypes, ['type1', 'type2']);
+    });
     test('variableTypes is null', function () {
       // Expect all variable types to be returned.
       // The field does not need to be initialized to do this--it just needs
@@ -390,16 +412,23 @@ suite('Variable Fields', function () {
       const resultTypes = fieldVariable.getVariableTypes();
       assert.deepEqual(resultTypes, ['type1', 'type2']);
     });
-    test('variableTypes is the empty list', function () {
-      const fieldVariable = new Blockly.FieldVariable('name1');
+    test('variableTypes is null and variable is in the flyout', function () {
+      // Expect all variable types in the workspace and
+      // flyout workspace to be returned.
+      const fieldVariable = new Blockly.FieldVariable('name1', undefined, null);
       const mockBlock = createTestBlock();
       mockBlock.workspace = this.workspace;
-      fieldVariable.setSourceBlock(mockBlock);
-      fieldVariable.variableTypes = [];
 
-      assert.throws(function () {
-        fieldVariable.getVariableTypes();
-      });
+      // Pretend this is a flyout workspace with potential variables
+      mockBlock.isInFlyout = true;
+      mockBlock.workspace.createPotentialVariableMap();
+      mockBlock.workspace
+        .getPotentialVariableMap()
+        .createVariable('name3', 'type3');
+      fieldVariable.setSourceBlock(mockBlock);
+
+      const resultTypes = fieldVariable.getVariableTypes();
+      assert.deepEqual(resultTypes, ['type1', 'type2', 'type3']);
     });
   });
   suite('Default types', function () {

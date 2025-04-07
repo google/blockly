@@ -854,7 +854,6 @@ export class Workspace implements IASTNodeLocation {
    * These exist in the flyout but not in the workspace.
    *
    * @returns The potential variable map.
-   * @internal
    */
   getPotentialVariableMap(): IVariableMap<
     IVariableModel<IVariableState>

@@ -113,13 +113,24 @@ export class BlockDragStrategy implements IDragStrategy {
     this.workspace.setResizesEnabled(false);
     blockAnimation.disconnectUiStop();
 
-    const healStack = !!e && (e.altKey || e.ctrlKey || e.metaKey);
+    const healStack = this.shouldHealStack(e);
 
     if (this.shouldDisconnect(healStack)) {
       this.disconnectBlock(healStack);
     }
     this.block.setDragging(true);
     this.workspace.getLayerManager()?.moveToDragLayer(this.block);
+  }
+
+  /**
+   * Get whether the drag should act on a single block or a block stack.
+   * 
+   * @param e The instigating pointer event, if any.
+   * @returns True if just the initial block should be dragged out, false
+   *     if all following blocks should also be dragged.
+   */
+  protected shouldHealStack(e: PointerEvent | undefined) {
+    return !!e && (e.altKey || e.ctrlKey || e.metaKey);
   }
 
   /** Starts a drag on a shadow, recording the drag offset. */

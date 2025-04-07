@@ -124,7 +124,7 @@ export class BlockDragStrategy implements IDragStrategy {
 
   /**
    * Get whether the drag should act on a single block or a block stack.
-   * 
+   *
    * @param e The instigating pointer event, if any.
    * @returns True if just the initial block should be dragged out, false
    *     if all following blocks should also be dragged.

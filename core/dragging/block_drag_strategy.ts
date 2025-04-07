@@ -326,9 +326,7 @@ export class BlockDragStrategy implements IDragStrategy {
     delta: Coordinate,
   ): ConnectionCandidate | null {
     const localConns = this.getLocalConnections(draggingBlock);
-    let radius = this.connectionCandidate
-      ? config.connectingSnapRadius
-      : config.snapRadius;
+    let radius = this.getSearchRadius();
     let candidate = null;
 
     for (const conn of localConns) {
@@ -344,6 +342,15 @@ export class BlockDragStrategy implements IDragStrategy {
     }
 
     return candidate;
+  }
+
+  /**
+   * Get the radius to use when searching for a nearby valid connection.
+   */
+  protected getSearchRadius() {
+    return this.connectionCandidate
+      ? config.connectingSnapRadius
+      : config.snapRadius;
   }
 
   /**

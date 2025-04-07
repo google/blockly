@@ -426,9 +426,7 @@ export class FieldVariable extends FieldDropdown {
    * @returns Array of variable types.
    */
   private getVariableTypes(): string[] {
-    let variableTypes = this.variableTypes;
-
-    if (variableTypes) return variableTypes;
+    if (this.variableTypes) return this.variableTypes;
 
     // If variableTypes is null, return all variable types in the workspace.
     if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {

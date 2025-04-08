@@ -428,13 +428,13 @@ export class FieldVariable extends FieldDropdown {
   private getVariableTypes(): string[] {
     if (this.variableTypes) return this.variableTypes;
 
-    // If variableTypes is null, return all variable types in the workspace.
     if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {
       // We should include all types in the block's workspace,
       // but the block is dead so just give up.
       return [''];
     }
 
+    // If variableTypes is null, return all variable types in the workspace.
     let allTypes = this.sourceBlock_.workspace.getVariableMap().getTypes();
     if (this.sourceBlock_.isInFlyout) {
       // If this block is in a flyout, we also need to check the potential variables

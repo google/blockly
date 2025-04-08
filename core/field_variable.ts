@@ -71,7 +71,8 @@ export class FieldVariable extends FieldDropdown {
    *     field's value. Takes in a variable ID  & returns a validated variable
    *     ID, or null to abort the change.
    * @param variableTypes A list of the types of variables to include in the
-   *     dropdown. Will only be used if config is not provided.
+   *     dropdown. Pass `null` to include all types that exist on the
+   *     workspace. Will only be used if config is not provided.
    * @param defaultType The type of variable to create if this field's value
    *     is not explicitly set.  Defaults to ''. Will only be used if config
    *     is not provided.
@@ -83,7 +84,7 @@ export class FieldVariable extends FieldDropdown {
   constructor(
     varName: string | null | typeof Field.SKIP_SETUP,
     validator?: FieldVariableValidator,
-    variableTypes?: string[],
+    variableTypes?: string[] | null,
     defaultType?: string,
     config?: FieldVariableConfig,
   ) {
@@ -423,25 +424,27 @@ export class FieldVariable extends FieldDropdown {
    * Return a list of variable types to include in the dropdown.
    *
    * @returns Array of variable types.
-   * @throws {Error} if variableTypes is an empty array.
    */
   private getVariableTypes(): string[] {
-    let variableTypes = this.variableTypes;
-    if (variableTypes === null) {
-      // If variableTypes is null, return all variable types.
-      if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
-        return this.sourceBlock_.workspace.getVariableMap().getTypes();
-      }
+    if (this.variableTypes) return this.variableTypes;
+
+    if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {
+      // We should include all types in the block's workspace,
+      // but the block is dead so just give up.
+      return [''];
     }
-    variableTypes = variableTypes || [''];
-    if (variableTypes.length === 0) {
-      // Throw an error if variableTypes is an empty list.
-      const name = this.getText();
-      throw Error(
-        "'variableTypes' of field variable " + name + ' was an empty list',
-      );
+
+    // If variableTypes is null, return all variable types in the workspace.
+    let allTypes = this.sourceBlock_.workspace.getVariableMap().getTypes();
+    if (this.sourceBlock_.isInFlyout) {
+      // If this block is in a flyout, we also need to check the potential variables
+      const potentialMap =
+        this.sourceBlock_.workspace.getPotentialVariableMap();
+      if (!potentialMap) return allTypes;
+      allTypes = Array.from(new Set([...allTypes, ...potentialMap.getTypes()]));
     }
-    return variableTypes;
+
+    return allTypes;
   }
 
   /**
@@ -455,11 +458,15 @@ export class FieldVariable extends FieldDropdown {
    *     value is not explicitly set.  Defaults to ''.
    */
   private setTypes(variableTypes: string[] | null = null, defaultType = '') {
-    // If you expected that the default type would be the same as the only entry
-    // in the variable types array, tell the Blockly team by commenting on
-    // #1499.
-    // Set the allowable variable types.  Null means all types on the workspace.
+    const name = this.getText();
     if (Array.isArray(variableTypes)) {
+      if (variableTypes.length === 0) {
+        // Throw an error if variableTypes is an empty list.
+        throw Error(
+          `'variableTypes' of field variable ${name} was an empty list. If you want to include all variable types, pass 'null' instead.`,
+        );
+      }
+
       // Make sure the default type is valid.
       let isInArray = false;
       for (let i = 0; i < variableTypes.length; i++) {
@@ -477,8 +484,7 @@ export class FieldVariable extends FieldDropdown {
       }
     } else if (variableTypes !== null) {
       throw Error(
-        "'variableTypes' was not an array in the definition of " +
-          'a FieldVariable',
+        `'variableTypes' was not an array or null in the definition of FieldVariable ${name}`,
       );
     }
     // Only update the field once all checks pass.

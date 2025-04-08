@@ -198,7 +198,7 @@ let content = `
   display: none;
 }
 
-.blocklyDisabled>.blocklyPath {
+.blocklyDisabledPattern>.blocklyPath {
   fill: var(--blocklyDisabledPattern);
   fill-opacity: .5;
   stroke-opacity: .5;

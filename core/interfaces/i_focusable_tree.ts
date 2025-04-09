@@ -59,3 +59,7 @@ export interface IFocusableTree {
    */
   lookUpFocusableNode(id: string): IFocusableNode | null;
 }
+
+export function isFocusableTree(object: any | null): object is IFocusableTree {
+  return object && 'getFocusedNode' in object && 'getRootFocusableNode' in object && 'getNestedTrees' in object && 'lookUpFocusableNode' in object && 'findFocusableNodeFor' in object;
+}

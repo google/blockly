@@ -172,16 +172,16 @@ export class MarkerSvg {
 
     this.showAtLocation_(curNode);
 
-    this.fireMarkerEvent(oldNode, curNode);
+    // this.fireMarkerEvent(oldNode, curNode);
 
     // Ensures the marker will be visible immediately after the move.
-    const animate = this.currentMarkerSvg!.childNodes[0];
-    if (
-      animate !== undefined &&
-      (animate as SVGAnimationElement).beginElement
-    ) {
-      (animate as SVGAnimationElement).beginElement();
-    }
+    // const animate = this.currentMarkerSvg!.childNodes[0];
+    // if (
+    //   animate !== undefined &&
+    //   (animate as SVGAnimationElement).beginElement
+    // ) {
+    //   (animate as SVGAnimationElement).beginElement();
+    // }
   }
 
   /**
@@ -192,6 +192,7 @@ export class MarkerSvg {
   protected showAtLocation_(curNode: ASTNode) {
     const curNodeAsConnection = curNode.getLocation() as Connection;
     const connectionType = curNodeAsConnection.type;
+    console.log('@@@@@@ show marker at location:', curNode.getType());
     if (curNode.getType() === ASTNode.types.BLOCK) {
       this.showWithBlock_(curNode);
     } else if (curNode.getType() === ASTNode.types.OUTPUT) {

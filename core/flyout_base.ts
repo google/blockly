@@ -12,6 +12,8 @@
 // Former goog.module ID: Blockly.Flyout
 
 import {BlockSvg} from './block_svg.js';
+import { IFocusableNode, isFocusableNode } from './interfaces/i_focusable_node.js';
+import { IFocusableTree } from './interfaces/i_focusable_tree.js';
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
@@ -32,18 +34,20 @@ import {SEPARATOR_TYPE} from './separator_flyout_inflater.js';
 import * as blocks from './serialization/blocks.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
+import { FocusableTreeTraverser } from './utils/focusable_tree_traverser.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
+import { getFocusManager } from './focus_manager.js';
 
 /**
  * Class for a flyout.
  */
 export abstract class Flyout
   extends DeleteArea
-  implements IAutoHideable, IFlyout
+  implements IAutoHideable, IFlyout, IFocusableNode
 {
   /**
    * Position the flyout.
@@ -317,6 +321,9 @@ export abstract class Flyout
     this.workspace_
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
+
+    getFocusManager().registerTree(this);
+
     return this.svgGroup_;
   }
 
@@ -398,6 +405,7 @@ export abstract class Flyout
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
+    getFocusManager().unregisterTree(this);
   }
 
   /**
@@ -960,5 +968,41 @@ export abstract class Flyout
     }
 
     return null;
+  }
+
+  getFocusableElement(): HTMLElement | SVGElement {
+    if (!this.svgGroup_) {
+      throw new Error("Flyout has no DOM created.");
+    }
+    return this.svgGroup_;
+  }
+
+  getFocusableTree(): IFocusableTree {
+    return this;
+  }
+
+  getFocusedNode(): IFocusableNode | null {
+    return FocusableTreeTraverser.findFocusedNode(this);
+  }
+
+  getRootFocusableNode(): IFocusableNode {
+    return this;
+  }
+
+  getNestedTrees(): Array<IFocusableTree> {
+    return [];
+  }
+
+  lookUpFocusableNode(id: string): IFocusableNode | null {
+    return this.getContents()
+      .filter((item) => item instanceof isFocusableNode)
+      .map((item) => item as unknown as IFocusableNode)
+      .find((node) => node.getFocusableElement().id == id) ?? null;
+  }
+
+  findFocusableNodeFor(
+    element: HTMLElement | SVGElement,
+  ): IFocusableNode | null {
+    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
   }
 }

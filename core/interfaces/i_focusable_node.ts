@@ -37,3 +37,7 @@ export interface IFocusableNode {
    */
   getFocusableTree(): IFocusableTree;
 }
+
+export function isFocusableNode(object: any | null): object is IFocusableNode {
+  return object && 'getFocusableElement' in object && 'getFocusableTree' in object;
+}

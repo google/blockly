@@ -145,8 +145,8 @@ import {
 } from './interfaces/i_draggable.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import {IFlyout} from './interfaces/i_flyout.js';
-import {IFocusableNode} from './interfaces/i_focusable_node.js';
-import {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import {IFocusableNode, isFocusableNode} from './interfaces/i_focusable_node.js';
+import {IFocusableTree, isFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IHasBubble, hasBubble} from './interfaces/i_has_bubble.js';
 import {IIcon, isIcon} from './interfaces/i_icon.js';
 import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
@@ -619,6 +619,8 @@ export {
   isCopyable,
   isDeletable,
   isDraggable,
+  isFocusableNode,
+  isFocusableTree,
   isIcon,
   isObservable,
   isPaster,

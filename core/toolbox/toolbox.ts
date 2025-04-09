@@ -22,11 +22,14 @@ import {DeleteArea} from '../delete_area.js';
 import '../events/events_toolbox_item_select.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import {getFocusManager} from '../focus_manager.js';
 import type {IAutoHideable} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 import {isDeletable} from '../interfaces/i_deletable.js';
 import type {IDraggable} from '../interfaces/i_draggable.js';
 import type {IFlyout} from '../interfaces/i_flyout.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 import {isSelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
@@ -39,6 +42,7 @@ import type {KeyboardShortcut} from '../shortcut_registry.js';
 import * as Touch from '../touch.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
+import {FocusableTreeTraverser} from '../utils/focusable_tree_traverser.js';
 import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -51,7 +55,12 @@ import {CollapsibleToolboxCategory} from './collapsible_category.js';
  */
 export class Toolbox
   extends DeleteArea
-  implements IAutoHideable, IKeyboardAccessible, IStyleable, IToolbox
+  implements
+    IAutoHideable,
+    IKeyboardAccessible,
+    IStyleable,
+    IToolbox,
+    IFocusableNode
 {
   /**
    * The unique ID for this component that is used to register with the
@@ -163,6 +172,7 @@ export class Toolbox
         ComponentManager.Capability.DRAG_TARGET,
       ],
     });
+    getFocusManager().registerTree(this);
   }
 
   /**
@@ -969,7 +979,7 @@ export class Toolbox
    *
    * @returns True if a parent category was selected, false otherwise.
    */
-  private selectParent(): boolean {
+  selectParent(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
@@ -997,7 +1007,7 @@ export class Toolbox
    *
    * @returns True if a child category was selected, false otherwise.
    */
-  private selectChild(): boolean {
+  selectChild(): boolean {
     if (!this.selectedItem_ || !this.selectedItem_.isCollapsible()) {
       return false;
     }
@@ -1016,7 +1026,7 @@ export class Toolbox
    *
    * @returns True if a next category was selected, false otherwise.
    */
-  private selectNext(): boolean {
+  selectNext(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
@@ -1041,7 +1051,7 @@ export class Toolbox
    *
    * @returns True if a previous category was selected, false otherwise.
    */
-  private selectPrevious(): boolean {
+  selectPrevious(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
@@ -1077,6 +1087,39 @@ export class Toolbox
       this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
       dom.removeNode(this.HtmlDiv);
     }
+
+    getFocusManager().unregisterTree(this);
+  }
+
+  getFocusableElement(): HTMLElement | SVGElement {
+    if (!this.HtmlDiv) throw Error('Toolbox DOM has not yet been created.');
+    return this.HtmlDiv;
+  }
+
+  getFocusableTree(): IFocusableTree {
+    return this;
+  }
+
+  getFocusedNode(): IFocusableNode | null {
+    return FocusableTreeTraverser.findFocusedNode(this);
+  }
+
+  getRootFocusableNode(): IFocusableNode {
+    return this;
+  }
+
+  getNestedTrees(): Array<IFocusableTree> {
+    if (this.flyout) return [this.flyout]; else return [];
+  }
+
+  lookUpFocusableNode(id: string): IFocusableNode | null {
+    return this.getToolboxItemById(id) as IFocusableNode;
+  }
+
+  findFocusableNodeFor(
+    element: HTMLElement | SVGElement,
+  ): IFocusableNode | null {
+    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
   }
 }
 

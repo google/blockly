@@ -31,6 +31,8 @@ import * as dom from '../utils/dom.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import {ASTNode} from './ast_node.js';
 import {Marker} from './marker.js';
+import {isFocusableNode} from '../interfaces/i_focusable_node.js';
+import {getFocusManager} from '../focus_manager.js';
 
 /** Options object for LineCursor instances. */
 export interface CursorOptions {
@@ -530,12 +532,38 @@ export class LineCursor extends Marker {
    * @param updateSelection If true (the default) we'll update the selection
    *     too.
    */
-  override setCurNode(newNode: ASTNode | null, updateSelection = true) {
-    if (updateSelection) {
-      this.updateSelectionFromNode(newNode);
-    }
+  override setCurNode(newNode: ASTNode | null, selectionUpToDate = false) {
+    // if (!selectionUpToDate) {
+    //   this.updateSelectionFromNode(newNode);
+    // }
 
     super.setCurNode(newNode);
+
+    // If old node was a block, unselect it or remove fake selection.
+    // if (oldNode?.getType() === ASTNode.types.BLOCK) {
+    //   const block = oldNode.getLocation() as Blockly.BlockSvg;
+    //   if (!block.isShadow()) {
+    //     Blockly.common.setSelected(null);
+    //   } else {
+    //     block.removeSelect();
+    //   }
+    // }
+
+    // this.drawMarker(oldNode, newNode);
+
+    const newNodeLocation = newNode?.getLocation();
+    console.trace('@@@@@@', 'setCurNode -> focus node:', newNodeLocation);
+    if (isFocusableNode(newNodeLocation)) {
+      getFocusManager().focusNode(newNodeLocation);
+    } else console.log('Error: node is not focusable:', newNodeLocation);
+    // if (newNode?.getType() === ASTNode.types.BLOCK) {
+    //   const block = newNode.getLocation() as Blockly.BlockSvg;
+    //   if (!block.isShadow()) {
+    //     Blockly.common.setSelected(block);
+    //   } else {
+    //     block.addSelect();
+    //   }
+    // }
 
     // Try to scroll cursor into view.
     if (newNode?.getType() === ASTNode.types.BLOCK) {
@@ -577,47 +605,49 @@ export class LineCursor extends Marker {
     realDrawer: MarkerSvg,
   ) {
     // If old node was a block, unselect it or remove fake selection.
-    if (oldNode?.getType() === ASTNode.types.BLOCK) {
-      const block = oldNode.getLocation() as BlockSvg;
-      if (!block.isShadow()) {
-        // Selection should already be in sync.
-      } else {
-        block.removeSelect();
-      }
-    }
+    // if (oldNode?.getType() === ASTNode.types.BLOCK) {
+    //   const block = oldNode.getLocation() as BlockSvg;
+  //   if (!block.isShadow()) {
+    //     // Selection should already be in sync.
+    //   } else {
+    //     block.removeSelect();
+    //   }
+    // }
 
-    if (this.isZelos && oldNode && this.isValueInputConnection(oldNode)) {
-      this.hideAtInput(oldNode);
-    }
+    // if (this.isZelos && oldNode && this.isValueInputConnection(oldNode)) {
+    //   this.hideAtInput(oldNode);
+    // }
 
     const curNodeType = curNode?.getType();
     const isZelosInputConnection =
       this.isZelos && curNode && this.isValueInputConnection(curNode);
 
+      realDrawer.draw(oldNode, curNode);
+
     // If drawing can't be handled locally, just use the drawer.
     if (curNodeType !== ASTNode.types.BLOCK && !isZelosInputConnection) {
-      realDrawer.draw(oldNode, curNode);
+      // realDrawer.draw(oldNode, curNode);
       return;
     }
 
     // Hide any visible marker SVG and instead do some manual rendering.
     realDrawer.hide();
 
-    if (isZelosInputConnection) {
-      this.showAtInput(curNode);
-    } else if (curNode && curNodeType === ASTNode.types.BLOCK) {
-      const block = curNode.getLocation() as BlockSvg;
-      if (!block.isShadow()) {
-        // Selection should already be in sync.
-      } else {
-        block.addSelect();
-        block.getParent()?.removeSelect();
-      }
-    }
+    // if (isZelosInputConnection) {
+    //   this.showAtInput(curNode);
+    // } else if (curNode && curNodeType === ASTNode.types.BLOCK) {
+    //   const block = curNode.getLocation() as BlockSvg;
+    //   if (!block.isShadow()) {
+    //     // Selection should already be in sync.
+    //   } else {
+    //     block.addSelect();
+    //     block.getParent()?.removeSelect();
+    //   }
+    // }
 
     // Call MarkerSvg.prototype.fireMarkerEvent like
     // MarkerSvg.prototype.draw would (even though it's private).
-    (realDrawer as any)?.fireMarkerEvent?.(oldNode, curNode);
+    // (realDrawer as any)?.fireMarkerEvent?.(oldNode, curNode);
   }
 
   /**
@@ -701,18 +731,20 @@ export class LineCursor extends Marker {
    */
   private updateCurNodeFromSelection() {
     const curNode = super.getCurNode();
-    const selected = common.getSelected();
+    const focused = getFocusManager().getFocusedNode();
+    // const selected = common.getSelected();
 
-    if (selected === null && curNode?.getType() === ASTNode.types.BLOCK) {
+    if (focused === null && curNode?.getType() === ASTNode.types.BLOCK) {
       this.setCurNode(null, false);
       return;
     }
-    if (selected?.workspace !== this.workspace) {
-      return;
-    }
-    if (selected instanceof BlockSvg) {
-      let block: BlockSvg | null = selected;
-      if (selected.isShadow()) {
+    if (focused instanceof BlockSvg) {
+      let block: BlockSvg | null = focused;
+
+      if (block?.workspace !== this.workspace) {
+        return;
+      }
+      if (block.isShadow()) {
         // OK if the current node is on the parent OR the shadow block.
         // The former happens for clicks, the latter for keyboard nav.
         if (

@@ -43,6 +43,8 @@ import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js'
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
 import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {MarkerManager} from './marker_manager.js';
@@ -74,7 +76,8 @@ export class BlockSvg
     IBoundedElement,
     ICopyable<BlockCopyData>,
     IDraggable,
-    IDeletable
+    IDeletable,
+    IFocusableNode
 {
   /**
    * Constant for identifying rows that are to be rendered inline.
@@ -189,7 +192,7 @@ export class BlockSvg
       throw TypeError('Cannot create a rendered block in a headless workspace');
     }
     this.workspace = workspace;
-    this.svgGroup = dom.createSvgElement(Svg.G, {});
+    this.svgGroup = dom.createSvgElement(Svg.G, {'tabindex': '-1', 'id': this.id});
 
     if (prototypeName) {
       dom.addClass(this.svgGroup, prototypeName);
@@ -1766,5 +1769,13 @@ export class BlockSvg
           : json['classes'],
       );
     }
+  }
+
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.svgGroup;
+  }
+
+  getFocusableTree(): IFocusableTree {
+    return this.workspace;
   }
 }

@@ -60,6 +60,8 @@ export class FocusManager {
   registeredTrees: Array<IFocusableTree> = [];
 
   private currentlyHoldsEphemeralFocus: boolean = false;
+  // TODO: Figure out why this is needed, and how to test it.
+  private ignoreFocusChanges: boolean = false;
 
   constructor(
     addGlobalEventListener: (type: string, listener: EventListener) => void,
@@ -68,6 +70,7 @@ export class FocusManager {
     // tracked focusable trees.
     addGlobalEventListener('focusin', (event) => {
       if (!(event instanceof FocusEvent)) return;
+      if (this.ignoreFocusChanges) return;
 
       // The target that now has focus.
       const activeElement = document.activeElement;
@@ -205,8 +208,7 @@ export class FocusManager {
    * Any previously focused node will be updated to be passively highlighted (if
    * it's in a different focusable tree) or blurred (if it's in the same one).
    *
-   * @param focusableNode The node that should receive active
-   *     focus.
+   * @param focusableNode The node that should receive active focus.
    */
   focusNode(focusableNode: IFocusableNode): void {
     const nextTree = focusableNode.getFocusableTree();
@@ -302,6 +304,7 @@ export class FocusManager {
     dom.addClass(element, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     dom.removeClass(element, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
     element.focus();
+    // this.ignoreFocusChanges = false;
   }
 
   private setNodeToPassive(node: IFocusableNode): void {

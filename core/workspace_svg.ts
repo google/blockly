@@ -37,12 +37,15 @@ import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Flyout} from './flyout_base.js';
 import type {FlyoutButton} from './flyout_button.js';
+import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {
@@ -69,6 +72,7 @@ import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as drag from './utils/drag.js';
+import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 import type {Metrics} from './utils/metrics.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
@@ -82,6 +86,7 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
+import type {Field} from './field.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -90,7 +95,10 @@ const ZOOM_TO_FIT_MARGIN = 20;
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  */
-export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
+export class WorkspaceSvg
+  extends Workspace
+  implements IASTNodeLocationSvg, IFocusableNode, IFocusableTree
+{
   /**
    * A wrapper function called when a resize event occurs.
    * You can pass the result to `eventHandling.unbind`.
@@ -760,7 +768,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
      *   <g class="blocklyBubbleCanvas"></g>
      * </g>
      */
-    this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': 'blocklyWorkspace'});
+    this.svgGroup_ = dom.createSvgElement(Svg.G, {
+      'class': 'blocklyWorkspace',
+      'tabindex': '-1',
+      'id': this.id,
+    });
 
     // Note that a <g> alone does not receive mouse events--it must have a
     // valid target inside it.  If no background class is specified, as in the
@@ -836,6 +848,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.getTheme(),
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
+
+    getFocusManager().registerTree(this);
+
     return this.svgGroup_;
   }
 
@@ -920,6 +935,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       document.body.removeEventListener('wheel', this.dummyWheelListener);
       this.dummyWheelListener = null;
     }
+
+    getFocusManager().unregisterTree(this);
   }
 
   /**
@@ -2605,6 +2622,48 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     deltaX *= scale;
     deltaY *= scale;
     this.scroll(this.scrollX + deltaX, this.scrollY + deltaY);
+  }
+
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.svgGroup_;
+  }
+
+  getFocusableTree(): IFocusableTree {
+    return this;
+  }
+
+  getFocusedNode(): IFocusableNode | null {
+    return FocusableTreeTraverser.findFocusedNode(this);
+  }
+
+  getRootFocusableNode(): IFocusableNode {
+    return this;
+  }
+
+  getNestedTrees(): Array<IFocusableTree> {
+    return [];
+  }
+
+  lookUpFocusableNode(id: string): IFocusableNode | null {
+    // TODO: This isn't a complete solution since non-blocks can have focus.
+    const fieldIndicator = '_field_';
+    const fieldIndicatorIndex = id.indexOf(fieldIndicator);
+    if (fieldIndicatorIndex !== -1) {
+      const blockId = id.substring(0, fieldIndicatorIndex);
+      const block = this.getBlockById(blockId);
+      if (block != null) {
+        for (const field of block.getFields()) {
+          if (field.getFocusableElement().id === id) return field;
+        }
+      }
+      return null;
+    } else return this.getBlockById(id) as IFocusableNode;
+  }
+
+  findFocusableNodeFor(
+    element: HTMLElement | SVGElement,
+  ): IFocusableNode | null {
+    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
   }
 }
 

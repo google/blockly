@@ -496,11 +496,13 @@ input[type=number] {
 }
 
 .blocklyActiveFocus {
-  outline-color: #2ae;
-  outline-width: 2px;
+  stroke: #2ae;
+  stroke-width: 2px;
+  fill: #0f0;
 }
 .blocklyPassiveFocus {
-  outline-color: #3fdfff;
-  outline-width: 1.5px;
+  stroke: #3fdfff;
+  stroke-width: 1.5px;
+  fill: #00f;
 }
 `;

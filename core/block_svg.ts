@@ -16,7 +16,6 @@ import './events/events_selected.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
-import {IDeletable} from './blockly.js';
 import * as browserEvents from './browser_events.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 import * as common from './common.js';
@@ -41,7 +40,9 @@ import {WarningIcon} from './icons/warning_icon.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
+import {IDeletable} from './interfaces/i_deletable.js';
 import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
@@ -72,6 +73,7 @@ export class BlockSvg
   implements
     IASTNodeLocationSvg,
     IBoundedElement,
+    IContextMenu,
     ICopyable<BlockCopyData>,
     IDraggable,
     IDeletable

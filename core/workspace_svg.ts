@@ -41,6 +41,7 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
@@ -90,7 +91,10 @@ const ZOOM_TO_FIT_MARGIN = 20;
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  */
-export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
+export class WorkspaceSvg
+  extends Workspace
+  implements IASTNodeLocationSvg, IContextMenu
+{
   /**
    * A wrapper function called when a resize event occurs.
    * You can pass the result to `eventHandling.unbind`.

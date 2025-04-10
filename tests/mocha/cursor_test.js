@@ -192,6 +192,9 @@ suite('Cursor', function () {
       setup(function () {
         this.blockA = this.workspace.newBlock('empty_block');
       });
+      teardown(function () {
+        this.workspace.clear();
+      });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
         assert.equal(node.getLocation(), this.blockA);
@@ -205,6 +208,9 @@ suite('Cursor', function () {
     suite('one stack block', function () {
       setup(function () {
         this.blockA = this.workspace.newBlock('stack_block');
+      });
+      teardown(function () {
+        this.workspace.clear();
       });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
@@ -220,6 +226,9 @@ suite('Cursor', function () {
       setup(function () {
         this.blockA = this.workspace.newBlock('row_block');
       });
+      teardown(function () {
+        this.workspace.clear();
+      });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
         assert.equal(node.getLocation(), this.blockA.outputConnection);
@@ -233,6 +242,9 @@ suite('Cursor', function () {
       setup(function () {
         this.blockA = this.workspace.newBlock('c_hat_block');
       });
+      teardown(function () {
+        this.workspace.clear();
+      });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
         assert.equal(node.getLocation(), this.blockA);
@@ -245,54 +257,130 @@ suite('Cursor', function () {
 
     suite('multiblock stack', function () {
       setup(function () {
-        this.blockA = this.workspace.newBlock('stack_block');
-        this.blockB = this.workspace.newBlock('stack_block');
-        this.blockA.nextConnection.connect(this.blockB.previousConnection);
+        const state = {
+          "blocks": {
+            "languageVersion": 0,
+            "blocks": [
+              {
+                "type": "stack_block",
+                "id": "A",
+                "x": 0,
+                "y": 0,
+                "next": {
+                  "block": {
+                    "type": "stack_block",
+                    "id": "B"
+                  }
+                }
+              },
+            ]
+          }
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace);
+      });
+      teardown(function () {
+        this.workspace.clear();
       });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
-        assert.equal(node.getLocation(), this.blockA.previousConnection);
+        const blockA = this.workspace.getBlockById('A');
+        assert.equal(node.getLocation(), blockA.previousConnection);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node.getLocation(), this.blockB.nextConnection);
+        const blockB = this.workspace.getBlockById('B');
+        assert.equal(node.getLocation(), blockB.nextConnection);
       });
     });
 
     suite('multiblock row', function () {
       setup(function () {
-        this.blockA = this.workspace.newBlock('row_block');
-        this.blockB = this.workspace.newBlock('row_block');
-        this.blockA.inputList[0].connection.connect(
-          this.blockB.outputConnection,
-        );
+        const state = {
+          "blocks": {
+            "languageVersion": 0,
+            "blocks": [
+              {
+                "type": "row_block",
+                "id": "A",
+                "x": 0,
+                "y": 0,
+                "inputs": {
+                  "INPUT": {
+                    "block": {
+                      "type": "row_block",
+                      "id": "B"
+                    }
+                  }
+                }
+              },
+            ]
+          }
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace);
+      });
+      teardown(function () {
+        this.workspace.clear();
       });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
-        assert.equal(node.getLocation(), this.blockA.outputConnection);
+        const blockA = this.workspace.getBlockById('A');
+        assert.equal(node.getLocation(), blockA.outputConnection);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node.getLocation(), this.blockB.inputList[0].connection);
+        const blockB = this.workspace.getBlockById('B');
+        assert.equal(node.getLocation(), blockB.inputList[0].connection);
       });
     })
     suite('two stacks', function () {
       setup(function () {
-        this.blockA = this.workspace.newBlock('stack_block');
-        this.blockB = this.workspace.newBlock('stack_block');
-        this.blockA.nextConnection.connect(this.blockB.previousConnection);
-
-        this.blockC = this.workspace.newBlock('stack_block');
-        this.blockD = this.workspace.newBlock('stack_block');
-        this.blockC.nextConnection.connect(this.blockD.previousConnection);
+          const state = {
+            "blocks": {
+              "languageVersion": 0,
+              "blocks": [
+                {
+                  "type": "stack_block",
+                  "id": "A",
+                  "x": 0,
+                  "y": 0,
+                  "next": {
+                    "block": {
+                      "type": "stack_block",
+                      "id": "B"
+                    }
+                  }
+                }, 
+                {
+                  "type": "stack_block",
+                  "id": "C",
+                  "x": 100,
+                  "y": 100,
+                  "next": {
+                    "block": {
+                      "type": "stack_block",
+                      "id": "D"
+                    }
+                  }
+                }
+              ]
+            }
+          };
+          Blockly.serialization.workspaces.load(state, this.workspace);
+      });
+      teardown(function () {
+        this.workspace.clear();
       });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
-        assert.equal(node.getLocation(), this.blockA.previousConnection);
+        const location = node.getLocation();
+        const previousConnection = this.workspace.getBlockById('A').previousConnection;
+        assert.equal(location, previousConnection);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node.getLocation(), this.blockC.nextConnection);
+        const location = node.getLocation();
+        const nextConnection = this.workspace.getBlockById('D').nextConnection;
+        assert.equal(location, nextConnection);
       });
     });
   });

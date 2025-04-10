@@ -258,23 +258,23 @@ suite('Cursor', function () {
     suite('multiblock stack', function () {
       setup(function () {
         const state = {
-          "blocks": {
-            "languageVersion": 0,
-            "blocks": [
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
               {
-                "type": "stack_block",
-                "id": "A",
-                "x": 0,
-                "y": 0,
-                "next": {
-                  "block": {
-                    "type": "stack_block",
-                    "id": "B"
-                  }
-                }
+                'type': 'stack_block',
+                'id': 'A',
+                'x': 0,
+                'y': 0,
+                'next': {
+                  'block': {
+                    'type': 'stack_block',
+                    'id': 'B',
+                  },
+                },
               },
-            ]
-          }
+            ],
+          },
         };
         Blockly.serialization.workspaces.load(state, this.workspace);
       });
@@ -296,25 +296,25 @@ suite('Cursor', function () {
     suite('multiblock row', function () {
       setup(function () {
         const state = {
-          "blocks": {
-            "languageVersion": 0,
-            "blocks": [
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
               {
-                "type": "row_block",
-                "id": "A",
-                "x": 0,
-                "y": 0,
-                "inputs": {
-                  "INPUT": {
-                    "block": {
-                      "type": "row_block",
-                      "id": "B"
-                    }
-                  }
-                }
+                'type': 'row_block',
+                'id': 'A',
+                'x': 0,
+                'y': 0,
+                'inputs': {
+                  'INPUT': {
+                    'block': {
+                      'type': 'row_block',
+                      'id': 'B',
+                    },
+                  },
+                },
               },
-            ]
-          }
+            ],
+          },
         };
         Blockly.serialization.workspaces.load(state, this.workspace);
       });
@@ -331,41 +331,41 @@ suite('Cursor', function () {
         const blockB = this.workspace.getBlockById('B');
         assert.equal(node.getLocation(), blockB.inputList[0].connection);
       });
-    })
+    });
     suite('two stacks', function () {
       setup(function () {
-          const state = {
-            "blocks": {
-              "languageVersion": 0,
-              "blocks": [
-                {
-                  "type": "stack_block",
-                  "id": "A",
-                  "x": 0,
-                  "y": 0,
-                  "next": {
-                    "block": {
-                      "type": "stack_block",
-                      "id": "B"
-                    }
-                  }
-                }, 
-                {
-                  "type": "stack_block",
-                  "id": "C",
-                  "x": 100,
-                  "y": 100,
-                  "next": {
-                    "block": {
-                      "type": "stack_block",
-                      "id": "D"
-                    }
-                  }
-                }
-              ]
-            }
-          };
-          Blockly.serialization.workspaces.load(state, this.workspace);
+        const state = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'stack_block',
+                'id': 'A',
+                'x': 0,
+                'y': 0,
+                'next': {
+                  'block': {
+                    'type': 'stack_block',
+                    'id': 'B',
+                  },
+                },
+              },
+              {
+                'type': 'stack_block',
+                'id': 'C',
+                'x': 100,
+                'y': 100,
+                'next': {
+                  'block': {
+                    'type': 'stack_block',
+                    'id': 'D',
+                  },
+                },
+              },
+            ],
+          },
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace);
       });
       teardown(function () {
         this.workspace.clear();
@@ -373,7 +373,8 @@ suite('Cursor', function () {
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
         const location = node.getLocation();
-        const previousConnection = this.workspace.getBlockById('A').previousConnection;
+        const previousConnection =
+          this.workspace.getBlockById('A').previousConnection;
         assert.equal(location, previousConnection);
       });
       test('getLastNode', function () {

@@ -581,15 +581,16 @@ export class BlockSvg
    *
    * @returns Context menu options or null if no menu.
    */
-  protected generateContextMenu(): Array<
-    ContextMenuOption | LegacyContextMenuOption
-  > | null {
+  protected generateContextMenu(
+    e: Event,
+  ): Array<ContextMenuOption | LegacyContextMenuOption> | null {
     if (this.workspace.isReadOnly() || !this.contextMenu) {
       return null;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.BLOCK,
       {block: this},
+      e,
     );
 
     // Allow the block to add or modify menuOptions.
@@ -607,7 +608,7 @@ export class BlockSvg
    * @internal
    */
   showContextMenu(e: PointerEvent) {
-    const menuOptions = this.generateContextMenu();
+    const menuOptions = this.generateContextMenu(e);
 
     if (menuOptions && menuOptions.length) {
       ContextMenu.show(e, menuOptions, this.RTL, this.workspace);

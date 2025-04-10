@@ -287,6 +287,7 @@ export class RenderedWorkspaceComment
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.COMMENT,
       {comment: this},
+      e,
     );
     contextMenu.show(e, menuOptions, this.workspace.RTL, this.workspace);
   }

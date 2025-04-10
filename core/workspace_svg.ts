@@ -1713,6 +1713,7 @@ export class WorkspaceSvg
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.WORKSPACE,
       {workspace: this},
+      e,
     );
 
     // Allow the developer to add or modify menuOptions.

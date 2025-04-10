@@ -1706,7 +1706,7 @@ export class WorkspaceSvg
    * @param e Mouse event.
    * @internal
    */
-  showContextMenu(e: PointerEvent) {
+  showContextMenu(e: Event) {
     if (this.isReadOnly() || this.isFlyout) {
       return;
     }
@@ -1721,7 +1721,15 @@ export class WorkspaceSvg
       this.configureContextMenu(menuOptions, e);
     }
 
-    ContextMenu.show(e, menuOptions, this.RTL, this);
+    let location;
+    if (e instanceof PointerEvent) {
+      location = new Coordinate(e.clientX, e.clientY);
+    } else {
+      // TODO: Get the location based on the workspace cursor location
+      location = svgMath.wsToScreenCoordinates(this, new Coordinate(5, 5));
+    }
+
+    ContextMenu.show(e, menuOptions, this.RTL, this, location);
   }
 
   /**

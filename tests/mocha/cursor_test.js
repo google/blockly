@@ -275,6 +275,25 @@ suite('Cursor', function () {
         const node = this.cursor.getLastNode();
         assert.equal(node.getLocation(), this.blockB.inputList[0].connection);
       });
+    })
+    suite('two stacks', function () {
+      setup(function () {
+        this.blockA = this.workspace.newBlock('stack_block');
+        this.blockB = this.workspace.newBlock('stack_block');
+        this.blockA.nextConnection.connect(this.blockB.previousConnection);
+
+        this.blockC = this.workspace.newBlock('stack_block');
+        this.blockD = this.workspace.newBlock('stack_block');
+        this.blockC.nextConnection.connect(this.blockD.previousConnection);
+      });
+      test('getFirstNode', function () {
+        const node = this.cursor.getFirstNode();
+        assert.equal(node.getLocation(), this.blockA.previousConnection);
+      });
+      test('getLastNode', function () {
+        const node = this.cursor.getLastNode();
+        assert.equal(node.getLocation(), this.blockC.nextConnection);
+      });
     });
   });
 });

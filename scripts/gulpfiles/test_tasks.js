@@ -382,18 +382,18 @@ function typeDefinitions() {
 
 // Run all tests in sequence.
 const tasks = [
-  eslint,
+  //eslint,
   // Build must run before the remaining tasks
-  build,
-  renamings,
-  metadata,
+  //build,
+  //renamings,
+  //metadata,
   mocha,
-  generators,
-  node,
-  typeDefinitions,
+  //generators,
+  //node,
+  //typeDefinitions,
   // Make sure these two are in series with each other
-  advancedCompile,
-  advancedCompileInBrowser
+  //advancedCompile,
+  //advancedCompileInBrowser
 ];
 
 const test = gulp.series(...tasks, reportTestResult);

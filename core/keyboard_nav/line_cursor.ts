@@ -756,6 +756,43 @@ export class LineCursor extends Marker {
       }
     }
   }
+
+  /**
+   * Get the first navigable node on the workspace, or null if none exist.
+   *
+   * @returns The first navigable node on the workspace, or null.
+   */
+  getFirstNode(): ASTNode | null {
+    const topBlocks = this.workspace.getTopBlocks(true);
+    if (!topBlocks.length) return null;
+    return ASTNode.createTopNode(topBlocks[0]);
+  }
+
+  /**
+   * Get the last navigable node on the workspace, or null if none exist.
+   *
+   * @returns The last navigable node on the workspace, or null.
+   */
+  getLastNode(): ASTNode | null {
+    // Loop back to last block if it exists.
+    const topBlocks = this.workspace.getTopBlocks(true);
+    if (!topBlocks.length) return null;
+
+    // Find the last stack.
+    const lastTopBlockNode = ASTNode.createStackNode(
+      topBlocks[topBlocks.length - 1],
+    );
+    let prevNode = lastTopBlockNode;
+    let nextNode: ASTNode | null = lastTopBlockNode;
+    // Iterate until you fall off the end of the stack.
+    while (nextNode) {
+      prevNode = nextNode;
+      nextNode = this.getNextNode(prevNode, (node) => {
+        return !!node;
+      });
+    }
+    return prevNode;
+  }
 }
 
 registry.register(registry.Type.CURSOR, registry.DEFAULT, LineCursor);

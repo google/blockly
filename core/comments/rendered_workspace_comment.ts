@@ -22,6 +22,7 @@ import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import * as layers from '../layers.js';
 import * as commentSerialization from '../serialization/workspace_comments.js';
+import {svgMath} from '../utils.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
@@ -283,12 +284,32 @@ export class RenderedWorkspaceComment
   }
 
   /** Show a context menu for this comment. */
-  showContextMenu(e: PointerEvent): void {
+  showContextMenu(e: Event): void {
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.COMMENT,
       {comment: this},
+      e,
     );
-    contextMenu.show(e, menuOptions, this.workspace.RTL, this.workspace);
+
+    let location: Coordinate;
+    if (e instanceof PointerEvent) {
+      location = new Coordinate(e.clientX, e.clientY);
+    } else {
+      // Show the menu based on the location of the comment
+      const xy = svgMath.wsToScreenCoordinates(
+        this.workspace,
+        this.getRelativeToSurfaceXY(),
+      );
+      location = xy.translate(10, 10);
+    }
+
+    contextMenu.show(
+      e,
+      menuOptions,
+      this.workspace.RTL,
+      this.workspace,
+      location,
+    );
   }
 
   /** Snap this comment to the nearest grid point. */

@@ -581,15 +581,16 @@ export class BlockSvg
    *
    * @returns Context menu options or null if no menu.
    */
-  protected generateContextMenu(): Array<
-    ContextMenuOption | LegacyContextMenuOption
-  > | null {
+  protected generateContextMenu(
+    e: Event,
+  ): Array<ContextMenuOption | LegacyContextMenuOption> | null {
     if (this.workspace.isReadOnly() || !this.contextMenu) {
       return null;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
       ContextMenuRegistry.ScopeType.BLOCK,
       {block: this},
+      e,
     );
 
     // Allow the block to add or modify menuOptions.
@@ -601,16 +602,56 @@ export class BlockSvg
   }
 
   /**
+   * Gets the location in which to show the context menu for this block.
+   * Use the location of a click if the block was clicked, or a location
+   * based on the block's fields otherwise.
+   */
+  protected calculateContextMenuLocation(e: Event): Coordinate {
+    // Open the menu where the user clicked, if they clicked
+    if (e instanceof PointerEvent) {
+      return new Coordinate(e.clientX, e.clientY);
+    }
+
+    // Otherwise, calculate a location.
+    // Get the location of the top-left corner of the block in
+    // screen coordinates.
+    const blockCoords = svgMath.wsToScreenCoordinates(
+      this.workspace,
+      this.getRelativeToSurfaceXY(),
+    );
+
+    // Prefer a y position below the first field in the block.
+    const fieldBoundingClientRect = this.inputList
+      .filter((input) => input.isVisible())
+      .flatMap((input) => input.fieldRow)
+      .find((f) => f.isVisible())
+      ?.getSvgRoot()
+      ?.getBoundingClientRect();
+
+    const y =
+      fieldBoundingClientRect && fieldBoundingClientRect.height
+        ? fieldBoundingClientRect.y + fieldBoundingClientRect.height
+        : blockCoords.y + this.height;
+
+    return new Coordinate(
+      this.RTL ? blockCoords.x - 5 : blockCoords.x + 5,
+      y + 5,
+    );
+  }
+
+  /**
    * Show the context menu for this block.
    *
    * @param e Mouse event.
    * @internal
    */
-  showContextMenu(e: PointerEvent) {
-    const menuOptions = this.generateContextMenu();
+  showContextMenu(e: Event) {
+    const menuOptions = this.generateContextMenu(e);
+
+    const location = this.calculateContextMenuLocation(e);
 
     if (menuOptions && menuOptions.length) {
-      ContextMenu.show(e, menuOptions, this.RTL, this.workspace);
+      ContextMenu.show(e, menuOptions, this.RTL, this.workspace, location);
       ContextMenu.setCurrentBlock(this);
     }
   }

@@ -13,6 +13,7 @@
 
 import type {BlockSvg} from './block_svg.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
+import {Coordinate} from './utils.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -83,6 +84,7 @@ export class ContextMenuRegistry {
   getContextMenuOptions(
     scopeType: ScopeType,
     scope: Scope,
+    menuOpenEvent: Event,
   ): ContextMenuOption[] {
     const menuOptions: ContextMenuOption[] = [];
     for (const item of this.registeredItems.values()) {
@@ -102,7 +104,7 @@ export class ContextMenuRegistry {
             separator: true,
           };
         } else {
-          const precondition = item.preconditionFn(scope);
+          const precondition = item.preconditionFn(scope, menuOpenEvent);
           if (precondition === 'hidden') continue;
 
           const displayText =
@@ -165,12 +167,18 @@ export namespace ContextMenuRegistry {
     /**
      * @param scope Object that provides a reference to the thing that had its
      *     context menu opened.
-     * @param e The original event that triggered the context menu to open. Not
-     *     the event that triggered the click on the option.
+     * @param menuOpenEvent The original event that triggered the context menu to open.
+     * @param menuSelectEvent The event that triggered the option being selected.
+     * @param location The location in screen coordinates where the menu was opened.
      */
-    callback: (scope: Scope, e: PointerEvent) => void;
+    callback: (
+      scope: Scope,
+      menuOpenEvent: Event,
+      menuSelectEvent: Event,
+      location: Coordinate,
+    ) => void;
     displayText: ((p1: Scope) => string | HTMLElement) | string | HTMLElement;
-    preconditionFn: (p1: Scope) => string;
+    preconditionFn: (p1: Scope, menuOpenEvent: Event) => string;
     separator?: never;
   }
 
@@ -206,10 +214,16 @@ export namespace ContextMenuRegistry {
     /**
      * @param scope Object that provides a reference to the thing that had its
      *     context menu opened.
-     * @param e The original event that triggered the context menu to open. Not
-     *     the event that triggered the click on the option.
+     * @param menuOpenEvent The original event that triggered the context menu to open.
+     * @param menuSelectEvent The event that triggered the option being selected.
+     * @param location The location in screen coordinates where the menu was opened.
      */
-    callback: (scope: Scope, e: PointerEvent) => void;
+    callback: (
+      scope: Scope,
+      menuOpenEvent: Event,
+      menuSelectEvent: Event,
+      location: Coordinate,
+    ) => void;
     separator?: never;
   }
 

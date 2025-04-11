@@ -21,6 +21,7 @@ import {Menu} from './menu.js';
 import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
 import * as serializationBlocks from './serialization/blocks.js';
+import {Coordinate} from './utils.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
@@ -38,6 +39,8 @@ const dummyOwner = {};
 
 /**
  * Gets the block the context menu is currently attached to.
+ * It is not recommended that you use this function; instead,
+ * use the scope object passed to the context menu callback.
  *
  * @returns The block the context menu is attached to.
  */
@@ -62,26 +65,38 @@ let menu_: Menu | null = null;
 /**
  * Construct the menu based on the list of options and show the menu.
  *
- * @param e Mouse event.
+ * @param menuOpenEvent Event that caused the menu to open.
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
  * @param workspace The workspace associated with the context menu, if any.
+ * @param location The screen coordinates at which to show the menu.
  */
 export function show(
-  e: PointerEvent,
+  menuOpenEvent: Event,
   options: (ContextMenuOption | LegacyContextMenuOption)[],
   rtl: boolean,
   workspace?: WorkspaceSvg,
+  location?: Coordinate,
 ) {
   WidgetDiv.show(dummyOwner, rtl, dispose, workspace);
   if (!options.length) {
     hide();
     return;
   }
-  const menu = populate_(options, rtl, e);
+
+  if (!location) {
+    if (menuOpenEvent instanceof PointerEvent) {
+      location = new Coordinate(menuOpenEvent.clientX, menuOpenEvent.clientY);
+    } else {
+      // We got a keyboard event that didn't tell us where to open the menu, so just guess
+      console.warn('Context menu opened with keyboard but no location given');
+      location = new Coordinate(0, 0);
+    }
+  }
+  const menu = populate_(options, rtl, menuOpenEvent, location);
   menu_ = menu;
 
-  position_(menu, e, rtl);
+  position_(menu, rtl, location);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
   setTimeout(function () {
@@ -95,13 +110,15 @@ export function show(
  *
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
- * @param e The event that triggered the context menu to open.
+ * @param menuOpenEvent The event that triggered the context menu to open.
+ * @param location The screen coordinates at which to show the menu.
  * @returns The menu that will be shown on right click.
  */
 function populate_(
   options: (ContextMenuOption | LegacyContextMenuOption)[],
   rtl: boolean,
-  e: PointerEvent,
+  menuOpenEvent: Event,
+  location: Coordinate,
 ): Menu {
   /* Here's what one option object looks like:
       {text: 'Make It So',
@@ -123,7 +140,7 @@ function populate_(
     menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      const actionHandler = function () {
+      const actionHandler = function (p1: MenuItem, menuSelectEvent: Event) {
         hide();
         requestAnimationFrame(() => {
           setTimeout(() => {
@@ -131,7 +148,12 @@ function populate_(
             // will not be expecting a scope parameter, so there should be
             // no problems. Just assume it is a ContextMenuOption and we'll
             // pass undefined if it's not.
-            option.callback((option as ContextMenuOption).scope, e);
+            option.callback(
+              (option as ContextMenuOption).scope,
+              menuOpenEvent,
+              menuSelectEvent,
+              location,
+            );
           }, 0);
         });
       };
@@ -145,21 +167,19 @@ function populate_(
  * Add the menu to the page and position it correctly.
  *
  * @param menu The menu to add and position.
- * @param e Mouse event for the right click that is making the context
- *     menu appear.
  * @param rtl True if RTL, false if LTR.
+ * @param location The location at which to anchor the menu.
  */
-function position_(menu: Menu, e: Event, rtl: boolean) {
+function position_(menu: Menu, rtl: boolean, location: Coordinate) {
   // Record windowSize and scrollOffset before adding menu.
   const viewportBBox = svgMath.getViewportBBox();
-  const mouseEvent = e as MouseEvent;
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
   const anchorBBox = new Rect(
-    mouseEvent.clientY + viewportBBox.top,
-    mouseEvent.clientY + viewportBBox.top,
-    mouseEvent.clientX + viewportBBox.left,
-    mouseEvent.clientX + viewportBBox.left,
+    location.y + viewportBBox.top,
+    location.y + viewportBBox.top,
+    location.x + viewportBBox.left,
+    location.x + viewportBBox.left,
   );
 
   createWidget_(menu);

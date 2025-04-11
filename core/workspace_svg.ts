@@ -37,7 +37,7 @@ import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Flyout} from './flyout_base.js';
 import type {FlyoutButton} from './flyout_button.js';
-import {getFocusManager} from './focus_manager.js';
+import {getFocusManager, TreeCustomizationCallbacks} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -87,6 +87,8 @@ import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
 import type {Field} from './field.js';
+import * as aria from './utils/aria.js';
+import {Msg} from './msg.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -770,9 +772,13 @@ export class WorkspaceSvg
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {
       'class': 'blocklyWorkspace',
-      'tabindex': '-1',
+      // TODO: Verify whether using this or opt_backgroundClass is a reasonable proxy for the main workspace, or if something else should be used.
+      'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
     });
+    if (injectionDiv) {
+      aria.setState(this.svgGroup_, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
+    }
 
     // Note that a <g> alone does not receive mouse events--it must have a
     // valid target inside it.  If no background class is specified, as in the
@@ -849,7 +855,23 @@ export class WorkspaceSvg
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
 
-    getFocusManager().registerTree(this);
+    const customizationOptions: TreeCustomizationCallbacks = {
+      Initialize: () => {
+        // TODO: This doesn't handle the idea of starting in a preset location like the plugin does.
+        return this.getTopBlocks(true)[0] ?? null;
+      },
+      // TODO: Perhaps synchronize here could select the block? Would drastically simplify selection management in cursor (I think).
+      Synchronize: null,
+      BlurFocus: () => {
+        // TODO: make sure this works correctly for a permanent flyout.
+        // If the flyout loses focus, make sure to close it.
+        if (this.isFlyout) {
+          // TODO: fix this as it doesn't seem to work (it gets triggered correctly, hide() just doesn't seem to do anything).
+          this.getFlyout()?.hide();
+        }
+      }
+    };
+    getFocusManager().registerTree(this, customizationOptions);
 
     return this.svgGroup_;
   }
@@ -2632,10 +2654,6 @@ export class WorkspaceSvg
     return this;
   }
 
-  getFocusedNode(): IFocusableNode | null {
-    return FocusableTreeTraverser.findFocusedNode(this);
-  }
-
   getRootFocusableNode(): IFocusableNode {
     return this;
   }
@@ -2658,12 +2676,6 @@ export class WorkspaceSvg
       }
       return null;
     } else return this.getBlockById(id) as IFocusableNode;
-  }
-
-  findFocusableNodeFor(
-    element: HTMLElement | SVGElement,
-  ): IFocusableNode | null {
-    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
   }
 }
 

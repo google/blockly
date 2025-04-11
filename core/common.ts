@@ -82,6 +82,7 @@ export function getMainWorkspace(): Workspace {
  * @param workspace The most recently used top level workspace.
  */
 export function setMainWorkspace(workspace: Workspace) {
+  console.log('@@@@@@ set main workspace:', workspace.id);
   mainWorkspace = workspace;
 }
 

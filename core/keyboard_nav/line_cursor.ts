@@ -757,7 +757,13 @@ export class LineCursor extends Marker {
         block = block.getParent();
       }
       if (block) {
-        this.setCurNode(ASTNode.createBlockNode(block), false);
+        if (block.getRootBlock() === block && this.workspace.isFlyout) {
+          // This block actually represents a stack. Note that this is needed
+          // because ASTNode special cases stack for cross-block navigation.
+          this.setCurNode(ASTNode.createStackNode(block), false);
+        } else {
+          this.setCurNode(ASTNode.createBlockNode(block), false);
+        }
       }
     }
   }

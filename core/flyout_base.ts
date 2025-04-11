@@ -322,7 +322,7 @@ export abstract class Flyout
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
 
-    getFocusManager().registerTree(this);
+    // getFocusManager().registerTree(this);
 
     return this.svgGroup_;
   }
@@ -405,7 +405,7 @@ export abstract class Flyout
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
-    getFocusManager().unregisterTree(this);
+    // getFocusManager().unregisterTree(this);
   }
 
   /**
@@ -971,38 +971,27 @@ export abstract class Flyout
   }
 
   getFocusableElement(): HTMLElement | SVGElement {
-    if (!this.svgGroup_) {
-      throw new Error("Flyout has no DOM created.");
-    }
-    return this.svgGroup_;
+    return this.workspace_.getFocusableElement();
   }
 
   getFocusableTree(): IFocusableTree {
-    return this;
-  }
-
-  getFocusedNode(): IFocusableNode | null {
-    return FocusableTreeTraverser.findFocusedNode(this);
+    return this.workspace_.getFocusableTree();
   }
 
   getRootFocusableNode(): IFocusableNode {
-    return this;
+    return this.workspace_.getRootFocusableNode();
   }
 
   getNestedTrees(): Array<IFocusableTree> {
-    return [];
+    return this.workspace_.getNestedTrees();
   }
 
   lookUpFocusableNode(id: string): IFocusableNode | null {
-    return this.getContents()
-      .filter((item) => item instanceof isFocusableNode)
-      .map((item) => item as unknown as IFocusableNode)
-      .find((node) => node.getFocusableElement().id == id) ?? null;
-  }
-
-  findFocusableNodeFor(
-    element: HTMLElement | SVGElement,
-  ): IFocusableNode | null {
-    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
+    return this.workspace_.lookUpFocusableNode(id);
+    // TODO: This may violate the cross-subtree boundary (since flyout contains a workspace that is itself a tree).
+    // return this.getContents()
+    //   .filter((item) => isFocusableNode(item))
+    //   .map((item) => item as unknown as IFocusableNode)
+    //   .find((node) => node.getFocusableElement().id == id) ?? null;
   }
 }

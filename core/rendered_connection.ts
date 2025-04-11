@@ -45,8 +45,8 @@ export class RenderedConnection extends Connection implements IFocusableNode {
   private trackedState: TrackedState;
   private highlighted: boolean = false;
   private constants: ConstantProvider;
-  private svgGroup: SVGElement | null = null;
-  private svgPath: SVGElement | null = null;
+  private svgGroup: SVGElement;
+  private svgPath: SVGElement;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection | null = null;
@@ -78,6 +78,41 @@ export class RenderedConnection extends Connection implements IFocusableNode {
     this.trackedState = RenderedConnection.TrackedState.WILL_TRACK;
 
     this.constants = (source.workspace as WorkspaceSvg).getRenderer().getConstants();
+
+    this.svgGroup = dom.createSvgElement(
+      Svg.G,
+      {
+        'class': 'blocklyCursor',
+        'width': this.constants.CURSOR_WS_WIDTH,
+        'height': this.constants.WS_CURSOR_HEIGHT,
+      }
+    );
+
+    this.svgPath = dom.createSvgElement(
+      Svg.PATH,
+      {'transform': ''},
+      this.svgGroup,
+    );
+
+    // TODO: Ensure this auto-moves with the block.
+    const x = this.getOffsetInBlock().x;
+    const y = this.getOffsetInBlock().y;
+
+    const path =
+      svgPaths.moveTo(0, 0) +
+      'c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5';
+      // TODO: It seems that constants isn't yet initialized at this point.
+      // (this.constants.shapeFor(this) as PuzzleTab).pathDown;
+    this.svgPath.setAttribute('d', path);
+    this.svgPath.setAttribute(
+      'transform',
+      'translate(' +
+        x +
+        ',' +
+        y +
+        ')' +
+        (this.sourceBlock_.workspace.RTL ? ' scale(-1 1)' : ''),
+    );
   }
 
   /**
@@ -566,41 +601,6 @@ export class RenderedConnection extends Connection implements IFocusableNode {
       const visible = parentInput.isVisible();
       childBlock.getSvgRoot().style.display = visible ? 'block' : 'none';
     }
-
-    this.svgGroup = dom.createSvgElement(
-      Svg.G,
-      {
-        'class': 'blocklyCursor',
-        'width': this.constants.CURSOR_WS_WIDTH,
-        'height': this.constants.WS_CURSOR_HEIGHT,
-      }
-    );
-
-    this.svgPath = dom.createSvgElement(
-      Svg.PATH,
-      {'transform': ''},
-      this.svgGroup,
-    );
-
-    // TODO: Ensure this auto-moves with the block.
-    const x = this.getOffsetInBlock().x;
-    const y = this.getOffsetInBlock().y;
-
-    const path =
-      svgPaths.moveTo(0, 0) +
-      'c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5';
-      // TODO: It seems that constants isn't yet initialized at this point.
-      // (this.constants.shapeFor(this) as PuzzleTab).pathDown;
-    this.svgPath.setAttribute('d', path);
-    this.svgPath.setAttribute(
-      'transform',
-      'translate(' +
-        x +
-        ',' +
-        y +
-        ')' +
-        (this.sourceBlock_.workspace.RTL ? ' scale(-1 1)' : ''),
-    );
   }
 
   /**
@@ -637,9 +637,6 @@ export class RenderedConnection extends Connection implements IFocusableNode {
   }
 
   getFocusableElement(): HTMLElement | SVGElement {
-    if (!this.svgGroup) {
-      throw Error("This connection hasn't been connected.");
-    }
     return this.svgGroup;
   }
 

@@ -22,7 +22,7 @@ import {DeleteArea} from '../delete_area.js';
 import '../events/events_toolbox_item_select.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
-import {getFocusManager} from '../focus_manager.js';
+import {getFocusManager, TreeCustomizationCallbacks} from '../focus_manager.js';
 import type {IAutoHideable} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 import {isDeletable} from '../interfaces/i_deletable.js';
@@ -172,7 +172,22 @@ export class Toolbox
         ComponentManager.Capability.DRAG_TARGET,
       ],
     });
-    getFocusManager().registerTree(this);
+    const customizationOptions: TreeCustomizationCallbacks = {
+      Initialize: () => {
+        return this.getToolboxItems().find((item) =>
+          item.isSelectable()) ?? null;
+      },
+      Synchronize: (node: IFocusableNode) => {
+        if (node !== this) {
+          // Only select the item if it isn't already selected as to not toggle.
+          if (this.getSelectedItem() !== node) {
+            this.setSelectedItem(node as IToolboxItem);
+          }
+        } else this.clearSelection();
+      },
+      BlurFocus: null
+    };
+    getFocusManager().registerTree(this, customizationOptions);
   }
 
   /**
@@ -187,7 +202,6 @@ export class Toolbox
     const container = this.createContainer_();
 
     this.contentsDiv_ = this.createContentsContainer_();
-    this.contentsDiv_.tabIndex = 0;
     aria.setRole(this.contentsDiv_, aria.Role.TREE);
     container.appendChild(this.contentsDiv_);
 
@@ -204,6 +218,7 @@ export class Toolbox
    */
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = document.createElement('div');
+    toolboxContainer.tabIndex = 0;
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolbox');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
@@ -1100,10 +1115,6 @@ export class Toolbox
     return this;
   }
 
-  getFocusedNode(): IFocusableNode | null {
-    return FocusableTreeTraverser.findFocusedNode(this);
-  }
-
   getRootFocusableNode(): IFocusableNode {
     return this;
   }
@@ -1114,12 +1125,6 @@ export class Toolbox
 
   lookUpFocusableNode(id: string): IFocusableNode | null {
     return this.getToolboxItemById(id) as IFocusableNode;
-  }
-
-  findFocusableNodeFor(
-    element: HTMLElement | SVGElement,
-  ): IFocusableNode | null {
-    return FocusableTreeTraverser.findFocusableNodeFor(element, this);
   }
 }
 

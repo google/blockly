@@ -286,8 +286,7 @@ export class RenderedWorkspaceComment
   /** Show a context menu for this comment. */
   showContextMenu(e: Event): void {
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-      ContextMenuRegistry.ScopeType.COMMENT,
-      {comment: this},
+      {comment: this, focusedNode: this},
       e,
     );
 

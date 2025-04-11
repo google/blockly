@@ -1711,8 +1711,7 @@ export class WorkspaceSvg
       return;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-      ContextMenuRegistry.ScopeType.WORKSPACE,
-      {workspace: this},
+      {workspace: this, focusedNode: this},
       e,
     );
 

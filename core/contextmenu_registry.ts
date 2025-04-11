@@ -13,6 +13,7 @@
 
 import type {BlockSvg} from './block_svg.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -71,56 +72,60 @@ export class ContextMenuRegistry {
   }
 
   /**
-   * Gets the valid context menu options for the given scope type (e.g. block or
-   * workspace) and scope. Blocks are only shown if the preconditionFn shows
+   * Gets the valid context menu options for the given scope.
+   * Options are only included if the preconditionFn shows
    * they should not be hidden.
    *
-   * @param scopeType Type of scope where menu should be shown (e.g. on a block
-   *     or on a workspace)
    * @param scope Current scope of context menu (i.e., the exact workspace or
-   *     block being clicked on)
+   *     block being clicked on).
+   * @param menuOpenEvent Event that caused the menu to open.
    * @returns the list of ContextMenuOptions
    */
   getContextMenuOptions(
-    scopeType: ScopeType,
     scope: Scope,
     menuOpenEvent: Event,
   ): ContextMenuOption[] {
     const menuOptions: ContextMenuOption[] = [];
     for (const item of this.registeredItems.values()) {
-      if (scopeType === item.scopeType) {
-        let menuOption:
-          | ContextMenuRegistry.CoreContextMenuOption
-          | ContextMenuRegistry.SeparatorContextMenuOption
-          | ContextMenuRegistry.ActionContextMenuOption;
-        menuOption = {
-          scope,
-          weight: item.weight,
-        };
-
-        if (item.separator) {
-          menuOption = {
-            ...menuOption,
-            separator: true,
-          };
-        } else {
-          const precondition = item.preconditionFn(scope, menuOpenEvent);
-          if (precondition === 'hidden') continue;
-
-          const displayText =
-            typeof item.displayText === 'function'
-              ? item.displayText(scope)
-              : item.displayText;
-          menuOption = {
-            ...menuOption,
-            text: displayText,
-            callback: item.callback,
-            enabled: precondition === 'enabled',
-          };
-        }
-
-        menuOptions.push(menuOption);
+      if (item.scopeType) {
+        // If the scopeType is present, check to make sure
+        // that the option is compatible with the current scope
+        if (item.scopeType === ScopeType.BLOCK && !scope.block) continue;
+        if (item.scopeType === ScopeType.COMMENT && !scope.comment) continue;
+        if (item.scopeType === ScopeType.WORKSPACE && !scope.workspace)
+          continue;
       }
+      let menuOption:
+        | ContextMenuRegistry.CoreContextMenuOption
+        | ContextMenuRegistry.SeparatorContextMenuOption
+        | ContextMenuRegistry.ActionContextMenuOption;
+      menuOption = {
+        scope,
+        weight: item.weight,
+      };
+
+      if (item.separator) {
+        menuOption = {
+          ...menuOption,
+          separator: true,
+        };
+      } else {
+        const precondition = item.preconditionFn(scope, menuOpenEvent);
+        if (precondition === 'hidden') continue;
+
+        const displayText =
+          typeof item.displayText === 'function'
+            ? item.displayText(scope)
+            : item.displayText;
+        menuOption = {
+          ...menuOption,
+          text: displayText,
+          callback: item.callback,
+          enabled: precondition === 'enabled',
+        };
+      }
+
+      menuOptions.push(menuOption);
     }
     menuOptions.sort(function (a, b) {
       return a.weight - b.weight;
@@ -142,20 +147,22 @@ export namespace ContextMenuRegistry {
   }
 
   /**
-   * The actual workspace/block where the menu is being rendered. This is passed
-   * to callback and displayText functions that depend on this information.
+   * The actual workspace/block/focused object where the menu is being
+   * rendered. This is passed to callback and displayText functions
+   * that depend on this information.
    */
   export interface Scope {
     block?: BlockSvg;
     workspace?: WorkspaceSvg;
     comment?: RenderedWorkspaceComment;
+    focusedNode?: IFocusableNode | any; // TODO: Remove any once Block, etc. implement IFocusableNode
   }
 
   /**
    * Fields common to all context menu registry items.
    */
   interface CoreRegistryItem {
-    scopeType: ScopeType;
+    scopeType?: ScopeType;
     weight: number;
     id: string;
   }

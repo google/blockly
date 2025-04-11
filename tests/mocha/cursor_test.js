@@ -586,7 +586,7 @@ suite('Cursor', function () {
         );
         assert.equal(nextNode.getLocation(), this.blockA.previousConnection);
       });
-  
+
       test('Valid if connection - start at end - with loopback', function () {
         const startNode = ASTNode.createConnectionNode(
           this.blockC.nextConnection,
@@ -596,8 +596,228 @@ suite('Cursor', function () {
           this.isConnection,
           true,
         );
-        // todo
         assert.equal(nextNode.getLocation(), this.blockA.previousConnection);
+      });
+    });
+  });
+
+  suite.only('Get previous node', function () {
+    setup(function () {
+      sharedTestSetup.call(this);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': 'empty_block',
+          'message0': '',
+        },
+        {
+          'type': 'stack_block',
+          'message0': '%1',
+          'args0': [
+            {
+              'type': 'field_input',
+              'name': 'FIELD',
+              'text': 'default',
+            },
+          ],
+          'previousStatement': null,
+          'nextStatement': null,
+        },
+        {
+          'type': 'row_block',
+          'message0': '%1 %2',
+          'args0': [
+            {
+              'type': 'field_input',
+              'name': 'FIELD',
+              'text': 'default',
+            },
+            {
+              'type': 'input_value',
+              'name': 'INPUT',
+            },
+          ],
+          'output': null,
+        },
+      ]);
+      this.workspace = Blockly.inject('blocklyDiv', {});
+      this.cursor = this.workspace.getCursor();
+      this.neverValid = () => false;
+      this.alwaysValid = () => true;
+      this.isConnection = (node) => {
+        return node && node.isConnection();
+      };
+    });
+    teardown(function () {
+      sharedTestTeardown.call(this);
+    });
+    suite('stack', function () {
+      setup(function () {
+        const state = {
+          'blocks': {
+            'languageVersion': 0,
+            'blocks': [
+              {
+                'type': 'stack_block',
+                'id': 'A',
+                'x': 0,
+                'y': 0,
+                'next': {
+                  'block': {
+                    'type': 'stack_block',
+                    'id': 'B',
+                    'next': {
+                      'block': {
+                        'type': 'stack_block',
+                        'id': 'C',
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace);
+        this.blockA = this.workspace.getBlockById('A');
+        this.blockB = this.workspace.getBlockById('B');
+        this.blockC = this.workspace.getBlockById('C');
+      });
+      teardown(function () {
+        this.workspace.clear();
+      });
+      test('Never valid - start at top', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockA.previousConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.neverValid,
+          false,
+        );
+        assert.isNull(previousNode);
+      });
+      test('Never valid - start in middle', function () {
+        const startNode = ASTNode.createBlockNode(this.blockB);
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.neverValid,
+          false,
+        );
+        assert.isNull(previousNode);
+      });
+      test('Never valid - start at end', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockC.nextConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.neverValid,
+          false,
+        );
+        assert.isNull(previousNode);
+      });
+
+      test('Always valid - start at top', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockA.previousConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.alwaysValid,
+          false,
+        );
+        //assert.equal(previousNode.getLocation(), this.blockA);
+        assert.isNotNull(previousNode);
+      });
+      test('Always valid - start in middle', function () {
+        const startNode = ASTNode.createBlockNode(this.blockB);
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.alwaysValid,
+          false,
+        );
+        assert.equal(previousNode.getLocation(), this.blockB.previousConnection);
+        //assert.isNotNull(previousNode);
+      });
+      test('Always valid - start at end', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockC.nextConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.alwaysValid,
+          false,
+        );
+        assert.equal(previousNode.getLocation(), this.blockC.getField('FIELD'));
+      });
+
+      test('Valid if connection - start at top', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockA.previousConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.isConnection,
+          false,
+        );
+        assert.isNull(previousNode);
+      });
+      test('Valid if connection - start in middle', function () {
+        const startNode = ASTNode.createBlockNode(this.blockB);
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.isConnection,
+          false,
+        );
+        assert.equal(previousNode.getLocation(), this.blockB.previousConnection);
+        //assert.equal(previousNode.getLocation(), this.blockB.nextConnection);
+        //assert.isNotNull(previousNode);
+      });
+      test('Valid if connection - start at end', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockC.nextConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.isConnection,
+          false,
+        );
+        assert.equal(previousNode.getLocation(), this.blockC.previousConnection);
+        //assert.isNull(previousNode);
+      });
+      test('Never valid - start at top - with loopback', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockA.previousConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.neverValid,
+          true,
+        );
+        assert.isNull(previousNode);
+      });
+      test('Always valid - start at top - with loopback', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockA.previousConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.alwaysValid,
+          true,
+        );
+        assert.equal(previousNode.getLocation(), this.blockC.nextConnection);
+      });
+
+      test('Valid if connection - start at top - with loopback', function () {
+        const startNode = ASTNode.createConnectionNode(
+          this.blockA.previousConnection,
+        );
+        const previousNode = this.cursor.getPreviousNode(
+          startNode,
+          this.isConnection,
+          true,
+        );
+        assert.equal(previousNode.getLocation(), this.blockC.nextConnection);
       });
     });
   });

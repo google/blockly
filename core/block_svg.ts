@@ -624,7 +624,7 @@ export class BlockSvg
     const fieldBoundingClientRect = this.inputList
       .filter((input) => input.isVisible())
       .flatMap((input) => input.fieldRow)
-      .filter((f) => f.isVisible())[0]
+      .find((f) => f.isVisible())
       ?.getSvgRoot()
       ?.getBoundingClientRect();
 
@@ -633,7 +633,10 @@ export class BlockSvg
         ? fieldBoundingClientRect.y + fieldBoundingClientRect.height
         : blockCoords.y + this.height;
 
-    return new Coordinate(blockCoords.x + 5, y + 5);
+    return new Coordinate(
+      this.RTL ? blockCoords.x - 5 : blockCoords.x + 5,
+      y + 5,
+    );
   }
 
   /**

@@ -70,7 +70,6 @@ let menu_: Menu | null = null;
  * @param rtl True if RTL, false if LTR.
  * @param workspace The workspace associated with the context menu, if any.
  * @param location The screen coordinates at which to show the menu.
- * @param location
  */
 export function show(
   menuOpenEvent: Event,

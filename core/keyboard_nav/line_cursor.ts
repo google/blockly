@@ -328,7 +328,7 @@ export class LineCursor extends Marker {
    * @param node The current position in the AST.
    * @param isValid A function true/false depending on whether the given node
    *     should be traversed.
-   * @param boolean Whether to loop around to the beginning of the workspace if
+   * @param loop Whether to loop around to the beginning of the workspace if
    *     novalid node was found.
    * @returns The next node in the traversal.
    */
@@ -382,7 +382,7 @@ export class LineCursor extends Marker {
    * @param node The current position in the AST.
    * @param isValid A function true/false depending on whether the given node
    *     should be traversed.
-   * @param boolean Whether to loop around to the end of the workspace if no
+   * @param loop Whether to loop around to the end of the workspace if no
    *     valid node was found.
    * @returns The previous node in the traversal or null if no previous node
    *     exists.

@@ -800,7 +800,7 @@ suite('Cursor', function () {
         );
         assert.isNull(previousNode);
       });
-      test.skip('Always valid - start at top - with loopback', function () {
+      test('Always valid - start at top - with loopback', function () {
         const startNode = ASTNode.createConnectionNode(
           this.blockA.previousConnection,
         );
@@ -809,9 +809,9 @@ suite('Cursor', function () {
           this.alwaysValid,
           true,
         );
-        assert.equal(previousNode.getLocation(), this.blockC.nextConnection);
+        // Previous node will be a stack node in this case.
+        assert.equal(previousNode.getLocation(), this.blockA);
       });
-
       test('Valid if connection - start at top - with loopback', function () {
         const startNode = ASTNode.createConnectionNode(
           this.blockA.previousConnection,

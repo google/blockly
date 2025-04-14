@@ -468,7 +468,7 @@ export class ASTNode {
           return ASTNode.createFieldNode(field);
         }
       }
-      if (input.connection) {
+      if (input.connection && input.isVisible()) {
         return ASTNode.createInputNode(input);
       }
     }

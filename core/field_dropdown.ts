@@ -30,7 +30,6 @@ import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import * as utilsString from './utils/string.js';
-import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 
 /**
@@ -276,16 +275,18 @@ export class FieldDropdown extends Field<string> {
       throw new UnattachedFieldError();
     }
     this.dropdownCreate();
+    if (!this.menu_) return;
+
     if (e && typeof e.clientX === 'number') {
-      this.menu_!.openingCoords = new Coordinate(e.clientX, e.clientY);
+      this.menu_.openingCoords = new Coordinate(e.clientX, e.clientY);
     } else {
-      this.menu_!.openingCoords = null;
+      this.menu_.openingCoords = null;
     }
 
     // Remove any pre-existing elements in the dropdown.
     dropDownDiv.clearContent();
     // Element gets created in render.
-    const menuElement = this.menu_!.render(dropDownDiv.getContentDiv());
+    const menuElement = this.menu_.render(dropDownDiv.getContentDiv());
     dom.addClass(menuElement, 'blocklyDropdownMenu');
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {
@@ -296,18 +297,15 @@ export class FieldDropdown extends Field<string> {
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
+    dropDownDiv.getContentDiv().style.height = `${this.menu_.getSize().height}px`;
+
     // Focusing needs to be handled after the menu is rendered and positioned.
     // Otherwise it will cause a page scroll to get the misplaced menu in
     // view. See issue #1329.
-    this.menu_!.focus();
+    this.menu_.focus();
 
     if (this.selectedMenuItem) {
-      this.menu_!.setHighlighted(this.selectedMenuItem);
-      style.scrollIntoContainerView(
-        this.selectedMenuItem.getElement()!,
-        dropDownDiv.getContentDiv(),
-        true,
-      );
+      this.menu_.setHighlighted(this.selectedMenuItem);
     }
 
     this.applyColour();

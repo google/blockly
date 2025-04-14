@@ -1702,6 +1702,16 @@ export class BlockSvg
     );
   }
 
+  /**
+   * Returns the drag strategy currently in use by this block.
+   *
+   * @internal
+   * @returns This block's drag strategy.
+   */
+  getDragStrategy(): IDragStrategy {
+    return this.dragStrategy;
+  }
+
   /** Sets the drag strategy for this block. */
   setDragStrategy(dragStrategy: IDragStrategy) {
     this.dragStrategy = dragStrategy;

@@ -168,13 +168,11 @@ export namespace ContextMenuRegistry {
      * @param scope Object that provides a reference to the thing that had its
      *     context menu opened.
      * @param menuOpenEvent The original event that triggered the context menu to open.
-     * @param menuSelectEvent The event that triggered the option being selected.
      * @param location The location in screen coordinates where the menu was opened.
      */
     callback: (
       scope: Scope,
       menuOpenEvent: Event,
-      menuSelectEvent: Event,
       location: Coordinate,
     ) => void;
     displayText: ((p1: Scope) => string | HTMLElement) | string | HTMLElement;
@@ -215,13 +213,11 @@ export namespace ContextMenuRegistry {
      * @param scope Object that provides a reference to the thing that had its
      *     context menu opened.
      * @param menuOpenEvent The original event that triggered the context menu to open.
-     * @param menuSelectEvent The event that triggered the option being selected.
      * @param location The location in screen coordinates where the menu was opened.
      */
     callback: (
       scope: Scope,
       menuOpenEvent: Event,
-      menuSelectEvent: Event,
       location: Coordinate,
     ) => void;
     separator?: never;

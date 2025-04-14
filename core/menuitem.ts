@@ -41,8 +41,7 @@ export class MenuItem {
   private highlight = false;
 
   /** Bound function to call when this menu item is clicked. */
-  private actionHandler: ((obj: this, menuSelectEvent: Event) => void) | null =
-    null;
+  private actionHandler: ((obj: this) => void) | null = null;
 
   /**
    * @param content Text caption to display as the content of the item, or a
@@ -221,14 +220,11 @@ export class MenuItem {
    * Performs the appropriate action when the menu item is activated
    * by the user.
    *
-   * @param menuSelectEvent the event that triggered the selection
-   * of the menu item.
-   *
    * @internal
    */
-  performAction(menuSelectEvent: Event) {
+  performAction() {
     if (this.isEnabled() && this.actionHandler) {
-      this.actionHandler(this, menuSelectEvent);
+      this.actionHandler(this);
     }
   }
 
@@ -240,7 +236,7 @@ export class MenuItem {
    * @param obj Used as the 'this' object in fn when called.
    * @internal
    */
-  onAction(fn: (p1: MenuItem, menuSelectEvent: Event) => void, obj: object) {
+  onAction(fn: (p1: MenuItem) => void, obj: object) {
     this.actionHandler = fn.bind(obj);
   }
 }

@@ -379,7 +379,7 @@ export class Menu {
 
     const menuItem = this.getMenuItem(e.target as Element);
     if (menuItem) {
-      menuItem.performAction(e);
+      menuItem.performAction();
     }
   }
 
@@ -431,7 +431,7 @@ export class Menu {
       case 'Enter':
       case ' ':
         if (highlighted) {
-          highlighted.performAction(e);
+          highlighted.performAction();
         }
         break;
 

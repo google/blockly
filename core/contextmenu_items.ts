@@ -614,12 +614,7 @@ export function registerCommentCreate() {
     preconditionFn: (scope: Scope) => {
       return scope.workspace?.isMutator ? 'hidden' : 'enabled';
     },
-    callback: (
-      scope: Scope,
-      menuOpenEvent: Event,
-      menuSelectEvent: Event,
-      location: Coordinate,
-    ) => {
+    callback: (scope: Scope, menuOpenEvent: Event, location: Coordinate) => {
       const workspace = scope.workspace;
       if (!workspace) return;
       eventUtils.setGroup(true);

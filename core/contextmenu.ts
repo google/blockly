@@ -140,7 +140,7 @@ function populate_(
     menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      const actionHandler = function (p1: MenuItem, menuSelectEvent: Event) {
+      const actionHandler = function () {
         hide();
         requestAnimationFrame(() => {
           setTimeout(() => {
@@ -151,7 +151,6 @@ function populate_(
             option.callback(
               (option as ContextMenuOption).scope,
               menuOpenEvent,
-              menuSelectEvent,
               location,
             );
           }, 0);

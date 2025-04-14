@@ -23,6 +23,7 @@ import type {Abstract} from './events/events_abstract.js';
 import * as eventUtils from './events/utils.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import type {IVariableMap} from './interfaces/i_variable_map.js';
 import type {
@@ -43,7 +44,7 @@ import * as Variables from './variables.js';
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
  */
-export class Workspace implements IASTNodeLocation {
+export class Workspace implements IASTNodeLocation, INavigable {
   /**
    * Angle away from the horizontal to sweep for blocks.  Order of execution is
    * generally top to bottom, but a small angle changes the scan to give a bit
@@ -967,5 +968,33 @@ export class Workspace implements IASTNodeLocation {
   setIsReadOnly(readOnly: boolean) {
     this.readOnly = readOnly;
     this.options.readOnly = readOnly;
+  }
+
+  in(): INavigable | null {
+    return this.getTopBlocks(true)[0] ?? null;
+  }
+
+  out(): INavigable | null {
+    return null;
+  }
+
+  next(): INavigable | null {
+    return null;
+  }
+
+  prev(): INavigable | null {
+    return null;
+  }
+
+  isNewline() {
+    return false;
+  }
+
+  isInline() {
+    return false;
+  }
+
+  isNavigable() {
+    return true;
   }
 }

@@ -580,7 +580,7 @@ suite('ASTNode', function () {
         const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
         assert.equal(inNode.getLocation(), field);
       });
-      test('fromBlockToPrevious', function () {
+      test('fromBlockToPrevious actually stack', function () {
         const prevConnection = this.blocks.statementInput4.previousConnection;
         const node = ASTNode.createStackNode(this.blocks.statementInput4);
         const inNode = node.in();

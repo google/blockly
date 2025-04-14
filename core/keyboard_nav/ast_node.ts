@@ -22,6 +22,7 @@ import type {FlyoutItem} from '../flyout_item.js';
 import type {Input} from '../inputs/input.js';
 import type {IASTNodeLocation} from '../interfaces/i_ast_node_location.js';
 import type {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block.js';
+import type {INavigable} from '../interfaces/i_navigable.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {Workspace} from '../workspace.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
@@ -44,7 +45,7 @@ export class ASTNode {
   private static readonly DEFAULT_OFFSET_Y: number = -20;
   private readonly type: string;
   private readonly isConnectionLocation: boolean;
-  private readonly location: IASTNodeLocation;
+  private readonly location: INavigable;
 
   /** The coordinate on the workspace. */
   private wsCoordinate: Coordinate | null = null;
@@ -55,7 +56,7 @@ export class ASTNode {
    * @param location The position in the AST.
    * @param opt_params Optional dictionary of options.
    */
-  constructor(type: string, location: IASTNodeLocation, opt_params?: Params) {
+  constructor(type: string, location: INavigable, opt_params?: Params) {
     if (!location) {
       throw Error('Cannot create a node without a location.');
     }
@@ -97,7 +98,7 @@ export class ASTNode {
    * @returns The current field, connection, workspace, or block the cursor is
    *     on.
    */
-  getLocation(): IASTNodeLocation {
+  getLocation(): INavigable {
     return this.location;
   }
 
@@ -495,13 +496,23 @@ export class ASTNode {
     }
   }
 
+  next(): ASTNode | null {
+    const result = this.next_();
+    if ((result?.getLocation() ?? null) !== this.location.next()) {
+      throw new Error(
+        `${result?.getLocation() ?? null} !== ${this.location.next()}`,
+      );
+    }
+    return result;
+  }
+
   /**
    * Find the element to the right of the current element in the AST.
    *
    * @returns An AST node that wraps the next field, connection, block, or
    *     workspace. Or null if there is no node to the right.
    */
-  next(): ASTNode | null {
+  next_(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.STACK:
         return this.navigateBetweenStacks(true);
@@ -540,6 +551,16 @@ export class ASTNode {
     return null;
   }
 
+  in(): ASTNode | null {
+    const result = this.in_();
+    if ((result?.getLocation() ?? null) !== this.location.in()) {
+      throw new Error(
+        `${result?.getLocation() ?? null} !== ${this.location.in()}`,
+      );
+    }
+    return result;
+  }
+
   /**
    * Find the element one level below and all the way to the left of the current
    * location.
@@ -547,7 +568,7 @@ export class ASTNode {
    * @returns An AST node that wraps the next field, connection, workspace, or
    *     block. Or null if there is nothing below this node.
    */
-  in(): ASTNode | null {
+  in_(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.WORKSPACE: {
         const workspace = this.location as Workspace;
@@ -577,13 +598,23 @@ export class ASTNode {
     return null;
   }
 
+  prev(): ASTNode | null {
+    const result = this.prev_();
+    if ((result?.getLocation() ?? null) !== this.location.prev()) {
+      throw new Error(
+        `${result?.getLocation() ?? null} !== ${this.location.prev()}`,
+      );
+    }
+    return result;
+  }
+
   /**
    * Find the element to the left of the current element in the AST.
    *
    * @returns An AST node that wraps the previous field, connection, workspace
    *     or block. Or null if no node exists to the left. null.
    */
-  prev(): ASTNode | null {
+  prev_(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.STACK:
         return this.navigateBetweenStacks(false);
@@ -622,6 +653,16 @@ export class ASTNode {
     return null;
   }
 
+  out(): ASTNode | null {
+    const result = this.out_();
+    if ((result?.getLocation() ?? null) !== this.location.out()) {
+      throw new Error(
+        `${result?.getLocation() ?? null} !== ${this.location.out()}`,
+      );
+    }
+    return result;
+  }
+
   /**
    * Find the next element that is one position above and all the way to the
    * left of the current location.
@@ -629,7 +670,7 @@ export class ASTNode {
    * @returns An AST node that wraps the next field, connection, workspace or
    *     block. Or null if we are at the workspace level.
    */
-  out(): ASTNode | null {
+  out_(): ASTNode | null {
     switch (this.type) {
       case ASTNode.types.STACK: {
         const block = this.location as Block;
@@ -745,6 +786,7 @@ export class ASTNode {
     if (!input.connection) {
       return null;
     }
+    console.log(`createInputNode connection type ${input.connection.type}`);
     return new ASTNode(ASTNode.types.INPUT, input.connection);
   }
 

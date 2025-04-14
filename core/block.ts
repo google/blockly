@@ -43,6 +43,7 @@ import {ValueInput} from './inputs/value_input.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import {type IIcon} from './interfaces/i_icon.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {
   IVariableModel,
   IVariableState,
@@ -61,7 +62,7 @@ import type {Workspace} from './workspace.js';
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  */
-export class Block implements IASTNodeLocation {
+export class Block implements IASTNodeLocation, INavigable {
   /**
    * An optional callback method to use whenever the block's parent workspace
    * changes. This is usually only called from the constructor, the block type
@@ -2528,6 +2529,81 @@ export class Block implements IASTNodeLocation {
       msg += ' (id="' + this.id + '")';
     }
     return msg;
+  }
+
+  /**
+   * Gets the parent connection on a block.
+   * This is either an output connection, previous connection or undefined.
+   * If both connections exist return the one that is actually connected
+   * to another block.
+   *
+   * @param block The block to find the parent connection on.
+   * @returns The connection connecting to the parent of the block.
+   */
+  protected getParentConnection(): Connection | null {
+    if (!this.outputConnection || this.previousConnection?.isConnected()) {
+      return this.previousConnection;
+    }
+    return this.outputConnection;
+  }
+
+  /**
+   * Navigate between stacks of blocks on the workspace.
+   *
+   * @param forward True to go forward. False to go backwards.
+   * @returns The first block of the next stack or null if there are no blocks
+   *     on the workspace.
+   */
+  private navigateBetweenStacks(forward: boolean): Block | null {
+    const curRoot = this.getRootBlock();
+    const topBlocks = curRoot.workspace.getTopBlocks(true);
+    for (let i = 0; i < topBlocks.length; i++) {
+      const topBlock = topBlocks[i];
+      if (curRoot.id === topBlock.id) {
+        const offset = forward ? 1 : -1;
+        const resultIndex = i + offset;
+        if (resultIndex === -1 || resultIndex === topBlocks.length) {
+          return null;
+        }
+        return topBlocks[resultIndex];
+      }
+    }
+    throw Error(
+      "Couldn't find " + (forward ? 'next' : 'previous') + ' stack?!',
+    );
+  }
+
+  next(): INavigable | null {
+    return this.nextConnection; // ?? this.navigateBetweenStacks(true);
+  }
+
+  prev(): INavigable | null {
+    return this.getParentConnection(); // ?? this.navigateBetweenStacks(false);
+  }
+
+  out(): INavigable | null {
+    const topBlock = this.getTopStackBlock();
+
+    return (
+      topBlock.getParentConnection()?.targetConnection?.getParentInput()
+        ?.connection ?? topBlock
+    );
+  }
+
+  in(): INavigable | null {
+    // TODO: return icon if any
+    for (const input of this.inputList) {
+      for (const field of input.fieldRow) {
+        if (field.isNavigable()) return field;
+      }
+      if (input.connection) return input.connection;
+    }
+
+    return null;
+  }
+
+  isNavigable() {
+    return true;
   }
 }
 

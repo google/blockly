@@ -12,8 +12,8 @@
  */
 // Former goog.module ID: Blockly.Marker
 
+import type {INavigable} from '../interfaces/i_navigable.js';
 import type {MarkerSvg} from '../renderers/common/marker_svg.js';
-import type {ASTNode} from './ast_node.js';
 
 /**
  * Class for a marker.
@@ -24,7 +24,7 @@ export class Marker {
   colour: string | null = null;
 
   /** The current location of the marker. */
-  private curNode: ASTNode | null = null;
+  private curNode: INavigable | null = null;
 
   /**
    * The object in charge of drawing the visual representation of the current
@@ -58,7 +58,7 @@ export class Marker {
    *
    * @returns The current field, connection, or block the marker is on.
    */
-  getCurNode(): ASTNode | null {
+  getCurNode(): INavigable | null {
     return this.curNode;
   }
 
@@ -67,7 +67,7 @@ export class Marker {
    *
    * @param newNode The new location of the marker, or null to remove it.
    */
-  setCurNode(newNode: ASTNode | null) {
+  setCurNode(newNode: INavigable | null) {
     const oldNode = this.curNode;
     this.curNode = newNode;
     this.drawer?.draw(oldNode, this.curNode);

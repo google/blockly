@@ -7,12 +7,12 @@
 // Former goog.module ID: Blockly.IASTNodeLocationWithBlock
 
 import type {Block} from '../block.js';
-import type {IASTNodeLocation} from './i_ast_node_location.js';
+import type {INavigable} from './i_navigable.js';
 
 /**
  * An AST node location that has an associated block.
  */
-export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
+export interface IASTNodeLocationWithBlock extends INavigable {
   /**
    * Get the source block associated with this node.
    *

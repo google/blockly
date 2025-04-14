@@ -19,13 +19,14 @@ import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import * as blocks from './serialization/blocks.js';
 import * as Xml from './xml.js';
 
 /**
  * Class for a connection between blocks.
  */
-export class Connection implements IASTNodeLocationWithBlock {
+export class Connection implements IASTNodeLocationWithBlock, INavigable {
   /** Constants for checking whether two connections are compatible. */
   static CAN_CONNECT = 0;
   static REASON_SELF_CONNECTION = 1;
@@ -721,6 +722,87 @@ export class Connection implements IASTNodeLocationWithBlock {
       return connection;
     }
     return null;
+  }
+
+  in(): INavigable | null {
+    if (this.getParentInput()) {
+      return this.targetConnection;
+    }
+
+    return null;
+  }
+
+  out(): INavigable | null {
+    if (this.getParentInput()) {
+      return this.getSourceBlock();
+    } else if (this.type === ConnectionType.OUTPUT_VALUE) {
+      return this.targetConnection ?? this.getSourceBlock();
+    }
+
+    return this.getSourceBlock().out();
+  }
+
+  next(): INavigable | null {
+    if (this.getParentInput()) {
+      const parentInput = this.getParentInput();
+      const block = parentInput?.getSourceBlock();
+      if (!block || !parentInput) return null;
+
+      const curIdx = block.inputList.indexOf(parentInput);
+      for (let i = curIdx + 1; i < block.inputList.length; i++) {
+        const input = block.inputList[i];
+        const fieldRow = input.fieldRow;
+        for (let j = 0; j < fieldRow.length; j++) {
+          const field = fieldRow[j];
+          if (field.isNavigable()) {
+            return field;
+          }
+        }
+        if (input.connection) {
+          return input.connection;
+        }
+      }
+      return null;
+    } else if (this.type === ConnectionType.NEXT_STATEMENT) {
+      return this.targetConnection;
+    }
+
+    return this.getSourceBlock();
+  }
+
+  prev(): INavigable | null {
+    if (this.getParentInput()) {
+      const parentInput = this.getParentInput();
+      const block = parentInput?.getSourceBlock();
+      if (!block || !parentInput) return null;
+
+      const curIdx = block.inputList.indexOf(parentInput);
+      for (let i = curIdx; i >= 0; i--) {
+        const input = block.inputList[i];
+        if (input.connection && input !== parentInput) {
+          return input.connection;
+        }
+        const fieldRow = input.fieldRow;
+        for (let j = fieldRow.length - 1; j >= 0; j--) {
+          const field = fieldRow[j];
+          if (field.isNavigable()) {
+            return field;
+          }
+        }
+      }
+      return null;
+    } else if (this.type === ConnectionType.PREVIOUS_STATEMENT) {
+      return this.targetConnection && !this.targetConnection.getParentInput()
+        ? this.targetConnection
+        : null;
+    } else if (this.type === ConnectionType.NEXT_STATEMENT) {
+      return this.getSourceBlock();
+    }
+    return null;
+  }
+
+  isNavigable() {
+    return true;
   }
 }
 

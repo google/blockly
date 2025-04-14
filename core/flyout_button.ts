@@ -15,6 +15,7 @@ import type {IASTNodeLocationSvg} from './blockly.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRenderedElement} from './interfaces/i_rendered_element.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -29,7 +30,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a button or label in the flyout.
  */
 export class FlyoutButton
-  implements IASTNodeLocationSvg, IBoundedElement, IRenderedElement
+  implements IASTNodeLocationSvg, IBoundedElement, IRenderedElement, INavigable
 {
   /** The horizontal margin around the text in the button. */
   static TEXT_MARGIN_X = 5;
@@ -388,6 +389,26 @@ export class FlyoutButton
    */
   getSvgRoot() {
     return this.svgGroup;
+  }
+
+  in(): INavigable | null {
+    return null;
+  }
+
+  out(): INavigable | null {
+    return null;
+  }
+
+  next(): INavigable | null {
+    return null;
+  }
+
+  prev(): INavigable | null {
+    return null;
+  }
+
+  isNavigable() {
+    return !this.isFlyoutLabel;
   }
 }
 

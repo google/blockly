@@ -26,6 +26,7 @@ import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
 import {MarkerManager} from './marker_manager.js';
@@ -72,7 +73,8 @@ export abstract class Field<T = any>
     IASTNodeLocationWithBlock,
     IKeyboardAccessible,
     IRegistrable,
-    ISerializable
+    ISerializable,
+    INavigable
 {
   /**
    * To overwrite the default value which is set in **Field**, directly update
@@ -1414,6 +1416,73 @@ export abstract class Field<T = any>
   static fromJson(_options: FieldConfig): Field {
     throw new Error(
       `Attempted to instantiate a field from the registry that hasn't defined a 'fromJson' method.`,
+    );
+  }
+
+  in(): INavigable | null {
+    return null;
+  }
+
+  out(): INavigable | null {
+    return this.getSourceBlock();
+  }
+
+  next(): INavigable | null {
+    const input = this.getParentInput();
+    const block = this.getSourceBlock();
+    if (!block) return null;
+
+    const curIdx = block.inputList.indexOf(input);
+    let fieldIdx = input.fieldRow.indexOf(this) + 1;
+    for (let i = curIdx; i < block.inputList.length; i++) {
+      const newInput = block.inputList[i];
+      const fieldRow = newInput.fieldRow;
+      while (fieldIdx < fieldRow.length) {
+        if (fieldRow[fieldIdx].isNavigable()) {
+          return fieldRow[fieldIdx];
+        }
+        fieldIdx++;
+      }
+      fieldIdx = 0;
+      if (newInput.connection) {
+        return newInput.connection;
+      }
+    }
+    return null;
+  }
+
+  prev(): INavigable | null {
+    const parentInput = this.getParentInput();
+    const block = this.getSourceBlock();
+    if (!block) return null;
+
+    const curIdx = block.inputList.indexOf(parentInput);
+    let fieldIdx = parentInput.fieldRow.indexOf(this) - 1;
+    for (let i = curIdx; i >= 0; i--) {
+      const input = block.inputList[i];
+      if (input.connection && input !== parentInput) {
+        return input.connection;
+      }
+      const fieldRow = input.fieldRow;
+      while (fieldIdx > -1) {
+        if (fieldRow[fieldIdx].isNavigable()) {
+          return fieldRow[fieldIdx];
+        }
+        fieldIdx--;
+      }
+      // Reset the fieldIdx to the length of the field row of the previous
+      // input.
+      if (i - 1 >= 0) {
+        fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
+      }
+    }
+    return null;
+  }
+
+  isNavigable() {
+    return (
+      !(this.getSourceBlock()?.isSimpleReporter() && this.isFullBlockField()) &&
+      this.isClickable()
     );
   }
 }

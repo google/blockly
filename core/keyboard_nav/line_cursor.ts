@@ -16,19 +16,20 @@
 import type {Block} from '../block.js';
 import {BlockSvg} from '../block_svg.js';
 import * as common from '../common.js';
-import type {Connection} from '../connection.js';
+import {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Abstract} from '../events/events_abstract.js';
 import {Click, ClickTarget} from '../events/events_click.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
-import type {Field} from '../field.js';
+import {Field} from '../field.js';
+import type {INavigable} from '../interfaces/i_navigable.js';
 import * as registry from '../registry.js';
 import type {MarkerSvg} from '../renderers/common/marker_svg.js';
 import type {PathObject} from '../renderers/zelos/path_object.js';
 import {Renderer} from '../renderers/zelos/renderer.js';
 import * as dom from '../utils/dom.js';
-import type {WorkspaceSvg} from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 import {ASTNode} from './ast_node.js';
 import {Marker} from './marker.js';
 
@@ -56,7 +57,7 @@ export class LineCursor extends Marker {
   private readonly options: CursorOptions;
 
   /** Locations to try moving the cursor to after a deletion. */
-  private potentialNodes: ASTNode[] | null = null;
+  private potentialNodes: INavigable[] | null = null;
 
   /** Whether the renderer is zelos-style. */
   private isZelos = false;
@@ -94,7 +95,7 @@ export class LineCursor extends Marker {
    * @returns The next node, or null if the current node is
    *     not set or there is no next value.
    */
-  next(): ASTNode | null {
+  next(): INavigable | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -114,7 +115,7 @@ export class LineCursor extends Marker {
    * @returns The next node, or null if the current node is
    *     not set or there is no next value.
    */
-  in(): ASTNode | null {
+  in(): INavigable | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -133,7 +134,7 @@ export class LineCursor extends Marker {
    * @returns The previous node, or null if the current node
    *     is not set or there is no previous value.
    */
-  prev(): ASTNode | null {
+  prev(): INavigable | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -156,7 +157,7 @@ export class LineCursor extends Marker {
    * @returns The previous node, or null if the current node
    *     is not set or there is no previous value.
    */
-  out(): ASTNode | null {
+  out(): INavigable | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -211,33 +212,27 @@ export class LineCursor extends Marker {
    * @param node The AST node to check.
    * @returns True if the node should be visited, false otherwise.
    */
-  protected validLineNode(node: ASTNode | null): boolean {
+  protected validLineNode(node: INavigable | null): boolean {
     if (!node) return false;
-    const location = node.getLocation();
-    const type = node && node.getType();
-    switch (type) {
-      case ASTNode.types.BLOCK:
-        return !(location as Block).outputConnection?.isConnected();
-      case ASTNode.types.INPUT: {
-        const connection = location as Connection;
+    if (node instanceof BlockSvg) {
+      return !node.outputConnection?.isConnected();
+    } else if (node instanceof Connection) {
+      if (node.getParentInput()) {
         return (
-          connection.type === ConnectionType.NEXT_STATEMENT &&
-          (this.options.stackConnections || !connection.isConnected())
+          node.type === ConnectionType.NEXT_STATEMENT &&
+          (this.options.stackConnections || !node.isConnected())
         );
       }
-      case ASTNode.types.NEXT:
-        return (
-          this.options.stackConnections ||
-          !(location as Connection).isConnected()
-        );
-      case ASTNode.types.PREVIOUS:
-        return (
-          this.options.stackConnections &&
-          !(location as Connection).isConnected()
-        );
-      default:
-        return false;
+
+      if (
+        node.type === ConnectionType.NEXT_STATEMENT ||
+        node.type === ConnectionType.PREVIOUS_STATEMENT
+      ) {
+        return this.options.stackConnections || !node.isConnected();
+      }
     }
+
+    return false;
   }
 
   /**
@@ -253,25 +248,19 @@ export class LineCursor extends Marker {
    * @param node The AST node to check whether it is valid.
    * @returns True if the node should be visited, false otherwise.
    */
-  protected validInLineNode(node: ASTNode | null): boolean {
+  protected validInLineNode(node: INavigable | null): boolean {
     if (!node) return false;
     if (this.validLineNode(node)) return true;
-    const location = node.getLocation();
-    const type = node && node.getType();
-    switch (type) {
-      case ASTNode.types.BLOCK:
-        return true;
-      case ASTNode.types.INPUT:
-        return !(location as Connection).isConnected();
-      case ASTNode.types.FIELD: {
-        const field = node.getLocation() as Field;
-        return !(
-          field.getSourceBlock()?.isSimpleReporter() && field.isFullBlockField()
-        );
-      }
-      default:
-        return false;
+
+    if (node instanceof BlockSvg) {
+      return true;
+    } else if (node instanceof Connection && node.getParentInput()) {
+      return node.isConnected();
+    } else if (node instanceof Field) {
+      return node.isNavigable();
     }
+
+    return false;
   }
 
   /**
@@ -282,10 +271,9 @@ export class LineCursor extends Marker {
    * @param node The AST node to check whether it is valid.
    * @returns True if the node should be visited, false otherwise.
    */
-  protected validNode(node: ASTNode | null): boolean {
+  protected validNode(node: INavigable | null): boolean {
     return (
-      !!node &&
-      (this.validInLineNode(node) || node.getType() === ASTNode.types.WORKSPACE)
+      !!node && (this.validInLineNode(node) || node instanceof WorkspaceSvg)
     );
   }
 
@@ -300,9 +288,9 @@ export class LineCursor extends Marker {
    * @returns The next node in the traversal.
    */
   getNextNode(
-    node: ASTNode | null,
-    isValid: (p1: ASTNode | null) => boolean,
-  ): ASTNode | null {
+    node: INavigable | null,
+    isValid: (p1: INavigable | null) => boolean,
+  ): INavigable | null {
     if (!node) {
       return null;
     }
@@ -333,13 +321,13 @@ export class LineCursor extends Marker {
    *     exists.
    */
   getPreviousNode(
-    node: ASTNode | null,
-    isValid: (p1: ASTNode | null) => boolean,
-  ): ASTNode | null {
+    node: INavigable | null,
+    isValid: (p1: INavigable | null) => boolean,
+  ): INavigable | null {
     if (!node) {
       return null;
     }
-    let newNode: ASTNode | null = node.prev();
+    let newNode: INavigable | null = node.prev();
 
     if (newNode) {
       newNode = this.getRightMostChild(newNode);
@@ -361,7 +349,9 @@ export class LineCursor extends Marker {
    * @param node The current position in the AST.
    * @returns The next sibling node, the parent's next sibling, or null.
    */
-  private findSiblingOrParentSibling(node: ASTNode | null): ASTNode | null {
+  private findSiblingOrParentSibling(
+    node: INavigable | null,
+  ): INavigable | null {
     if (!node) {
       return null;
     }
@@ -379,13 +369,13 @@ export class LineCursor extends Marker {
    * @returns The right most child of the given node, or the node if no child
    *     exists.
    */
-  private getRightMostChild(node: ASTNode): ASTNode | null {
+  private getRightMostChild(node: INavigable): INavigable | null {
     let newNode = node.in();
     if (!newNode) {
       return node;
     }
     for (
-      let nextNode: ASTNode | null = newNode;
+      let nextNode: INavigable | null = newNode;
       nextNode;
       nextNode = newNode.next()
     ) {
@@ -419,36 +409,29 @@ export class LineCursor extends Marker {
   preDelete(deletedBlock: Block) {
     const curNode = this.getCurNode();
 
-    const nodes: ASTNode[] = curNode ? [curNode] : [];
+    const nodes: INavigable[] = curNode ? [curNode] : [];
     // The connection to which the deleted block is attached.
     const parentConnection =
       deletedBlock.previousConnection?.targetConnection ??
       deletedBlock.outputConnection?.targetConnection;
     if (parentConnection) {
-      const parentNode = ASTNode.createConnectionNode(parentConnection);
-      if (parentNode) nodes.push(parentNode);
+      nodes.push(parentConnection);
     }
     // The block connected to the next connection of the deleted block.
     const nextBlock = deletedBlock.getNextBlock();
     if (nextBlock) {
-      const nextNode = ASTNode.createBlockNode(nextBlock);
-      if (nextNode) nodes.push(nextNode);
+      nodes.push(nextBlock);
     }
     //  The parent block of the deleted block.
     const parentBlock = deletedBlock.getParent();
     if (parentBlock) {
-      const parentNode = ASTNode.createBlockNode(parentBlock);
-      if (parentNode) nodes.push(parentNode);
+      nodes.push(parentBlock);
     }
     // A location on the workspace beneath the deleted block.
     // Move to the workspace.
-    const curBlock = curNode?.getSourceBlock();
+    const curBlock = curNode?.getSourceBlock?.();
     if (curBlock) {
-      const workspaceNode = ASTNode.createWorkspaceNode(
-        this.workspace,
-        curBlock.getRelativeToSurfaceXY(),
-      );
-      if (workspaceNode) nodes.push(workspaceNode);
+      nodes.push(this.workspace);
     }
     this.potentialNodes = nodes;
   }
@@ -462,7 +445,7 @@ export class LineCursor extends Marker {
     this.potentialNodes = null;
     if (!nodes) throw new Error('must call preDelete first');
     for (const node of nodes) {
-      if (this.validNode(node) && !node.getSourceBlock()?.disposed) {
+      if (this.validNode(node) && !node.getSourceBlock?.()?.disposed) {
         this.setCurNode(node);
         return;
       }
@@ -481,7 +464,7 @@ export class LineCursor extends Marker {
    *
    * @returns The current field, connection, or block the cursor is on.
    */
-  override getCurNode(): ASTNode | null {
+  override getCurNode(): INavigable | null {
     this.updateCurNodeFromSelection();
     return super.getCurNode();
   }
@@ -530,7 +513,7 @@ export class LineCursor extends Marker {
    * @param updateSelection If true (the default) we'll update the selection
    *     too.
    */
-  override setCurNode(newNode: ASTNode | null, updateSelection = true) {
+  override setCurNode(newNode: INavigable | null, updateSelection = true) {
     if (updateSelection) {
       this.updateSelectionFromNode(newNode);
     }
@@ -538,10 +521,9 @@ export class LineCursor extends Marker {
     super.setCurNode(newNode);
 
     // Try to scroll cursor into view.
-    if (newNode?.getType() === ASTNode.types.BLOCK) {
-      const block = newNode.getLocation() as BlockSvg;
-      block.workspace.scrollBoundsIntoView(
-        block.getBoundingRectangleWithoutChildren(),
+    if (newNode instanceof BlockSvg) {
+      newNode.workspace.scrollBoundsIntoView(
+        newNode.getBoundingRectangleWithoutChildren(),
       );
     }
   }
@@ -639,7 +621,7 @@ export class LineCursor extends Marker {
    */
   private hideAtInput(node: ASTNode) {
     const inputConnection = node.getLocation() as Connection;
-    const sourceBlock = inputConnection.getSourceBlock() as BlockSvg;
+    const sourceBlock = inputConnection.getSourceBlock?.() as BlockSvg;
     const input = inputConnection.getParentInput();
     if (input) {
       const pathObject = sourceBlock.pathObject as PathObject;
@@ -655,7 +637,7 @@ export class LineCursor extends Marker {
    */
   private showAtInput(node: ASTNode) {
     const inputConnection = node.getLocation() as Connection;
-    const sourceBlock = inputConnection.getSourceBlock() as BlockSvg;
+    const sourceBlock = inputConnection.getSourceBlock?.() as BlockSvg;
     const input = inputConnection.getParentInput();
     if (input) {
       const pathObject = sourceBlock.pathObject as PathObject;
@@ -703,7 +685,7 @@ export class LineCursor extends Marker {
     const curNode = super.getCurNode();
     const selected = common.getSelected();
 
-    if (selected === null && curNode?.getType() === ASTNode.types.BLOCK) {
+    if (selected === null && curNode instanceof BlockSvg) {
       this.setCurNode(null, false);
       return;
     }
@@ -715,17 +697,13 @@ export class LineCursor extends Marker {
       if (selected.isShadow()) {
         // OK if the current node is on the parent OR the shadow block.
         // The former happens for clicks, the latter for keyboard nav.
-        if (
-          curNode &&
-          (curNode.getLocation() === block ||
-            curNode.getLocation() === block.getParent())
-        ) {
+        if (curNode && (curNode === block || curNode === block.getParent())) {
           return;
         }
         block = block.getParent();
       }
       if (block) {
-        this.setCurNode(ASTNode.createBlockNode(block), false);
+        this.setCurNode(block, false);
       }
     }
   }
@@ -741,11 +719,11 @@ export class LineCursor extends Marker {
    *
    * @param newNode The new node.
    */
-  private updateSelectionFromNode(newNode: ASTNode | null) {
-    if (newNode?.getType() === ASTNode.types.BLOCK) {
-      if (common.getSelected() !== newNode.getLocation()) {
+  private updateSelectionFromNode(newNode: INavigable | null) {
+    if (newNode instanceof BlockSvg) {
+      if (common.getSelected() !== newNode) {
         eventUtils.disable();
-        common.setSelected(newNode.getLocation() as BlockSvg);
+        common.setSelected(newNode);
         eventUtils.enable();
       }
     } else {

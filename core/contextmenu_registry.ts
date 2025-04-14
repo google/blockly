@@ -13,7 +13,7 @@
 
 import type {BlockSvg} from './block_svg.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
-import {Coordinate} from './utils.js';
+import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**

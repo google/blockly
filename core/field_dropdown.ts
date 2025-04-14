@@ -334,7 +334,7 @@ export class FieldDropdown extends Field<string> {
 
       const [label, value] = option;
       const content = (() => {
-        if (typeof label === 'object') {
+        if (isImageProperties(label)) {
           // Convert ImageProperties to an HTMLImageElement.
           const image = new Image(label['width'], label['height']);
           image.src = label['src'];
@@ -499,7 +499,7 @@ export class FieldDropdown extends Field<string> {
 
     // Show correct element.
     const option = this.selectedOption && this.selectedOption[0];
-    if (option && typeof option === 'object') {
+    if (isImageProperties(option)) {
       this.renderSelectedImage(option);
     } else {
       this.renderSelectedText();
@@ -637,8 +637,10 @@ export class FieldDropdown extends Field<string> {
       return null;
     }
     const option = this.selectedOption[0];
-    if (typeof option === 'object') {
-      return option['alt'];
+    if (isImageProperties(option)) {
+      return option.alt;
+    } else if (option instanceof HTMLElement) {
+      return option.title ?? option.ariaLabel ?? option.innerText;
     }
     return option;
   }
@@ -687,10 +689,9 @@ export class FieldDropdown extends Field<string> {
       hasImages = true;
       // Copy the image properties so they're not influenced by the original.
       // NOTE: No need to deep copy since image properties are only 1 level deep.
-      const imageLabel =
-        label.alt !== null
-          ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
-          : {...label};
+      const imageLabel = isImageProperties(label)
+        ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
+        : {...label};
       return [imageLabel, value];
     });
 
@@ -776,12 +777,13 @@ export class FieldDropdown extends Field<string> {
       } else if (
         option[0] &&
         typeof option[0] !== 'string' &&
-        typeof option[0].src !== 'string'
+        !isImageProperties(option[0]) &&
+        !(option[0] instanceof HTMLElement)
       ) {
         foundError = true;
         console.error(
           `Invalid option[${i}]: Each FieldDropdown option must have a string 
-          label or image description. Found ${option[0]} in: ${option}`,
+          label, image description, or HTML element. Found ${option[0]} in: ${option}`,
         );
       }
     }
@@ -789,6 +791,27 @@ export class FieldDropdown extends Field<string> {
       throw TypeError('Found invalid FieldDropdown options.');
     }
   }
+}
+
+/**
+ * Returns whether or not an object conforms to the ImageProperties interface.
+ *
+ * @param obj The object to test.
+ * @returns True if the object conforms to ImageProperties, otherwise false.
+ */
+function isImageProperties(obj: any): obj is ImageProperties {
+  return (
+    obj &&
+    typeof obj === 'object' &&
+    'src' in obj &&
+    typeof obj.src === 'string' &&
+    'alt' in obj &&
+    typeof obj.alt === 'string' &&
+    'width' in obj &&
+    typeof obj.width === 'number' &&
+    'height' in obj &&
+    typeof obj.height === 'number'
+  );
 }
 
 /**
@@ -805,9 +828,12 @@ export interface ImageProperties {
  * An individual option in the dropdown menu. Can be either the string literal
  * `separator` for a menu separator item, or an array for normal action menu
  * items. In the latter case, the first element is the human-readable value
- * (text or image), and the second element is the language-neutral value.
+ * (text, ImageProperties object, or HTML element), and the second element is
+ * the language-neutral value.
  */
-export type MenuOption = [string | ImageProperties, string] | 'separator';
+export type MenuOption =
+  | [string | ImageProperties | HTMLElement, string]
+  | 'separator';
 
 /**
  * A function that generates an array of menu options for FieldDropdown

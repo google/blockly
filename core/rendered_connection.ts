@@ -603,10 +603,11 @@ export class RenderedConnection extends Connection implements IContextMenu {
    */
   showContextMenu(e: Event): void {
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-      ContextMenuRegistry.ScopeType.WORKSPACE,
       {focusedNode: this},
       e,
     );
+
+    if (!menuOptions.length) return;
 
     const block = this.getSourceBlock();
     const workspace = block.workspace;

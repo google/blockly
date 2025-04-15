@@ -588,8 +588,7 @@ export class BlockSvg
       return null;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-      ContextMenuRegistry.ScopeType.BLOCK,
-      {block: this},
+      {block: this, focusedNode: this},
       e,
     );
 

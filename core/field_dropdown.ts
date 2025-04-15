@@ -336,9 +336,9 @@ export class FieldDropdown extends Field<string> {
       const content = (() => {
         if (isImageProperties(label)) {
           // Convert ImageProperties to an HTMLImageElement.
-          const image = new Image(label['width'], label['height']);
-          image.src = label['src'];
-          image.alt = label['alt'] || '';
+          const image = new Image(label.width, label.height);
+          image.src = label.src;
+          image.alt = label.alt;
           return image;
         }
         return label;

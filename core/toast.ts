@@ -61,7 +61,7 @@ export class Toast {
     }
 
     // Clear any existing toasts.
-    this.clearToast(workspace);
+    this.hide(workspace);
 
     const toast = this.createDom(workspace, options);
 
@@ -155,7 +155,7 @@ export class Toast {
    * @param workspace The workspace to dismiss a toast in.
    * @param id The toast ID, or undefined to clear any toast.
    */
-  static clearToast(workspace: WorkspaceSvg, id?: string) {
+  static hide(workspace: WorkspaceSvg, id?: string) {
     const toast = workspace.getInjectionDiv().querySelector(`.${CLASS_NAME}`);
     if (toast instanceof HTMLElement && (!id || id === toast.dataset.toastId)) {
       toast.remove();

@@ -6,6 +6,10 @@
 
 // Former goog.module ID: Blockly.dialog
 
+import type {ToastOptions} from './toast.js';
+import {Toast} from './toast.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
+
 const defaultAlert = function (message: string, opt_callback?: () => void) {
   window.alert(message);
   if (opt_callback) {
@@ -33,6 +37,9 @@ const defaultPrompt = function (
 };
 
 let promptImplementation = defaultPrompt;
+
+const defaultToast = Toast.show.bind(Toast);
+let toastImplementation = defaultToast;
 
 /**
  * Wrapper to window.alert() that app developers may override via setAlert to
@@ -115,4 +122,29 @@ export function setPrompt(
   ) => void,
 ) {
   promptImplementation = promptFunction ?? defaultPrompt;
+}
+
+/**
+ * Displays a temporary notification atop the workspace. Blockly provides a
+ * default toast implementation, but developers may provide their own via
+ * setToast. For simple appearance customization, CSS should be sufficient.
+ *
+ * @param workspace The workspace to display the toast notification atop.
+ * @param options Configuration options for the notification, including its
+ *     message and duration.
+ */
+export function toast(workspace: WorkspaceSvg, options: ToastOptions) {
+  toastImplementation(workspace, options);
+}
+
+/**
+ * Sets the function to be run when Blockly.dialog.toast() is called.
+ *
+ * @param promptFunction The function to be run.
+ * @see Blockly.dialog.toast
+ */
+export function setToast(
+  toastFunction?: (workspace: WorkspaceSvg, options: ToastOptions) => void,
+) {
+  toastImplementation = toastFunction ?? defaultToast;
 }

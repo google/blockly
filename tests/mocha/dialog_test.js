@@ -14,13 +14,14 @@ suite('Dialog utilities', function () {
   setup(function () {
     sharedTestSetup.call(this);
     this.workspace = Blockly.inject('blocklyDiv', {});
-    Blockly.dialog.setAlert(undefined);
-    Blockly.dialog.setPrompt(undefined);
-    Blockly.dialog.setConfirm(undefined);
   });
 
   teardown(function () {
     sharedTestTeardown.call(this);
+    Blockly.dialog.setAlert(undefined);
+    Blockly.dialog.setPrompt(undefined);
+    Blockly.dialog.setConfirm(undefined);
+    Blockly.dialog.setToast(undefined);
   });
 
   test('use the browser alert by default', function () {
@@ -132,5 +133,36 @@ suite('Dialog utilities', function () {
     Blockly.dialog.prompt(message, defaultValue, callback);
     assert.isTrue(callback.calledWith('something'));
     prompt.restore();
+  });
+
+  test('use the built-in toast by default', function () {
+    const message = 'test toast';
+    Blockly.dialog.toast(this.workspace, {message});
+    const toast = this.workspace
+      .getInjectionDiv()
+      .querySelector('.blocklyToast');
+    assert.isNotNull(toast);
+    assert.equal(toast.textContent, message);
+  });
+
+  test('support setting a custom toast handler', function () {
+    const toast = sinon.spy();
+    Blockly.dialog.setToast(toast);
+    const message = 'test toast';
+    const options = {message};
+    Blockly.dialog.toast(this.workspace, options);
+    assert.isTrue(toast.calledWith(this.workspace, options));
+  });
+
+  test('do not use the built-in toast if a custom toast handler is set', function () {
+    const builtInToast = sinon.stub(Blockly.Toast, 'show');
+
+    const toast = sinon.spy();
+    Blockly.dialog.setToast(toast);
+    const message = 'test toast';
+    Blockly.dialog.toast(this.workspace, {message});
+    assert.isFalse(builtInToast.called);
+
+    builtInToast.restore();
   });
 });

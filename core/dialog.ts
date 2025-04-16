@@ -140,7 +140,7 @@ export function toast(workspace: WorkspaceSvg, options: ToastOptions) {
 /**
  * Sets the function to be run when Blockly.dialog.toast() is called.
  *
- * @param promptFunction The function to be run.
+ * @param toastFunction The function to be run.
  * @see Blockly.dialog.toast
  */
 export function setToast(

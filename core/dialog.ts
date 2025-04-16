@@ -65,13 +65,6 @@ export function setAlert(
  * @param callback The callback for handling user response.
  */
 export function confirm(message: string, callback: (result: boolean) => void) {
-  TEST_ONLY.confirmInternal(message, callback);
-}
-
-/**
- * Private version of confirm for stubbing in tests.
- */
-function confirmInternal(message: string, callback: (result: boolean) => void) {
   confirmImplementation(message, callback);
 }
 
@@ -123,7 +116,3 @@ export function setPrompt(
 ) {
   promptImplementation = promptFunction ?? defaultPrompt;
 }
-
-export const TEST_ONLY = {
-  confirmInternal,
-};

@@ -461,6 +461,8 @@ export class ASTNode {
     const inputs = block.inputList;
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
+      if (!input.isVisible()) continue;
+
       const fieldRow = input.fieldRow;
       for (let j = 0; j < fieldRow.length; j++) {
         const field = fieldRow[j];
@@ -468,7 +470,7 @@ export class ASTNode {
           return ASTNode.createFieldNode(field);
         }
       }
-      if (input.connection && input.isVisible()) {
+      if (input.connection) {
         return ASTNode.createInputNode(input);
       }
     }

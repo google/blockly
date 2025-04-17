@@ -222,7 +222,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     );
 
     blockListeners.push(
-      browserEvents.bind(block.getSvgRoot(), 'pointerenter', null, () => {
+      browserEvents.bind(block.getSvgRoot(), 'pointermove', null, () => {
         if (!this.flyout?.targetWorkspace?.isDragging()) {
           block.addSelect();
         }

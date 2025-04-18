@@ -79,7 +79,7 @@ export class FocusManager {
   static readonly PASSIVE_FOCUS_NODE_CSS_CLASS_NAME = 'blocklyPassiveFocus';
 
   focusedNode: IFocusableNode | null = null;
-  registeredTrees: Array<TreeRegistration> = [];
+  registeredTrees: Array<IFocusableTree> = [];
 
   private currentlyHoldsEphemeralFocus: boolean = false;
   // TODO: Figure out why this is needed, and how to test it.
@@ -104,10 +104,10 @@ export class FocusManager {
         // If the target losing focus maps to any tree, then it should be
         // updated. Per the contract of findFocusableNodeFor only one tree
         // should claim the element.
-        for (const registration of this.registeredTrees) {
+        for (const tree of this.registeredTrees) {
           newNode = FocusableTreeTraverser.findFocusableNodeFor(
             activeElement,
-            registration.tree,
+            tree,
           );
           if (newNode) break;
         }
@@ -125,6 +125,7 @@ export class FocusManager {
         // a tree (in which case they WILL go to the root and set that as the last known focus state
         // of the tree which should generally stabilize the user experience since they explicitly
         // navigated away).
+        console.log('@@@@@@ focusing a new node, is tree root:', newNode === newTree.getRootFocusableNode(), 'tree is different:',newTree !== oldTree);
         if (newNode === newTree.getRootFocusableNode() && newTree !== oldTree/* && !prevFocusedNode*/) {
           // If the root of the tree is the one taking focus, try to focus the
           // whole tree explicitly since it hasn't yet received focus.
@@ -149,12 +150,11 @@ export class FocusManager {
    * in this manager. Use isRegistered to check in cases when it can't be
    * certain whether the tree has been registered.
    */
-  registerTree(tree: IFocusableTree, callbacks: TreeCustomizationCallbacks = {Initialize: null, Synchronize: null, BlurFocus: null}): void {
+  registerTree(tree: IFocusableTree): void {//, callbacks: TreeCustomizationCallbacks = {Initialize: null, Synchronize: null, BlurFocus: null}): void {
     if (this.isRegistered(tree)) {
-      throw Error(`Attempted to re-register already registered tree: ${tree}.`);
+      throw new Error(`Attempted to re-register already registered tree: ${tree}.`);
     }
-    this.registeredTrees.push(
-      new TreeRegistration(tree, callbacks));
+    this.registeredTrees.push(tree);
   }
 
   /**
@@ -163,11 +163,7 @@ export class FocusManager {
    * unregisterTree.
    */
   isRegistered(tree: IFocusableTree): boolean {
-    return !!this.lookUpRegistration(tree);
-  }
-
-  private lookUpRegistration(tree: IFocusableTree): TreeRegistration | null {
-    return this.registeredTrees.find((reg) => reg.tree === tree) ?? null;
+    return this.registeredTrees.findIndex((reg) => reg === tree) !== -1;
   }
 
   /**
@@ -181,7 +177,7 @@ export class FocusManager {
    */
   unregisterTree(tree: IFocusableTree): void {
     if (!this.isRegistered(tree)) {
-      throw Error(`Attempted to unregister not registered tree: ${tree}.`);
+      throw new Error(`Attempted to unregister not registered tree: ${tree}.`);
     }
     const treeIndex = this.registeredTrees.findIndex((tree) => tree === tree);
     this.registeredTrees.splice(treeIndex, 1);
@@ -239,20 +235,24 @@ export class FocusManager {
    *     focus.
    */
   focusTree(focusableTree: IFocusableTree): void {
-    const registration = this.lookUpRegistration(focusableTree);
-    if (!registration) {
-      throw Error(`Attempted to focus unregistered tree: ${focusableTree}.`);
+    if (!this.isRegistered(focusableTree)) {
+      throw new Error(`Attempted to focus unregistered tree: ${focusableTree}.`);
     }
     const currNode = FocusableTreeTraverser.findFocusedNode(focusableTree);
-    const initialize = registration.callbacks.Initialize;
-    let nextNodeToFocus: IFocusableNode | null = currNode;
-    if (!nextNodeToFocus && initialize) {
+    const rootFallback = focusableTree.getRootFocusableNode();
+    const nodeToRestore = focusableTree.getRestoredFocusableNode(currNode);
+    // let nextNodeToFocus: IFocusableNode | null = currNode;
+    // // const initialize = registration.callbacks.Initialize;
+    // if (!nextNodeToFocus) {
+    //   nextNodeToFocus = focusableTree.getDefaultFocusableNode();
+    // }
+    // if (!nextNodeToFocus && initialize) {
       // The tree hasn't yet received focus, so initialize it.
-      nextNodeToFocus = initialize()
-    }
+      // nextNodeToFocus = initialize()
+    // }
     // Either the previous node has been restored, a new node has been
     // initialized, or the root should be used (due to no or failed initing).
-    this.focusNode(nextNodeToFocus ?? focusableTree.getRootFocusableNode());
+    this.focusNode(nodeToRestore ?? currNode ?? rootFallback);
   }
 
   /**
@@ -264,11 +264,24 @@ export class FocusManager {
    * @param focusableNode The node that should receive active focus.
    */
   focusNode(focusableNode: IFocusableNode): void {
+    if (this.focusedNode == focusableNode) return; // State is unchanged.
+
     const nextTree = focusableNode.getFocusableTree();
-    const registration = this.lookUpRegistration(nextTree);
-    if (!registration) {
-      throw Error(`Attempted to focus unregistered node: ${focusableNode}.`);
+    if (!this.isRegistered(nextTree)) {
+      throw new Error(`Attempted to focus unregistered node: ${focusableNode}.`);
     }
+
+    // Safety check for ensuring focusNode() doesn't get called for a node that
+    // isn't actually hooked up to its parent tree correctly (since this can
+    // cause weird inconsistencies).
+    const matchedNode = FocusableTreeTraverser.findFocusableNodeFor(
+      focusableNode.getFocusableElement(),
+      nextTree,
+    );
+    if (matchedNode !== focusableNode) {
+      throw new Error(`Attempting to focus node which isn't recognized by its parent tree: ${focusableNode}.`);
+    }
+
     const prevNode = this.focusedNode;
     const prevTree = prevNode?.getFocusableTree();
     if (prevNode && prevTree !== nextTree) {
@@ -286,19 +299,28 @@ export class FocusManager {
     if (nextTreeRoot !== focusableNode) {
       this.removeHighlight(nextTreeRoot);
     }
+
+    // TODO: Add guardrails to prevent focus methods from being invoked in callbacks.
+    // TODO: Make this work correctly with ephemeral focus.
+    // TODO: Figure out correct ordering here, but if we allow onNodeFocus to change internal display visibility then the focus() call *must* happen after it.
+    if (prevTree && prevTree !== nextTree) prevTree.onTreeBlur(nextTree);
+    nextTree.onTreeFocus(focusableNode, prevTree ?? null);
+    if (prevNode) prevNode.onNodeBlur();
+    focusableNode.onNodeFocus();
+
     if (!this.currentlyHoldsEphemeralFocus) {
       // Only change the actively focused node if ephemeral state isn't held.
       this.setNodeToActive(focusableNode);
     }
     this.focusedNode = focusableNode;
-    if (registration.callbacks.Synchronize) {
+    // if (registration.callbacks.Synchronize) {
       // Provide the tree with an opportunity to synchronize to focus state.
-      registration.callbacks.Synchronize(focusableNode);
-    }
-    if (prevTree && prevTree !== nextTree) {
-      const blurFocus = this.lookUpRegistration(prevTree)?.callbacks?.BlurFocus;
-      if (blurFocus) blurFocus();
-    }
+      // registration.callbacks.Synchronize(focusableNode);
+    // }
+    // if (prevTree && prevTree !== nextTree) {
+      // const blurFocus = this.lookUpRegistration(prevTree)?.callbacks?.BlurFocus;
+      // if (blurFocus) blurFocus();
+    // }
   }
 
   /**
@@ -323,7 +345,7 @@ export class FocusManager {
     focusableElement: HTMLElement | SVGElement,
   ): ReturnEphemeralFocus {
     if (this.currentlyHoldsEphemeralFocus) {
-      throw Error(
+      throw new Error(
         `Attempted to take ephemeral focus when it's already held, ` +
           `with new element: ${focusableElement}.`,
       );
@@ -338,7 +360,7 @@ export class FocusManager {
     let hasFinishedEphemeralFocus = false;
     return () => {
       if (hasFinishedEphemeralFocus) {
-        throw Error(
+        throw new Error(
           `Attempted to finish ephemeral focus twice for element: ` +
             `${focusableElement}.`,
         );
@@ -358,6 +380,8 @@ export class FocusManager {
     // restored upon exiting ephemeral focus mode.
     if (this.focusedNode && !this.currentlyHoldsEphemeralFocus) {
       this.setNodeToPassive(this.focusedNode);
+      this.focusedNode.getFocusableTree().onTreeBlur(null);
+      this.focusedNode.onNodeBlur();
       this.focusedNode = null;
     }
   }

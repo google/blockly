@@ -37,6 +37,8 @@ export interface IFocusableTree {
    */
   getRootFocusableNode(): IFocusableNode;
 
+  getRestoredFocusableNode(previousNode: IFocusableNode | null): IFocusableNode | null;
+
   /**
    * Returns all directly nested trees under this tree.
    *
@@ -58,6 +60,10 @@ export interface IFocusableTree {
    * @param id The ID of the node's focusable HTMLElement or SVGElement.
    */
   lookUpFocusableNode(id: string): IFocusableNode | null;
+
+  onTreeFocus(node: IFocusableNode, previousTree: IFocusableTree | null): void;
+
+  onTreeBlur(nextTree: IFocusableTree | null): void;
 }
 
 export function isFocusableTree(object: any | null): object is IFocusableTree {

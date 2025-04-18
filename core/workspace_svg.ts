@@ -89,6 +89,7 @@ import {ZoomControls} from './zoom_controls.js';
 import type {Field} from './field.js';
 import * as aria from './utils/aria.js';
 import {Msg} from './msg.js';
+import { IAutoHideable } from './blockly.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -855,23 +856,24 @@ export class WorkspaceSvg
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
 
-    const customizationOptions: TreeCustomizationCallbacks = {
-      Initialize: () => {
-        // TODO: This doesn't handle the idea of starting in a preset location like the plugin does.
-        return this.getTopBlocks(true)[0] ?? null;
-      },
-      // TODO: Perhaps synchronize here could select the block? Would drastically simplify selection management in cursor (I think).
-      Synchronize: null,
-      BlurFocus: () => {
-        // TODO: make sure this works correctly for a permanent flyout.
-        // If the flyout loses focus, make sure to close it.
-        if (this.isFlyout) {
-          // TODO: fix this as it doesn't seem to work (it gets triggered correctly, hide() just doesn't seem to do anything).
-          this.getFlyout()?.hide();
-        }
-      }
-    };
-    getFocusManager().registerTree(this, customizationOptions);
+    // const customizationOptions: TreeCustomizationCallbacks = {
+    //   Initialize: () => {
+    //     // TODO: This doesn't handle the idea of starting in a preset location like the plugin does.
+    //     return this.getTopBlocks(true)[0] ?? null;
+    //   },
+    //   // TODO: Perhaps synchronize here could select the block? Would drastically simplify selection management in cursor (I think).
+    //   Synchronize: null,
+    //   BlurFocus: () => {
+    //     // TODO: make sure this works correctly for a permanent flyout.
+    //     // If the flyout loses focus, make sure to close it.
+    //     if (this.isFlyout) {
+    //       // TODO: fix this as it doesn't seem to work (it gets triggered correctly, hide() just doesn't seem to do anything).
+    //       this.getFlyout()?.hide();
+    //     }
+    //   }
+    // };
+    // getFocusManager().registerTree(this, customizationOptions);
+    getFocusManager().registerTree(this);
 
     return this.svgGroup_;
   }
@@ -2654,8 +2656,19 @@ export class WorkspaceSvg
     return this;
   }
 
+  onNodeFocus(): void {}
+
+  onNodeBlur(): void {}
+
   getRootFocusableNode(): IFocusableNode {
     return this;
+  }
+
+  getRestoredFocusableNode(previousNode: IFocusableNode | null): IFocusableNode | null {
+    if (!previousNode) {
+      // TODO: This doesn't handle the idea of starting in a preset location like the plugin does.
+      return this.getTopBlocks(true)[0] ?? null;
+    } else return null;
   }
 
   getNestedTrees(): Array<IFocusableTree> {
@@ -2664,18 +2677,48 @@ export class WorkspaceSvg
 
   lookUpFocusableNode(id: string): IFocusableNode | null {
     // TODO: This isn't a complete solution since non-blocks can have focus.
-    const fieldIndicator = '_field_';
-    const fieldIndicatorIndex = id.indexOf(fieldIndicator);
+    const fieldIndicatorIndex = id.indexOf('_field_');
+    const connectionIndicatorIndex = id.indexOf('_connection_');
     if (fieldIndicatorIndex !== -1) {
       const blockId = id.substring(0, fieldIndicatorIndex);
       const block = this.getBlockById(blockId);
-      if (block != null) {
+      if (block) {
         for (const field of block.getFields()) {
           if (field.getFocusableElement().id === id) return field;
         }
       }
       return null;
+    } else if (connectionIndicatorIndex !== -1) {
+      const blockId = id.substring(0, connectionIndicatorIndex);
+      const block = this.getBlockById(blockId);
+      if (block) {
+        for (const connection of block.getConnections_(true)) {
+          if (connection.id === id) return connection;
+        }
+      }
+      return null;
     } else return this.getBlockById(id) as IFocusableNode;
+  }
+
+  onTreeFocus(node: IFocusableNode, previousTree: IFocusableTree | null): void {
+    console.log('@@@@@@ onTreeFocus, isFlyout:', this.isFlyout);
+    // TODO: Perhaps synchronize here could select the block? Would drastically simplify selection management in cursor (I think).
+  }
+
+  onTreeBlur(nextTree: IFocusableTree | null): void {
+    // TODO: make sure this works correctly for a permanent flyout.
+    // If the flyout loses focus, make sure to close it.
+    console.log('@@@@@@ onTreeBlur, isFlyout:', this.isFlyout);
+    if (this.isFlyout && this.targetWorkspace) {
+      // Only hide the flyout if the flyout's workspace is losing focus and that
+      // focus isn't returning to the flyout itself or the toolbox.
+      const flyout = this.targetWorkspace.getFlyout();
+      const toolbox = this.targetWorkspace.getToolbox();
+      if (flyout && nextTree === flyout) return;
+      if (toolbox && nextTree === toolbox) return;
+      if (toolbox) toolbox.clearSelection();
+      if (flyout && flyout instanceof Flyout) flyout.autoHide(false);
+    }
   }
 }
 

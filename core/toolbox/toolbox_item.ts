@@ -164,5 +164,9 @@ export class ToolboxItem implements IToolboxItem {
   getFocusableTree(): IFocusableTree {
     return this.parentToolbox_;
   }
+
+  onNodeFocus(): void {}
+
+  onNodeBlur(): void {}
 }
 // nop by default

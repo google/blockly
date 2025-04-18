@@ -192,7 +192,7 @@ export class BlockSvg
       throw TypeError('Cannot create a rendered block in a headless workspace');
     }
     this.workspace = workspace;
-    this.svgGroup = dom.createSvgElement(Svg.G, {'tabindex': '-1', 'id': this.id});
+    this.svgGroup = dom.createSvgElement(Svg.G, {});
 
     if (prototypeName) {
       dom.addClass(this.svgGroup, prototypeName);
@@ -211,6 +211,7 @@ export class BlockSvg
 
     // Expose this block's ID on its top-level SVG group.
     this.svgGroup.setAttribute('data-id', this.id);
+    svgPath.id = this.id;
 
     this.doInit_();
   }
@@ -1772,10 +1773,22 @@ export class BlockSvg
   }
 
   getFocusableElement(): HTMLElement | SVGElement {
-    return this.svgGroup;
+    return this.pathObject.svgPath;
   }
 
   getFocusableTree(): IFocusableTree {
     return this.workspace;
+  }
+
+  onNodeFocus(): void {
+    if (!this.isShadow()) {
+      common.setSelected(this);
+    }
+  }
+
+  onNodeBlur(): void {
+    if (common.getSelected() === this) {
+      common.setSelected(null);
+    }
   }
 }

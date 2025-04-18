@@ -307,6 +307,7 @@ export abstract class Flyout
     // hide/show code will set up proper visibility and size later.
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
+      'tabindex': '0',
     });
     this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(
@@ -322,7 +323,7 @@ export abstract class Flyout
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
 
-    // getFocusManager().registerTree(this);
+    getFocusManager().registerTree(this);
 
     return this.svgGroup_;
   }
@@ -405,7 +406,7 @@ export abstract class Flyout
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
-    // getFocusManager().unregisterTree(this);
+    getFocusManager().unregisterTree(this);
   }
 
   /**
@@ -971,23 +972,56 @@ export abstract class Flyout
   }
 
   getFocusableElement(): HTMLElement | SVGElement {
-    return this.workspace_.getFocusableElement();
+    if (!this.svgGroup_) throw new Error('Flyout DOM is not yet created.');
+    return this.svgGroup_;
+    // return this.workspace_.getFocusableElement();
   }
 
   getFocusableTree(): IFocusableTree {
-    return this.workspace_.getFocusableTree();
+    return this;
+    // return this.workspace_.getFocusableTree();
+  }
+
+  onNodeFocus(): void {
+    // this.workspace_.onNodeFocus();
+  }
+
+  onNodeBlur(): void {
+    // this.workspace_.onNodeBlur();
   }
 
   getRootFocusableNode(): IFocusableNode {
-    return this.workspace_.getRootFocusableNode();
+    return this;
+    // return this.workspace_.getRootFocusableNode();
+  }
+
+  getRestoredFocusableNode(previousNode: IFocusableNode | null): IFocusableNode | null {
+    return null;
   }
 
   getNestedTrees(): Array<IFocusableTree> {
-    return this.workspace_.getNestedTrees();
+    return [this.workspace_];
+    // return this.workspace_.getNestedTrees();
+  }
+
+  onTreeFocus(node: IFocusableNode, previousTree: IFocusableTree | null): void {
+    // this.workspace_.onTreeFocus(node);
+  }
+
+  onTreeBlur(nextTree: IFocusableTree | null): void {
+    const toolbox = this.targetWorkspace.getToolbox();
+    // If focus is moving to either the toolbox or the flyout's workspace, do
+    // not close the flyout. For anything else, do close it.
+    if (toolbox && nextTree === toolbox) return;
+    if (nextTree == this.workspace_) return;
+    if (toolbox) toolbox.clearSelection();
+    this.autoHide(false);
+    // this.workspace_.onTreeBlur();
   }
 
   lookUpFocusableNode(id: string): IFocusableNode | null {
-    return this.workspace_.lookUpFocusableNode(id);
+    return null;
+    // return this.workspace_.lookUpFocusableNode(id);
     // TODO: This may violate the cross-subtree boundary (since flyout contains a workspace that is itself a tree).
     // return this.getContents()
     //   .filter((item) => isFocusableNode(item))

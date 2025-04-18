@@ -1428,6 +1428,10 @@ export abstract class Field<T = any>
     return block.workspace as WorkspaceSvg;
   }
 
+  onNodeFocus(): void {}
+
+  onNodeBlur(): void {}
+
   /**
    * Subclasses should reimplement this method to construct their Field
    * subclass from a JSON arg object.

@@ -172,22 +172,23 @@ export class Toolbox
         ComponentManager.Capability.DRAG_TARGET,
       ],
     });
-    const customizationOptions: TreeCustomizationCallbacks = {
-      Initialize: () => {
-        return this.getToolboxItems().find((item) =>
-          item.isSelectable()) ?? null;
-      },
-      Synchronize: (node: IFocusableNode) => {
-        if (node !== this) {
-          // Only select the item if it isn't already selected as to not toggle.
-          if (this.getSelectedItem() !== node) {
-            this.setSelectedItem(node as IToolboxItem);
-          }
-        } else this.clearSelection();
-      },
-      BlurFocus: null
-    };
-    getFocusManager().registerTree(this, customizationOptions);
+    // const customizationOptions: TreeCustomizationCallbacks = {
+    //   Initialize: () => {
+    //     return this.getToolboxItems().find((item) =>
+    //       item.isSelectable()) ?? null;
+    //   },
+    //   Synchronize: (node: IFocusableNode) => {
+    //     if (node !== this) {
+    //       // Only select the item if it isn't already selected as to not toggle.
+    //       if (this.getSelectedItem() !== node) {
+    //         this.setSelectedItem(node as IToolboxItem);
+    //       }
+    //     } else this.clearSelection();
+    //   },
+    //   BlurFocus: null
+    // };
+    // getFocusManager().registerTree(this, customizationOptions);
+    getFocusManager().registerTree(this);
   }
 
   /**
@@ -1119,12 +1120,45 @@ export class Toolbox
     return this;
   }
 
+  onNodeFocus(): void {}
+
+  onNodeBlur(): void {}
+
+  getRestoredFocusableNode(previousNode: IFocusableNode | null): IFocusableNode | null {
+    if (!previousNode || previousNode === this) {
+      return this.getToolboxItems().find((item) => item.isSelectable()) ?? null;
+    } else return null;
+  }
+
   getNestedTrees(): Array<IFocusableTree> {
-    if (this.flyout) return [this.flyout]; else return [];
+    return [];
+    // if (this.flyout) return [this.flyout.getWorkspace()]; else return [];
   }
 
   lookUpFocusableNode(id: string): IFocusableNode | null {
     return this.getToolboxItemById(id) as IFocusableNode;
+  }
+
+  onTreeFocus(node: IFocusableNode, previousTree: IFocusableTree | null): void {
+    console.log('@@@@@ toolbox.onTreeFocus', node, 'is root:', node===this);
+    if (node !== this) {
+      // Only select the item if it isn't already selected so as to not toggle.
+      if (this.getSelectedItem() !== node) {
+        console.log('@@@@@ select item', node as IToolboxItem);
+        this.setSelectedItem(node as IToolboxItem);
+      }
+    } else this.clearSelection();
+    /*if (node !== this && this.getSelectedItem() !== node) {
+      console.log('@@@@@ select item', node as IToolboxItem);
+      this.setSelectedItem(node as IToolboxItem);
+    } else {
+      // There should always be a toolbox item selected, if possible.
+      const first = this.getToolboxItems().find((item) => item.isSelectable());
+      this.setSelectedItem(first ?? null);
+    }*/
+  }
+
+  onTreeBlur(nextTree: IFocusableTree | null): void {
   }
 }
 

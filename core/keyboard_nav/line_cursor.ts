@@ -74,7 +74,7 @@ export class LineCursor extends Marker {
     super();
     // Bind changeListener to facilitate future disposal.
     this.changeListener = this.changeListener.bind(this);
-    this.workspace.addChangeListener(this.changeListener);
+    // this.workspace.addChangeListener(this.changeListener);
     // Regularise options and apply defaults.
     this.options = {...defaultOptions, ...options};
 
@@ -622,7 +622,7 @@ export class LineCursor extends Marker {
     const isZelosInputConnection =
       this.isZelos && curNode && this.isValueInputConnection(curNode);
 
-      realDrawer.draw(oldNode, curNode);
+      // realDrawer.draw(oldNode, curNode);
 
     // If drawing can't be handled locally, just use the drawer.
     if (curNodeType !== ASTNode.types.BLOCK && !isZelosInputConnection) {

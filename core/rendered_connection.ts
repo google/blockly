@@ -363,13 +363,21 @@ export class RenderedConnection extends Connection implements IFocusableNode {
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
-    this.getSourceBlock().queueRender();
+    const highlightSvg = this.findHighlightSvg();
+    // if (highlightSvg) {
+    //   highlightSvg.style.display = '';
+    // }
+    // this.getSourceBlock().queueRender();
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
-    this.getSourceBlock().queueRender();
+    const highlightSvg = this.findHighlightSvg();
+    // if (highlightSvg) {
+      // highlightSvg.style.display = 'none';
+    // }
+    // this.getSourceBlock().queueRender();
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */
@@ -637,11 +645,27 @@ export class RenderedConnection extends Connection implements IFocusableNode {
   }
 
   getFocusableElement(): HTMLElement | SVGElement {
-    return this.svgGroup;
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) return highlightSvg;
+    throw new Error('No highlight SVG found corresponding to this connection.');
   }
 
   getFocusableTree(): IFocusableTree {
     return this.getSourceBlock().workspace as WorkspaceSvg;
+  }
+
+  onNodeFocus(): void {
+    this.highlight();
+  }
+
+  onNodeBlur(): void {
+    this.unhighlight();
+  }
+
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as unknown | null as SVGElement | null;
   }
 }
 

@@ -150,14 +150,19 @@ let content = `
 
 .blocklyHighlightedConnectionPath {
   fill: none;
-  stroke: #fc3;
-  stroke-width: 4px;
+  // stroke: #fc3;
+  // stroke-width: 4px;
 }
 
 .blocklyPathLight {
   fill: none;
   stroke-linecap: round;
   stroke-width: 1;
+}
+
+.blocklySelected {
+  stroke: #ffa200;
+  stroke-width: 5;
 }
 
 .blocklySelected>.blocklyPathLight {
@@ -464,8 +469,8 @@ input[type=number] {
 }
 
 .blocklyMenuSeparator {
-  background-color: #ccc; 
-  height: 1px; 
+  background-color: #ccc;
+  height: 1px;
   border: 0;
   margin-left: 4px;
   margin-right: 4px;
@@ -496,13 +501,14 @@ input[type=number] {
 }
 
 .blocklyActiveFocus {
-  stroke: #2ae;
-  stroke-width: 2px;
-  fill: #0f0;
+  stroke: #ffa200;
+  stroke-width: 3;
+  outline-color: #ffa200;
 }
 .blocklyPassiveFocus {
-  stroke: #3fdfff;
-  stroke-width: 1.5px;
-  fill: #00f;
+  stroke: #ffa200;
+  stroke-dasharray: 5 3;
+  stroke-width: 3;
+  outline-color: #ffa200;
 }
 `;

@@ -36,6 +36,10 @@ export interface IFocusableNode {
    * belongs.
    */
   getFocusableTree(): IFocusableTree;
+
+  onNodeFocus(): void;
+
+  onNodeBlur(): void;
 }
 
 export function isFocusableNode(object: any | null): object is IFocusableNode {

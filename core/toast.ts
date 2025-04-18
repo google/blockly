@@ -5,6 +5,7 @@
  */
 
 import * as Css from './css.js';
+import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
@@ -93,7 +94,7 @@ export class Toast {
     messageElement.innerText = message;
     const closeButton = toast.appendChild(document.createElement('button'));
     closeButton.className = CLOSE_BUTTON_CLASS_NAME;
-    aria.setState(closeButton, aria.State.LABEL, 'Close');
+    aria.setState(closeButton, aria.State.LABEL, Msg['CLOSE']);
     const closeIcon = dom.createSvgElement(
       Svg.SVG,
       {

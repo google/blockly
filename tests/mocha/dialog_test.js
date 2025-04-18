@@ -18,10 +18,10 @@ suite('Dialog utilities', function () {
 
   teardown(function () {
     sharedTestTeardown.call(this);
-    Blockly.dialog.setAlert(undefined);
-    Blockly.dialog.setPrompt(undefined);
-    Blockly.dialog.setConfirm(undefined);
-    Blockly.dialog.setToast(undefined);
+    Blockly.dialog.setAlert();
+    Blockly.dialog.setPrompt();
+    Blockly.dialog.setConfirm();
+    Blockly.dialog.setToast();
   });
 
   test('use the browser alert by default', function () {

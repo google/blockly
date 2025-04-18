@@ -59,9 +59,12 @@ export function alert(message: string, opt_callback?: () => void) {
  * @see Blockly.dialog.alert
  */
 export function setAlert(
-  alertFunction?: (message: string, callback?: () => void) => void,
+  alertFunction: (
+    message: string,
+    callback?: () => void,
+  ) => void = defaultAlert,
 ) {
-  alertImplementation = alertFunction ?? defaultAlert;
+  alertImplementation = alertFunction;
 }
 
 /**
@@ -82,12 +85,12 @@ export function confirm(message: string, callback: (result: boolean) => void) {
  * @see Blockly.dialog.confirm
  */
 export function setConfirm(
-  confirmFunction?: (
+  confirmFunction: (
     message: string,
     callback: (result: boolean) => void,
-  ) => void,
+  ) => void = defaultConfirm,
 ) {
-  confirmImplementation = confirmFunction ?? defaultConfirm;
+  confirmImplementation = confirmFunction;
 }
 
 /**
@@ -115,13 +118,13 @@ export function prompt(
  * @see Blockly.dialog.prompt
  */
 export function setPrompt(
-  promptFunction?: (
+  promptFunction: (
     message: string,
     defaultValue: string,
     callback: (result: string | null) => void,
-  ) => void,
+  ) => void = defaultPrompt,
 ) {
-  promptImplementation = promptFunction ?? defaultPrompt;
+  promptImplementation = promptFunction;
 }
 
 /**
@@ -144,7 +147,10 @@ export function toast(workspace: WorkspaceSvg, options: ToastOptions) {
  * @see Blockly.dialog.toast
  */
 export function setToast(
-  toastFunction?: (workspace: WorkspaceSvg, options: ToastOptions) => void,
+  toastFunction: (
+    workspace: WorkspaceSvg,
+    options: ToastOptions,
+  ) => void = defaultToast,
 ) {
-  toastImplementation = toastFunction ?? defaultToast;
+  toastImplementation = toastFunction;
 }

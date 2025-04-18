@@ -55,7 +55,8 @@ export function alert(message: string, opt_callback?: () => void) {
 /**
  * Sets the function to be run when Blockly.dialog.alert() is called.
  *
- * @param alertFunction The function to be run.
+ * @param alertFunction The function to be run, or undefined to restore the
+ *     default implementation.
  * @see Blockly.dialog.alert
  */
 export function setAlert(
@@ -81,7 +82,8 @@ export function confirm(message: string, callback: (result: boolean) => void) {
 /**
  * Sets the function to be run when Blockly.dialog.confirm() is called.
  *
- * @param confirmFunction The function to be run.
+ * @param confirmFunction The function to be run, or undefined to restore the
+ *     default implementation.
  * @see Blockly.dialog.confirm
  */
 export function setConfirm(
@@ -114,7 +116,8 @@ export function prompt(
 /**
  * Sets the function to be run when Blockly.dialog.prompt() is called.
  *
- * @param promptFunction The function to be run.
+ * @param promptFunction The function to be run, or undefined to restore the
+ *     default implementation.
  * @see Blockly.dialog.prompt
  */
 export function setPrompt(
@@ -143,7 +146,8 @@ export function toast(workspace: WorkspaceSvg, options: ToastOptions) {
 /**
  * Sets the function to be run when Blockly.dialog.toast() is called.
  *
- * @param toastFunction The function to be run.
+ * @param toastFunction The function to be run, or undefined to restore the
+ *     default implementation.
  * @see Blockly.dialog.toast
  */
 export function setToast(

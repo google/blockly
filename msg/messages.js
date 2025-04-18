@@ -1614,3 +1614,110 @@ Blockly.Msg.DIALOG_OK = 'OK';
 /** @type {string} */
 /// button label - Pressing this button cancels a proposed action.\n{{Identical|Cancel}}
 Blockly.Msg.DIALOG_CANCEL = 'Cancel';
+
+/** @type {string} */
+/// menu label - Contextual menu item that deletes the focused block.
+Blockly.Msg.DELETE_BLOCK = 'Delete block (%1)';
+/** @type {string} */
+/// menu label - Keyboard shortcut for the Delete key, shown at the end of a
+/// menu item that deletes the focused block.
+Blockly.Msg.DELETE_SHORTCUT = 'Del';
+/** @type {string} */
+/// menu label - Contextual menu item that moves the keyboard navigation cursor
+/// into a subitem of the focused block.
+Blockly.Msg.EDIT_BLOCK_CONTENTS = 'Edit Block contents (→︎)';
+/** @type {string} */
+/// menu label - Contextual menu item that prompts the user to choose a block to
+/// insert into the program at the focused location.
+Blockly.Msg.INSERT_BLOCK = 'Insert Block (I)';
+/** @type {string} */
+/// keyboard shortcut label - Contextual menu item that starts a keyboard-driven 
+/// move of the focused block.
+Blockly.Msg.START_MOVE = 'Start move';
+/** @type {string} */
+/// keyboard shortcut label - Contextual menu item that ends a keyboard-driven
+/// move of the focused block.
+Blockly.Msg.FINISH_MOVE = 'Finish move';
+/** @type {string} */
+/// keyboard shortcut label - Contextual menu item that ends a keyboard-drive
+/// move of the focused block by returning it to its original location.
+Blockly.Msg.ABORT_MOVE = 'Abort move';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block to the
+/// next valid location to the left.
+Blockly.Msg.MOVE_LEFT_CONSTRAINED = 'Move left, constrained';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block to the
+/// next valid location to the right.
+Blockly.Msg.MOVE_RIGHT_CONSTRAINED = 'Move right constrained';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block to the
+/// next valid location above it.
+Blockly.Msg.MOVE_UP_CONSTRAINED = 'Move up, constrained';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block to the
+/// next valid location below it.
+Blockly.Msg.MOVE_DOWN_CONSTRAINED = 'Move down constrained';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block freely
+/// to the left.
+Blockly.Msg.MOVE_LEFT_UNCONSTRAINED = 'Move left, unconstrained';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block freely
+/// to the right.
+Blockly.Msg.MOVE_RIGHT_UNCONSTRAINED = 'Move right, unconstrained';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block freely
+/// upwards.
+Blockly.Msg.MOVE_UP_UNCONSTRAINED = 'Move up unconstrained';
+/** @type {string} */
+/// keyboard shortcut label - Description of shortcut that moves a block freely
+/// downwards.
+Blockly.Msg.MOVE_DOWN_UNCONSTRAINED = 'Move down, unconstrained';
+/** @type {string} */
+/// menu label - Contextual menu item that starts a keyboard-driven block move.
+Blockly.Msg.MOVE_BLOCK = 'Move Block (M)';
+/** @type {string} */
+/// Name of the Microsoft Windows operating system displayed in a list of 
+/// keyboard shortcuts.
+Blockly.Msg.WINDOWS = 'Windows';
+/** @type {string} */
+/// Name of the Apple macOS operating system displayed in a list of keyboard
+/// shortcuts,
+Blockly.Msg.MAC_OS = 'macOS';
+/** @type {string} */
+/// Name of the Google ChromeOS operating system displayed in a list of keyboard
+/// shortcuts.
+Blockly.Msg.CHROME_OS = 'ChromeOS';
+/** @type {string} */
+/// Name of the GNU/Linux operating system displayed in a list of keyboard
+/// shortcuts.
+Blockly.Msg.LINUX = 'Linux';
+/** @type {string} */
+/// Placeholder name for an operating system that can't be identified in a list
+/// of keyboard shortcuts.
+Blockly.Msg.UNKNOWN = 'Unknown';
+/** @type {string} */
+/// Representation of the Control key used in keyboard shortcuts.
+Blockly.Msg.CONTROL_KEY = 'Ctrl';
+/** @type {string} */
+/// Representation of the Mac Command key used in keyboard shortcuts.
+Blockly.Msg.COMMAND_KEY = '⌘ Command';
+/** @type {string} */
+/// Representation of the Mac Option key used in keyboard shortcuts.
+Blockly.Msg.OPTION_KEY = '⌥ Option';
+/** @type {string} */
+/// Representation of the Alt key used in keyboard shortcuts.
+Blockly.Msg.ALT_KEY = 'Alt';
+/** @type {string} */
+/// menu label - Contextual menu item that cuts the focused item.
+Blockly.Msg.CUT_SHORTCUT = 'Cut (%1)';
+/** @type {string} */
+/// menu label - Contextual menu item that copies the focused item.
+Blockly.Msg.COPY_SHORTCUT = 'Copy (%1)';
+/** @type {string} */
+/// menu label - Contextual menu item that pastes the previously copied item.
+Blockly.Msg.PASTE_SHORTCUT = 'Paste (%1)';
+/** @type {string} */
+/// Alert message shown to prompt users to review available keyboard shortcuts.
+Blockly.Msg.HELP_PROMPT = 'Press %1 for help on keyboard controls';

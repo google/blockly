@@ -1617,11 +1617,11 @@ Blockly.Msg.DIALOG_CANCEL = 'Cancel';
 
 /** @type {string} */
 /// menu label - Contextual menu item that deletes the focused block.
-Blockly.Msg.DELETE_BLOCK = 'Delete block (%1)';
+Blockly.Msg.DELETE_SHORTCUT = 'Delete block (%1)';
 /** @type {string} */
 /// menu label - Keyboard shortcut for the Delete key, shown at the end of a
 /// menu item that deletes the focused block.
-Blockly.Msg.DELETE_SHORTCUT = 'Del';
+Blockly.Msg.DELETE_KEY = 'Del';
 /** @type {string} */
 /// menu label - Contextual menu item that moves the keyboard navigation cursor
 /// into a subitem of the focused block.

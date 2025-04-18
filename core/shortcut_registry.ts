@@ -12,6 +12,7 @@
  */
 // Former goog.module ID: Blockly.ShortcutRegistry
 
+import { Scope } from './contextmenu_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as object from './utils/object.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -249,12 +250,12 @@ export class ShortcutRegistry {
       const shortcut = this.shortcuts.get(shortcutName);
       if (
         !shortcut ||
-        (shortcut.preconditionFn && !shortcut.preconditionFn(workspace))
+        (shortcut.preconditionFn && !shortcut.preconditionFn(workspace, {}))
       ) {
         continue;
       }
       // If the key has been handled, stop processing shortcuts.
-      if (shortcut.callback?.(workspace, e, shortcut)) return true;
+      if (shortcut.callback?.(workspace, e, shortcut, {})) return true;
     }
     return false;
   }
@@ -372,6 +373,8 @@ export namespace ShortcutRegistry {
      * @param e The event that caused the shortcut to be activated.
      * @param shortcut The `KeyboardShortcut` that was activated
      *     (i.e., the one this callback is attached to).
+     * @param scope Information about the focused item when the
+     * shortcut was invoked.
      * @returns Returning true ends processing of the invoked keycode.
      *     Returning false causes processing to continue with the
      *     next-most-recently registered shortcut for the invoked
@@ -381,6 +384,7 @@ export namespace ShortcutRegistry {
       workspace: WorkspaceSvg,
       e: Event,
       shortcut: KeyboardShortcut,
+      scope: Scope,
     ) => boolean;
 
     /** The name of the shortcut.  Should be unique. */
@@ -393,9 +397,11 @@ export namespace ShortcutRegistry {
      *
      * @param workspace The `WorkspaceSvg` where the shortcut was
      *     invoked.
+     * @param scope Information about the focused item when the
+     * shortcut would be invoked.
      * @returns True iff `callback` function should be called.
      */
-    preconditionFn?: (workspace: WorkspaceSvg) => boolean;
+    preconditionFn?: (workspace: WorkspaceSvg, scope: Scope) => boolean;
 
     /** Optional arbitray extra data attached to the shortcut. */
     metadata?: object;

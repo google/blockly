@@ -37,11 +37,34 @@ export interface IFocusableNode {
    */
   getFocusableTree(): IFocusableTree;
 
+  /**
+   * Called when this node receives active focus.
+   *
+   * Note that it's fine for implementations to change visibility modifiers, but
+   * they should avoid the following:
+   * - Creating or removing DOM elements (including via the renderer or drawer).
+   * - Affecting focus via DOM focus() calls or the FocusManager.
+   */
   onNodeFocus(): void;
 
+  /**
+   * Called when this node loses active focus. It may still have passive focus.
+   *
+   * This has the same implementation restrictions as onNodeFocus().
+   */
   onNodeBlur(): void;
 }
 
+/**
+ * Determines whether the provided object fulfills the contract of
+ * IFocusableNode.
+ *
+ * @param object The object to test.
+ * @returns Whether the provided object can be used as an IFocusableNode.
+ */
 export function isFocusableNode(object: any | null): object is IFocusableNode {
-  return object && 'getFocusableElement' in object && 'getFocusableTree' in object;
+  return object && 'getFocusableElement' in object
+    && 'getFocusableTree' in object
+    && 'onNodeFocus' in object
+    && 'onNodeBlur' in object;
 }

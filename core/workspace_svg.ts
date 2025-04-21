@@ -37,7 +37,7 @@ import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Flyout} from './flyout_base.js';
 import type {FlyoutButton} from './flyout_button.js';
-import {getFocusManager, TreeCustomizationCallbacks} from './focus_manager.js';
+import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -856,23 +856,6 @@ export class WorkspaceSvg
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
 
-    // const customizationOptions: TreeCustomizationCallbacks = {
-    //   Initialize: () => {
-    //     // TODO: This doesn't handle the idea of starting in a preset location like the plugin does.
-    //     return this.getTopBlocks(true)[0] ?? null;
-    //   },
-    //   // TODO: Perhaps synchronize here could select the block? Would drastically simplify selection management in cursor (I think).
-    //   Synchronize: null,
-    //   BlurFocus: () => {
-    //     // TODO: make sure this works correctly for a permanent flyout.
-    //     // If the flyout loses focus, make sure to close it.
-    //     if (this.isFlyout) {
-    //       // TODO: fix this as it doesn't seem to work (it gets triggered correctly, hide() just doesn't seem to do anything).
-    //       this.getFlyout()?.hide();
-    //     }
-    //   }
-    // };
-    // getFocusManager().registerTree(this, customizationOptions);
     getFocusManager().registerTree(this);
 
     return this.svgGroup_;

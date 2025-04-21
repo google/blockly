@@ -22,7 +22,7 @@ import {DeleteArea} from '../delete_area.js';
 import '../events/events_toolbox_item_select.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
-import {getFocusManager, TreeCustomizationCallbacks} from '../focus_manager.js';
+import {getFocusManager} from '../focus_manager.js';
 import type {IAutoHideable} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 import {isDeletable} from '../interfaces/i_deletable.js';
@@ -172,22 +172,6 @@ export class Toolbox
         ComponentManager.Capability.DRAG_TARGET,
       ],
     });
-    // const customizationOptions: TreeCustomizationCallbacks = {
-    //   Initialize: () => {
-    //     return this.getToolboxItems().find((item) =>
-    //       item.isSelectable()) ?? null;
-    //   },
-    //   Synchronize: (node: IFocusableNode) => {
-    //     if (node !== this) {
-    //       // Only select the item if it isn't already selected as to not toggle.
-    //       if (this.getSelectedItem() !== node) {
-    //         this.setSelectedItem(node as IToolboxItem);
-    //       }
-    //     } else this.clearSelection();
-    //   },
-    //   BlurFocus: null
-    // };
-    // getFocusManager().registerTree(this, customizationOptions);
     getFocusManager().registerTree(this);
   }
 

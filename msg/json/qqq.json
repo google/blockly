@@ -431,5 +431,8 @@
 	"CUT_SHORTCUT": "menu label - Contextual menu item that cuts the focused item.",
 	"COPY_SHORTCUT": "menu label - Contextual menu item that copies the focused item.",
 	"PASTE_SHORTCUT": "menu label - Contextual menu item that pastes the previously copied item.",
-	"HELP_PROMPT": "Alert message shown to prompt users to review available keyboard shortcuts."
+	"HELP_PROMPT": "Alert message shown to prompt users to review available keyboard shortcuts.",
+	"SHORTCUTS_GENERAL": "shortcut list section header - Label for general purpose keyboard shortcuts.",
+	"SHORTCUTS_EDITING": "shortcut list section header - Label for keyboard shortcuts related to editing a workspace.",
+	"SHORTCUTS_CODE_NAVIGATION": "shortcut list section header - Label for keyboard shortcuts related to moving around the workspace."
 }

@@ -1721,3 +1721,14 @@ Blockly.Msg.PASTE_SHORTCUT = 'Paste (%1)';
 /** @type {string} */
 /// Alert message shown to prompt users to review available keyboard shortcuts.
 Blockly.Msg.HELP_PROMPT = 'Press %1 for help on keyboard controls';
+/** @type {string} */
+/// shortcut list section header - Label for general purpose keyboard shortcuts.
+Blockly.Msg.SHORTCUTS_GENERAL = 'General';
+/** @type {string} */
+/// shortcut list section header - Label for keyboard shortcuts related to
+/// editing a workspace.
+Blockly.Msg.SHORTCUTS_EDITING = 'Editing'
+/** @type {string} */
+/// shortcut list section header - Label for keyboard shortcuts related to
+/// moving around the workspace.
+Blockly.Msg.SHORTCUTS_CODE_NAVIGATION = 'Code navigation';

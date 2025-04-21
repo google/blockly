@@ -60,20 +60,3 @@ export interface IFocusableNode {
    */
   onNodeBlur(): void;
 }
-
-/**
- * Determines whether the provided object fulfills the contract of
- * IFocusableNode.
- *
- * @param object The object to test.
- * @returns Whether the provided object can be used as an IFocusableNode.
- */
-export function isFocusableNode(object: any | null): object is IFocusableNode {
-  return (
-    object &&
-    'getFocusableElement' in object &&
-    'getFocusableTree' in object &&
-    'onNodeFocus' in object &&
-    'onNodeBlur' in object
-  );
-}

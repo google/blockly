@@ -63,7 +63,7 @@ class FocusableTreeImpl {
   onTreeBlur() {}
 }
 
-suite.only('FocusableTreeTraverser', function () {
+suite('FocusableTreeTraverser', function () {
   setup(function () {
     sharedTestSetup.call(this);
 

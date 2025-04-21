@@ -90,6 +90,13 @@ export interface IFocusableTree {
   /**
    * Called when a node of this tree has received active focus.
    *
+   * Note that a null previousTree does not necessarily indicate that this is
+   * the first time Blockly is receiving focus. In fact, few assumptions can be
+   * made about previous focus state as a previous null tree simply indicates
+   * that Blockly did not hold active focus prior to this tree becoming focused
+   * (which can happen due to focus exiting the Blockly injection div, or for
+   * other cases like ephemeral focus).
+   *
    * See IFocusableNode.onNodeFocus() as implementations have the same
    * restrictions as with that method.
    *
@@ -104,7 +111,8 @@ export interface IFocusableTree {
    * passively focused and there is no other active node of this tree taking its
    * place.
    *
-   * This has the same implementation restrictions as onTreeFocus().
+   * This has the same implementation restrictions and considerations as
+   * onTreeFocus().
    *
    * @param nextTree The next tree receiving active focus, or null if none (such
    *     as in the case that Blockly is entirely losing DOM focus).

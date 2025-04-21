@@ -25,8 +25,14 @@ export interface IFocusableNode {
    * and a tab index must be present in order for the element to be focusable in
    * the DOM).
    *
-   * It's expected the return element will not change for the lifetime of the
-   * node.
+   * The returned element must be visible if the node is ever focused via
+   * FocusManager.focusNode() or FocusManager.focusTree(). It's allowed for an
+   * element to be hidden until onNodeFocus() is called, or become hidden with a
+   * call to onNodeBlur().
+   *
+   * It's expected the actual returned element will not change for the lifetime
+   * of the node (that is, its properties can change but a new element should
+   * never be returned.)
    */
   getFocusableElement(): HTMLElement | SVGElement;
 

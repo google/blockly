@@ -39,7 +39,7 @@ export interface IFocusableTree {
 
   /**
    * Returns the IFocusableNode of this tree that should receive active focus
-   * when the tree itself has focused returned to it.
+   * when the tree itself has focus returned to it.
    *
    * There are some very important notes to consider about a tree's focus
    * lifecycle when implementing a version of this method that doesn't return

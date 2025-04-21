@@ -224,7 +224,7 @@ export class FocusManager {
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
-    if (this.focusedNode == focusableNode) return; // State is unchanged.
+    if (this.focusedNode === focusableNode) return; // State is unchanged.
 
     const nextTree = focusableNode.getFocusableTree();
     if (!this.isRegistered(nextTree)) {

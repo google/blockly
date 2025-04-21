@@ -32,7 +32,7 @@ export interface IFocusableNode {
    *
    * It's expected the actual returned element will not change for the lifetime
    * of the node (that is, its properties can change but a new element should
-   * never be returned.)
+   * never be returned).
    */
   getFocusableElement(): HTMLElement | SVGElement;
 

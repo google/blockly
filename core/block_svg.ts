@@ -16,7 +16,6 @@ import './events/events_selected.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
-import {IDeletable} from './blockly.js';
 import * as browserEvents from './browser_events.js';
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 import * as common from './common.js';
@@ -41,7 +40,9 @@ import {WarningIcon} from './icons/warning_icon.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
+import {IDeletable} from './interfaces/i_deletable.js';
 import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
@@ -74,6 +75,7 @@ export class BlockSvg
   implements
     IASTNodeLocationSvg,
     IBoundedElement,
+    IContextMenu,
     ICopyable<BlockCopyData>,
     IDraggable,
     IDeletable,
@@ -583,15 +585,15 @@ export class BlockSvg
    *
    * @returns Context menu options or null if no menu.
    */
-  protected generateContextMenu(): Array<
-    ContextMenuOption | LegacyContextMenuOption
-  > | null {
+  protected generateContextMenu(
+    e: Event,
+  ): Array<ContextMenuOption | LegacyContextMenuOption> | null {
     if (this.workspace.isReadOnly() || !this.contextMenu) {
       return null;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-      ContextMenuRegistry.ScopeType.BLOCK,
-      {block: this},
+      {block: this, focusedNode: this},
+      e,
     );
 
     // Allow the block to add or modify menuOptions.
@@ -603,16 +605,56 @@ export class BlockSvg
   }
 
   /**
+   * Gets the location in which to show the context menu for this block.
+   * Use the location of a click if the block was clicked, or a location
+   * based on the block's fields otherwise.
+   */
+  protected calculateContextMenuLocation(e: Event): Coordinate {
+    // Open the menu where the user clicked, if they clicked
+    if (e instanceof PointerEvent) {
+      return new Coordinate(e.clientX, e.clientY);
+    }
+
+    // Otherwise, calculate a location.
+    // Get the location of the top-left corner of the block in
+    // screen coordinates.
+    const blockCoords = svgMath.wsToScreenCoordinates(
+      this.workspace,
+      this.getRelativeToSurfaceXY(),
+    );
+
+    // Prefer a y position below the first field in the block.
+    const fieldBoundingClientRect = this.inputList
+      .filter((input) => input.isVisible())
+      .flatMap((input) => input.fieldRow)
+      .find((f) => f.isVisible())
+      ?.getSvgRoot()
+      ?.getBoundingClientRect();
+
+    const y =
+      fieldBoundingClientRect && fieldBoundingClientRect.height
+        ? fieldBoundingClientRect.y + fieldBoundingClientRect.height
+        : blockCoords.y + this.height;
+
+    return new Coordinate(
+      this.RTL ? blockCoords.x - 5 : blockCoords.x + 5,
+      y + 5,
+    );
+  }
+
+  /**
    * Show the context menu for this block.
    *
    * @param e Mouse event.
    * @internal
    */
-  showContextMenu(e: PointerEvent) {
-    const menuOptions = this.generateContextMenu();
+  showContextMenu(e: Event) {
+    const menuOptions = this.generateContextMenu(e);
+
+    const location = this.calculateContextMenuLocation(e);
 
     if (menuOptions && menuOptions.length) {
-      ContextMenu.show(e, menuOptions, this.RTL, this.workspace);
+      ContextMenu.show(e, menuOptions, this.RTL, this.workspace, location);
       ContextMenu.setCurrentBlock(this);
     }
   }
@@ -1702,6 +1744,16 @@ export class BlockSvg
       conn,
       add,
     );
+  }
+
+  /**
+   * Returns the drag strategy currently in use by this block.
+   *
+   * @internal
+   * @returns This block's drag strategy.
+   */
+  getDragStrategy(): IDragStrategy {
+    return this.dragStrategy;
   }
 
   /** Sets the drag strategy for this block. */

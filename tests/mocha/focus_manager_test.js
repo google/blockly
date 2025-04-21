@@ -50,7 +50,9 @@ class FocusableTreeImpl {
     return this.rootNode;
   }
 
-  getRestoredFocusableNode() { return null; }
+  getRestoredFocusableNode() {
+    return null;
+  }
 
   getNestedTrees() {
     return this.nestedTrees;
@@ -2092,7 +2094,7 @@ suite('FocusManager', function () {
           .getRootFocusableNode()
           .getFocusableElement();
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
-          assert.includesClass(
+        assert.includesClass(
           nodeElem.classList,
           FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );

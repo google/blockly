@@ -32,7 +32,7 @@ export interface IFocusableNode {
    *
    * It's expected the actual returned element will not change for the lifetime
    * of the node (that is, its properties can change but a new element should
-   * never be returned.)
+   * never be returned).
    */
   getFocusableElement(): HTMLElement | SVGElement;
 
@@ -59,18 +59,4 @@ export interface IFocusableNode {
    * This has the same implementation restrictions as onNodeFocus().
    */
   onNodeBlur(): void;
-}
-
-/**
- * Determines whether the provided object fulfills the contract of
- * IFocusableNode.
- *
- * @param object The object to test.
- * @returns Whether the provided object can be used as an IFocusableNode.
- */
-export function isFocusableNode(object: any | null): object is IFocusableNode {
-  return object && 'getFocusableElement' in object
-    && 'getFocusableTree' in object
-    && 'onNodeFocus' in object
-    && 'onNodeBlur' in object;
 }

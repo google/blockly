@@ -20,7 +20,10 @@ import type {ConnectionDB} from './connection_db.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {ConnectionType} from './connection_type.js';
+import * as ContextMenu from './contextmenu.js';
+import {ContextMenuRegistry} from './contextmenu_registry.js';
 import * as eventUtils from './events/utils.js';
+import {IContextMenu} from './interfaces/i_contextmenu.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -29,6 +32,7 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as svgPaths from './utils/svg_paths.js';
 import type {ConstantProvider, PuzzleTab} from './renderers/common/constants.js';
+import * as svgMath from './utils/svg_math.js';
 
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;
@@ -36,7 +40,9 @@ const BUMP_RANDOMNESS = 10;
 /**
  * Class for a connection between blocks that may be rendered on screen.
  */
-export class RenderedConnection extends Connection implements IFocusableNode {
+export class RenderedConnection
+  extends Connection
+  implements IContextMenu, IFocusableNode {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
   private readonly db: ConnectionDB;
@@ -644,6 +650,46 @@ export class RenderedConnection extends Connection implements IFocusableNode {
     return this;
   }
 
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as unknown | null as SVGElement | null;
+  }
+
+  /**
+   * Handles showing the context menu when it is opened on a connection.
+   * Note that typically the context menu can't be opened with the mouse
+   * on a connection, because you can't select a connection. But keyboard
+   * users may open the context menu with a keyboard shortcut.
+   *
+   * @param e Event that triggered the opening of the context menu.
+   */
+  showContextMenu(e: Event): void {
+    const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
+      {focusedNode: this},
+      e,
+    );
+
+    if (!menuOptions.length) return;
+
+    const block = this.getSourceBlock();
+    const workspace = block.workspace;
+
+    let location;
+    if (e instanceof PointerEvent) {
+      location = new Coordinate(e.clientX, e.clientY);
+    } else {
+      const connectionWSCoords = new Coordinate(this.x, this.y);
+      const connectionScreenCoords = svgMath.wsToScreenCoordinates(
+        workspace,
+        connectionWSCoords,
+      );
+      location = connectionScreenCoords.translate(block.RTL ? -5 : 5, 5);
+    }
+
+    ContextMenu.show(e, menuOptions, block.RTL, workspace, location);
+  }
+
   getFocusableElement(): HTMLElement | SVGElement {
     const highlightSvg = this.findHighlightSvg();
     if (highlightSvg) return highlightSvg;
@@ -660,12 +706,6 @@ export class RenderedConnection extends Connection implements IFocusableNode {
 
   onNodeBlur(): void {
     this.unhighlight();
-  }
-
-  private findHighlightSvg(): SVGElement | null {
-    // This cast is valid as TypeScript's definition is wrong. See:
-    // https://github.com/microsoft/TypeScript/issues/60996.
-    return document.getElementById(this.id) as unknown | null as SVGElement | null;
   }
 }
 

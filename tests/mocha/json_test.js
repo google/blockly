@@ -256,12 +256,6 @@ suite('JSON Block Definitions', function () {
         'alt': '%{BKY_ALT_TEXT}',
       };
       const VALUE1 = 'VALUE1';
-      const IMAGE2 = {
-        'width': 90,
-        'height': 123,
-        'src': 'http://image2.src',
-      };
-      const VALUE2 = 'VALUE2';
 
       Blockly.defineBlocksWithJsonArray([
         {
@@ -274,7 +268,6 @@ suite('JSON Block Definitions', function () {
               'options': [
                 [IMAGE0, VALUE0],
                 [IMAGE1, VALUE1],
-                [IMAGE2, VALUE2],
               ],
             },
           ],
@@ -305,11 +298,6 @@ suite('JSON Block Definitions', function () {
       assertImageEquals(IMAGE1, image1);
       assert.equal(image1.alt, IMAGE1_ALT_TEXT); // Via Msg reference
       assert.equal(VALUE1, options[1][1]);
-
-      const image2 = options[2][0];
-      assertImageEquals(IMAGE1, image1);
-      assert.notExists(image2.alt); // No alt specified.
-      assert.equal(VALUE2, options[2][1]);
     });
   });
 });

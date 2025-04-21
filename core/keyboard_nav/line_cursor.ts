@@ -101,7 +101,11 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    const newNode = this.getNextNode(curNode, this.validLineNode.bind(this));
+    const newNode = this.getNextNode(
+      curNode,
+      this.validLineNode.bind(this),
+      true,
+    );
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -121,7 +125,11 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    const newNode = this.getNextNode(curNode, this.validInLineNode.bind(this));
+    const newNode = this.getNextNode(
+      curNode,
+      this.validInLineNode.bind(this),
+      true,
+    );
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -140,11 +148,10 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    const newNode = this.getPreviousNode(
+    const newNode = this.getPreviousNodeImpl(
       curNode,
       this.validLineNode.bind(this),
     );
-
     if (newNode) {
       this.setCurNode(newNode);
     }
@@ -163,7 +170,7 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    const newNode = this.getPreviousNode(
+    const newNode = this.getPreviousNodeImpl(
       curNode,
       this.validInLineNode.bind(this),
     );
@@ -186,6 +193,7 @@ export class LineCursor extends Marker {
     const rightNode = this.getNextNode(
       curNode,
       this.validInLineNode.bind(this),
+      false,
     );
     return this.validLineNode(rightNode);
   }
@@ -301,26 +309,44 @@ export class LineCursor extends Marker {
    *     should be traversed.
    * @returns The next node in the traversal.
    */
-  getNextNode(
+  private getNextNodeImpl(
     node: ASTNode | null,
     isValid: (p1: ASTNode | null) => boolean,
   ): ASTNode | null {
-    if (!node) {
-      return null;
-    }
-    const newNode = node.in() || node.next();
-    if (isValid(newNode)) {
-      return newNode;
-    } else if (newNode) {
-      return this.getNextNode(newNode, isValid);
-    }
-    const siblingOrParentSibling = this.findSiblingOrParentSibling(node.out());
-    if (isValid(siblingOrParentSibling)) {
-      return siblingOrParentSibling;
-    } else if (siblingOrParentSibling) {
-      return this.getNextNode(siblingOrParentSibling, isValid);
-    }
+    if (!node) return null;
+    let newNode = node.in() || node.next();
+    if (isValid(newNode)) return newNode;
+    if (newNode) return this.getNextNodeImpl(newNode, isValid);
+
+    newNode = this.findSiblingOrParentSibling(node.out());
+    if (isValid(newNode)) return newNode;
+    if (newNode) return this.getNextNodeImpl(newNode, isValid);
     return null;
+  }
+
+  /**
+   * Get the next node in the AST, optionally allowing for loopback.
+   *
+   * @param node The current position in the AST.
+   * @param isValid A function true/false depending on whether the given node
+   *     should be traversed.
+   * @param loop Whether to loop around to the beginning of the workspace if
+   *     novalid node was found.
+   * @returns The next node in the traversal.
+   */
+  getNextNode(
+    node: ASTNode | null,
+    isValid: (p1: ASTNode | null) => boolean,
+    loop: boolean,
+  ): ASTNode | null {
+    if (!node) return null;
+
+    const potential = this.getNextNodeImpl(node, isValid);
+    if (potential || !loop) return potential;
+    // Loop back.
+    const firstNode = this.getFirstNode();
+    if (isValid(firstNode)) return firstNode;
+    return this.getNextNodeImpl(firstNode, isValid);
   }
 
   /**
@@ -334,13 +360,11 @@ export class LineCursor extends Marker {
    * @returns The previous node in the traversal or null if no previous node
    *     exists.
    */
-  getPreviousNode(
+  private getPreviousNodeImpl(
     node: ASTNode | null,
     isValid: (p1: ASTNode | null) => boolean,
   ): ASTNode | null {
-    if (!node) {
-      return null;
-    }
+    if (!node) return null;
     let newNode: ASTNode | null = node.prev();
 
     if (newNode) {
@@ -348,12 +372,36 @@ export class LineCursor extends Marker {
     } else {
       newNode = node.out();
     }
-    if (isValid(newNode)) {
-      return newNode;
-    } else if (newNode) {
-      return this.getPreviousNode(newNode, isValid);
-    }
+
+    if (isValid(newNode)) return newNode;
+    if (newNode) return this.getPreviousNodeImpl(newNode, isValid);
     return null;
+  }
+
+  /**
+   * Get the previous node in the AST, optionally allowing for loopback.
+   *
+   * @param node The current position in the AST.
+   * @param isValid A function true/false depending on whether the given node
+   *     should be traversed.
+   * @param loop Whether to loop around to the end of the workspace if no
+   *     valid node was found.
+   * @returns The previous node in the traversal or null if no previous node
+   *     exists.
+   */
+  getPreviousNode(
+    node: ASTNode | null,
+    isValid: (p1: ASTNode | null) => boolean,
+    loop: boolean,
+  ): ASTNode | null {
+    if (!node) return null;
+
+    const potential = this.getPreviousNodeImpl(node, isValid);
+    if (potential || !loop) return potential;
+    // Loop back.
+    const lastNode = this.getLastNode();
+    if (isValid(lastNode)) return lastNode;
+    return this.getPreviousNodeImpl(lastNode, isValid);
   }
 
   /**
@@ -364,13 +412,9 @@ export class LineCursor extends Marker {
    * @returns The next sibling node, the parent's next sibling, or null.
    */
   private findSiblingOrParentSibling(node: ASTNode | null): ASTNode | null {
-    if (!node) {
-      return null;
-    }
+    if (!node) return null;
     const nextNode = node.next();
-    if (nextNode) {
-      return nextNode;
-    }
+    if (nextNode) return nextNode;
     return this.findSiblingOrParentSibling(node.out());
   }
 
@@ -383,9 +427,7 @@ export class LineCursor extends Marker {
    */
   private getRightMostChild(node: ASTNode): ASTNode | null {
     let newNode = node.in();
-    if (!newNode) {
-      return node;
-    }
+    if (!newNode) return node;
     for (
       let nextNode: ASTNode | null = newNode;
       nextNode;
@@ -793,6 +835,47 @@ export class LineCursor extends Marker {
         eventUtils.enable();
       }
     }
+  }
+
+  /**
+   * Get the first navigable node on the workspace, or null if none exist.
+   *
+   * @returns The first navigable node on the workspace, or null.
+   */
+  getFirstNode(): ASTNode | null {
+    const topBlocks = this.workspace.getTopBlocks(true);
+    if (!topBlocks.length) return null;
+    return ASTNode.createTopNode(topBlocks[0]);
+  }
+
+  /**
+   * Get the last navigable node on the workspace, or null if none exist.
+   *
+   * @returns The last navigable node on the workspace, or null.
+   */
+  getLastNode(): ASTNode | null {
+    // Loop back to last block if it exists.
+    const topBlocks = this.workspace.getTopBlocks(true);
+    if (!topBlocks.length) return null;
+
+    // Find the last stack.
+    const lastTopBlockNode = ASTNode.createStackNode(
+      topBlocks[topBlocks.length - 1],
+    );
+    let prevNode = lastTopBlockNode;
+    let nextNode: ASTNode | null = lastTopBlockNode;
+    // Iterate until you fall off the end of the stack.
+    while (nextNode) {
+      prevNode = nextNode;
+      nextNode = this.getNextNode(
+        prevNode,
+        (node) => {
+          return !!node;
+        },
+        false,
+      );
+    }
+    return prevNode;
   }
 }
 

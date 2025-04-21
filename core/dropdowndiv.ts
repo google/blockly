@@ -133,9 +133,6 @@ export function createDom() {
   // Transition animation for transform: translate() and opacity.
   div.style.transition =
     'transform ' + ANIMATION_TIME + 's, ' + 'opacity ' + ANIMATION_TIME + 's';
-
-  // Handle focusin/out events to add a visual indicator when
-  // a child is focused or blurred.
 }
 
 /**
@@ -166,8 +163,8 @@ export function getContentDiv(): HTMLDivElement {
 
 /** Clear the content of the drop-down. */
 export function clearContent() {
-  content.textContent = '';
-  content.style.width = '';
+  div.remove();
+  createDom();
 }
 
 /**
@@ -338,12 +335,8 @@ export function show<T>(
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   renderedClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  if (renderedClassName) {
-    dom.addClass(div, renderedClassName);
-  }
-  if (themeClassName) {
-    dom.addClass(div, themeClassName);
-  }
+  dom.addClass(div, renderedClassName);
+  dom.addClass(div, themeClassName);
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -645,16 +638,6 @@ export function hideWithoutAnimation() {
     clearTimeout(animateOutTimer);
   }
 
-  // Reset style properties in case this gets called directly
-  // instead of hide() - see discussion on #2551.
-  div.style.transform = '';
-  div.style.left = '';
-  div.style.top = '';
-  div.style.opacity = '0';
-  div.style.display = 'none';
-  div.style.backgroundColor = '';
-  div.style.borderColor = '';
-
   if (onHide) {
     onHide();
     onHide = null;
@@ -662,14 +645,6 @@ export function hideWithoutAnimation() {
   clearContent();
   owner = null;
 
-  if (renderedClassName) {
-    dom.removeClass(div, renderedClassName);
-    renderedClassName = '';
-  }
-  if (themeClassName) {
-    dom.removeClass(div, themeClassName);
-    themeClassName = '';
-  }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
 }
 

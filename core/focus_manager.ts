@@ -224,7 +224,7 @@ export class FocusManager {
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
-    if (this.focusedNode == focusableNode) return; // State is unchanged.
+    if (this.focusedNode === focusableNode) return; // State is unchanged.
 
     const nextTree = focusableNode.getFocusableTree();
     if (!this.isRegistered(nextTree)) {
@@ -241,7 +241,8 @@ export class FocusManager {
     if (matchedNode !== focusableNode) {
       throw Error(
         `Attempting to focus node which isn't recognized by its parent tree: ` +
-          `${focusableNode}.`);
+          `${focusableNode}.`,
+      );
     }
 
     const prevNode = this.focusedNode;
@@ -325,8 +326,8 @@ export class FocusManager {
   private ensureManagerIsUnlocked(): void {
     if (this.lockFocusStateChanges) {
       throw Error(
-        'FocusManager state changes cannot happen in a tree/node focus/blur '
-          + 'callback.'
+        'FocusManager state changes cannot happen in a tree/node focus/blur ' +
+          'callback.',
       );
     }
   }
@@ -342,7 +343,8 @@ export class FocusManager {
   }
 
   private activelyFocusNode(
-    node: IFocusableNode, prevTree: IFocusableTree | null
+    node: IFocusableNode,
+    prevTree: IFocusableTree | null,
   ): void {
     // Note that order matters here. Focus callbacks are allowed to change
     // element visibility which can influence focusability, including for a
@@ -358,7 +360,8 @@ export class FocusManager {
   }
 
   private passivelyFocusNode(
-    node: IFocusableNode, nextTree: IFocusableTree | null
+    node: IFocusableNode,
+    nextTree: IFocusableTree | null,
   ): void {
     this.lockFocusStateChanges = true;
     node.getFocusableTree().onTreeBlur(nextTree);

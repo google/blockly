@@ -48,7 +48,9 @@ class FocusableTreeImpl {
     return this.rootNode;
   }
 
-  getRestoredFocusableNode() { return null; }
+  getRestoredFocusableNode() {
+    return null;
+  }
 
   getNestedTrees() {
     return this.nestedTrees;

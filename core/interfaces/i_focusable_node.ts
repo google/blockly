@@ -25,8 +25,14 @@ export interface IFocusableNode {
    * and a tab index must be present in order for the element to be focusable in
    * the DOM).
    *
-   * It's expected the return element will not change for the lifetime of the
-   * node.
+   * The returned element must be visible if the node is ever focused via
+   * FocusManager.focusNode() or FocusManager.focusTree(). It's allowed for an
+   * element to be hidden until onNodeFocus() is called, or become hidden with a
+   * call to onNodeBlur().
+   *
+   * It's expected the actual returned element will not change for the lifetime
+   * of the node (that is, its properties can change but a new element should
+   * never be returned.)
    */
   getFocusableElement(): HTMLElement | SVGElement;
 
@@ -36,4 +42,38 @@ export interface IFocusableNode {
    * belongs.
    */
   getFocusableTree(): IFocusableTree;
+
+  /**
+   * Called when this node receives active focus.
+   *
+   * Note that it's fine for implementations to change visibility modifiers, but
+   * they should avoid the following:
+   * - Creating or removing DOM elements (including via the renderer or drawer).
+   * - Affecting focus via DOM focus() calls or the FocusManager.
+   */
+  onNodeFocus(): void;
+
+  /**
+   * Called when this node loses active focus. It may still have passive focus.
+   *
+   * This has the same implementation restrictions as onNodeFocus().
+   */
+  onNodeBlur(): void;
+}
+
+/**
+ * Determines whether the provided object fulfills the contract of
+ * IFocusableNode.
+ *
+ * @param object The object to test.
+ * @returns Whether the provided object can be used as an IFocusableNode.
+ */
+export function isFocusableNode(object: any | null): object is IFocusableNode {
+  return (
+    object &&
+    'getFocusableElement' in object &&
+    'getFocusableTree' in object &&
+    'onNodeFocus' in object &&
+    'onNodeBlur' in object
+  );
 }

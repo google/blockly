@@ -96,4 +96,34 @@ suite('Toasts', function () {
 
     clock.restore();
   });
+
+  test('default to polite assertiveness', function () {
+    const message = 'texas toast';
+    Blockly.Toast.show(this.workspace, {message, id: 'test'});
+    const toast = this.workspace
+      .getInjectionDiv()
+      .querySelector('.blocklyToast');
+
+    assert.equal(
+      toast.getAttribute('aria-live'),
+      Blockly.Toast.Assertiveness.POLITE,
+    );
+  });
+
+  test('respects assertiveness option', function () {
+    const message = 'texas toast';
+    Blockly.Toast.show(this.workspace, {
+      message,
+      id: 'test',
+      assertiveness: Blockly.Toast.Assertiveness.ASSERTIVE,
+    });
+    const toast = this.workspace
+      .getInjectionDiv()
+      .querySelector('.blocklyToast');
+
+    assert.equal(
+      toast.getAttribute('aria-live'),
+      Blockly.Toast.Assertiveness.ASSERTIVE,
+    );
+  });
 });

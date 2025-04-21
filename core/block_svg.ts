@@ -515,9 +515,7 @@ export class BlockSvg
   private childHasWarning(): boolean {
     const children = this.getChildren(false);
     for (const child of children) {
-      if (child.getIcon(WarningIcon.TYPE)) {
-        return true;
-      } else if (child.childHasWarning()) {
+      if (child.getIcon(WarningIcon.TYPE) || child.childHasWarning()) {
         return true;
       }
     }

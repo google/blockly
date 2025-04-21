@@ -508,6 +508,23 @@ export class BlockSvg
   }
 
   /**
+   * Traverses child blocks to see if any of them have a warning.
+   *
+   * @returns true if any child has a warning, false otherwise.
+   */
+  private childHasWarning(): boolean {
+    const children = this.getChildren(false);
+    for (const child of children) {
+      if (child.getIcon(WarningIcon.TYPE)) {
+        return true;
+      } else if (child.childHasWarning()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Makes sure that when the block is collapsed, it is rendered correctly
    * for that state.
    */
@@ -531,6 +548,13 @@ export class BlockSvg
       this.removeInput(collapsedInputName);
       this.setWarningText(null, BlockSvg.COLLAPSED_WARNING_ID);
       return;
+    }
+
+    if (this.childHasWarning()) {
+      this.setWarningText(
+        Msg['COLLAPSED_WARNINGS_WARNING'],
+        BlockSvg.COLLAPSED_WARNING_ID,
+      );
     }
 
     const text = this.toString(internalConstants.COLLAPSE_CHARS);

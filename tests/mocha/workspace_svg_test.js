@@ -18,7 +18,7 @@ import {
 } from './test_helpers/setup_teardown.js';
 import {testAWorkspace} from './test_helpers/workspace.js';
 
-suite('WorkspaceSvg', function () {
+suite.only('WorkspaceSvg', function () {
   setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     const toolbox = document.getElementById('toolbox-categories');

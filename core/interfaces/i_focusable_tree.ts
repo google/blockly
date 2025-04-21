@@ -119,3 +119,22 @@ export interface IFocusableTree {
    */
   onTreeBlur(nextTree: IFocusableTree | null): void;
 }
+
+/**
+ * Determines whether the provided object fulfills the contract of
+ * IFocusableTree.
+ *
+ * @param object The object to test.
+ * @returns Whether the provided object can be used as an IFocusableTree.
+ */
+export function isFocusableTree(object: any | null): object is IFocusableTree {
+  return (
+    object &&
+    'getRootFocusableNode' in object &&
+    'getRestoredFocusableNode' in object &&
+    'getNestedTrees' in object &&
+    'lookUpFocusableNode' in object &&
+    'onTreeFocus' in object &&
+    'onTreeBlur' in object
+  );
+}

@@ -1625,11 +1625,11 @@ Blockly.Msg.DELETE_KEY = 'Del';
 /** @type {string} */
 /// menu label - Contextual menu item that moves the keyboard navigation cursor
 /// into a subitem of the focused block.
-Blockly.Msg.EDIT_BLOCK_CONTENTS = 'Edit Block contents (→︎)';
+Blockly.Msg.EDIT_BLOCK_CONTENTS = 'Edit Block contents (%1)';
 /** @type {string} */
 /// menu label - Contextual menu item that prompts the user to choose a block to
 /// insert into the program at the focused location.
-Blockly.Msg.INSERT_BLOCK = 'Insert Block (I)';
+Blockly.Msg.INSERT_BLOCK = 'Insert Block (%1)';
 /** @type {string} */
 /// keyboard shortcut label - Contextual menu item that starts a keyboard-driven 
 /// move of the focused block.
@@ -1676,7 +1676,7 @@ Blockly.Msg.MOVE_UP_UNCONSTRAINED = 'Move up unconstrained';
 Blockly.Msg.MOVE_DOWN_UNCONSTRAINED = 'Move down, unconstrained';
 /** @type {string} */
 /// menu label - Contextual menu item that starts a keyboard-driven block move.
-Blockly.Msg.MOVE_BLOCK = 'Move Block (M)';
+Blockly.Msg.MOVE_BLOCK = 'Move Block (%1)';
 /** @type {string} */
 /// Name of the Microsoft Windows operating system displayed in a list of 
 /// keyboard shortcuts.

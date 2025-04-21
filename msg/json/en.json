@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2025-04-18 14:38:37.755140",
+		"lastupdated": "2025-04-21 08:25:34.842680",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -399,8 +399,8 @@
 	"DIALOG_CANCEL": "Cancel",
 	"DELETE_SHORTCUT": "Delete block (%1)",
 	"DELETE_KEY": "Del",
-	"EDIT_BLOCK_CONTENTS": "Edit Block contents (→︎)",
-	"INSERT_BLOCK": "Insert Block (I)",
+	"EDIT_BLOCK_CONTENTS": "Edit Block contents (%1)",
+	"INSERT_BLOCK": "Insert Block (%1)",
 	"START_MOVE": "Start move",
 	"FINISH_MOVE": "Finish move",
 	"ABORT_MOVE": "Abort move",
@@ -412,7 +412,7 @@
 	"MOVE_RIGHT_UNCONSTRAINED": "Move right, unconstrained",
 	"MOVE_UP_UNCONSTRAINED": "Move up unconstrained",
 	"MOVE_DOWN_UNCONSTRAINED": "Move down, unconstrained",
-	"MOVE_BLOCK": "Move Block (M)",
+	"MOVE_BLOCK": "Move Block (%1)",
 	"WINDOWS": "Windows",
 	"MAC_OS": "macOS",
 	"CHROME_OS": "ChromeOS",

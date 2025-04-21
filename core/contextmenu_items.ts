@@ -614,7 +614,12 @@ export function registerCommentCreate() {
     preconditionFn: (scope: Scope) => {
       return scope.workspace?.isMutator ? 'hidden' : 'enabled';
     },
-    callback: (scope: Scope, e: PointerEvent) => {
+    callback: (
+      scope: Scope,
+      menuOpenEvent: Event,
+      menuSelectEvent: Event,
+      location: Coordinate,
+    ) => {
       const workspace = scope.workspace;
       if (!workspace) return;
       eventUtils.setGroup(true);
@@ -622,7 +627,7 @@ export function registerCommentCreate() {
       comment.setPlaceholderText(Msg['WORKSPACE_COMMENT_DEFAULT_TEXT']);
       comment.moveTo(
         pixelsToWorkspaceCoords(
-          new Coordinate(e.clientX, e.clientY),
+          new Coordinate(location.x, location.y),
           workspace,
         ),
       );

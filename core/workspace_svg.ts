@@ -41,6 +41,7 @@ import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
@@ -90,7 +91,10 @@ const ZOOM_TO_FIT_MARGIN = 20;
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  */
-export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
+export class WorkspaceSvg
+  extends Workspace
+  implements IASTNodeLocationSvg, IContextMenu
+{
   /**
    * A wrapper function called when a resize event occurs.
    * You can pass the result to `eventHandling.unbind`.
@@ -1702,13 +1706,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse event.
    * @internal
    */
-  showContextMenu(e: PointerEvent) {
+  showContextMenu(e: Event) {
     if (this.isReadOnly() || this.isFlyout) {
       return;
     }
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-      ContextMenuRegistry.ScopeType.WORKSPACE,
-      {workspace: this},
+      {workspace: this, focusedNode: this},
+      e,
     );
 
     // Allow the developer to add or modify menuOptions.
@@ -1716,7 +1720,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.configureContextMenu(menuOptions, e);
     }
 
-    ContextMenu.show(e, menuOptions, this.RTL, this);
+    let location;
+    if (e instanceof PointerEvent) {
+      location = new Coordinate(e.clientX, e.clientY);
+    } else {
+      // TODO: Get the location based on the workspace cursor location
+      location = svgMath.wsToScreenCoordinates(this, new Coordinate(5, 5));
+    }
+
+    ContextMenu.show(e, menuOptions, this.RTL, this, location);
   }
 
   /**

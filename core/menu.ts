@@ -258,11 +258,10 @@ export class Menu {
       // Bring the highlighted item into view. This has no effect if the menu is
       // not scrollable.
       const menuElement = this.getElement();
-      const scrollingParent = menuElement?.parentElement;
       const menuItemElement = item.getElement();
-      if (!scrollingParent || !menuItemElement) return;
+      if (!menuElement || !menuItemElement) return;
 
-      style.scrollIntoContainerView(menuItemElement, scrollingParent);
+      style.scrollIntoContainerView(menuItemElement, menuElement);
       aria.setState(menuElement, aria.State.ACTIVEDESCENDANT, item.getId());
     }
   }
@@ -379,7 +378,7 @@ export class Menu {
 
     const menuItem = this.getMenuItem(e.target as Element);
     if (menuItem) {
-      menuItem.performAction();
+      menuItem.performAction(e);
     }
   }
 
@@ -431,7 +430,7 @@ export class Menu {
       case 'Enter':
       case ' ':
         if (highlighted) {
-          highlighted.performAction();
+          highlighted.performAction(e);
         }
         break;
 

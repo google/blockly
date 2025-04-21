@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2025-04-21 10:30:50.781430",
+		"lastupdated": "2025-04-21 10:42:10.549634",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -426,7 +426,7 @@
 	"COPY_SHORTCUT": "Copy (%1)",
 	"PASTE_SHORTCUT": "Paste (%1)",
 	"HELP_PROMPT": "Press %1 for help on keyboard controls",
-	"GENERAL": "General",
-	"EDITING": "Editing",
-	"CODE_NAVIGATION": "Code navigation"
+	"SHORTCUTS_GENERAL": "General",
+	"SHORTCUTS_EDITING": "Editing",
+	"SHORTCUTS_CODE_NAVIGATION": "Code navigation"
 }

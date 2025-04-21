@@ -1723,12 +1723,12 @@ Blockly.Msg.PASTE_SHORTCUT = 'Paste (%1)';
 Blockly.Msg.HELP_PROMPT = 'Press %1 for help on keyboard controls';
 /** @type {string} */
 /// shortcut list section header - Label for general purpose keyboard shortcuts.
-Blockly.Msg.GENERAL = 'General';
+Blockly.Msg.SHORTCUTS_GENERAL = 'General';
 /** @type {string} */
 /// shortcut list section header - Label for keyboard shortcuts related to
 /// editing a workspace.
-Blockly.Msg.EDITING = 'Editing'
+Blockly.Msg.SHORTCUTS_EDITING = 'Editing'
 /** @type {string} */
 /// shortcut list section header - Label for keyboard shortcuts related to
 /// moving around the workspace.
-Blockly.Msg.CODE_NAVIGATION = 'Code navigation';
+Blockly.Msg.SHORTCUTS_CODE_NAVIGATION = 'Code navigation';

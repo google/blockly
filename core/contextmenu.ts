@@ -220,6 +220,8 @@ function createWidget_(menu: Menu) {
   );
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
+  // Highlight the first thing in the menu
+  menu.highlightNext();
 }
 /**
  * Halts the propagation of the event without doing anything else.

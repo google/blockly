@@ -14,3 +14,8 @@ export interface IContextMenu {
    */
   showContextMenu(e: Event): void;
 }
+
+/** Type guard for objects that implement IContextMenu. */
+export function hasContextMenu(obj: object): obj is IContextMenu {
+  return (obj as any).showContextMenu !== undefined;
+}

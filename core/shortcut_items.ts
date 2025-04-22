@@ -10,6 +10,7 @@ import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as eventUtils from './events/utils.js';
 import {Gesture} from './gesture.js';
+import {hasContextMenu} from './interfaces/i_contextmenu.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {isDeletable} from './interfaces/i_deletable.js';
 import {isDraggable} from './interfaces/i_draggable.js';
@@ -31,6 +32,7 @@ export enum names {
   PASTE = 'paste',
   UNDO = 'undo',
   REDO = 'redo',
+  MENU = 'menu',
 }
 
 /**
@@ -322,6 +324,33 @@ export function registerRedo() {
 }
 
 /**
+ * Keyboard shortcut to open the context menu on ctrl/cmd+Enter.
+ */
+export function registerMenu() {
+  const ctrlEnter = ShortcutRegistry.registry.createSerializedKey(
+    KeyCodes.ENTER,
+    [KeyCodes.CTRL],
+  );
+  const cmdEnter = ShortcutRegistry.registry.createSerializedKey(
+    KeyCodes.ENTER,
+    [KeyCodes.META],
+  );
+  const menuShortcut: KeyboardShortcut = {
+    name: names.MENU,
+    preconditionFn: (workspace, scope) => {
+      return hasContextMenu(scope.focusedNode);
+    },
+    callback: (workspace, e, shortcut, scope) => {
+      if (!hasContextMenu(scope.focusedNode)) return false;
+      scope.focusedNode.showContextMenu(e);
+      return true;
+    },
+    keyCodes: [ctrlEnter, cmdEnter],
+  };
+  ShortcutRegistry.registry.register(menuShortcut);
+}
+
+/**
  * Registers all default keyboard shortcut item. This should be called once per
  * instance of KeyboardShortcutRegistry.
  *
@@ -335,6 +364,7 @@ export function registerDefaultShortcuts() {
   registerPaste();
   registerUndo();
   registerRedo();
+  registerMenu();
 }
 
 registerDefaultShortcuts();

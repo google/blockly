@@ -27,6 +27,7 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
+import {getFocusManager} from './focus_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
@@ -35,7 +36,6 @@ import {Size} from './utils/size.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import { getFocusManager } from './focus_manager.js';
 
 /**
  * Supported types for FieldInput subclasses.
@@ -338,8 +338,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     Defaults to false.
    */
   protected override showEditor_(
-    onEditorShown: () => void, onEditorHidden: () => void, _e?: Event,
-    quietInput: boolean = false
+    onEditorShown: () => void,
+    onEditorHidden: () => void,
+    _e?: Event,
+    quietInput: boolean = false,
   ) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     if (
@@ -354,8 +356,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   }
 
   protected override onShowEditor(): void {
-    this.returnFocusCallback =
-      getFocusManager().takeEphemeralFocus(document.body);
+    this.returnFocusCallback = getFocusManager().takeEphemeralFocus(
+      document.body,
+    );
   }
 
   protected override onHideEditor(): void {
@@ -368,7 +371,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * keyboards).
    */
   private showPromptEditor(
-    onEditorShown: () => void, onEditorHidden: () => void
+    onEditorShown: () => void,
+    onEditorHidden: () => void,
   ) {
     onEditorShown();
     dialog.prompt(
@@ -391,7 +395,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * @param quietInput True if editor should be created without focus.
    */
   private showInlineEditor(
-    onEditorShown: () => void, onEditorHidden: () => void, quietInput: boolean
+    onEditorShown: () => void,
+    onEditorHidden: () => void,
+    quietInput: boolean,
   ) {
     const block = this.getSourceBlock();
     if (!block) {

@@ -22,7 +22,7 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import { getFocusManager } from './focus_manager.js';
+import {getFocusManager} from './focus_manager.js';
 import {Menu} from './menu.js';
 import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
@@ -273,7 +273,9 @@ export class FieldDropdown extends Field<string> {
    *     undefined if triggered programmatically.
    */
   protected override showEditor_(
-    onEditorShown: () => void, onEditorHidden: () => void, e?: MouseEvent
+    onEditorShown: () => void,
+    onEditorHidden: () => void,
+    e?: MouseEvent,
   ) {
     const block = this.getSourceBlock();
     if (!block) {

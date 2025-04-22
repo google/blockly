@@ -63,7 +63,8 @@ class FieldMitosis extends Field<CellGroup> {
   }
 
   protected override showEditor_(
-    _onEditorShown: () => void, _onEditorHidden: () => void
+    _onEditorShown: () => void,
+    _onEditorHidden: () => void,
   ) {
     // Note that an editor shouldn't be shown for this field, so the callbacks
     // are ignored.

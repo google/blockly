@@ -228,7 +228,7 @@ suite('Text Input Fields', function () {
 
         this.assertSpellcheck = function (field, value) {
           this.prepField(field);
-          field.showEditor_();
+          field.showEditor_(() => {}, () => {});
           assert.equal(
             field.htmlInput_.getAttribute('spellcheck'),
             value.toString(),
@@ -265,7 +265,7 @@ suite('Text Input Fields', function () {
       test('setSpellcheck Editor Shown', function () {
         const field = new Blockly.FieldTextInput('test');
         this.prepField(field);
-        field.showEditor_();
+        field.showEditor_(() => {}, () => {});
         field.setSpellcheck(false);
         assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
       });

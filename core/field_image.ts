@@ -217,11 +217,19 @@ export class FieldImage extends Field<string> {
    * If field click is called, and click handler defined,
    * call the handler.
    */
-  protected override showEditor_() {
+  protected override showEditor_(
+    _onEditorShown: () => void, _onEditorHidden: () => void
+  ) {
+    // Note that an editor shouldn't be shown for this field, so the callbacks
+    // are ignored.
     if (this.clickHandler) {
       this.clickHandler(this);
     }
   }
+
+  protected override onShowEditor(): void {}
+
+  protected override onHideEditor(): void {}
 
   /**
    * Set the function that is called when this image  is clicked.

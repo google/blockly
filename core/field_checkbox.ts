@@ -136,9 +136,17 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   }
 
   /** Toggle the state of the checkbox on click. */
-  protected override showEditor_() {
+  protected override showEditor_(
+    onEditorShown: () => void, onEditorHidden: () => void
+  ) {
+    onEditorShown();
     this.setValue(!this.value_);
+    onEditorHidden();
   }
+
+  protected override onShowEditor(): void {}
+
+  protected override onHideEditor(): void {}
 
   /**
    * Ensure that the input value is valid ('TRUE' or 'FALSE').

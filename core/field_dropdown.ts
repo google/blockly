@@ -269,7 +269,9 @@ export class FieldDropdown extends Field<string> {
    * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
-  protected override showEditor_(e?: MouseEvent) {
+  protected override showEditor_(
+    onEditorShown: () => void, onEditorHidden: () => void, e?: MouseEvent
+  ) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -277,6 +279,7 @@ export class FieldDropdown extends Field<string> {
     this.dropdownCreate();
     if (!this.menu_) return;
 
+    onEditorShown();
     if (e && typeof e.clientX === 'number') {
       this.menu_.openingCoords = new Coordinate(e.clientX, e.clientY);
     } else {
@@ -295,7 +298,10 @@ export class FieldDropdown extends Field<string> {
       dropDownDiv.setColour(primaryColour, borderColour);
     }
 
-    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, () => {
+      this.dropdownDispose_.bind(this);
+      onEditorHidden();
+    });
 
     dropDownDiv.getContentDiv().style.height = `${this.menu_.getSize().height}px`;
 
@@ -310,6 +316,10 @@ export class FieldDropdown extends Field<string> {
 
     this.applyColour();
   }
+
+  protected override onShowEditor(): void {}
+
+  protected override onHideEditor(): void {}
 
   /** Create the dropdown editor. */
   private dropdownCreate() {
@@ -769,7 +779,7 @@ export class FieldDropdown extends Field<string> {
       } else if (typeof option[1] !== 'string') {
         foundError = true;
         console.error(
-          `Invalid option[${i}]: Each FieldDropdown option id must be a string. 
+          `Invalid option[${i}]: Each FieldDropdown option id must be a string.
           Found ${option[1]} in: ${option}`,
         );
       } else if (
@@ -780,7 +790,7 @@ export class FieldDropdown extends Field<string> {
       ) {
         foundError = true;
         console.error(
-          `Invalid option[${i}]: Each FieldDropdown option must have a string 
+          `Invalid option[${i}]: Each FieldDropdown option must have a string
           label, image description, or HTML element. Found ${option[0]} in: ${option}`,
         );
       }

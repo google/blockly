@@ -2716,7 +2716,19 @@ export class WorkspaceSvg
   ): void {}
 
   /** See IFocusableTree.onTreeBlur. */
-  onTreeBlur(_nextTree: IFocusableTree | null): void {}
+  onTreeBlur(nextTree: IFocusableTree | null): void {
+    // If the flyout loses focus, make sure to close it.
+    if (this.isFlyout && this.targetWorkspace) {
+      // Only hide the flyout if the flyout's workspace is losing focus and that
+      // focus isn't returning to the flyout itself or the toolbox.
+      const flyout = this.targetWorkspace.getFlyout();
+      const toolbox = this.targetWorkspace.getToolbox();
+      if (flyout && nextTree === flyout) return;
+      if (toolbox && nextTree === toolbox) return;
+      if (toolbox) toolbox.clearSelection();
+      if (flyout && flyout instanceof Flyout) flyout.autoHide(false);
+    }
+  }
 }
 
 /**

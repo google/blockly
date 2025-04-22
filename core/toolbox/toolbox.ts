@@ -1091,59 +1091,64 @@ export class Toolbox
     getFocusManager().unregisterTree(this);
   }
 
+  /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     if (!this.HtmlDiv) throw Error('Toolbox DOM has not yet been created.');
     return this.HtmlDiv;
   }
 
+  /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
     return this;
   }
 
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;
   }
 
-  onNodeFocus(): void {}
-
-  onNodeBlur(): void {}
-
-  getRestoredFocusableNode(previousNode: IFocusableNode | null): IFocusableNode | null {
+  /** See IFocusableTree.getRestoredFocusableNode. */
+  getRestoredFocusableNode(
+    previousNode: IFocusableNode | null,
+  ): IFocusableNode | null {
+    // Always try to select the first selectable toolbox item rather than the
+    // root of the toolbox.
     if (!previousNode || previousNode === this) {
       return this.getToolboxItems().find((item) => item.isSelectable()) ?? null;
     } else return null;
   }
 
+  /** See IFocusableTree.getNestedTrees. */
   getNestedTrees(): Array<IFocusableTree> {
     return [];
-    // if (this.flyout) return [this.flyout.getWorkspace()]; else return [];
   }
 
+  /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
     return this.getToolboxItemById(id) as IFocusableNode;
   }
 
-  onTreeFocus(node: IFocusableNode, previousTree: IFocusableTree | null): void {
-    console.log('@@@@@ toolbox.onTreeFocus', node, 'is root:', node===this);
+  /** See IFocusableTree.onTreeFocus. */
+  onTreeFocus(
+    node: IFocusableNode,
+    _previousTree: IFocusableTree | null,
+  ): void {
     if (node !== this) {
       // Only select the item if it isn't already selected so as to not toggle.
       if (this.getSelectedItem() !== node) {
-        console.log('@@@@@ select item', node as IToolboxItem);
         this.setSelectedItem(node as IToolboxItem);
       }
     } else this.clearSelection();
-    /*if (node !== this && this.getSelectedItem() !== node) {
-      console.log('@@@@@ select item', node as IToolboxItem);
-      this.setSelectedItem(node as IToolboxItem);
-    } else {
-      // There should always be a toolbox item selected, if possible.
-      const first = this.getToolboxItems().find((item) => item.isSelectable());
-      this.setSelectedItem(first ?? null);
-    }*/
   }
 
-  onTreeBlur(nextTree: IFocusableTree | null): void {
-  }
+  /** See IFocusableTree.onTreeBlur. */
+  onTreeBlur(_nextTree: IFocusableTree | null): void {}
 }
 
 /** CSS for Toolbox.  See css.js for use. */

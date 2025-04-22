@@ -23,9 +23,12 @@ import * as eventUtils from './events/utils.js';
 import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
+import {getFocusManager} from './focus_manager.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
+import {IFocusableNode} from './interfaces/i_focusable_node.js';
+import {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
@@ -971,61 +974,62 @@ export abstract class Flyout
     return null;
   }
 
+  /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     if (!this.svgGroup_) throw new Error('Flyout DOM is not yet created.');
     return this.svgGroup_;
-    // return this.workspace_.getFocusableElement();
   }
 
+  /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
     return this;
-    // return this.workspace_.getFocusableTree();
   }
 
-  onNodeFocus(): void {
-    // this.workspace_.onNodeFocus();
-  }
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
 
-  onNodeBlur(): void {
-    // this.workspace_.onNodeBlur();
-  }
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
 
+  /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;
-    // return this.workspace_.getRootFocusableNode();
   }
 
-  getRestoredFocusableNode(previousNode: IFocusableNode | null): IFocusableNode | null {
+  /** See IFocusableTree.getRestoredFocusableNode. */
+  getRestoredFocusableNode(
+    _previousNode: IFocusableNode | null,
+  ): IFocusableNode | null {
     return null;
   }
 
+  /** See IFocusableTree.getNestedTrees. */
   getNestedTrees(): Array<IFocusableTree> {
     return [this.workspace_];
-    // return this.workspace_.getNestedTrees();
   }
 
-  onTreeFocus(node: IFocusableNode, previousTree: IFocusableTree | null): void {
-    // this.workspace_.onTreeFocus(node);
+  /** See IFocusableTree.lookUpFocusableNode. */
+  lookUpFocusableNode(_id: string): IFocusableNode | null {
+    // No focusable node needs to be returned since the flyout's subtree is a
+    // workspace that will manage its own focusable state.
+    return null;
   }
 
+  /** See IFocusableTree.onTreeFocus. */
+  onTreeFocus(
+    _node: IFocusableNode,
+    _previousTree: IFocusableTree | null,
+  ): void {}
+
+  /** See IFocusableTree.onTreeBlur. */
   onTreeBlur(nextTree: IFocusableTree | null): void {
     const toolbox = this.targetWorkspace.getToolbox();
     // If focus is moving to either the toolbox or the flyout's workspace, do
-    // not close the flyout. For anything else, do close it.
+    // not close the flyout. For anything else, do close it since the flyout is
+    // no longer focused.
     if (toolbox && nextTree === toolbox) return;
     if (nextTree == this.workspace_) return;
     if (toolbox) toolbox.clearSelection();
     this.autoHide(false);
-    // this.workspace_.onTreeBlur();
-  }
-
-  lookUpFocusableNode(id: string): IFocusableNode | null {
-    return null;
-    // return this.workspace_.lookUpFocusableNode(id);
-    // TODO: This may violate the cross-subtree boundary (since flyout contains a workspace that is itself a tree).
-    // return this.getContents()
-    //   .filter((item) => isFocusableNode(item))
-    //   .map((item) => item as unknown as IFocusableNode)
-    //   .find((node) => node.getFocusableElement().id == id) ?? null;
   }
 }

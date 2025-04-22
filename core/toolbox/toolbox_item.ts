@@ -150,6 +150,7 @@ export class ToolboxItem implements IToolboxItem {
    */
   setVisible_(_isVisible: boolean) {}
 
+  /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     const div = this.getDiv();
     if (!div) {
@@ -161,12 +162,15 @@ export class ToolboxItem implements IToolboxItem {
     return div as HTMLElement;
   }
 
+  /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
     return this.parentToolbox_;
   }
 
+  /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {}
 
+  /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 }
 // nop by default

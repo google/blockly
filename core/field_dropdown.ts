@@ -22,6 +22,7 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import { getFocusManager } from './focus_manager.js';
 import {Menu} from './menu.js';
 import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
@@ -87,6 +88,8 @@ export class FieldDropdown extends Field<string> {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   private selectedOption!: MenuOption;
   override clickTarget_: SVGElement | null = null;
+
+  private returnFocusCallback: (() => void) | null = null;
 
   /**
    * The y offset from the top of the field to the top of the image, if an image
@@ -317,9 +320,17 @@ export class FieldDropdown extends Field<string> {
     this.applyColour();
   }
 
-  protected override onShowEditor(): void {}
+  protected override onShowEditor(): void {
+    const menuElement = this.menu_?.getElement();
+    if (menuElement) {
+      this.returnFocusCallback =
+        getFocusManager().takeEphemeralFocus(menuElement);
+    }
+  }
 
-  protected override onHideEditor(): void {}
+  protected override onHideEditor(): void {
+    if (this.returnFocusCallback) this.returnFocusCallback();
+  }
 
   /** Create the dropdown editor. */
   private dropdownCreate() {

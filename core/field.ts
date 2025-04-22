@@ -25,6 +25,8 @@ import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
@@ -42,7 +44,8 @@ import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
+import * as idGenerator from './utils/idgenerator.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -72,7 +75,8 @@ export abstract class Field<T = any>
     IASTNodeLocationWithBlock,
     IKeyboardAccessible,
     IRegistrable,
-    ISerializable
+    ISerializable,
+    IFocusableNode
 {
   /**
    * To overwrite the default value which is set in **Field**, directly update
@@ -191,6 +195,8 @@ export abstract class Field<T = any>
    */
   SERIALIZABLE = false;
 
+  private id_: string | null = null;
+
   /**
    * @param value The initial value of the field.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
@@ -255,6 +261,7 @@ export abstract class Field<T = any>
       throw Error('Field already bound to a block');
     }
     this.sourceBlock_ = block;
+    this.id_ = `${block.id}_field_${idGenerator.getNextUniqueId()}`;
   }
 
   /**
@@ -298,7 +305,13 @@ export abstract class Field<T = any>
       // Field has already been initialized once.
       return;
     }
-    this.fieldGroup_ = dom.createSvgElement(Svg.G, {});
+    const id = this.id_;
+    if (!id) throw new Error('Expected ID to be defined prior to init.');
+    this.fieldGroup_ = dom.createSvgElement(Svg.G, {
+      'tabindex': '-1',
+      'id': id,
+      'aria-label': 'Field ' + this.name,
+    });
     if (!this.isVisible()) {
       this.fieldGroup_.style.display = 'none';
     }
@@ -1415,6 +1428,30 @@ export abstract class Field<T = any>
       workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
     }
   }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    if (!this.fieldGroup_) {
+      throw Error("This field currently has no representative DOM element.");
+    }
+    return this.fieldGroup_;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+    // TODO: Remove the latter two casts once WorkspaceSvg is a focusable tree.
+    return block.workspace as WorkspaceSvg as unknown as IFocusableTree;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
 
   /**
    * Subclasses should reimplement this method to construct their Field

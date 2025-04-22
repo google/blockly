@@ -35,6 +35,7 @@ import {Size} from './utils/size.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import { getFocusManager } from './focus_manager.js';
 
 /**
  * Supported types for FieldInput subclasses.
@@ -99,6 +100,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * are not. Editable fields should also be serializable.
    */
   override SERIALIZABLE = true;
+
+  private returnFocusCallback: (() => void) | null = null;
 
   /**
    * @param value The initial value of the field. Should cast to a string.
@@ -350,9 +353,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     }
   }
 
-  protected override onShowEditor(): void {}
+  protected override onShowEditor(): void {
+    this.returnFocusCallback =
+      getFocusManager().takeEphemeralFocus(document.body);
+  }
 
-  protected override onHideEditor(): void {}
+  protected override onHideEditor(): void {
+    if (this.returnFocusCallback) this.returnFocusCallback();
+  }
 
   /**
    * Create and show a text input editor that is a prompt (usually a popup).

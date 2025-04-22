@@ -149,6 +149,7 @@ export class Toolbox
     this.flyout = this.createFlyout_();
 
     this.HtmlDiv = this.createDom_(this.workspace_);
+    this.HtmlDiv.setAttribute('aria-label', 'Toolbox');
     const flyoutDom = this.flyout.createDom('svg');
     dom.addClass(flyoutDom, 'blocklyToolboxFlyout');
     dom.insertAfter(flyoutDom, svg);

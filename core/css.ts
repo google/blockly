@@ -511,9 +511,9 @@ input[type=number] {
   outline-color: #ffa200;
 }
 
-.blocklyMainBackground, .blocklyActiveFocus > * {
-  // Reset to blocklyMainBackground's initial properties to avoid inheriting these.
-  stroke-width: 1;
-  stroke: #c6c6c6;
-}
+// .blocklyMainBackground, .blocklyActiveFocus > * {
+//   // Reset to blocklyMainBackground's initial properties to avoid inheriting these.
+//   stroke-width: 1;
+//   stroke: #c6c6c6;
+// }
 `;

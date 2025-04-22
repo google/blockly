@@ -90,8 +90,6 @@ import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
 import type {Field} from './field.js';
-import * as aria from './utils/aria.js';
-import {Msg} from './msg.js';
 import { IAutoHideable } from './blockly.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
@@ -779,6 +777,7 @@ export class WorkspaceSvg
       // Only the main workspace should be tabbable.
       'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
+      'aria-label': 'Workspace',
     });
     if (injectionDiv) {
       aria.setState(

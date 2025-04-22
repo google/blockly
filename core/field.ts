@@ -309,7 +309,8 @@ export abstract class Field<T = any>
     if (!id) throw new Error('Expected ID to be defined prior to init.');
     this.fieldGroup_ = dom.createSvgElement(Svg.G, {
       'tabindex': '-1',
-      'id': id
+      'id': id,
+      'aria-label': 'Field ' + this.name,
     });
     if (!this.isVisible()) {
       this.fieldGroup_.style.display = 'none';

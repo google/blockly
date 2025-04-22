@@ -692,7 +692,10 @@ export class RenderedConnection
 
   getFocusableElement(): HTMLElement | SVGElement {
     const highlightSvg = this.findHighlightSvg();
-    if (highlightSvg) return highlightSvg;
+    if (highlightSvg) {
+      highlightSvg.setAttribute('aria-label', 'Connection');
+      return highlightSvg;
+    }
     throw new Error('No highlight SVG found corresponding to this connection.');
   }
 

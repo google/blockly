@@ -12,8 +12,6 @@
 // Former goog.module ID: Blockly.Flyout
 
 import {BlockSvg} from './block_svg.js';
-import { IFocusableNode, isFocusableNode } from './interfaces/i_focusable_node.js';
-import { IFocusableTree } from './interfaces/i_focusable_tree.js';
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
@@ -43,7 +41,6 @@ import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as Variables from './variables.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-import { getFocusManager } from './focus_manager.js';
 
 /**
  * Class for a flyout.
@@ -311,6 +308,7 @@ export abstract class Flyout
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
       'tabindex': '0',
+      'aria-label': 'Flyout',
     });
     this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(

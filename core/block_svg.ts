@@ -214,6 +214,7 @@ export class BlockSvg
     // Expose this block's ID on its top-level SVG group.
     this.svgGroup.setAttribute('data-id', this.id);
     svgPath.id = this.id;
+    svgPath.setAttribute('aria-label', this.type ? '"' + this.type + '" block' : 'Block');
 
     this.doInit_();
   }

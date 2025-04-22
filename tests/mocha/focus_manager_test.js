@@ -305,6 +305,18 @@ suite('FocusManager', function () {
 
       assert.isTrue(isRegistered);
     });
+
+    test('for unregistered tree with other registered tree returns false', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.focusManager.unregisterTree(this.testFocusableTree1);
+
+      const isRegistered = this.focusManager.isRegistered(
+        this.testFocusableTree1,
+      );
+
+      assert.isFalse(isRegistered);
+    });
   });
 
   suite('getFocusedTree()', function () {

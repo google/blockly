@@ -57,6 +57,7 @@ import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
 import {MarkerManager} from './marker_manager.js';
+import {Msg} from './msg.js';
 import {Options} from './options.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
@@ -69,6 +70,7 @@ import {Classic} from './theme/classic.js';
 import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
 import type {Trashcan} from './trashcan.js';
+import * as aria from './utils/aria.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -774,12 +776,16 @@ export class WorkspaceSvg
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {
       'class': 'blocklyWorkspace',
-      // TODO: Verify whether using this or opt_backgroundClass is a reasonable proxy for the main workspace, or if something else should be used.
+      // Only the main workspace should be tabbable.
       'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
     });
     if (injectionDiv) {
-      aria.setState(this.svgGroup_, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
+      aria.setState(
+        this.svgGroup_,
+        aria.State.LABEL,
+        Msg['WORKSPACE_ARIA_LABEL'],
+      );
     }
 
     // Note that a <g> alone does not receive mouse events--it must have a
@@ -944,7 +950,9 @@ export class WorkspaceSvg
       this.dummyWheelListener = null;
     }
 
-    getFocusManager().unregisterTree(this);
+    if (getFocusManager().isRegistered(this)) {
+      getFocusManager().unregisterTree(this);
+    }
   }
 
   /**
@@ -2640,33 +2648,42 @@ export class WorkspaceSvg
     this.scroll(this.scrollX + deltaX, this.scrollY + deltaY);
   }
 
+  /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     return this.svgGroup_;
   }
 
+  /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
     return this;
   }
 
+  /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {}
 
+  /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
+  /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;
   }
 
-  getRestoredFocusableNode(previousNode: IFocusableNode | null): IFocusableNode | null {
+  /** See IFocusableTree.getRestoredFocusableNode. */
+  getRestoredFocusableNode(
+    previousNode: IFocusableNode | null,
+  ): IFocusableNode | null {
     if (!previousNode) {
-      // TODO: This doesn't handle the idea of starting in a preset location like the plugin does.
       return this.getTopBlocks(true)[0] ?? null;
     } else return null;
   }
 
+  /** See IFocusableTree.getNestedTrees. */
   getNestedTrees(): Array<IFocusableTree> {
     return [];
   }
 
+  /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
     // TODO: This isn't a complete solution since non-blocks can have focus.
     const fieldIndicatorIndex = id.indexOf('_field_');
@@ -2692,26 +2709,14 @@ export class WorkspaceSvg
     } else return this.getBlockById(id) as IFocusableNode;
   }
 
-  onTreeFocus(node: IFocusableNode, previousTree: IFocusableTree | null): void {
-    console.log('@@@@@@ onTreeFocus, isFlyout:', this.isFlyout);
-    // TODO: Perhaps synchronize here could select the block? Would drastically simplify selection management in cursor (I think).
-  }
+  /** See IFocusableTree.onTreeFocus. */
+  onTreeFocus(
+    _node: IFocusableNode,
+    _previousTree: IFocusableTree | null,
+  ): void {}
 
-  onTreeBlur(nextTree: IFocusableTree | null): void {
-    // TODO: make sure this works correctly for a permanent flyout.
-    // If the flyout loses focus, make sure to close it.
-    console.log('@@@@@@ onTreeBlur, isFlyout:', this.isFlyout);
-    if (this.isFlyout && this.targetWorkspace) {
-      // Only hide the flyout if the flyout's workspace is losing focus and that
-      // focus isn't returning to the flyout itself or the toolbox.
-      const flyout = this.targetWorkspace.getFlyout();
-      const toolbox = this.targetWorkspace.getToolbox();
-      if (flyout && nextTree === flyout) return;
-      if (toolbox && nextTree === toolbox) return;
-      if (toolbox) toolbox.clearSelection();
-      if (flyout && flyout instanceof Flyout) flyout.autoHide(false);
-    }
-  }
+  /** See IFocusableTree.onTreeBlur. */
+  onTreeBlur(_nextTree: IFocusableTree | null): void {}
 }
 
 /**

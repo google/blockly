@@ -1824,20 +1824,24 @@ export class BlockSvg
     }
   }
 
+  /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     return this.pathObject.svgPath;
   }
 
+  /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
     return this.workspace;
   }
 
+  /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
     if (!this.isShadow()) {
       common.setSelected(this);
     }
   }
 
+  /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
     if (common.getSelected() === this) {
       common.setSelected(null);

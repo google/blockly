@@ -12,7 +12,8 @@
  */
 // Former goog.module ID: Blockly.ShortcutRegistry
 
-import { Scope } from './contextmenu_registry.js';
+import {Scope} from './contextmenu_registry.js';
+import {getFocusManager} from './focus_manager.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as object from './utils/object.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -250,12 +251,20 @@ export class ShortcutRegistry {
       const shortcut = this.shortcuts.get(shortcutName);
       if (
         !shortcut ||
-        (shortcut.preconditionFn && !shortcut.preconditionFn(workspace, {}))
+        (shortcut.preconditionFn &&
+          !shortcut.preconditionFn(workspace, {
+            focusedNode: getFocusManager().getFocusedNode(),
+          }))
       ) {
         continue;
       }
       // If the key has been handled, stop processing shortcuts.
-      if (shortcut.callback?.(workspace, e, shortcut, {})) return true;
+      if (
+        shortcut.callback?.(workspace, e, shortcut, {
+          focusedNode: getFocusManager().getFocusedNode(),
+        })
+      )
+        return true;
     }
     return false;
   }

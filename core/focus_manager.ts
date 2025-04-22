@@ -148,7 +148,7 @@ export class FocusManager {
     if (!this.isRegistered(tree)) {
       throw Error(`Attempted to unregister not registered tree: ${tree}.`);
     }
-    const treeIndex = this.registeredTrees.findIndex((tree) => tree === tree);
+    const treeIndex = this.registeredTrees.findIndex((reg) => reg === tree);
     this.registeredTrees.splice(treeIndex, 1);
 
     const focusedNode = FocusableTreeTraverser.findFocusedNode(tree);

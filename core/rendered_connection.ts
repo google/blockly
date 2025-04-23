@@ -17,6 +17,8 @@ import * as common from './common.js';
 import {config} from './config.js';
 import {Connection} from './connection.js';
 import type {ConnectionDB} from './connection_db.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {ConnectionType} from './connection_type.js';
 import * as ContextMenu from './contextmenu.js';
 import {ContextMenuRegistry} from './contextmenu_registry.js';
@@ -25,6 +27,11 @@ import {IContextMenu} from './interfaces/i_contextmenu.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
+import {WorkspaceSvg} from './workspace_svg.js';
+import * as dom from './utils/dom.js';
+import {Svg} from './utils/svg.js';
+import * as svgPaths from './utils/svg_paths.js';
+import type {ConstantProvider, PuzzleTab} from './renderers/common/constants.js';
 import * as svgMath from './utils/svg_math.js';
 
 /** Maximum randomness in workspace units for bumping a block. */
@@ -33,7 +40,9 @@ const BUMP_RANDOMNESS = 10;
 /**
  * Class for a connection between blocks that may be rendered on screen.
  */
-export class RenderedConnection extends Connection implements IContextMenu {
+export class RenderedConnection
+  extends Connection
+  implements IContextMenu, IFocusableNode {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
   private readonly db: ConnectionDB;
@@ -41,6 +50,9 @@ export class RenderedConnection extends Connection implements IContextMenu {
   private readonly offsetInBlock: Coordinate;
   private trackedState: TrackedState;
   private highlighted: boolean = false;
+  private constants: ConstantProvider;
+  private svgGroup: SVGElement;
+  private svgPath: SVGElement;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection | null = null;
@@ -70,6 +82,43 @@ export class RenderedConnection extends Connection implements IContextMenu {
 
     /** Describes the state of this connection's tracked-ness. */
     this.trackedState = RenderedConnection.TrackedState.WILL_TRACK;
+
+    this.constants = (source.workspace as WorkspaceSvg).getRenderer().getConstants();
+
+    this.svgGroup = dom.createSvgElement(
+      Svg.G,
+      {
+        'class': 'blocklyCursor',
+        'width': this.constants.CURSOR_WS_WIDTH,
+        'height': this.constants.WS_CURSOR_HEIGHT,
+      }
+    );
+
+    this.svgPath = dom.createSvgElement(
+      Svg.PATH,
+      {'transform': ''},
+      this.svgGroup,
+    );
+
+    // TODO: Ensure this auto-moves with the block.
+    const x = this.getOffsetInBlock().x;
+    const y = this.getOffsetInBlock().y;
+
+    const path =
+      svgPaths.moveTo(0, 0) +
+      'c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5';
+      // TODO: It seems that constants isn't yet initialized at this point.
+      // (this.constants.shapeFor(this) as PuzzleTab).pathDown;
+    this.svgPath.setAttribute('d', path);
+    this.svgPath.setAttribute(
+      'transform',
+      'translate(' +
+        x +
+        ',' +
+        y +
+        ')' +
+        (this.sourceBlock_.workspace.RTL ? ' scale(-1 1)' : ''),
+    );
   }
 
   /**
@@ -320,13 +369,21 @@ export class RenderedConnection extends Connection implements IContextMenu {
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
-    this.getSourceBlock().queueRender();
+    const highlightSvg = this.findHighlightSvg();
+    // if (highlightSvg) {
+    //   highlightSvg.style.display = '';
+    // }
+    // this.getSourceBlock().queueRender();
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
-    this.getSourceBlock().queueRender();
+    const highlightSvg = this.findHighlightSvg();
+    // if (highlightSvg) {
+      // highlightSvg.style.display = 'none';
+    // }
+    // this.getSourceBlock().queueRender();
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */
@@ -593,6 +650,12 @@ export class RenderedConnection extends Connection implements IContextMenu {
     return this;
   }
 
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as unknown | null as SVGElement | null;
+  }
+
   /**
    * Handles showing the context menu when it is opened on a connection.
    * Note that typically the context menu can't be opened with the mouse
@@ -625,6 +688,31 @@ export class RenderedConnection extends Connection implements IContextMenu {
     }
 
     ContextMenu.show(e, menuOptions, block.RTL, workspace, location);
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) {
+      highlightSvg.setAttribute('aria-label', 'Connection');
+      return highlightSvg;
+    }
+    throw new Error('No highlight SVG found corresponding to this connection.');
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.getSourceBlock().workspace as WorkspaceSvg;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {
+    this.highlight();
+  }
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {
+    this.unhighlight();
   }
 }
 

@@ -25,6 +25,10 @@ class FocusableNodeImpl {
   getFocusableTree() {
     return this.tree;
   }
+
+  onNodeFocus() {}
+
+  onNodeBlur() {}
 }
 
 class FocusableTreeImpl {
@@ -44,6 +48,10 @@ class FocusableTreeImpl {
     return this.rootNode;
   }
 
+  getRestoredFocusableNode() {
+    return null;
+  }
+
   getNestedTrees() {
     return this.nestedTrees;
   }
@@ -51,6 +59,10 @@ class FocusableTreeImpl {
   lookUpFocusableNode(id) {
     return this.idToNodeMap[id];
   }
+
+  onTreeFocus() {}
+
+  onTreeBlur() {}
 }
 
 suite('FocusableTreeTraverser', function () {

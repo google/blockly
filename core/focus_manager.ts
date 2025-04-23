@@ -340,8 +340,8 @@ export class FocusManager {
   }
 
   /**
-   * Defocuses the current actively focused node tracked by the manager, if
-   * there is one iff the manager isn't in an ephemeral focus state.
+   * Defocuses the current actively focused node tracked by the manager, iff
+   * there's a node being tracked and the manager doesn't have ephemeral focus.
    */
   private defocusCurrentFocusedNode(): void {
     // The current node will likely be defocused while ephemeral focus is held,

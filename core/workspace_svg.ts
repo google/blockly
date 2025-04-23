@@ -2581,23 +2581,23 @@ export class WorkspaceSvg
       rawViewport.left + rawViewport.width,
     );
 
-    if (
-      bounds.left >= viewport.left &&
-      bounds.top >= viewport.top &&
-      bounds.right <= viewport.right &&
-      bounds.bottom <= viewport.bottom
-    ) {
-      // Do nothing if the block is fully inside the viewport.
-      return;
-    }
-
-    // Add some padding to the bounds so the element is scrolled comfortably
+    // Add the padding to the bounds so the element is scrolled comfortably
     // into view.
     bounds = bounds.clone();
     bounds.top -= padding;
     bounds.bottom += padding;
     bounds.left -= padding;
     bounds.right += padding;
+
+    if (
+      bounds.left >= viewport.left &&
+      bounds.top >= viewport.top &&
+      bounds.right <= viewport.right &&
+      bounds.bottom <= viewport.bottom
+    ) {
+      // Do nothing if the block with padding is fully inside the viewport.
+      return;
+    }
 
     let deltaX = 0;
     let deltaY = 0;

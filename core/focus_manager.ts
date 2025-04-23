@@ -323,6 +323,13 @@ export class FocusManager {
     };
   }
 
+  /**
+   * Ensures that the manager is currently allowing operations that change its
+   * internal focus state (such as via focusNode()).
+   *
+   * If the manager is currently not allowing state changes, an exception is
+   * thrown.
+   */
   private ensureManagerIsUnlocked(): void {
     if (this.lockFocusStateChanges) {
       throw Error(
@@ -332,6 +339,10 @@ export class FocusManager {
     }
   }
 
+  /**
+   * Defocuses the current actively focused node tracked by the manager, if
+   * there is one iff the manager isn't in an ephemeral focus state.
+   */
   private defocusCurrentFocusedNode(): void {
     // The current node will likely be defocused while ephemeral focus is held,
     // but internal manager state shouldn't change since the node should be
@@ -342,6 +353,18 @@ export class FocusManager {
     }
   }
 
+  /**
+   * Marks the specified node as actively focused, also calling related lifecycle
+   * callback methods for both the node and its parent tree. This ensures that
+   * the node is properly styled to indicate its active focus.
+   *
+   * This does not change the manager's currently tracked node, nor does it
+   * change any other nodes.
+   *
+   * @param node The node to be actively focused.
+   * @param prevTree The tree of the previously actively focused node, or null
+   *     if there wasn't a previously actively focused node.
+   */
   private activelyFocusNode(
     node: IFocusableNode,
     prevTree: IFocusableTree | null,
@@ -359,6 +382,18 @@ export class FocusManager {
     node.getFocusableElement().focus();
   }
 
+  /**
+   * Marks the specified node as passively focused, also calling related
+   * lifecycle callback methods for both the node and its parent tree. This
+   * ensures that the node is properly styled to indicate its passive focus.
+   *
+   * This does not change the manager's currently tracked node, nor does it
+   * change any other nodes.
+   *
+   * @param node The node to be passively focused.
+   * @param nextTree The tree of the node receiving active focus, or null if no
+   *     node will be actively focused.
+   */
   private passivelyFocusNode(
     node: IFocusableNode,
     nextTree: IFocusableTree | null,
@@ -371,18 +406,36 @@ export class FocusManager {
     this.setNodeToVisualPassiveFocus(node);
   }
 
+  /**
+   * Updates the node's styling to indicate that it should have an active focus
+   * indicator.
+   *
+   * @param node The node to be styled for active focus.
+   */
   private setNodeToVisualActiveFocus(node: IFocusableNode): void {
     const element = node.getFocusableElement();
     dom.addClass(element, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     dom.removeClass(element, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
   }
 
+  /**
+   * Updates the node's styling to indicate that it should have a passive focus
+   * indicator.
+   *
+   * @param node The node to be styled for passive focus.
+   */
   private setNodeToVisualPassiveFocus(node: IFocusableNode): void {
     const element = node.getFocusableElement();
     dom.removeClass(element, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     dom.addClass(element, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
   }
 
+  /**
+   * Removes any active/passive indicators for the specified node.
+   *
+   * @param node The node which should have neither passive nor active focus
+   *     indication.
+   */
   private removeHighlight(node: IFocusableNode): void {
     const element = node.getFocusableElement();
     dom.removeClass(element, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);

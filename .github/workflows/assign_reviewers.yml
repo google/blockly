@@ -9,14 +9,14 @@ name: Assign requested reviewers
 # N.B.: Runs with a read-write repo token.  Do not check out the
 # submitted branch!
 on:
-  pull_request:
+  pull_request_target:
     types: [review_requested]
-
-permissions: write-all
 
 jobs:
   requested-reviewer:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: Assign requested reviewer
         uses: actions/github-script@v7

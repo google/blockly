@@ -44,6 +44,8 @@ import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
 import {IDeletable} from './interfaces/i_deletable.js';
 import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
 import {MarkerManager} from './marker_manager.js';
@@ -76,7 +78,8 @@ export class BlockSvg
     IContextMenu,
     ICopyable<BlockCopyData>,
     IDraggable,
-    IDeletable
+    IDeletable,
+    IFocusableNode
 {
   /**
    * Constant for identifying rows that are to be rendered inline.
@@ -210,6 +213,7 @@ export class BlockSvg
 
     // Expose this block's ID on its top-level SVG group.
     this.svgGroup.setAttribute('data-id', this.id);
+    svgPath.id = this.id;
 
     this.doInit_();
   }
@@ -1825,6 +1829,28 @@ export class BlockSvg
           ? json['classes'].join(' ')
           : json['classes'],
       );
+    }
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.pathObject.svgPath;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.workspace;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {
+    common.setSelected(this);
+  }
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {
+    if (common.getSelected() === this) {
+      common.setSelected(null);
     }
   }
 }

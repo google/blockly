@@ -8,6 +8,7 @@
 
 import * as common from './common.js';
 import {Field} from './field.js';
+import { ReturnEphemeralFocus, getFocusManager } from './focus_manager.js';
 import * as dom from './utils/dom.js';
 import type {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
@@ -33,6 +34,9 @@ let themeClassName = '';
 
 /** The HTML container for popup overlays (e.g. editor widgets). */
 let containerDiv: HTMLDivElement | null;
+
+/** Callback to FocusManager to return ephemeral focus when the div closes. */
+let returnEphemeralFocus: ReturnEphemeralFocus | null = null;
 
 /**
  * Returns the HTML container for editor widgets.
@@ -110,6 +114,7 @@ export function show(
   if (themeClassName) {
     dom.addClass(div, themeClassName);
   }
+  returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
 }
 
 /**
@@ -126,8 +131,14 @@ export function hide() {
   div.style.display = 'none';
   div.style.left = '';
   div.style.top = '';
-  if (dispose) dispose();
-  dispose = null;
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
+  }
+  if (dispose) {
+    dispose();
+    dispose = null;
+  }
   div.textContent = '';
 
   if (rendererClassName) {

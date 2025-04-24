@@ -54,6 +54,8 @@ export class ToolboxSeparator extends ToolboxItem {
    */
   protected createDom_(): HTMLDivElement {
     const container = document.createElement('div');
+    container.tabIndex = -1;
+    container.id = this.getId();
     const className = this.cssConfig_['container'];
     if (className) {
       dom.addClass(container, className);

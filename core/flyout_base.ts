@@ -21,9 +21,12 @@ import * as eventUtils from './events/utils.js';
 import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
+import {getFocusManager} from './focus_manager.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
+import {IFocusableNode} from './interfaces/i_focusable_node.js';
+import {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
@@ -43,7 +46,7 @@ import {WorkspaceSvg} from './workspace_svg.js';
  */
 export abstract class Flyout
   extends DeleteArea
-  implements IAutoHideable, IFlyout
+  implements IAutoHideable, IFlyout, IFocusableNode
 {
   /**
    * Position the flyout.
@@ -303,6 +306,7 @@ export abstract class Flyout
     // hide/show code will set up proper visibility and size later.
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
+      'tabindex': '0',
     });
     this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(
@@ -317,6 +321,9 @@ export abstract class Flyout
     this.workspace_
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
+
+    getFocusManager().registerTree(this);
+
     return this.svgGroup_;
   }
 
@@ -398,6 +405,7 @@ export abstract class Flyout
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
+    getFocusManager().unregisterTree(this);
   }
 
   /**
@@ -960,5 +968,64 @@ export abstract class Flyout
     }
 
     return null;
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    if (!this.svgGroup_) throw new Error('Flyout DOM is not yet created.');
+    return this.svgGroup_;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableTree.getRootFocusableNode. */
+  getRootFocusableNode(): IFocusableNode {
+    return this;
+  }
+
+  /** See IFocusableTree.getRestoredFocusableNode. */
+  getRestoredFocusableNode(
+    _previousNode: IFocusableNode | null,
+  ): IFocusableNode | null {
+    return null;
+  }
+
+  /** See IFocusableTree.getNestedTrees. */
+  getNestedTrees(): Array<IFocusableTree> {
+    return [this.workspace_];
+  }
+
+  /** See IFocusableTree.lookUpFocusableNode. */
+  lookUpFocusableNode(_id: string): IFocusableNode | null {
+    // No focusable node needs to be returned since the flyout's subtree is a
+    // workspace that will manage its own focusable state.
+    return null;
+  }
+
+  /** See IFocusableTree.onTreeFocus. */
+  onTreeFocus(
+    _node: IFocusableNode,
+    _previousTree: IFocusableTree | null,
+  ): void {}
+
+  /** See IFocusableTree.onTreeBlur. */
+  onTreeBlur(nextTree: IFocusableTree | null): void {
+    const toolbox = this.targetWorkspace.getToolbox();
+    // If focus is moving to either the toolbox or the flyout's workspace, do
+    // not close the flyout. For anything else, do close it since the flyout is
+    // no longer focused.
+    if (toolbox && nextTree === toolbox) return;
+    if (nextTree == this.workspace_) return;
+    if (toolbox) toolbox.clearSelection();
+    this.autoHide(false);
   }
 }

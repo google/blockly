@@ -1144,7 +1144,9 @@ export class Toolbox
       if (this.getSelectedItem() !== node) {
         this.setSelectedItem(node as IToolboxItem);
       }
-    } else this.clearSelection();
+    } else {
+      this.clearSelection();
+    }
   }
 
   /** See IFocusableTree.onTreeBlur. */

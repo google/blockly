@@ -37,6 +37,7 @@ import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Flyout} from './flyout_base.js';
 import type {FlyoutButton} from './flyout_button.js';
+import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
@@ -44,6 +45,8 @@ import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {
@@ -54,6 +57,7 @@ import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
 import {MarkerManager} from './marker_manager.js';
+import {Msg} from './msg.js';
 import {Options} from './options.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
@@ -66,6 +70,7 @@ import {Classic} from './theme/classic.js';
 import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
 import type {Trashcan} from './trashcan.js';
+import * as aria from './utils/aria.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -93,7 +98,7 @@ const ZOOM_TO_FIT_MARGIN = 20;
  */
 export class WorkspaceSvg
   extends Workspace
-  implements IASTNodeLocationSvg, IContextMenu
+  implements IASTNodeLocationSvg, IContextMenu, IFocusableNode, IFocusableTree
 {
   /**
    * A wrapper function called when a resize event occurs.
@@ -764,7 +769,19 @@ export class WorkspaceSvg
      *   <g class="blocklyBubbleCanvas"></g>
      * </g>
      */
-    this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': 'blocklyWorkspace'});
+    this.svgGroup_ = dom.createSvgElement(Svg.G, {
+      'class': 'blocklyWorkspace',
+      // Only the top-level workspace should be tabbable.
+      'tabindex': injectionDiv ? '0' : '-1',
+      'id': this.id,
+    });
+    if (injectionDiv) {
+      aria.setState(
+        this.svgGroup_,
+        aria.State.LABEL,
+        Msg['WORKSPACE_ARIA_LABEL'],
+      );
+    }
 
     // Note that a <g> alone does not receive mouse events--it must have a
     // valid target inside it.  If no background class is specified, as in the
@@ -840,6 +857,9 @@ export class WorkspaceSvg
       this.getTheme(),
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
+
+    getFocusManager().registerTree(this);
+
     return this.svgGroup_;
   }
 
@@ -923,6 +943,10 @@ export class WorkspaceSvg
     if (this.dummyWheelListener) {
       document.body.removeEventListener('wheel', this.dummyWheelListener);
       this.dummyWheelListener = null;
+    }
+
+    if (getFocusManager().isRegistered(this)) {
+      getFocusManager().unregisterTree(this);
     }
   }
 
@@ -2617,6 +2641,67 @@ export class WorkspaceSvg
     deltaX *= scale;
     deltaY *= scale;
     this.scroll(this.scrollX + deltaX, this.scrollY + deltaY);
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.svgGroup_;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableTree.getRootFocusableNode. */
+  getRootFocusableNode(): IFocusableNode {
+    return this;
+  }
+
+  /** See IFocusableTree.getRestoredFocusableNode. */
+  getRestoredFocusableNode(
+    previousNode: IFocusableNode | null,
+  ): IFocusableNode | null {
+    if (!previousNode) {
+      return this.getTopBlocks(true)[0] ?? null;
+    } else return null;
+  }
+
+  /** See IFocusableTree.getNestedTrees. */
+  getNestedTrees(): Array<IFocusableTree> {
+    return [];
+  }
+
+  /** See IFocusableTree.lookUpFocusableNode. */
+  lookUpFocusableNode(id: string): IFocusableNode | null {
+    return this.getBlockById(id) as IFocusableNode;
+  }
+
+  /** See IFocusableTree.onTreeFocus. */
+  onTreeFocus(
+    _node: IFocusableNode,
+    _previousTree: IFocusableTree | null,
+  ): void {}
+
+  /** See IFocusableTree.onTreeBlur. */
+  onTreeBlur(nextTree: IFocusableTree | null): void {
+    // If the flyout loses focus, make sure to close it.
+    if (this.isFlyout && this.targetWorkspace) {
+      // Only hide the flyout if the flyout's workspace is losing focus and that
+      // focus isn't returning to the flyout itself or the toolbox.
+      const flyout = this.targetWorkspace.getFlyout();
+      const toolbox = this.targetWorkspace.getToolbox();
+      if (flyout && nextTree === flyout) return;
+      if (toolbox && nextTree === toolbox) return;
+      if (toolbox) toolbox.clearSelection();
+      if (flyout && flyout instanceof Flyout) flyout.autoHide(false);
+    }
   }
 }
 

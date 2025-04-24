@@ -22,11 +22,14 @@ import {DeleteArea} from '../delete_area.js';
 import '../events/events_toolbox_item_select.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import {getFocusManager} from '../focus_manager.js';
 import type {IAutoHideable} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 import {isDeletable} from '../interfaces/i_deletable.js';
 import type {IDraggable} from '../interfaces/i_draggable.js';
 import type {IFlyout} from '../interfaces/i_flyout.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 import {isSelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
@@ -51,7 +54,12 @@ import {CollapsibleToolboxCategory} from './collapsible_category.js';
  */
 export class Toolbox
   extends DeleteArea
-  implements IAutoHideable, IKeyboardAccessible, IStyleable, IToolbox
+  implements
+    IAutoHideable,
+    IKeyboardAccessible,
+    IStyleable,
+    IToolbox,
+    IFocusableNode
 {
   /**
    * The unique ID for this component that is used to register with the
@@ -163,6 +171,7 @@ export class Toolbox
         ComponentManager.Capability.DRAG_TARGET,
       ],
     });
+    getFocusManager().registerTree(this);
   }
 
   /**
@@ -177,7 +186,6 @@ export class Toolbox
     const container = this.createContainer_();
 
     this.contentsDiv_ = this.createContentsContainer_();
-    this.contentsDiv_.tabIndex = 0;
     aria.setRole(this.contentsDiv_, aria.Role.TREE);
     container.appendChild(this.contentsDiv_);
 
@@ -194,6 +202,7 @@ export class Toolbox
    */
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = document.createElement('div');
+    toolboxContainer.tabIndex = 0;
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolbox');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
@@ -1077,7 +1086,69 @@ export class Toolbox
       this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
       dom.removeNode(this.HtmlDiv);
     }
+
+    getFocusManager().unregisterTree(this);
   }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    if (!this.HtmlDiv) throw Error('Toolbox DOM has not yet been created.');
+    return this.HtmlDiv;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableTree.getRootFocusableNode. */
+  getRootFocusableNode(): IFocusableNode {
+    return this;
+  }
+
+  /** See IFocusableTree.getRestoredFocusableNode. */
+  getRestoredFocusableNode(
+    previousNode: IFocusableNode | null,
+  ): IFocusableNode | null {
+    // Always try to select the first selectable toolbox item rather than the
+    // root of the toolbox.
+    if (!previousNode || previousNode === this) {
+      return this.getToolboxItems().find((item) => item.isSelectable()) ?? null;
+    }
+    return null;
+  }
+
+  /** See IFocusableTree.getNestedTrees. */
+  getNestedTrees(): Array<IFocusableTree> {
+    return [];
+  }
+
+  /** See IFocusableTree.lookUpFocusableNode. */
+  lookUpFocusableNode(id: string): IFocusableNode | null {
+    return this.getToolboxItemById(id) as IFocusableNode;
+  }
+
+  /** See IFocusableTree.onTreeFocus. */
+  onTreeFocus(
+    node: IFocusableNode,
+    _previousTree: IFocusableTree | null,
+  ): void {
+    if (node !== this) {
+      // Only select the item if it isn't already selected so as to not toggle.
+      if (this.getSelectedItem() !== node) {
+        this.setSelectedItem(node as IToolboxItem);
+      }
+    } else this.clearSelection();
+  }
+
+  /** See IFocusableTree.onTreeBlur. */
+  onTreeBlur(_nextTree: IFocusableTree | null): void {}
 }
 
 /** CSS for Toolbox.  See css.js for use. */

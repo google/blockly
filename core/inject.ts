@@ -13,13 +13,11 @@ import * as common from './common.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Grid} from './grid.js';
-import {Msg} from './msg.js';
 import {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import {ShortcutRegistry} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
-import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -56,8 +54,6 @@ export function inject(
   if (opt_options?.rtl) {
     dom.addClass(subContainer, 'blocklyRTL');
   }
-  subContainer.tabIndex = 0;
-  aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 
   containerElement!.appendChild(subContainer);
   const svg = createDom(subContainer, options);
@@ -126,7 +122,6 @@ function createDom(container: HTMLElement, options: Options): SVGElement {
       'xmlns:xlink': dom.XLINK_NS,
       'version': '1.1',
       'class': 'blocklySvg',
-      'tabindex': '0',
     },
     container,
   );

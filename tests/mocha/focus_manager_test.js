@@ -27,6 +27,10 @@ class FocusableNodeImpl {
   getFocusableTree() {
     return this.tree;
   }
+
+  onNodeFocus() {}
+
+  onNodeBlur() {}
 }
 
 class FocusableTreeImpl {
@@ -46,6 +50,10 @@ class FocusableTreeImpl {
     return this.rootNode;
   }
 
+  getRestoredFocusableNode() {
+    return null;
+  }
+
   getNestedTrees() {
     return this.nestedTrees;
   }
@@ -53,6 +61,10 @@ class FocusableTreeImpl {
   lookUpFocusableNode(id) {
     return this.idToNodeMap[id];
   }
+
+  onTreeFocus() {}
+
+  onTreeBlur() {}
 }
 
 suite('FocusManager', function () {
@@ -292,6 +304,18 @@ suite('FocusManager', function () {
       );
 
       assert.isTrue(isRegistered);
+    });
+
+    test('for unregistered tree with other registered tree returns false', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.focusManager.unregisterTree(this.testFocusableTree1);
+
+      const isRegistered = this.focusManager.isRegistered(
+        this.testFocusableTree1,
+      );
+
+      assert.isFalse(isRegistered);
     });
   });
 
@@ -2067,7 +2091,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('registered tree focus()ed other tree node passively focused tree root now has active property', function () {
+      test('registered tree focus()ed other tree node passively focused tree node now has active property', function () {
         this.focusManager.registerTree(this.testFocusableTree1);
         this.focusManager.registerTree(this.testFocusableTree2);
         document.getElementById('testFocusableTree1.node1').focus();
@@ -2075,26 +2099,27 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableTree1').focus();
 
-        // This differs from the behavior of focusTree() since directly focusing a tree's root will
-        // coerce it to now have focus.
+        // Directly refocusing a tree's root should have functional parity with focusTree(). That
+        // means the tree's previous node should now have active focus again and its root should
+        // have no focus indication.
         const rootElem = this.testFocusableTree1
           .getRootFocusableNode()
           .getFocusableElement();
         const nodeElem = this.testFocusableTree1Node1.getFocusableElement();
         assert.includesClass(
-          rootElem.classList,
+          nodeElem.classList,
           FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
         assert.notIncludesClass(
-          rootElem.classList,
+          nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
         assert.notIncludesClass(
-          nodeElem.classList,
+          rootElem.classList,
           FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
         assert.notIncludesClass(
-          nodeElem.classList,
+          rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });
@@ -3879,7 +3904,7 @@ suite('FocusManager', function () {
         );
       });
 
-      test('registered tree focus()ed other tree node passively focused tree root now has active property', function () {
+      test('registered tree focus()ed other tree node passively focused tree node now has active property', function () {
         this.focusManager.registerTree(this.testFocusableGroup1);
         this.focusManager.registerTree(this.testFocusableGroup2);
         document.getElementById('testFocusableGroup1.node1').focus();
@@ -3887,26 +3912,27 @@ suite('FocusManager', function () {
 
         document.getElementById('testFocusableGroup1').focus();
 
-        // This differs from the behavior of focusTree() since directly focusing a tree's root will
-        // coerce it to now have focus.
+        // Directly refocusing a tree's root should have functional parity with focusTree(). That
+        // means the tree's previous node should now have active focus again and its root should
+        // have no focus indication.
         const rootElem = this.testFocusableGroup1
           .getRootFocusableNode()
           .getFocusableElement();
         const nodeElem = this.testFocusableGroup1Node1.getFocusableElement();
         assert.includesClass(
-          rootElem.classList,
+          nodeElem.classList,
           FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
         assert.notIncludesClass(
-          rootElem.classList,
+          nodeElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
         assert.notIncludesClass(
-          nodeElem.classList,
+          rootElem.classList,
           FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
         assert.notIncludesClass(
-          nodeElem.classList,
+          rootElem.classList,
           FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
         );
       });

@@ -15,7 +15,7 @@
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import type {Field} from './field.js';
-import { ReturnEphemeralFocus, getFocusManager } from './focus_manager.js';
+import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';

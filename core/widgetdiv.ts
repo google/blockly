@@ -8,7 +8,7 @@
 
 import * as common from './common.js';
 import {Field} from './field.js';
-import { ReturnEphemeralFocus, getFocusManager } from './focus_manager.js';
+import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
 import * as dom from './utils/dom.js';
 import type {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';

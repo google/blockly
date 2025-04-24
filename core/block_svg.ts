@@ -1836,9 +1836,7 @@ export class BlockSvg
 
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
-    if (!this.isShadow()) {
-      common.setSelected(this);
-    }
+    common.setSelected(this);
   }
 
   /** See IFocusableNode.onNodeBlur. */

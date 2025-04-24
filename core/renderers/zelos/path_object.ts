@@ -85,21 +85,21 @@ export class PathObject extends BasePathObject {
     }
   }
 
-  override updateSelected(enable: boolean) {
-    this.setClass_('blocklySelected', enable);
-    if (enable) {
-      if (!this.svgPathSelected) {
-        this.svgPathSelected = this.svgPath.cloneNode(true) as SVGElement;
-        this.svgPathSelected.classList.add('blocklyPathSelected');
-        this.svgRoot.appendChild(this.svgPathSelected);
-      }
-    } else {
-      if (this.svgPathSelected) {
-        this.svgRoot.removeChild(this.svgPathSelected);
-        this.svgPathSelected = null;
-      }
-    }
-  }
+  // override updateSelected(enable: boolean) {
+  //   this.setClass_('blocklySelected', enable);
+  //   if (enable) {
+  //     if (!this.svgPathSelected) {
+  //       this.svgPathSelected = this.svgPath.cloneNode(true) as SVGElement;
+  //       this.svgPathSelected.classList.add('blocklyPathSelected');
+  //       this.svgRoot.appendChild(this.svgPathSelected);
+  //     }
+  //   } else {
+  //     if (this.svgPathSelected) {
+  //       this.svgRoot.removeChild(this.svgPathSelected);
+  //       this.svgPathSelected = null;
+  //     }
+  //   }
+  // }
 
   override updateReplacementFade(enable: boolean) {
     this.setClass_('blocklyReplaceable', enable);

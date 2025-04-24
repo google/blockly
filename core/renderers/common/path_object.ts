@@ -153,13 +153,17 @@ export class PathObject implements IPathObject {
    *     removed.
    */
   protected setClass_(className: string, add: boolean) {
+    this.setClassOnElem_(this.svgRoot, className, add);
+  }
+
+  private setClassOnElem_(root: SVGElement, className: string, add: boolean) {
     if (!className) {
       return;
     }
     if (add) {
-      dom.addClass(this.svgRoot, className);
+      dom.addClass(root, className);
     } else {
-      dom.removeClass(this.svgRoot, className);
+      dom.removeClass(root, className);
     }
   }
 
@@ -209,7 +213,7 @@ export class PathObject implements IPathObject {
    * @param enable True if selection is enabled, false otherwise.
    */
   updateSelected(enable: boolean) {
-    this.setClass_('blocklySelected', enable);
+    this.setClassOnElem_(this.svgPath, 'blocklySelected', enable);
   }
 
   /**
@@ -268,25 +272,33 @@ export class PathObject implements IPathObject {
     connectionPath: string,
     offset: Coordinate,
     rtl: boolean,
-  ) {
-    if (this.connectionHighlights.has(connection)) {
-      if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
-        return;
-      }
-      this.removeConnectionHighlight(connection);
+  ): SVGElement {
+    const previousHighlight = this.connectionHighlights.get(connection);
+    if (previousHighlight) {
+      // TODO: Fix the highlight seemingly being recreated every time it's focused.
+      // if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
+        return previousHighlight;
+      // }
+      // this.removeConnectionHighlight(connection);
     }
 
     const highlight = dom.createSvgElement(
       Svg.PATH,
       {
+        'id': connection.id,
         'class': 'blocklyHighlightedConnectionPath',
+        // 'style': 'display: none;',
+        'tabindex': '-1',
         'd': connectionPath,
         'transform':
           `translate(${offset.x}, ${offset.y})` + (rtl ? ' scale(-1 1)' : ''),
       },
       this.svgRoot,
     );
+    // TODO: Do this in a cleaner way. One possibility: create the path without 'd' or 'transform' in RenderedConnection, then just update it here (and keep registrations).
+    (highlight as any).renderedConnection = connection;
     this.connectionHighlights.set(connection, highlight);
+    return highlight;
   }
 
   private currentHighlightMatchesNew(

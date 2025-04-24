@@ -75,7 +75,6 @@ import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as drag from './utils/drag.js';
-import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 import type {Metrics} from './utils/metrics.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
@@ -89,8 +88,6 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
-import type {Field} from './field.js';
-import { IAutoHideable } from './blockly.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;

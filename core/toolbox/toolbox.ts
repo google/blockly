@@ -42,7 +42,6 @@ import type {KeyboardShortcut} from '../shortcut_registry.js';
 import * as Touch from '../touch.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
-import {FocusableTreeTraverser} from '../utils/focusable_tree_traverser.js';
 import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';

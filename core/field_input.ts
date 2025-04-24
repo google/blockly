@@ -27,6 +27,7 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
+import {getFocusManager} from './focus_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
@@ -35,7 +36,6 @@ import {Size} from './utils/size.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
-import { getFocusManager } from './focus_manager.js';
 
 /**
  * Supported types for FieldInput subclasses.
@@ -352,7 +352,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * keyboards).
    */
   private showPromptEditor() {
-    const returnFocusCallback = getFocusManager().takeEphemeralFocus(document.body);
+    const returnFocusCallback = getFocusManager().takeEphemeralFocus(
+      document.body,
+    );
     dialog.prompt(
       Msg['CHANGE_VALUE_TITLE'],
       this.getText(),
@@ -377,7 +379,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     if (!block) {
       throw new UnattachedFieldError();
     }
-    const returnFocusCallback = getFocusManager().takeEphemeralFocus(document.body);
+    const returnFocusCallback = getFocusManager().takeEphemeralFocus(
+      document.body,
+    );
     WidgetDiv.show(
       this,
       block.RTL,

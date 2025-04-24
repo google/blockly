@@ -23,6 +23,8 @@ import {Click, ClickTarget} from '../events/events_click.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {Field} from '../field.js';
+import {getFocusManager} from '../focus_manager.js';
+import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
 import type {MarkerSvg} from '../renderers/common/marker_svg.js';
 import type {PathObject} from '../renderers/zelos/path_object.js';
@@ -31,8 +33,6 @@ import * as dom from '../utils/dom.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import {ASTNode} from './ast_node.js';
 import {Marker} from './marker.js';
-import {isFocusableNode} from '../interfaces/i_focusable_node.js';
-import {getFocusManager} from '../focus_manager.js';
 
 /** Options object for LineCursor instances. */
 export interface CursorOptions {
@@ -574,7 +574,7 @@ export class LineCursor extends Marker {
    * @param updateSelection If true (the default) we'll update the selection
    *     too.
    */
-  override setCurNode(newNode: ASTNode | null, selectionUpToDate = false) {
+  override setCurNode(newNode: ASTNode | null, _selectionUpToDate = false) {
     // if (!selectionUpToDate) {
     //   this.updateSelectionFromNode(newNode);
     // }
@@ -649,7 +649,7 @@ export class LineCursor extends Marker {
     // If old node was a block, unselect it or remove fake selection.
     // if (oldNode?.getType() === ASTNode.types.BLOCK) {
     //   const block = oldNode.getLocation() as BlockSvg;
-  //   if (!block.isShadow()) {
+    //   if (!block.isShadow()) {
     //     // Selection should already be in sync.
     //   } else {
     //     block.removeSelect();
@@ -664,7 +664,7 @@ export class LineCursor extends Marker {
     const isZelosInputConnection =
       this.isZelos && curNode && this.isValueInputConnection(curNode);
 
-      // realDrawer.draw(oldNode, curNode);
+    // realDrawer.draw(oldNode, curNode);
 
     // If drawing can't be handled locally, just use the drawer.
     if (curNodeType !== ASTNode.types.BLOCK && !isZelosInputConnection) {

@@ -35,7 +35,6 @@ import {SEPARATOR_TYPE} from './separator_flyout_inflater.js';
 import * as blocks from './serialization/blocks.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { FocusableTreeTraverser } from './utils/focusable_tree_traverser.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';

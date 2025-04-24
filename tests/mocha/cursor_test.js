@@ -125,6 +125,15 @@ suite('Cursor', function () {
       assert.equal(curNode.getLocation(), this.blocks.A.nextConnection);
     });
 
+    test('Prev - From first connection loop to last next connection', function () {
+      const prevConnection = this.blocks.A.previousConnection;
+      const prevConnectionNode = ASTNode.createConnectionNode(prevConnection);
+      this.cursor.setCurNode(prevConnectionNode);
+      this.cursor.prev();
+      const curNode = this.cursor.getCurNode();
+      assert.equal(curNode.getLocation(), this.blocks.D.nextConnection);
+    });
+
     test('Out - From field does not skip over block node', function () {
       const field = this.blocks.E.inputList[0].fieldRow[0];
       const fieldNode = ASTNode.createFieldNode(field);
@@ -132,6 +141,15 @@ suite('Cursor', function () {
       this.cursor.out();
       const curNode = this.cursor.getCurNode();
       assert.equal(curNode.getLocation(), this.blocks.E);
+    });
+
+    test('Out - From first connection loop to last next connection', function () {
+      const prevConnection = this.blocks.A.previousConnection;
+      const prevConnectionNode = ASTNode.createConnectionNode(prevConnection);
+      this.cursor.setCurNode(prevConnectionNode);
+      this.cursor.prev();
+      const curNode = this.cursor.getCurNode();
+      assert.equal(curNode.getLocation(), this.blocks.D.nextConnection);
     });
   });
   suite('Searching', function () {

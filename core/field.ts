@@ -1427,8 +1427,7 @@ export abstract class Field<T = any>
     if (!block) {
       throw new UnattachedFieldError();
     }
-    // TODO: Remove the latter two casts once WorkspaceSvg is a focusable tree.
-    return block.workspace as WorkspaceSvg as unknown as IFocusableTree;
+    return block.workspace as WorkspaceSvg;
   }
 
   /** See IFocusableNode.onNodeFocus. */

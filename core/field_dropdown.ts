@@ -22,7 +22,6 @@ import {
   UnattachedFieldError,
 } from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {getFocusManager} from './focus_manager.js';
 import {Menu} from './menu.js';
 import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
@@ -770,7 +769,7 @@ export class FieldDropdown extends Field<string> {
       } else if (typeof option[1] !== 'string') {
         foundError = true;
         console.error(
-          `Invalid option[${i}]: Each FieldDropdown option id must be a string.
+          `Invalid option[${i}]: Each FieldDropdown option id must be a string. 
           Found ${option[1]} in: ${option}`,
         );
       } else if (
@@ -781,7 +780,7 @@ export class FieldDropdown extends Field<string> {
       ) {
         foundError = true;
         console.error(
-          `Invalid option[${i}]: Each FieldDropdown option must have a string
+          `Invalid option[${i}]: Each FieldDropdown option must have a string 
           label, image description, or HTML element. Found ${option[0]} in: ${option}`,
         );
       }

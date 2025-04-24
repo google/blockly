@@ -27,7 +27,6 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
-import {getFocusManager} from './focus_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
@@ -333,7 +332,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
    */
-  protected override showEditor_(_e?: Event, quietInput: boolean = false) {
+  protected override showEditor_(_e?: Event, quietInput = false) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     if (
       !quietInput &&

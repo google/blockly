@@ -649,6 +649,7 @@ class ProcedureArgumentField extends FieldTextInput {
    * @param e The event that triggered display of the field editor.
    */
   protected override showEditor_(e?: Event) {
+    super.showEditor_(e);
     this.editingInteractively = true;
     this.editingVariable = undefined;
   }

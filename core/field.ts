@@ -782,11 +782,7 @@ export abstract class Field<T = any>
    */
   showEditor(e?: Event) {
     if (this.isClickable()) {
-      this.showEditor_(
-        () => this.onShowEditor(),
-        () => this.onHideEditor(),
-        e,
-      );
+      this.showEditor_(e);
     }
   }
 
@@ -794,28 +790,11 @@ export abstract class Field<T = any>
    * A developer hook to create an editor for the field. This is no-op by
    * default, and must be overriden to create an editor.
    *
-   * @param onEditorShown Callback that must be called when the editor is shown.
-   * @param onEditorHidden Callback that must be called when the editor hides.
-   * @param e Optional mouse event that triggered the field to open, or
+   * @param _e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
-  protected abstract showEditor_(
-    onEditorShown: () => void,
-    onEditorHidden: () => void,
-    e?: Event,
-  ): void;
-
-  /**
-   * Called when an editor is shown. This is expected to be used for ensuring
-   * that the editor has proper focus.
-   */
-  protected abstract onShowEditor(): void;
-
-  /**
-   * Called when an editor is hidden. This is expected to be used for ensuring
-   * that the editor no longer proper focus.
-   */
-  protected abstract onHideEditor(): void;
+  protected showEditor_(_e?: Event): void {}
+  // NOP
 
   /**
    * A developer hook to reposition the WidgetDiv during a window resize. You

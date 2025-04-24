@@ -94,18 +94,6 @@ export class FieldLabel extends Field<string> {
     return `${newValue}`;
   }
 
-  protected override showEditor_(
-    _onEditorShown: () => void,
-    _onEditorHidden: () => void,
-  ) {
-    // Note that an editor shouldn't be shown for this field, so the callbacks
-    // are ignored.
-  }
-
-  protected override onShowEditor(): void {}
-
-  protected override onHideEditor(): void {}
-
   /**
    * Set the CSS class applied to the field's textElement_.
    *

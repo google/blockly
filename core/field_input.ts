@@ -101,8 +101,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   override SERIALIZABLE = true;
 
-  private returnFocusCallback: (() => void) | null = null;
-
   /**
    * @param value The initial value of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts
@@ -330,39 +328,22 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Shows a prompt editor for mobile browsers if the modalInputs option is
    * enabled.
    *
-   * @param onEditorShown Callback that must be called when the editor is shown.
-   * @param onEditorHidden Callback that must be called when the editor hides.
    * @param _e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
    */
-  protected override showEditor_(
-    onEditorShown: () => void,
-    onEditorHidden: () => void,
-    _e?: Event,
-    quietInput: boolean = false,
-  ) {
+  protected override showEditor_(_e?: Event, quietInput: boolean = false) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     if (
       !quietInput &&
       this.workspace_.options.modalInputs &&
       (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)
     ) {
-      this.showPromptEditor(onEditorShown, onEditorHidden);
+      this.showPromptEditor();
     } else {
-      this.showInlineEditor(onEditorShown, onEditorHidden, quietInput);
+      this.showInlineEditor(quietInput);
     }
-  }
-
-  protected override onShowEditor(): void {
-    this.returnFocusCallback = getFocusManager().takeEphemeralFocus(
-      document.body,
-    );
-  }
-
-  protected override onHideEditor(): void {
-    if (this.returnFocusCallback) this.returnFocusCallback();
   }
 
   /**
@@ -370,11 +351,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Mobile browsers may have issues with in-line textareas (focus and
    * keyboards).
    */
-  private showPromptEditor(
-    onEditorShown: () => void,
-    onEditorHidden: () => void,
-  ) {
-    onEditorShown();
+  private showPromptEditor() {
     dialog.prompt(
       Msg['CHANGE_VALUE_TITLE'],
       this.getText(),
@@ -384,7 +361,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
           this.setValue(this.getValueFromEditorText_(text));
         }
         this.onFinishEditing_(this.value_);
-        onEditorHidden();
       },
     );
   }
@@ -394,11 +370,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *
    * @param quietInput True if editor should be created without focus.
    */
-  private showInlineEditor(
-    onEditorShown: () => void,
-    onEditorHidden: () => void,
-    quietInput: boolean,
-  ) {
+  private showInlineEditor(quietInput: boolean) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -406,13 +378,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     WidgetDiv.show(
       this,
       block.RTL,
-      () => {
-        this.widgetDispose_();
-        onEditorHidden();
-      },
+      this.widgetDispose_.bind(this),
       this.workspace_,
     );
-    onEditorShown();
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
     this.valueWhenEditorWasOpened_ = this.value_;

@@ -89,8 +89,6 @@ export class FieldDropdown extends Field<string> {
   private selectedOption!: MenuOption;
   override clickTarget_: SVGElement | null = null;
 
-  private returnFocusCallback: (() => void) | null = null;
-
   /**
    * The y offset from the top of the field to the top of the image, if an image
    * is selected.
@@ -272,11 +270,7 @@ export class FieldDropdown extends Field<string> {
    * @param e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
-  protected override showEditor_(
-    onEditorShown: () => void,
-    onEditorHidden: () => void,
-    e?: MouseEvent,
-  ) {
+  protected override showEditor_(e?: MouseEvent) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -284,7 +278,6 @@ export class FieldDropdown extends Field<string> {
     this.dropdownCreate();
     if (!this.menu_) return;
 
-    onEditorShown();
     if (e && typeof e.clientX === 'number') {
       this.menu_.openingCoords = new Coordinate(e.clientX, e.clientY);
     } else {
@@ -303,10 +296,7 @@ export class FieldDropdown extends Field<string> {
       dropDownDiv.setColour(primaryColour, borderColour);
     }
 
-    dropDownDiv.showPositionedByField(this, () => {
-      this.dropdownDispose_.bind(this);
-      onEditorHidden();
-    });
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     dropDownDiv.getContentDiv().style.height = `${this.menu_.getSize().height}px`;
 
@@ -320,18 +310,6 @@ export class FieldDropdown extends Field<string> {
     }
 
     this.applyColour();
-  }
-
-  protected override onShowEditor(): void {
-    const menuElement = this.menu_?.getElement();
-    if (menuElement) {
-      this.returnFocusCallback =
-        getFocusManager().takeEphemeralFocus(menuElement);
-    }
-  }
-
-  protected override onHideEditor(): void {
-    if (this.returnFocusCallback) this.returnFocusCallback();
   }
 
   /** Create the dropdown editor. */

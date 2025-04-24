@@ -33,6 +33,8 @@ const defaultPrompt = function (
   defaultValue: string,
   callback: (result: string | null) => void,
 ) {
+  // NOTE TO DEVELOPER: Ephemeral focus doesn't need to be taken for the native
+  // window prompt since it prevents focus from changing while open.
   callback(window.prompt(message, defaultValue));
 };
 
@@ -115,6 +117,11 @@ export function prompt(
 
 /**
  * Sets the function to be run when Blockly.dialog.prompt() is called.
+ *
+ * **Important**: When overridding this, be aware that non-native prompt
+ * experiences may require managing ephemeral focus in FocusManager. This isn't
+ * needed for the native window prompt because it prevents focus from being
+ * changed while open.
  *
  * @param promptFunction The function to be run, or undefined to restore the
  *     default implementation.

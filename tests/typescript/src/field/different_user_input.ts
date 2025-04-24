@@ -61,18 +61,6 @@ class FieldMitosis extends Field<CellGroup> {
     });
     this.value_ = {cells};
   }
-
-  protected override showEditor_(
-    _onEditorShown: () => void,
-    _onEditorHidden: () => void,
-  ) {
-    // Note that an editor shouldn't be shown for this field, so the callbacks
-    // are ignored.
-  }
-
-  protected override onShowEditor(): void {}
-
-  protected override onHideEditor(): void {}
 }
 
 fieldRegistry.register('field_mitosis', FieldMitosis);

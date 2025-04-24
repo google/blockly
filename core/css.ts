@@ -157,15 +157,6 @@ let content = `
   stroke-width: 1;
 }
 
-.blocklySelected {
-  stroke: #ffa200;
-  stroke-width: 5;
-}
-
-.blocklySelected>.blocklyPathLight {
-  display: none;
-}
-
 .blocklyDraggable {
   cursor: grab;
   cursor: -webkit-grab;
@@ -499,21 +490,41 @@ input[type=number] {
   cursor: grabbing;
 }
 
-.blocklyActiveFocus {
+.blocklyActiveFocus:is(.blocklyField,.blocklyPath,.blocklyHighlightedConnectionPath) {
   stroke: #ffa200;
-  stroke-width: 3;
-  outline-color: #ffa200;
+  stroke-width: 3px;
+  outline-width: 0px;
 }
-.blocklyPassiveFocus {
+.blocklyActiveFocus > .blocklyFlyoutBackground, .blocklyActiveFocus > .blocklyMainBackground {
   stroke: #ffa200;
-  stroke-dasharray: 5 3;
-  stroke-width: 3;
-  outline-color: #ffa200;
+  stroke-width: 3px;
+}
+.blocklyActiveFocus:is(.blocklyFlyout,.blocklyWorkspace) {
+  outline-width: 0px;
+}
+.blocklyActiveFocus:is(.blocklyToolbox,.blocklyToolboxCategoryContainer) {
+  outline: 3px solid #ffa200;
 }
 
-// .blocklyMainBackground, .blocklyActiveFocus > * {
-//   // Reset to blocklyMainBackground's initial properties to avoid inheriting these.
-//   stroke-width: 1;
-//   stroke: #c6c6c6;
-// }
+.blocklyPassiveFocus:is(.blocklyField,.blocklyPath,.blocklyHighlightedConnectionPath) {
+  stroke: #ffa200;
+  stroke-dasharray: 5px 3px;
+  stroke-width: 3px;
+}
+.blocklyPassiveFocus > .blocklyFlyoutBackground, .blocklyPassiveFocus > .blocklyMainBackground {
+  stroke: #ffa200;
+  stroke-dasharray: 5px 3px;
+  stroke-width: 3px;
+}
+.blocklyPassiveFocus:is(.blocklyToolbox,.blocklyToolboxCategoryContainer) {
+  border: 3px dashed #ffa200;
+}
+
+.blocklySelected:is(.blocklyPath) {
+  stroke: #ffa200;
+  stroke-width: 5;
+}
+.blocklySelected>.blocklyPathLight {
+  display: none;
+}
 `;

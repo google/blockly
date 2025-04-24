@@ -247,7 +247,7 @@ export class FocusManager {
 
     const prevNode = this.focusedNode;
     const prevTree = prevNode?.getFocusableTree();
-    if (prevNode && prevTree !== nextTree) {
+    if (prevNode) {
       this.passivelyFocusNode(prevNode, nextTree);
     }
 
@@ -374,7 +374,9 @@ export class FocusManager {
     // node's focusable element (which *is* allowed to be invisible until the
     // node needs to be focused).
     this.lockFocusStateChanges = true;
-    node.getFocusableTree().onTreeFocus(node, prevTree);
+    if (node.getFocusableTree() !== prevTree) {
+      node.getFocusableTree().onTreeFocus(node, prevTree);
+    }
     node.onNodeFocus();
     this.lockFocusStateChanges = false;
 
@@ -399,11 +401,14 @@ export class FocusManager {
     nextTree: IFocusableTree | null,
   ): void {
     this.lockFocusStateChanges = true;
-    node.getFocusableTree().onTreeBlur(nextTree);
+    if (node.getFocusableTree() !== nextTree) {
+      node.getFocusableTree().onTreeBlur(nextTree);
+    }
     node.onNodeBlur();
     this.lockFocusStateChanges = false;
-
-    this.setNodeToVisualPassiveFocus(node);
+    if (node.getFocusableTree() !== nextTree) {
+      this.setNodeToVisualPassiveFocus(node);
+    }
   }
 
   /**

@@ -27,7 +27,6 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
-import {getFocusManager} from './focus_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
@@ -352,9 +351,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * keyboards).
    */
   private showPromptEditor() {
-    const returnFocusCallback = getFocusManager().takeEphemeralFocus(
-      document.body,
-    );
     dialog.prompt(
       Msg['CHANGE_VALUE_TITLE'],
       this.getText(),
@@ -364,7 +360,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
           this.setValue(this.getValueFromEditorText_(text));
         }
         this.onFinishEditing_(this.value_);
-        returnFocusCallback();
       },
     );
   }
@@ -379,16 +374,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     if (!block) {
       throw new UnattachedFieldError();
     }
-    const returnFocusCallback = getFocusManager().takeEphemeralFocus(
-      document.body,
-    );
     WidgetDiv.show(
       this,
       block.RTL,
-      () => {
-        this.widgetDispose_();
-        returnFocusCallback();
-      },
+      this.widgetDispose_.bind(this),
       this.workspace_,
     );
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;

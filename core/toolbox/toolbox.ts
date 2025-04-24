@@ -1122,7 +1122,8 @@ export class Toolbox
     // root of the toolbox.
     if (!previousNode || previousNode === this) {
       return this.getToolboxItems().find((item) => item.isSelectable()) ?? null;
-    } else return null;
+    }
+    return null;
   }
 
   /** See IFocusableTree.getNestedTrees. */

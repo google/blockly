@@ -15,6 +15,7 @@
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import type {Field} from './field.js';
+import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';
@@ -81,6 +82,9 @@ let owner: Field | null = null;
 
 /** Whether the dropdown was positioned to a field or the source block. */
 let positionToField: boolean | null = null;
+
+/** Callback to FocusManager to return ephemeral focus when the div closes. */
+let returnEphemeralFocus: ReturnEphemeralFocus | null = null;
 
 /**
  * Dropdown bounds info object used to encapsulate sizing information about a
@@ -337,6 +341,8 @@ export function show<T>(
   themeClassName = mainWorkspace.getTheme().getClassName();
   dom.addClass(div, renderedClassName);
   dom.addClass(div, themeClassName);
+
+  returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -623,6 +629,10 @@ export function hide() {
   animateOutTimer = setTimeout(function () {
     hideWithoutAnimation();
   }, ANIMATION_TIME * 1000);
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
+  }
   if (onHide) {
     onHide();
     onHide = null;
@@ -638,6 +648,10 @@ export function hideWithoutAnimation() {
     clearTimeout(animateOutTimer);
   }
 
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
+  }
   if (onHide) {
     onHide();
     onHide = null;

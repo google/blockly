@@ -36,6 +36,7 @@ import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
+import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
@@ -45,7 +46,6 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-import * as idGenerator from './utils/idgenerator.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -1414,13 +1414,15 @@ export abstract class Field<T = any>
     }
   }
 
+  /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     if (!this.fieldGroup_) {
-      throw Error("This field currently has no representative DOM element.");
+      throw Error('This field currently has no representative DOM element.');
     }
     return this.fieldGroup_;
   }
 
+  /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
     const block = this.getSourceBlock();
     if (!block) {
@@ -1429,8 +1431,10 @@ export abstract class Field<T = any>
     return block.workspace as WorkspaceSvg;
   }
 
+  /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {}
 
+  /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
   /**

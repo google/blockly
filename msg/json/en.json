@@ -18,6 +18,7 @@
 	"DELETE_X_BLOCKS": "Delete %1 Blocks",
 	"DELETE_ALL_BLOCKS": "Delete all %1 blocks?",
 	"CLEAN_UP": "Clean up Blocks",
+	"CLOSE": "Close",
 	"COLLAPSE_BLOCK": "Collapse Block",
 	"COLLAPSE_ALL": "Collapse Blocks",
 	"EXPAND_BLOCK": "Expand Block",

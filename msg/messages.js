@@ -103,6 +103,9 @@ Blockly.Msg.DELETE_ALL_BLOCKS = 'Delete all %1 blocks?';
 /// context menu - Reposition all the blocks so that they form a neat line.
 Blockly.Msg.CLEAN_UP = 'Clean up Blocks';
 /** @type {string} */
+/// toast notification - Accessibility label for close button.
+Blockly.Msg.CLOSE = 'Close';
+/** @type {string} */
 /// context menu - Make the appearance of the selected block smaller by hiding some information about it.
 Blockly.Msg.COLLAPSE_BLOCK = 'Collapse Block';
 /** @type {string} */

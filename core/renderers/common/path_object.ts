@@ -277,7 +277,7 @@ export class PathObject implements IPathObject {
     if (previousHighlight) {
       // TODO: Fix the highlight seemingly being recreated every time it's focused.
       // if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
-        return previousHighlight;
+      return previousHighlight;
       // }
       // this.removeConnectionHighlight(connection);
     }

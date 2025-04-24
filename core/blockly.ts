@@ -432,6 +432,8 @@ Names.prototype.populateProcedures = function (
 };
 // clang-format on
 
+export * from './toast.js';
+
 // Re-export submodules that no longer declareLegacyNamespace.
 export {
   ASTNode,

@@ -234,7 +234,9 @@ export class Drawer extends BaseDrawer {
   }
 
   /** Returns a path to highlight the given connection. */
-  override drawConnectionHighlightPath(measurable: Connection): SVGElement | undefined {
+  override drawConnectionHighlightPath(
+    measurable: Connection,
+  ): SVGElement | undefined {
     const conn = measurable.connectionModel;
     if (
       conn.type === ConnectionType.NEXT_STATEMENT ||

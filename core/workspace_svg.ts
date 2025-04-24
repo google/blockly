@@ -774,7 +774,7 @@ export class WorkspaceSvg
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {
       'class': 'blocklyWorkspace',
-      // Only the main workspace should be tabbable.
+      // Only the top-level workspace should be tabbable.
       'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
       'aria-label': 'Workspace',
@@ -2684,7 +2684,6 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
-    // TODO: This isn't a complete solution since non-blocks can have focus.
     const fieldIndicatorIndex = id.indexOf('_field_');
     const connectionIndicatorIndex = id.indexOf('_connection_');
     if (fieldIndicatorIndex !== -1) {
@@ -2705,7 +2704,8 @@ export class WorkspaceSvg
         }
       }
       return null;
-    } else return this.getBlockById(id) as IFocusableNode;
+    }
+    return this.getBlockById(id) as IFocusableNode;
   }
 
   /** See IFocusableTree.onTreeFocus. */

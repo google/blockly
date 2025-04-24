@@ -20,7 +20,7 @@ import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';
-import { idGenerator } from './utils.js';
+import {idGenerator} from './utils.js';
 import * as Xml from './xml.js';
 
 /**

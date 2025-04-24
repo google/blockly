@@ -51,6 +51,9 @@ export enum Role {
 
   // ARIA role for a visual separator in e.g. a menu.
   SEPARATOR = 'separator',
+
+  // ARIA role for a live region providing information.
+  STATUS = 'status',
 }
 
 /**
@@ -110,6 +113,14 @@ export enum State {
 
   // ARIA property for slider minimum value. Value: number.
   VALUEMIN = 'valuemin',
+
+  // ARIA property for live region chattiness.
+  // Value: one of {polite, assertive, off}.
+  LIVE = 'live',
+
+  // ARIA property for removing elements from the accessibility tree.
+  // Value: one of {true, false, undefined}.
+  HIDDEN = 'hidden',
 }
 
 /**

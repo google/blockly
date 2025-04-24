@@ -771,7 +771,7 @@ export class WorkspaceSvg
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {
       'class': 'blocklyWorkspace',
-      // Only the main workspace should be tabbable.
+      // Only the top-level workspace should be tabbable.
       'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
     });
@@ -2680,6 +2680,17 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
+    const fieldIndicatorIndex = id.indexOf('_field_');
+    if (fieldIndicatorIndex !== -1) {
+      const blockId = id.substring(0, fieldIndicatorIndex);
+      const block = this.getBlockById(blockId);
+      if (block) {
+        for (const field of block.getFields()) {
+          if (field.getFocusableElement().id === id) return field;
+        }
+      }
+      return null;
+    }
     return this.getBlockById(id) as IFocusableNode;
   }
 

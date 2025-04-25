@@ -36,6 +36,7 @@ import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import { getFocusManager } from './focus_manager.js';
 
 /**
  * Note: In this file "start" refers to pointerdown
@@ -289,7 +290,7 @@ export class Gesture {
       // The start block is no longer relevant, because this is a drag.
       this.startBlock = null;
       this.targetBlock = this.flyout.createBlock(this.targetBlock);
-      common.setSelected(this.targetBlock);
+      getFocusManager().focusNode(this.targetBlock);
       return true;
     }
     return false;
@@ -726,6 +727,7 @@ export class Gesture {
     if (this.targetBlock) {
       this.bringBlockToFront();
       this.targetBlock.workspace.hideChaff(!!this.flyout);
+      getFocusManager().focusNode(this.targetBlock);
       this.targetBlock.showContextMenu(e);
     } else if (this.startBubble) {
       this.startBubble.showContextMenu(e);
@@ -734,6 +736,7 @@ export class Gesture {
       this.startComment.showContextMenu(e);
     } else if (this.startWorkspace_ && !this.flyout) {
       this.startWorkspace_.hideChaff();
+      getFocusManager().focusNode(this.startWorkspace_);
       this.startWorkspace_.showContextMenu(e);
     }
 
@@ -762,9 +765,10 @@ export class Gesture {
     this.mostRecentEvent = e;
 
     if (!this.startBlock && !this.startBubble && !this.startComment) {
-      // Selection determines what things start drags. So to drag the workspace,
-      // we need to deselect anything that was previously selected.
-      common.setSelected(null);
+      // Ensure the workspace is selected if nothing else should be.
+      getFocusManager().focusNode(ws);
+    } else if (this.startBlock) {
+      getFocusManager().focusNode(this.startBlock);
     }
 
     this.doStart(e);
@@ -901,6 +905,7 @@ export class Gesture {
         const newBlock = this.flyout.createBlock(this.targetBlock);
         newBlock.snapToGrid();
         newBlock.bumpNeighbours();
+        getFocusManager().focusNode(newBlock);
       }
     } else {
       if (!this.startWorkspace_) {
@@ -916,6 +921,9 @@ export class Gesture {
         'block',
       );
       eventUtils.fire(event);
+      if (this.targetBlock) {
+        getFocusManager().focusNode(this.targetBlock);
+      }
     }
     this.bringBlockToFront();
     eventUtils.setGroup(false);
@@ -1023,7 +1031,6 @@ export class Gesture {
     // If the gesture already went through a bubble, don't set the start block.
     if (!this.startBlock && !this.startBubble) {
       this.startBlock = block;
-      common.setSelected(this.startBlock);
       if (block.isInFlyout && block !== block.getRootBlock()) {
         this.setTargetBlock(block.getRootBlock());
       } else {

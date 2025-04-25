@@ -445,6 +445,9 @@ export class BlockDragStrategy implements IDragStrategy {
       return;
     }
 
+    this.connectionPreviewer!.hidePreview();
+    this.connectionCandidate = null;
+
     this.startChildConn?.connect(this.block.nextConnection);
     if (this.startParentConn) {
       switch (this.startParentConn.type) {
@@ -470,9 +473,6 @@ export class BlockDragStrategy implements IDragStrategy {
 
     this.startChildConn = null;
     this.startParentConn = null;
-
-    this.connectionPreviewer!.hidePreview();
-    this.connectionCandidate = null;
 
     this.block.setDragging(false);
     this.dragging = false;

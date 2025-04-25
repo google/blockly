@@ -305,14 +305,22 @@ export class BlockSvg
       (newParent as BlockSvg).getSvgRoot().appendChild(svgRoot);
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
-      // root of the workspace.
-      const draggingBlock = this.workspace
+      // root of the workspace.  Try to insert it before any top-level
+      // block being dragged, but note that blocks can have the
+      // blocklyDragging class even if they're not top blocks (especially
+      // at start and end of a drag).
+      const draggingBlockElement = this.workspace
         .getCanvas()
         .querySelector('.blocklyDragging');
-      if (draggingBlock) {
-        this.workspace.getCanvas().insertBefore(svgRoot, draggingBlock);
+      const draggingParentElement = draggingBlockElement?.parentElement as
+        | SVGElement
+        | null
+        | undefined;
+      const canvass = this.workspace.getCanvas();
+      if (draggingParentElement === canvass) {
+        canvass.insertBefore(svgRoot, draggingBlockElement);
       } else {
-        this.workspace.getCanvas().appendChild(svgRoot);
+        canvass.appendChild(svgRoot);
       }
       this.translate(oldXY.x, oldXY.y);
     }

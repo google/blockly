@@ -54,7 +54,6 @@ suite('Toolbox', function () {
       const themeManagerSpy = sinon.spy(themeManager, 'subscribe');
       const componentManager = this.toolbox.workspace_.getComponentManager();
       sinon.stub(componentManager, 'addComponent');
-      this.toolbox.dispose(); // Dispose of the old toolbox so that it can be reinited.
       this.toolbox.init();
       sinon.assert.calledWith(
         themeManagerSpy,
@@ -73,14 +72,12 @@ suite('Toolbox', function () {
       const renderSpy = sinon.spy(this.toolbox, 'render');
       const componentManager = this.toolbox.workspace_.getComponentManager();
       sinon.stub(componentManager, 'addComponent');
-      this.toolbox.dispose(); // Dispose of the old toolbox so that it can be reinited.
       this.toolbox.init();
       sinon.assert.calledOnce(renderSpy);
     });
     test('Init called -> Flyout is initialized', function () {
       const componentManager = this.toolbox.workspace_.getComponentManager();
       sinon.stub(componentManager, 'addComponent');
-      this.toolbox.dispose(); // Dispose of the old toolbox so that it can be reinited.
       this.toolbox.init();
       assert.isDefined(this.toolbox.getFlyout());
     });

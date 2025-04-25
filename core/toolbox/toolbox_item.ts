@@ -12,7 +12,6 @@
 // Former goog.module ID: Blockly.ToolboxItem
 
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
-import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as idGenerator from '../utils/idgenerator.js';
@@ -149,28 +148,5 @@ export class ToolboxItem implements IToolboxItem {
    * @param _isVisible True if category should be visible.
    */
   setVisible_(_isVisible: boolean) {}
-
-  /** See IFocusableNode.getFocusableElement. */
-  getFocusableElement(): HTMLElement | SVGElement {
-    const div = this.getDiv();
-    if (!div) {
-      throw Error('Trying to access toolbox item before DOM is initialized.');
-    }
-    if (!(div instanceof HTMLElement)) {
-      throw Error('Toolbox item div is unexpectedly not an HTML element.');
-    }
-    return div as HTMLElement;
-  }
-
-  /** See IFocusableNode.getFocusableTree. */
-  getFocusableTree(): IFocusableTree {
-    return this.parentToolbox_;
-  }
-
-  /** See IFocusableNode.onNodeFocus. */
-  onNodeFocus(): void {}
-
-  /** See IFocusableNode.onNodeBlur. */
-  onNodeBlur(): void {}
 }
 // nop by default

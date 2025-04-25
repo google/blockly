@@ -147,7 +147,7 @@ suite('Cursor', function () {
       const prevConnection = this.blocks.A.previousConnection;
       const prevConnectionNode = ASTNode.createConnectionNode(prevConnection);
       this.cursor.setCurNode(prevConnectionNode);
-      this.cursor.prev();
+      this.cursor.out();
       const curNode = this.cursor.getCurNode();
       assert.equal(curNode.getLocation(), this.blocks.D.nextConnection);
     });

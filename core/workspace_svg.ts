@@ -2603,15 +2603,28 @@ export class WorkspaceSvg
     let deltaY = 0;
 
     if (bounds.left < viewport.left) {
-      deltaX = viewport.left - bounds.left;
+      deltaX = this.RTL
+        ? Math.min(
+            viewport.left - bounds.left,
+            viewport.right - bounds.right, // Don't move the right side out of view
+          )
+        : viewport.left - bounds.left;
     } else if (bounds.right > viewport.right) {
-      deltaX = viewport.right - bounds.right;
+      deltaX = this.RTL
+        ? viewport.right - bounds.right
+        : Math.max(
+            viewport.right - bounds.right,
+            viewport.left - bounds.left, // Don't move the left side out of view
+          );
     }
 
     if (bounds.top < viewport.top) {
       deltaY = viewport.top - bounds.top;
     } else if (bounds.bottom > viewport.bottom) {
-      deltaY = viewport.bottom - bounds.bottom;
+      deltaY = Math.max(
+        viewport.bottom - bounds.bottom,
+        viewport.top - bounds.top, // Don't move the top out of view
+      );
     }
 
     deltaX *= scale;

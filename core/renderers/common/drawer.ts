@@ -437,7 +437,7 @@ export class Drawer {
 
         const highlightSvg = this.drawConnectionHighlightPath(elem);
         if (highlightSvg) {
-          // highlightSvg.style.display = elem.highlighted ? '' : 'none';
+          highlightSvg.style.display = elem.highlighted ? '' : 'none';
         }
         // if (elem.highlighted) {
         //   this.drawConnectionHighlightPath(elem);

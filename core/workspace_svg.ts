@@ -2604,7 +2604,10 @@ export class WorkspaceSvg
 
     if (bounds.left < viewport.left) {
       deltaX = this.RTL
-        ? Math.min(viewport.left - bounds.left, viewport.right - bounds.right)
+        ? Math.min(
+            viewport.left - bounds.left,
+            viewport.right - bounds.right, // Don't move the right side out of view
+          )
         : viewport.left - bounds.left;
     } else if (bounds.right > viewport.right) {
       deltaX = this.RTL

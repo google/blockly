@@ -316,11 +316,11 @@ export class BlockSvg
         | SVGElement
         | null
         | undefined;
-      const canvass = this.workspace.getCanvas();
-      if (draggingParentElement === canvass) {
-        canvass.insertBefore(svgRoot, draggingBlockElement);
+      const canvas = this.workspace.getCanvas();
+      if (draggingParentElement === canvas) {
+        canvas.insertBefore(svgRoot, draggingBlockElement);
       } else {
-        canvass.appendChild(svgRoot);
+        canvas.appendChild(svgRoot);
       }
       this.translate(oldXY.x, oldXY.y);
     }

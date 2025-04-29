@@ -18,11 +18,9 @@ import {BlockSvg} from '../block_svg.js';
 import * as common from '../common.js';
 import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
-import type {Abstract} from '../events/events_abstract.js';
-import {Click, ClickTarget} from '../events/events_click.js';
-import {EventType} from '../events/type.js';
-import * as eventUtils from '../events/utils.js';
 import type {Field} from '../field.js';
+import {getFocusManager} from '../focus_manager.js';
+import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
 import type {MarkerSvg} from '../renderers/common/marker_svg.js';
 import type {PathObject} from '../renderers/zelos/path_object.js';
@@ -70,21 +68,10 @@ export class LineCursor extends Marker {
     options?: Partial<CursorOptions>,
   ) {
     super();
-    // Bind changeListener to facilitate future disposal.
-    this.changeListener = this.changeListener.bind(this);
-    this.workspace.addChangeListener(this.changeListener);
     // Regularise options and apply defaults.
     this.options = {...defaultOptions, ...options};
 
     this.isZelos = workspace.getRenderer() instanceof Renderer;
-  }
-
-  /**
-   * Clean up this cursor.
-   */
-  dispose() {
-    this.workspace.removeChangeListener(this.changeListener);
-    super.dispose();
   }
 
   /**
@@ -331,8 +318,8 @@ export class LineCursor extends Marker {
    * @param node The current position in the AST.
    * @param isValid A function true/false depending on whether the given node
    *     should be traversed.
-   * @param loop Whether to loop around to the beginning of the workspace if
-   *     novalid node was found.
+   * @param loop Whether to loop around to the beginning of the workspace if no
+   *     valid node was found.
    * @returns The next node in the traversal.
    */
   getNextNode(
@@ -385,8 +372,8 @@ export class LineCursor extends Marker {
    * @param node The current position in the AST.
    * @param isValid A function true/false depending on whether the given node
    *     should be traversed.
-   * @param loop Whether to loop around to the end of the workspace if no
-   *     valid node was found.
+   * @param loop Whether to loop around to the end of the workspace if no valid
+   *     node was found.
    * @returns The previous node in the traversal or null if no previous node
    *     exists.
    */
@@ -527,7 +514,12 @@ export class LineCursor extends Marker {
    * @returns The current field, connection, or block the cursor is on.
    */
   override getCurNode(): ASTNode | null {
-    this.updateCurNodeFromSelection();
+    if (!this.updateCurNodeFromFocus()) {
+      // Fall back to selection if focus fails to sync. This can happen for
+      // non-focusable nodes or for cases when focus may not properly propagate
+      // (such as for mouse clicks).
+      this.updateCurNodeFromSelection();
+    }
     return super.getCurNode();
   }
 
@@ -572,15 +564,14 @@ export class LineCursor extends Marker {
    * this.drawMarker() instead of this.drawer.draw() directly.
    *
    * @param newNode The new location of the cursor.
-   * @param updateSelection If true (the default) we'll update the selection
-   *     too.
    */
-  override setCurNode(newNode: ASTNode | null, updateSelection = true) {
-    if (updateSelection) {
-      this.updateSelectionFromNode(newNode);
-    }
-
+  override setCurNode(newNode: ASTNode | null) {
     super.setCurNode(newNode);
+
+    const newNodeLocation = newNode?.getLocation();
+    if (isFocusableNode(newNodeLocation)) {
+      getFocusManager().focusNode(newNodeLocation);
+    }
 
     // Try to scroll cursor into view.
     if (newNode?.getType() === ASTNode.types.BLOCK) {
@@ -710,32 +701,6 @@ export class LineCursor extends Marker {
   }
 
   /**
-   * Event listener that syncs the cursor location to the selected block on
-   * SELECTED events.
-   *
-   * This does not run early enough in all cases so `getCurNode()` also updates
-   * the node from the selection.
-   *
-   * @param event The `Selected` event.
-   */
-  private changeListener(event: Abstract) {
-    switch (event.type) {
-      case EventType.SELECTED:
-        this.updateCurNodeFromSelection();
-        break;
-      case EventType.CLICK: {
-        const click = event as Click;
-        if (
-          click.workspaceId === this.workspace.id &&
-          click.targetType === ClickTarget.WORKSPACE
-        ) {
-          this.setCurNode(null);
-        }
-      }
-    }
-  }
-
-  /**
    * Updates the current node to match the selection.
    *
    * Clears the current node if it's on a block but the selection is null.
@@ -749,7 +714,7 @@ export class LineCursor extends Marker {
     const selected = common.getSelected();
 
     if (selected === null && curNode?.getType() === ASTNode.types.BLOCK) {
-      this.setCurNode(null, false);
+      this.setCurNode(null);
       return;
     }
     if (selected?.workspace !== this.workspace) {
@@ -770,36 +735,35 @@ export class LineCursor extends Marker {
         block = block.getParent();
       }
       if (block) {
-        this.setCurNode(ASTNode.createBlockNode(block), false);
+        this.setCurNode(ASTNode.createBlockNode(block));
       }
     }
   }
 
   /**
-   * Updates the selection from the node.
+   * Updates the current node to match what's currently focused.
    *
-   * Clears the selection for non-block nodes.
-   * Clears the selection for shadow blocks as the selection is drawn on
-   * the parent but the cursor will be drawn on the shadow block itself.
-   * We need to take care not to later clear the current node due to that null
-   * selection, so we track the latest selection we're in sync with.
-   *
-   * @param newNode The new node.
+   * @returns Whether the current node has been set successfully from the
+   *     current focused node.
    */
-  private updateSelectionFromNode(newNode: ASTNode | null) {
-    if (newNode?.getType() === ASTNode.types.BLOCK) {
-      if (common.getSelected() !== newNode.getLocation()) {
-        eventUtils.disable();
-        common.setSelected(newNode.getLocation() as BlockSvg);
-        eventUtils.enable();
-      }
-    } else {
-      if (common.getSelected()) {
-        eventUtils.disable();
-        common.setSelected(null);
-        eventUtils.enable();
+  private updateCurNodeFromFocus(): boolean {
+    const focused = getFocusManager().getFocusedNode();
+
+    if (focused instanceof BlockSvg) {
+      let block: BlockSvg | null = focused;
+      if (block && block.workspace === this.workspace) {
+        if (block.getRootBlock() === block && this.workspace.isFlyout) {
+          // This block actually represents a stack. Note that this is needed
+          // because ASTNode special cases stack for cross-block navigation.
+          this.setCurNode(ASTNode.createStackNode(block));
+        } else {
+          this.setCurNode(ASTNode.createBlockNode(block));
+        }
+        return true;
       }
     }
+
+    return false;
   }
 
   /**

@@ -238,7 +238,7 @@ export class BlockDragStrategy implements IDragStrategy {
     const currCandidate = this.connectionCandidate;
     const newCandidate = this.getConnectionCandidate(draggingBlock, delta);
     if (!newCandidate) {
-      this.connectionPreviewer!.hidePreview();
+      this.connectionPreviewer?.hidePreview();
       this.connectionCandidate = null;
       return;
     }
@@ -254,7 +254,7 @@ export class BlockDragStrategy implements IDragStrategy {
       local.type === ConnectionType.OUTPUT_VALUE ||
       local.type === ConnectionType.PREVIOUS_STATEMENT;
     const neighbourIsConnectedToRealBlock =
-      neighbour.isConnected() && !neighbour.targetBlock()!.isInsertionMarker();
+      neighbour.isConnected() && !neighbour.targetBlock()?.isInsertionMarker();
     if (
       localIsOutputOrPrevious &&
       neighbourIsConnectedToRealBlock &&
@@ -264,14 +264,14 @@ export class BlockDragStrategy implements IDragStrategy {
         local.type,
       )
     ) {
-      this.connectionPreviewer!.previewReplacement(
+      this.connectionPreviewer?.previewReplacement(
         local,
         neighbour,
         neighbour.targetBlock()!,
       );
       return;
     }
-    this.connectionPreviewer!.previewConnection(local, neighbour);
+    this.connectionPreviewer?.previewConnection(local, neighbour);
   }
 
   /**
@@ -385,7 +385,7 @@ export class BlockDragStrategy implements IDragStrategy {
     dom.stopTextWidthCache();
 
     blockAnimation.disconnectUiStop();
-    this.connectionPreviewer!.hidePreview();
+    this.connectionPreviewer?.hidePreview();
 
     if (!this.block.isDeadOrDying() && this.dragging) {
       // These are expensive and don't need to be done if we're deleting, or
@@ -413,7 +413,7 @@ export class BlockDragStrategy implements IDragStrategy {
 
     // Must dispose after connections are applied to not break the dynamic
     // connections plugin. See #7859
-    this.connectionPreviewer!.dispose();
+    this.connectionPreviewer?.dispose();
     this.workspace.setResizesEnabled(true);
     eventUtils.setGroup(newGroup);
   }
@@ -445,6 +445,9 @@ export class BlockDragStrategy implements IDragStrategy {
       return;
     }
 
+    this.connectionPreviewer?.hidePreview();
+    this.connectionCandidate = null;
+
     this.startChildConn?.connect(this.block.nextConnection);
     if (this.startParentConn) {
       switch (this.startParentConn.type) {
@@ -470,9 +473,6 @@ export class BlockDragStrategy implements IDragStrategy {
 
     this.startChildConn = null;
     this.startParentConn = null;
-
-    this.connectionPreviewer!.hidePreview();
-    this.connectionCandidate = null;
 
     this.block.setDragging(false);
     this.dragging = false;

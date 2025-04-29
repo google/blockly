@@ -46,10 +46,6 @@ import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
-import type {
-  IVariableModel,
-  IVariableState,
-} from './interfaces/i_variable_model.js';
 import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
@@ -1332,50 +1328,6 @@ export class WorkspaceSvg
     if (ws && !ws.currentGesture_ && ws.toolbox && ws.toolbox.getFlyout()) {
       ws.toolbox.refreshSelection();
     }
-  }
-
-  /**
-   * Rename a variable by updating its name in the variable map.  Update the
-   *     flyout to show the renamed variable immediately.
-   *
-   * @param id ID of the variable to rename.
-   * @param newName New variable name.
-   */
-  override renameVariableById(id: string, newName: string) {
-    super.renameVariableById(id, newName);
-    this.refreshToolboxSelection();
-  }
-
-  /**
-   * Delete a variable by the passed in ID.   Update the flyout to show
-   *     immediately that the variable is deleted.
-   *
-   * @param id ID of variable to delete.
-   */
-  override deleteVariableById(id: string) {
-    super.deleteVariableById(id);
-    this.refreshToolboxSelection();
-  }
-
-  /**
-   * Create a new variable with the given name.  Update the flyout to show the
-   *     new variable immediately.
-   *
-   * @param name The new variable's name.
-   * @param opt_type The type of the variable like 'int' or 'string'.
-   *     Does not need to be unique. Field_variable can filter variables based
-   * on their type. This will default to '' which is a specific type.
-   * @param opt_id The unique ID of the variable. This will default to a UUID.
-   * @returns The newly created variable.
-   */
-  override createVariable(
-    name: string,
-    opt_type?: string | null,
-    opt_id?: string | null,
-  ): IVariableModel<IVariableState> {
-    const newVar = super.createVariable(name, opt_type, opt_id);
-    this.refreshToolboxSelection();
-    return newVar;
   }
 
   /** Make a list of all the delete areas for this workspace. */

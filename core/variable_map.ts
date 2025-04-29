@@ -25,7 +25,7 @@ import {Names} from './names.js';
 import * as registry from './registry.js';
 import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
-import * as Variables from './variables.js';
+import {deleteVariable, getVariableUsesById} from './variables.js';
 import type {Workspace} from './workspace.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
@@ -291,7 +291,7 @@ export class VariableMap
    * @param variable Variable to delete.
    */
   deleteVariable(variable: IVariableModel<IVariableState>) {
-    const uses = this.getVariableUsesById(variable.getId());
+    const uses = getVariableUsesById(this.workspace, variable.getId());
     const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
       eventUtils.setGroup(true);
@@ -331,7 +331,7 @@ export class VariableMap
     );
     const variable = this.getVariableById(id);
     if (variable) {
-      Variables.deleteVariable(this.workspace, variable);
+      deleteVariable(this.workspace, variable);
     }
   }
 
@@ -449,7 +449,7 @@ export class VariableMap
       'v13',
       'Blockly.Variables.getVariableUsesById',
     );
-    return Variables.getVariableUsesById(this.workspace, id);
+    return getVariableUsesById(this.workspace, id);
   }
 }
 

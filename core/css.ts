@@ -147,8 +147,8 @@ let content = `
 
 .blocklyHighlightedConnectionPath {
   fill: none;
-  // stroke: #fc3;
-  // stroke-width: 4px;
+  stroke: #fc3;
+  stroke-width: 4px;
 }
 
 .blocklyPathLight {
@@ -463,8 +463,8 @@ input[type=number] {
 }
 
 .blocklyMenuSeparator {
-  background-color: #ccc;
-  height: 1px;
+  background-color: #ccc; 
+  height: 1px; 
   border: 0;
   margin-left: 4px;
   margin-right: 4px;

@@ -885,9 +885,9 @@ export class ConstantProvider extends BaseConstantProvider {
       `}`,
 
       // Connection highlight.
-      // `${selector} .blocklyHighlightedConnectionPath {`,
-      // `stroke: ${this.SELECTED_GLOW_COLOUR};`,
-      // `}`,
+      `${selector} .blocklyHighlightedConnectionPath {`,
+      `stroke: ${this.SELECTED_GLOW_COLOUR};`,
+      `}`,
 
       // Disabled outline paths.
       `${selector} .blocklyDisabledPattern > .blocklyOutlinePath {`,

@@ -62,7 +62,7 @@ export class PathObject implements IPathObject {
     /** The primary path of the block. */
     this.svgPath = dom.createSvgElement(
       Svg.PATH,
-      {'class': 'blocklyPath', 'tabindex': '-1'},
+      {'class': 'blocklyPath'},
       this.svgRoot,
     );
 
@@ -153,17 +153,13 @@ export class PathObject implements IPathObject {
    *     removed.
    */
   protected setClass_(className: string, add: boolean) {
-    this.setClassOnElem_(this.svgRoot, className, add);
-  }
-
-  private setClassOnElem_(root: SVGElement, className: string, add: boolean) {
     if (!className) {
       return;
     }
     if (add) {
-      dom.addClass(root, className);
+      dom.addClass(this.svgRoot, className);
     } else {
-      dom.removeClass(root, className);
+      dom.removeClass(this.svgRoot, className);
     }
   }
 
@@ -213,7 +209,7 @@ export class PathObject implements IPathObject {
    * @param enable True if selection is enabled, false otherwise.
    */
   updateSelected(enable: boolean) {
-    this.setClassOnElem_(this.svgPath, 'blocklySelected', enable);
+    this.setClass_('blocklySelected', enable);
   }
 
   /**
@@ -272,14 +268,12 @@ export class PathObject implements IPathObject {
     connectionPath: string,
     offset: Coordinate,
     rtl: boolean,
-  ): SVGElement {
-    const previousHighlight = this.connectionHighlights.get(connection);
-    if (previousHighlight) {
-      // TODO: Fix the highlight seemingly being recreated every time it's focused.
-      // if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
-      return previousHighlight;
-      // }
-      // this.removeConnectionHighlight(connection);
+  ) {
+    if (this.connectionHighlights.has(connection)) {
+      if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
+        return;
+      }
+      this.removeConnectionHighlight(connection);
     }
 
     const highlight = dom.createSvgElement(
@@ -287,7 +281,6 @@ export class PathObject implements IPathObject {
       {
         'id': connection.id,
         'class': 'blocklyHighlightedConnectionPath',
-        // 'style': 'display: none;',
         'tabindex': '-1',
         'd': connectionPath,
         'transform':
@@ -295,10 +288,7 @@ export class PathObject implements IPathObject {
       },
       this.svgRoot,
     );
-    // TODO: Do this in a cleaner way. One possibility: create the path without 'd' or 'transform' in RenderedConnection, then just update it here (and keep registrations).
-    (highlight as any).renderedConnection = connection;
     this.connectionHighlights.set(connection, highlight);
-    return highlight;
   }
 
   private currentHighlightMatchesNew(

@@ -26,12 +26,8 @@ import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
-import type {ConstantProvider} from './renderers/common/constants.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import * as svgPaths from './utils/svg_paths.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
 /** Maximum randomness in workspace units for bumping a block. */
@@ -51,9 +47,6 @@ export class RenderedConnection
   private readonly offsetInBlock: Coordinate;
   private trackedState: TrackedState;
   private highlighted: boolean = false;
-  private constants: ConstantProvider;
-  private svgGroup: SVGElement;
-  private svgPath: SVGElement;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection | null = null;
@@ -83,41 +76,6 @@ export class RenderedConnection
 
     /** Describes the state of this connection's tracked-ness. */
     this.trackedState = RenderedConnection.TrackedState.WILL_TRACK;
-
-    this.constants = (source.workspace as WorkspaceSvg)
-      .getRenderer()
-      .getConstants();
-
-    this.svgGroup = dom.createSvgElement(Svg.G, {
-      'class': 'blocklyCursor',
-      'width': this.constants.CURSOR_WS_WIDTH,
-      'height': this.constants.WS_CURSOR_HEIGHT,
-    });
-
-    this.svgPath = dom.createSvgElement(
-      Svg.PATH,
-      {'transform': ''},
-      this.svgGroup,
-    );
-
-    // TODO: Ensure this auto-moves with the block.
-    const x = this.getOffsetInBlock().x;
-    const y = this.getOffsetInBlock().y;
-
-    const path =
-      svgPaths.moveTo(0, 0) + 'c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5';
-    // TODO: It seems that constants isn't yet initialized at this point.
-    // (this.constants.shapeFor(this) as PuzzleTab).pathDown;
-    this.svgPath.setAttribute('d', path);
-    this.svgPath.setAttribute(
-      'transform',
-      'translate(' +
-        x +
-        ',' +
-        y +
-        ')' +
-        (this.sourceBlock_.workspace.RTL ? ' scale(-1 1)' : ''),
-    );
   }
 
   /**
@@ -368,21 +326,13 @@ export class RenderedConnection
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
-    const _highlightSvg = this.findHighlightSvg();
-    // if (highlightSvg) {
-    //   highlightSvg.style.display = '';
-    // }
-    // this.getSourceBlock().queueRender();
+    this.getSourceBlock().queueRender();
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
-    const _highlightSvg = this.findHighlightSvg();
-    // if (highlightSvg) {
-    // highlightSvg.style.display = 'none';
-    // }
-    // this.getSourceBlock().queueRender();
+    this.getSourceBlock().queueRender();
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */
@@ -649,14 +599,6 @@ export class RenderedConnection
     return this;
   }
 
-  private findHighlightSvg(): SVGElement | null {
-    // This cast is valid as TypeScript's definition is wrong. See:
-    // https://github.com/microsoft/TypeScript/issues/60996.
-    return document.getElementById(this.id) as
-      | unknown
-      | null as SVGElement | null;
-  }
-
   /**
    * Handles showing the context menu when it is opened on a connection.
    * Note that typically the context menu can't be opened with the mouse
@@ -693,11 +635,12 @@ export class RenderedConnection
 
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
-    const highlightSvg = this.findHighlightSvg();
-    if (highlightSvg) {
-      highlightSvg.setAttribute('aria-label', 'Connection');
-      return highlightSvg;
-    }
+    // This cast is valid as TypeScript's type definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    const highlightSvg = document.getElementById(this.id) as
+      | unknown
+      | null as SVGElement | null;
+    if (highlightSvg) return highlightSvg;
     throw new Error('No highlight SVG found corresponding to this connection.');
   }
 
@@ -708,12 +651,10 @@ export class RenderedConnection
 
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
-    this.highlight();
   }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
-    this.unhighlight();
   }
 }
 

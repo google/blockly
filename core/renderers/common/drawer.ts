@@ -435,23 +435,19 @@ export class Drawer {
       for (const elem of row.elements) {
         if (!(elem instanceof Connection)) continue;
 
-        const highlightSvg = this.drawConnectionHighlightPath(elem);
-        if (highlightSvg) {
-          // highlightSvg.style.display = elem.highlighted ? '' : 'none';
+        if (elem.highlighted) {
+          this.drawConnectionHighlightPath(elem);
+        } else {
+          this.block_.pathObject.removeConnectionHighlight?.(
+            elem.connectionModel,
+          );
         }
-        // if (elem.highlighted) {
-        //   this.drawConnectionHighlightPath(elem);
-        // } else {
-        //   this.block_.pathObject.removeConnectionHighlight?.(
-        //     elem.connectionModel,
-        //   );
-        // }
       }
     }
   }
 
   /** Returns a path to highlight the given connection. */
-  drawConnectionHighlightPath(measurable: Connection): SVGElement | undefined {
+  drawConnectionHighlightPath(measurable: Connection) {
     const conn = measurable.connectionModel;
     let path = '';
     if (
@@ -463,7 +459,7 @@ export class Drawer {
       path = this.getStatementConnectionHighlightPath(measurable);
     }
     const block = conn.getSourceBlock();
-    return block.pathObject.addConnectionHighlight?.(
+    block.pathObject.addConnectionHighlight?.(
       conn,
       path,
       conn.getOffsetInBlock(),

@@ -234,16 +234,15 @@ export class Drawer extends BaseDrawer {
   }
 
   /** Returns a path to highlight the given connection. */
-  override drawConnectionHighlightPath(
-    measurable: Connection,
-  ): SVGElement | undefined {
+  drawConnectionHighlightPath(measurable: Connection) {
     const conn = measurable.connectionModel;
     if (
       conn.type === ConnectionType.NEXT_STATEMENT ||
       conn.type === ConnectionType.PREVIOUS_STATEMENT ||
       (conn.type === ConnectionType.OUTPUT_VALUE && !measurable.isDynamicShape)
     ) {
-      return super.drawConnectionHighlightPath(measurable);
+      super.drawConnectionHighlightPath(measurable);
+      return;
     }
 
     let path = '';
@@ -262,7 +261,7 @@ export class Drawer extends BaseDrawer {
         (output.shape as DynamicShape).pathDown(output.height);
     }
     const block = conn.getSourceBlock();
-    return block.pathObject.addConnectionHighlight?.(
+    block.pathObject.addConnectionHighlight?.(
       conn,
       path,
       conn.getOffsetInBlock(),

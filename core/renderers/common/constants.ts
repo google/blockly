@@ -1203,9 +1203,9 @@ export class ConstantProvider {
       `}`,
 
       // Connection highlight.
-      // `${selector} .blocklyHighlightedConnectionPath {`,
-      //   `stroke: #fc3;`,
-      // `}`,
+      `${selector} .blocklyHighlightedConnectionPath {`,
+        `stroke: #fc3;`,
+      `}`,
 
       // Replaceable highlight.
       `${selector} .blocklyReplaceable .blocklyPath {`,

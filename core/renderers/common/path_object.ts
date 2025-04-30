@@ -62,7 +62,7 @@ export class PathObject implements IPathObject {
     /** The primary path of the block. */
     this.svgPath = dom.createSvgElement(
       Svg.PATH,
-      {'class': 'blocklyPath'},
+      {'class': 'blocklyPath', 'tabindex': '-1'},
       this.svgRoot,
     );
 

@@ -195,6 +195,7 @@ export abstract class Field<T = any>
    */
   SERIALIZABLE = false;
 
+  /** The unique ID of this field. */
   private id_: string | null = null;
 
   /**

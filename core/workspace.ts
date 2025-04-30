@@ -386,9 +386,10 @@ export class Workspace implements IASTNodeLocation {
 
   /* Begin functions that are just pass-throughs to the variable map. */
   /**
-   * @deprecated v12 - Rename a variable by updating its name in the variable
+   * Rename a variable by updating its name in the variable
    * map. Identify the variable to rename with the given ID.
    *
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().renameVariable
    * @param id ID of the variable to rename.
    * @param newName New variable name.
    */
@@ -407,7 +408,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Create a variable with a given name, optional type, and optional ID.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().createVariable.
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().createVariable.
    * @param name The name of the variable. This must be unique across variables
    *     and procedures.
    * @param opt_type The type of the variable like 'int' or 'string'.
@@ -437,7 +438,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Find all the uses of the given variable, which is identified by ID.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().getVariableUsesById
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().getVariableUsesById
    * @param id ID of the variable to find.
    * @returns Array of block usages.
    */
@@ -455,7 +456,7 @@ export class Workspace implements IASTNodeLocation {
    * Delete a variables by the passed in ID and all of its uses from this
    * workspace. May prompt the user for confirmation.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().deleteVariable.
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().deleteVariable.
    * @param id ID of variable to delete.
    */
   deleteVariableById(id: string) {
@@ -477,7 +478,7 @@ export class Workspace implements IASTNodeLocation {
    * Find the variable by the given name and return it. Return null if not
    * found.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().getVariable.
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().getVariable.
    * @param name The name to check for.
    * @param opt_type The type of the variable.  If not provided it defaults to
    *     the empty string, which is a specific type.
@@ -500,7 +501,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Find the variable by the given ID and return it. Return null if not found.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().getVariableById.
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().getVariableById.
    * @param id The ID to check for.
    * @returns The variable with the given ID.
    */
@@ -518,7 +519,7 @@ export class Workspace implements IASTNodeLocation {
    * Find the variable with the specified type. If type is null, return list of
    *     variables with empty string type.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().getVariablesOfType.
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().getVariablesOfType.
    * @param type Type of the variables to find.
    * @returns The sought after variables of the passed in type. An empty array
    *     if none are found.
@@ -536,7 +537,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Return all variables of all types.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().getAllVariables.
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().getAllVariables.
    * @returns List of variable models.
    */
   getAllVariables(): IVariableModel<IVariableState>[] {
@@ -552,7 +553,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Returns all variable names of all types.
    *
-   * @deprecated v12, use Blockly.Workspace.getVariableMap().getAllVariables.
+   * @deprecated v12: use Blockly.Workspace.getVariableMap().getAllVariables.
    * @returns List of all variable names of all types.
    */
   getAllVariableNames(): string[] {

@@ -750,7 +750,7 @@ export class LineCursor extends Marker {
     const focused = getFocusManager().getFocusedNode();
 
     if (focused instanceof BlockSvg) {
-      let block: BlockSvg | null = focused;
+      const block: BlockSvg | null = focused;
       if (block && block.workspace === this.workspace) {
         if (block.getRootBlock() === block && this.workspace.isFlyout) {
           // This block actually represents a stack. Note that this is needed

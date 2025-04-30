@@ -45,7 +45,10 @@ import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
-import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import {
+  isFocusableNode,
+  type IFocusableNode,
+} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
@@ -2693,6 +2696,19 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
+    // Check against flyout items if this workspace is part of a flyout. Note
+    // that blocks may match against this pass before reaching getBlockById()
+    // below (but only for a flyout workspace).
+    const flyout = this.targetWorkspace?.getFlyout();
+    if (this.isFlyout && flyout) {
+      for (const flyoutItem of flyout.getContents()) {
+        const elem = flyoutItem.getElement();
+        if (isFocusableNode(elem) && elem.getFocusableElement().id === id) {
+          return elem;
+        }
+      }
+    }
+
     return this.getBlockById(id) as IFocusableNode;
   }
 
@@ -2703,7 +2719,19 @@ export class WorkspaceSvg
   ): void {}
 
   /** See IFocusableTree.onTreeBlur. */
-  onTreeBlur(_nextTree: IFocusableTree | null): void {}
+  onTreeBlur(nextTree: IFocusableTree | null): void {
+    // If the flyout loses focus, make sure to close it.
+    if (this.isFlyout && this.targetWorkspace) {
+      // Only hide the flyout if the flyout's workspace is losing focus and that
+      // focus isn't returning to the flyout itself or the toolbox.
+      const flyout = this.targetWorkspace.getFlyout();
+      const toolbox = this.targetWorkspace.getToolbox();
+      if (flyout && nextTree === flyout) return;
+      if (toolbox && nextTree === toolbox) return;
+      if (toolbox) toolbox.clearSelection();
+      if (flyout && flyout instanceof Flyout) flyout.autoHide(false);
+    }
+  }
 }
 
 /**

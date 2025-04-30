@@ -37,7 +37,7 @@ import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
 import type * as toolbox from './utils/toolbox.js';
-import * as Variables from './variables.js';
+import {deleteVariable, getVariableUsesById} from './variables.js';
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -449,7 +449,7 @@ export class Workspace implements IASTNodeLocation {
       'v13',
       'Blockly.Workspace.getVariableMap().getVariableUsesById',
     );
-    return Variables.getVariableUsesById(this, id);
+    return getVariableUsesById(this, id);
   }
 
   /**
@@ -471,7 +471,7 @@ export class Workspace implements IASTNodeLocation {
       console.warn(`Can't delete non-existent variable: ${id}`);
       return;
     }
-    Variables.deleteVariable(this, variable);
+    deleteVariable(this, variable);
   }
 
   /**

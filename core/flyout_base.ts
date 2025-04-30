@@ -1024,7 +1024,7 @@ export abstract class Flyout
     // not close the flyout. For anything else, do close it since the flyout is
     // no longer focused.
     if (toolbox && nextTree === toolbox) return;
-    if (nextTree == this.workspace_) return;
+    if (nextTree === this.workspace_) return;
     if (toolbox) toolbox.clearSelection();
     this.autoHide(false);
   }

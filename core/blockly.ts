@@ -111,6 +111,9 @@ import {
   ReturnEphemeralFocus,
   getFocusManager,
 } from './focus_manager.js';
+import {
+  FocusableTreeTraverser,
+} from './utils/focusable_tree_traverser.js';
 import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
@@ -527,6 +530,7 @@ export {
   FlyoutMetricsManager,
   FlyoutSeparator,
   FocusManager,
+  FocusableTreeTraverser,
   CodeGenerator as Generator,
   Gesture,
   Grid,

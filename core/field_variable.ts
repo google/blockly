@@ -586,7 +586,9 @@ export class FieldVariable extends FieldDropdown {
       // doesn't modify the workspace's list.
       for (let i = 0; i < variableTypes.length; i++) {
         const variableType = variableTypes[i];
-        const variables = workspace.getVariablesOfType(variableType);
+        const variables = workspace
+          .getVariableMap()
+          .getVariablesOfType(variableType);
         variableModelList = variableModelList.concat(variables);
         if (workspace.isFlyout) {
           variableModelList = variableModelList.concat(

@@ -56,6 +56,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   /** DOM representation of a shadow block, or null if none. */
   private shadowDom: Element | null = null;
 
+  /** The unique ID of this connection. */
   id: string;
 
   /**

@@ -18,6 +18,7 @@ import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IRenderedElement} from './interfaces/i_rendered_element.js';
+import {idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -74,6 +75,9 @@ export class FlyoutButton
    */
   cursorSvg: SVGElement | null = null;
 
+  /** The unique ID for this FlyoutButton. */
+  private id: string;
+
   /**
    * @param workspace The workspace in which to place this button.
    * @param targetWorkspace The flyout's target workspace.
@@ -111,9 +115,10 @@ export class FlyoutButton
       cssClass += ' ' + this.cssClass;
     }
 
+    this.id = idGenerator.getNextUniqueId();
     this.svgGroup = dom.createSvgElement(
       Svg.G,
-      {'class': cssClass, 'tabindex': '-1'},
+      {'id': this.id, 'class': cssClass, 'tabindex': '-1'},
       this.workspace.getCanvas(),
     );
 

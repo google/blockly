@@ -326,13 +326,28 @@ export class RenderedConnection
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
-    this.getSourceBlock().queueRender();
+
+    // Note that this needs to be done synchronously (vs. queuing a render pass)
+    // since only a displayed element can be focused, and this focusable node is
+    // implemented to make itself visible immediately prior to receiving DOM
+    // focus. It's expected that the connection's position should already be
+    // correct by this point (otherwise it will be corrected in a subsequent
+    // draw pass).
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) {
+      highlightSvg.style.display = '';
+    }
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
-    this.getSourceBlock().queueRender();
+
+    // Note that this is done synchronously for parity with highlight().
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) {
+      highlightSvg.style.display = 'none';
+    }
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */
@@ -635,11 +650,7 @@ export class RenderedConnection
 
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
-    // This cast is valid as TypeScript's type definition is wrong. See:
-    // https://github.com/microsoft/TypeScript/issues/60996.
-    const highlightSvg = document.getElementById(this.id) as
-      | unknown
-      | null as SVGElement | null;
+    const highlightSvg = this.findHighlightSvg();
     if (highlightSvg) return highlightSvg;
     throw new Error('No highlight SVG found corresponding to this connection.');
   }
@@ -651,10 +662,20 @@ export class RenderedConnection
 
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
+    this.highlight();
   }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
+    this.unhighlight();
+  }
+
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as
+      | unknown
+      | null as SVGElement | null;
   }
 }
 

@@ -22,10 +22,13 @@ import * as ContextMenu from './contextmenu.js';
 import {ContextMenuRegistry} from './contextmenu_registry.js';
 import * as eventUtils from './events/utils.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as svgMath from './utils/svg_math.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;
@@ -33,7 +36,10 @@ const BUMP_RANDOMNESS = 10;
 /**
  * Class for a connection between blocks that may be rendered on screen.
  */
-export class RenderedConnection extends Connection implements IContextMenu {
+export class RenderedConnection
+  extends Connection
+  implements IContextMenu, IFocusableNode
+{
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
   private readonly db: ConnectionDB;
@@ -320,13 +326,28 @@ export class RenderedConnection extends Connection implements IContextMenu {
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
-    this.getSourceBlock().queueRender();
+
+    // Note that this needs to be done synchronously (vs. queuing a render pass)
+    // since only a displayed element can be focused, and this focusable node is
+    // implemented to make itself visible immediately prior to receiving DOM
+    // focus. It's expected that the connection's position should already be
+    // correct by this point (otherwise it will be corrected in a subsequent
+    // draw pass).
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) {
+      highlightSvg.style.display = '';
+    }
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
-    this.getSourceBlock().queueRender();
+
+    // Note that this is done synchronously for parity with highlight().
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) {
+      highlightSvg.style.display = 'none';
+    }
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */
@@ -625,6 +646,36 @@ export class RenderedConnection extends Connection implements IContextMenu {
     }
 
     ContextMenu.show(e, menuOptions, block.RTL, workspace, location);
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) return highlightSvg;
+    throw new Error('No highlight SVG found corresponding to this connection.');
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.getSourceBlock().workspace as WorkspaceSvg;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {
+    this.highlight();
+  }
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {
+    this.unhighlight();
+  }
+
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as
+      | unknown
+      | null as SVGElement | null;
   }
 }
 

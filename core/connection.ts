@@ -20,6 +20,7 @@ import type {Input} from './inputs/input.js';
 import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';
+import {idGenerator} from './utils.js';
 import * as Xml from './xml.js';
 
 /**
@@ -55,6 +56,9 @@ export class Connection implements IASTNodeLocationWithBlock {
   /** DOM representation of a shadow block, or null if none. */
   private shadowDom: Element | null = null;
 
+  /** The unique ID of this connection. */
+  id: string;
+
   /**
    * Horizontal location of this connection.
    *
@@ -80,6 +84,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     public type: number,
   ) {
     this.sourceBlock_ = source;
+    this.id = `${source.id}_connection_${idGenerator.getNextUniqueId()}`;
   }
 
   /**

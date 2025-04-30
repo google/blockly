@@ -463,8 +463,8 @@ input[type=number] {
 }
 
 .blocklyMenuSeparator {
-  background-color: #ccc; 
-  height: 1px; 
+  background-color: #ccc;
+  height: 1px;
   border: 0;
   margin-left: 4px;
   margin-right: 4px;
@@ -494,12 +494,4 @@ input[type=number] {
   cursor: grabbing;
 }
 
-.blocklyActiveFocus {
-  outline-color: #2ae;
-  outline-width: 2px;
-}
-.blocklyPassiveFocus {
-  outline-color: #3fdfff;
-  outline-width: 1.5px;
-}
 `;

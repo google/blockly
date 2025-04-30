@@ -435,19 +435,16 @@ export class Drawer {
       for (const elem of row.elements) {
         if (!(elem instanceof Connection)) continue;
 
-        if (elem.highlighted) {
-          this.drawConnectionHighlightPath(elem);
-        } else {
-          this.block_.pathObject.removeConnectionHighlight?.(
-            elem.connectionModel,
-          );
+        const highlightSvg = this.drawConnectionHighlightPath(elem);
+        if (highlightSvg) {
+          highlightSvg.style.display = elem.highlighted ? '' : 'none';
         }
       }
     }
   }
 
   /** Returns a path to highlight the given connection. */
-  drawConnectionHighlightPath(measurable: Connection) {
+  drawConnectionHighlightPath(measurable: Connection): SVGElement | undefined {
     const conn = measurable.connectionModel;
     let path = '';
     if (
@@ -459,7 +456,7 @@ export class Drawer {
       path = this.getStatementConnectionHighlightPath(measurable);
     }
     const block = conn.getSourceBlock();
-    block.pathObject.addConnectionHighlight?.(
+    return block.pathObject.addConnectionHighlight?.(
       conn,
       path,
       conn.getOffsetInBlock(),

@@ -113,7 +113,7 @@ export interface IPathObject {
     connectionPath: string,
     offset: Coordinate,
     rtl: boolean,
-  ): void;
+  ): SVGElement;
 
   /**
    * Apply the stored colours to the block's path, taking into account whether

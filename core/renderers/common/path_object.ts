@@ -268,12 +268,17 @@ export class PathObject implements IPathObject {
     connectionPath: string,
     offset: Coordinate,
     rtl: boolean,
-  ) {
-    if (this.connectionHighlights.has(connection)) {
-      if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
-        return;
-      }
-      this.removeConnectionHighlight(connection);
+  ): SVGElement {
+    const transformation =
+      `translate(${offset.x}, ${offset.y})` + (rtl ? ' scale(-1 1)' : '');
+
+    const previousHighlight = this.connectionHighlights.get(connection);
+    if (previousHighlight) {
+      // Since a connection already exists, make sure that its path and
+      // transform are correct.
+      previousHighlight.setAttribute('d', connectionPath);
+      previousHighlight.setAttribute('transform', transformation);
+      return previousHighlight;
     }
 
     const highlight = dom.createSvgElement(
@@ -281,26 +286,15 @@ export class PathObject implements IPathObject {
       {
         'id': connection.id,
         'class': 'blocklyHighlightedConnectionPath',
+        'style': 'display: none;',
         'tabindex': '-1',
         'd': connectionPath,
-        'transform':
-          `translate(${offset.x}, ${offset.y})` + (rtl ? ' scale(-1 1)' : ''),
+        'transform': transformation,
       },
       this.svgRoot,
     );
     this.connectionHighlights.set(connection, highlight);
-  }
-
-  private currentHighlightMatchesNew(
-    connection: RenderedConnection,
-    newPath: string,
-    newOffset: Coordinate,
-  ): boolean {
-    const currPath = this.connectionHighlights
-      .get(connection)
-      ?.getAttribute('d');
-    const currOffset = this.highlightOffsets.get(connection);
-    return currPath === newPath && Coordinate.equals(currOffset, newOffset);
+    return highlight;
   }
 
   /**

@@ -456,19 +456,24 @@ export class FocusManager {
     dom.removeClass(element, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     dom.removeClass(element, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
   }
+
+  private static focusManager: FocusManager | null = null;
+
+  /**
+   * Returns the page-global FocusManager.
+   *
+   * The returned instance is guaranteed to not change across function calls, but
+   * may change across page loads.
+   */
+  static getFocusManager(): FocusManager {
+    if (!FocusManager.focusManager) {
+      FocusManager.focusManager = new FocusManager(document.addEventListener);
+    }
+    return FocusManager.focusManager;
+  }
 }
 
-let focusManager: FocusManager | null = null;
-
-/**
- * Returns the page-global FocusManager.
- *
- * The returned instance is guaranteed to not change across function calls, but
- * may change across page loads.
- */
+/** Convenience function for FocusManager.getFocusManager. */
 export function getFocusManager(): FocusManager {
-  if (!focusManager) {
-    focusManager = new FocusManager(document.addEventListener);
-  }
-  return focusManager;
+  return FocusManager.getFocusManager();
 }

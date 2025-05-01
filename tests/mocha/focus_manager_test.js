@@ -84,13 +84,7 @@ suite('FocusManager', function () {
   setup(function () {
     sharedTestSetup.call(this);
 
-    const testState = this;
-    testState.globalDocumentEventListeners = [];
-    const addDocumentEventListener = function (type, listener) {
-      testState.globalDocumentEventListeners.push({type, listener});
-      document.addEventListener(type, listener);
-    };
-    this.focusManager = new FocusManager(addDocumentEventListener);
+    this.focusManager = getFocusManager();
 
     this.testFocusableTree1 = createFocusableTree('testFocusableTree1');
     this.testFocusableTree1Node1 = createFocusableNode(
@@ -159,15 +153,6 @@ suite('FocusManager', function () {
 
   teardown(function () {
     sharedTestTeardown.call(this);
-
-    // Remove the globally registered listener from FocusManager to avoid state being shared across
-    // test boundaries.
-    for (const registeredListener of this.globalDocumentEventListeners) {
-      const eventType = registeredListener.type;
-      const eventListener = registeredListener.listener;
-      document.removeEventListener(eventType, eventListener);
-    }
-    this.globalDocumentEventListeners = [];
 
     // Ensure all node CSS styles are reset so that state isn't leaked between tests.
     const activeElems = document.querySelectorAll(

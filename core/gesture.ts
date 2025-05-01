@@ -291,6 +291,7 @@ export class Gesture {
       this.startBlock = null;
       this.targetBlock = this.flyout.createBlock(this.targetBlock);
       getFocusManager().focusNode(this.targetBlock);
+      common.setSelected(this.targetBlock);
       return true;
     }
     return false;
@@ -767,6 +768,7 @@ export class Gesture {
     if (!this.startBlock && !this.startBubble && !this.startComment) {
       // Ensure the workspace is selected if nothing else should be.
       getFocusManager().focusNode(ws);
+      common.setSelected(null);
     } else if (this.startBlock) {
       getFocusManager().focusNode(this.startBlock);
     }
@@ -1031,6 +1033,7 @@ export class Gesture {
     // If the gesture already went through a bubble, don't set the start block.
     if (!this.startBlock && !this.startBubble) {
       this.startBlock = block;
+      common.setSelected(this.startBlock);
       if (block.isInFlyout && block !== block.getRootBlock()) {
         this.setTargetBlock(block.getRootBlock());
       } else {

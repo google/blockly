@@ -65,26 +65,15 @@ export class FocusManager {
   constructor(
     addGlobalEventListener: (type: string, listener: EventListener) => void,
   ) {
-    // Register root document focus listeners for tracking when focus leaves all
-    // tracked focusable trees.
-    addGlobalEventListener('focusin', (event) => {
-      if (!(event instanceof FocusEvent)) return;
-
-      // The target that now has focus.
-      const activeElement = document.activeElement;
+    // Note that 'element' here is the element *gaining* focus.
+    const maybeFocus = (element: Element | EventTarget | null) => {
       let newNode: IFocusableNode | null | undefined = null;
-      if (
-        activeElement instanceof HTMLElement ||
-        activeElement instanceof SVGElement
-      ) {
-        // If the target losing focus maps to any tree, then it should be
-        // updated. Per the contract of findFocusableNodeFor only one tree
-        // should claim the element.
+      if (element instanceof HTMLElement || element instanceof SVGElement) {
+        // If the target losing or gaining focus maps to any tree, then it
+        // should be updated. Per the contract of findFocusableNodeFor only one
+        // tree should claim the element, so the search can be exited early.
         for (const tree of this.registeredTrees) {
-          newNode = FocusableTreeTraverser.findFocusableNodeFor(
-            activeElement,
-            tree,
-          );
+          newNode = FocusableTreeTraverser.findFocusableNodeFor(element, tree);
           if (newNode) break;
         }
       }
@@ -103,6 +92,26 @@ export class FocusManager {
       } else {
         this.defocusCurrentFocusedNode();
       }
+    };
+
+    // Register root document focus listeners for tracking when focus leaves all
+    // tracked focusable trees. Note that focusin and focusout can be somewhat
+    // overlapping in the information that they provide. This is fine because
+    // they both aim to check for focus changes on the element gaining or having
+    // received focus, and maybeFocus should behave relatively deterministic.
+    addGlobalEventListener('focusin', (event) => {
+      if (!(event instanceof FocusEvent)) return;
+
+      // When something receives focus, always use the current active element as
+      // the source of truth.
+      maybeFocus(document.activeElement);
+    });
+    addGlobalEventListener('focusout', (event) => {
+      if (!(event instanceof FocusEvent)) return;
+
+      // When something loses focus, it seems that document.activeElement may
+      // not necessarily be correct. Instead, use relatedTarget.
+      maybeFocus(event.relatedTarget);
     });
   }
 

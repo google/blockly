@@ -9,6 +9,8 @@
 import type {Block} from './block.js';
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
+import {Flyout} from './flyout_base.js';
+import {getFocusManager} from './focus_manager.js';
 import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
@@ -17,7 +19,7 @@ import * as deprecation from './utils/deprecation.js';
 import type {BlockInfo, FlyoutItemInfo} from './utils/toolbox.js';
 import * as utilsXml from './utils/xml.js';
 import type {Workspace} from './workspace.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -417,6 +419,14 @@ export function createVariableButtonHandler(
         // No conflict
         workspace.createVariable(text, type);
         if (opt_callback) opt_callback(text);
+        // Make sure to restore focus to the Flyout since creating a variable
+        // recreates elements of the Flyout.
+        if (workspace instanceof WorkspaceSvg) {
+          const flyout = workspace.getFlyout();
+          if (flyout && flyout instanceof Flyout) {
+            getFocusManager().focusTree(flyout.getWorkspace());
+          }
+        }
         return;
       }
 

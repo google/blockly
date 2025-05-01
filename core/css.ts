@@ -503,5 +503,4 @@ input[type=number] {
 ) {
   outline-width: 0px;
 }
-
 `;

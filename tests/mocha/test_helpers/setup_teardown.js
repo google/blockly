@@ -155,16 +155,6 @@ export function sharedTestTeardown() {
   }
 
   try {
-    // Remove the globally registered listener from FocusManager to avoid state
-    // being shared across test boundaries.
-    for (const registeredListener of this.globalDocumentEventListeners) {
-      const eventType = registeredListener.type;
-      const eventListener = registeredListener.listener;
-      document.removeEventListener(eventType, eventListener);
-    }
-    this.globalDocumentEventListeners = [];
-    FocusManager.getFocusManager = this.oldGetFocusManager;
-
     if (this.workspace) {
       workspaceTeardown.call(this, this.workspace);
       this.workspace = null;
@@ -207,6 +197,16 @@ export function sharedTestTeardown() {
     }
 
     Blockly.WidgetDiv.testOnly_setDiv(null);
+
+    // Remove the globally registered listener from FocusManager to avoid state
+    // being shared across test boundaries.
+    for (const registeredListener of this.globalDocumentEventListeners) {
+      const eventType = registeredListener.type;
+      const eventListener = registeredListener.listener;
+      document.removeEventListener(eventType, eventListener);
+    }
+    this.globalDocumentEventListeners = [];
+    FocusManager.getFocusManager = this.oldGetFocusManager;
   }
 }
 

@@ -494,4 +494,13 @@ input[type=number] {
   cursor: grabbing;
 }
 
+.blocklyActiveFocus:is(
+  .blocklyFlyout,
+  .blocklyWorkspace,
+  .blocklyField,
+  .blocklyPath,
+  .blocklyHighlightedConnectionPath
+) {
+  outline-width: 0px;
+}
 `;

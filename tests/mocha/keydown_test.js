@@ -31,6 +31,7 @@ suite('Key Down', function () {
     defineStackBlock();
     const block = workspace.newBlock('stack_block');
     Blockly.common.setSelected(block);
+    sinon.stub(Blockly.getFocusManager(), 'getFocusedNode').returns(block);
     return block;
   }
 

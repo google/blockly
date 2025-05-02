@@ -5,6 +5,7 @@
  */
 
 import {assert} from '../../node_modules/chai/chai.js';
+import {createTestBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -299,7 +300,7 @@ suite('Keyboard Shortcut Registry Test', function () {
         'callback': function () {
           return true;
         },
-        'precondition': function () {
+        'preconditionFn': function () {
           return true;
         },
       };
@@ -319,6 +320,27 @@ suite('Keyboard Shortcut Registry Test', function () {
       const event = createKeyDownEvent(Blockly.utils.KeyCodes.D);
       assert.isFalse(this.registry.onKeyDown(this.workspace, event));
     });
+    test('No callback if precondition fails', function () {
+      const shortcut = {
+        'name': 'test_shortcut',
+        'callback': function () {
+          return true;
+        },
+        'preconditionFn': function () {
+          return false;
+        },
+      };
+      const callBackStub = addShortcut(
+        this.registry,
+        shortcut,
+        Blockly.utils.KeyCodes.C,
+        true,
+      );
+      const event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
+      assert.isFalse(this.registry.onKeyDown(this.workspace, event));
+      sinon.assert.notCalled(callBackStub);
+    });
+
     test('No precondition available - execute callback', function () {
       delete this.testShortcut['precondition'];
       const event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
@@ -332,8 +354,8 @@ suite('Keyboard Shortcut Registry Test', function () {
         'callback': function () {
           return false;
         },
-        'precondition': function () {
-          return false;
+        'preconditionFn': function () {
+          return true;
         },
       };
       const testShortcut2Stub = addShortcut(
@@ -353,8 +375,8 @@ suite('Keyboard Shortcut Registry Test', function () {
         'callback': function () {
           return false;
         },
-        'precondition': function () {
-          return false;
+        'preconditionFn': function () {
+          return true;
         },
       };
       const testShortcut2Stub = addShortcut(
@@ -366,6 +388,63 @@ suite('Keyboard Shortcut Registry Test', function () {
       assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(testShortcut2Stub);
       sinon.assert.notCalled(this.callBackStub);
+    });
+    suite('interaction with FocusManager', function () {
+      setup(function () {
+        this.testShortcutWithScope = {
+          'name': 'test_shortcut',
+          'callback': function (workspace, e, shortcut, scope) {
+            return true;
+          },
+          'preconditionFn': function (workspace, scope) {
+            return true;
+          },
+        };
+
+        // Stub the focus manager
+        this.focusedBlock = createTestBlock();
+        sinon
+          .stub(Blockly.getFocusManager(), 'getFocusedNode')
+          .returns(this.focusedBlock);
+      });
+      test('Callback receives the focused node', function () {
+        const event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
+        const callbackStub = addShortcut(
+          this.registry,
+          this.testShortcutWithScope,
+          Blockly.utils.KeyCodes.C,
+          true,
+        );
+        this.registry.onKeyDown(this.workspace, event);
+
+        const expectedScope = {focusedNode: this.focusedBlock};
+        sinon.assert.calledWithExactly(
+          callbackStub,
+          this.workspace,
+          event,
+          this.testShortcutWithScope,
+          expectedScope,
+        );
+      });
+      test('Precondition receives the focused node', function () {
+        const event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
+        const callbackStub = addShortcut(
+          this.registry,
+          this.testShortcutWithScope,
+          Blockly.utils.KeyCodes.C,
+          true,
+        );
+        const preconditionStub = sinon
+          .stub(this.testShortcutWithScope, 'preconditionFn')
+          .returns(true);
+        this.registry.onKeyDown(this.workspace, event);
+        const expectedScope = {focusedNode: this.focusedBlock};
+        sinon.assert.calledWithExactly(
+          preconditionStub,
+          this.workspace,
+          expectedScope,
+        );
+      });
     });
   });
 

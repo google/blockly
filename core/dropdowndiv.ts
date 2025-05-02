@@ -629,10 +629,6 @@ export function hide() {
   animateOutTimer = setTimeout(function () {
     hideWithoutAnimation();
   }, ANIMATION_TIME * 1000);
-  if (returnEphemeralFocus) {
-    returnEphemeralFocus();
-    returnEphemeralFocus = null;
-  }
   if (onHide) {
     onHide();
     onHide = null;
@@ -648,10 +644,6 @@ export function hideWithoutAnimation() {
     clearTimeout(animateOutTimer);
   }
 
-  if (returnEphemeralFocus) {
-    returnEphemeralFocus();
-    returnEphemeralFocus = null;
-  }
   if (onHide) {
     onHide();
     onHide = null;
@@ -660,6 +652,11 @@ export function hideWithoutAnimation() {
   owner = null;
 
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
+
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
+  }
 }
 
 /**

@@ -291,7 +291,6 @@ export class Gesture {
       this.startBlock = null;
       this.targetBlock = this.flyout.createBlock(this.targetBlock);
       getFocusManager().focusNode(this.targetBlock);
-      common.setSelected(this.targetBlock);
       return true;
     }
     return false;
@@ -728,7 +727,6 @@ export class Gesture {
     if (this.targetBlock) {
       this.bringBlockToFront();
       this.targetBlock.workspace.hideChaff(!!this.flyout);
-      getFocusManager().focusNode(this.targetBlock);
       this.targetBlock.showContextMenu(e);
     } else if (this.startBubble) {
       this.startBubble.showContextMenu(e);
@@ -766,9 +764,10 @@ export class Gesture {
     this.mostRecentEvent = e;
 
     if (!this.startBlock && !this.startBubble && !this.startComment) {
-      // Ensure the workspace is selected if nothing else should be.
+      // Ensure the workspace is selected if nothing else should be. Note that
+      // this is focusNode() instead of focusTree() because if any active node
+      // is focused in the workspace it should be defocused.
       getFocusManager().focusNode(ws);
-      common.setSelected(null);
     } else if (this.startBlock) {
       getFocusManager().focusNode(this.startBlock);
     }
@@ -871,13 +870,18 @@ export class Gesture {
       );
     }
 
+    // Note that the order is important here: bringing a block to the front will
+    // cause it to become focused and showing the field editor will capture
+    // focus ephemerally. It's important to ensure that focus is properly
+    // restored back to the block after field editing has completed.
+    this.bringBlockToFront();
+
     // Only show the editor if the field's editor wasn't already open
     // right before this gesture started.
     const dropdownAlreadyOpen = this.currentDropdownOwner === this.startField;
     if (!dropdownAlreadyOpen) {
       this.startField.showEditor(this.mostRecentEvent);
     }
-    this.bringBlockToFront();
   }
 
   /** Execute an icon click. */
@@ -907,6 +911,8 @@ export class Gesture {
         const newBlock = this.flyout.createBlock(this.targetBlock);
         newBlock.snapToGrid();
         newBlock.bumpNeighbours();
+
+        // If a new block was added, make sure that it's correctly focused.
         getFocusManager().focusNode(newBlock);
       }
     } else {
@@ -923,9 +929,6 @@ export class Gesture {
         'block',
       );
       eventUtils.fire(event);
-      if (this.targetBlock) {
-        getFocusManager().focusNode(this.targetBlock);
-      }
     }
     this.bringBlockToFront();
     eventUtils.setGroup(false);
@@ -938,11 +941,7 @@ export class Gesture {
    * @param _e A pointerup event.
    */
   private doWorkspaceClick(_e: PointerEvent) {
-    const ws = this.creatorWorkspace;
-    if (common.getSelected()) {
-      common.getSelected()!.unselect();
-    }
-    this.fireWorkspaceClick(this.startWorkspace_ || ws);
+    this.fireWorkspaceClick(this.startWorkspace_ || this.creatorWorkspace);
   }
 
   /* End functions defining what actions to take to execute clicks on each type
@@ -957,6 +956,8 @@ export class Gesture {
   private bringBlockToFront() {
     // Blocks in the flyout don't overlap, so skip the work.
     if (this.targetBlock && !this.flyout) {
+      // Always ensure the block being dragged/clicked has focus.
+      getFocusManager().focusNode(this.targetBlock);
       this.targetBlock.bringToFront();
     }
   }
@@ -1033,7 +1034,6 @@ export class Gesture {
     // If the gesture already went through a bubble, don't set the start block.
     if (!this.startBlock && !this.startBubble) {
       this.startBlock = block;
-      common.setSelected(this.startBlock);
       if (block.isInFlyout && block !== block.getRootBlock()) {
         this.setTargetBlock(block.getRootBlock());
       } else {
@@ -1056,6 +1056,7 @@ export class Gesture {
       this.setTargetBlock(block.getParent()!);
     } else {
       this.targetBlock = block;
+      getFocusManager().focusNode(block);
     }
   }
 

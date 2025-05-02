@@ -5,10 +5,11 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import * as common from '../common.js';
+import {IFocusableNode} from '../blockly.js';
 import {config} from '../config.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import {getFocusManager} from '../focus_manager.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
 import {IPaster} from '../interfaces/i_paster.js';
 import {State, append} from '../serialization/blocks.js';
@@ -55,7 +56,11 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
     if (eventUtils.isEnabled() && !block.isShadow()) {
       eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(block));
     }
-    common.setSelected(block);
+
+    // Sometimes there's a delay before the block is fully created and ready for
+    // focusing, so wait slightly before focusing the newly pasted block.
+    const nodeToFocus: IFocusableNode = block;
+    setTimeout(() => getFocusManager().focusNode(nodeToFocus), 1);
     return block;
   }
 }

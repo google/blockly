@@ -2403,7 +2403,17 @@ export class WorkspaceSvg
 
   /**
    * Look up the gesture that is tracking this touch stream on this workspace.
-   * May create a new gesture.
+   *
+   * Returns the gesture in progress, except:
+   *
+   * - If there is a keyboard-initiate move in progress then null will
+   *   be returned - after calling event.preventDefault() and
+   *   event.stopPropagation() to ensure the pointer event is ignored.
+   * - If there is a gesture in progress but event.type is
+   *   'pointerdown' then the in-progress gesture will be cancelled;
+   *   this will result in null being returned.
+   * - If no gesutre is in progress but event is a pointerdown then a
+   *   new gesture will be created and returned.
    *
    * @param e Pointer event.
    * @returns The gesture that is tracking this touch stream, or null if no
@@ -2411,28 +2421,26 @@ export class WorkspaceSvg
    * @internal
    */
   getGesture(e: PointerEvent): Gesture | null {
+    if (this.keyboardMoveInProgress) {
+      // Normally these would be called from Gesture.doStart.
+      e.preventDefault();
+      e.stopPropagation();
+      return null;
+    }
+
     const isStart = e.type === 'pointerdown';
-
-    const gesture = this.currentGesture_;
-    if (gesture) {
-      if (isStart && gesture.hasStarted()) {
-        console.warn('Tried to start the same gesture twice.');
-        // That's funny.  We must have missed a mouse up.
-        // Cancel it, rather than try to retrieve all of the state we need.
-        gesture.cancel();
-        return null;
-      }
-      return gesture;
-    }
-
-    // No gesture existed on this workspace, but this looks like the start of a
-    // new gesture.
-    if (isStart) {
+    if (isStart && this.currentGesture_?.hasStarted()) {
+      console.warn('Tried to start the same gesture twice.');
+      // That's funny.  We must have missed a mouse up.
+      // Cancel it, rather than try to retrieve all of the state we need.
+      this.currentGesture_.cancel();  // Sets this.currentGesture_ to null.
+    } if (!this.currentGesture_ && isStart) {
+      // No gesture existed on this workspace, but this looks like the
+      // start of a new gesture.
       this.currentGesture_ = new Gesture(e, this);
-      return this.currentGesture_;
     }
-    // No gesture existed and this event couldn't be the start of a new gesture.
-    return null;
+
+    return this.currentGesture_;
   }
 
   /**

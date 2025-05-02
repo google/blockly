@@ -93,9 +93,11 @@ export class VariableMap
     } finally {
       eventUtils.setGroup(existingGroup);
     }
-    if (this.workspace instanceof WorkspaceSvg) {
-      this.workspace.refreshToolboxSelection();
-    }
+    setTimeout(() => {
+      if (this.workspace instanceof WorkspaceSvg) {
+        this.workspace.refreshToolboxSelection();
+      }
+    }, 0);
     return variable;
   }
 
@@ -112,9 +114,11 @@ export class VariableMap
     if (!this.variableMap.has(newType)) {
       this.variableMap.set(newType, newTypeVariables);
     }
-    if (this.workspace instanceof WorkspaceSvg) {
-      this.workspace.refreshToolboxSelection();
-    }
+    setTimeout(() => {
+      if (this.workspace instanceof WorkspaceSvg) {
+        this.workspace.refreshToolboxSelection();
+      }
+    }, 0);
     return variable;
   }
 
@@ -161,9 +165,12 @@ export class VariableMap
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
     }
-    if (this.workspace instanceof WorkspaceSvg) {
-      this.workspace.refreshToolboxSelection();
-    }
+
+    setTimeout(() => {
+      if (this.workspace instanceof WorkspaceSvg) {
+        this.workspace.refreshToolboxSelection();
+      }
+    }, 0);
   }
 
   /**
@@ -259,9 +266,12 @@ export class VariableMap
       this.variableMap.set(type, variables);
     }
     eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
-    if (this.workspace instanceof WorkspaceSvg) {
-      this.workspace.refreshToolboxSelection();
-    }
+
+    setTimeout(() => {
+      if (this.workspace instanceof WorkspaceSvg) {
+        this.workspace.refreshToolboxSelection();
+      }
+    }, 0);
     return variable;
   }
 
@@ -279,9 +289,12 @@ export class VariableMap
       );
     }
     this.variableMap.get(type)?.set(variable.getId(), variable);
-    if (this.workspace instanceof WorkspaceSvg) {
-      this.workspace.refreshToolboxSelection();
-    }
+
+    setTimeout(() => {
+      if (this.workspace instanceof WorkspaceSvg) {
+        this.workspace.refreshToolboxSelection();
+      }
+    }, 0);
   }
 
   /* Begin functions for variable deletion. */
@@ -310,9 +323,12 @@ export class VariableMap
     } finally {
       eventUtils.setGroup(existingGroup);
     }
-    if (this.workspace instanceof WorkspaceSvg) {
-      this.workspace.refreshToolboxSelection();
-    }
+
+    setTimeout(() => {
+      if (this.workspace instanceof WorkspaceSvg) {
+        this.workspace.refreshToolboxSelection();
+      }
+    }, 0);
   }
 
   /**

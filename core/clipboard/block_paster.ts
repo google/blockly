@@ -60,7 +60,7 @@ export class BlockPaster implements IPaster<BlockCopyData, BlockSvg> {
     // Sometimes there's a delay before the block is fully created and ready for
     // focusing, so wait slightly before focusing the newly pasted block.
     const nodeToFocus: IFocusableNode = block;
-    setTimeout(() => getFocusManager().focusNode(nodeToFocus), 1);
+    setTimeout(() => getFocusManager().focusNode(nodeToFocus), 0);
     return block;
   }
 }

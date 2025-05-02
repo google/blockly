@@ -131,6 +131,10 @@ export class ASTNode {
     return this.isConnectionLocation;
   }
 
+  private getVisibleInputs(block: Block): Input[] {
+    return block.inputList.filter((input) => input.isVisible());
+  }
+
   /**
    * Given an input find the next editable field or an input with a non null
    * connection in the same block. The current location must be an input
@@ -145,9 +149,10 @@ export class ASTNode {
     const block = parentInput?.getSourceBlock();
     if (!block || !parentInput) return null;
 
-    const curIdx = block.inputList.indexOf(parentInput);
-    for (let i = curIdx + 1; i < block.inputList.length; i++) {
-      const input = block.inputList[i];
+    const visibleInputs = this.getVisibleInputs(block);
+    const curIdx = visibleInputs.indexOf(parentInput);
+    for (let i = curIdx + 1; i < visibleInputs.length; i++) {
+      const input = visibleInputs[i];
       const fieldRow = input.fieldRow;
       for (let j = 0; j < fieldRow.length; j++) {
         const field = fieldRow[j];
@@ -178,10 +183,11 @@ export class ASTNode {
         'The current AST location is not associated with a block',
       );
     }
-    const curIdx = block.inputList.indexOf(input);
+    const visibleInputs = this.getVisibleInputs(block);
+    const curIdx = visibleInputs.indexOf(input);
     let fieldIdx = input.fieldRow.indexOf(location) + 1;
-    for (let i = curIdx; i < block.inputList.length; i++) {
-      const newInput = block.inputList[i];
+    for (let i = curIdx; i < visibleInputs.length; i++) {
+      const newInput = visibleInputs[i];
       const fieldRow = newInput.fieldRow;
       while (fieldIdx < fieldRow.length) {
         if (fieldRow[fieldIdx].isClickable() || ASTNode.NAVIGATE_ALL_FIELDS) {
@@ -210,9 +216,10 @@ export class ASTNode {
     const block = parentInput?.getSourceBlock();
     if (!block || !parentInput) return null;
 
-    const curIdx = block.inputList.indexOf(parentInput);
+    const visibleInputs = this.getVisibleInputs(block);
+    const curIdx = visibleInputs.indexOf(parentInput);
     for (let i = curIdx; i >= 0; i--) {
-      const input = block.inputList[i];
+      const input = visibleInputs[i];
       if (input.connection && input !== parentInput) {
         return ASTNode.createInputNode(input);
       }
@@ -242,10 +249,11 @@ export class ASTNode {
         'The current AST location is not associated with a block',
       );
     }
-    const curIdx = block.inputList.indexOf(parentInput);
+    const visibleInputs = this.getVisibleInputs(block);
+    const curIdx = visibleInputs.indexOf(parentInput);
     let fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
     for (let i = curIdx; i >= 0; i--) {
-      const input = block.inputList[i];
+      const input = visibleInputs[i];
       if (input.connection && input !== parentInput) {
         return ASTNode.createInputNode(input);
       }
@@ -259,7 +267,7 @@ export class ASTNode {
       // Reset the fieldIdx to the length of the field row of the previous
       // input.
       if (i - 1 >= 0) {
-        fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
+        fieldIdx = visibleInputs[i - 1].fieldRow.length - 1;
       }
     }
     return null;
@@ -458,10 +466,9 @@ export class ASTNode {
    * block.
    */
   private findFirstFieldOrInput(block: Block): ASTNode | null {
-    const inputs = block.inputList;
-    for (let i = 0; i < inputs.length; i++) {
-      const input = inputs[i];
-      if (!input.isVisible()) continue;
+    const visibleInputs = this.getVisibleInputs(block);
+    for (let i = 0; i < visibleInputs.length; i++) {
+      const input = visibleInputs[i];
 
       const fieldRow = input.fieldRow;
       for (let j = 0; j < fieldRow.length; j++) {

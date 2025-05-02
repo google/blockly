@@ -317,6 +317,9 @@ export class WorkspaceSvg
   /** True if keyboard accessibility mode is on, false otherwise. */
   keyboardAccessibilityMode = false;
 
+  /** True iff a keyboard-initiated move ("drag") is in progress. */
+  keyboardMoveInProgress = false;
+
   /** The list of top-level bounded elements on the workspace. */
   private topBoundedElements: IBoundedElement[] = [];
 
@@ -1505,12 +1508,43 @@ export class WorkspaceSvg
   }
 
   /**
-   * Is the user currently dragging a block or scrolling the flyout/workspace?
+   * Indicate whether a keyboard move is in progress or not.
    *
-   * @returns True if currently dragging or scrolling.
+   * Should be called with true when a keyboard move of an IDraggable
+   * is starts, and false when it finishes or is aborted.
+   *
+   * N.B.: This method is experimental and internal-only.  It is
+   * intended only to called only from the keyboard navigation plugin.
+   * Its signature and behaviour may be modified, or the method
+   * removed, at an time without notice and without being treated
+   * as a breaking change.
+   *
+   * @internal
+   * @param inProgress Is a keyboard-initated move in progress?
+   */
+  setKeyboardMoveInProgress(inProgress: boolean) {
+    this.keyboardMoveInProgress = inProgress;
+  }
+
+  /**
+   * Returns true iff the user is currently engaged in a drag gesture,
+   * or if a keyboard-initated move is in progress.
+   *
+   * Dragging gestures normally entail moving a block or other item on
+   * the workspace, or scrolling the flyout/workspace.
+   *
+   * Keyboard-initated movements are implemnted using the dragging
+   * infrastructure and are intended to emulate (a subset of) drag
+   * gestures and so should typically be treated as if they were a
+   * gesture-based drag.
+   *
+   * @returns True iff a drag gesture or keyboard move is in porgress.
    */
   isDragging(): boolean {
-    return this.currentGesture_ !== null && this.currentGesture_.isDragging();
+    return (
+      this.keyboardMoveInProgress ||
+      (this.currentGesture_ !== null && this.currentGesture_.isDragging())
+    );
   }
 
   /**

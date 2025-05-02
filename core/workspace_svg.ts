@@ -314,7 +314,7 @@ export class WorkspaceSvg
   keyboardAccessibilityMode = false;
 
   /** True iff a keyboard-initiated move ("drag") is in progress. */
-  keyboardMoveInProgress = false;
+  keyboardMoveInProgress = false; // TODO(#8960): Delete this.
 
   /** The list of top-level bounded elements on the workspace. */
   private topBoundedElements: IBoundedElement[] = [];
@@ -1471,6 +1471,8 @@ export class WorkspaceSvg
    * removed, at an time without notice and without being treated
    * as a breaking change.
    *
+   * TODO(#8960): Delete this.
+   *
    * @internal
    * @param inProgress Is a keyboard-initated move in progress?
    */
@@ -1494,6 +1496,8 @@ export class WorkspaceSvg
    */
   isDragging(): boolean {
     return (
+      // TODO(#8960): Query Mover.isMoving to see if move is in
+      // progress rather than relying on a status flag.
       this.keyboardMoveInProgress ||
       (this.currentGesture_ !== null && this.currentGesture_.isDragging())
     );
@@ -2421,6 +2425,8 @@ export class WorkspaceSvg
    * @internal
    */
   getGesture(e: PointerEvent): Gesture | null {
+    // TODO(#8960): Query Mover.isMoving to see if move is in progress
+    // rather than relying on .keyboardMoveInProgress status flag.
     if (this.keyboardMoveInProgress) {
       // Normally these would be called from Gesture.doStart.
       e.preventDefault();
@@ -2433,8 +2439,9 @@ export class WorkspaceSvg
       console.warn('Tried to start the same gesture twice.');
       // That's funny.  We must have missed a mouse up.
       // Cancel it, rather than try to retrieve all of the state we need.
-      this.currentGesture_.cancel();  // Sets this.currentGesture_ to null.
-    } if (!this.currentGesture_ && isStart) {
+      this.currentGesture_.cancel(); // Sets this.currentGesture_ to null.
+    }
+    if (!this.currentGesture_ && isStart) {
       // No gesture existed on this workspace, but this looks like the
       // start of a new gesture.
       this.currentGesture_ = new Gesture(e, this);

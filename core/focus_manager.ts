@@ -65,26 +65,15 @@ export class FocusManager {
   constructor(
     addGlobalEventListener: (type: string, listener: EventListener) => void,
   ) {
-    // Register root document focus listeners for tracking when focus leaves all
-    // tracked focusable trees.
-    addGlobalEventListener('focusin', (event) => {
-      if (!(event instanceof FocusEvent)) return;
-
-      // The target that now has focus.
-      const activeElement = document.activeElement;
+    // Note that 'element' here is the element *gaining* focus.
+    const maybeFocus = (element: Element | EventTarget | null) => {
       let newNode: IFocusableNode | null | undefined = null;
-      if (
-        activeElement instanceof HTMLElement ||
-        activeElement instanceof SVGElement
-      ) {
-        // If the target losing focus maps to any tree, then it should be
-        // updated. Per the contract of findFocusableNodeFor only one tree
-        // should claim the element.
+      if (element instanceof HTMLElement || element instanceof SVGElement) {
+        // If the target losing or gaining focus maps to any tree, then it
+        // should be updated. Per the contract of findFocusableNodeFor only one
+        // tree should claim the element, so the search can be exited early.
         for (const tree of this.registeredTrees) {
-          newNode = FocusableTreeTraverser.findFocusableNodeFor(
-            activeElement,
-            tree,
-          );
+          newNode = FocusableTreeTraverser.findFocusableNodeFor(element, tree);
           if (newNode) break;
         }
       }
@@ -103,6 +92,26 @@ export class FocusManager {
       } else {
         this.defocusCurrentFocusedNode();
       }
+    };
+
+    // Register root document focus listeners for tracking when focus leaves all
+    // tracked focusable trees. Note that focusin and focusout can be somewhat
+    // overlapping in the information that they provide. This is fine because
+    // they both aim to check for focus changes on the element gaining or having
+    // received focus, and maybeFocus should behave relatively deterministic.
+    addGlobalEventListener('focusin', (event) => {
+      if (!(event instanceof FocusEvent)) return;
+
+      // When something receives focus, always use the current active element as
+      // the source of truth.
+      maybeFocus(document.activeElement);
+    });
+    addGlobalEventListener('focusout', (event) => {
+      if (!(event instanceof FocusEvent)) return;
+
+      // When something loses focus, it seems that document.activeElement may
+      // not necessarily be correct. Instead, use relatedTarget.
+      maybeFocus(event.relatedTarget);
     });
   }
 
@@ -247,7 +256,7 @@ export class FocusManager {
 
     const prevNode = this.focusedNode;
     const prevTree = prevNode?.getFocusableTree();
-    if (prevNode && prevTree !== nextTree) {
+    if (prevNode) {
       this.passivelyFocusNode(prevNode, nextTree);
     }
 
@@ -374,7 +383,9 @@ export class FocusManager {
     // node's focusable element (which *is* allowed to be invisible until the
     // node needs to be focused).
     this.lockFocusStateChanges = true;
-    node.getFocusableTree().onTreeFocus(node, prevTree);
+    if (node.getFocusableTree() !== prevTree) {
+      node.getFocusableTree().onTreeFocus(node, prevTree);
+    }
     node.onNodeFocus();
     this.lockFocusStateChanges = false;
 
@@ -399,11 +410,15 @@ export class FocusManager {
     nextTree: IFocusableTree | null,
   ): void {
     this.lockFocusStateChanges = true;
-    node.getFocusableTree().onTreeBlur(nextTree);
+    if (node.getFocusableTree() !== nextTree) {
+      node.getFocusableTree().onTreeBlur(nextTree);
+    }
     node.onNodeBlur();
     this.lockFocusStateChanges = false;
 
-    this.setNodeToVisualPassiveFocus(node);
+    if (node.getFocusableTree() !== nextTree) {
+      this.setNodeToVisualPassiveFocus(node);
+    }
   }
 
   /**
@@ -441,19 +456,24 @@ export class FocusManager {
     dom.removeClass(element, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     dom.removeClass(element, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
   }
+
+  private static focusManager: FocusManager | null = null;
+
+  /**
+   * Returns the page-global FocusManager.
+   *
+   * The returned instance is guaranteed to not change across function calls, but
+   * may change across page loads.
+   */
+  static getFocusManager(): FocusManager {
+    if (!FocusManager.focusManager) {
+      FocusManager.focusManager = new FocusManager(document.addEventListener);
+    }
+    return FocusManager.focusManager;
+  }
 }
 
-let focusManager: FocusManager | null = null;
-
-/**
- * Returns the page-global FocusManager.
- *
- * The returned instance is guaranteed to not change across function calls, but
- * may change across page loads.
- */
+/** Convenience function for FocusManager.getFocusManager. */
 export function getFocusManager(): FocusManager {
-  if (!focusManager) {
-    focusManager = new FocusManager(document.addEventListener);
-  }
-  return focusManager;
+  return FocusManager.getFocusManager();
 }

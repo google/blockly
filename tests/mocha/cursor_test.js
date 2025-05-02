@@ -6,6 +6,7 @@
 
 import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 import {assert} from '../../node_modules/chai/chai.js';
+import {createRenderedBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,
@@ -63,11 +64,11 @@ suite('Cursor', function () {
       ]);
       this.workspace = Blockly.inject('blocklyDiv', {});
       this.cursor = this.workspace.getCursor();
-      const blockA = this.workspace.newBlock('input_statement');
-      const blockB = this.workspace.newBlock('input_statement');
-      const blockC = this.workspace.newBlock('input_statement');
-      const blockD = this.workspace.newBlock('input_statement');
-      const blockE = this.workspace.newBlock('field_input');
+      const blockA = createRenderedBlock(this.workspace, 'input_statement');
+      const blockB = createRenderedBlock(this.workspace, 'input_statement');
+      const blockC = createRenderedBlock(this.workspace, 'input_statement');
+      const blockD = createRenderedBlock(this.workspace, 'input_statement');
+      const blockE = createRenderedBlock(this.workspace, 'field_input');
 
       blockA.nextConnection.connect(blockB.previousConnection);
       blockA.inputList[0].connection.connect(blockE.outputConnection);
@@ -105,12 +106,12 @@ suite('Cursor', function () {
       );
     });
 
-    test('In - From output connection', function () {
+    test('In - From attached input connection', function () {
       const fieldBlock = this.blocks.E;
-      const outputNode = ASTNode.createConnectionNode(
-        fieldBlock.outputConnection,
+      const inputConnectionNode = ASTNode.createConnectionNode(
+        this.blocks.A.inputList[0].connection,
       );
-      this.cursor.setCurNode(outputNode);
+      this.cursor.setCurNode(inputConnectionNode);
       this.cursor.in();
       const curNode = this.cursor.getCurNode();
       assert.equal(curNode.getLocation(), fieldBlock);

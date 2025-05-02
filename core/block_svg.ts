@@ -1083,13 +1083,15 @@ export class BlockSvg
   }
 
   /**
-   * @deprecated v11 - Set whether the block is manually enabled or disabled.
+   * Set whether the block is manually enabled or disabled.
+   *
    * The user can toggle whether a block is disabled from a context menu
    * option. A block may still be disabled for other reasons even if the user
    * attempts to manually enable it, such as when the block is in an invalid
    * location. This method is deprecated and setDisabledReason should be used
    * instead.
    *
+   * @deprecated v11: use setDisabledReason.
    * @param enabled True if enabled.
    */
   override setEnabled(enabled: boolean) {

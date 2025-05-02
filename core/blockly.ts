@@ -120,6 +120,7 @@ import * as inputs from './inputs.js';
 import {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import {LabelFlyoutInflater} from './label_flyout_inflater.js';
 import {SeparatorFlyoutInflater} from './separator_flyout_inflater.js';
+import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 
 import {Input} from './inputs/input.js';
 import {InsertionMarkerPreviewer} from './insertion_marker_previewer.js';
@@ -527,6 +528,7 @@ export {
   FlyoutMetricsManager,
   FlyoutSeparator,
   FocusManager,
+  FocusableTreeTraverser,
   CodeGenerator as Generator,
   Gesture,
   Grid,

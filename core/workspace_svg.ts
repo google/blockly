@@ -52,10 +52,6 @@ import {
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
-import type {
-  IVariableModel,
-  IVariableState,
-} from './interfaces/i_variable_model.js';
 import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
@@ -316,6 +312,9 @@ export class WorkspaceSvg
 
   /** True if keyboard accessibility mode is on, false otherwise. */
   keyboardAccessibilityMode = false;
+
+  /** True iff a keyboard-initiated move ("drag") is in progress. */
+  keyboardMoveInProgress = false;
 
   /** The list of top-level bounded elements on the workspace. */
   private topBoundedElements: IBoundedElement[] = [];
@@ -1361,50 +1360,6 @@ export class WorkspaceSvg
     }
   }
 
-  /**
-   * Rename a variable by updating its name in the variable map.  Update the
-   *     flyout to show the renamed variable immediately.
-   *
-   * @param id ID of the variable to rename.
-   * @param newName New variable name.
-   */
-  override renameVariableById(id: string, newName: string) {
-    super.renameVariableById(id, newName);
-    this.refreshToolboxSelection();
-  }
-
-  /**
-   * Delete a variable by the passed in ID.   Update the flyout to show
-   *     immediately that the variable is deleted.
-   *
-   * @param id ID of variable to delete.
-   */
-  override deleteVariableById(id: string) {
-    super.deleteVariableById(id);
-    this.refreshToolboxSelection();
-  }
-
-  /**
-   * Create a new variable with the given name.  Update the flyout to show the
-   *     new variable immediately.
-   *
-   * @param name The new variable's name.
-   * @param opt_type The type of the variable like 'int' or 'string'.
-   *     Does not need to be unique. Field_variable can filter variables based
-   * on their type. This will default to '' which is a specific type.
-   * @param opt_id The unique ID of the variable. This will default to a UUID.
-   * @returns The newly created variable.
-   */
-  override createVariable(
-    name: string,
-    opt_type?: string | null,
-    opt_id?: string | null,
-  ): IVariableModel<IVariableState> {
-    const newVar = super.createVariable(name, opt_type, opt_id);
-    this.refreshToolboxSelection();
-    return newVar;
-  }
-
   /** Make a list of all the delete areas for this workspace. */
   recordDragTargets() {
     const dragTargets = this.componentManager.getComponents(
@@ -1505,12 +1460,43 @@ export class WorkspaceSvg
   }
 
   /**
-   * Is the user currently dragging a block or scrolling the flyout/workspace?
+   * Indicate whether a keyboard move is in progress or not.
    *
-   * @returns True if currently dragging or scrolling.
+   * Should be called with true when a keyboard move of an IDraggable
+   * is starts, and false when it finishes or is aborted.
+   *
+   * N.B.: This method is experimental and internal-only.  It is
+   * intended only to called only from the keyboard navigation plugin.
+   * Its signature and behaviour may be modified, or the method
+   * removed, at an time without notice and without being treated
+   * as a breaking change.
+   *
+   * @internal
+   * @param inProgress Is a keyboard-initated move in progress?
+   */
+  setKeyboardMoveInProgress(inProgress: boolean) {
+    this.keyboardMoveInProgress = inProgress;
+  }
+
+  /**
+   * Returns true iff the user is currently engaged in a drag gesture,
+   * or if a keyboard-initated move is in progress.
+   *
+   * Dragging gestures normally entail moving a block or other item on
+   * the workspace, or scrolling the flyout/workspace.
+   *
+   * Keyboard-initated movements are implemnted using the dragging
+   * infrastructure and are intended to emulate (a subset of) drag
+   * gestures and so should typically be treated as if they were a
+   * gesture-based drag.
+   *
+   * @returns True iff a drag gesture or keyboard move is in porgress.
    */
   isDragging(): boolean {
-    return this.currentGesture_ !== null && this.currentGesture_.isDragging();
+    return (
+      this.keyboardMoveInProgress ||
+      (this.currentGesture_ !== null && this.currentGesture_.isDragging())
+    );
   }
 
   /**

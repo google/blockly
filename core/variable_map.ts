@@ -25,8 +25,9 @@ import {Names} from './names.js';
 import * as registry from './registry.js';
 import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
-import * as Variables from './variables.js';
+import {deleteVariable, getVariableUsesById} from './variables.js';
 import type {Workspace} from './workspace.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a variable map.  This contains a dictionary data structure with
@@ -92,6 +93,9 @@ export class VariableMap
     } finally {
       eventUtils.setGroup(existingGroup);
     }
+    if (this.workspace instanceof WorkspaceSvg) {
+      this.workspace.refreshToolboxSelection();
+    }
     return variable;
   }
 
@@ -108,7 +112,9 @@ export class VariableMap
     if (!this.variableMap.has(newType)) {
       this.variableMap.set(newType, newTypeVariables);
     }
-
+    if (this.workspace instanceof WorkspaceSvg) {
+      this.workspace.refreshToolboxSelection();
+    }
     return variable;
   }
 
@@ -116,7 +122,7 @@ export class VariableMap
    * Rename a variable by updating its name in the variable map. Identify the
    * variable to rename with the given ID.
    *
-   * @deprecated v12, use VariableMap.renameVariable.
+   * @deprecated v12: use VariableMap.renameVariable.
    * @param id ID of the variable to rename.
    * @param newName New variable name.
    */
@@ -154,6 +160,9 @@ export class VariableMap
     variable.setName(newName);
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
+    }
+    if (this.workspace instanceof WorkspaceSvg) {
+      this.workspace.refreshToolboxSelection();
     }
   }
 
@@ -250,6 +259,9 @@ export class VariableMap
       this.variableMap.set(type, variables);
     }
     eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
+    if (this.workspace instanceof WorkspaceSvg) {
+      this.workspace.refreshToolboxSelection();
+    }
     return variable;
   }
 
@@ -267,6 +279,9 @@ export class VariableMap
       );
     }
     this.variableMap.get(type)?.set(variable.getId(), variable);
+    if (this.workspace instanceof WorkspaceSvg) {
+      this.workspace.refreshToolboxSelection();
+    }
   }
 
   /* Begin functions for variable deletion. */
@@ -276,7 +291,7 @@ export class VariableMap
    * @param variable Variable to delete.
    */
   deleteVariable(variable: IVariableModel<IVariableState>) {
-    const uses = this.getVariableUsesById(variable.getId());
+    const uses = getVariableUsesById(this.workspace, variable.getId());
     const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
       eventUtils.setGroup(true);
@@ -295,13 +310,16 @@ export class VariableMap
     } finally {
       eventUtils.setGroup(existingGroup);
     }
+    if (this.workspace instanceof WorkspaceSvg) {
+      this.workspace.refreshToolboxSelection();
+    }
   }
 
   /**
    * Delete a variables by the passed in ID and all of its uses from this
    * workspace. May prompt the user for confirmation.
    *
-   * @deprecated v12, use Blockly.Variables.deleteVariable.
+   * @deprecated v12: use Blockly.Variables.deleteVariable.
    * @param id ID of variable to delete.
    */
   deleteVariableById(id: string) {
@@ -313,7 +331,7 @@ export class VariableMap
     );
     const variable = this.getVariableById(id);
     if (variable) {
-      Variables.deleteVariable(this.workspace, variable);
+      deleteVariable(this.workspace, variable);
     }
   }
 
@@ -398,7 +416,7 @@ export class VariableMap
   /**
    * Returns all of the variable names of all types.
    *
-   * @deprecated v12, use Blockly.Variables.getAllVariables.
+   * @deprecated v12: use Blockly.Variables.getAllVariables.
    * @returns All of the variable names of all types.
    */
   getAllVariableNames(): string[] {
@@ -420,7 +438,7 @@ export class VariableMap
   /**
    * Find all the uses of a named variable.
    *
-   * @deprecated v12, use Blockly.Variables.getVariableUsesById.
+   * @deprecated v12: use Blockly.Variables.getVariableUsesById.
    * @param id ID of the variable to find.
    * @returns Array of block usages.
    */
@@ -431,7 +449,7 @@ export class VariableMap
       'v13',
       'Blockly.Variables.getVariableUsesById',
     );
-    return Variables.getVariableUsesById(this.workspace, id);
+    return getVariableUsesById(this.workspace, id);
   }
 }
 

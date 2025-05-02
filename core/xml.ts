@@ -703,7 +703,7 @@ export function domToVariables(xmlVariables: Element, workspace: Workspace) {
     const name = xmlChild.textContent;
 
     if (!name) return;
-    workspace.createVariable(name, type, id);
+    workspace.getVariableMap().createVariable(name, type ?? undefined, id);
   }
 }
 

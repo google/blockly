@@ -133,8 +133,8 @@ export class Dragger implements IDragger {
     eventUtils.setGroup(false);
 
     if (!wouldDelete && isFocusableNode(this.draggable)) {
-      // Ensure focusable nodes that have finished dragging (but aren't being)
-      // deleted end with focus and selection.
+      // Ensure focusable nodes that have finished dragging (but aren't being
+      // deleted) end with focus and selection.
       getFocusManager().focusNode(this.draggable);
     }
   }

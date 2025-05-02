@@ -101,9 +101,6 @@ export function registerCopy() {
   const ctrlC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [
     KeyCodes.CTRL,
   ]);
-  const altC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [
-    KeyCodes.ALT,
-  ]);
   const metaC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [
     KeyCodes.META,
   ]);
@@ -140,7 +137,7 @@ export function registerCopy() {
         : null;
       return !!copyData;
     },
-    keyCodes: [ctrlC, altC, metaC],
+    keyCodes: [ctrlC, metaC],
   };
   ShortcutRegistry.registry.register(copyShortcut);
 }
@@ -151,9 +148,6 @@ export function registerCopy() {
 export function registerCut() {
   const ctrlX = ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [
     KeyCodes.CTRL,
-  ]);
-  const altX = ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [
-    KeyCodes.ALT,
   ]);
   const metaX = ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [
     KeyCodes.META,
@@ -198,7 +192,7 @@ export function registerCut() {
       }
       return false;
     },
-    keyCodes: [ctrlX, altX, metaX],
+    keyCodes: [ctrlX, metaX],
   };
 
   ShortcutRegistry.registry.register(cutShortcut);
@@ -210,9 +204,6 @@ export function registerCut() {
 export function registerPaste() {
   const ctrlV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [
     KeyCodes.CTRL,
-  ]);
-  const altV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [
-    KeyCodes.ALT,
   ]);
   const metaV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [
     KeyCodes.META,
@@ -246,7 +237,7 @@ export function registerPaste() {
       const centerCoords = new Coordinate(left + width / 2, top + height / 2);
       return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
     },
-    keyCodes: [ctrlV, altV, metaV],
+    keyCodes: [ctrlV, metaV],
   };
 
   ShortcutRegistry.registry.register(pasteShortcut);
@@ -258,9 +249,6 @@ export function registerPaste() {
 export function registerUndo() {
   const ctrlZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.CTRL,
-  ]);
-  const altZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.ALT,
   ]);
   const metaZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.META,
@@ -278,7 +266,7 @@ export function registerUndo() {
       e.preventDefault();
       return true;
     },
-    keyCodes: [ctrlZ, altZ, metaZ],
+    keyCodes: [ctrlZ, metaZ],
   };
   ShortcutRegistry.registry.register(undoShortcut);
 }
@@ -291,10 +279,6 @@ export function registerRedo() {
   const ctrlShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.SHIFT,
     KeyCodes.CTRL,
-  ]);
-  const altShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.SHIFT,
-    KeyCodes.ALT,
   ]);
   const metaShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.SHIFT,
@@ -317,7 +301,7 @@ export function registerRedo() {
       e.preventDefault();
       return true;
     },
-    keyCodes: [ctrlShiftZ, altShiftZ, metaShiftZ, ctrlY],
+    keyCodes: [ctrlShiftZ, metaShiftZ, ctrlY],
   };
   ShortcutRegistry.registry.register(redoShortcut);
 }

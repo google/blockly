@@ -12,7 +12,6 @@
 // Former goog.module ID: Blockly.Trashcan
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
@@ -26,7 +25,6 @@ import type {IDraggable} from './interfaces/i_draggable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IPositionable} from './interfaces/i_positionable.js';
 import type {UiMetrics} from './metrics_manager.js';
-import {Options} from './options.js';
 import * as uiPosition from './positionable_helpers.js';
 import * as registry from './registry.js';
 import type * as blocks from './serialization/blocks.js';
@@ -103,17 +101,7 @@ export class Trashcan
     }
 
     // Create flyout options.
-    const flyoutWorkspaceOptions = new Options({
-      'scrollbars': true,
-      'parentWorkspace': this.workspace,
-      'rtl': this.workspace.RTL,
-      'oneBasedIndex': this.workspace.options.oneBasedIndex,
-      'renderer': this.workspace.options.renderer,
-      'rendererOverrides': this.workspace.options.rendererOverrides,
-      'move': {
-        'scrollbars': true,
-      },
-    } as BlocklyOptions);
+    const flyoutWorkspaceOptions = this.workspace.copyOptionsForFlyout();
     // Create vertical or horizontal flyout.
     if (this.workspace.horizontalLayout) {
       flyoutWorkspaceOptions.toolboxPosition =

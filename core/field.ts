@@ -113,18 +113,6 @@ export abstract class Field<T = any>
   private tooltip: Tooltip.TipInfo | null = null;
   protected size_: Size;
 
-  /**
-   * Holds the cursors svg element when the cursor is attached to the field.
-   * This is null if there is no cursor on the field.
-   */
-  private cursorSvg: SVGElement | null = null;
-
-  /**
-   * Holds the markers svg element when the marker is attached to the field.
-   * This is null if there is no marker on the field.
-   */
-  private markerSvg: SVGElement | null = null;
-
   /** The rendered field's SVG group element. */
   protected fieldGroup_: SVGGElement | null = null;
 
@@ -1356,44 +1344,6 @@ export abstract class Field<T = any>
    */
   onShortcut(_shortcut: KeyboardShortcut): boolean {
     return false;
-  }
-
-  /**
-   * Add the cursor SVG to this fields SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the field group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
-    this.fieldGroup_.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
-  }
-
-  /**
-   * Add the marker SVG to this fields SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the field group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
-    this.fieldGroup_.appendChild(markerSvg);
-    this.markerSvg = markerSvg;
   }
 
   /** See IFocusableNode.getFocusableElement. */

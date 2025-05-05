@@ -1699,28 +1699,6 @@ export class BlockSvg
   }
 
   /**
-   * Add the cursor SVG to this block's SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the block SVG
-   *     group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    this.pathObject.setCursorSvg(cursorSvg);
-  }
-
-  /**
-   * Add the marker SVG to this block's SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the block SVG
-   *     group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    this.pathObject.setMarkerSvg(markerSvg);
-  }
-
-  /**
    * Returns a bounding box describing the dimensions of this block
    * and any blocks stacked below it.
    *

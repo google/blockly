@@ -475,28 +475,6 @@ export class WorkspaceSvg
   }
 
   /**
-   * Add the cursor SVG to this workspaces SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    this.markerManager.setCursorSvg(cursorSvg);
-  }
-
-  /**
-   * Add the marker SVG to this workspaces SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    this.markerManager.setMarkerSvg(markerSvg);
-  }
-
-  /**
    * Get the marker with the given ID.
    *
    * @param id The ID of the marker.

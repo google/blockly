@@ -25,14 +25,8 @@ export class MarkerManager {
   /** The cursor. */
   private cursor: LineCursor | null = null;
 
-  /** The cursor's SVG element. */
-  private cursorSvg: SVGElement | null = null;
-
   /** The map of markers for the workspace. */
   private markers = new Map<string, Marker>();
-
-  /** The marker's SVG element. */
-  private markerSvg: SVGElement | null = null;
 
   /**
    * @param workspace The workspace for the marker manager.
@@ -101,47 +95,6 @@ export class MarkerManager {
    */
   setCursor(cursor: LineCursor) {
     this.cursor = cursor;
-  }
-
-  /**
-   * Add the cursor SVG to this workspace SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement | null) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
-    this.workspace.getBlockCanvas()!.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
-  }
-
-  /**
-   * Add the marker SVG to this workspaces SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement | null) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (this.workspace.getBlockCanvas()) {
-      if (this.cursorSvg) {
-        this.workspace
-          .getBlockCanvas()!
-          .insertBefore(markerSvg, this.cursorSvg);
-      } else {
-        this.workspace.getBlockCanvas()!.appendChild(markerSvg);
-      }
-    }
   }
 
   /**

@@ -2807,7 +2807,7 @@ export class WorkspaceSvg
    *
    * @returns This workspace's Navigator instance.
    */
-  getNavigator() {
+  getNavigator(): Navigator<any> {
     return this.navigator;
   }
 }

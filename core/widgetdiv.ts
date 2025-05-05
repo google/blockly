@@ -131,10 +131,6 @@ export function hide() {
   div.style.display = 'none';
   div.style.left = '';
   div.style.top = '';
-  if (returnEphemeralFocus) {
-    returnEphemeralFocus();
-    returnEphemeralFocus = null;
-  }
   if (dispose) {
     dispose();
     dispose = null;
@@ -150,6 +146,11 @@ export function hide() {
     themeClassName = '';
   }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
+
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
+  }
 }
 
 /**

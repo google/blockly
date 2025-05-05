@@ -34,6 +34,7 @@ import type {BlockMove} from './events/events_block_move.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {FieldLabel} from './field_label.js';
+import {getFocusManager} from './focus_manager.js';
 import {IconType} from './icons/icon_types.js';
 import {MutatorIcon} from './icons/mutator_icon.js';
 import {WarningIcon} from './icons/warning_icon.js';
@@ -1290,6 +1291,7 @@ export class BlockSvg
    *     adjusting its parents.
    */
   bringToFront(blockOnly = false) {
+    const previouslyFocused = getFocusManager().getFocusedNode();
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
     if (block.isDeadOrDying()) {
@@ -1306,6 +1308,13 @@ export class BlockSvg
       if (blockOnly) break;
       block = block.getParent();
     } while (block);
+    if (previouslyFocused) {
+      // Bringing a block to the front of the stack doesn't fundamentally change
+      // the logical structure of the page, but it does change element ordering
+      // which can take automatically take away focus from a node. Ensure focus
+      // is restored to avoid a discontinuity.
+      getFocusManager().focusNode(previouslyFocused);
+    }
   }
 
   /**

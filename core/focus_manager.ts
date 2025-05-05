@@ -56,17 +56,20 @@ export class FocusManager {
    */
   static readonly PASSIVE_FOCUS_NODE_CSS_CLASS_NAME = 'blocklyPassiveFocus';
 
-  focusedNode: IFocusableNode | null = null;
-  registeredTrees: Array<IFocusableTree> = [];
+  private focusedNode: IFocusableNode | null = null;
+  private previouslyFocusedNode: IFocusableNode | null = null;
+  private registeredTrees: Array<IFocusableTree> = [];
 
   private currentlyHoldsEphemeralFocus: boolean = false;
   private lockFocusStateChanges: boolean = false;
+  private recentlyLostAllFocus: boolean = false;
 
   constructor(
     addGlobalEventListener: (type: string, listener: EventListener) => void,
   ) {
     // Note that 'element' here is the element *gaining* focus.
     const maybeFocus = (element: Element | EventTarget | null) => {
+      this.recentlyLostAllFocus = !element;
       let newNode: IFocusableNode | null | undefined = null;
       if (element instanceof HTMLElement || element instanceof SVGElement) {
         // If the target losing or gaining focus maps to any tree, then it
@@ -164,7 +167,7 @@ export class FocusManager {
     const root = tree.getRootFocusableNode();
     if (focusedNode) this.removeHighlight(focusedNode);
     if (this.focusedNode === focusedNode || this.focusedNode === root) {
-      this.focusedNode = null;
+      this.updateFocusedNode(null);
     }
     this.removeHighlight(root);
   }
@@ -277,7 +280,7 @@ export class FocusManager {
       // Only change the actively focused node if ephemeral state isn't held.
       this.activelyFocusNode(focusableNode, prevTree ?? null);
     }
-    this.focusedNode = focusableNode;
+    this.updateFocusedNode(focusableNode);
   }
 
   /**
@@ -328,6 +331,22 @@ export class FocusManager {
 
       if (this.focusedNode) {
         this.activelyFocusNode(this.focusedNode, null);
+
+        // Even though focus was restored, check if it's lost again. It's
+        // possible for the browser to force focus away from all elements once
+        // the ephemeral element disappears. This ensures focus is restored.
+        const capturedNode = this.focusedNode;
+        setTimeout(() => {
+          // These checks are set up to minimize the risk that a legitimate
+          // focus change occurred within the delay that this would override.
+          if (
+            !this.focusedNode &&
+            this.previouslyFocusedNode === capturedNode &&
+            this.recentlyLostAllFocus
+          ) {
+            this.focusNode(capturedNode);
+          }
+        }, 0);
       }
     };
   }
@@ -349,6 +368,17 @@ export class FocusManager {
   }
 
   /**
+   * Updates the internally tracked focused node to the specified node, or null
+   * if focus is being lost. This also updates previous focus tracking.
+   *
+   * @param newFocusedNode The new node to set as focused.
+   */
+  private updateFocusedNode(newFocusedNode: IFocusableNode | null) {
+    this.previouslyFocusedNode = this.focusedNode;
+    this.focusedNode = newFocusedNode;
+  }
+
+  /**
    * Defocuses the current actively focused node tracked by the manager, iff
    * there's a node being tracked and the manager doesn't have ephemeral focus.
    */
@@ -358,7 +388,7 @@ export class FocusManager {
     // restored upon exiting ephemeral focus mode.
     if (this.focusedNode && !this.currentlyHoldsEphemeralFocus) {
       this.passivelyFocusNode(this.focusedNode, null);
-      this.focusedNode = null;
+      this.updateFocusedNode(null);
     }
   }
 

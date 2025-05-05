@@ -50,7 +50,6 @@ import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IIcon} from './interfaces/i_icon.js';
 import type {INavigable} from './interfaces/i_navigable.js';
 import * as internalConstants from './internal_constants.js';
-import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import {RenderedConnection} from './rendered_connection.js';

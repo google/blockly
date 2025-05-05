@@ -31,7 +31,6 @@ import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
-import {MarkerManager} from './marker_manager.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
 import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';

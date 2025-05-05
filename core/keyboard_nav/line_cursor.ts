@@ -30,9 +30,7 @@ import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigable} from '../interfaces/i_navigable.js';
 import * as registry from '../registry.js';
 import {RenderedConnection} from '../rendered_connection.js';
-import type {PathObject} from '../renderers/zelos/path_object.js';
 import {Renderer} from '../renderers/zelos/renderer.js';
-import * as dom from '../utils/dom.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {ASTNode} from './ast_node.js';
 import {BlockNavigationPolicy} from './block_navigation_policy.js';
@@ -595,7 +593,7 @@ export class LineCursor extends Marker {
       );
     }
   }
-  
+
   /**
    * Updates the current node to match the selection.
    *

@@ -11,9 +11,7 @@ import type {BlockSvg} from '../../block_svg.js';
 import {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
 import type {IRegistrable} from '../../interfaces/i_registrable.js';
-import type {Marker} from '../../keyboard_nav/marker.js';
 import type {BlockStyle, Theme} from '../../theme.js';
-import type {WorkspaceSvg} from '../../workspace_svg.js';
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
@@ -165,7 +163,7 @@ export class Renderer implements IRegistrable {
   protected makeDrawer_(block: BlockSvg, info: RenderInfo): Drawer {
     return new Drawer(block, info);
   }
-  
+
   /**
    * Create a new instance of a renderer path object.
    *

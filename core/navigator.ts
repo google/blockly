@@ -34,7 +34,7 @@ export class Navigator<T extends INavigable<T>> {
    * Returns the navigation ruleset associated with the given object instance's
    * class.
    *
-   * @param An object to retrieve a navigation ruleset for.
+   * @param key An object to retrieve a navigation ruleset for.
    * @returns The navigation ruleset of objects of the given object's class, or
    *     undefined if no ruleset has been registered for the object's class.
    */

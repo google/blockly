@@ -41,6 +41,7 @@ import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
+import {isAutoHideable} from './interfaces/i_autohideable.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
@@ -2765,7 +2766,7 @@ export class WorkspaceSvg
       if (flyout && nextTree === flyout) return;
       if (toolbox && nextTree === toolbox) return;
       if (toolbox) toolbox.clearSelection();
-      if (flyout && flyout instanceof Flyout) flyout.autoHide(false);
+      if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
     }
   }
 }

@@ -16,7 +16,6 @@ import {Renderer as BaseRenderer} from '../common/renderer.js';
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 
 /**
@@ -67,20 +66,6 @@ export class Renderer extends BaseRenderer {
     info: BaseRenderInfo,
   ): Drawer {
     return new Drawer(block, info as RenderInfo);
-  }
-
-  /**
-   * Create a new instance of the renderer's cursor drawer.
-   *
-   * @param workspace The workspace the cursor belongs to.
-   * @param marker The marker.
-   * @returns The object in charge of drawing the marker.
-   */
-  override makeMarkerDrawer(
-    workspace: WorkspaceSvg,
-    marker: Marker,
-  ): MarkerSvg {
-    return new MarkerSvg(workspace, this.getConstants(), marker);
   }
 
   /**

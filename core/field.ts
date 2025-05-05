@@ -1396,26 +1396,6 @@ export abstract class Field<T = any>
     this.markerSvg = markerSvg;
   }
 
-  /**
-   * Redraw any attached marker or cursor svgs if needed.
-   *
-   * @internal
-   */
-  updateMarkers_() {
-    const block = this.getSourceBlock();
-    if (!block) {
-      throw new UnattachedFieldError();
-    }
-    const workspace = block.workspace as WorkspaceSvg;
-    if (workspace.keyboardAccessibilityMode && this.cursorSvg) {
-      workspace.getCursor()!.draw();
-    }
-    if (workspace.keyboardAccessibilityMode && this.markerSvg) {
-      // TODO(#4592): Update all markers on the field.
-      workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
-  }
-
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     if (!this.fieldGroup_) {

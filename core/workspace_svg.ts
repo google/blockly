@@ -1340,10 +1340,6 @@ export class WorkspaceSvg
       .flatMap((block) => block.getDescendants(false))
       .filter((block) => block.isInsertionMarker())
       .forEach((block) => block.queueRender());
-
-    renderManagement
-      .finishQueuedRenders()
-      .then(() => void this.markerManager.updateMarkers());
   }
 
   /**

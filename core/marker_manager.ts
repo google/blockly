@@ -50,11 +50,6 @@ export class MarkerManager {
     if (this.markers.has(id)) {
       this.unregisterMarker(id);
     }
-    const drawer = this.workspace
-      .getRenderer()
-      .makeMarkerDrawer(this.workspace, marker);
-    marker.setDrawer(drawer);
-    this.setMarkerSvg(drawer.createDom());
     this.markers.set(id, marker);
   }
 
@@ -105,15 +100,7 @@ export class MarkerManager {
    * @param cursor The cursor used to move around this workspace.
    */
   setCursor(cursor: LineCursor) {
-    this.cursor?.getDrawer()?.dispose();
     this.cursor = cursor;
-    if (this.cursor) {
-      const drawer = this.workspace
-        .getRenderer()
-        .makeMarkerDrawer(this.workspace, this.cursor);
-      this.cursor.setDrawer(drawer);
-      this.setCursorSvg(drawer.createDom());
-    }
   }
 
   /**
@@ -154,17 +141,6 @@ export class MarkerManager {
       } else {
         this.workspace.getBlockCanvas()!.appendChild(markerSvg);
       }
-    }
-  }
-
-  /**
-   * Redraw the attached cursor SVG if needed.
-   *
-   * @internal
-   */
-  updateMarkers() {
-    if (this.workspace.keyboardAccessibilityMode && this.cursorSvg) {
-      this.workspace.getCursor()!.draw();
     }
   }
 

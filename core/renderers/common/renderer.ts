@@ -18,7 +18,6 @@ import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 
 /**
@@ -166,18 +165,7 @@ export class Renderer implements IRegistrable {
   protected makeDrawer_(block: BlockSvg, info: RenderInfo): Drawer {
     return new Drawer(block, info);
   }
-
-  /**
-   * Create a new instance of the renderer's marker drawer.
-   *
-   * @param workspace The workspace the marker belongs to.
-   * @param marker The marker.
-   * @returns The object in charge of drawing the marker.
-   */
-  makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker): MarkerSvg {
-    return new MarkerSvg(workspace, this.getConstants(), marker);
-  }
-
+  
   /**
    * Create a new instance of a renderer path object.
    *

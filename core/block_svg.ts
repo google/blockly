@@ -1679,7 +1679,6 @@ export class BlockSvg
     this.tightenChildrenEfficiently();
 
     dom.stopTextWidthCache();
-    this.updateMarkers_();
   }
 
   /**
@@ -1697,22 +1696,6 @@ export class BlockSvg
       if (conn) conn.tightenEfficiently();
     }
     if (this.nextConnection) this.nextConnection.tightenEfficiently();
-  }
-
-  /** Redraw any attached marker or cursor svgs if needed. */
-  protected updateMarkers_() {
-    if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
-      this.workspace.getCursor()!.draw();
-    }
-    if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
-      // TODO(#4592): Update all markers on the block.
-      this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
-    for (const input of this.inputList) {
-      for (const field of input.fieldRow) {
-        field.updateMarkers_();
-      }
-    }
   }
 
   /**

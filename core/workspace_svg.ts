@@ -52,6 +52,7 @@ import {
 } from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
@@ -99,7 +100,12 @@ const ZOOM_TO_FIT_MARGIN = 20;
  */
 export class WorkspaceSvg
   extends Workspace
-  implements IASTNodeLocationSvg, IContextMenu, IFocusableNode, IFocusableTree
+  implements
+    IASTNodeLocationSvg,
+    IContextMenu,
+    IFocusableNode,
+    IFocusableTree,
+    INavigable<WorkspaceSvg>
 {
   /**
    * A wrapper function called when a resize event occurs.
@@ -2775,6 +2781,24 @@ export class WorkspaceSvg
       if (toolbox) toolbox.clearSelection();
       if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
     }
+  }
+
+  /**
+   * Returns the class of this workspace.
+   *
+   * @returns WorkspaceSvg.
+   */
+  getClass() {
+    return WorkspaceSvg;
+  }
+
+  /**
+   * Returns whether or not this workspace is keyboard-navigable.
+   *
+   * @returns True.
+   */
+  isNavigable() {
+    return true;
   }
 
   /**

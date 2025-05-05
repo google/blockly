@@ -28,6 +28,7 @@ import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_w
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
 import {MarkerManager} from './marker_manager.js';
@@ -76,7 +77,8 @@ export abstract class Field<T = any>
     IKeyboardAccessible,
     IRegistrable,
     ISerializable,
-    IFocusableNode
+    IFocusableNode,
+    INavigable<Field<T>>
 {
   /**
    * To overwrite the default value which is set in **Field**, directly update
@@ -1452,6 +1454,30 @@ export abstract class Field<T = any>
       `Attempted to instantiate a field from the registry that hasn't defined a 'fromJson' method.`,
     );
   }
+
+  /**
+   * Returns whether or not this field is accessible by keyboard navigation.
+   *
+   * @returns True if this field is keyboard accessible, otherwise false.
+   */
+  isNavigable() {
+    return (
+      this.isClickable() &&
+      this.isCurrentlyEditable() &&
+      !(this.getSourceBlock()?.isSimpleReporter() && this.isFullBlockField()) &&
+      this.getParentInput().isVisible()
+    );
+  }
+
+  /**
+   * Returns this field's class.
+   *
+   * Used by keyboard navigation to look up the rules for navigating from this
+   * field. Must be implemented by subclasses.
+   *
+   * @returns This field's class.
+   */
+  abstract getClass(): new (...args: any) => Field<T>;
 }
 
 /**

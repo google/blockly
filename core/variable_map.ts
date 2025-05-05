@@ -27,7 +27,6 @@ import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {deleteVariable, getVariableUsesById} from './variables.js';
 import type {Workspace} from './workspace.js';
-import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a variable map.  This contains a dictionary data structure with

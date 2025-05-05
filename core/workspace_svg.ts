@@ -33,6 +33,7 @@ import {
   ContextMenuRegistry,
 } from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {Abstract as AbstractEvent} from './events/events.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Flyout} from './flyout_base.js';
@@ -88,7 +89,6 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
-import { Abstract as AbstractEvent } from './events/events.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;

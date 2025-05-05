@@ -22,7 +22,6 @@ import '../core/field_label.js';
 import {FieldVariable} from '../core/field_variable.js';
 import {Msg} from '../core/msg.js';
 import * as Variables from '../core/variables.js';
-import type {WorkspaceSvg} from '../core/workspace_svg.js';
 
 /**
  * A dictionary of the block definitions provided by this module.

@@ -32,7 +32,6 @@ import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
 import * as Variables from './variables.js';
-import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**

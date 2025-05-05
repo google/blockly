@@ -181,7 +181,6 @@ const deleteOptionCallbackFactory = function (block: VariableBlock) {
     if (variable) {
       Variables.deleteVariable(variable.getWorkspace(), variable, block);
     }
-    (block.workspace as WorkspaceSvg).refreshToolboxSelection();
   };
 };
 

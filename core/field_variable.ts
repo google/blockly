@@ -523,9 +523,6 @@ export class FieldVariable extends FieldDropdown {
         // Delete variable.
         const workspace = this.variable.getWorkspace();
         Variables.deleteVariable(workspace, this.variable, this.sourceBlock_);
-        if (workspace instanceof WorkspaceSvg) {
-          workspace.refreshToolboxSelection();
-        }
         return;
       }
     }

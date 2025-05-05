@@ -88,6 +88,7 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
+import { Abstract as AbstractEvent } from './events/events.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -398,6 +399,9 @@ export class WorkspaceSvg
       );
       this.addChangeListener(Procedures.mutatorOpenListener);
     }
+
+    // Set up callbacks to refresh the toolbox when variables change
+    this.addChangeListener(this.variableChangeCallback.bind(this));
 
     /** Object in charge of storing and updating the workspace theme. */
     this.themeManager_ = this.options.parentWorkspace
@@ -1358,6 +1362,24 @@ export class WorkspaceSvg
         this.highlightedBlocks.push(block);
       }
       block.setHighlighted(state);
+    }
+  }
+
+  /**
+   * Handles any necessary updates when a variable changes.
+   *
+   * @internal
+   */
+  variableChangeCallback(event: AbstractEvent) {
+    console.log(this);
+    switch (event.type) {
+      case EventType.VAR_CREATE:
+      case EventType.VAR_DELETE:
+      case EventType.VAR_RENAME:
+      case EventType.VAR_TYPE_CHANGE:
+        this.refreshToolboxSelection();
+        break;
+      default:
     }
   }
 

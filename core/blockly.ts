@@ -433,6 +433,8 @@ Names.prototype.populateProcedures = function (
 };
 // clang-format on
 
+export * from './interfaces/i_navigable.js';
+export * from './interfaces/i_navigation_policy.js';
 export * from './toast.js';
 
 // Re-export submodules that no longer declareLegacyNamespace.

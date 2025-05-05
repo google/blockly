@@ -314,7 +314,7 @@ export class WorkspaceSvg
   keyboardAccessibilityMode = false;
 
   /** True iff a keyboard-initiated move ("drag") is in progress. */
-  keyboardMoveInProgress = false;
+  keyboardMoveInProgress = false; // TODO(#8960): Delete this.
 
   /** The list of top-level bounded elements on the workspace. */
   private topBoundedElements: IBoundedElement[] = [];
@@ -986,6 +986,28 @@ export class WorkspaceSvg
   }
 
   /**
+   * Creates a new set of options from this workspace's options with just the
+   * values that are relevant to a flyout.
+   *
+   * @returns A subset of this workspace's options.
+   */
+  copyOptionsForFlyout(): Options {
+    return new Options({
+      'parentWorkspace': this,
+      'rtl': this.RTL,
+      'oneBasedIndex': this.options.oneBasedIndex,
+      'horizontalLayout': this.horizontalLayout,
+      'renderer': this.options.renderer,
+      'rendererOverrides': this.options.rendererOverrides,
+      'plugins': this.options.plugins,
+      'modalInputs': this.options.modalInputs,
+      'move': {
+        'scrollbars': true,
+      },
+    } as BlocklyOptions);
+  }
+
+  /**
    * Add a flyout element in an element with the given tag name.
    *
    * @param tagName What type of tag the flyout belongs in.
@@ -993,17 +1015,7 @@ export class WorkspaceSvg
    * @internal
    */
   addFlyout(tagName: string | Svg<SVGSVGElement> | Svg<SVGGElement>): Element {
-    const workspaceOptions = new Options({
-      'parentWorkspace': this,
-      'rtl': this.RTL,
-      'oneBasedIndex': this.options.oneBasedIndex,
-      'horizontalLayout': this.horizontalLayout,
-      'renderer': this.options.renderer,
-      'rendererOverrides': this.options.rendererOverrides,
-      'move': {
-        'scrollbars': true,
-      },
-    } as BlocklyOptions);
+    const workspaceOptions = this.copyOptionsForFlyout();
     workspaceOptions.toolboxPosition = this.options.toolboxPosition;
     if (this.horizontalLayout) {
       const HorizontalFlyout = registry.getClassFromOptions(
@@ -1471,6 +1483,8 @@ export class WorkspaceSvg
    * removed, at an time without notice and without being treated
    * as a breaking change.
    *
+   * TODO(#8960): Delete this.
+   *
    * @internal
    * @param inProgress Is a keyboard-initated move in progress?
    */
@@ -1494,6 +1508,8 @@ export class WorkspaceSvg
    */
   isDragging(): boolean {
     return (
+      // TODO(#8960): Query Mover.isMoving to see if move is in
+      // progress rather than relying on a status flag.
       this.keyboardMoveInProgress ||
       (this.currentGesture_ !== null && this.currentGesture_.isDragging())
     );
@@ -2403,7 +2419,17 @@ export class WorkspaceSvg
 
   /**
    * Look up the gesture that is tracking this touch stream on this workspace.
-   * May create a new gesture.
+   *
+   * Returns the gesture in progress, except:
+   *
+   * - If there is a keyboard-initiate move in progress then null will
+   *   be returned - after calling event.preventDefault() and
+   *   event.stopPropagation() to ensure the pointer event is ignored.
+   * - If there is a gesture in progress but event.type is
+   *   'pointerdown' then the in-progress gesture will be cancelled;
+   *   this will result in null being returned.
+   * - If no gesutre is in progress but event is a pointerdown then a
+   *   new gesture will be created and returned.
    *
    * @param e Pointer event.
    * @returns The gesture that is tracking this touch stream, or null if no
@@ -2411,28 +2437,29 @@ export class WorkspaceSvg
    * @internal
    */
   getGesture(e: PointerEvent): Gesture | null {
+    // TODO(#8960): Query Mover.isMoving to see if move is in progress
+    // rather than relying on .keyboardMoveInProgress status flag.
+    if (this.keyboardMoveInProgress) {
+      // Normally these would be called from Gesture.doStart.
+      e.preventDefault();
+      e.stopPropagation();
+      return null;
+    }
+
     const isStart = e.type === 'pointerdown';
-
-    const gesture = this.currentGesture_;
-    if (gesture) {
-      if (isStart && gesture.hasStarted()) {
-        console.warn('Tried to start the same gesture twice.');
-        // That's funny.  We must have missed a mouse up.
-        // Cancel it, rather than try to retrieve all of the state we need.
-        gesture.cancel();
-        return null;
-      }
-      return gesture;
+    if (isStart && this.currentGesture_?.hasStarted()) {
+      console.warn('Tried to start the same gesture twice.');
+      // That's funny.  We must have missed a mouse up.
+      // Cancel it, rather than try to retrieve all of the state we need.
+      this.currentGesture_.cancel(); // Sets this.currentGesture_ to null.
     }
-
-    // No gesture existed on this workspace, but this looks like the start of a
-    // new gesture.
-    if (isStart) {
+    if (!this.currentGesture_ && isStart) {
+      // No gesture existed on this workspace, but this looks like the
+      // start of a new gesture.
       this.currentGesture_ = new Gesture(e, this);
-      return this.currentGesture_;
     }
-    // No gesture existed and this event couldn't be the start of a new gesture.
-    return null;
+
+    return this.currentGesture_;
   }
 
   /**
@@ -2728,8 +2755,9 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.onTreeBlur. */
   onTreeBlur(nextTree: IFocusableTree | null): void {
-    // If the flyout loses focus, make sure to close it.
-    if (this.isFlyout && this.targetWorkspace) {
+    // If the flyout loses focus, make sure to close it unless focus is being
+    // lost to a different element on the page.
+    if (nextTree && this.isFlyout && this.targetWorkspace) {
       // Only hide the flyout if the flyout's workspace is losing focus and that
       // focus isn't returning to the flyout itself or the toolbox.
       const flyout = this.targetWorkspace.getFlyout();

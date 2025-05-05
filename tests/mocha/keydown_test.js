@@ -31,6 +31,7 @@ suite('Key Down', function () {
     defineStackBlock();
     const block = workspace.newBlock('stack_block');
     Blockly.common.setSelected(block);
+    sinon.stub(Blockly.getFocusManager(), 'getFocusedNode').returns(block);
     return block;
   }
 
@@ -131,12 +132,6 @@ suite('Key Down', function () {
           Blockly.utils.KeyCodes.META,
         ]),
       ],
-      [
-        'Alt C',
-        createKeyDownEvent(Blockly.utils.KeyCodes.C, [
-          Blockly.utils.KeyCodes.ALT,
-        ]),
-      ],
     ];
     // Copy a block.
     suite('Simple', function () {
@@ -222,12 +217,6 @@ suite('Key Down', function () {
           Blockly.utils.KeyCodes.META,
         ]),
       ],
-      [
-        'Alt Z',
-        createKeyDownEvent(Blockly.utils.KeyCodes.Z, [
-          Blockly.utils.KeyCodes.ALT,
-        ]),
-      ],
     ];
     // Undo.
     suite('Simple', function () {
@@ -285,13 +274,6 @@ suite('Key Down', function () {
         'Meta Shift Z',
         createKeyDownEvent(Blockly.utils.KeyCodes.Z, [
           Blockly.utils.KeyCodes.META,
-          Blockly.utils.KeyCodes.SHIFT,
-        ]),
-      ],
-      [
-        'Alt Shift Z',
-        createKeyDownEvent(Blockly.utils.KeyCodes.Z, [
-          Blockly.utils.KeyCodes.ALT,
           Blockly.utils.KeyCodes.SHIFT,
         ]),
       ],

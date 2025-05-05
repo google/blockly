@@ -8,12 +8,12 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
-import * as common from './common.js';
 import * as eventUtils from './events/utils.js';
 import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {isDeletable} from './interfaces/i_deletable.js';
 import {isDraggable} from './interfaces/i_draggable.js';
+import {isSelectable} from './interfaces/i_selectable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
@@ -43,9 +43,7 @@ export function registerEscape() {
       return !workspace.isReadOnly();
     },
     callback(workspace) {
-      // AnyDuringMigration because:  Property 'hideChaff' does not exist on
-      // type 'Workspace'.
-      (workspace as AnyDuringMigration).hideChaff();
+      workspace.hideChaff();
       return true;
     },
     keyCodes: [KeyCodes.ESC],
@@ -59,28 +57,28 @@ export function registerEscape() {
 export function registerDelete() {
   const deleteShortcut: KeyboardShortcut = {
     name: names.DELETE,
-    preconditionFn(workspace) {
-      const selected = common.getSelected();
+    preconditionFn(workspace, scope) {
+      const focused = scope.focusedNode;
       return (
         !workspace.isReadOnly() &&
-        selected != null &&
-        isDeletable(selected) &&
-        selected.isDeletable() &&
+        focused != null &&
+        isDeletable(focused) &&
+        focused.isDeletable() &&
         !Gesture.inProgress()
       );
     },
-    callback(workspace, e) {
+    callback(workspace, e, shortcut, scope) {
       // Delete or backspace.
       // Stop the browser from going back to the previous page.
       // Do this first to prevent an error in the delete code from resulting in
       // data loss.
       e.preventDefault();
-      const selected = common.getSelected();
-      if (selected instanceof BlockSvg) {
-        selected.checkAndDelete();
-      } else if (isDeletable(selected) && selected.isDeletable()) {
+      const focused = scope.focusedNode;
+      if (focused instanceof BlockSvg) {
+        focused.checkAndDelete();
+      } else if (isDeletable(focused) && focused.isDeletable()) {
         eventUtils.setGroup(true);
-        selected.dispose();
+        focused.dispose();
         eventUtils.setGroup(false);
       }
       return true;
@@ -101,46 +99,43 @@ export function registerCopy() {
   const ctrlC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [
     KeyCodes.CTRL,
   ]);
-  const altC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [
-    KeyCodes.ALT,
-  ]);
   const metaC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [
     KeyCodes.META,
   ]);
 
   const copyShortcut: KeyboardShortcut = {
     name: names.COPY,
-    preconditionFn(workspace) {
-      const selected = common.getSelected();
+    preconditionFn(workspace, scope) {
+      const focused = scope.focusedNode;
       return (
         !workspace.isReadOnly() &&
         !Gesture.inProgress() &&
-        selected != null &&
-        isDeletable(selected) &&
-        selected.isDeletable() &&
-        isDraggable(selected) &&
-        selected.isMovable() &&
-        isCopyable(selected)
+        focused != null &&
+        isDeletable(focused) &&
+        focused.isDeletable() &&
+        isDraggable(focused) &&
+        focused.isMovable() &&
+        isCopyable(focused)
       );
     },
-    callback(workspace, e) {
+    callback(workspace, e, shortcut, scope) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
       workspace.hideChaff();
-      const selected = common.getSelected();
-      if (!selected || !isCopyable(selected)) return false;
-      copyData = selected.toCopyData();
+      const focused = scope.focusedNode;
+      if (!focused || !isCopyable(focused)) return false;
+      copyData = focused.toCopyData();
       copyWorkspace =
-        selected.workspace instanceof WorkspaceSvg
-          ? selected.workspace
+        focused.workspace instanceof WorkspaceSvg
+          ? focused.workspace
           : workspace;
-      copyCoords = isDraggable(selected)
-        ? selected.getRelativeToSurfaceXY()
+      copyCoords = isDraggable(focused)
+        ? focused.getRelativeToSurfaceXY()
         : null;
       return !!copyData;
     },
-    keyCodes: [ctrlC, altC, metaC],
+    keyCodes: [ctrlC, metaC],
   };
   ShortcutRegistry.registry.register(copyShortcut);
 }
@@ -152,53 +147,51 @@ export function registerCut() {
   const ctrlX = ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [
     KeyCodes.CTRL,
   ]);
-  const altX = ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [
-    KeyCodes.ALT,
-  ]);
   const metaX = ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [
     KeyCodes.META,
   ]);
 
   const cutShortcut: KeyboardShortcut = {
     name: names.CUT,
-    preconditionFn(workspace) {
-      const selected = common.getSelected();
+    preconditionFn(workspace, scope) {
+      const focused = scope.focusedNode;
       return (
         !workspace.isReadOnly() &&
         !Gesture.inProgress() &&
-        selected != null &&
-        isDeletable(selected) &&
-        selected.isDeletable() &&
-        isDraggable(selected) &&
-        selected.isMovable() &&
-        !selected.workspace!.isFlyout
+        focused != null &&
+        isDeletable(focused) &&
+        focused.isDeletable() &&
+        isDraggable(focused) &&
+        focused.isMovable() &&
+        isSelectable(focused) &&
+        !focused.workspace.isFlyout
       );
     },
-    callback(workspace) {
-      const selected = common.getSelected();
+    callback(workspace, e, shortcut, scope) {
+      const focused = scope.focusedNode;
 
-      if (selected instanceof BlockSvg) {
-        copyData = selected.toCopyData();
+      if (focused instanceof BlockSvg) {
+        copyData = focused.toCopyData();
         copyWorkspace = workspace;
-        copyCoords = selected.getRelativeToSurfaceXY();
-        selected.checkAndDelete();
+        copyCoords = focused.getRelativeToSurfaceXY();
+        focused.checkAndDelete();
         return true;
       } else if (
-        isDeletable(selected) &&
-        selected.isDeletable() &&
-        isCopyable(selected)
+        isDeletable(focused) &&
+        focused.isDeletable() &&
+        isCopyable(focused)
       ) {
-        copyData = selected.toCopyData();
+        copyData = focused.toCopyData();
         copyWorkspace = workspace;
-        copyCoords = isDraggable(selected)
-          ? selected.getRelativeToSurfaceXY()
+        copyCoords = isDraggable(focused)
+          ? focused.getRelativeToSurfaceXY()
           : null;
-        selected.dispose();
+        focused.dispose();
         return true;
       }
       return false;
     },
-    keyCodes: [ctrlX, altX, metaX],
+    keyCodes: [ctrlX, metaX],
   };
 
   ShortcutRegistry.registry.register(cutShortcut);
@@ -210,9 +203,6 @@ export function registerCut() {
 export function registerPaste() {
   const ctrlV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [
     KeyCodes.CTRL,
-  ]);
-  const altV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [
-    KeyCodes.ALT,
   ]);
   const metaV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [
     KeyCodes.META,
@@ -246,7 +236,7 @@ export function registerPaste() {
       const centerCoords = new Coordinate(left + width / 2, top + height / 2);
       return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
     },
-    keyCodes: [ctrlV, altV, metaV],
+    keyCodes: [ctrlV, metaV],
   };
 
   ShortcutRegistry.registry.register(pasteShortcut);
@@ -258,9 +248,6 @@ export function registerPaste() {
 export function registerUndo() {
   const ctrlZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.CTRL,
-  ]);
-  const altZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.ALT,
   ]);
   const metaZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.META,
@@ -278,7 +265,7 @@ export function registerUndo() {
       e.preventDefault();
       return true;
     },
-    keyCodes: [ctrlZ, altZ, metaZ],
+    keyCodes: [ctrlZ, metaZ],
   };
   ShortcutRegistry.registry.register(undoShortcut);
 }
@@ -291,10 +278,6 @@ export function registerRedo() {
   const ctrlShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.SHIFT,
     KeyCodes.CTRL,
-  ]);
-  const altShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.SHIFT,
-    KeyCodes.ALT,
   ]);
   const metaShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
     KeyCodes.SHIFT,
@@ -317,7 +300,7 @@ export function registerRedo() {
       e.preventDefault();
       return true;
     },
-    keyCodes: [ctrlShiftZ, altShiftZ, metaShiftZ, ctrlY],
+    keyCodes: [ctrlShiftZ, metaShiftZ, ctrlY],
   };
   ShortcutRegistry.registry.register(redoShortcut);
 }

@@ -1881,6 +1881,62 @@ suite('Blocks', function () {
       });
     });
 
+    suite('Warning icons and collapsing', function () {
+      setup(function () {
+        this.workspace = Blockly.inject('blocklyDiv');
+        this.parentBlock = Blockly.serialization.blocks.append(
+          {
+            'type': 'statement_block',
+            'inputs': {
+              'STATEMENT': {
+                'block': {
+                  'type': 'statement_block',
+                },
+              },
+            },
+          },
+          this.workspace,
+        );
+        this.parentBlock.initSvg();
+        this.parentBlock.render();
+
+        this.childBlock = this.parentBlock.getInputTargetBlock('STATEMENT');
+        this.childBlock.initSvg();
+        this.childBlock.render();
+      });
+
+      teardown(function () {
+        workspaceTeardown.call(this, this.workspace);
+      });
+
+      test('Adding a warning to a child block does not affect the parent', function () {
+        const text = 'Warning Text';
+        this.childBlock.setWarningText(text);
+        const icon = this.parentBlock.getIcon(Blockly.icons.WarningIcon.TYPE);
+        assert.isUndefined(
+          icon,
+          "Setting a child block's warning should not add a warning to the parent",
+        );
+      });
+
+      test('Warnings are added and removed when collapsing a stack with warnings', function () {
+        const text = 'Warning Text';
+
+        this.childBlock.setWarningText(text);
+
+        this.parentBlock.setCollapsed(true);
+        let icon = this.parentBlock.getIcon(Blockly.icons.WarningIcon.TYPE);
+        assert.exists(icon?.getText(), 'Expected warning icon text to be set');
+
+        this.parentBlock.setCollapsed(false);
+        icon = this.parentBlock.getIcon(Blockly.icons.WarningIcon.TYPE);
+        assert.isUndefined(
+          icon,
+          'Warning should be removed from parent after expanding',
+        );
+      });
+    });
+
     suite('Bubbles and collapsing', function () {
       setup(function () {
         this.workspace = Blockly.inject('blocklyDiv');

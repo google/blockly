@@ -33,7 +33,7 @@ export class ButtonFlyoutInflater implements IFlyoutInflater {
     );
     button.show();
 
-    return new FlyoutItem(button, BUTTON_TYPE, true);
+    return new FlyoutItem(button, BUTTON_TYPE);
   }
 
   /**

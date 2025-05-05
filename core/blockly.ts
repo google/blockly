@@ -435,6 +435,7 @@ Names.prototype.populateProcedures = function (
 
 export * from './interfaces/i_navigable.js';
 export * from './interfaces/i_navigation_policy.js';
+export * from './navigator.js';
 export * from './toast.js';
 
 // Re-export submodules that no longer declareLegacyNamespace.

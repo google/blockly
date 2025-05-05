@@ -58,6 +58,7 @@ import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
+import {Navigator} from './navigator.js';
 import {Options} from './options.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
@@ -334,6 +335,12 @@ export class WorkspaceSvg
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   svgBubbleCanvas_!: SVGElement;
   zoomControls_: ZoomControls | null = null;
+
+  /**
+   * Navigator that handles moving focus between items in this workspace in
+   * response to keyboard navigation commands.
+   */
+  private navigator = new Navigator();
 
   /**
    * @param options Dictionary of options.
@@ -2768,6 +2775,16 @@ export class WorkspaceSvg
       if (toolbox) toolbox.clearSelection();
       if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
     }
+  }
+
+  /**
+   * Returns an object responsible for coordinating movement of focus between
+   * items on this workspace in response to keyboard navigation commands.
+   *
+   * @returns This workspace's Navigator instance.
+   */
+  getNavigator() {
+    return this.navigator;
   }
 }
 

@@ -1370,7 +1370,7 @@ export class WorkspaceSvg
    *
    * @internal
    */
-  variableChangeCallback(event: AbstractEvent) {
+  private variableChangeCallback(event: AbstractEvent) {
     switch (event.type) {
       case EventType.VAR_CREATE:
       case EventType.VAR_DELETE:

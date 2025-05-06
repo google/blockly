@@ -72,7 +72,7 @@ class FocusableTreeImpl {
   onTreeBlur() {}
 }
 
-suite.only('FocusManager', function () {
+suite('FocusManager', function () {
   const ACTIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
   const PASSIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
 

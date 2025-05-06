@@ -52,6 +52,10 @@ export interface IFocusableTree {
    *    bypass this method.
    * 3. The default behavior (i.e. returning null here) involves either
    *    restoring the previous node (previousNode) or focusing the tree's root.
+   * 4. The provided node may sometimes no longer be valid, such as in the case
+   *    an attempt is made to focus a node that has been recently removed from
+   *    its parent tree. Implementations can check for the validity of the node
+   *    in order to specialize the node to which focus should fall back.
    *
    * This method is largely intended to provide tree implementations with the
    * means of specifying a better default node than their root.

@@ -38,6 +38,7 @@ class FocusableTreeImpl {
     this.nestedTrees = nestedTrees;
     this.idToNodeMap = {};
     this.rootNode = this.addNode(rootElement);
+    this.fallbackNode = null;
   }
 
   addNode(element) {
@@ -46,12 +47,16 @@ class FocusableTreeImpl {
     return node;
   }
 
+  removeNode(node) {
+    delete this.idToNodeMap[node.getFocusableElement().id];
+  }
+
   getRootFocusableNode() {
     return this.rootNode;
   }
 
   getRestoredFocusableNode() {
-    return null;
+    return this.fallbackNode;
   }
 
   getNestedTrees() {
@@ -384,6 +389,31 @@ suite('FocusManager', function () {
 
       // There should be exactly 1 focus event fired from focusNode().
       assert.strictEqual(focusCount, 1);
+    });
+
+    test('for orphaned node returns tree root by default', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.testFocusableTree1.removeNode(this.testFocusableTree1Node1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      // Focusing an invalid node should fall back to the tree root when it has no restoration
+      // fallback node.
+      const currentNode = this.focusManager.getFocusedNode();
+      const treeRoot = this.testFocusableTree1.getRootFocusableNode();
+      assert.strictEqual(currentNode, treeRoot);
+    });
+
+    test('for orphaned node returns specified fallback node', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.testFocusableTree1.fallbackNode = this.testFocusableTree1Node2;
+      this.testFocusableTree1.removeNode(this.testFocusableTree1Node1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      // Focusing an invalid node should fall back to the restored fallback.
+      const currentNode = this.focusManager.getFocusedNode();
+      assert.strictEqual(currentNode, this.testFocusableTree1Node2);
     });
   });
 

@@ -227,7 +227,7 @@ export class FocusManager {
   }
 
   /**
-   * Focuses DOM input on the selected node, and marks it as actively focused.
+   * Focuses DOM input on the specified node, and marks it as actively focused.
    *
    * Any previously focused node will be updated to be passively highlighted (if
    * it's in a different focusable tree) or blurred (if it's in the same one).
@@ -244,17 +244,20 @@ export class FocusManager {
     }
 
     // Safety check for ensuring focusNode() doesn't get called for a node that
-    // isn't actually hooked up to its parent tree correctly (since this can
-    // cause weird inconsistencies).
+    // isn't actually hooked up to its parent tree correctly. This usually
+    // happens when calls to focusNode() interleave with asynchronous clean-up
+    // operations (which can happen due to ephemeral focus and in other cases).
+    // Fall back to a reasonable default since there's no valid node to focus.
     const matchedNode = FocusableTreeTraverser.findFocusableNodeFor(
       focusableNode.getFocusableElement(),
       nextTree,
     );
+    const prevNodeNextTree = FocusableTreeTraverser.findFocusedNode(nextTree);
+    let nodeToFocus = focusableNode;
     if (matchedNode !== focusableNode) {
-      throw Error(
-        `Attempting to focus node which isn't recognized by its parent tree: ` +
-          `${focusableNode}.`,
-      );
+      const nodeToRestore = nextTree.getRestoredFocusableNode(prevNodeNextTree);
+      const rootFallback = nextTree.getRootFocusableNode();
+      nodeToFocus = nodeToRestore ?? prevNodeNextTree ?? rootFallback;
     }
 
     const prevNode = this.focusedNode;
@@ -264,7 +267,6 @@ export class FocusManager {
     }
 
     // If there's a focused node in the new node's tree, ensure it's reset.
-    const prevNodeNextTree = FocusableTreeTraverser.findFocusedNode(nextTree);
     const nextTreeRoot = nextTree.getRootFocusableNode();
     if (prevNodeNextTree) {
       this.removeHighlight(prevNodeNextTree);
@@ -272,19 +274,19 @@ export class FocusManager {
     // For caution, ensure that the root is always reset since getFocusedNode()
     // is expected to return null if the root was highlighted, if the root is
     // not the node now being set to active.
-    if (nextTreeRoot !== focusableNode) {
+    if (nextTreeRoot !== nodeToFocus) {
       this.removeHighlight(nextTreeRoot);
     }
 
     if (!this.currentlyHoldsEphemeralFocus) {
       // Only change the actively focused node if ephemeral state isn't held.
-      this.activelyFocusNode(focusableNode, prevTree ?? null);
+      this.activelyFocusNode(nodeToFocus, prevTree ?? null);
     }
-    this.updateFocusedNode(focusableNode);
+    this.updateFocusedNode(nodeToFocus);
   }
 
   /**
-   * Ephemerally captures focus for a selected element until the returned lambda
+   * Ephemerally captures focus for a specific element until the returned lambda
    * is called. This is expected to be especially useful for ephemeral UI flows
    * like dialogs.
    *

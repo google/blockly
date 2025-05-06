@@ -31,6 +31,7 @@ import * as svgMath from '../utils/svg_math.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentView} from './comment_view.js';
 import {WorkspaceComment} from './workspace_comment.js';
+import { getFocusManager } from '../focus_manager.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment
@@ -225,7 +226,7 @@ export class RenderedWorkspaceComment
         gesture.handleCommentStart(e, this);
         this.workspace.getLayerManager()?.append(this, layers.BLOCK);
       }
-      common.setSelected(this);
+      getFocusManager().focusNode(this);
     }
   }
 

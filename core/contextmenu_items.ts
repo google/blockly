@@ -19,6 +19,7 @@ import {
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
+import { getFocusManager } from './focus_manager.js';
 import {CommentIcon} from './icons/comment_icon.js';
 import {Msg} from './msg.js';
 import {StatementInput} from './renderers/zelos/zelos.js';
@@ -631,7 +632,7 @@ export function registerCommentCreate() {
           workspace,
         ),
       );
-      common.setSelected(comment);
+      getFocusManager().focusNode(comment);
       eventUtils.setGroup(false);
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,

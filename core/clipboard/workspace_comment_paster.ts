@@ -8,6 +8,7 @@ import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.j
 import * as common from '../common.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import { getFocusManager } from '../focus_manager.js';
 import {ICopyData} from '../interfaces/i_copyable.js';
 import {IPaster} from '../interfaces/i_paster.js';
 import * as commentSerialiation from '../serialization/workspace_comments.js';
@@ -49,7 +50,7 @@ export class WorkspaceCommentPaster
     if (eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(EventType.COMMENT_CREATE))(comment));
     }
-    common.setSelected(comment);
+    getFocusManager().focusNode(comment);
     return comment;
   }
 }

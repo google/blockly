@@ -12,6 +12,7 @@
 // Former goog.module ID: Blockly.WorkspaceDragger
 
 import * as common from './common.js';
+import { getFocusManager } from './focus_manager.js';
 import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -57,9 +58,8 @@ export class WorkspaceDragger {
    * @internal
    */
   startDrag() {
-    if (common.getSelected()) {
-      common.getSelected()!.unselect();
-    }
+    // Focus the workspace root to indicate that it's now selected for dragging.
+    getFocusManager().focusNode(this.workspace);
   }
 
   /**

@@ -265,19 +265,11 @@ export class BlockSvg
 
   /** Selects this block. Highlights the block visually. */
   select() {
-    if (this.isShadow()) {
-      this.getParent()?.select();
-      return;
-    }
     this.addSelect();
   }
 
   /** Unselects this block. Unhighlights the block visually. */
   unselect() {
-    if (this.isShadow()) {
-      this.getParent()?.unselect();
-      return;
-    }
     this.removeSelect();
   }
 
@@ -861,25 +853,6 @@ export class BlockSvg
       blockAnimations.disposeUiEffect(this);
     }
 
-    // Selecting a shadow block highlights an ancestor block, but that highlight
-    // should be removed if the shadow block will be deleted. So, before
-    // deleting blocks and severing the connections between them, check whether
-    // doing so would delete a selected block and make sure that any associated
-    // parent is updated.
-    const selection = common.getSelected();
-    if (selection instanceof Block) {
-      let selectionAncestor: Block | null = selection;
-      while (selectionAncestor !== null) {
-        if (selectionAncestor === this) {
-          // The block to be deleted contains the selected block, so remove any
-          // selection highlight associated with the selected block before
-          // deleting them.
-          selection.unselect();
-        }
-        selectionAncestor = selectionAncestor.getParent();
-      }
-    }
-
     super.dispose(!!healStack);
     dom.removeNode(this.svgGroup);
   }
@@ -893,7 +866,6 @@ export class BlockSvg
     super.disposeInternal();
 
     if (common.getSelected() === this) {
-      this.unselect();
       this.workspace.cancelCurrentGesture();
     }
 

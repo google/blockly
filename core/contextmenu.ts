@@ -17,6 +17,7 @@ import type {
 } from './contextmenu_registry.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
+import { getFocusManager } from './focus_manager.js';
 import {Menu} from './menu.js';
 import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
@@ -289,7 +290,7 @@ export function callbackFactory(
     if (eventUtils.isEnabled() && !newBlock.isShadow()) {
       eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(newBlock));
     }
-    common.setSelected(newBlock);
+    getFocusManager().focusNode(newBlock);
     return newBlock;
   };
 }

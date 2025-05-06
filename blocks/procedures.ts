@@ -27,6 +27,7 @@ import {FieldCheckbox} from '../core/field_checkbox.js';
 import {FieldLabel} from '../core/field_label.js';
 import * as fieldRegistry from '../core/field_registry.js';
 import {FieldTextInput} from '../core/field_textinput.js';
+import { getFocusManager } from '../core/focus_manager.js';
 import '../core/icons/comment_icon.js';
 import {MutatorIcon as Mutator} from '../core/icons/mutator_icon.js';
 import '../core/icons/warning_icon.js';
@@ -1178,7 +1179,7 @@ const PROCEDURE_CALL_COMMON = {
         const def = Procedures.getDefinition(name, workspace);
         if (def) {
           (workspace as WorkspaceSvg).centerOnBlock(def.id);
-          common.setSelected(def as BlockSvg);
+          getFocusManager().focusNode(def as BlockSvg);
         }
       },
     });

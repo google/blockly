@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IFocusableTree, ISelectable} from '../blockly.js';
+import {IFocusableTree, ISelectable, getFocusManager} from '../blockly.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
@@ -212,7 +212,7 @@ export abstract class Bubble implements IBubble, ISelectable {
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
     this.bringToFront();
-    common.setSelected(this);
+    getFocusManager().focusNode(this);
   }
 
   /** Positions the bubble relative to its anchor. Does not render its tail. */

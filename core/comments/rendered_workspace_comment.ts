@@ -267,11 +267,13 @@ export class RenderedWorkspaceComment
   /** Visually highlights the comment. */
   select(): void {
     dom.addClass(this.getSvgRoot(), 'blocklySelected');
+    common.fireSelectedEvent(this);
   }
 
   /** Visually unhighlights the comment. */
   unselect(): void {
     dom.removeClass(this.getSvgRoot(), 'blocklySelected');
+    common.fireSelectedEvent(null);
   }
 
   /**
@@ -339,13 +341,11 @@ export class RenderedWorkspaceComment
 
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
-    common.setSelected(this);
+    this.select();
   }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
-    if (common.getSelected() === this) {
-      common.setSelected(null);
-    }
+    this.unselect();
   }
 }

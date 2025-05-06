@@ -95,25 +95,36 @@ export function getSelected(): ISelectable | null {
 }
 
 /**
- * Sets the current selection. Note that this does not change current focus as
- * this is expected to be called directly by ISelectable implementations.
+ * Sets the current selection.
  *
- * @param newSelection The newly selected block.
+ * To clear the current selection, select another ISelectable or focus a
+ * non-selectable (like the workspace root node).
+ *
+ * @param newSelection The new selection to make.
  * @internal
  */
-export function setSelected(newSelection: ISelectable | null) {
-  const selected = getSelected();
-  if (selected === newSelection) return;
+export function setSelected(newSelection: ISelectable) {
+  getFocusManager().focusNode(newSelection);
+}
 
+/**
+ * Fires a selection change event based on the new selection.
+ *
+ * This is only expected to be called by ISelectable implementations and should
+ * always be called before updating the current selection state. It does not
+ * change focus or selection state.
+ *
+ * @param newSelection The new selection.
+ * @internal
+ */
+export function fireSelectedEvent(newSelection: ISelectable | null) {
+  const selected = getSelected();
   const event = new (eventUtils.get(EventType.SELECTED))(
     selected?.id ?? null,
     newSelection?.id ?? null,
     newSelection?.workspace.id ?? selected?.workspace.id ?? '',
   );
   eventUtils.fire(event);
-
-  selected?.unselect();
-  newSelection?.select();
 }
 
 /**

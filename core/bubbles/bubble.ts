@@ -647,10 +647,12 @@ export abstract class Bubble implements IBubble, ISelectable {
 
   select(): void {
     // Bubbles don't have any visual for being selected.
+    common.fireSelectedEvent(this);
   }
 
   unselect(): void {
     // Bubbles don't have any visual for being selected.
+    common.fireSelectedEvent(null);
   }
 
   /** See IFocusableNode.getFocusableElement. */
@@ -665,13 +667,11 @@ export abstract class Bubble implements IBubble, ISelectable {
 
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
-    common.setSelected(this);
+    this.select();
   }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
-    if (common.getSelected() === this) {
-      common.setSelected(null);
-    }
+    this.unselect();
   }
 }

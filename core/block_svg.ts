@@ -266,11 +266,13 @@ export class BlockSvg
   /** Selects this block. Highlights the block visually. */
   select() {
     this.addSelect();
+    common.fireSelectedEvent(this);
   }
 
   /** Unselects this block. Unhighlights the block visually. */
   unselect() {
     this.removeSelect();
+    common.fireSelectedEvent(null);
   }
 
   /**
@@ -1849,13 +1851,11 @@ export class BlockSvg
 
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
-    common.setSelected(this);
+    this.select();
   }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
-    if (common.getSelected() === this) {
-      common.setSelected(null);
-    }
+    this.unselect();
   }
 }

@@ -9,7 +9,6 @@
 import type {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
-import * as common from './common.js';
 import {MANUALLY_DISABLED} from './constants.js';
 import {
   ContextMenuRegistry,
@@ -19,7 +18,7 @@ import {
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
-import { getFocusManager } from './focus_manager.js';
+import {getFocusManager} from './focus_manager.js';
 import {CommentIcon} from './icons/comment_icon.js';
 import {Msg} from './msg.js';
 import {StatementInput} from './renderers/zelos/zelos.js';

@@ -8,7 +8,7 @@
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
-import { IBubble } from '../blockly.js';
+import {IBubble} from '../blockly.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';

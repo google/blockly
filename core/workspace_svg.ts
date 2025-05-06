@@ -20,6 +20,7 @@ import './events/events_viewport.js';
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
+import {hasBubble} from './blockly.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
@@ -89,7 +90,6 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
-import { hasBubble } from './blockly.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -2769,19 +2769,23 @@ export class WorkspaceSvg
     }
 
     // Search for a specific block.
-    const block = this.getBlockById(id) as IFocusableNode
+    const block = this.getBlockById(id) as IFocusableNode;
     if (block) return block;
 
     // Search for a workspace comment (semi-expensive).
     for (const comment of this.getTopComments()) {
-      if (comment instanceof RenderedWorkspaceComment
-        && comment.getFocusableElement().id === id) {
+      if (
+        comment instanceof RenderedWorkspaceComment &&
+        comment.getFocusableElement().id === id
+      ) {
         return comment;
       }
     }
 
     // Search for icons and bubbles (which requires an expensive getAllBlocks).
-    const icons = this.getAllBlocks().map((block) => block.getIcons()).flat();
+    const icons = this.getAllBlocks()
+      .map((block) => block.getIcons())
+      .flat();
     for (const icon of icons) {
       if (icon.getFocusableElement().id === id) return icon;
       if (hasBubble(icon)) {

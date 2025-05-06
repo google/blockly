@@ -7,7 +7,12 @@
 // Former goog.module ID: Blockly.common
 
 import type {Block} from './block.js';
-import {BlockSvg, ISelectable, getFocusManager, isSelectable} from './blockly.js';
+import {
+  BlockSvg,
+  ISelectable,
+  getFocusManager,
+  isSelectable,
+} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';

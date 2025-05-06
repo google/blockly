@@ -9,7 +9,7 @@
 import type {Coordinate} from '../utils/coordinate.js';
 import type {IContextMenu} from './i_contextmenu.js';
 import type {IDraggable} from './i_draggable.js';
-import { IFocusableNode } from './i_focusable_node.js';
+import {IFocusableNode} from './i_focusable_node.js';
 
 /**
  * A bubble interface.

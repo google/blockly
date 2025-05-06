@@ -7,8 +7,7 @@
 import type {IconType} from '../icons/icon_types.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {Size} from '../utils/size.js';
-import { IBubble } from './i_bubble.js';
-import { IFocusableNode, isFocusableNode } from './i_focusable_node.js';
+import {IFocusableNode, isFocusableNode} from './i_focusable_node.js';
 
 export interface IIcon extends IFocusableNode {
   /**

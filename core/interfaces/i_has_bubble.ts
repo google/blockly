@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { IBubble } from "./i_bubble";
+import {IBubble} from './i_bubble';
 
 export interface IHasBubble {
   /** @returns True if the bubble is currently open, false otherwise. */

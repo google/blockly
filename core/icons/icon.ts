@@ -7,18 +7,17 @@
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as browserEvents from '../browser_events.js';
-import {hasBubble} from '../interfaces/i_has_bubble.js';
 import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import {hasBubble} from '../interfaces/i_has_bubble.js';
 import type {IIcon} from '../interfaces/i_icon.js';
 import * as tooltip from '../tooltip.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as idGenerator from '../utils/idgenerator.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {IconType} from './icon_types.js';
-import * as idGenerator from '../utils/idgenerator.js';
-import type { WorkspaceSvg } from '../workspace_svg.js';
-import { IBubble } from '../blockly.js';
 
 /**
  * The abstract icon class. Icons are visual elements that live in the top-start
@@ -58,9 +57,11 @@ export abstract class Icon implements IIcon {
     if (this.svgRoot) return; // The icon has already been initialized.
 
     const svgBlock = this.sourceBlock as BlockSvg;
-    this.svgRoot = dom.createSvgElement(
-      Svg.G, { 'class': 'blocklyIconGroup', 'tabindex': '-1', 'id': this.id },
-    );
+    this.svgRoot = dom.createSvgElement(Svg.G, {
+      'class': 'blocklyIconGroup',
+      'tabindex': '-1',
+      'id': this.id,
+    });
     svgBlock.getSvgRoot().appendChild(this.svgRoot);
     this.updateSvgRootOffset();
     browserEvents.conditionalBind(

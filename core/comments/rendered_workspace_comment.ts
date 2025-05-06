@@ -13,12 +13,13 @@ import * as common from '../common.js';
 import * as contextMenu from '../contextmenu.js';
 import {ContextMenuRegistry} from '../contextmenu_registry.js';
 import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
+import {getFocusManager} from '../focus_manager.js';
 import {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import {IContextMenu} from '../interfaces/i_contextmenu.js';
-import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {ICopyable} from '../interfaces/i_copyable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
+import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import * as layers from '../layers.js';
@@ -31,7 +32,6 @@ import * as svgMath from '../utils/svg_math.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentView} from './comment_view.js';
 import {WorkspaceComment} from './workspace_comment.js';
-import { getFocusManager } from '../focus_manager.js';
 
 export class RenderedWorkspaceComment
   extends WorkspaceComment

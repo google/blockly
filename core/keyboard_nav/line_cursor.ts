@@ -15,7 +15,6 @@
 
 import type {Block} from '../block.js';
 import {BlockSvg} from '../block_svg.js';
-import * as common from '../common.js';
 import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';

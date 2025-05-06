@@ -21,7 +21,9 @@ export class WorkspaceNavigationPolicy
    * @returns The top block of the first block stack, if any.
    */
   getFirstChild(current: WorkspaceSvg): INavigable<unknown> | null {
-    const block = current.getTopBlocks(true)[0];
+    const blocks = current.getTopBlocks(true);
+    if (!blocks.length) return null;
+    const block = blocks[0];
     let topConnection = block.outputConnection;
     if (
       !topConnection ||

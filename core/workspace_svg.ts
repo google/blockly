@@ -33,6 +33,7 @@ import {
   ContextMenuRegistry,
 } from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {Abstract as AbstractEvent} from './events/events.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Flyout} from './flyout_base.js';
@@ -398,6 +399,9 @@ export class WorkspaceSvg
       );
       this.addChangeListener(Procedures.mutatorOpenListener);
     }
+
+    // Set up callbacks to refresh the toolbox when variables change
+    this.addChangeListener(this.variableChangeCallback.bind(this));
 
     /** Object in charge of storing and updating the workspace theme. */
     this.themeManager_ = this.options.parentWorkspace
@@ -1358,6 +1362,23 @@ export class WorkspaceSvg
         this.highlightedBlocks.push(block);
       }
       block.setHighlighted(state);
+    }
+  }
+
+  /**
+   * Handles any necessary updates when a variable changes.
+   *
+   * @internal
+   */
+  variableChangeCallback(event: AbstractEvent) {
+    switch (event.type) {
+      case EventType.VAR_CREATE:
+      case EventType.VAR_DELETE:
+      case EventType.VAR_RENAME:
+      case EventType.VAR_TYPE_CHANGE:
+        this.refreshToolboxSelection();
+        break;
+      default:
     }
   }
 

@@ -337,8 +337,14 @@ export class RenderedWorkspaceComment
   }
 
   /** See IFocusableNode.onNodeFocus. */
-  onNodeFocus(): void {}
+  onNodeFocus(): void {
+    common.setSelected(this);
+  }
 
   /** See IFocusableNode.onNodeBlur. */
-  onNodeBlur(): void {}
+  onNodeBlur(): void {
+    if (common.getSelected() === this) {
+      common.setSelected(null);
+    }
+  }
 }

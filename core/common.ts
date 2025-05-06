@@ -7,7 +7,7 @@
 // Former goog.module ID: Blockly.common
 
 import type {Block} from './block.js';
-import {ISelectable} from './blockly.js';
+import {ISelectable, getFocusManager, isSelectable} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';
@@ -86,26 +86,23 @@ export function setMainWorkspace(workspace: Workspace) {
 }
 
 /**
- * Currently selected copyable object.
- */
-let selected: ISelectable | null = null;
-
-/**
- * Returns the currently selected copyable object.
+ * Returns the current selection.
  */
 export function getSelected(): ISelectable | null {
-  return selected;
+  const focused = getFocusManager().getFocusedNode();
+  if (focused && isSelectable(focused)) return focused;
+  return null;
 }
 
 /**
- * Sets the currently selected block. This function does not visually mark the
- * block as selected or fire the required events. If you wish to
- * programmatically select a block, use `BlockSvg#select`.
+ * Sets the current selection. Note that this does not change current focus as
+ * this is expected to be called directly by ISelectable implementations.
  *
  * @param newSelection The newly selected block.
  * @internal
  */
 export function setSelected(newSelection: ISelectable | null) {
+  const selected = getSelected();
   if (selected === newSelection) return;
 
   const event = new (eventUtils.get(EventType.SELECTED))(
@@ -116,8 +113,7 @@ export function setSelected(newSelection: ISelectable | null) {
   eventUtils.fire(event);
 
   selected?.unselect();
-  selected = newSelection;
-  selected?.select();
+  newSelection?.select();
 }
 
 /**

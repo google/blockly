@@ -16,7 +16,7 @@
 import './events/events_click.js';
 
 import * as blockAnimations from './block_animations.js';
-import type {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import {RenderedWorkspaceComment} from './comments.js';
 import * as common from './common.js';
@@ -346,7 +346,7 @@ export class Gesture {
     // to return the new block.
     if (this.flyout) this.updateIsDraggingFromFlyout();
 
-    const selected = common.getSelected();
+    const selected = common.getSelectedBlock();
     if (selected && isDraggable(selected) && selected.isMovable()) {
       this.dragging = true;
       this.dragger = this.createDragger(selected, this.startWorkspace_);

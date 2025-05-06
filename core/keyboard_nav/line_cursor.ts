@@ -514,12 +514,7 @@ export class LineCursor extends Marker {
    * @returns The current field, connection, or block the cursor is on.
    */
   override getCurNode(): ASTNode | null {
-    if (!this.updateCurNodeFromFocus()) {
-      // Fall back to selection if focus fails to sync. This can happen for
-      // non-focusable nodes or for cases when focus may not properly propagate
-      // (such as for mouse clicks).
-      this.updateCurNodeFromSelection();
-    }
+    this.updateCurNodeFromFocus();
     return super.getCurNode();
   }
 
@@ -701,52 +696,9 @@ export class LineCursor extends Marker {
   }
 
   /**
-   * Updates the current node to match the selection.
-   *
-   * Clears the current node if it's on a block but the selection is null.
-   * Sets the node to a block if selected for our workspace.
-   * For shadow blocks selections the parent is used by default (unless we're
-   * already on the shadow block via keyboard) as that's where the visual
-   * selection is.
-   */
-  private updateCurNodeFromSelection() {
-    const curNode = super.getCurNode();
-    const selected = common.getSelected();
-
-    if (selected === null && curNode?.getType() === ASTNode.types.BLOCK) {
-      this.setCurNode(null);
-      return;
-    }
-    if (selected?.workspace !== this.workspace) {
-      return;
-    }
-    if (selected instanceof BlockSvg) {
-      let block: BlockSvg | null = selected;
-      if (selected.isShadow()) {
-        // OK if the current node is on the parent OR the shadow block.
-        // The former happens for clicks, the latter for keyboard nav.
-        if (
-          curNode &&
-          (curNode.getLocation() === block ||
-            curNode.getLocation() === block.getParent())
-        ) {
-          return;
-        }
-        block = block.getParent();
-      }
-      if (block) {
-        this.setCurNode(ASTNode.createBlockNode(block));
-      }
-    }
-  }
-
-  /**
    * Updates the current node to match what's currently focused.
-   *
-   * @returns Whether the current node has been set successfully from the
-   *     current focused node.
    */
-  private updateCurNodeFromFocus(): boolean {
+  private updateCurNodeFromFocus() {
     const focused = getFocusManager().getFocusedNode();
 
     if (focused instanceof BlockSvg) {
@@ -759,11 +711,12 @@ export class LineCursor extends Marker {
         } else {
           this.setCurNode(ASTNode.createBlockNode(block));
         }
-        return true;
       }
     }
 
-    return false;
+    // Something else is focused. Clear the cursor since it will be restored
+    // once focus is returned.
+    this.setCurNode(null);
   }
 
   /**

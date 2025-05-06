@@ -7,7 +7,7 @@
 // Former goog.module ID: Blockly.common
 
 import type {Block} from './block.js';
-import {ISelectable, getFocusManager, isSelectable} from './blockly.js';
+import {BlockSvg, ISelectable, getFocusManager, isSelectable} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';
@@ -92,6 +92,19 @@ export function getSelected(): ISelectable | null {
   const focused = getFocusManager().getFocusedNode();
   if (focused && isSelectable(focused)) return focused;
   return null;
+}
+
+/**
+ * @internal
+ */
+export function getSelectedBlock(): BlockSvg | null {
+  const selected = getSelected();
+  if (!selected || !(selected instanceof BlockSvg)) return null;
+  let nonShadow: BlockSvg | null = selected;
+  while (nonShadow && nonShadow instanceof BlockSvg && nonShadow.isShadow()) {
+    nonShadow = nonShadow.getParent();
+  }
+  return nonShadow;
 }
 
 /**

@@ -867,7 +867,7 @@ export class BlockSvg
     this.disposing = true;
     super.disposeInternal();
 
-    if (common.getSelected() === this) {
+    if (getFocusManager().getFocusedNode() === this) {
       this.workspace.cancelCurrentGesture();
     }
 

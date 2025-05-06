@@ -197,7 +197,7 @@ export class RenderedConnection
       ? inferiorRootBlock
       : superiorRootBlock;
     // Raise it to the top for extra visibility.
-    const selected = common.getSelected() === dynamicRootBlock;
+    const selected = common.getSelectedBlock() === dynamicRootBlock;
     if (!selected) dynamicRootBlock.addSelect();
     if (dynamicRootBlock.RTL) {
       offsetX = -offsetX;
@@ -564,7 +564,7 @@ export class RenderedConnection
     // order in the DOM, this works around an issue where the selection outline
     // path could be partially obscured by a new block inserted after it in the
     // DOM.
-    const selection = common.getSelected();
+    const selection = common.getSelectedBlock();
     const selectedBlock =
       (selection === parentBlock && parentBlock) ||
       (selection === childBlock && childBlock);

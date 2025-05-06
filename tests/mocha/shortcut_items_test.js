@@ -12,7 +12,7 @@ import {
 } from './test_helpers/setup_teardown.js';
 import {createKeyDownEvent} from './test_helpers/user_input.js';
 
-suite('Key Down', function () {
+suite('Keyboard Shortcut Items', function () {
   setup(function () {
     sharedTestSetup.call(this);
     this.workspace = Blockly.inject('blocklyDiv', {});
@@ -33,6 +33,18 @@ suite('Key Down', function () {
     Blockly.common.setSelected(block);
     sinon.stub(Blockly.getFocusManager(), 'getFocusedNode').returns(block);
     return block;
+  }
+
+  /**
+   * Creates a block and sets its nextConnection as the focused node.
+   * @param {Blockly.Workspace} workspace The workspace to create a new block on.
+   */
+  function setSelectedConnection(workspace) {
+    defineStackBlock();
+    const block = workspace.newBlock('stack_block');
+    sinon
+      .stub(Blockly.getFocusManager(), 'getFocusedNode')
+      .returns(block.nextConnection);
   }
 
   /**
@@ -73,9 +85,14 @@ suite('Key Down', function () {
       this.injectionDiv.dispatchEvent(this.event);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
+    test('Called when connection is focused', function () {
+      setSelectedConnection(this.workspace);
+      this.injectionDiv.dispatchEvent(this.event);
+      sinon.assert.calledOnce(this.hideChaffSpy);
+    });
   });
 
-  suite('Delete Block', function () {
+  suite('Delete', function () {
     setup(function () {
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype,
@@ -89,6 +106,7 @@ suite('Key Down', function () {
       ['Backspace', createKeyDownEvent(Blockly.utils.KeyCodes.BACKSPACE)],
     ];
     // Delete a block.
+    // Note that chaff is hidden when a block is deleted.
     suite('Simple', function () {
       testCases.forEach(function (testCase) {
         const testCaseName = testCase[0];
@@ -107,6 +125,16 @@ suite('Key Down', function () {
         const keyEvent = testCase[1];
         runReadOnlyTest(keyEvent, testCaseName);
       });
+    });
+    // Do not delete anything if a connection is focused.
+    test('Not called when connection is focused', function () {
+      // Restore the stub behavior called during setup
+      Blockly.getFocusManager().getFocusedNode.restore();
+
+      setSelectedConnection(this.workspace);
+      const event = createKeyDownEvent(Blockly.utils.KeyCodes.DELETE);
+      this.injectionDiv.dispatchEvent(event);
+      sinon.assert.notCalled(this.hideChaffSpy);
     });
   });
 
@@ -193,6 +221,18 @@ suite('Key Down', function () {
           sinon.assert.notCalled(this.hideChaffSpy);
         });
       });
+    });
+    test('Not called when connection is focused', function () {
+      // Restore the stub behavior called during setup
+      Blockly.getFocusManager().getFocusedNode.restore();
+
+      setSelectedConnection(this.workspace);
+      const event = createKeyDownEvent(Blockly.utils.KeyCodes.C, [
+        Blockly.utils.KeyCodes.CTRL,
+      ]);
+      this.injectionDiv.dispatchEvent(event);
+      sinon.assert.notCalled(this.copySpy);
+      sinon.assert.notCalled(this.hideChaffSpy);
     });
   });
 

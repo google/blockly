@@ -16,7 +16,7 @@ export interface INavigationPolicy<T> {
    * @param current The element which the user is navigating into.
    * @returns The current element's first child, or null if it has none.
    */
-  getFirstChild(current: T): INavigable<unknown> | null;
+  getFirstChild(current: T): INavigable<any> | null;
 
   /**
    * Returns the parent element of the given element, if any.
@@ -24,7 +24,7 @@ export interface INavigationPolicy<T> {
    * @param current The element which the user is navigating out of.
    * @returns The parent element of the current element, or null if it has none.
    */
-  getParent(current: T): INavigable<unknown> | null;
+  getParent(current: T): INavigable<any> | null;
 
   /**
    * Returns the peer element following the given element, if any.
@@ -33,7 +33,7 @@ export interface INavigationPolicy<T> {
    * @returns The next peer element of the current element, or null if there is
    *     none.
    */
-  getNextSibling(current: T): INavigable<unknown> | null;
+  getNextSibling(current: T): INavigable<any> | null;
 
   /**
    * Returns the peer element preceding the given element, if any.
@@ -42,5 +42,5 @@ export interface INavigationPolicy<T> {
    * @returns The previous peer element of the current element, or null if
    *     there is none.
    */
-  getPreviousSibling(current: T): INavigable<unknown> | null;
+  getPreviousSibling(current: T): INavigable<any> | null;
 }

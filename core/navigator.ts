@@ -7,16 +7,18 @@
 import type {INavigable} from './interfaces/i_navigable.js';
 import type {INavigationPolicy} from './interfaces/i_navigation_policy.js';
 
+type RuleMap<T> = Map<new (...args: any) => T, INavigationPolicy<T>>;
+
 /**
  * Class responsible for determining where focus should move in response to
  * keyboard navigation commands.
  */
-export class Navigator<T extends INavigable<T>> {
+export class Navigator {
   /**
    * Map from classes to a corresponding ruleset to handle navigation from
    * instances of that class.
    */
-  private rules = new Map<new (...args: any) => T, INavigationPolicy<T>>();
+  private rules: RuleMap<any> = new Map();
 
   /**
    * Associates a navigation ruleset with its corresponding class.
@@ -26,7 +28,10 @@ export class Navigator<T extends INavigable<T>> {
    * @param policy A ruleset that determines where focus should move starting
    *     from an instance of the given class.
    */
-  set<K extends T>(key: new (...args: any) => K, policy: INavigationPolicy<K>) {
+  set<T extends INavigable<T>>(
+    key: new (...args: any) => T,
+    policy: INavigationPolicy<T>,
+  ) {
     this.rules.set(key, policy);
   }
 
@@ -38,7 +43,9 @@ export class Navigator<T extends INavigable<T>> {
    * @returns The navigation ruleset of objects of the given object's class, or
    *     undefined if no ruleset has been registered for the object's class.
    */
-  private get(key: T): INavigationPolicy<T> | undefined {
+  private get<T extends INavigable<T>>(
+    key: T,
+  ): INavigationPolicy<T> | undefined {
     return this.rules.get(key.getClass());
   }
 
@@ -48,8 +55,12 @@ export class Navigator<T extends INavigable<T>> {
    * @param current The object to retrieve the first child of.
    * @returns The first child node of the given object, if any.
    */
-  getFirstChild(current: T): INavigable<unknown> | null {
-    return this.get(current)?.getFirstChild(current) ?? null;
+  getFirstChild<T extends INavigable<T>>(current: T): INavigable<any> | null {
+    const result = this.get(current)?.getFirstChild(current);
+    if (!result) return null;
+    // If the child isn't navigable, don't traverse into it; check its peers.
+    if (!result.isNavigable()) return this.getNextSibling(result);
+    return result;
   }
 
   /**
@@ -58,8 +69,11 @@ export class Navigator<T extends INavigable<T>> {
    * @param current The object to retrieve the parent of.
    * @returns The parent node of the given object, if any.
    */
-  getParent(current: T): INavigable<unknown> | null {
-    return this.get(current)?.getParent(current) ?? null;
+  getParent<T extends INavigable<T>>(current: T): INavigable<any> | null {
+    const result = this.get(current)?.getParent(current);
+    if (!result) return null;
+    if (!result.isNavigable()) return this.getParent(result);
+    return result;
   }
 
   /**
@@ -68,8 +82,11 @@ export class Navigator<T extends INavigable<T>> {
    * @param current The object to retrieve the next sibling node of.
    * @returns The next sibling node of the given object, if any.
    */
-  getNextSibling(current: T): INavigable<unknown> | null {
-    return this.get(current)?.getNextSibling(current) ?? null;
+  getNextSibling<T extends INavigable<T>>(current: T): INavigable<any> | null {
+    const result = this.get(current)?.getNextSibling(current);
+    if (!result) return null;
+    if (!result.isNavigable()) return this.getNextSibling(result);
+    return result;
   }
 
   /**
@@ -78,7 +95,12 @@ export class Navigator<T extends INavigable<T>> {
    * @param current The object to retrieve the previous sibling node of.
    * @returns The previous sibling node of the given object, if any.
    */
-  getPreviousSibling(current: T): INavigable<unknown> | null {
-    return this.get(current)?.getPreviousSibling(current) ?? null;
+  getPreviousSibling<T extends INavigable<T>>(
+    current: T,
+  ): INavigable<any> | null {
+    const result = this.get(current)?.getPreviousSibling(current);
+    if (!result) return null;
+    if (!result.isNavigable()) return this.getPreviousSibling(result);
+    return result;
   }
 }

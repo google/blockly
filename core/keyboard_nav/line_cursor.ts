@@ -304,10 +304,8 @@ export class LineCursor extends Marker {
   protected validInLineNode(node: INavigable<any> | null): boolean {
     if (!node) return false;
     if (this.validLineNode(node)) return true;
-    if (node instanceof BlockSvg) {
+    if (node instanceof BlockSvg || node instanceof Field) {
       return true;
-    } else if (node instanceof Field) {
-      return node.isNavigable();
     } else if (
       node instanceof RenderedConnection &&
       node.getParentInput() &&
@@ -354,7 +352,7 @@ export class LineCursor extends Marker {
     let newNode =
       this.workspace.getNavigator().getFirstChild(node) ||
       this.workspace.getNavigator().getNextSibling(node);
-    if (newNode?.isNavigable() && isValid(newNode)) return newNode;
+    if (isValid(newNode)) return newNode;
     if (newNode) {
       visitedNodes.add(node);
       return this.getNextNodeImpl(newNode, isValid, visitedNodes);
@@ -363,7 +361,7 @@ export class LineCursor extends Marker {
     newNode = this.findSiblingOrParentSibling(
       this.workspace.getNavigator().getParent(node),
     );
-    if (newNode?.isNavigable() && isValid(newNode)) return newNode;
+    if (isValid(newNode)) return newNode;
     if (newNode) {
       visitedNodes.add(node);
       return this.getNextNodeImpl(newNode, isValid, visitedNodes);
@@ -419,7 +417,7 @@ export class LineCursor extends Marker {
       newNode = this.workspace.getNavigator().getParent(node);
     }
 
-    if (newNode?.isNavigable() && isValid(newNode)) return newNode;
+    if (isValid(newNode)) return newNode;
     if (newNode) {
       visitedNodes.add(node);
       return this.getPreviousNodeImpl(newNode, isValid, visitedNodes);

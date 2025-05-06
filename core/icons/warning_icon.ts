@@ -7,6 +7,7 @@
 // Former goog.module ID: Blockly.Warning
 
 import type {BlockSvg} from '../block_svg.js';
+import { IBubble } from '../blockly.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
@@ -195,6 +196,10 @@ export class WarningIcon extends Icon implements IHasBubble {
         'warning',
       ),
     );
+  }
+
+  getBubble(): IBubble | null {
+    return this.textBubble;
   }
 
   /**

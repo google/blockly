@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {ISelectable} from '../blockly.js';
+import {IFocusableTree, ISelectable} from '../blockly.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
@@ -101,7 +101,7 @@ export abstract class Bubble implements IBubble, ISelectable {
     this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(
       Svg.G,
-      {'class': 'blocklyBubble'},
+      { 'class': 'blocklyBubble', 'tabindex': '-1', 'id': this.id },
       workspace.getBubbleCanvas(),
     );
     const embossGroup = dom.createSvgElement(
@@ -652,4 +652,20 @@ export abstract class Bubble implements IBubble, ISelectable {
   unselect(): void {
     // Bubbles don't have any visual for being selected.
   }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.svgRoot;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.workspace;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
 }

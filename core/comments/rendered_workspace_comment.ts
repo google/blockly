@@ -15,6 +15,7 @@ import {ContextMenuRegistry} from '../contextmenu_registry.js';
 import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
 import {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import {IContextMenu} from '../interfaces/i_contextmenu.js';
+import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {ICopyable} from '../interfaces/i_copyable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
@@ -60,6 +61,8 @@ export class RenderedWorkspaceComment
     this.view.setSize(this.getSize());
     this.view.setEditable(this.isEditable());
     this.view.getSvgRoot().setAttribute('data-id', this.id);
+    this.view.getSvgRoot().setAttribute('id', this.id);
+    this.view.getSvgRoot().setAttribute('tabindex', '-1');
 
     this.addModelUpdateBindings();
 
@@ -322,4 +325,20 @@ export class RenderedWorkspaceComment
       this.moveTo(alignedXY, ['snap']);
     }
   }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.getSvgRoot();
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.workspace;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
 }

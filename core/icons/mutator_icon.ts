@@ -7,6 +7,7 @@
 // Former goog.module ID: Blockly.Mutator
 
 import type {BlockSvg} from '../block_svg.js';
+import { IBubble } from '../blockly.js';
 import type {BlocklyOptions} from '../blockly_options.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import type {Abstract} from '../events/events_abstract.js';
@@ -201,6 +202,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
         'mutator',
       ),
     );
+  }
+
+  getBubble(): IBubble | null {
+    return this.miniWorkspaceBubble;
   }
 
   /** @returns the configuration the mini workspace should have. */

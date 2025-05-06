@@ -13,7 +13,6 @@ import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
 import {isDeletable} from './interfaces/i_deletable.js';
 import {isDraggable} from './interfaces/i_draggable.js';
-import {isSelectable} from './interfaces/i_selectable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
@@ -163,7 +162,7 @@ export function registerCut() {
         focused.isDeletable() &&
         isDraggable(focused) &&
         focused.isMovable() &&
-        isSelectable(focused) &&
+        isCopyable(focused) &&
         !focused.workspace.isFlyout
       );
     },

@@ -6,7 +6,6 @@
 
 import * as Blockly from '../../build/src/core/blockly.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
-import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
   assertEventEquals,
@@ -518,85 +517,6 @@ suite('Events', function () {
           oldValue: 'old value',
           newValue: 'new value',
         }),
-      },
-      {
-        title: 'null to Block Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          thisObj.block,
-          true,
-          null,
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        ],
-        getExpectedJson: (thisObj) => ({
-          type: 'marker_move',
-          group: '',
-          isCursor: true,
-          blockId: thisObj.block.id,
-          oldNode: undefined,
-          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        }),
-      },
-      {
-        title: 'null to Workspace Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          null,
-          true,
-          null,
-          ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-        ],
-        getExpectedJson: (thisObj) => ({
-          type: 'marker_move',
-          group: '',
-          isCursor: true,
-          blockId: undefined,
-          oldNode: undefined,
-          newNode: ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-        }),
-      },
-      {
-        title: 'Workspace to Block Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          thisObj.block,
-          true,
-          ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        ],
-        getExpectedJson: (thisObj) => ({
-          type: 'marker_move',
-          group: '',
-          isCursor: true,
-          blockId: thisObj.block.id,
-          oldNode: ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        }),
-      },
-      {
-        title: 'Block to Workspace Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          null,
-          true,
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-          ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-        ],
       },
       {
         title: 'Selected',

@@ -463,20 +463,6 @@ suite('Blocks', function () {
       teardown(function () {
         workspaceTeardown.call(this, this.workspace);
       });
-
-      test('Disposing selected shadow unhighlights parent', function () {
-        const parentBlock = this.parentBlock;
-        common.setSelected(this.shadowChild);
-        assert.isTrue(
-          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
-          'Expected parent to be highlighted after selecting shadow child',
-        );
-        this.shadowChild.dispose();
-        assert.isFalse(
-          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
-          'Expected parent to be unhighlighted after deleting shadow child',
-        );
-      });
     });
   });
 

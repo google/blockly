@@ -346,7 +346,7 @@ export class Gesture {
     // to return the new block.
     if (this.flyout) this.updateIsDraggingFromFlyout();
 
-    const selected = common.getSelectedBlock();
+    const selected = this.getSelectedBlock();
     if (selected && isDraggable(selected) && selected.isMovable()) {
       this.dragging = true;
       this.dragger = this.createDragger(selected, this.startWorkspace_);
@@ -355,6 +355,16 @@ export class Gesture {
     } else {
       this.updateIsDraggingWorkspace();
     }
+  }
+
+  private getSelectedBlock(): BlockSvg | null {
+    const selected = common.getSelected();
+    if (!selected || !(selected instanceof BlockSvg)) return null;
+    let nonShadow: BlockSvg | null = selected;
+    while (nonShadow && nonShadow instanceof BlockSvg && nonShadow.isShadow()) {
+      nonShadow = nonShadow.getParent();
+    }
+    return nonShadow;
   }
 
   private createDragger(

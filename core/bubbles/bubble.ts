@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IFocusableTree, ISelectable, getFocusManager} from '../blockly.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
 import {IBubble} from '../interfaces/i_bubble.js';
+import {ISelectable} from '../interfaces/i_selectable.js';
+import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import {getFocusManager} from '../focus_manager.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
 import {Coordinate} from '../utils/coordinate.js';
@@ -86,6 +88,8 @@ export abstract class Bubble implements IBubble, ISelectable {
 
   private dragStrategy = new BubbleDragStrategy(this, this.workspace);
 
+  private focusableElement: SVGElement | HTMLElement;
+
   /**
    * @param workspace The workspace this bubble belongs to.
    * @param anchor The anchor location of the thing this bubble is attached to.
@@ -97,11 +101,12 @@ export abstract class Bubble implements IBubble, ISelectable {
     public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
+    private overriddenFocusableElement?: SVGElement | HTMLElement
   ) {
     this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(
       Svg.G,
-      {'class': 'blocklyBubble', 'tabindex': '-1', 'id': this.id},
+      {'class': 'blocklyBubble'},
       workspace.getBubbleCanvas(),
     );
     const embossGroup = dom.createSvgElement(
@@ -126,6 +131,10 @@ export abstract class Bubble implements IBubble, ISelectable {
       embossGroup,
     );
     this.contentContainer = dom.createSvgElement(Svg.G, {}, this.svgRoot);
+
+    this.focusableElement = overriddenFocusableElement ?? this.svgRoot;
+    this.focusableElement.setAttribute('id', this.id);
+    this.focusableElement.setAttribute('tabindex', '-1');
 
     browserEvents.conditionalBind(
       this.background,
@@ -211,7 +220,6 @@ export abstract class Bubble implements IBubble, ISelectable {
   /** Brings the bubble to the front and passes the pointer event off to the gesture system. */
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
-    this.bringToFront();
     getFocusManager().focusNode(this);
   }
 
@@ -657,7 +665,7 @@ export abstract class Bubble implements IBubble, ISelectable {
 
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
-    return this.svgRoot;
+    return this.focusableElement;
   }
 
   /** See IFocusableNode.getFocusableTree. */
@@ -668,6 +676,7 @@ export abstract class Bubble implements IBubble, ISelectable {
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
     this.select();
+    this.bringToFront();
   }
 
   /** See IFocusableNode.onNodeBlur. */

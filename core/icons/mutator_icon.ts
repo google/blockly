@@ -7,7 +7,6 @@
 // Former goog.module ID: Blockly.Mutator
 
 import type {BlockSvg} from '../block_svg.js';
-import {IBubble} from '../blockly.js';
 import type {BlocklyOptions} from '../blockly_options.js';
 import {MiniWorkspaceBubble} from '../bubbles/mini_workspace_bubble.js';
 import type {Abstract} from '../events/events_abstract.js';
@@ -15,6 +14,7 @@ import {BlockChange} from '../events/events_block_change.js';
 import {isBlockChange, isBlockCreate} from '../events/predicates.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import type {IBubble} from '../interfaces/i_bubble.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
 import {Coordinate} from '../utils/coordinate.js';

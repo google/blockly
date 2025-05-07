@@ -31,6 +31,10 @@ class FocusableNodeImpl {
   onNodeFocus() {}
 
   onNodeBlur() {}
+
+  canBeFocused() {
+    return true;
+  }
 }
 
 class FocusableTreeImpl {

@@ -499,7 +499,11 @@ input[type=number] {
   .blocklyWorkspace,
   .blocklyField,
   .blocklyPath,
-  .blocklyHighlightedConnectionPath
+  .blocklyHighlightedConnectionPath,
+  .blocklyComment,
+  .blocklyBubble,
+  .blocklyIconGroup,
+  .blocklyTextarea
 ) {
   outline-width: 0px;
 }

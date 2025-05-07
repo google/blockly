@@ -2774,9 +2774,7 @@ export class WorkspaceSvg
     }
 
     // Search for icons and bubbles (which requires an expensive getAllBlocks).
-    const icons = this.getAllBlocks()
-      .map((block) => block.getIcons())
-      .flat();
+    const icons = this.getAllBlocks().map((block) => block.getIcons()).flat();
     for (const icon of icons) {
       if (icon.getFocusableElement().id === id) return icon;
       if (hasBubble(icon)) {

@@ -89,6 +89,7 @@ export function isFocusableNode(object: any | null): object is IFocusableNode {
     'getFocusableElement' in object &&
     'getFocusableTree' in object &&
     'onNodeFocus' in object &&
-    'onNodeBlur' in object
+    'onNodeBlur' in object &&
+    'canBeFocused' in object
   );
 }

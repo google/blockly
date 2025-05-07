@@ -8,7 +8,6 @@
 
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
-import {IBubble} from '../blockly.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
@@ -24,6 +23,7 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 import {Icon} from './icon.js';
 import {IconType} from './icon_types.js';
 import * as registry from './registry.js';
+import type {IBubble} from '../interfaces/i_bubble.js';
 
 /** The size of the comment icon in workspace-scale units. */
 const SIZE = 17;

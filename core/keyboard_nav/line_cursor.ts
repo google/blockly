@@ -599,10 +599,6 @@ export class LineCursor extends Marker {
         this.setCurNode(block);
       }
     }
-
-    // Something else is focused. Clear the cursor since it will be restored
-    // once focus is returned.
-    this.setCurNode(null);
   }
 
   /**

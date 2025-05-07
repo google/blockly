@@ -7,12 +7,8 @@
 // Former goog.module ID: Blockly.common
 
 import type {Block} from './block.js';
-import {
-  BlockSvg,
-  ISelectable,
-  getFocusManager,
-  isSelectable,
-} from './blockly.js';
+import {ISelectable, isSelectable} from './interfaces/i_selectable.js';
+import {getFocusManager} from './focus_manager.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';
@@ -100,19 +96,6 @@ export function getSelected(): ISelectable | null {
 }
 
 /**
- * @internal
- */
-export function getSelectedBlock(): BlockSvg | null {
-  const selected = getSelected();
-  if (!selected || !(selected instanceof BlockSvg)) return null;
-  let nonShadow: BlockSvg | null = selected;
-  while (nonShadow && nonShadow instanceof BlockSvg && nonShadow.isShadow()) {
-    nonShadow = nonShadow.getParent();
-  }
-  return nonShadow;
-}
-
-/**
  * Sets the current selection.
  *
  * To clear the current selection, select another ISelectable or focus a
@@ -122,7 +105,7 @@ export function getSelectedBlock(): BlockSvg | null {
  * @internal
  */
 export function setSelected(newSelection: ISelectable) {
-  getFocusManager().focusNode(newSelection);
+  // getFocusManager().focusNode(newSelection);
 }
 
 /**

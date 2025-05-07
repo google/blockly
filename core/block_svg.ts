@@ -50,7 +50,6 @@ import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IIcon} from './interfaces/i_icon.js';
 import type {INavigable} from './interfaces/i_navigable.js';
 import * as internalConstants from './internal_constants.js';
-import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import {RenderedConnection} from './rendered_connection.js';
@@ -1679,7 +1678,6 @@ export class BlockSvg
     this.tightenChildrenEfficiently();
 
     dom.stopTextWidthCache();
-    this.updateMarkers_();
   }
 
   /**
@@ -1697,44 +1695,6 @@ export class BlockSvg
       if (conn) conn.tightenEfficiently();
     }
     if (this.nextConnection) this.nextConnection.tightenEfficiently();
-  }
-
-  /** Redraw any attached marker or cursor svgs if needed. */
-  protected updateMarkers_() {
-    if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
-      this.workspace.getCursor()!.draw();
-    }
-    if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
-      // TODO(#4592): Update all markers on the block.
-      this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
-    for (const input of this.inputList) {
-      for (const field of input.fieldRow) {
-        field.updateMarkers_();
-      }
-    }
-  }
-
-  /**
-   * Add the cursor SVG to this block's SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the block SVG
-   *     group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    this.pathObject.setCursorSvg(cursorSvg);
-  }
-
-  /**
-   * Add the marker SVG to this block's SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the block SVG
-   *     group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    this.pathObject.setMarkerSvg(markerSvg);
   }
 
   /**

@@ -24,18 +24,6 @@ export class PathObject implements IPathObject {
   svgRoot: SVGElement;
   svgPath: SVGElement;
 
-  /**
-   * Holds the cursors svg element when the cursor is attached to the block.
-   * This is null if there is no cursor on the block.
-   */
-  cursorSvg: SVGElement | null = null;
-
-  /**
-   * Holds the markers svg element when the marker is attached to the block.
-   * This is null if there is no marker on the block.
-   */
-  markerSvg: SVGElement | null = null;
-
   constants: ConstantProvider;
   style: BlockStyle;
 
@@ -84,42 +72,6 @@ export class PathObject implements IPathObject {
   flipRTL() {
     // Mirror the block's path.
     this.svgPath.setAttribute('transform', 'scale(-1 1)');
-  }
-
-  /**
-   * Add the cursor SVG to this block's SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the block SVG
-   *     group.
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
-    this.svgRoot.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
-  }
-
-  /**
-   * Add the marker SVG to this block's SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the block SVG
-   *     group.
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (this.cursorSvg) {
-      this.svgRoot.insertBefore(markerSvg, this.cursorSvg);
-    } else {
-      this.svgRoot.appendChild(markerSvg);
-    }
-    this.markerSvg = markerSvg;
   }
 
   /**

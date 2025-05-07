@@ -17,7 +17,6 @@ import {Field} from '../field.js';
 import {FlyoutButton} from '../flyout_button.js';
 import type {INavigable} from '../interfaces/i_navigable.js';
 import {RenderedConnection} from '../rendered_connection.js';
-import type {MarkerSvg} from '../renderers/common/marker_svg.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {ASTNode} from './ast_node.js';
@@ -33,32 +32,8 @@ export class Marker {
   /** The current location of the marker. */
   protected curNode: INavigable<any> | null = null;
 
-  /**
-   * The object in charge of drawing the visual representation of the current
-   * node.
-   */
-  private drawer: MarkerSvg | null = null;
-
   /** The type of the marker. */
   type = 'marker';
-
-  /**
-   * Sets the object in charge of drawing the marker.
-   *
-   * @param drawer The object in charge of drawing the marker.
-   */
-  setDrawer(drawer: MarkerSvg) {
-    this.drawer = drawer;
-  }
-
-  /**
-   * Get the current drawer for the marker.
-   *
-   * @returns The object in charge of drawing the marker.
-   */
-  getDrawer(): MarkerSvg | null {
-    return this.drawer;
-  }
 
   /**
    * Gets the current location of the marker.
@@ -75,30 +50,11 @@ export class Marker {
    * @param newNode The new location of the marker, or null to remove it.
    */
   setCurNode(newNode: INavigable<any> | null) {
-    const oldNode = this.curNode;
     this.curNode = newNode;
-    this.drawer?.draw(this.toASTNode(oldNode), this.toASTNode(this.curNode));
-  }
-
-  /**
-   * Redraw the current marker.
-   *
-   * @internal
-   */
-  draw() {
-    const node = this.toASTNode(this.curNode);
-    this.drawer?.draw(node, node);
-  }
-
-  /** Hide the marker SVG. */
-  hide() {
-    this.drawer?.hide();
   }
 
   /** Dispose of this marker. */
   dispose() {
-    this.drawer?.dispose();
-    this.drawer = null;
     this.curNode = null;
   }
 

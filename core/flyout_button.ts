@@ -349,15 +349,6 @@ export class FlyoutButton
   }
 
   /**
-   * Required by IASTNodeLocationSvg, but not used. A marker cannot be set on a
-   * button. If the 'mark' shortcut is used on a button, its associated callback
-   * function is triggered.
-   */
-  setMarkerSvg() {
-    throw new Error('Attempted to set a marker on a button.');
-  }
-
-  /**
    * Do something when the button is clicked.
    *
    * @param e Pointer up event.

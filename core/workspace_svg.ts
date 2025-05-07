@@ -64,7 +64,6 @@ import {Navigator} from './navigator.js';
 import {Options} from './options.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
-import * as renderManagement from './render_management.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {ScrollbarPair} from './scrollbar_pair.js';
@@ -472,28 +471,6 @@ export class WorkspaceSvg
    */
   getComponentManager(): ComponentManager {
     return this.componentManager;
-  }
-
-  /**
-   * Add the cursor SVG to this workspaces SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    this.markerManager.setCursorSvg(cursorSvg);
-  }
-
-  /**
-   * Add the marker SVG to this workspaces SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    this.markerManager.setMarkerSvg(markerSvg);
   }
 
   /**
@@ -1340,10 +1317,6 @@ export class WorkspaceSvg
       .flatMap((block) => block.getDescendants(false))
       .filter((block) => block.isInsertionMarker())
       .forEach((block) => block.queueRender());
-
-    renderManagement
-      .finishQueuedRenders()
-      .then(() => void this.markerManager.updateMarkers());
   }
 
   /**

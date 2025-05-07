@@ -17,6 +17,7 @@ import * as Css from './css.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRenderedElement} from './interfaces/i_rendered_element.js';
 import {idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -36,7 +37,8 @@ export class FlyoutButton
     IASTNodeLocationSvg,
     IBoundedElement,
     IRenderedElement,
-    IFocusableNode
+    IFocusableNode,
+    INavigable<FlyoutButton>
 {
   /** The horizontal margin around the text in the button. */
   static TEXT_MARGIN_X = 5;
@@ -347,15 +349,6 @@ export class FlyoutButton
   }
 
   /**
-   * Required by IASTNodeLocationSvg, but not used. A marker cannot be set on a
-   * button. If the 'mark' shortcut is used on a button, its associated callback
-   * function is triggered.
-   */
-  setMarkerSvg() {
-    throw new Error('Attempted to set a marker on a button.');
-  }
-
-  /**
    * Do something when the button is clicked.
    *
    * @param e Pointer up event.
@@ -416,6 +409,28 @@ export class FlyoutButton
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
+
+  /**
+   * Returns whether or not this button is accessible through keyboard
+   * navigation.
+   *
+   * @returns True if this button is keyboard accessible, otherwise false.
+   */
+  isNavigable() {
+    return true;
+  }
+
+  /**
+   * Returns this button's class.
+   *
+   * Used by keyboard navigation to look up the rules for navigating from this
+   * button.
+   *
+   * @returns This button's class.
+   */
+  getClass() {
+    return FlyoutButton;
+  }
 }
 
 /** CSS for buttons and labels. See css.js for use. */

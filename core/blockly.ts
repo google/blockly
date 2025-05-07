@@ -433,6 +433,16 @@ Names.prototype.populateProcedures = function (
 };
 // clang-format on
 
+export * from './interfaces/i_navigable.js';
+export * from './interfaces/i_navigation_policy.js';
+export * from './keyboard_nav/block_navigation_policy.js';
+export * from './keyboard_nav/connection_navigation_policy.js';
+export * from './keyboard_nav/field_navigation_policy.js';
+export * from './keyboard_nav/flyout_button_navigation_policy.js';
+export * from './keyboard_nav/flyout_navigation_policy.js';
+export * from './keyboard_nav/flyout_separator_navigation_policy.js';
+export * from './keyboard_nav/workspace_navigation_policy.js';
+export * from './navigator.js';
 export * from './toast.js';
 
 // Re-export submodules that no longer declareLegacyNamespace.

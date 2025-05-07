@@ -89,6 +89,18 @@ export class FieldTextInput extends FieldInput<string> {
     // override the static fromJson method.
     return new this(text, undefined, options);
   }
+
+  /**
+   * Returns this field's class.
+   *
+   * Used by keyboard navigation to look up the rules for navigating from this
+   * field.
+   *
+   * @returns This field's class.
+   */
+  getClass() {
+    return FieldTextInput;
+  }
 }
 
 fieldRegistry.register('field_input', FieldTextInput);

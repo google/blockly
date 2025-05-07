@@ -5,12 +5,15 @@
  */
 
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import {Rect} from './utils/rect.js';
 
 /**
  * Representation of a gap between elements in a flyout.
  */
-export class FlyoutSeparator implements IBoundedElement {
+export class FlyoutSeparator
+  implements IBoundedElement, INavigable<FlyoutSeparator>
+{
   private x = 0;
   private y = 0;
 
@@ -49,6 +52,28 @@ export class FlyoutSeparator implements IBoundedElement {
   moveBy(dx: number, dy: number, _reason?: string[]) {
     this.x += dx;
     this.y += dy;
+  }
+
+  /**
+   * Returns false to prevent this separator from being navigated to by the
+   * keyboard.
+   *
+   * @returns False.
+   */
+  isNavigable() {
+    return false;
+  }
+
+  /**
+   * Returns this separator's class.
+   *
+   * Used by keyboard navigation to look up the rules for navigating from this
+   * separator.
+   *
+   * @returns This separator's class.
+   */
+  getClass() {
+    return FlyoutSeparator;
   }
 }
 

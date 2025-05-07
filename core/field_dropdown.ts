@@ -796,6 +796,18 @@ export class FieldDropdown extends Field<string> {
       throw TypeError('Found invalid FieldDropdown options.');
     }
   }
+
+  /**
+   * Returns this field's class.
+   *
+   * Used by keyboard navigation to look up the rules for navigating from this
+   * field.
+   *
+   * @returns This field's class.
+   */
+  getClass() {
+    return FieldDropdown;
+  }
 }
 
 /**

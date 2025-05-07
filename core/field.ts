@@ -28,9 +28,9 @@ import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_w
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
-import {MarkerManager} from './marker_manager.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
 import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
@@ -76,7 +76,8 @@ export abstract class Field<T = any>
     IKeyboardAccessible,
     IRegistrable,
     ISerializable,
-    IFocusableNode
+    IFocusableNode,
+    INavigable<Field<T>>
 {
   /**
    * To overwrite the default value which is set in **Field**, directly update
@@ -110,18 +111,6 @@ export abstract class Field<T = any>
    */
   private tooltip: Tooltip.TipInfo | null = null;
   protected size_: Size;
-
-  /**
-   * Holds the cursors svg element when the cursor is attached to the field.
-   * This is null if there is no cursor on the field.
-   */
-  private cursorSvg: SVGElement | null = null;
-
-  /**
-   * Holds the markers svg element when the marker is attached to the field.
-   * This is null if there is no marker on the field.
-   */
-  private markerSvg: SVGElement | null = null;
 
   /** The rendered field's SVG group element. */
   protected fieldGroup_: SVGGElement | null = null;
@@ -1356,64 +1345,6 @@ export abstract class Field<T = any>
     return false;
   }
 
-  /**
-   * Add the cursor SVG to this fields SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the field group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
-    this.fieldGroup_.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
-  }
-
-  /**
-   * Add the marker SVG to this fields SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the field group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
-    this.fieldGroup_.appendChild(markerSvg);
-    this.markerSvg = markerSvg;
-  }
-
-  /**
-   * Redraw any attached marker or cursor svgs if needed.
-   *
-   * @internal
-   */
-  updateMarkers_() {
-    const block = this.getSourceBlock();
-    if (!block) {
-      throw new UnattachedFieldError();
-    }
-    const workspace = block.workspace as WorkspaceSvg;
-    if (workspace.keyboardAccessibilityMode && this.cursorSvg) {
-      workspace.getCursor()!.draw();
-    }
-    if (workspace.keyboardAccessibilityMode && this.markerSvg) {
-      // TODO(#4592): Update all markers on the field.
-      workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
-  }
-
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     if (!this.fieldGroup_) {
@@ -1452,6 +1383,30 @@ export abstract class Field<T = any>
       `Attempted to instantiate a field from the registry that hasn't defined a 'fromJson' method.`,
     );
   }
+
+  /**
+   * Returns whether or not this field is accessible by keyboard navigation.
+   *
+   * @returns True if this field is keyboard accessible, otherwise false.
+   */
+  isNavigable() {
+    return (
+      this.isClickable() &&
+      this.isCurrentlyEditable() &&
+      !(this.getSourceBlock()?.isSimpleReporter() && this.isFullBlockField()) &&
+      this.getParentInput().isVisible()
+    );
+  }
+
+  /**
+   * Returns this field's class.
+   *
+   * Used by keyboard navigation to look up the rules for navigating from this
+   * field. Must be implemented by subclasses.
+   *
+   * @returns This field's class.
+   */
+  abstract getClass(): new (...args: any) => Field<T>;
 }
 
 /**

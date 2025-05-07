@@ -14,8 +14,6 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import type {Connection} from '../connection.js';
-import * as common from '../common.js';
 import {ConnectionType} from '../connection_type.js';
 import {Field} from '../field.js';
 import {FieldCheckbox} from '../field_checkbox.js';

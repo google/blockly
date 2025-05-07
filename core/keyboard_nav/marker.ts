@@ -12,8 +12,15 @@
  */
 // Former goog.module ID: Blockly.Marker
 
+import {BlockSvg} from '../block_svg.js';
+import {Field} from '../field.js';
+import {FlyoutButton} from '../flyout_button.js';
+import type {INavigable} from '../interfaces/i_navigable.js';
+import {RenderedConnection} from '../rendered_connection.js';
 import type {MarkerSvg} from '../renderers/common/marker_svg.js';
-import type {ASTNode} from './ast_node.js';
+import {Coordinate} from '../utils/coordinate.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
+import {ASTNode} from './ast_node.js';
 
 /**
  * Class for a marker.
@@ -24,7 +31,7 @@ export class Marker {
   colour: string | null = null;
 
   /** The current location of the marker. */
-  private curNode: ASTNode | null = null;
+  protected curNode: INavigable<any> | null = null;
 
   /**
    * The object in charge of drawing the visual representation of the current
@@ -58,7 +65,7 @@ export class Marker {
    *
    * @returns The current field, connection, or block the marker is on.
    */
-  getCurNode(): ASTNode | null {
+  getCurNode(): INavigable<any> | null {
     return this.curNode;
   }
 
@@ -67,10 +74,10 @@ export class Marker {
    *
    * @param newNode The new location of the marker, or null to remove it.
    */
-  setCurNode(newNode: ASTNode | null) {
+  setCurNode(newNode: INavigable<any> | null) {
     const oldNode = this.curNode;
     this.curNode = newNode;
-    this.drawer?.draw(oldNode, this.curNode);
+    this.drawer?.draw(this.toASTNode(oldNode), this.toASTNode(this.curNode));
   }
 
   /**
@@ -79,7 +86,8 @@ export class Marker {
    * @internal
    */
   draw() {
-    this.drawer?.draw(this.curNode, this.curNode);
+    const node = this.toASTNode(this.curNode);
+    this.drawer?.draw(node, node);
   }
 
   /** Hide the marker SVG. */
@@ -92,5 +100,47 @@ export class Marker {
     this.drawer?.dispose();
     this.drawer = null;
     this.curNode = null;
+  }
+
+  /**
+   * Converts an INavigable to a legacy ASTNode.
+   *
+   * @param node The INavigable instance to convert.
+   * @returns An ASTNode representation of the given object if possible,
+   *     otherwise null.
+   */
+  toASTNode(node: INavigable<any> | null): ASTNode | null {
+    if (node instanceof BlockSvg) {
+      return ASTNode.createBlockNode(node);
+    } else if (node instanceof Field) {
+      return ASTNode.createFieldNode(node);
+    } else if (node instanceof WorkspaceSvg) {
+      return ASTNode.createWorkspaceNode(node, new Coordinate(0, 0));
+    } else if (node instanceof FlyoutButton) {
+      return ASTNode.createButtonNode(node);
+    } else if (node instanceof RenderedConnection) {
+      return ASTNode.createConnectionNode(node);
+    }
+
+    return null;
+  }
+
+  /**
+   * Returns the block that this marker's current node is a child of.
+   *
+   * @returns The parent block of the marker's current node if any, otherwise
+   *     null.
+   */
+  getSourceBlock(): BlockSvg | null {
+    const curNode = this.getCurNode();
+    if (curNode instanceof BlockSvg) {
+      return curNode;
+    } else if (curNode instanceof Field) {
+      return curNode.getSourceBlock() as BlockSvg;
+    } else if (curNode instanceof RenderedConnection) {
+      return curNode.getSourceBlock();
+    }
+
+    return null;
   }
 }

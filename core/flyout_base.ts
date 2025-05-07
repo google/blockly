@@ -696,7 +696,6 @@ export abstract class Flyout
                 this.horizontalLayout ? SeparatorAxis.X : SeparatorAxis.Y,
               ),
               SEPARATOR_TYPE,
-              false,
             ),
           );
         }

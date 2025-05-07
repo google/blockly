@@ -228,6 +228,18 @@ export class FieldCheckbox extends Field<CheckboxBool> {
     // 'override' the static fromJson method.
     return new this(options.checked, undefined, options);
   }
+
+  /**
+   * Returns this field's class.
+   *
+   * Used by keyboard navigation to look up the rules for navigating from this
+   * field.
+   *
+   * @returns This field's class.
+   */
+  getClass() {
+    return FieldCheckbox;
+  }
 }
 
 fieldRegistry.register('field_checkbox', FieldCheckbox);

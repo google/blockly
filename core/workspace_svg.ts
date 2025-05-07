@@ -53,12 +53,14 @@ import {
 } from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import type {INavigable} from './interfaces/i_navigable.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
+import {Navigator} from './navigator.js';
 import {Options} from './options.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
@@ -99,7 +101,12 @@ const ZOOM_TO_FIT_MARGIN = 20;
  */
 export class WorkspaceSvg
   extends Workspace
-  implements IASTNodeLocationSvg, IContextMenu, IFocusableNode, IFocusableTree
+  implements
+    IASTNodeLocationSvg,
+    IContextMenu,
+    IFocusableNode,
+    IFocusableTree,
+    INavigable<WorkspaceSvg>
 {
   /**
    * A wrapper function called when a resize event occurs.
@@ -335,6 +342,12 @@ export class WorkspaceSvg
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   svgBubbleCanvas_!: SVGElement;
   zoomControls_: ZoomControls | null = null;
+
+  /**
+   * Navigator that handles moving focus between items in this workspace in
+   * response to keyboard navigation commands.
+   */
+  private navigator = new Navigator();
 
   /**
    * @param options Dictionary of options.
@@ -2789,6 +2802,34 @@ export class WorkspaceSvg
       if (toolbox) toolbox.clearSelection();
       if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
     }
+  }
+
+  /**
+   * Returns the class of this workspace.
+   *
+   * @returns WorkspaceSvg.
+   */
+  getClass() {
+    return WorkspaceSvg;
+  }
+
+  /**
+   * Returns whether or not this workspace is keyboard-navigable.
+   *
+   * @returns True.
+   */
+  isNavigable() {
+    return true;
+  }
+
+  /**
+   * Returns an object responsible for coordinating movement of focus between
+   * items on this workspace in response to keyboard navigation commands.
+   *
+   * @returns This workspace's Navigator instance.
+   */
+  getNavigator(): Navigator {
+    return this.navigator;
   }
 }
 

@@ -43,7 +43,7 @@ export class SeparatorFlyoutInflater implements IFlyoutInflater {
       ? SeparatorAxis.X
       : SeparatorAxis.Y;
     const separator = new FlyoutSeparator(0, flyoutAxis);
-    return new FlyoutItem(separator, SEPARATOR_TYPE, false);
+    return new FlyoutItem(separator, SEPARATOR_TYPE);
   }
 
   /**

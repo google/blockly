@@ -1368,6 +1368,11 @@ export abstract class Field<T = any>
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   /**
    * Subclasses should reimplement this method to construct their Field
    * subclass from a JSON arg object.

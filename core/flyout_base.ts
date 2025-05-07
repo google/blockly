@@ -986,6 +986,11 @@ export abstract class Flyout
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;

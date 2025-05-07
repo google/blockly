@@ -348,4 +348,9 @@ export class RenderedWorkspaceComment
   onNodeBlur(): void {
     this.unselect();
   }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
 }

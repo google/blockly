@@ -173,4 +173,9 @@ export abstract class Icon implements IIcon {
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
 }

@@ -674,4 +674,9 @@ export abstract class Bubble implements IBubble, ISelectable {
   onNodeBlur(): void {
     this.unselect();
   }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
 }

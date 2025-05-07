@@ -81,7 +81,7 @@ export class FocusManager {
         }
       }
 
-      if (newNode) {
+      if (newNode && newNode.canBeFocused()) {
         const newTree = newNode.getFocusableTree();
         const oldTree = this.focusedNode?.getFocusableTree();
         if (newNode === newTree.getRootFocusableNode() && newTree !== oldTree) {
@@ -232,11 +232,16 @@ export class FocusManager {
    * Any previously focused node will be updated to be passively highlighted (if
    * it's in a different focusable tree) or blurred (if it's in the same one).
    *
+   * **Important**: If the provided node is not able to be focused (e.g. its
+   * canBeFocused() method returns false), it will be ignored and any existing
+   * focus state will remain unchanged.
+   *
    * @param focusableNode The node that should receive active focus.
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
     if (this.focusedNode === focusableNode) return; // State is unchanged.
+    if (!focusableNode.canBeFocused()) return; // This node can't be focused.
 
     const nextTree = focusableNode.getFocusableTree();
     if (!this.isRegistered(nextTree)) {

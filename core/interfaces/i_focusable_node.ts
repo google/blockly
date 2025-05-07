@@ -59,6 +59,21 @@ export interface IFocusableNode {
    * This has the same implementation restrictions as onNodeFocus().
    */
   onNodeBlur(): void;
+
+  /**
+   * Indicates whether this node allows focus. If this returns false then none
+   * of the other IFocusableNode methods will be called.
+   *
+   * Note that special care must be taken if this dynamically changes its return
+   * value over the lifetime of the node as certain environment conditions could
+   * affect the focusability of this node's DOM element (such as whether the
+   * element has a positive or zero tabindex). Also, changing from a true to a
+   * false value while the node holds focus would not change the current focus
+   * of the node, and may result in some of the node's functions being called
+   * later on when defocused (since it was previously considered focusable at
+   * the time of being focused).
+   */
+  canBeFocused(): boolean;
 }
 
 /**

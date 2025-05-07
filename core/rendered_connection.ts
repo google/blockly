@@ -671,6 +671,11 @@ export class RenderedConnection
     this.unhighlight();
   }
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   private findHighlightSvg(): SVGElement | null {
     // This cast is valid as TypeScript's definition is wrong. See:
     // https://github.com/microsoft/TypeScript/issues/60996.

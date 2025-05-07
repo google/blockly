@@ -1821,6 +1821,11 @@ export class BlockSvg
     this.unselect();
   }
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   /**
    * Returns whether or not this block can be navigated to via the keyboard.
    *

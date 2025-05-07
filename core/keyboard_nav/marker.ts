@@ -50,7 +50,6 @@ export class Marker {
    * @param newNode The new location of the marker, or null to remove it.
    */
   setCurNode(newNode: INavigable<any> | null) {
-    const oldNode = this.curNode;
     this.curNode = newNode;
   }
 

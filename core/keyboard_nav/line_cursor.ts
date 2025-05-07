@@ -32,7 +32,6 @@ import * as registry from '../registry.js';
 import {RenderedConnection} from '../rendered_connection.js';
 import {Renderer} from '../renderers/zelos/renderer.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import {ASTNode} from './ast_node.js';
 import {BlockNavigationPolicy} from './block_navigation_policy.js';
 import {ConnectionNavigationPolicy} from './connection_navigation_policy.js';
 import {FieldNavigationPolicy} from './field_navigation_policy.js';

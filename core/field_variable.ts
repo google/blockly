@@ -49,7 +49,6 @@ export class FieldVariable extends FieldDropdown {
    * dropdown.
    */
   variableTypes: string[] | null = [];
-  protected override size_: Size;
 
   /** The variable model associated with this field. */
   private variable: IVariableModel<IVariableState> | null = null;

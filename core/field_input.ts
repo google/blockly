@@ -101,6 +101,26 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   override SERIALIZABLE = true;
 
   /**
+   * Sets the size of this field. Although this appears to be a no-op, it must
+   * exist since the getter is overridden below.
+   */
+  protected override set size_(newValue: Size) {
+    super.size_ = newValue;
+  }
+
+  /**
+   * Returns the size of this field, with a minimum width of 14.
+   */
+  protected override get size_() {
+    const s = super.size_;
+    if (s.width < 14) {
+      s.width = 14;
+    }
+
+    return s;
+  }
+
+  /**
    * @param value The initial value of the field. Should cast to a string.
    *     Defaults to an empty string if null or undefined. Also accepts
    *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses

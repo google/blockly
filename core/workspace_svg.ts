@@ -2760,7 +2760,7 @@ export class WorkspaceSvg
     }
 
     // Search for a specific block.
-    const block = this.getBlockById(id) as IFocusableNode;
+    const block = this.getBlockById(id);
     if (block) return block;
 
     // Search for a workspace comment (semi-expensive).

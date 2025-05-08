@@ -174,7 +174,6 @@ import {
 import {IVariableMap} from './interfaces/i_variable_map.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
 import {CursorOptions, LineCursor} from './keyboard_nav/line_cursor.js';
 import {Marker} from './keyboard_nav/marker.js';
 import type {LayerManager} from './layer_manager.js';
@@ -447,7 +446,6 @@ export * from './toast.js';
 
 // Re-export submodules that no longer declareLegacyNamespace.
 export {
-  ASTNode,
   Block,
   BlockSvg,
   BlocklyOptions,

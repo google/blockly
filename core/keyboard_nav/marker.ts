@@ -14,12 +14,8 @@
 
 import {BlockSvg} from '../block_svg.js';
 import {Field} from '../field.js';
-import {FlyoutButton} from '../flyout_button.js';
 import type {INavigable} from '../interfaces/i_navigable.js';
 import {RenderedConnection} from '../rendered_connection.js';
-import {Coordinate} from '../utils/coordinate.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
-import {ASTNode} from './ast_node.js';
 
 /**
  * Class for a marker.
@@ -59,23 +55,17 @@ export class Marker {
   }
 
   /**
-   * Converts an INavigable to a legacy ASTNode.
+   * Returns the block that the given node is a child of.
    *
-   * @param node The INavigable instance to convert.
-   * @returns An ASTNode representation of the given object if possible,
-   *     otherwise null.
+   * @returns The parent block of the node if any, otherwise null.
    */
-  toASTNode(node: INavigable<any> | null): ASTNode | null {
+  getSourceBlockFromNode(node: INavigable<any> | null): BlockSvg | null {
     if (node instanceof BlockSvg) {
-      return ASTNode.createBlockNode(node);
+      return node;
     } else if (node instanceof Field) {
-      return ASTNode.createFieldNode(node);
-    } else if (node instanceof WorkspaceSvg) {
-      return ASTNode.createWorkspaceNode(node, new Coordinate(0, 0));
-    } else if (node instanceof FlyoutButton) {
-      return ASTNode.createButtonNode(node);
+      return node.getSourceBlock() as BlockSvg;
     } else if (node instanceof RenderedConnection) {
-      return ASTNode.createConnectionNode(node);
+      return node.getSourceBlock();
     }
 
     return null;
@@ -88,15 +78,6 @@ export class Marker {
    *     null.
    */
   getSourceBlock(): BlockSvg | null {
-    const curNode = this.getCurNode();
-    if (curNode instanceof BlockSvg) {
-      return curNode;
-    } else if (curNode instanceof Field) {
-      return curNode.getSourceBlock() as BlockSvg;
-    } else if (curNode instanceof RenderedConnection) {
-      return curNode.getSourceBlock();
-    }
-
-    return null;
+    return this.getSourceBlockFromNode(this.getCurNode());
   }
 }

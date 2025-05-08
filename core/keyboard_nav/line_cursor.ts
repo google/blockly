@@ -540,7 +540,7 @@ export class LineCursor extends Marker {
     for (const node of nodes) {
       if (
         this.validNode(node) &&
-        !this.toASTNode(node)?.getSourceBlock()?.disposed
+        !this.getSourceBlockFromNode(node)?.disposed
       ) {
         this.setCurNode(node);
         return;

@@ -21,7 +21,6 @@ import * as common from './common.js';
 import type {ConnectionDB} from './connection_db.js';
 import type {Abstract} from './events/events_abstract.js';
 import * as eventUtils from './events/utils.js';
-import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import type {IVariableMap} from './interfaces/i_variable_map.js';
@@ -43,7 +42,7 @@ import {deleteVariable, getVariableUsesById} from './variables.js';
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
  */
-export class Workspace implements IASTNodeLocation {
+export class Workspace {
   /**
    * Angle away from the horizontal to sweep for blocks.  Order of execution is
    * generally top to bottom, but a small angle changes the scan to give a bit

@@ -11,7 +11,6 @@
  */
 // Former goog.module ID: Blockly.FlyoutButton
 
-import type {IASTNodeLocationSvg} from './blockly.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
@@ -34,7 +33,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class FlyoutButton
   implements
-    IASTNodeLocationSvg,
     IBoundedElement,
     IRenderedElement,
     IFocusableNode,

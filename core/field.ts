@@ -23,8 +23,6 @@ import * as dropDownDiv from './dropdowndiv.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
-import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
-import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
@@ -71,8 +69,6 @@ export type FieldValidator<T = any> = (newValue: T) => T | null | undefined;
  */
 export abstract class Field<T = any>
   implements
-    IASTNodeLocationSvg,
-    IASTNodeLocationWithBlock,
     IKeyboardAccessible,
     IRegistrable,
     ISerializable,

@@ -39,7 +39,6 @@ import {IconType} from './icons/icon_types.js';
 import {MutatorIcon} from './icons/mutator_icon.js';
 import {WarningIcon} from './icons/warning_icon.js';
 import type {Input} from './inputs/input.js';
-import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
@@ -74,7 +73,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 export class BlockSvg
   extends Block
   implements
-    IASTNodeLocationSvg,
     IBoundedElement,
     IContextMenu,
     ICopyable<BlockCopyData>,

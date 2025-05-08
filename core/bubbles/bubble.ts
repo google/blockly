@@ -7,10 +7,10 @@
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
-import {IBubble} from '../interfaces/i_bubble.js';
-import {ISelectable} from '../interfaces/i_selectable.js';
-import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {getFocusManager} from '../focus_manager.js';
+import {IBubble} from '../interfaces/i_bubble.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import {ISelectable} from '../interfaces/i_selectable.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
 import {Coordinate} from '../utils/coordinate.js';
@@ -101,7 +101,7 @@ export abstract class Bubble implements IBubble, ISelectable {
     public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
-    private overriddenFocusableElement?: SVGElement | HTMLElement
+    private overriddenFocusableElement?: SVGElement | HTMLElement,
   ) {
     this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(

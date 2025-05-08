@@ -46,13 +46,13 @@ import {isAutoHideable} from './interfaces/i_autohideable.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
-import {hasBubble} from './interfaces/i_has_bubble.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import {
   isFocusableNode,
   type IFocusableNode,
 } from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import {hasBubble} from './interfaces/i_has_bubble.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {INavigable} from './interfaces/i_navigable.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
@@ -2774,7 +2774,9 @@ export class WorkspaceSvg
     }
 
     // Search for icons and bubbles (which requires an expensive getAllBlocks).
-    const icons = this.getAllBlocks().map((block) => block.getIcons()).flat();
+    const icons = this.getAllBlocks()
+      .map((block) => block.getIcons())
+      .flat();
     for (const icon of icons) {
       if (icon.getFocusableElement().id === id) return icon;
       if (hasBubble(icon)) {

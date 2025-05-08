@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as common from '../../build/src/core/common.js';
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';

@@ -10,6 +10,7 @@ import type {BlockSvg} from '../block_svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import type {IBubble} from '../interfaces/i_bubble.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
 import {Size} from '../utils.js';
@@ -19,7 +20,6 @@ import {Rect} from '../utils/rect.js';
 import {Svg} from '../utils/svg.js';
 import {Icon} from './icon.js';
 import {IconType} from './icon_types.js';
-import type {IBubble} from '../interfaces/i_bubble.js';
 
 /** The size of the warning icon in workspace-scale units. */
 const SIZE = 17;

@@ -35,9 +35,13 @@ export class MockIcon {
 
   onClick() {}
 
-  getFocusableElement() { throw new Error('Unsupported operation in mock.'); }
+  getFocusableElement() {
+    throw new Error('Unsupported operation in mock.');
+  }
 
-  getFocusableTree() { throw new Error('Unsupported operation in mock.'); }
+  getFocusableTree() {
+    throw new Error('Unsupported operation in mock.');
+  }
 
   onNodeFocus() {}
 

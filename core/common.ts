@@ -7,12 +7,12 @@
 // Former goog.module ID: Blockly.common
 
 import type {Block} from './block.js';
-import {ISelectable, isSelectable} from './interfaces/i_selectable.js';
-import {getFocusManager} from './focus_manager.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
+import {getFocusManager} from './focus_manager.js';
+import {ISelectable, isSelectable} from './interfaces/i_selectable.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -105,7 +105,7 @@ export function getSelected(): ISelectable | null {
  * @internal
  */
 export function setSelected(newSelection: ISelectable) {
-  // getFocusManager().focusNode(newSelection);
+  getFocusManager().focusNode(newSelection);
 }
 
 /**

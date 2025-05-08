@@ -141,7 +141,10 @@ export class TextInputBubble extends Bubble {
   }
 
   /** Creates the editor UI for this bubble. */
-  private createEditor(container: SVGGElement, textArea: HTMLTextAreaElement): SVGForeignObjectElement {
+  private createEditor(
+    container: SVGGElement,
+    textArea: HTMLTextAreaElement,
+  ): SVGForeignObjectElement {
     const inputRoot = dom.createSvgElement(
       Svg.FOREIGNOBJECT,
       {

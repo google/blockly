@@ -17,7 +17,6 @@ import type {BlockMove} from './events/events_block_move.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
-import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';
 import {idGenerator} from './utils.js';
@@ -26,7 +25,7 @@ import * as Xml from './xml.js';
 /**
  * Class for a connection between blocks.
  */
-export class Connection implements IASTNodeLocationWithBlock {
+export class Connection {
   /** Constants for checking whether two connections are compatible. */
   static CAN_CONNECT = 0;
   static REASON_SELF_CONNECTION = 1;

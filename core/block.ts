@@ -40,7 +40,6 @@ import {EndRowInput} from './inputs/end_row_input.js';
 import {Input} from './inputs/input.js';
 import {StatementInput} from './inputs/statement_input.js';
 import {ValueInput} from './inputs/value_input.js';
-import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import {type IIcon} from './interfaces/i_icon.js';
 import type {
@@ -61,7 +60,7 @@ import type {Workspace} from './workspace.js';
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  */
-export class Block implements IASTNodeLocation {
+export class Block {
   /**
    * An optional callback method to use whenever the block's parent workspace
    * changes. This is usually only called from the constructor, the block type

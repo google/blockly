@@ -20,7 +20,6 @@ import './events/events_viewport.js';
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
-import {hasBubble} from './blockly.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
@@ -47,6 +46,7 @@ import {isAutoHideable} from './interfaces/i_autohideable.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
+import {hasBubble} from './interfaces/i_has_bubble.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import {
   isFocusableNode,

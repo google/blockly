@@ -7,7 +7,7 @@
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as browserEvents from '../browser_events.js';
-import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
 import type {IIcon} from '../interfaces/i_icon.js';
 import * as tooltip from '../tooltip.js';

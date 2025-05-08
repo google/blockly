@@ -9,7 +9,7 @@ import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
 import {IBubble} from '../interfaces/i_bubble.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
-import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {getFocusManager} from '../focus_manager.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';

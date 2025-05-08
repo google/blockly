@@ -339,6 +339,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     );
   }
 
+  /** See IHasBubble.getBubble. */
   getBubble(): IBubble | null {
     return this.textInputBubble;
   }

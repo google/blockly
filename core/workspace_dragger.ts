@@ -56,10 +56,7 @@ export class WorkspaceDragger {
    *
    * @internal
    */
-  startDrag() {
-    // Focus the workspace root to indicate that it's now selected for dragging.
-    getFocusManager().focusNode(this.workspace);
-  }
+  startDrag() {}
 
   /**
    * Finish dragging the workspace and put everything back where it belongs.

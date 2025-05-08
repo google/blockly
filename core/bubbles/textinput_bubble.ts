@@ -130,17 +130,17 @@ export class TextInputBubble extends Bubble {
     this.locationChangeListeners.push(listener);
   }
 
+  /** Creates and returns the editable text area for this bubble's editor. */
   private static createTextArea(): HTMLTextAreaElement {
     const textArea = document.createElementNS(
       dom.HTML_NS,
       'textarea',
     ) as HTMLTextAreaElement;
     textArea.className = 'blocklyTextarea blocklyText';
-    // textArea.setAttribute('tabindex', '-1');
     return textArea;
   }
 
-  /** Creates the editor UI for this bubble. */
+  /** Creates and returns the UI container element for this bubble's editor. */
   private createEditor(
     container: SVGGElement,
     textArea: HTMLTextAreaElement,
@@ -163,9 +163,6 @@ export class TextInputBubble extends Bubble {
     inputRoot.appendChild(body);
 
     this.bindTextAreaEvents(textArea);
-    // setTimeout(() => {
-    //   textArea.focus();
-    // }, 0);
 
     return inputRoot;
   }

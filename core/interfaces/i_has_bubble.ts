@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IBubble} from './i_bubble';
+import type {IBubble} from './i_bubble';
 
 export interface IHasBubble {
   /** @returns True if the bubble is currently open, false otherwise. */
@@ -13,6 +13,17 @@ export interface IHasBubble {
   /** Sets whether the bubble is open or not. */
   setBubbleVisible(visible: boolean): Promise<void>;
 
+  /**
+   * Returns the current IBubble that implementations are managing, or null if
+   * there isn't one.
+   *
+   * Note that this cannot be expected to return null if bubbleIsVisible()
+   * returns false, i.e., the nullability of the returned bubble does not
+   * necessarily imply visibility.
+   *
+   * @returns The current IBubble maintained by implementations, or null if
+   *     there is not one.
+   */
   getBubble(): IBubble | null;
 }
 

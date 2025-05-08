@@ -400,9 +400,9 @@ export class FocusManager {
   }
 
   /**
-   * Marks the specified node as actively focused, also calling related lifecycle
-   * callback methods for both the node and its parent tree. This ensures that
-   * the node is properly styled to indicate its active focus.
+   * Marks the specified node as actively focused, also calling related
+   * lifecycle callback methods for both the node and its parent tree. This
+   * ensures that the node is properly styled to indicate its active focus.
    *
    * This does not change the manager's currently tracked node, nor does it
    * change any other nodes.
@@ -499,8 +499,8 @@ export class FocusManager {
   /**
    * Returns the page-global FocusManager.
    *
-   * The returned instance is guaranteed to not change across function calls, but
-   * may change across page loads.
+   * The returned instance is guaranteed to not change across function calls,
+   * but may change across page loads.
    */
   static getFocusManager(): FocusManager {
     if (!FocusManager.focusManager) {

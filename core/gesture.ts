@@ -346,7 +346,7 @@ export class Gesture {
     // to return the new block.
     if (this.flyout) this.updateIsDraggingFromFlyout();
 
-    const selected = this.getSelectedBlock();
+    const selected = this.getSelectedBlock() ?? common.getSelected();
     if (selected && isDraggable(selected) && selected.isMovable()) {
       this.dragging = true;
       this.dragger = this.createDragger(selected, this.startWorkspace_);

@@ -122,7 +122,12 @@ export class LayerManager {
     if (!this.layers.has(layerNum)) {
       this.createLayer(layerNum);
     }
-    this.layers.get(layerNum)?.appendChild(elem.getSvgRoot());
+    const childElem = elem.getSvgRoot();
+    if (this.layers.get(layerNum)?.lastChild !== childElem) {
+      // Only append the child if it isn't already last (to avoid re-firing
+      // events like focused).
+      this.layers.get(layerNum)?.appendChild(childElem);
+    }
   }
 
   /**

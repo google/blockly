@@ -33,6 +33,9 @@ export interface IFocusableNode {
    * It's expected the actual returned element will not change for the lifetime
    * of the node (that is, its properties can change but a new element should
    * never be returned).
+   *
+   * @returns The HTMLElement or SVGElement which can both receive focus and be
+   *     visually represented as actively or passively focused for this node.
    */
   getFocusableElement(): HTMLElement | SVGElement;
 
@@ -40,6 +43,8 @@ export interface IFocusableNode {
    * Returns the closest parent tree of this node (in cases where a tree has
    * distinct trees underneath it), which represents the tree to which this node
    * belongs.
+   *
+   * @returns The node's IFocusableTree.
    */
   getFocusableTree(): IFocusableTree;
 
@@ -64,14 +69,27 @@ export interface IFocusableNode {
    * Indicates whether this node allows focus. If this returns false then none
    * of the other IFocusableNode methods will be called.
    *
-   * Note that special care must be taken if this dynamically changes its return
-   * value over the lifetime of the node as certain environment conditions could
-   * affect the focusability of this node's DOM element (such as whether the
-   * element has a positive or zero tabindex). Also, changing from a true to a
-   * false value while the node holds focus would not change the current focus
-   * of the node, and may result in some of the node's functions being called
-   * later on when defocused (since it was previously considered focusable at
-   * the time of being focused).
+   * Note that special care must be taken if implementations of this function
+   * dynamically change their return value value over the lifetime of the node
+   * as certain environment conditions could affect the focusability of this
+   * node's DOM element (such as whether the element has a positive or zero
+   * tabindex). Also, changing from a true to a false value while the node holds
+   * focus will not immediately change the current focus of the node nor
+   * FocusManager's internal state, and thus may result in some of the node's
+   * functions being called later on when defocused (since it was previously
+   * considered focusable at the time of being focused).
+   *
+   * Implementations should generally always return true here unless there are
+   * circumstances under which this node should be skipped for focus
+   * considerations. Examples may include being disabled, read-only, a purely
+   * visual decoration, or a node with no visual representation that must
+   * implement this interface (e.g. due to a parent interface extending it).
+   * Keep in mind accessibility best practices when determining whether a node
+   * should be focusable since even disabled and read-only elements are still
+   * often relevant to providing organizational context to users (particularly
+   * when using a screen reader).
+   *
+   * @returns Whether this node can be focused by FocusManager.
    */
   canBeFocused(): boolean;
 }

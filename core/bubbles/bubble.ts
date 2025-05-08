@@ -96,12 +96,16 @@ export abstract class Bubble implements IBubble, ISelectable {
    *     The tail of the bubble will point to this location.
    * @param ownerRect An optional rect we don't want the bubble to overlap with
    *     when automatically positioning.
+   * @param overriddenFocusableElement An optional replacement to the focusable
+   *     element that's represented by this bubble (as a focusable node). This
+   *     element will have its ID and tabindex overwritten. If not provided, the
+   *     focusable element of this node will default to the bubble's SVG root.
    */
   constructor(
     public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
-    private overriddenFocusableElement?: SVGElement | HTMLElement,
+    overriddenFocusableElement?: SVGElement | HTMLElement,
   ) {
     this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(

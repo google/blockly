@@ -224,7 +224,6 @@ export class RenderedWorkspaceComment
         e.stopPropagation();
       } else {
         gesture.handleCommentStart(e, this);
-        this.workspace.getLayerManager()?.append(this, layers.BLOCK);
       }
       getFocusManager().focusNode(this);
     }
@@ -342,6 +341,8 @@ export class RenderedWorkspaceComment
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
     this.select();
+    // Ensure that the comment is always at the top when focused.
+    this.workspace.getLayerManager()?.append(this, layers.BLOCK);
   }
 
   /** See IFocusableNode.onNodeBlur. */

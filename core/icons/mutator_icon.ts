@@ -204,6 +204,7 @@ export class MutatorIcon extends Icon implements IHasBubble {
     );
   }
 
+  /** See IHasBubble.getBubble. */
   getBubble(): IBubble | null {
     return this.miniWorkspaceBubble;
   }

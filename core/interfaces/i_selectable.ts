@@ -12,7 +12,7 @@ import {IFocusableNode, isFocusableNode} from './i_focusable_node.js';
 /**
  * The interface for an object that is selectable.
  *
- * Implementations are genreally expected to use their implementations of
+ * Implementations are generally expected to use their implementations of
  * onNodeFocus() and onNodeBlur() to call setSelected() with themselves and
  * null, respectively, in order to ensure that selections are correctly updated
  * and the selection change event is fired.

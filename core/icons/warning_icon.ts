@@ -198,6 +198,7 @@ export class WarningIcon extends Icon implements IHasBubble {
     );
   }
 
+  /** See IHasBubble.getBubble. */
   getBubble(): IBubble | null {
     return this.textBubble;
   }

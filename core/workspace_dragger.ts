@@ -11,7 +11,6 @@
  */
 // Former goog.module ID: Blockly.WorkspaceDragger
 
-import {getFocusManager} from './focus_manager.js';
 import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 

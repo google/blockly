@@ -91,12 +91,8 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
       return current.workspace;
     }
 
-    const lastBlock = topBlocks[targetIndex]
-      .getDescendants(true)
-      .reverse()
-      .pop();
-
-    return lastBlock?.nextConnection ?? lastBlock ?? null;
+    const block = topBlocks[targetIndex];
+    return block.lastConnectionInStack(false) ?? block;
   }
 
   /**

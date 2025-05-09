@@ -64,6 +64,7 @@ export class WorkspaceNavigationPolicy
     const blocks = current.getTopBlocks(true);
     if (!blocks.length) return null;
     const block = blocks[blocks.length - 1];
-    return block;
+    const lastBlock = block.getDescendants(true).pop();
+    return lastBlock?.nextConnection ?? lastBlock ?? null;
   }
 }

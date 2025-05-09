@@ -618,7 +618,7 @@ export class LineCursor extends Marker {
    * @returns The last navigable node on the workspace, or null.
    */
   getLastNode(): INavigable<any> | null {
-    return this.workspace.getNavigator().getPreviousSibling(this.workspace);
+    return this.getPreviousNode(this.workspace, () => true, true);
   }
 }
 

@@ -609,7 +609,7 @@ export class LineCursor extends Marker {
    * @returns The first navigable node on the workspace, or null.
    */
   getFirstNode(): INavigable<any> | null {
-    return this.workspace.getNavigator().getFirstChild(this.workspace);
+    return this.workspace.getNavigator().getNextSibling(this.workspace);
   }
 
   /**
@@ -618,8 +618,7 @@ export class LineCursor extends Marker {
    * @returns The last navigable node on the workspace, or null.
    */
   getLastNode(): INavigable<any> | null {
-    const first = this.getFirstNode();
-    return this.getPreviousNode(first, () => true, true);
+    return this.workspace.getNavigator().getPreviousSibling(this.workspace);
   }
 }
 

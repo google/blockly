@@ -17,10 +17,30 @@ export class WorkspaceNavigationPolicy
   /**
    * Returns the first child of the given workspace.
    *
-   * @param current The workspace to return the first child of.
+   * @param _current The workspace to return the first child of.
    * @returns The top block of the first block stack, if any.
    */
-  getFirstChild(current: WorkspaceSvg): INavigable<unknown> | null {
+  getFirstChild(_current: WorkspaceSvg): INavigable<unknown> | null {
+    return null;
+  }
+
+  /**
+   * Returns the parent of the given workspace.
+   *
+   * @param _current The workspace to return the parent of.
+   * @returns Null.
+   */
+  getParent(_current: WorkspaceSvg): INavigable<unknown> | null {
+    return null;
+  }
+
+  /**
+   * Returns the first navigable child of the given workspace.
+   *
+   * @param current The workspace to return the next sibling of.
+   * @returns Null.
+   */
+  getNextSibling(current: WorkspaceSvg): INavigable<unknown> | null {
     const blocks = current.getTopBlocks(true);
     if (!blocks.length) return null;
     const block = blocks[0];
@@ -35,32 +55,15 @@ export class WorkspaceNavigationPolicy
   }
 
   /**
-   * Returns the parent of the given workspace.
+   * Returns the last block of the given workspace.
    *
-   * @param _current The workspace to return the parent of.
+   * @param current The workspace to return the previous sibling of.
    * @returns Null.
    */
-  getParent(_current: WorkspaceSvg): INavigable<unknown> | null {
-    return null;
-  }
-
-  /**
-   * Returns the next sibling of the given workspace.
-   *
-   * @param _current The workspace to return the next sibling of.
-   * @returns Null.
-   */
-  getNextSibling(_current: WorkspaceSvg): INavigable<unknown> | null {
-    return null;
-  }
-
-  /**
-   * Returns the previous sibling of the given workspace.
-   *
-   * @param _current The workspace to return the previous sibling of.
-   * @returns Null.
-   */
-  getPreviousSibling(_current: WorkspaceSvg): INavigable<unknown> | null {
-    return null;
+  getPreviousSibling(current: WorkspaceSvg): INavigable<unknown> | null {
+    const blocks = current.getTopBlocks(true);
+    if (!blocks.length) return null;
+    const block = blocks[blocks.length - 1];
+    return block;
   }
 }

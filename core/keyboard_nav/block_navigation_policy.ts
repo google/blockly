@@ -60,9 +60,9 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
       // connection, it must be the last block in the stack, so its next sibling
       // is the first block of the next stack on the workspace.
       const topBlocks = current.workspace.getTopBlocks(true);
-      let targetIndex = topBlocks.indexOf(current.getRootBlock()) + 1;
+      const targetIndex = topBlocks.indexOf(current.getRootBlock()) + 1;
       if (targetIndex >= topBlocks.length) {
-        targetIndex = 0;
+        return current.workspace;
       }
       const previousBlock = topBlocks[targetIndex];
       return this.getParentConnection(previousBlock) ?? previousBlock;
@@ -86,9 +86,9 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     // so its previous sibling is the last connection of the last block of the
     // previous stack on the workspace.
     const topBlocks = current.workspace.getTopBlocks(true);
-    let targetIndex = topBlocks.indexOf(current.getRootBlock()) - 1;
+    const targetIndex = topBlocks.indexOf(current.getRootBlock()) - 1;
     if (targetIndex < 0) {
-      targetIndex = topBlocks.length - 1;
+      return current.workspace;
     }
 
     const lastBlock = topBlocks[targetIndex]

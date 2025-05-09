@@ -278,6 +278,8 @@ export class LineCursor extends Marker {
       } else if (node.type === ConnectionType.PREVIOUS_STATEMENT) {
         return this.options.stackConnections && !node.isConnected();
       }
+    } else if (node instanceof WorkspaceSvg) {
+      return true;
     }
 
     return false;

@@ -241,7 +241,11 @@ export class FocusManager {
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
     if (this.focusedNode === focusableNode) return; // State is unchanged.
-    if (!focusableNode.canBeFocused()) return; // This node can't be focused.
+    if (!focusableNode.canBeFocused()) {
+      // This node can't be focused.
+      console.warn("Trying to focus a node that can't be focused.");
+      return;
+    }
 
     const nextTree = focusableNode.getFocusableTree();
     if (!this.isRegistered(nextTree)) {

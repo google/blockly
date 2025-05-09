@@ -221,7 +221,10 @@ export abstract class Bubble implements IBubble, ISelectable {
     this.background.setAttribute('fill', colour);
   }
 
-  /** Brings the bubble to the front and passes the pointer event off to the gesture system. */
+  /**
+   * Passes the pointer event off to the gesture system and ensures the bubble
+   * is focused.
+   */
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
     getFocusManager().focusNode(this);

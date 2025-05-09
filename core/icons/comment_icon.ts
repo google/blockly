@@ -11,6 +11,7 @@ import type {BlockSvg} from '../block_svg.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import type {IBubble} from '../interfaces/i_bubble.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import type {ISerializable} from '../interfaces/i_serializable.js';
 import * as renderManagement from '../render_management.js';
@@ -336,6 +337,11 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
         'comment',
       ),
     );
+  }
+
+  /** See IHasBubble.getBubble. */
+  getBubble(): IBubble | null {
+    return this.textInputBubble;
   }
 
   /**

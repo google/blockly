@@ -13,7 +13,6 @@
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
-import * as common from './common.js';
 import {config} from './config.js';
 import {Connection} from './connection.js';
 import type {ConnectionDB} from './connection_db.js';
@@ -198,15 +197,12 @@ export class RenderedConnection
       ? inferiorRootBlock
       : superiorRootBlock;
     // Raise it to the top for extra visibility.
-    const selected = common.getSelected() === dynamicRootBlock;
-    if (!selected) dynamicRootBlock.addSelect();
     if (dynamicRootBlock.RTL) {
       offsetX = -offsetX;
     }
     const dx = staticConnection.x + offsetX - dynamicConnection.x;
     const dy = staticConnection.y + offsetY - dynamicConnection.y;
     dynamicRootBlock.moveBy(dx, dy, ['bump']);
-    if (!selected) dynamicRootBlock.removeSelect();
   }
 
   /**
@@ -559,21 +555,6 @@ export class RenderedConnection
     childBlock.updateDisabled();
     childBlock.queueRender();
 
-    // If either block being connected was selected, visually un- and reselect
-    // it. This has the effect of moving the selection path to the end of the
-    // list of child nodes in the DOM. Since SVG z-order is determined by node
-    // order in the DOM, this works around an issue where the selection outline
-    // path could be partially obscured by a new block inserted after it in the
-    // DOM.
-    const selection = common.getSelected();
-    const selectedBlock =
-      (selection === parentBlock && parentBlock) ||
-      (selection === childBlock && childBlock);
-    if (selectedBlock) {
-      selectedBlock.removeSelect();
-      selectedBlock.addSelect();
-    }
-
     // The input the child block is connected to (if any).
     const parentInput = parentBlock.getInputWithBlock(childBlock);
     if (parentInput) {
@@ -669,6 +650,11 @@ export class RenderedConnection
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
     this.unhighlight();
+  }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
   }
 
   private findHighlightSvg(): SVGElement | null {

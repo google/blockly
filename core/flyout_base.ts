@@ -26,7 +26,7 @@ import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import {IFocusableNode} from './interfaces/i_focusable_node.js';
-import {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
@@ -985,6 +985,11 @@ export abstract class Flyout
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
 
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {

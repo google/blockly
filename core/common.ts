@@ -7,11 +7,12 @@
 // Former goog.module ID: Blockly.common
 
 import type {Block} from './block.js';
-import {ISelectable} from './blockly.js';
 import {BlockDefinition, Blocks} from './blocks.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
+import {getFocusManager} from './focus_manager.js';
+import {ISelectable, isSelectable} from './interfaces/i_selectable.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -86,38 +87,45 @@ export function setMainWorkspace(workspace: Workspace) {
 }
 
 /**
- * Currently selected copyable object.
- */
-let selected: ISelectable | null = null;
-
-/**
- * Returns the currently selected copyable object.
+ * Returns the current selection.
  */
 export function getSelected(): ISelectable | null {
-  return selected;
+  const focused = getFocusManager().getFocusedNode();
+  if (focused && isSelectable(focused)) return focused;
+  return null;
 }
 
 /**
- * Sets the currently selected block. This function does not visually mark the
- * block as selected or fire the required events. If you wish to
- * programmatically select a block, use `BlockSvg#select`.
+ * Sets the current selection.
  *
- * @param newSelection The newly selected block.
+ * To clear the current selection, select another ISelectable or focus a
+ * non-selectable (like the workspace root node).
+ *
+ * @param newSelection The new selection to make.
  * @internal
  */
-export function setSelected(newSelection: ISelectable | null) {
-  if (selected === newSelection) return;
+export function setSelected(newSelection: ISelectable) {
+  getFocusManager().focusNode(newSelection);
+}
 
+/**
+ * Fires a selection change event based on the new selection.
+ *
+ * This is only expected to be called by ISelectable implementations and should
+ * always be called before updating the current selection state. It does not
+ * change focus or selection state.
+ *
+ * @param newSelection The new selection.
+ * @internal
+ */
+export function fireSelectedEvent(newSelection: ISelectable | null) {
+  const selected = getSelected();
   const event = new (eventUtils.get(EventType.SELECTED))(
     selected?.id ?? null,
     newSelection?.id ?? null,
     newSelection?.workspace.id ?? selected?.workspace.id ?? '',
   );
   eventUtils.fire(event);
-
-  selected?.unselect();
-  selected = newSelection;
-  selected?.select();
 }
 
 /**

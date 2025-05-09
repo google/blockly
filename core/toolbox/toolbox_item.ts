@@ -172,5 +172,10 @@ export class ToolboxItem implements IToolboxItem {
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
 }
 // nop by default

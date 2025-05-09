@@ -51,6 +51,7 @@ import {
   type IFocusableNode,
 } from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import {hasBubble} from './interfaces/i_has_bubble.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {INavigable} from './interfaces/i_navigable.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
@@ -2694,6 +2695,11 @@ export class WorkspaceSvg
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;
@@ -2728,6 +2734,7 @@ export class WorkspaceSvg
       }
     }
 
+    // Search for fields and connections (based on ID indicators).
     const fieldIndicatorIndex = id.indexOf('_field_');
     const connectionIndicatorIndex = id.indexOf('_connection_');
     if (fieldIndicatorIndex !== -1) {
@@ -2750,7 +2757,33 @@ export class WorkspaceSvg
       return null;
     }
 
-    return this.getBlockById(id) as IFocusableNode;
+    // Search for a specific block.
+    const block = this.getBlockById(id);
+    if (block) return block;
+
+    // Search for a workspace comment (semi-expensive).
+    for (const comment of this.getTopComments()) {
+      if (
+        comment instanceof RenderedWorkspaceComment &&
+        comment.getFocusableElement().id === id
+      ) {
+        return comment;
+      }
+    }
+
+    // Search for icons and bubbles (which requires an expensive getAllBlocks).
+    const icons = this.getAllBlocks()
+      .map((block) => block.getIcons())
+      .flat();
+    for (const icon of icons) {
+      if (icon.getFocusableElement().id === id) return icon;
+      if (hasBubble(icon)) {
+        const bubble = icon.getBubble();
+        if (bubble && bubble.getFocusableElement().id === id) return bubble;
+      }
+    }
+
+    return null;
   }
 
   /** See IFocusableTree.onTreeFocus. */

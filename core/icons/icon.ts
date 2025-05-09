@@ -7,13 +7,16 @@
 import type {Block} from '../block.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as browserEvents from '../browser_events.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
 import type {IIcon} from '../interfaces/i_icon.js';
 import * as tooltip from '../tooltip.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
+import * as idGenerator from '../utils/idgenerator.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {IconType} from './icon_types.js';
 
 /**
@@ -38,8 +41,12 @@ export abstract class Icon implements IIcon {
   /** The tooltip for this icon. */
   protected tooltip: tooltip.TipInfo;
 
+  /** The unique ID of this icon. */
+  private id: string;
+
   constructor(protected sourceBlock: Block) {
     this.tooltip = sourceBlock;
+    this.id = idGenerator.getNextUniqueId();
   }
 
   getType(): IconType<IIcon> {
@@ -50,7 +57,11 @@ export abstract class Icon implements IIcon {
     if (this.svgRoot) return; // The icon has already been initialized.
 
     const svgBlock = this.sourceBlock as BlockSvg;
-    this.svgRoot = dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'});
+    this.svgRoot = dom.createSvgElement(Svg.G, {
+      'class': 'blocklyIconGroup',
+      'tabindex': '-1',
+      'id': this.id,
+    });
     svgBlock.getSvgRoot().appendChild(this.svgRoot);
     this.updateSvgRootOffset();
     browserEvents.conditionalBind(
@@ -142,6 +153,29 @@ export abstract class Icon implements IIcon {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isClickableInFlyout(autoClosingFlyout: boolean): boolean {
+    return true;
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    const svgRoot = this.svgRoot;
+    if (!svgRoot) throw new Error('Attempting to focus uninitialized icon.');
+    return svgRoot;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.sourceBlock.workspace as WorkspaceSvg;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
     return true;
   }
 }

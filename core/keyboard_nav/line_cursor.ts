@@ -14,7 +14,6 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import * as common from '../common.js';
 import {ConnectionType} from '../connection_type.js';
 import {Field} from '../field.js';
 import {FieldCheckbox} from '../field_checkbox.js';
@@ -561,12 +560,7 @@ export class LineCursor extends Marker {
    * @returns The current field, connection, or block the cursor is on.
    */
   override getCurNode(): INavigable<any> | null {
-    if (!this.updateCurNodeFromFocus()) {
-      // Fall back to selection if focus fails to sync. This can happen for
-      // non-focusable nodes or for cases when focus may not properly propagate
-      // (such as for mouse clicks).
-      this.updateCurNodeFromSelection();
-    }
+    this.updateCurNodeFromFocus();
     return super.getCurNode();
   }
 
@@ -594,59 +588,17 @@ export class LineCursor extends Marker {
   }
 
   /**
-   * Updates the current node to match the selection.
-   *
-   * Clears the current node if it's on a block but the selection is null.
-   * Sets the node to a block if selected for our workspace.
-   * For shadow blocks selections the parent is used by default (unless we're
-   * already on the shadow block via keyboard) as that's where the visual
-   * selection is.
-   */
-  private updateCurNodeFromSelection() {
-    const curNode = super.getCurNode();
-    const selected = common.getSelected();
-
-    if (selected === null && curNode instanceof BlockSvg) {
-      this.setCurNode(null);
-      return;
-    }
-    if (selected?.workspace !== this.workspace) {
-      return;
-    }
-    if (selected instanceof BlockSvg) {
-      let block: BlockSvg | null = selected;
-      if (selected.isShadow()) {
-        // OK if the current node is on the parent OR the shadow block.
-        // The former happens for clicks, the latter for keyboard nav.
-        if (curNode && (curNode === block || curNode === block.getParent())) {
-          return;
-        }
-        block = block.getParent();
-      }
-      if (block) {
-        this.setCurNode(block);
-      }
-    }
-  }
-
-  /**
    * Updates the current node to match what's currently focused.
-   *
-   * @returns Whether the current node has been set successfully from the
-   *     current focused node.
    */
-  private updateCurNodeFromFocus(): boolean {
+  private updateCurNodeFromFocus() {
     const focused = getFocusManager().getFocusedNode();
 
     if (focused instanceof BlockSvg) {
       const block: BlockSvg | null = focused;
       if (block && block.workspace === this.workspace) {
         this.setCurNode(block);
-        return true;
       }
     }
-
-    return false;
   }
 
   /**

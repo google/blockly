@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as common from '../../build/src/core/common.js';
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
@@ -462,20 +461,6 @@ suite('Blocks', function () {
 
       teardown(function () {
         workspaceTeardown.call(this, this.workspace);
-      });
-
-      test('Disposing selected shadow unhighlights parent', function () {
-        const parentBlock = this.parentBlock;
-        common.setSelected(this.shadowChild);
-        assert.isTrue(
-          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
-          'Expected parent to be highlighted after selecting shadow child',
-        );
-        this.shadowChild.dispose();
-        assert.isFalse(
-          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
-          'Expected parent to be unhighlighted after deleting shadow child',
-        );
       });
     });
   });

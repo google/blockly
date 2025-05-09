@@ -408,6 +408,11 @@ export class FlyoutButton
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   /**
    * Returns whether or not this button is accessible through keyboard
    * navigation.

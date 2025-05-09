@@ -81,7 +81,7 @@ export class FocusManager {
         }
       }
 
-      if (newNode) {
+      if (newNode && newNode.canBeFocused()) {
         const newTree = newNode.getFocusableTree();
         const oldTree = this.focusedNode?.getFocusableTree();
         if (newNode === newTree.getRootFocusableNode() && newTree !== oldTree) {
@@ -232,11 +232,20 @@ export class FocusManager {
    * Any previously focused node will be updated to be passively highlighted (if
    * it's in a different focusable tree) or blurred (if it's in the same one).
    *
+   * **Important**: If the provided node is not able to be focused (e.g. its
+   * canBeFocused() method returns false), it will be ignored and any existing
+   * focus state will remain unchanged.
+   *
    * @param focusableNode The node that should receive active focus.
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
     if (this.focusedNode === focusableNode) return; // State is unchanged.
+    if (!focusableNode.canBeFocused()) {
+      // This node can't be focused.
+      console.warn("Trying to focus a node that can't be focused.");
+      return;
+    }
 
     const nextTree = focusableNode.getFocusableTree();
     if (!this.isRegistered(nextTree)) {
@@ -395,9 +404,9 @@ export class FocusManager {
   }
 
   /**
-   * Marks the specified node as actively focused, also calling related lifecycle
-   * callback methods for both the node and its parent tree. This ensures that
-   * the node is properly styled to indicate its active focus.
+   * Marks the specified node as actively focused, also calling related
+   * lifecycle callback methods for both the node and its parent tree. This
+   * ensures that the node is properly styled to indicate its active focus.
    *
    * This does not change the manager's currently tracked node, nor does it
    * change any other nodes.
@@ -494,8 +503,8 @@ export class FocusManager {
   /**
    * Returns the page-global FocusManager.
    *
-   * The returned instance is guaranteed to not change across function calls, but
-   * may change across page loads.
+   * The returned instance is guaranteed to not change across function calls,
+   * but may change across page loads.
    */
   static getFocusManager(): FocusManager {
     if (!FocusManager.focusManager) {

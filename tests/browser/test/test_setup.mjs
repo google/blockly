@@ -175,6 +175,11 @@ export async function clickBlock(browser, block, clickOptions) {
   await browser.execute(
     (blockId, newElemId) => {
       const block = Blockly.getMainWorkspace().getBlockById(blockId);
+      // Ensure the block we want to click is within the viewport.
+      Blockly.getMainWorkspace().scrollBoundsIntoView(
+        block.getBoundingRectangleWithoutChildren(),
+        10,
+      );
       for (const input of block.inputList) {
         for (const field of input.fieldRow) {
           if (field instanceof Blockly.FieldLabel) {

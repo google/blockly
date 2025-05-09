@@ -253,7 +253,7 @@ export class ShortcutRegistry {
         !shortcut ||
         (shortcut.preconditionFn &&
           !shortcut.preconditionFn(workspace, {
-            focusedNode: getFocusManager().getFocusedNode(),
+            focusedNode: getFocusManager().getFocusedNode() ?? undefined,
           }))
       ) {
         continue;
@@ -261,10 +261,11 @@ export class ShortcutRegistry {
       // If the key has been handled, stop processing shortcuts.
       if (
         shortcut.callback?.(workspace, e, shortcut, {
-          focusedNode: getFocusManager().getFocusedNode(),
+          focusedNode: getFocusManager().getFocusedNode() ?? undefined,
         })
-      )
+      ) {
         return true;
+      }
     }
     return false;
   }

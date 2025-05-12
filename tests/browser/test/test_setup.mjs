@@ -535,6 +535,7 @@ export async function dragBlockFromMutatorFlyout(
 export async function contextMenuSelect(browser, block, itemText) {
   await clickBlock(browser, block.id, {button: 2});
 
+  await browser.pause(PAUSE_TIME);
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();
   await item.click();

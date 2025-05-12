@@ -121,6 +121,9 @@ export class BlockDragStrategy implements IDragStrategy {
     }
     this.block.setDragging(true);
     this.workspace.getLayerManager()?.moveToDragLayer(this.block);
+
+    // Since moving the block to the drag layer will cause it to lose focus,
+    // ensure it regains focus (to enable the block's selection highlight).
     getFocusManager().focusNode(this.block);
   }
 

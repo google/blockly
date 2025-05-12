@@ -37,11 +37,11 @@ import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {FlyoutButton} from './flyout_button.js';
 import {Gesture} from './gesture.js';
-import {Grid} from './grid.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import {IGrid} from './interfaces/i_grid.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {Cursor} from './keyboard_nav/cursor.js';
@@ -275,7 +275,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private readonly highlightedBlocks: BlockSvg[] = [];
   private audioManager: WorkspaceAudio;
-  private grid: Grid | null;
+  private grid: IGrid | null;
   private markerManager: MarkerManager;
 
   /**
@@ -355,7 +355,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     /** This workspace's grid object or null. */
     this.grid = this.options.gridPattern
-      ? new Grid(this.options.gridPattern, options.gridOptions)
+      ? options.gridProvider.createGrid(
+          this.options.gridPattern,
+          options.gridOptions,
+        )
       : null;
 
     /** Manager in charge of markers and cursors. */
@@ -2388,7 +2391,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *
    * @returns The grid object for this workspace.
    */
-  getGrid(): Grid | null {
+  getGrid(): IGrid | null {
     return this.grid;
   }
 

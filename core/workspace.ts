@@ -868,7 +868,7 @@ export class Workspace {
    */
   createPotentialVariableMap() {
     const VariableMap = this.getVariableMapClass();
-    this.potentialVariableMap = new VariableMap(this);
+    this.potentialVariableMap = new VariableMap(this, true);
   }
 
   /**

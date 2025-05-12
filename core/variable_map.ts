@@ -46,8 +46,15 @@ export class VariableMap
     Map<string, IVariableModel<IVariableState>>
   >();
 
-  /** @param workspace The workspace this map belongs to. */
-  constructor(public workspace: Workspace) {}
+  /**
+   * @param workspace The workspace this map belongs to.
+   * @param potentialMap True if this holds variables that don't exist in the
+   *  workspace yet.
+   */
+  constructor(
+    public workspace: Workspace,
+    public potentialMap = false,
+  ) {}
 
   /** Clear the variable map.  Fires events for every deletion. */
   clear() {
@@ -77,9 +84,12 @@ export class VariableMap
     const type = variable.getType();
     const conflictVar = this.getVariable(newName, type);
     const blocks = this.workspace.getAllBlocks(false);
-    const existingGroup = eventUtils.getGroup();
-    if (!existingGroup) {
-      eventUtils.setGroup(true);
+    let existingGroup = '';
+    if (!this.potentialMap) {
+      existingGroup = eventUtils.getGroup();
+      if (!existingGroup) {
+        eventUtils.setGroup(true);
+      }
     }
     try {
       // The IDs may match if the rename is a simple case change (name1 ->
@@ -90,7 +100,7 @@ export class VariableMap
         this.renameVariableWithConflict(variable, newName, conflictVar, blocks);
       }
     } finally {
-      eventUtils.setGroup(existingGroup);
+      if (!this.potentialMap) eventUtils.setGroup(existingGroup);
     }
     return variable;
   }
@@ -147,9 +157,11 @@ export class VariableMap
     newName: string,
     blocks: Block[],
   ) {
-    eventUtils.fire(
-      new (eventUtils.get(EventType.VAR_RENAME))(variable, newName),
-    );
+    if (!this.potentialMap) {
+      eventUtils.fire(
+        new (eventUtils.get(EventType.VAR_RENAME))(variable, newName),
+      );
+    }
     variable.setName(newName);
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
@@ -186,8 +198,10 @@ export class VariableMap
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].renameVarById(variable.getId(), conflictVar.getId());
     }
-    // Finally delete the original variable, which is now unreferenced.
-    eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
+    if (!this.potentialMap) {
+      // Finally delete the original variable, which is now unreferenced.
+      eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
+    }
     // And remove it from the map.
     this.variableMap.get(type)?.delete(variable.getId());
   }
@@ -248,7 +262,9 @@ export class VariableMap
     if (!this.variableMap.has(type)) {
       this.variableMap.set(type, variables);
     }
-    eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
+    if (!this.potentialMap) {
+      eventUtils.fire(new (eventUtils.get(EventType.VAR_CREATE))(variable));
+    }
     return variable;
   }
 
@@ -276,9 +292,12 @@ export class VariableMap
    */
   deleteVariable(variable: IVariableModel<IVariableState>) {
     const uses = getVariableUsesById(this.workspace, variable.getId());
-    const existingGroup = eventUtils.getGroup();
-    if (!existingGroup) {
-      eventUtils.setGroup(true);
+    let existingGroup = '';
+    if (!this.potentialMap) {
+      existingGroup = eventUtils.getGroup();
+      if (!existingGroup) {
+        eventUtils.setGroup(true);
+      }
     }
     try {
       for (let i = 0; i < uses.length; i++) {
@@ -287,12 +306,16 @@ export class VariableMap
       const variables = this.variableMap.get(variable.getType());
       if (!variables || !variables.has(variable.getId())) return;
       variables.delete(variable.getId());
-      eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
+      if (!this.potentialMap) {
+        eventUtils.fire(new (eventUtils.get(EventType.VAR_DELETE))(variable));
+      }
       if (variables.size === 0) {
         this.variableMap.delete(variable.getType());
       }
     } finally {
-      eventUtils.setGroup(existingGroup);
+      if (!this.potentialMap) {
+        eventUtils.setGroup(existingGroup);
+      }
     }
   }
 

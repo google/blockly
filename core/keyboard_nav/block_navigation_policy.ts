@@ -118,6 +118,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
   /**
    * Returns whether or not the given block can be navigated to.
    *
+   * @param current The instance to check for navigability.
    * @returns True if the given block can be focused.
    */
   isNavigable(current: BlockSvg): boolean {

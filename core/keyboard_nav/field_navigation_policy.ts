@@ -92,6 +92,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
   /**
    * Returns whether or not the given field can be navigated to.
    *
+   * @param current The instance to check for navigability.
    * @returns True if the given field can be focused and navigated to.
    */
   isNavigable(current: Field<any>): boolean {

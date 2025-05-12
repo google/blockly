@@ -34,9 +34,10 @@ export class FlyoutSeparatorNavigationPolicy
   /**
    * Returns whether or not the given flyout separator can be navigated to.
    *
+   * @param _current The instance to check for navigability.
    * @returns False.
    */
-  isNavigable(current: FlyoutSeparator): boolean {
+  isNavigable(_current: FlyoutSeparator): boolean {
     return false;
   }
 }

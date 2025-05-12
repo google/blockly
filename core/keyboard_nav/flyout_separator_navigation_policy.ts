@@ -30,4 +30,14 @@ export class FlyoutSeparatorNavigationPolicy
   getPreviousSibling(_current: FlyoutSeparator): INavigable<unknown> | null {
     return null;
   }
+
+  /**
+   * Returns whether or not the given flyout separator can be navigated to.
+   *
+   * @param _current The instance to check for navigability.
+   * @returns False.
+   */
+  isNavigable(_current: FlyoutSeparator): boolean {
+    return false;
+  }
 }

@@ -2833,15 +2833,6 @@ export class WorkspaceSvg
   }
 
   /**
-   * Returns whether or not this workspace is keyboard-navigable.
-   *
-   * @returns True.
-   */
-  isNavigable() {
-    return true;
-  }
-
-  /**
    * Returns an object responsible for coordinating movement of focus between
    * items on this workspace in response to keyboard navigation commands.
    *

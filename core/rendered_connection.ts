@@ -666,15 +666,6 @@ export class RenderedConnection
   }
 
   /**
-   * Returns whether or not this connection is keyboard-navigable.
-   *
-   * @returns True.
-   */
-  isNavigable() {
-    return true;
-  }
-
-  /**
    * Returns this connection's class for keyboard navigation.
    *
    * @returns RenderedConnection.

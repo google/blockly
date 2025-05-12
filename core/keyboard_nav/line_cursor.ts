@@ -26,7 +26,7 @@ import {FlyoutButton} from '../flyout_button.js';
 import {FlyoutSeparator} from '../flyout_separator.js';
 import {getFocusManager} from '../focus_manager.js';
 import {isFocusableNode} from '../interfaces/i_focusable_node.js';
-import type {INavigable} from '../interfaces/i_navigable.js';
+import {isNavigable, type INavigable} from '../interfaces/i_navigable.js';
 import * as registry from '../registry.js';
 import {RenderedConnection} from '../rendered_connection.js';
 import {Renderer} from '../renderers/zelos/renderer.js';
@@ -593,11 +593,10 @@ export class LineCursor extends Marker {
   private updateCurNodeFromFocus() {
     const focused = getFocusManager().getFocusedNode();
 
-    if (focused instanceof BlockSvg) {
-      const block: BlockSvg | null = focused;
-      if (block && block.workspace === this.workspace) {
-        this.setCurNode(block);
-      }
+    if (isNavigable(focused)) {
+      const block = this.getSourceBlockFromNode(focused);
+      if (block && block.workspace !== this.workspace) return;
+      this.setCurNode(focused);
     }
   }
 

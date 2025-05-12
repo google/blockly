@@ -14,6 +14,7 @@ import {ConnectionType} from '../connection_type.js';
 import type {BlockMove} from '../events/events_block_move.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import {getFocusManager} from '../focus_manager.js';
 import {IConnectionPreviewer} from '../interfaces/i_connection_previewer.js';
 import {IDragStrategy} from '../interfaces/i_draggable.js';
 import * as layers from '../layers.js';
@@ -120,6 +121,7 @@ export class BlockDragStrategy implements IDragStrategy {
     }
     this.block.setDragging(true);
     this.workspace.getLayerManager()?.moveToDragLayer(this.block);
+    getFocusManager().focusNode(this.block);
   }
 
   /**

@@ -59,8 +59,9 @@ export class Navigator {
     const result = this.get(current)?.getFirstChild(current);
     if (!result) return null;
     // If the child isn't navigable, don't traverse into it; check its peers.
-    if (!this.get(result)?.isNavigable(result))
+    if (!this.get(result)?.isNavigable(result)) {
       return this.getNextSibling(result);
+    }
     return result;
   }
 
@@ -86,8 +87,9 @@ export class Navigator {
   getNextSibling<T extends INavigable<T>>(current: T): INavigable<any> | null {
     const result = this.get(current)?.getNextSibling(current);
     if (!result) return null;
-    if (!this.get(result)?.isNavigable(result))
+    if (!this.get(result)?.isNavigable(result)) {
       return this.getNextSibling(result);
+    }
     return result;
   }
 
@@ -102,8 +104,9 @@ export class Navigator {
   ): INavigable<any> | null {
     const result = this.get(current)?.getPreviousSibling(current);
     if (!result) return null;
-    if (!this.get(result)?.isNavigable(result))
+    if (!this.get(result)?.isNavigable(result)) {
       return this.getPreviousSibling(result);
+    }
     return result;
   }
 }

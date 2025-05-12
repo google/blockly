@@ -180,16 +180,18 @@ export async function clickBlock(browser, block, clickOptions) {
         block.getBoundingRectangleWithoutChildren(),
         10,
       );
-      for (const input of block.inputList) {
-        for (const field of input.fieldRow) {
-          if (field instanceof Blockly.FieldLabel) {
-            field.getSvgRoot().id = newElemId;
-            return;
+      if (!block.isCollapsed()) {
+        for (const input of block.inputList) {
+          for (const field of input.fieldRow) {
+            if (field instanceof Blockly.FieldLabel) {
+              field.getSvgRoot().id = newElemId;
+              return;
+            }
           }
         }
       }
       // No label field found. Fall back to the block's SVG root.
-      block.getSvgRoot().id = findableId;
+      block.getSvgRoot().id = newElemId;
     },
     block.id,
     findableId,
@@ -533,6 +535,7 @@ export async function dragBlockFromMutatorFlyout(
 export async function contextMenuSelect(browser, block, itemText) {
   await clickBlock(browser, block, {button: 2});
 
+  await browser.pause(PAUSE_TIME);
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();
   await item.click();

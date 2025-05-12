@@ -2746,7 +2746,9 @@ export class WorkspaceSvg
       const block = this.getBlockById(blockId);
       if (block) {
         for (const field of block.getFields()) {
-          if (field.getFocusableElement().id === id) return field;
+          if (field.canBeFocused() && field.getFocusableElement().id === id) {
+            return field;
+          }
         }
       }
       return null;
@@ -2769,6 +2771,7 @@ export class WorkspaceSvg
     for (const comment of this.getTopComments()) {
       if (
         comment instanceof RenderedWorkspaceComment &&
+        comment.canBeFocused() &&
         comment.getFocusableElement().id === id
       ) {
         return comment;
@@ -2780,10 +2783,18 @@ export class WorkspaceSvg
       .map((block) => block.getIcons())
       .flat();
     for (const icon of icons) {
-      if (icon.getFocusableElement().id === id) return icon;
+      if (icon.canBeFocused() && icon.getFocusableElement().id === id) {
+        return icon;
+      }
       if (hasBubble(icon)) {
         const bubble = icon.getBubble();
-        if (bubble && bubble.getFocusableElement().id === id) return bubble;
+        if (
+          bubble &&
+          bubble.canBeFocused() &&
+          bubble.getFocusableElement().id === id
+        ) {
+          return bubble;
+        }
       }
     }
 

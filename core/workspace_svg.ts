@@ -2728,7 +2728,11 @@ export class WorkspaceSvg
     if (this.isFlyout && flyout) {
       for (const flyoutItem of flyout.getContents()) {
         const elem = flyoutItem.getElement();
-        if (isFocusableNode(elem) && elem.getFocusableElement().id === id) {
+        if (
+          isFocusableNode(elem) &&
+          elem.canBeFocused() &&
+          elem.getFocusableElement().id === id
+        ) {
           return elem;
         }
       }
@@ -2815,15 +2819,6 @@ export class WorkspaceSvg
    */
   getClass() {
     return WorkspaceSvg;
-  }
-
-  /**
-   * Returns whether or not this workspace is keyboard-navigable.
-   *
-   * @returns True.
-   */
-  isNavigable() {
-    return true;
   }
 
   /**

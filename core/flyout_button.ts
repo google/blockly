@@ -414,16 +414,6 @@ export class FlyoutButton
   }
 
   /**
-   * Returns whether or not this button is accessible through keyboard
-   * navigation.
-   *
-   * @returns True if this button is keyboard accessible, otherwise false.
-   */
-  isNavigable() {
-    return true;
-  }
-
-  /**
    * Returns this button's class.
    *
    * Used by keyboard navigation to look up the rules for navigating from this

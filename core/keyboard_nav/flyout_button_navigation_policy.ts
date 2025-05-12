@@ -53,4 +53,14 @@ export class FlyoutButtonNavigationPolicy
   getPreviousSibling(_current: FlyoutButton): INavigable<unknown> | null {
     return null;
   }
+
+  /**
+   * Returns whether or not the given flyout button can be navigated to.
+   *
+   * @param current The instance to check for navigability.
+   * @returns True if the given flyout button can be focused.
+   */
+  isNavigable(current: FlyoutButton): boolean {
+    return current.canBeFocused();
+  }
 }

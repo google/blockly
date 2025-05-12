@@ -63,4 +63,13 @@ export class WorkspaceNavigationPolicy
   getPreviousSibling(_current: WorkspaceSvg): INavigable<unknown> | null {
     return null;
   }
+
+  /**
+   * Returns whether or not the given workspace can be navigated to.
+   *
+   * @returns True if the given workspace can be focused.
+   */
+  isNavigable(current: WorkspaceSvg): boolean {
+    return current.canBeFocused();
+  }
 }

@@ -88,4 +88,22 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
     }
     return null;
   }
+
+  /**
+   * Returns whether or not the given field can be navigated to.
+   *
+   * @returns True if the given field can be focused and navigated to.
+   */
+  isNavigable(current: Field<any>): boolean {
+    return (
+      current.canBeFocused() &&
+      current.isClickable() &&
+      current.isCurrentlyEditable() &&
+      !(
+        current.getSourceBlock()?.isSimpleReporter() &&
+        current.isFullBlockField()
+      ) &&
+      current.getParentInput().isVisible()
+    );
+  }
 }

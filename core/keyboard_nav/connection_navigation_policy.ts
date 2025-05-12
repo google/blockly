@@ -166,4 +166,13 @@ export class ConnectionNavigationPolicy
     }
     return block.outputConnection;
   }
+
+  /**
+   * Returns whether or not the given connection can be navigated to.
+   *
+   * @returns True if the given connection can be focused.
+   */
+  isNavigable(current: RenderedConnection): boolean {
+    return current.canBeFocused();
+  }
 }

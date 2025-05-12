@@ -88,4 +88,13 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
 
     return flyoutContents[index].getElement();
   }
+
+  /**
+   * Returns whether or not the given flyout item can be navigated to.
+   *
+   * @returns True if the given flyout item can be focused.
+   */
+  isNavigable(current: T): boolean {
+    return this.policy.isNavigable(current);
+  }
 }

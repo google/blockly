@@ -165,11 +165,11 @@ export async function getBlockElementById(browser, id) {
  * causes problems if it has holes (e.g. statement inputs). Instead, this tries
  * to get the first text field on the block. It falls back on the block's SVG root.
  * @param browser The active WebdriverIO Browser object.
- * @param block The block to click, as an interactable element.
+ * @param blockId The id of the block to click, as an interactable element.
  * @param clickOptions The options to pass to webdriverio's element.click function.
  * @return A Promise that resolves when the actions are completed.
  */
-export async function clickBlock(browser, block, clickOptions) {
+export async function clickBlock(browser, blockId, clickOptions) {
   const findableId = 'clickTargetElement';
   // In the browser context, find the element that we want and give it a findable ID.
   await browser.execute(
@@ -193,7 +193,7 @@ export async function clickBlock(browser, block, clickOptions) {
       // No label field found. Fall back to the block's SVG root.
       block.getSvgRoot().id = newElemId;
     },
-    block.id,
+    blockId,
     findableId,
   );
 
@@ -533,9 +533,8 @@ export async function dragBlockFromMutatorFlyout(
  * @return A Promise that resolves when the actions are completed.
  */
 export async function contextMenuSelect(browser, block, itemText) {
-  await clickBlock(browser, block, {button: 2});
+  await clickBlock(browser, block.id, {button: 2});
 
-  await browser.pause(PAUSE_TIME);
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();
   await item.click();

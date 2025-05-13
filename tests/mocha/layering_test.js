@@ -89,7 +89,7 @@ suite('Layering', function () {
   });
 
   suite('dragging', function () {
-    test.only('moving an element to the drag layer adds it to the drag group', function () {
+    test('moving an element to the drag layer adds it to the drag group', function () {
       const elem = createRenderedElement();
 
       this.layerManager.moveToDragLayer(elem);

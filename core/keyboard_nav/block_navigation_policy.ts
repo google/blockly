@@ -6,7 +6,7 @@
 
 import {BlockSvg} from '../block_svg.js';
 import type {Field} from '../field.js';
-import type {INavigable} from '../interfaces/i_navigable.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
@@ -20,7 +20,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @param current The block to return the first child of.
    * @returns The first field or input of the given block, if any.
    */
-  getFirstChild(current: BlockSvg): INavigable<unknown> | null {
+  getFirstChild(current: BlockSvg): IFocusableNode | null {
     for (const input of current.inputList) {
       for (const field of input.fieldRow) {
         return field;
@@ -39,7 +39,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @returns The top block of the given block's stack, or the connection to
    *     which it is attached.
    */
-  getParent(current: BlockSvg): INavigable<unknown> | null {
+  getParent(current: BlockSvg): IFocusableNode | null {
     if (current.previousConnection?.targetBlock()) {
       const surroundParent = current.getSurroundParent();
       if (surroundParent) return surroundParent;
@@ -57,7 +57,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @returns The first block of the next stack if the given block is a terminal
    *     block, or its next connection.
    */
-  getNextSibling(current: BlockSvg): INavigable<unknown> | null {
+  getNextSibling(current: BlockSvg): IFocusableNode | null {
     if (current.nextConnection?.targetBlock()) {
       return current.nextConnection?.targetBlock();
     }
@@ -101,7 +101,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @returns The block's previous/output connection, or the last
    *     connection/block of the previous block stack if it is a root block.
    */
-  getPreviousSibling(current: BlockSvg): INavigable<unknown> | null {
+  getPreviousSibling(current: BlockSvg): IFocusableNode | null {
     if (current.previousConnection?.targetBlock()) {
       return current.previousConnection?.targetBlock();
     }
@@ -127,7 +127,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     }
 
     const currentIndex = siblings.indexOf(current);
-    let result: INavigable<any> | null = null;
+    let result: IFocusableNode | null = null;
     if (currentIndex >= 1) {
       result = siblings[currentIndex - 1];
     } else if (currentIndex === 0 && navigatingCrossStacks) {
@@ -151,5 +151,15 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    */
   isNavigable(current: BlockSvg): boolean {
     return current.canBeFocused();
+  }
+
+  /**
+   * Returns whether the given object can be navigated from by this policy.
+   *
+   * @param current The object to check if this policy applies to.
+   * @returns True if the object is a BlockSvg.
+   */
+  isApplicable(current: any): current is BlockSvg {
+    return current instanceof BlockSvg;
   }
 }

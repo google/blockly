@@ -27,7 +27,6 @@ export class FieldImage extends Field<string> {
    * of the field.
    */
   private static readonly Y_PADDING = 1;
-  protected override size_: Size;
   protected readonly imageHeight: number;
 
   /** The function to be called when this field is clicked. */
@@ -272,18 +271,6 @@ export class FieldImage extends Field<string> {
       undefined,
       options,
     );
-  }
-
-  /**
-   * Returns this field's class.
-   *
-   * Used by keyboard navigation to look up the rules for navigating from this
-   * field.
-   *
-   * @returns This field's class.
-   */
-  getClass() {
-    return FieldImage;
   }
 }
 

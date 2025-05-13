@@ -14,43 +14,12 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import {FieldCheckbox} from '../field_checkbox.js';
-import {FieldDropdown} from '../field_dropdown.js';
-import {FieldImage} from '../field_image.js';
-import {FieldLabel} from '../field_label.js';
-import {FieldNumber} from '../field_number.js';
-import {FieldTextInput} from '../field_textinput.js';
-import {FlyoutButton} from '../flyout_button.js';
-import {FlyoutSeparator} from '../flyout_separator.js';
 import {getFocusManager} from '../focus_manager.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {isFocusableNode} from '../interfaces/i_focusable_node.js';
-import {isNavigable, type INavigable} from '../interfaces/i_navigable.js';
 import * as registry from '../registry.js';
-import {RenderedConnection} from '../rendered_connection.js';
-import {Renderer} from '../renderers/zelos/renderer.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import {BlockNavigationPolicy} from './block_navigation_policy.js';
-import {ConnectionNavigationPolicy} from './connection_navigation_policy.js';
-import {FieldNavigationPolicy} from './field_navigation_policy.js';
-import {FlyoutButtonNavigationPolicy} from './flyout_button_navigation_policy.js';
-import {FlyoutNavigationPolicy} from './flyout_navigation_policy.js';
-import {FlyoutSeparatorNavigationPolicy} from './flyout_separator_navigation_policy.js';
 import {Marker} from './marker.js';
-import {WorkspaceNavigationPolicy} from './workspace_navigation_policy.js';
-
-/** Options object for LineCursor instances. */
-export interface CursorOptions {
-  /**
-   * Can the cursor visit all stack connections (next/previous), or
-   * (if false) only unconnected next connections?
-   */
-  stackConnections: boolean;
-}
-
-/** Default options for LineCursor instances. */
-const defaultOptions: CursorOptions = {
-  stackConnections: true,
-};
 
 /**
  * Class for a line cursor.
@@ -58,76 +27,14 @@ const defaultOptions: CursorOptions = {
 export class LineCursor extends Marker {
   override type = 'cursor';
 
-  /** Options for this line cursor. */
-  private readonly options: CursorOptions;
-
   /** Locations to try moving the cursor to after a deletion. */
-  private potentialNodes: INavigable<any>[] | null = null;
-
-  /** Whether the renderer is zelos-style. */
-  private isZelos = false;
+  private potentialNodes: IFocusableNode[] | null = null;
 
   /**
    * @param workspace The workspace this cursor belongs to.
-   * @param options Cursor options.
    */
-  constructor(
-    protected readonly workspace: WorkspaceSvg,
-    options?: Partial<CursorOptions>,
-  ) {
+  constructor(protected readonly workspace: WorkspaceSvg) {
     super();
-    // Regularise options and apply defaults.
-    this.options = {...defaultOptions, ...options};
-
-    this.isZelos = workspace.getRenderer() instanceof Renderer;
-
-    this.registerNavigationPolicies();
-  }
-
-  /**
-   * Registers default navigation policies for Blockly's built-in types with
-   * this cursor's workspace.
-   */
-  protected registerNavigationPolicies() {
-    const navigator = this.workspace.getNavigator();
-
-    const blockPolicy = new BlockNavigationPolicy();
-    if (this.workspace.isFlyout) {
-      const flyout = this.workspace.targetWorkspace?.getFlyout();
-      if (flyout) {
-        navigator.set(
-          BlockSvg,
-          new FlyoutNavigationPolicy(blockPolicy, flyout),
-        );
-
-        const buttonPolicy = new FlyoutButtonNavigationPolicy();
-        navigator.set(
-          FlyoutButton,
-          new FlyoutNavigationPolicy(buttonPolicy, flyout),
-        );
-
-        navigator.set(
-          FlyoutSeparator,
-          new FlyoutNavigationPolicy(
-            new FlyoutSeparatorNavigationPolicy(),
-            flyout,
-          ),
-        );
-      }
-    } else {
-      navigator.set(BlockSvg, blockPolicy);
-    }
-
-    navigator.set(RenderedConnection, new ConnectionNavigationPolicy());
-    navigator.set(WorkspaceSvg, new WorkspaceNavigationPolicy());
-
-    const fieldPolicy = new FieldNavigationPolicy();
-    navigator.set(FieldCheckbox, fieldPolicy);
-    navigator.set(FieldDropdown, fieldPolicy);
-    navigator.set(FieldImage, fieldPolicy);
-    navigator.set(FieldLabel, fieldPolicy);
-    navigator.set(FieldNumber, fieldPolicy);
-    navigator.set(FieldTextInput, fieldPolicy);
   }
 
   /**
@@ -137,14 +44,14 @@ export class LineCursor extends Marker {
    * @returns The next node, or null if the current node is
    *     not set or there is no next value.
    */
-  next(): INavigable<any> | null {
+  next(): IFocusableNode | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
     }
     const newNode = this.getNextNode(
       curNode,
-      (candidate: INavigable<any> | null) => {
+      (candidate: IFocusableNode | null) => {
         return (
           candidate instanceof BlockSvg &&
           !candidate.outputConnection?.targetBlock()
@@ -166,7 +73,7 @@ export class LineCursor extends Marker {
    * @returns The next node, or null if the current node is
    *     not set or there is no next value.
    */
-  in(): INavigable<any> | null {
+  in(): IFocusableNode | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -186,14 +93,14 @@ export class LineCursor extends Marker {
    * @returns The previous node, or null if the current node
    *     is not set or there is no previous value.
    */
-  prev(): INavigable<any> | null {
+  prev(): IFocusableNode | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
     }
     const newNode = this.getPreviousNode(
       curNode,
-      (candidate: INavigable<any> | null) => {
+      (candidate: IFocusableNode | null) => {
         return (
           candidate instanceof BlockSvg &&
           !candidate.outputConnection?.targetBlock()
@@ -215,7 +122,7 @@ export class LineCursor extends Marker {
    * @returns The previous node, or null if the current node
    *     is not set or there is no previous value.
    */
-  out(): INavigable<any> | null {
+  out(): IFocusableNode | null {
     const curNode = this.getCurNode();
     if (!curNode) {
       return null;
@@ -241,7 +148,7 @@ export class LineCursor extends Marker {
     const inNode = this.getNextNode(curNode, () => true, true);
     const nextNode = this.getNextNode(
       curNode,
-      (candidate: INavigable<any> | null) => {
+      (candidate: IFocusableNode | null) => {
         return (
           candidate instanceof BlockSvg &&
           !candidate.outputConnection?.targetBlock()
@@ -265,10 +172,10 @@ export class LineCursor extends Marker {
    * @returns The next node in the traversal.
    */
   private getNextNodeImpl(
-    node: INavigable<any> | null,
-    isValid: (p1: INavigable<any> | null) => boolean,
-    visitedNodes: Set<INavigable<any>> = new Set<INavigable<any>>(),
-  ): INavigable<any> | null {
+    node: IFocusableNode | null,
+    isValid: (p1: IFocusableNode | null) => boolean,
+    visitedNodes: Set<IFocusableNode> = new Set<IFocusableNode>(),
+  ): IFocusableNode | null {
     if (!node || visitedNodes.has(node)) return null;
     let newNode =
       this.workspace.getNavigator().getFirstChild(node) ||
@@ -301,10 +208,10 @@ export class LineCursor extends Marker {
    * @returns The next node in the traversal.
    */
   getNextNode(
-    node: INavigable<any> | null,
-    isValid: (p1: INavigable<any> | null) => boolean,
+    node: IFocusableNode | null,
+    isValid: (p1: IFocusableNode | null) => boolean,
     loop: boolean,
-  ): INavigable<any> | null {
+  ): IFocusableNode | null {
     if (!node || (!loop && this.getLastNode() === node)) return null;
 
     return this.getNextNodeImpl(node, isValid);
@@ -323,10 +230,10 @@ export class LineCursor extends Marker {
    *     exists.
    */
   private getPreviousNodeImpl(
-    node: INavigable<any> | null,
-    isValid: (p1: INavigable<any> | null) => boolean,
-    visitedNodes: Set<INavigable<any>> = new Set<INavigable<any>>(),
-  ): INavigable<any> | null {
+    node: IFocusableNode | null,
+    isValid: (p1: IFocusableNode | null) => boolean,
+    visitedNodes: Set<IFocusableNode> = new Set<IFocusableNode>(),
+  ): IFocusableNode | null {
     if (!node || visitedNodes.has(node)) return null;
 
     const newNode =
@@ -355,10 +262,10 @@ export class LineCursor extends Marker {
    *     exists.
    */
   getPreviousNode(
-    node: INavigable<any> | null,
-    isValid: (p1: INavigable<any> | null) => boolean,
+    node: IFocusableNode | null,
+    isValid: (p1: IFocusableNode | null) => boolean,
     loop: boolean,
-  ): INavigable<any> | null {
+  ): IFocusableNode | null {
     if (!node || (!loop && this.getFirstNode() === node)) return null;
 
     return this.getPreviousNodeImpl(node, isValid);
@@ -371,15 +278,15 @@ export class LineCursor extends Marker {
    * @returns The right most child of the given node, or the node if no child
    *     exists.
    */
-  getRightMostChild(
-    node: INavigable<any> | null,
-    stopIfFound: INavigable<any>,
-  ): INavigable<any> | null {
+  private getRightMostChild(
+    node: IFocusableNode | null,
+    stopIfFound: IFocusableNode,
+  ): IFocusableNode | null {
     if (!node) return node;
     let newNode = this.workspace.getNavigator().getFirstChild(node);
     if (!newNode || newNode === stopIfFound) return node;
     for (
-      let nextNode: INavigable<any> | null = newNode;
+      let nextNode: IFocusableNode | null = newNode;
       nextNode;
       nextNode = this.workspace.getNavigator().getNextSibling(newNode)
     ) {
@@ -414,7 +321,7 @@ export class LineCursor extends Marker {
   preDelete(deletedBlock: BlockSvg) {
     const curNode = this.getCurNode();
 
-    const nodes: INavigable<any>[] = curNode ? [curNode] : [];
+    const nodes: IFocusableNode[] = curNode ? [curNode] : [];
     // The connection to which the deleted block is attached.
     const parentConnection =
       deletedBlock.previousConnection?.targetConnection ??
@@ -466,7 +373,7 @@ export class LineCursor extends Marker {
    *
    * @returns The current field, connection, or block the cursor is on.
    */
-  override getCurNode(): INavigable<any> | null {
+  override getCurNode(): IFocusableNode | null {
     this.updateCurNodeFromFocus();
     return super.getCurNode();
   }
@@ -479,7 +386,7 @@ export class LineCursor extends Marker {
    *
    * @param newNode The new location of the cursor.
    */
-  override setCurNode(newNode: INavigable<any> | null) {
+  override setCurNode(newNode: IFocusableNode | null) {
     super.setCurNode(newNode);
 
     if (isFocusableNode(newNode)) {
@@ -512,7 +419,7 @@ export class LineCursor extends Marker {
    *
    * @returns The first navigable node on the workspace, or null.
    */
-  getFirstNode(): INavigable<any> | null {
+  getFirstNode(): IFocusableNode | null {
     return this.workspace.getNavigator().getFirstChild(this.workspace);
   }
 
@@ -521,7 +428,7 @@ export class LineCursor extends Marker {
    *
    * @returns The last navigable node on the workspace, or null.
    */
-  getLastNode(): INavigable<any> | null {
+  getLastNode(): IFocusableNode | null {
     const first = this.getFirstNode();
     return this.getPreviousNode(first, () => true, true);
   }

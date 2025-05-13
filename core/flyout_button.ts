@@ -16,7 +16,6 @@ import * as Css from './css.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
-import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRenderedElement} from './interfaces/i_rendered_element.js';
 import {idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -32,11 +31,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a button or label in the flyout.
  */
 export class FlyoutButton
-  implements
-    IBoundedElement,
-    IRenderedElement,
-    IFocusableNode,
-    INavigable<FlyoutButton>
+  implements IBoundedElement, IRenderedElement, IFocusableNode
 {
   /** The horizontal margin around the text in the button. */
   static TEXT_MARGIN_X = 5;
@@ -411,18 +406,6 @@ export class FlyoutButton
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
-  }
-
-  /**
-   * Returns this button's class.
-   *
-   * Used by keyboard navigation to look up the rules for navigating from this
-   * button.
-   *
-   * @returns This button's class.
-   */
-  getClass() {
-    return FlyoutButton;
   }
 }
 

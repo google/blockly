@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {INavigable} from '../interfaces/i_navigable.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
-import type {WorkspaceSvg} from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Set of rules controlling keyboard navigation from a workspace.
@@ -20,7 +20,7 @@ export class WorkspaceNavigationPolicy
    * @param current The workspace to return the first child of.
    * @returns The top block of the first block stack, if any.
    */
-  getFirstChild(current: WorkspaceSvg): INavigable<unknown> | null {
+  getFirstChild(current: WorkspaceSvg): IFocusableNode | null {
     const blocks = current.getTopBlocks(true);
     return blocks.length ? blocks[0] : null;
   }
@@ -31,7 +31,7 @@ export class WorkspaceNavigationPolicy
    * @param _current The workspace to return the parent of.
    * @returns Null.
    */
-  getParent(_current: WorkspaceSvg): INavigable<unknown> | null {
+  getParent(_current: WorkspaceSvg): IFocusableNode | null {
     return null;
   }
 
@@ -41,7 +41,7 @@ export class WorkspaceNavigationPolicy
    * @param _current The workspace to return the next sibling of.
    * @returns Null.
    */
-  getNextSibling(_current: WorkspaceSvg): INavigable<unknown> | null {
+  getNextSibling(_current: WorkspaceSvg): IFocusableNode | null {
     return null;
   }
 
@@ -51,7 +51,7 @@ export class WorkspaceNavigationPolicy
    * @param _current The workspace to return the previous sibling of.
    * @returns Null.
    */
-  getPreviousSibling(_current: WorkspaceSvg): INavigable<unknown> | null {
+  getPreviousSibling(_current: WorkspaceSvg): IFocusableNode | null {
     return null;
   }
 
@@ -63,5 +63,15 @@ export class WorkspaceNavigationPolicy
    */
   isNavigable(current: WorkspaceSvg): boolean {
     return current.canBeFocused();
+  }
+
+  /**
+   * Returns whether the given object can be navigated from by this policy.
+   *
+   * @param current The object to check if this policy applies to.
+   * @returns True if the object is a WorkspaceSvg.
+   */
+  isApplicable(current: any): current is WorkspaceSvg {
+    return current instanceof WorkspaceSvg;
   }
 }

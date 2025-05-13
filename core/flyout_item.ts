@@ -1,5 +1,6 @@
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import type {INavigable} from './interfaces/i_navigable.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+
 /**
  * Representation of an item displayed in a flyout.
  */
@@ -12,7 +13,7 @@ export class FlyoutItem {
    *     flyout inflater that created this object.
    */
   constructor(
-    private element: IBoundedElement & INavigable<any>,
+    private element: IBoundedElement & IFocusableNode,
     private type: string,
   ) {}
 

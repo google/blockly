@@ -47,7 +47,6 @@ import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IIcon} from './interfaces/i_icon.js';
-import type {INavigable} from './interfaces/i_navigable.js';
 import * as internalConstants from './internal_constants.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
@@ -57,7 +56,6 @@ import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
@@ -78,8 +76,7 @@ export class BlockSvg
     ICopyable<BlockCopyData>,
     IDraggable,
     IDeletable,
-    IFocusableNode,
-    INavigable<BlockSvg>
+    IFocusableNode
 {
   /**
    * Constant for identifying rows that are to be rendered inline.
@@ -1079,32 +1076,6 @@ export class BlockSvg
   }
 
   /**
-   * Set whether the block is manually enabled or disabled.
-   *
-   * The user can toggle whether a block is disabled from a context menu
-   * option. A block may still be disabled for other reasons even if the user
-   * attempts to manually enable it, such as when the block is in an invalid
-   * location. This method is deprecated and setDisabledReason should be used
-   * instead.
-   *
-   * @deprecated v11: use setDisabledReason.
-   * @param enabled True if enabled.
-   */
-  override setEnabled(enabled: boolean) {
-    deprecation.warn(
-      'setEnabled',
-      'v11',
-      'v12',
-      'the setDisabledReason method of BlockSvg',
-    );
-    const wasEnabled = this.isEnabled();
-    super.setEnabled(enabled);
-    if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
-      this.updateDisabled();
-    }
-  }
-
-  /**
    * Add or remove a reason why the block might be disabled. If a block has
    * any reasons to be disabled, then the block itself will be considered
    * disabled. A block could be disabled for multiple independent reasons
@@ -1822,17 +1793,5 @@ export class BlockSvg
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
-  }
-
-  /**
-   * Returns this block's class.
-   *
-   * Used by keyboard navigation to look up the rules for navigating from this
-   * block.
-   *
-   * @returns This block's class.
-   */
-  getClass() {
-    return BlockSvg;
   }
 }

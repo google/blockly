@@ -580,7 +580,7 @@ suite('Cursor', function () {
           this.alwaysValid,
           true,
         );
-        assert.equal(nextNode, this.blockA.previousConnection);
+        assert.equal(nextNode, this.workspace);
       });
 
       test('Valid if connection - start at end - with loopback', function () {
@@ -778,7 +778,7 @@ suite('Cursor', function () {
           this.alwaysValid,
           true,
         );
-        assert.equal(previousNode, this.blockC.nextConnection);
+        assert.equal(previousNode, this.workspace);
       });
       test('Valid if connection - start at top - with loopback', function () {
         const startNode = this.blockA.previousConnection;

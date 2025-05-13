@@ -459,7 +459,7 @@ suite('Navigation', function () {
       });
       test('fromWorkspaceToBlock', function () {
         const inNode = this.navigator.getFirstChild(this.workspace);
-        assert.equal(inNode, this.workspace.getTopBlocks(true)[0]);
+        assert.isNull(inNode);
       });
       test('fromWorkspaceToNull', function () {
         const inNode = this.navigator.getFirstChild(this.emptyWorkspace);

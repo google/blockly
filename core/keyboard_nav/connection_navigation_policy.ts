@@ -81,9 +81,9 @@ export class ConnectionNavigationPolicy
         sourceBlock.getRootBlock().lastConnectionInStack(false) === current
       ) {
         const topBlocks = sourceBlock.workspace.getTopBlocks(true);
-        let targetIndex = topBlocks.indexOf(sourceBlock.getRootBlock()) + 1;
+        const targetIndex = topBlocks.indexOf(sourceBlock.getRootBlock()) + 1;
         if (targetIndex >= topBlocks.length) {
-          targetIndex = 0;
+          return sourceBlock.workspace;
         }
         const nextBlock = topBlocks[targetIndex];
         return this.getParentConnection(nextBlock) ?? nextBlock;
@@ -134,9 +134,9 @@ export class ConnectionNavigationPolicy
         this.getParentConnection(sourceBlock.getRootBlock()) === current
       ) {
         const topBlocks = sourceBlock.workspace.getTopBlocks(true);
-        let targetIndex = topBlocks.indexOf(sourceBlock.getRootBlock()) - 1;
+        const targetIndex = topBlocks.indexOf(sourceBlock.getRootBlock()) - 1;
         if (targetIndex < 0) {
-          targetIndex = topBlocks.length - 1;
+          return sourceBlock.workspace;
         }
         const previousRootBlock = topBlocks[targetIndex];
         return (

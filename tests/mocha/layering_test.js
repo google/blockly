@@ -24,6 +24,15 @@ suite('Layering', function () {
     const g = Blockly.utils.dom.createSvgElement('g', {});
     return {
       getSvgRoot: () => g,
+      getFocusableElement: () => {
+        throw new Error('Unsupported.');
+      },
+      getFocusableTree: () => {
+        throw new Error('Unsupported.');
+      },
+      onNodeFocus: () => {},
+      onNodeBlur: () => {},
+      canBeFocused: () => false,
     };
   }
 

@@ -8,6 +8,7 @@
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
+import {FocusManager} from '../../focus_manager.js';
 import type {BlockStyle} from '../../theme.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
@@ -91,6 +92,17 @@ export class PathObject extends BasePathObject {
       if (!this.svgPathSelected) {
         this.svgPathSelected = this.svgPath.cloneNode(true) as SVGElement;
         this.svgPathSelected.classList.add('blocklyPathSelected');
+        // Ensure focus-specific properties don't overlap with the block's path.
+        dom.removeClass(
+          this.svgPathSelected,
+          FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        dom.removeClass(
+          this.svgPathSelected,
+          FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+        );
+        this.svgPathSelected.removeAttribute('tabindex');
+        this.svgPathSelected.removeAttribute('id');
         this.svgRoot.appendChild(this.svgPathSelected);
       }
     } else {

@@ -9,7 +9,6 @@
 import type {Block} from '../block.js';
 import * as common from '../common.js';
 import * as registry from '../registry.js';
-import * as deprecation from '../utils/deprecation.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -124,7 +123,7 @@ function fireInternal(event: Abstract) {
 
 /** Dispatch all queued events. */
 function fireNow() {
-  const queue = filter(FIRE_QUEUE, true);
+  const queue = filter(FIRE_QUEUE);
   FIRE_QUEUE.length = 0;
   for (const event of queue) {
     if (!event.workspaceId) continue;
@@ -227,18 +226,9 @@ function enqueueEvent(event: Abstract) {
  * cause them to be reordered.
  *
  * @param queue Array of events.
- * @param forward True if forward (redo), false if backward (undo).
- *     This parameter is deprecated: true is now the default and
- *     calling filter with it set to false will in future not be
- *     supported.
  * @returns Array of filtered events.
  */
-export function filter(queue: Abstract[], forward = true): Abstract[] {
-  if (!forward) {
-    deprecation.warn('filter(queue, /*forward=*/false)', 'v11.2', 'v12');
-    // Undo was merged in reverse order.
-    queue = queue.slice().reverse(); // Copy before reversing in place.
-  }
+export function filter(queue: Abstract[]): Abstract[] {
   const mergedQueue: Abstract[] = [];
   // Merge duplicates.
   for (const event of queue) {
@@ -290,10 +280,6 @@ export function filter(queue: Abstract[], forward = true): Abstract[] {
   }
   // Filter out any events that have become null due to merging.
   queue = mergedQueue.filter((e) => !e.isNull());
-  if (!forward) {
-    // Restore undo order.
-    queue.reverse();
-  }
   return queue;
 }
 

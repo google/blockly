@@ -84,6 +84,9 @@ export abstract class Field<T = any>
    */
   DEFAULT_VALUE: T | null = null;
 
+  /** Non-breaking space. */
+  static readonly NBSP = '\u00A0';
+
   /**
    * A value used to signal when a field's constructor should *not* set the
    * field's value or run configure_, and should allow a subclass to do that
@@ -106,7 +109,28 @@ export abstract class Field<T = any>
    * field is not yet initialized. Is *not* guaranteed to be accurate.
    */
   private tooltip: Tooltip.TipInfo | null = null;
-  protected size_: Size;
+
+  /** This field's dimensions. */
+  private size: Size = new Size(0, 0);
+
+  /**
+   * Gets the size of this field. Because getSize() and updateSize() have side
+   * effects, this acts as a shim for subclasses which wish to adjust field
+   * bounds when setting/getting the size without triggering unwanted rendering
+   * or other side effects. Note that subclasses must override *both* get and
+   * set if either is overridden; the implementation may just call directly
+   * through to super, but it must exist per the JS spec.
+   */
+  protected get size_(): Size {
+    return this.size;
+  }
+
+  /**
+   * Sets the size of this field.
+   */
+  protected set size_(newValue: Size) {
+    this.size = newValue;
+  }
 
   /** The rendered field's SVG group element. */
   protected fieldGroup_: SVGGElement | null = null;
@@ -969,6 +993,8 @@ export abstract class Field<T = any>
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 2) + '…';
     }
+    // Replace whitespace with non-breaking spaces so the text doesn't collapse.
+    text = text.replace(/\s/g, Field.NBSP);
     if (this.sourceBlock_ && this.sourceBlock_.RTL) {
       // The SVG is LTR, force text to be RTL by adding an RLM.
       text += '\u200F';

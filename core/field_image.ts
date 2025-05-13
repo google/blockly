@@ -27,7 +27,6 @@ export class FieldImage extends Field<string> {
    * of the field.
    */
   private static readonly Y_PADDING = 1;
-  protected override size_: Size;
   protected readonly imageHeight: number;
 
   /** The function to be called when this field is clicked. */

@@ -14,7 +14,7 @@
 
 import {BlockSvg} from '../block_svg.js';
 import {Field} from '../field.js';
-import type {INavigable} from '../interfaces/i_navigable.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {RenderedConnection} from '../rendered_connection.js';
 
 /**
@@ -26,7 +26,7 @@ export class Marker {
   colour: string | null = null;
 
   /** The current location of the marker. */
-  protected curNode: INavigable<any> | null = null;
+  protected curNode: IFocusableNode | null = null;
 
   /** The type of the marker. */
   type = 'marker';
@@ -36,7 +36,7 @@ export class Marker {
    *
    * @returns The current field, connection, or block the marker is on.
    */
-  getCurNode(): INavigable<any> | null {
+  getCurNode(): IFocusableNode | null {
     return this.curNode;
   }
 
@@ -45,7 +45,7 @@ export class Marker {
    *
    * @param newNode The new location of the marker, or null to remove it.
    */
-  setCurNode(newNode: INavigable<any> | null) {
+  setCurNode(newNode: IFocusableNode | null) {
     this.curNode = newNode;
   }
 
@@ -59,7 +59,7 @@ export class Marker {
    *
    * @returns The parent block of the node if any, otherwise null.
    */
-  getSourceBlockFromNode(node: INavigable<any> | null): BlockSvg | null {
+  getSourceBlockFromNode(node: IFocusableNode | null): BlockSvg | null {
     if (node instanceof BlockSvg) {
       return node;
     } else if (node instanceof Field) {

@@ -7,15 +7,12 @@
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
-import type {INavigable} from './interfaces/i_navigable.js';
 import {Rect} from './utils/rect.js';
 
 /**
  * Representation of a gap between elements in a flyout.
  */
-export class FlyoutSeparator
-  implements IBoundedElement, INavigable<FlyoutSeparator>, IFocusableNode
-{
+export class FlyoutSeparator implements IBoundedElement, IFocusableNode {
   private x = 0;
   private y = 0;
 
@@ -64,18 +61,6 @@ export class FlyoutSeparator
    */
   isNavigable() {
     return false;
-  }
-
-  /**
-   * Returns this separator's class.
-   *
-   * Used by keyboard navigation to look up the rules for navigating from this
-   * separator.
-   *
-   * @returns This separator's class.
-   */
-  getClass() {
-    return FlyoutSeparator;
   }
 
   /** See IFocusableNode.getFocusableElement. */

@@ -61,10 +61,6 @@ class FieldMitosis extends Field<CellGroup> {
     });
     this.value_ = {cells};
   }
-
-  getClass() {
-    return FieldMitosis;
-  }
 }
 
 fieldRegistry.register('field_mitosis', FieldMitosis);

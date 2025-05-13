@@ -26,7 +26,6 @@ import type {Input} from './inputs/input.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
-import type {INavigable} from './interfaces/i_navigable.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
@@ -68,12 +67,7 @@ export type FieldValidator<T = any> = (newValue: T) => T | null | undefined;
  * @typeParam T - The value stored on the field.
  */
 export abstract class Field<T = any>
-  implements
-    IKeyboardAccessible,
-    IRegistrable,
-    ISerializable,
-    IFocusableNode,
-    INavigable<Field<T>>
+  implements IKeyboardAccessible, IRegistrable, ISerializable, IFocusableNode
 {
   /**
    * To overwrite the default value which is set in **Field**, directly update
@@ -1410,16 +1404,6 @@ export abstract class Field<T = any>
       `Attempted to instantiate a field from the registry that hasn't defined a 'fromJson' method.`,
     );
   }
-
-  /**
-   * Returns this field's class.
-   *
-   * Used by keyboard navigation to look up the rules for navigating from this
-   * field. Must be implemented by subclasses.
-   *
-   * @returns This field's class.
-   */
-  abstract getClass(): new (...args: any) => Field<T>;
 }
 
 /**

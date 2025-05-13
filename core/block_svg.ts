@@ -57,7 +57,6 @@ import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
@@ -1076,32 +1075,6 @@ export class BlockSvg
     this.queueRender();
 
     return removed;
-  }
-
-  /**
-   * Set whether the block is manually enabled or disabled.
-   *
-   * The user can toggle whether a block is disabled from a context menu
-   * option. A block may still be disabled for other reasons even if the user
-   * attempts to manually enable it, such as when the block is in an invalid
-   * location. This method is deprecated and setDisabledReason should be used
-   * instead.
-   *
-   * @deprecated v11: use setDisabledReason.
-   * @param enabled True if enabled.
-   */
-  override setEnabled(enabled: boolean) {
-    deprecation.warn(
-      'setEnabled',
-      'v11',
-      'v12',
-      'the setDisabledReason method of BlockSvg',
-    );
-    const wasEnabled = this.isEnabled();
-    super.setEnabled(enabled);
-    if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
-      this.updateDisabled();
-    }
   }
 
   /**

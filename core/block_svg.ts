@@ -1825,15 +1825,6 @@ export class BlockSvg
   }
 
   /**
-   * Returns whether or not this block can be navigated to via the keyboard.
-   *
-   * @returns True if this block is keyboard navigable, otherwise false.
-   */
-  isNavigable() {
-    return true;
-  }
-
-  /**
    * Returns this block's class.
    *
    * Used by keyboard navigation to look up the rules for navigating from this

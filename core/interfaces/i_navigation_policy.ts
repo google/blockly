@@ -43,4 +43,18 @@ export interface INavigationPolicy<T> {
    *     there is none.
    */
   getPreviousSibling(current: T): INavigable<any> | null;
+
+  /**
+   * Returns whether or not the given instance should be reachable via keyboard
+   * navigation.
+   *
+   * Implementors should generally return true, unless there are circumstances
+   * under which this item should be skipped while using keyboard navigation.
+   * Common examples might include being disabled, invalid, readonly, or purely
+   * a visual decoration. For example, while Fields are navigable, non-editable
+   * fields return false, since they cannot be interacted with when focused.
+   *
+   * @returns True if this element should be included in keyboard navigation.
+   */
+  isNavigable(current: T): boolean;
 }

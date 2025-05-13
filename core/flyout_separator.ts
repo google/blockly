@@ -5,6 +5,8 @@
  */
 
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {INavigable} from './interfaces/i_navigable.js';
 import {Rect} from './utils/rect.js';
 
@@ -12,7 +14,7 @@ import {Rect} from './utils/rect.js';
  * Representation of a gap between elements in a flyout.
  */
 export class FlyoutSeparator
-  implements IBoundedElement, INavigable<FlyoutSeparator>
+  implements IBoundedElement, INavigable<FlyoutSeparator>, IFocusableNode
 {
   private x = 0;
   private y = 0;
@@ -74,6 +76,27 @@ export class FlyoutSeparator
    */
   getClass() {
     return FlyoutSeparator;
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    throw new Error('Cannot be focused');
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    throw new Error('Cannot be focused');
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return false;
   }
 }
 

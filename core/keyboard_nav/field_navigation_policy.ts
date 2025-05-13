@@ -8,7 +8,6 @@ import type {BlockSvg} from '../block_svg.js';
 import type {Field} from '../field.js';
 import type {INavigable} from '../interfaces/i_navigable.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
-import type {RenderedConnection} from '../rendered_connection.js';
 
 /**
  * Set of rules controlling keyboard navigation from a field.
@@ -52,8 +51,8 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
       const fieldRow = newInput.fieldRow;
       if (fieldIdx < fieldRow.length) return fieldRow[fieldIdx];
       fieldIdx = 0;
-      if (newInput.connection) {
-        return newInput.connection as RenderedConnection;
+      if (newInput.connection?.targetBlock()) {
+        return newInput.connection.targetBlock() as BlockSvg;
       }
     }
     return null;
@@ -74,8 +73,8 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
     let fieldIdx = parentInput.fieldRow.indexOf(current) - 1;
     for (let i = curIdx; i >= 0; i--) {
       const input = block.inputList[i];
-      if (input.connection && input !== parentInput) {
-        return input.connection as RenderedConnection;
+      if (input.connection?.targetBlock() && input !== parentInput) {
+        return input.connection.targetBlock() as BlockSvg;
       }
       const fieldRow = input.fieldRow;
       if (fieldIdx > -1) return fieldRow[fieldIdx];
@@ -87,5 +86,24 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
       }
     }
     return null;
+  }
+
+  /**
+   * Returns whether or not the given field can be navigated to.
+   *
+   * @param current The instance to check for navigability.
+   * @returns True if the given field can be focused and navigated to.
+   */
+  isNavigable(current: Field<any>): boolean {
+    return (
+      current.canBeFocused() &&
+      current.isClickable() &&
+      current.isCurrentlyEditable() &&
+      !(
+        current.getSourceBlock()?.isSimpleReporter() &&
+        current.isFullBlockField()
+      ) &&
+      current.getParentInput().isVisible()
+    );
   }
 }

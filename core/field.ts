@@ -1386,20 +1386,6 @@ export abstract class Field<T = any>
   }
 
   /**
-   * Returns whether or not this field is accessible by keyboard navigation.
-   *
-   * @returns True if this field is keyboard accessible, otherwise false.
-   */
-  isNavigable() {
-    return (
-      this.isClickable() &&
-      this.isCurrentlyEditable() &&
-      !(this.getSourceBlock()?.isSimpleReporter() && this.isFullBlockField()) &&
-      this.getParentInput().isVisible()
-    );
-  }
-
-  /**
    * Returns this field's class.
    *
    * Used by keyboard navigation to look up the rules for navigating from this

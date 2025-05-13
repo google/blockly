@@ -50,13 +50,7 @@ export class Navigator {
   private get(
     current: IFocusableNode,
   ): INavigationPolicy<typeof current> | undefined {
-    for (const rule of this.rules) {
-      if (rule.isApplicable(current)) {
-        return rule;
-      }
-    }
-
-    return undefined;
+    return this.rules.find((rule) => rule.isApplicable(current));
   }
 
   /**

@@ -21,9 +21,7 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
   constructor(
     private policy: INavigationPolicy<T>,
     private flyout: IFlyout,
-  ) {
-    console.log('make flyout nav policy');
-  }
+  ) {}
 
   /**
    * Returns null to prevent navigating into flyout items.
@@ -52,28 +50,19 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
    * @returns The flyout item following the given one.
    */
   getNextSibling(current: T): IFocusableNode | null {
-    console.log('flyout next');
     const flyoutContents = this.flyout.getContents();
-    if (!flyoutContents) {
-      console.log('no cotnents;');
-      return null;
-    }
+    if (!flyoutContents) return null;
 
     let index = flyoutContents.findIndex(
       (flyoutItem) => flyoutItem.getElement() === current,
     );
 
-    if (index === -1) {
-      console.log('not found');
-      return null;
-    }
+    if (index === -1) return null;
     index++;
     if (index >= flyoutContents.length) {
       index = 0;
     }
 
-    console.log('returning');
-    console.log(flyoutContents[index].getElement());
     return flyoutContents[index].getElement();
   }
 

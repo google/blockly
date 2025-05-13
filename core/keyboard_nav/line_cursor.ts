@@ -374,7 +374,15 @@ export class LineCursor extends Marker {
    * @returns The current field, connection, or block the cursor is on.
    */
   override getCurNode(): IFocusableNode | null {
-    this.updateCurNodeFromFocus();
+    // Ensure the current node matches what's currently focused.
+    const focused = getFocusManager().getFocusedNode();
+    const block = this.getSourceBlockFromNode(focused);
+    if (!block || block.workspace === this.workspace) {
+      // If the current focused node corresponds to a block then ensure that it
+      // belongs to the correct workspace for this cursor.
+      this.setCurNode(focused);
+    }
+
     return super.getCurNode();
   }
 
@@ -398,19 +406,6 @@ export class LineCursor extends Marker {
       newNode.workspace.scrollBoundsIntoView(
         newNode.getBoundingRectangleWithoutChildren(),
       );
-    }
-  }
-
-  /**
-   * Updates the current node to match what's currently focused.
-   */
-  private updateCurNodeFromFocus() {
-    const focused = getFocusManager().getFocusedNode();
-
-    if (isNavigable(focused)) {
-      const block = this.getSourceBlockFromNode(focused);
-      if (block && block.workspace !== this.workspace) return;
-      this.setCurNode(focused);
     }
   }
 

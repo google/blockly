@@ -5,7 +5,6 @@
  */
 
 import {IBubble, WorkspaceSvg} from '../blockly.js';
-import {getFocusManager} from '../focus_manager.js';
 import {IDragStrategy} from '../interfaces/i_draggable.js';
 import * as layers from '../layers.js';
 import {Coordinate} from '../utils.js';
@@ -29,10 +28,6 @@ export class BubbleDragStrategy implements IDragStrategy {
     if (this.bubble.setDragging) {
       this.bubble.setDragging(true);
     }
-
-    // Since moving the bubble to the drag layer will cause it to lose focus,
-    // ensure it regains focus (to fire related bubble selection events).
-    getFocusManager().focusNode(this.bubble);
   }
 
   drag(newLoc: Coordinate): void {
@@ -46,10 +41,6 @@ export class BubbleDragStrategy implements IDragStrategy {
       .getLayerManager()
       ?.moveOffDragLayer(this.bubble, layers.BUBBLE);
     this.bubble.setDragging(false);
-
-    // Since moving the bubble off the drag layer will cause it to lose focus,
-    // ensure it regains focus (to fire related bubble selection events).
-    getFocusManager().focusNode(this.bubble);
   }
 
   revertDrag(): void {

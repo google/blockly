@@ -8,7 +8,6 @@ import {RenderedWorkspaceComment} from '../comments.js';
 import {CommentMove} from '../events/events_comment_move.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
-import {getFocusManager} from '../focus_manager.js';
 import {IDragStrategy} from '../interfaces/i_draggable.js';
 import * as layers from '../layers.js';
 import {Coordinate} from '../utils.js';
@@ -37,10 +36,6 @@ export class CommentDragStrategy implements IDragStrategy {
     this.workspace.setResizesEnabled(false);
     this.workspace.getLayerManager()?.moveToDragLayer(this.comment);
     this.comment.setDragging(true);
-
-    // Since moving the comment to the drag layer will cause it to lose focus,
-    // ensure it regains focus (to enable the comments's selection highlight).
-    getFocusManager().focusNode(this.comment);
   }
 
   drag(newLoc: Coordinate): void {
@@ -59,10 +54,6 @@ export class CommentDragStrategy implements IDragStrategy {
     this.comment.snapToGrid();
 
     this.workspace.setResizesEnabled(true);
-
-    // Since moving the comment off the drag layer will cause it to lose focus,
-    // ensure it regains focus (to enable the comments's selection highlight).
-    getFocusManager().focusNode(this.comment);
   }
 
   /** Fire a UI event at the start of a comment drag. */

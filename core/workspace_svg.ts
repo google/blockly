@@ -53,7 +53,6 @@ import {
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
-import type {INavigable} from './interfaces/i_navigable.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
 import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
@@ -100,11 +99,7 @@ const ZOOM_TO_FIT_MARGIN = 20;
  */
 export class WorkspaceSvg
   extends Workspace
-  implements
-    IContextMenu,
-    IFocusableNode,
-    IFocusableTree,
-    INavigable<WorkspaceSvg>
+  implements IContextMenu, IFocusableNode, IFocusableTree
 {
   /**
    * A wrapper function called when a resize event occurs.
@@ -2824,15 +2819,6 @@ export class WorkspaceSvg
   }
 
   /**
-   * Returns the class of this workspace.
-   *
-   * @returns WorkspaceSvg.
-   */
-  getClass() {
-    return WorkspaceSvg;
-  }
-
-  /**
    * Returns an object responsible for coordinating movement of focus between
    * items on this workspace in response to keyboard navigation commands.
    *
@@ -2840,6 +2826,16 @@ export class WorkspaceSvg
    */
   getNavigator(): Navigator {
     return this.navigator;
+  }
+
+  /**
+   * Sets the Navigator instance used by this workspace.
+   *
+   * @param newNavigator A Navigator object to coordinate movement between
+   *     elements on the workspace.
+   */
+  setNavigator(newNavigator: Navigator) {
+    this.navigator = newNavigator;
   }
 }
 

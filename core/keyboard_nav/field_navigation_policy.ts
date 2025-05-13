@@ -5,8 +5,8 @@
  */
 
 import type {BlockSvg} from '../block_svg.js';
-import type {Field} from '../field.js';
-import type {INavigable} from '../interfaces/i_navigable.js';
+import {Field} from '../field.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 
 /**
@@ -19,7 +19,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
    * @param _current The field to navigate from.
    * @returns Null.
    */
-  getFirstChild(_current: Field<any>): INavigable<unknown> | null {
+  getFirstChild(_current: Field<any>): IFocusableNode | null {
     return null;
   }
 
@@ -29,7 +29,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
    * @param current The field to navigate from.
    * @returns The given field's parent block.
    */
-  getParent(current: Field<any>): INavigable<unknown> | null {
+  getParent(current: Field<any>): IFocusableNode | null {
     return current.getSourceBlock() as BlockSvg;
   }
 
@@ -39,7 +39,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
    * @param current The field to navigate from.
    * @returns The next field or input in the given field's block.
    */
-  getNextSibling(current: Field<any>): INavigable<unknown> | null {
+  getNextSibling(current: Field<any>): IFocusableNode | null {
     const input = current.getParentInput();
     const block = current.getSourceBlock();
     if (!block) return null;
@@ -64,7 +64,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
    * @param current The field to navigate from.
    * @returns The preceding field or input in the given field's block.
    */
-  getPreviousSibling(current: Field<any>): INavigable<unknown> | null {
+  getPreviousSibling(current: Field<any>): IFocusableNode | null {
     const parentInput = current.getParentInput();
     const block = current.getSourceBlock();
     if (!block) return null;
@@ -105,5 +105,15 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
       ) &&
       current.getParentInput().isVisible()
     );
+  }
+
+  /**
+   * Returns whether the given object can be navigated from by this policy.
+   *
+   * @param current The object to check if this policy applies to.
+   * @returns True if the object is a Field.
+   */
+  isApplicable(current: any): current is Field {
+    return current instanceof Field;
   }
 }

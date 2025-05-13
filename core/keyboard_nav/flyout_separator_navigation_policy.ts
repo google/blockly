@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {FlyoutSeparator} from '../flyout_separator.js';
-import type {INavigable} from '../interfaces/i_navigable.js';
+import {FlyoutSeparator} from '../flyout_separator.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 
 /**
@@ -15,19 +15,19 @@ import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 export class FlyoutSeparatorNavigationPolicy
   implements INavigationPolicy<FlyoutSeparator>
 {
-  getFirstChild(_current: FlyoutSeparator): INavigable<unknown> | null {
+  getFirstChild(_current: FlyoutSeparator): IFocusableNode | null {
     return null;
   }
 
-  getParent(_current: FlyoutSeparator): INavigable<unknown> | null {
+  getParent(_current: FlyoutSeparator): IFocusableNode | null {
     return null;
   }
 
-  getNextSibling(_current: FlyoutSeparator): INavigable<unknown> | null {
+  getNextSibling(_current: FlyoutSeparator): IFocusableNode | null {
     return null;
   }
 
-  getPreviousSibling(_current: FlyoutSeparator): INavigable<unknown> | null {
+  getPreviousSibling(_current: FlyoutSeparator): IFocusableNode | null {
     return null;
   }
 
@@ -39,5 +39,15 @@ export class FlyoutSeparatorNavigationPolicy
    */
   isNavigable(_current: FlyoutSeparator): boolean {
     return false;
+  }
+
+  /**
+   * Returns whether the given object can be navigated from by this policy.
+   *
+   * @param current The object to check if this policy applies to.
+   * @returns True if the object is a FlyoutSeparator.
+   */
+  isApplicable(current: any): current is FlyoutSeparator {
+    return current instanceof FlyoutSeparator;
   }
 }

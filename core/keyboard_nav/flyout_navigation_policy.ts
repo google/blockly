@@ -5,7 +5,7 @@
  */
 
 import type {IFlyout} from '../interfaces/i_flyout.js';
-import type {INavigable} from '../interfaces/i_navigable.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 
 /**
@@ -21,7 +21,9 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
   constructor(
     private policy: INavigationPolicy<T>,
     private flyout: IFlyout,
-  ) {}
+  ) {
+    console.log('make flyout nav policy');
+  }
 
   /**
    * Returns null to prevent navigating into flyout items.
@@ -29,7 +31,7 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
    * @param _current The flyout item to navigate from.
    * @returns Null to prevent navigating into flyout items.
    */
-  getFirstChild(_current: T): INavigable<unknown> | null {
+  getFirstChild(_current: T): IFocusableNode | null {
     return null;
   }
 
@@ -39,7 +41,7 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
    * @param current The flyout item to navigate from.
    * @returns The parent of the given flyout item.
    */
-  getParent(current: T): INavigable<unknown> | null {
+  getParent(current: T): IFocusableNode | null {
     return this.policy.getParent(current);
   }
 
@@ -49,20 +51,29 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
    * @param current The flyout item to navigate from.
    * @returns The flyout item following the given one.
    */
-  getNextSibling(current: T): INavigable<unknown> | null {
+  getNextSibling(current: T): IFocusableNode | null {
+    console.log('flyout next');
     const flyoutContents = this.flyout.getContents();
-    if (!flyoutContents) return null;
+    if (!flyoutContents) {
+      console.log('no cotnents;');
+      return null;
+    }
 
     let index = flyoutContents.findIndex(
       (flyoutItem) => flyoutItem.getElement() === current,
     );
 
-    if (index === -1) return null;
+    if (index === -1) {
+      console.log('not found');
+      return null;
+    }
     index++;
     if (index >= flyoutContents.length) {
       index = 0;
     }
 
+    console.log('returning');
+    console.log(flyoutContents[index].getElement());
     return flyoutContents[index].getElement();
   }
 
@@ -72,7 +83,7 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
    * @param current The flyout item to navigate from.
    * @returns The flyout item preceding the given one.
    */
-  getPreviousSibling(current: T): INavigable<unknown> | null {
+  getPreviousSibling(current: T): IFocusableNode | null {
     const flyoutContents = this.flyout.getContents();
     if (!flyoutContents) return null;
 
@@ -97,5 +108,15 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
    */
   isNavigable(current: T): boolean {
     return this.policy.isNavigable(current);
+  }
+
+  /**
+   * Returns whether the given object can be navigated from by this policy.
+   *
+   * @param current The object to check if this policy applies to.
+   * @returns True if the object is a BlockSvg.
+   */
+  isApplicable(current: any): current is T {
+    return this.policy.isApplicable(current);
   }
 }

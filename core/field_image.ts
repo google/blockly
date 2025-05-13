@@ -273,18 +273,6 @@ export class FieldImage extends Field<string> {
       options,
     );
   }
-
-  /**
-   * Returns this field's class.
-   *
-   * Used by keyboard navigation to look up the rules for navigating from this
-   * field.
-   *
-   * @returns This field's class.
-   */
-  getClass() {
-    return FieldImage;
-  }
 }
 
 fieldRegistry.register('field_image', FieldImage);

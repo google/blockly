@@ -24,7 +24,6 @@ import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
-import type {INavigable} from './interfaces/i_navigable.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as svgMath from './utils/svg_math.js';
@@ -38,7 +37,7 @@ const BUMP_RANDOMNESS = 10;
  */
 export class RenderedConnection
   extends Connection
-  implements IContextMenu, IFocusableNode, INavigable<RenderedConnection>
+  implements IContextMenu, IFocusableNode
 {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
@@ -663,15 +662,6 @@ export class RenderedConnection
     return document.getElementById(this.id) as
       | unknown
       | null as SVGElement | null;
-  }
-
-  /**
-   * Returns this connection's class for keyboard navigation.
-   *
-   * @returns RenderedConnection.
-   */
-  getClass() {
-    return RenderedConnection;
   }
 }
 

@@ -47,7 +47,6 @@ import type {IDragStrategy, IDraggable} from './interfaces/i_draggable.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IIcon} from './interfaces/i_icon.js';
-import type {INavigable} from './interfaces/i_navigable.js';
 import * as internalConstants from './internal_constants.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
@@ -78,8 +77,7 @@ export class BlockSvg
     ICopyable<BlockCopyData>,
     IDraggable,
     IDeletable,
-    IFocusableNode,
-    INavigable<BlockSvg>
+    IFocusableNode
 {
   /**
    * Constant for identifying rows that are to be rendered inline.
@@ -1822,17 +1820,5 @@ export class BlockSvg
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
-  }
-
-  /**
-   * Returns this block's class.
-   *
-   * Used by keyboard navigation to look up the rules for navigating from this
-   * block.
-   *
-   * @returns This block's class.
-   */
-  getClass() {
-    return BlockSvg;
   }
 }

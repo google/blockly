@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {FlyoutButton} from '../flyout_button.js';
-import type {INavigable} from '../interfaces/i_navigable.js';
+import {FlyoutButton} from '../flyout_button.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 
 /**
@@ -20,7 +20,7 @@ export class FlyoutButtonNavigationPolicy
    * @param _current The FlyoutButton instance to navigate from.
    * @returns Null.
    */
-  getFirstChild(_current: FlyoutButton): INavigable<unknown> | null {
+  getFirstChild(_current: FlyoutButton): IFocusableNode | null {
     return null;
   }
 
@@ -30,7 +30,7 @@ export class FlyoutButtonNavigationPolicy
    * @param current The FlyoutButton instance to navigate from.
    * @returns The given flyout button's parent workspace.
    */
-  getParent(current: FlyoutButton): INavigable<unknown> | null {
+  getParent(current: FlyoutButton): IFocusableNode | null {
     return current.getWorkspace();
   }
 
@@ -40,7 +40,7 @@ export class FlyoutButtonNavigationPolicy
    * @param _current The FlyoutButton instance to navigate from.
    * @returns Null.
    */
-  getNextSibling(_current: FlyoutButton): INavigable<unknown> | null {
+  getNextSibling(_current: FlyoutButton): IFocusableNode | null {
     return null;
   }
 
@@ -50,7 +50,7 @@ export class FlyoutButtonNavigationPolicy
    * @param _current The FlyoutButton instance to navigate from.
    * @returns Null.
    */
-  getPreviousSibling(_current: FlyoutButton): INavigable<unknown> | null {
+  getPreviousSibling(_current: FlyoutButton): IFocusableNode | null {
     return null;
   }
 
@@ -62,5 +62,15 @@ export class FlyoutButtonNavigationPolicy
    */
   isNavigable(current: FlyoutButton): boolean {
     return current.canBeFocused();
+  }
+
+  /**
+   * Returns whether the given object can be navigated from by this policy.
+   *
+   * @param current The object to check if this policy applies to.
+   * @returns True if the object is a FlyoutButton.
+   */
+  isApplicable(current: any): current is FlyoutButton {
+    return current instanceof FlyoutButton;
   }
 }

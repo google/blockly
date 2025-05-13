@@ -20,6 +20,7 @@ import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
+import {FlyoutNavigator} from './flyout_navigator.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
 import {getFocusManager} from './focus_manager.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
@@ -243,6 +244,7 @@ export abstract class Flyout
     this.workspace_.internalIsFlyout = true;
     // Keep the workspace visibility consistent with the flyout's visibility.
     this.workspace_.setVisible(this.visible);
+    this.workspace_.setNavigator(new FlyoutNavigator(this));
 
     /**
      * The unique id for this component that is used to register with the

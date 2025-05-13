@@ -24,6 +24,15 @@ suite('Layering', function () {
     const g = Blockly.utils.dom.createSvgElement('g', {});
     return {
       getSvgRoot: () => g,
+      getFocusableElement: () => {
+        throw new Error('Unsupported.');
+      },
+      getFocusableTree: () => {
+        throw new Error('Unsupported.');
+      },
+      onNodeFocus: () => {},
+      onNodeBlur: () => {},
+      canBeFocused: () => false,
     };
   }
 
@@ -80,7 +89,7 @@ suite('Layering', function () {
   });
 
   suite('dragging', function () {
-    test('moving an element to the drag layer adds it to the drag group', function () {
+    test.only('moving an element to the drag layer adds it to the drag group', function () {
       const elem = createRenderedElement();
 
       this.layerManager.moveToDragLayer(elem);

@@ -30,12 +30,10 @@ export class Navigator {
   ];
 
   /**
-   * Associates a navigation ruleset with its corresponding class.
+   * Adds a navigation ruleset to this Navigator.
    *
-   * @param key The class whose object instances should have their navigation
-   *     controlled by the associated policy.
    * @param policy A ruleset that determines where focus should move starting
-   *     from an instance of the given class.
+   *     from an instance of its managed class.
    */
   addNavigationPolicy(policy: INavigationPolicy<any>) {
     this.rules.push(policy);
@@ -45,7 +43,7 @@ export class Navigator {
    * Returns the navigation ruleset associated with the given object instance's
    * class.
    *
-   * @param key An object to retrieve a navigation ruleset for.
+   * @param current An object to retrieve a navigation ruleset for.
    * @returns The navigation ruleset of objects of the given object's class, or
    *     undefined if no ruleset has been registered for the object's class.
    */

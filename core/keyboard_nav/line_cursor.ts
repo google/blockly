@@ -32,7 +32,6 @@ export class LineCursor extends Marker {
 
   /**
    * @param workspace The workspace this cursor belongs to.
-   * @param options Cursor options.
    */
   constructor(protected readonly workspace: WorkspaceSvg) {
     super();

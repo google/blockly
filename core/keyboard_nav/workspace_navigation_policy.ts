@@ -22,16 +22,7 @@ export class WorkspaceNavigationPolicy
    */
   getFirstChild(current: WorkspaceSvg): INavigable<unknown> | null {
     const blocks = current.getTopBlocks(true);
-    if (!blocks.length) return null;
-    const block = blocks[0];
-    let topConnection = block.outputConnection;
-    if (
-      !topConnection ||
-      (block.previousConnection && block.previousConnection.isConnected())
-    ) {
-      topConnection = block.previousConnection;
-    }
-    return topConnection ?? block;
+    return blocks.length ? blocks[0] : null;
   }
 
   /**
@@ -62,5 +53,15 @@ export class WorkspaceNavigationPolicy
    */
   getPreviousSibling(_current: WorkspaceSvg): INavigable<unknown> | null {
     return null;
+  }
+
+  /**
+   * Returns whether or not the given workspace can be navigated to.
+   *
+   * @param current The instance to check for navigability.
+   * @returns True if the given workspace can be focused.
+   */
+  isNavigable(current: WorkspaceSvg): boolean {
+    return current.canBeFocused();
   }
 }

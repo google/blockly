@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {BlockSvg} from '../block_svg.js';
+import {BlockSvg} from '../block_svg.js';
+import type {Field} from '../field.js';
 import type {INavigable} from '../interfaces/i_navigable.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
-import type {RenderedConnection} from '../rendered_connection.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Set of rules controlling keyboard navigation from a block.
@@ -24,7 +25,8 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
       for (const field of input.fieldRow) {
         return field;
       }
-      if (input.connection) return input.connection as RenderedConnection;
+      if (input.connection?.targetBlock())
+        return input.connection.targetBlock() as BlockSvg;
     }
 
     return null;
@@ -38,12 +40,14 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    *     which it is attached.
    */
   getParent(current: BlockSvg): INavigable<unknown> | null {
-    const topBlock = current.getTopStackBlock();
+    if (current.previousConnection?.targetBlock()) {
+      const surroundParent = current.getSurroundParent();
+      if (surroundParent) return surroundParent;
+    } else if (current.outputConnection?.targetBlock()) {
+      return current.outputConnection.targetBlock();
+    }
 
-    return (
-      (this.getParentConnection(topBlock)?.targetConnection?.getParentInput()
-        ?.connection as RenderedConnection) ?? topBlock
-    );
+    return current.workspace;
   }
 
   /**
@@ -54,21 +58,40 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    *     block, or its next connection.
    */
   getNextSibling(current: BlockSvg): INavigable<unknown> | null {
-    const nextConnection = current.nextConnection;
-    if (!current.outputConnection?.targetConnection && !nextConnection) {
-      // If this block has no connected output connection and no next
-      // connection, it must be the last block in the stack, so its next sibling
-      // is the first block of the next stack on the workspace.
-      const topBlocks = current.workspace.getTopBlocks(true);
-      let targetIndex = topBlocks.indexOf(current.getRootBlock()) + 1;
-      if (targetIndex >= topBlocks.length) {
-        targetIndex = 0;
-      }
-      const previousBlock = topBlocks[targetIndex];
-      return this.getParentConnection(previousBlock) ?? previousBlock;
+    if (current.nextConnection?.targetBlock()) {
+      return current.nextConnection?.targetBlock();
     }
 
-    return nextConnection;
+    const parent = this.getParent(current);
+    let navigatingCrossStacks = false;
+    let siblings: (BlockSvg | Field)[] = [];
+    if (parent instanceof BlockSvg) {
+      for (let i = 0, input; (input = parent.inputList[i]); i++) {
+        if (input.connection) {
+          siblings.push(...input.fieldRow);
+          const child = input.connection.targetBlock();
+          if (child) {
+            siblings.push(child as BlockSvg);
+          }
+        }
+      }
+    } else if (parent instanceof WorkspaceSvg) {
+      siblings = parent.getTopBlocks(true);
+      navigatingCrossStacks = true;
+    } else {
+      return null;
+    }
+
+    const currentIndex = siblings.indexOf(
+      navigatingCrossStacks ? current.getRootBlock() : current,
+    );
+    if (currentIndex >= 0 && currentIndex < siblings.length - 1) {
+      return siblings[currentIndex + 1];
+    } else if (currentIndex === siblings.length - 1 && navigatingCrossStacks) {
+      return siblings[0];
+    }
+
+    return null;
   }
 
   /**
@@ -79,39 +102,54 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    *     connection/block of the previous block stack if it is a root block.
    */
   getPreviousSibling(current: BlockSvg): INavigable<unknown> | null {
-    const parentConnection = this.getParentConnection(current);
-    if (parentConnection) return parentConnection;
-
-    // If this block has no output/previous connection, it must be a root block,
-    // so its previous sibling is the last connection of the last block of the
-    // previous stack on the workspace.
-    const topBlocks = current.workspace.getTopBlocks(true);
-    let targetIndex = topBlocks.indexOf(current.getRootBlock()) - 1;
-    if (targetIndex < 0) {
-      targetIndex = topBlocks.length - 1;
+    if (current.previousConnection?.targetBlock()) {
+      return current.previousConnection?.targetBlock();
     }
 
-    const lastBlock = topBlocks[targetIndex]
-      .getDescendants(true)
-      .reverse()
-      .pop();
+    const parent = this.getParent(current);
+    let navigatingCrossStacks = false;
+    let siblings: (BlockSvg | Field)[] = [];
+    if (parent instanceof BlockSvg) {
+      for (let i = 0, input; (input = parent.inputList[i]); i++) {
+        if (input.connection) {
+          siblings.push(...input.fieldRow);
+          const child = input.connection.targetBlock();
+          if (child) {
+            siblings.push(child as BlockSvg);
+          }
+        }
+      }
+    } else if (parent instanceof WorkspaceSvg) {
+      siblings = parent.getTopBlocks(true);
+      navigatingCrossStacks = true;
+    } else {
+      return null;
+    }
 
-    return lastBlock?.nextConnection ?? lastBlock ?? null;
+    const currentIndex = siblings.indexOf(current);
+    let result: INavigable<any> | null = null;
+    if (currentIndex >= 1) {
+      result = siblings[currentIndex - 1];
+    } else if (currentIndex === 0 && navigatingCrossStacks) {
+      result = siblings[siblings.length - 1];
+    }
+
+    // If navigating to a previous stack, our previous sibling is the last
+    // block in it.
+    if (navigatingCrossStacks && result instanceof BlockSvg) {
+      return result.lastConnectionInStack(false)?.getSourceBlock() ?? result;
+    }
+
+    return result;
   }
 
   /**
-   * Gets the parent connection on a block.
-   * This is either an output connection, previous connection or undefined.
-   * If both connections exist return the one that is actually connected
-   * to another block.
+   * Returns whether or not the given block can be navigated to.
    *
-   * @param block The block to find the parent connection on.
-   * @returns The connection connecting to the parent of the block.
+   * @param current The instance to check for navigability.
+   * @returns True if the given block can be focused.
    */
-  protected getParentConnection(block: BlockSvg) {
-    if (!block.outputConnection || block.previousConnection?.isConnected()) {
-      return block.previousConnection;
-    }
-    return block.outputConnection;
+  isNavigable(current: BlockSvg): boolean {
+    return current.canBeFocused();
   }
 }

@@ -37,6 +37,106 @@ const xmlText =
   '  </block>\n' +
   '</xml>';
 
+const json = {
+  'blocks': {
+    'languageVersion': 0,
+    'blocks': [
+      {
+        'type': 'procedures_defnoreturn',
+        'id': '0!;|f{%4H@mgQ`SIEDKV',
+        'x': 38,
+        'y': 163,
+        'icons': {
+          'comment': {
+            'text': 'Describe this function...',
+            'pinned': false,
+            'height': 80,
+            'width': 160,
+          },
+        },
+        'fields': {
+          'NAME': 'say hello',
+        },
+        'inputs': {
+          'STACK': {
+            'block': {
+              'type': 'text_print',
+              'id': 't^`WoL~R$t}rk]`JVFUP',
+              'inputs': {
+                'TEXT': {
+                  'shadow': {
+                    'type': 'text',
+                    'id': '_PxHV1tqEy60kP^].Qhh',
+                    'fields': {
+                      'TEXT': 'abc',
+                    },
+                  },
+                  'block': {
+                    'type': 'text_join',
+                    'id': 'K4.OZ9ql9j0f367238R@',
+                    'extraState': {
+                      'itemCount': 2,
+                    },
+                    'inputs': {
+                      'ADD0': {
+                        'block': {
+                          'type': 'text',
+                          'id': '5ElufS^j4;l:9N#|Yt$X',
+                          'fields': {
+                            'TEXT': 'The meaning of life is',
+                          },
+                        },
+                      },
+                      'ADD1': {
+                        'block': {
+                          'type': 'math_arithmetic',
+                          'id': ',QfcN`h]rQ86a]6J|di1',
+                          'fields': {
+                            'OP': 'MINUS',
+                          },
+                          'inputs': {
+                            'A': {
+                              'shadow': {
+                                'type': 'math_number',
+                                'id': 'ClcKUIPYleVQ_j7ZjK]^',
+                                'fields': {
+                                  'NUM': 44,
+                                },
+                              },
+                            },
+                            'B': {
+                              'shadow': {
+                                'type': 'math_number',
+                                'id': 'F_cU|uaP7oB-k(j~@X?g',
+                                'fields': {
+                                  'NUM': 2,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        'type': 'procedures_callnoreturn',
+        'id': 'Ad^$sruQ.`6zNmQ6jPit',
+        'x': 38,
+        'y': 113,
+        'extraState': {
+          'name': 'say hello',
+        },
+      },
+    ],
+  },
+};
+
 suite('Test Node.js', function () {
   test('Import XML', function () {
     const xml = Blockly.utils.xml.textToDom(xmlText);
@@ -68,5 +168,17 @@ suite('Test Node.js', function () {
 
     // Check output
     assert.equal("window.alert('Hello from Blockly!');", code.trim(), 'equal');
+  });
+  test('Import JSON', function () {
+    const workspace = new Blockly.Workspace();
+    Blockly.serialization.workspaces.load(json, workspace);
+  });
+  test('Roundtrip JSON', function () {
+    const workspace = new Blockly.Workspace();
+    Blockly.serialization.workspaces.load(json, workspace);
+
+    const jsonAfter = Blockly.serialization.workspaces.save(workspace);
+
+    assert.deepEqual(jsonAfter, json);
   });
 });

@@ -22,16 +22,7 @@ export class WorkspaceNavigationPolicy
    */
   getFirstChild(current: WorkspaceSvg): INavigable<unknown> | null {
     const blocks = current.getTopBlocks(true);
-    if (!blocks.length) return null;
-    const block = blocks[0];
-    let topConnection = block.outputConnection;
-    if (
-      !topConnection ||
-      (block.previousConnection && block.previousConnection.isConnected())
-    ) {
-      topConnection = block.previousConnection;
-    }
-    return topConnection ?? block;
+    return blocks.length ? blocks[0] : null;
   }
 
   /**

@@ -14,8 +14,6 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import {ConnectionType} from '../connection_type.js';
-import {Field} from '../field.js';
 import {FieldCheckbox} from '../field_checkbox.js';
 import {FieldDropdown} from '../field_dropdown.js';
 import {FieldImage} from '../field_image.js';
@@ -146,7 +144,12 @@ export class LineCursor extends Marker {
     }
     const newNode = this.getNextNode(
       curNode,
-      this.workspace.isFlyout ? () => true : this.validLineNode.bind(this),
+      (candidate: INavigable<any> | null) => {
+        return (
+          candidate instanceof BlockSvg &&
+          !candidate.outputConnection?.targetBlock()
+        );
+      },
       true,
     );
 
@@ -168,11 +171,8 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    const newNode = this.getNextNode(
-      curNode,
-      this.workspace.isFlyout ? () => true : this.validInLineNode.bind(this),
-      true,
-    );
+
+    const newNode = this.getNextNode(curNode, () => true, true);
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -193,7 +193,12 @@ export class LineCursor extends Marker {
     }
     const newNode = this.getPreviousNode(
       curNode,
-      this.workspace.isFlyout ? () => true : this.validLineNode.bind(this),
+      (candidate: INavigable<any> | null) => {
+        return (
+          candidate instanceof BlockSvg &&
+          !candidate.outputConnection?.targetBlock()
+        );
+      },
       true,
     );
 
@@ -215,11 +220,8 @@ export class LineCursor extends Marker {
     if (!curNode) {
       return null;
     }
-    const newNode = this.getPreviousNode(
-      curNode,
-      this.workspace.isFlyout ? () => true : this.validInLineNode.bind(this),
-      true,
-    );
+
+    const newNode = this.getPreviousNode(curNode, () => true, true);
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -229,102 +231,26 @@ export class LineCursor extends Marker {
 
   /**
    * Returns true iff the node to which we would navigate if in() were
-   * called, which will be a validInLineNode, is also a validLineNode
-   * - in effect, if the LineCursor is at the end of the 'current
+   * called is the same as the node to which we would navigate if next() were
+   * called - in effect, if the LineCursor is at the end of the 'current
    * line' of the program.
    */
   atEndOfLine(): boolean {
     const curNode = this.getCurNode();
     if (!curNode) return false;
-    const rightNode = this.getNextNode(
+    const inNode = this.getNextNode(curNode, () => true, true);
+    const nextNode = this.getNextNode(
       curNode,
-      this.validInLineNode.bind(this),
-      false,
+      (candidate: INavigable<any> | null) => {
+        return (
+          candidate instanceof BlockSvg &&
+          !candidate.outputConnection?.targetBlock()
+        );
+      },
+      true,
     );
-    return this.validLineNode(rightNode);
-  }
 
-  /**
-   * Returns true iff the given node represents the "beginning of a
-   * new line of code" (and thus can be visited by pressing the
-   * up/down arrow keys).  Specifically, if the node is for:
-   *
-   * - Any block that is not a value block.
-   * - A top-level value block (one that is unconnected).
-   * - An unconnected next statement input.
-   * - An unconnected 'next' connection - the "blank line at the end".
-   *   This is to facilitate connecting additional blocks to a
-   *   stack/substack.
-   *
-   * If options.stackConnections is true (the default) then allow the
-   * cursor to visit all (useful) stack connection by additionally
-   * returning true for:
-   *
-   *   - Any next statement input
-   *   - Any 'next' connection.
-   *   - An unconnected previous statement input.
-   *
-   * @param node The AST node to check.
-   * @returns True if the node should be visited, false otherwise.
-   */
-  protected validLineNode(node: INavigable<any> | null): boolean {
-    if (!node) return false;
-
-    if (node instanceof BlockSvg) {
-      return !node.outputConnection?.isConnected();
-    } else if (node instanceof RenderedConnection) {
-      if (node.type === ConnectionType.NEXT_STATEMENT) {
-        return this.options.stackConnections || !node.isConnected();
-      } else if (node.type === ConnectionType.PREVIOUS_STATEMENT) {
-        return this.options.stackConnections && !node.isConnected();
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * Returns true iff the given node can be visited by the cursor when
-   * using the left/right arrow keys.  Specifically, if the node is
-   * any node for which validLineNode would return true, plus:
-   *
-   * - Any block.
-   * - Any field that is not a full block field.
-   * - Any unconnected next or input connection.  This is to
-   *   facilitate connecting additional blocks.
-   *
-   * @param node The AST node to check whether it is valid.
-   * @returns True if the node should be visited, false otherwise.
-   */
-  protected validInLineNode(node: INavigable<any> | null): boolean {
-    if (!node) return false;
-    if (this.validLineNode(node)) return true;
-    if (node instanceof BlockSvg || node instanceof Field) {
-      return true;
-    } else if (
-      node instanceof RenderedConnection &&
-      node.getParentInput() &&
-      (node.type === ConnectionType.INPUT_VALUE ||
-        node.type === ConnectionType.NEXT_STATEMENT)
-    ) {
-      return !node.isConnected();
-    }
-
-    return false;
-  }
-
-  /**
-   * Returns true iff the given node can be visited by the cursor.
-   * Specifically, if the node is any for which validInLineNode would
-   * return true, or if it is a workspace node.
-   *
-   * @param node The AST node to check whether it is valid.
-   * @returns True if the node should be visited, false otherwise.
-   */
-  protected validNode(node: INavigable<any> | null): boolean {
-    return (
-      !!node && (this.validInLineNode(node) || node instanceof WorkspaceSvg)
-    );
+    return inNode === nextNode;
   }
 
   /**
@@ -347,15 +273,15 @@ export class LineCursor extends Marker {
     let newNode =
       this.workspace.getNavigator().getFirstChild(node) ||
       this.workspace.getNavigator().getNextSibling(node);
-    if (isValid(newNode)) return newNode;
-    if (newNode) {
-      visitedNodes.add(node);
-      return this.getNextNodeImpl(newNode, isValid, visitedNodes);
+
+    let target = node;
+    while (target && !newNode) {
+      const parent = this.workspace.getNavigator().getParent(target);
+      if (!parent) break;
+      newNode = this.workspace.getNavigator().getNextSibling(parent);
+      target = parent;
     }
 
-    newNode = this.findSiblingOrParentSibling(
-      this.workspace.getNavigator().getParent(node),
-    );
     if (isValid(newNode)) return newNode;
     if (newNode) {
       visitedNodes.add(node);
@@ -402,15 +328,12 @@ export class LineCursor extends Marker {
     visitedNodes: Set<INavigable<any>> = new Set<INavigable<any>>(),
   ): INavigable<any> | null {
     if (!node || visitedNodes.has(node)) return null;
-    let newNode: INavigable<any> | null = this.workspace
-      .getNavigator()
-      .getPreviousSibling(node);
 
-    if (newNode) {
-      newNode = this.getRightMostChild(newNode);
-    } else {
-      newNode = this.workspace.getNavigator().getParent(node);
-    }
+    const newNode =
+      this.getRightMostChild(
+        this.workspace.getNavigator().getPreviousSibling(node),
+        node,
+      ) || this.workspace.getNavigator().getParent(node);
 
     if (isValid(newNode)) return newNode;
     if (newNode) {
@@ -442,41 +365,28 @@ export class LineCursor extends Marker {
   }
 
   /**
-   * From the given node find either the next valid sibling or the parent's
-   * next sibling.
-   *
-   * @param node The current position in the AST.
-   * @returns The next sibling node, the parent's next sibling, or null.
-   */
-  private findSiblingOrParentSibling(
-    node: INavigable<any> | null,
-  ): INavigable<any> | null {
-    if (!node) return null;
-    const nextNode = this.workspace.getNavigator().getNextSibling(node);
-    if (nextNode) return nextNode;
-    return this.findSiblingOrParentSibling(
-      this.workspace.getNavigator().getParent(node),
-    );
-  }
-
-  /**
    * Get the right most child of a node.
    *
    * @param node The node to find the right most child of.
    * @returns The right most child of the given node, or the node if no child
    *     exists.
    */
-  private getRightMostChild(node: INavigable<any>): INavigable<any> | null {
+  getRightMostChild(
+    node: INavigable<any> | null,
+    stopIfFound: INavigable<any>,
+  ): INavigable<any> | null {
+    if (!node) return node;
     let newNode = this.workspace.getNavigator().getFirstChild(node);
-    if (!newNode) return node;
+    if (!newNode || newNode === stopIfFound) return node;
     for (
       let nextNode: INavigable<any> | null = newNode;
       nextNode;
       nextNode = this.workspace.getNavigator().getNextSibling(newNode)
     ) {
+      if (nextNode === stopIfFound) break;
       newNode = nextNode;
     }
-    return this.getRightMostChild(newNode);
+    return this.getRightMostChild(newNode, stopIfFound);
   }
 
   /**
@@ -537,10 +447,7 @@ export class LineCursor extends Marker {
     this.potentialNodes = null;
     if (!nodes) throw new Error('must call preDelete first');
     for (const node of nodes) {
-      if (
-        this.validNode(node) &&
-        !this.getSourceBlockFromNode(node)?.disposed
-      ) {
+      if (!this.getSourceBlockFromNode(node)?.disposed) {
         this.setCurNode(node);
         return;
       }

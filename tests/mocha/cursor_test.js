@@ -97,34 +97,34 @@ suite('Cursor', function () {
       this.cursor.setCurNode(prevNode);
       this.cursor.next();
       const curNode = this.cursor.getCurNode();
-      assert.equal(curNode, this.blocks.B.getInput('NAME4').connection);
+      assert.equal(curNode, this.blocks.C);
     });
 
-    test('In - From attached input connection', function () {
+    test('In - From field to attached input connection', function () {
       const fieldBlock = this.blocks.E;
-      const inputConnectionNode = this.blocks.A.inputList[0].connection;
-      this.cursor.setCurNode(inputConnectionNode);
+      const fieldNode = this.blocks.A.getField('NAME2');
+      this.cursor.setCurNode(fieldNode);
       this.cursor.in();
       const curNode = this.cursor.getCurNode();
       assert.equal(curNode, fieldBlock);
     });
 
-    test('Prev - From previous connection does not skip over next connection', function () {
+    test('Prev - From previous connection does skip over next connection', function () {
       const prevConnection = this.blocks.B.previousConnection;
       const prevConnectionNode = prevConnection;
       this.cursor.setCurNode(prevConnectionNode);
       this.cursor.prev();
       const curNode = this.cursor.getCurNode();
-      assert.equal(curNode, this.blocks.A.nextConnection);
+      assert.equal(curNode, this.blocks.A);
     });
 
-    test('Prev - From first connection loop to last next connection', function () {
-      const prevConnection = this.blocks.A.previousConnection;
+    test('Prev - From first block loop to last block', function () {
+      const prevConnection = this.blocks.A;
       const prevConnectionNode = prevConnection;
       this.cursor.setCurNode(prevConnectionNode);
       this.cursor.prev();
       const curNode = this.cursor.getCurNode();
-      assert.equal(curNode, this.blocks.D.nextConnection);
+      assert.equal(curNode, this.blocks.D);
     });
 
     test('Out - From field does not skip over block node', function () {
@@ -225,11 +225,11 @@ suite('Cursor', function () {
       });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
-        assert.equal(node, this.blockA.previousConnection);
+        assert.equal(node, this.blockA);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node, this.blockA.nextConnection);
+        assert.equal(node, this.blockA);
       });
     });
 
@@ -242,11 +242,11 @@ suite('Cursor', function () {
       });
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
-        assert.equal(node, this.blockA.outputConnection);
+        assert.equal(node, this.blockA);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node, this.blockA.inputList[0].connection);
+        assert.equal(node, this.blockA);
       });
     });
     suite('one c-hat block', function () {
@@ -262,7 +262,7 @@ suite('Cursor', function () {
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node, this.blockA.inputList[0].connection);
+        assert.equal(node, this.blockA);
       });
     });
 
@@ -295,12 +295,12 @@ suite('Cursor', function () {
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
         const blockA = this.workspace.getBlockById('A');
-        assert.equal(node, blockA.previousConnection);
+        assert.equal(node, blockA);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
         const blockB = this.workspace.getBlockById('B');
-        assert.equal(node, blockB.nextConnection);
+        assert.equal(node, blockB);
       });
     });
 
@@ -335,12 +335,12 @@ suite('Cursor', function () {
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
         const blockA = this.workspace.getBlockById('A');
-        assert.equal(node, blockA.outputConnection);
+        assert.equal(node, blockA);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
         const blockB = this.workspace.getBlockById('B');
-        assert.equal(node, blockB.inputList[0].connection);
+        assert.equal(node, blockB);
       });
     });
 
@@ -385,15 +385,14 @@ suite('Cursor', function () {
       test('getFirstNode', function () {
         const node = this.cursor.getFirstNode();
         const location = node;
-        const previousConnection =
-          this.workspace.getBlockById('A').previousConnection;
-        assert.equal(location, previousConnection);
+        const blockA = this.workspace.getBlockById('A');
+        assert.equal(location, blockA);
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
         const location = node;
-        const nextConnection = this.workspace.getBlockById('D').nextConnection;
-        assert.equal(location, nextConnection);
+        const blockD = this.workspace.getBlockById('D');
+        assert.equal(location, blockD);
       });
     });
   });
@@ -439,8 +438,8 @@ suite('Cursor', function () {
       this.cursor = this.workspace.getCursor();
       this.neverValid = () => false;
       this.alwaysValid = () => true;
-      this.isConnection = (node) => {
-        return node && node instanceof Blockly.RenderedConnection;
+      this.isBlock = (node) => {
+        return node && node instanceof Blockly.BlockSvg;
       };
     });
     teardown(function () {
@@ -528,7 +527,7 @@ suite('Cursor', function () {
         assert.equal(nextNode, this.blockB.getField('FIELD'));
       });
       test('Always valid - start at end', function () {
-        const startNode = this.blockC.nextConnection;
+        const startNode = this.blockC.getField('FIELD');
         const nextNode = this.cursor.getNextNode(
           startNode,
           this.alwaysValid,
@@ -537,29 +536,29 @@ suite('Cursor', function () {
         assert.isNull(nextNode);
       });
 
-      test('Valid if connection - start at top', function () {
-        const startNode = this.blockA.previousConnection;
+      test('Valid if block - start at top', function () {
+        const startNode = this.blockA;
         const nextNode = this.cursor.getNextNode(
           startNode,
-          this.isConnection,
+          this.isBlock,
           false,
         );
-        assert.equal(nextNode, this.blockA.nextConnection);
+        assert.equal(nextNode, this.blockB);
       });
-      test('Valid if connection - start in middle', function () {
+      test('Valid if block - start in middle', function () {
         const startNode = this.blockB;
         const nextNode = this.cursor.getNextNode(
           startNode,
-          this.isConnection,
+          this.isBlock,
           false,
         );
-        assert.equal(nextNode, this.blockB.nextConnection);
+        assert.equal(nextNode, this.blockC);
       });
-      test('Valid if connection - start at end', function () {
-        const startNode = this.blockC.nextConnection;
+      test('Valid if block - start at end', function () {
+        const startNode = this.blockC.getField('FIELD');
         const nextNode = this.cursor.getNextNode(
           startNode,
-          this.isConnection,
+          this.isBlock,
           false,
         );
         assert.isNull(nextNode);
@@ -583,14 +582,10 @@ suite('Cursor', function () {
         assert.equal(nextNode, this.blockA.previousConnection);
       });
 
-      test('Valid if connection - start at end - with loopback', function () {
-        const startNode = this.blockC.nextConnection;
-        const nextNode = this.cursor.getNextNode(
-          startNode,
-          this.isConnection,
-          true,
-        );
-        assert.equal(nextNode, this.blockA.previousConnection);
+      test('Valid if block - start at end - with loopback', function () {
+        const startNode = this.blockC;
+        const nextNode = this.cursor.getNextNode(startNode, this.isBlock, true);
+        assert.equal(nextNode, this.blockA);
       });
     });
   });
@@ -637,8 +632,8 @@ suite('Cursor', function () {
       this.cursor = this.workspace.getCursor();
       this.neverValid = () => false;
       this.alwaysValid = () => true;
-      this.isConnection = (node) => {
-        return node && node instanceof Blockly.RenderedConnection;
+      this.isBlock = (node) => {
+        return node && node instanceof Blockly.BlockSvg;
       };
     });
     teardown(function () {
@@ -708,7 +703,7 @@ suite('Cursor', function () {
       });
 
       test('Always valid - start at top', function () {
-        const startNode = this.blockA.previousConnection;
+        const startNode = this.blockA;
         const previousNode = this.cursor.getPreviousNode(
           startNode,
           this.alwaysValid,
@@ -723,7 +718,7 @@ suite('Cursor', function () {
           this.alwaysValid,
           false,
         );
-        assert.equal(previousNode, this.blockB.previousConnection);
+        assert.equal(previousNode, this.blockA.getField('FIELD'));
       });
       test('Always valid - start at end', function () {
         const startNode = this.blockC.nextConnection;
@@ -735,32 +730,32 @@ suite('Cursor', function () {
         assert.equal(previousNode, this.blockC.getField('FIELD'));
       });
 
-      test('Valid if connection - start at top', function () {
-        const startNode = this.blockA.previousConnection;
+      test('Valid if block - start at top', function () {
+        const startNode = this.blockA;
         const previousNode = this.cursor.getPreviousNode(
           startNode,
-          this.isConnection,
+          this.isBlock,
           false,
         );
         assert.isNull(previousNode);
       });
-      test('Valid if connection - start in middle', function () {
+      test('Valid if block - start in middle', function () {
         const startNode = this.blockB;
         const previousNode = this.cursor.getPreviousNode(
           startNode,
-          this.isConnection,
+          this.isBlock,
           false,
         );
-        assert.equal(previousNode, this.blockB.previousConnection);
+        assert.equal(previousNode, this.blockA);
       });
-      test('Valid if connection - start at end', function () {
-        const startNode = this.blockC.nextConnection;
+      test('Valid if block - start at end', function () {
+        const startNode = this.blockC;
         const previousNode = this.cursor.getPreviousNode(
           startNode,
-          this.isConnection,
+          this.isBlock,
           false,
         );
-        assert.equal(previousNode, this.blockC.previousConnection);
+        assert.equal(previousNode, this.blockB);
       });
       test('Never valid - start at top - with loopback', function () {
         const startNode = this.blockA.previousConnection;
@@ -780,14 +775,14 @@ suite('Cursor', function () {
         );
         assert.equal(previousNode, this.blockC.nextConnection);
       });
-      test('Valid if connection - start at top - with loopback', function () {
-        const startNode = this.blockA.previousConnection;
+      test('Valid if block - start at top - with loopback', function () {
+        const startNode = this.blockA;
         const previousNode = this.cursor.getPreviousNode(
           startNode,
-          this.isConnection,
+          this.isBlock,
           true,
         );
-        assert.equal(previousNode, this.blockC.nextConnection);
+        assert.equal(previousNode, this.blockC);
       });
     });
   });

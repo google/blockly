@@ -399,6 +399,10 @@ export class BlockDragStrategy implements IDragStrategy {
         .getLayerManager()
         ?.moveOffDragLayer(this.block, layers.BLOCK);
       this.block.setDragging(false);
+
+      // Since moving the block off the drag layer will cause it to lose focus,
+      // ensure it regains focus (to enable the block's selection highlight).
+      getFocusManager().focusNode(this.block);
     }
 
     if (this.connectionCandidate) {

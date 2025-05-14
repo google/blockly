@@ -582,6 +582,38 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       );
       WidgetDiv.hideIfOwner(this);
       dropDownDiv.hideWithoutAnimation();
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const cursor = this.workspace_?.getCursor();
+      const target = e.shiftKey
+        ? cursor?.getPreviousNode(
+            this,
+            (node) =>
+              (node instanceof FieldInput ||
+                (node instanceof BlockSvg && node.isSimpleReporter())) &&
+              node !== this.getSourceBlock(),
+            false,
+          )
+        : cursor?.getNextNode(
+            this,
+            (node) =>
+              (node instanceof FieldInput ||
+                (node instanceof BlockSvg && node.isSimpleReporter())) &&
+              node !== this.getSourceBlock(),
+            false,
+          );
+      if (target && target instanceof FieldInput) {
+        WidgetDiv.hideIfOwner(this);
+        dropDownDiv.hideWithoutAnimation();
+        target.showEditor();
+      } else if (target instanceof BlockSvg && target.isSimpleReporter()) {
+        WidgetDiv.hideIfOwner(this);
+        dropDownDiv.hideWithoutAnimation();
+        const field = target.getFields().next().value;
+        if (field instanceof FieldInput) {
+          field.showEditor();
+        }
+      }
     }
   }
 

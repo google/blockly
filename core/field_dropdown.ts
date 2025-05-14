@@ -800,7 +800,9 @@ export class FieldDropdown extends Field<string> {
         option[0] &&
         typeof option[0] !== 'string' &&
         !isImageProperties(option[0]) &&
-        !(option[0] instanceof HTMLElement)
+        !(
+          typeof HTMLElement !== 'undefined' && option[0] instanceof HTMLElement
+        )
       ) {
         foundError = true;
         console.error(

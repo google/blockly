@@ -181,4 +181,11 @@ suite('Test Node.js', function () {
 
     assert.deepEqual(jsonAfter, json);
   });
+  test('Dropdown getText works with no HTMLElement defined', function () {
+    const field = new Blockly.FieldDropdown([
+      ['firstOption', '1'],
+      ['secondOption', '2'],
+    ]);
+    assert.equal(field.getText(), 'firstOption');
+  });
 });

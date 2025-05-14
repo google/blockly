@@ -84,12 +84,18 @@ export function createDom() {
  * @param newDispose Optional cleanup function to be run when the widget is
  *     closed.
  * @param workspace The workspace associated with the widget owner.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the widget div's lifetime. Note that if a false value is
+ *     passed in here then callers should manage ephemeral focus directly
+ *     otherwise focus may not properly restore when the widget closes. Defaults
+ *     to true.
  */
 export function show(
   newOwner: unknown,
   rtl: boolean,
   newDispose: () => void,
   workspace?: WorkspaceSvg | null,
+  manageEphemeralFocus: boolean = true,
 ) {
   hide();
   owner = newOwner;
@@ -114,7 +120,9 @@ export function show(
   if (themeClassName) {
     dom.addClass(div, themeClassName);
   }
-  returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
+  if (manageEphemeralFocus) {
+    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
+  }
 }
 
 /**

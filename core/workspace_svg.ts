@@ -2759,7 +2759,9 @@ export class WorkspaceSvg
     }
 
     // Search for a specific block.
-    const block = this.getBlockById(id);
+    const block = this.getAllBlocks(false).find(
+      (block) => block.getFocusableElement().id === id,
+    );
     if (block) return block;
 
     // Search for a workspace comment (semi-expensive).

@@ -19,11 +19,13 @@ export interface IFocusableNode {
    * - blocklyActiveFocus
    * - blocklyPassiveFocus
    *
-   * The returned element must also have a valid ID specified, and unique to the
-   * element relative to its nearest IFocusableTree parent. It must also have a
-   * negative tabindex (since the focus manager itself will manage its tab index
-   * and a tab index must be present in order for the element to be focusable in
-   * the DOM).
+   * The returned element must also have a valid ID specified, and unique across
+   * the entire page. Failing to have a properly unique ID could result in
+   * trying to focus one node (such as via a mouse click) leading to another
+   * node with the same ID actually becoming focused by FocusManager. The
+   * returned element must also have a negative tabindex (since the focus
+   * manager itself will manage its tab index and a tab index must be present in
+   * order for the element to be focusable in the DOM).
    *
    * The returned element must be visible if the node is ever focused via
    * FocusManager.focusNode() or FocusManager.focusTree(). It's allowed for an

@@ -633,7 +633,13 @@ export class FieldDropdown extends Field<string> {
   /**
    * Use the `getText_` developer hook to override the field's text
    * representation.  Get the selected option text.  If the selected option is
-   * an image we return the image alt text.
+   * an image we return the image alt text. If the selected option is
+   * an HTMLElement, return the title, ariaLabel, or innerText of the
+   * element.
+   *
+   * If you use HTMLElement options in node and call this function,
+   * ensure that you are supplying an implementation of HTMLElement,
+   * such as through jsdom-global.
    *
    * @returns Selected option text.
    */
@@ -644,10 +650,21 @@ export class FieldDropdown extends Field<string> {
     const option = this.selectedOption[0];
     if (isImageProperties(option)) {
       return option.alt;
-    } else if (option instanceof HTMLElement) {
+    } else if (
+      typeof HTMLElement !== 'undefined' &&
+      option instanceof HTMLElement
+    ) {
       return option.title ?? option.ariaLabel ?? option.innerText;
+    } else if (typeof option === 'string') {
+      return option;
     }
-    return option;
+
+    console.warn(
+      "Can't get text for existing dropdown option. If " +
+        "you're using HTMLElement dropdown options in node, ensure you're " +
+        'using jsdom-global or similar.',
+    );
+    return null;
   }
 
   /**

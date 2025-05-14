@@ -637,7 +637,7 @@ export class FieldDropdown extends Field<string> {
    * an HTMLElement, return the title, ariaLabel, or innerText of the
    * element.
    *
-   * If you use HTMLElement options in node and call this function,
+   * If you use HTMLElement options in Node.js and call this function,
    * ensure that you are supplying an implementation of HTMLElement,
    * such as through jsdom-global.
    *

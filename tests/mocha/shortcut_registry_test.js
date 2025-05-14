@@ -260,13 +260,17 @@ suite('Keyboard Shortcut Registry Test', function () {
       assert.equal(this.registry.getKeyMap()['keyCode'][0], 'a');
     });
     test('Gets a copy of the registry', function () {
-      const shortcut = {'name': 'shortcutName'};
+      const shortcut = {'name': 'shortcutName', 'keyCodes': ['2', '4']};
       this.registry.register(shortcut);
       const registrycopy = this.registry.getRegistry();
       registrycopy['shortcutName']['name'] = 'shortcutName1';
       assert.equal(
         this.registry.getRegistry()['shortcutName']['name'],
         'shortcutName',
+      );
+      assert.deepEqual(
+        this.registry.getRegistry()['shortcutName']['keyCodes'],
+        shortcut['keyCodes'],
       );
     });
     test('Gets keyboard shortcuts from a key code', function () {

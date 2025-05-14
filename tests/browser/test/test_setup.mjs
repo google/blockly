@@ -484,8 +484,8 @@ export async function dragBlockTypeFromFlyout(
 }
 
 /**
- * Drags the specified block type from the mutator flyout of the given block and
- * returns the root element of the block.
+ * Drags the specified block type from the mutator flyout of the given block
+ * and returns the root element of the block.
  *
  * @param browser The active WebdriverIO Browser object.
  * @param mutatorBlock The block with the mutator attached that we want to drag
@@ -519,7 +519,18 @@ export async function dragBlockFromMutatorFlyout(
   );
   const flyoutBlock = await getBlockElementById(browser, id);
   await flyoutBlock.dragAndDrop({x: x, y: y});
-  return await getSelectedBlockElement(browser);
+
+  const draggedBlockId = await browser.execute(
+    (mutatorBlockId, blockType) => {
+      return Blockly.getMainWorkspace()
+        .getBlockById(mutatorBlockId)
+        .mutator.getWorkspace()
+        .getBlocksByType(blockType)[0].id;
+    },
+    mutatorBlock.id,
+    type,
+  );
+  return await getBlockElementById(browser, draggedBlockId);
 }
 
 /**

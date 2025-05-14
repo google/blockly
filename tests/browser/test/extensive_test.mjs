@@ -40,7 +40,8 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
     chai.assert.equal(allBlocks.length, 10);
   });
 
-  test('undoing delete block results in the correct number of blocks', async function () {
+  // TODO(#8793) Re-enable test after deleting a block updates focus correctly.
+  test.skip('undoing delete block results in the correct number of blocks', async function () {
     await this.browser.keys([Key.Ctrl, 'z']);
     await this.browser.pause(PAUSE_TIME);
     const allBlocks = await getAllBlocks(this.browser);

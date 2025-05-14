@@ -27,6 +27,7 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
@@ -585,34 +586,24 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     } else if (e.key === 'Tab') {
       e.preventDefault();
       const cursor = this.workspace_?.getCursor();
-      const target = e.shiftKey
-        ? cursor?.getPreviousNode(
-            this,
-            (node) =>
-              (node instanceof FieldInput ||
-                (node instanceof BlockSvg && node.isSimpleReporter())) &&
-              node !== this.getSourceBlock(),
-            false,
-          )
-        : cursor?.getNextNode(
-            this,
-            (node) =>
-              (node instanceof FieldInput ||
-                (node instanceof BlockSvg && node.isSimpleReporter())) &&
-              node !== this.getSourceBlock(),
-            false,
-          );
-      if (target && target instanceof FieldInput) {
+
+      const isValidDestination = (node: IFocusableNode | null) =>
+        (node instanceof FieldInput ||
+          (node instanceof BlockSvg && node.isSimpleReporter())) &&
+        node !== this.getSourceBlock();
+
+      let target = e.shiftKey
+        ? cursor?.getPreviousNode(this, isValidDestination, false)
+        : cursor?.getNextNode(this, isValidDestination, false);
+      target =
+        target instanceof BlockSvg && target.isSimpleReporter()
+          ? target.getFields().next().value
+          : target;
+
+      if (target instanceof FieldInput) {
         WidgetDiv.hideIfOwner(this);
         dropDownDiv.hideWithoutAnimation();
         target.showEditor();
-      } else if (target instanceof BlockSvg && target.isSimpleReporter()) {
-        WidgetDiv.hideIfOwner(this);
-        dropDownDiv.hideWithoutAnimation();
-        const field = target.getFields().next().value;
-        if (field instanceof FieldInput) {
-          field.showEditor();
-        }
       }
     }
   }

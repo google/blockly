@@ -8,11 +8,13 @@ import * as blockAnimations from '../block_animations.js';
 import {BlockSvg} from '../block_svg.js';
 import {ComponentManager} from '../component_manager.js';
 import * as eventUtils from '../events/utils.js';
+import {getFocusManager} from '../focus_manager.js';
 import {IDeletable, isDeletable} from '../interfaces/i_deletable.js';
 import {IDeleteArea} from '../interfaces/i_delete_area.js';
 import {IDragTarget} from '../interfaces/i_drag_target.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
 import {IDragger} from '../interfaces/i_dragger.js';
+import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
@@ -31,6 +33,9 @@ export class Dragger implements IDragger {
 
   /** Handles any drag startup. */
   onDragStart(e: PointerEvent) {
+    if (!eventUtils.getGroup()) {
+      eventUtils.setGroup(true);
+    }
     this.draggable.startDrag(e);
   }
 
@@ -119,12 +124,18 @@ export class Dragger implements IDragger {
     this.draggable.endDrag(e);
 
     if (wouldDelete && isDeletable(root)) {
-      // We want to make sure the delete gets grouped with any possible
-      // move event.
-      const newGroup = eventUtils.getGroup();
+      // We want to make sure the delete gets grouped with any possible move
+      // event. In core Blockly this shouldn't happen, but due to a change
+      // in behavior older custom draggables might still clear the group.
       eventUtils.setGroup(origGroup);
       root.dispose();
-      eventUtils.setGroup(newGroup);
+    }
+    eventUtils.setGroup(false);
+
+    if (!wouldDelete && isFocusableNode(this.draggable)) {
+      // Ensure focusable nodes that have finished dragging (but aren't being
+      // deleted) end with focus and selection.
+      getFocusManager().focusNode(this.draggable);
     }
   }
 

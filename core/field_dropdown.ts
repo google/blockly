@@ -23,27 +23,23 @@ import {
 } from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
+import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import * as utilsString from './utils/string.js';
-import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
 
 /**
  * Class for an editable dropdown field.
  */
 export class FieldDropdown extends Field<string> {
-  /** Horizontal distance that a checkmark overhangs the dropdown. */
-  static CHECKMARK_OVERHANG = 25;
-
   /**
-   * Maximum height of the dropdown menu, as a percentage of the viewport
-   * height.
+   * Magic constant used to represent a separator in a list of dropdown items.
    */
-  static MAX_MENU_HEIGHT_VH = 0.45;
+  static readonly SEPARATOR = 'separator';
 
   static ARROW_CHAR = '▾';
 
@@ -69,9 +65,6 @@ export class FieldDropdown extends Field<string> {
    * are not. Editable fields should also be serializable.
    */
   override SERIALIZABLE = true;
-
-  /** Mouse cursor style when over the hotspot that initiates the editor. */
-  override CURSOR = 'default';
 
   protected menuGenerator_?: MenuGenerator;
 
@@ -136,26 +129,11 @@ export class FieldDropdown extends Field<string> {
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
     if (menuGenerator === Field.SKIP_SETUP) return;
 
-    if (Array.isArray(menuGenerator)) {
-      this.validateOptions(menuGenerator);
-      const trimmed = this.trimOptions(menuGenerator);
-      this.menuGenerator_ = trimmed.options;
-      this.prefixField = trimmed.prefix || null;
-      this.suffixField = trimmed.suffix || null;
-    } else {
-      this.menuGenerator_ = menuGenerator;
-    }
-
-    /**
-     * The currently selected option. The field is initialized with the
-     * first option selected.
-     */
-    this.selectedOption = this.getOptions(false)[0];
+    this.setOptions(menuGenerator);
 
     if (config) {
       this.configure_(config);
     }
-    this.setValue(this.selectedOption[1]);
     if (validator) {
       this.setValidator(validator);
     }
@@ -212,6 +190,11 @@ export class FieldDropdown extends Field<string> {
 
     if (this.borderRect_) {
       dom.addClass(this.borderRect_, 'blocklyDropdownRect');
+    }
+
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyField');
+      dom.addClass(this.fieldGroup_, 'blocklyDropdownField');
     }
   }
 
@@ -277,16 +260,18 @@ export class FieldDropdown extends Field<string> {
       throw new UnattachedFieldError();
     }
     this.dropdownCreate();
+    if (!this.menu_) return;
+
     if (e && typeof e.clientX === 'number') {
-      this.menu_!.openingCoords = new Coordinate(e.clientX, e.clientY);
+      this.menu_.openingCoords = new Coordinate(e.clientX, e.clientY);
     } else {
-      this.menu_!.openingCoords = null;
+      this.menu_.openingCoords = null;
     }
 
     // Remove any pre-existing elements in the dropdown.
     dropDownDiv.clearContent();
     // Element gets created in render.
-    const menuElement = this.menu_!.render(dropDownDiv.getContentDiv());
+    const menuElement = this.menu_.render(dropDownDiv.getContentDiv());
     dom.addClass(menuElement, 'blocklyDropdownMenu');
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {
@@ -297,18 +282,15 @@ export class FieldDropdown extends Field<string> {
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
+    dropDownDiv.getContentDiv().style.height = `${this.menu_.getSize().height}px`;
+
     // Focusing needs to be handled after the menu is rendered and positioned.
     // Otherwise it will cause a page scroll to get the misplaced menu in
     // view. See issue #1329.
-    this.menu_!.focus();
+    this.menu_.focus();
 
     if (this.selectedMenuItem) {
-      this.menu_!.setHighlighted(this.selectedMenuItem);
-      style.scrollIntoContainerView(
-        this.selectedMenuItem.getElement()!,
-        dropDownDiv.getContentDiv(),
-        true,
-      );
+      this.menu_.setHighlighted(this.selectedMenuItem);
     }
 
     this.applyColour();
@@ -327,13 +309,19 @@ export class FieldDropdown extends Field<string> {
     const options = this.getOptions(false);
     this.selectedMenuItem = null;
     for (let i = 0; i < options.length; i++) {
-      const [label, value] = options[i];
+      const option = options[i];
+      if (option === FieldDropdown.SEPARATOR) {
+        menu.addChild(new MenuSeparator());
+        continue;
+      }
+
+      const [label, value] = option;
       const content = (() => {
-        if (typeof label === 'object') {
+        if (isImageProperties(label)) {
           // Convert ImageProperties to an HTMLImageElement.
-          const image = new Image(label['width'], label['height']);
-          image.src = label['src'];
-          image.alt = label['alt'] || '';
+          const image = new Image(label.width, label.height);
+          image.src = label.src;
+          image.alt = label.alt;
           return image;
         }
         return label;
@@ -412,6 +400,28 @@ export class FieldDropdown extends Field<string> {
     this.generatedOptions = this.menuGenerator_();
     this.validateOptions(this.generatedOptions);
     return this.generatedOptions;
+  }
+
+  /**
+   * Update the options on this dropdown. This will reset the selected item to
+   * the first item in the list.
+   *
+   * @param menuGenerator The array of options or a generator function.
+   */
+  setOptions(menuGenerator: MenuGenerator) {
+    if (Array.isArray(menuGenerator)) {
+      this.validateOptions(menuGenerator);
+      const trimmed = this.trimOptions(menuGenerator);
+      this.menuGenerator_ = trimmed.options;
+      this.prefixField = trimmed.prefix || null;
+      this.suffixField = trimmed.suffix || null;
+    } else {
+      this.menuGenerator_ = menuGenerator;
+    }
+    // The currently selected option. The field is initialized with the
+    // first option selected.
+    this.selectedOption = this.getOptions(false)[0];
+    this.setValue(this.selectedOption[1]);
   }
 
   /**
@@ -494,7 +504,7 @@ export class FieldDropdown extends Field<string> {
 
     // Show correct element.
     const option = this.selectedOption && this.selectedOption[0];
-    if (option && typeof option === 'object') {
+    if (isImageProperties(option)) {
       this.renderSelectedImage(option);
     } else {
       this.renderSelectedText();
@@ -541,12 +551,7 @@ export class FieldDropdown extends Field<string> {
         height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2,
       );
     } else {
-      arrowWidth = dom.getFastTextWidth(
-        this.arrow as SVGTSpanElement,
-        this.getConstants()!.FIELD_TEXT_FONTSIZE,
-        this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-        this.getConstants()!.FIELD_TEXT_FONTFAMILY,
-      );
+      arrowWidth = dom.getTextWidth(this.arrow as SVGTSpanElement);
     }
     this.size_.width = imageWidth + arrowWidth + xPadding * 2;
     this.size_.height = height;
@@ -579,12 +584,7 @@ export class FieldDropdown extends Field<string> {
       hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       this.getConstants()!.FIELD_TEXT_HEIGHT,
     );
-    const textWidth = dom.getFastTextWidth(
-      this.getTextElement(),
-      this.getConstants()!.FIELD_TEXT_FONTSIZE,
-      this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-      this.getConstants()!.FIELD_TEXT_FONTFAMILY,
-    );
+    const textWidth = dom.getTextWidth(this.getTextElement());
     const xPadding = hasBorder
       ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING
       : 0;
@@ -633,7 +633,13 @@ export class FieldDropdown extends Field<string> {
   /**
    * Use the `getText_` developer hook to override the field's text
    * representation.  Get the selected option text.  If the selected option is
-   * an image we return the image alt text.
+   * an image we return the image alt text. If the selected option is
+   * an HTMLElement, return the title, ariaLabel, or innerText of the
+   * element.
+   *
+   * If you use HTMLElement options in Node.js and call this function,
+   * ensure that you are supplying an implementation of HTMLElement,
+   * such as through jsdom-global.
    *
    * @returns Selected option text.
    */
@@ -642,10 +648,23 @@ export class FieldDropdown extends Field<string> {
       return null;
     }
     const option = this.selectedOption[0];
-    if (typeof option === 'object') {
-      return option['alt'];
+    if (isImageProperties(option)) {
+      return option.alt;
+    } else if (
+      typeof HTMLElement !== 'undefined' &&
+      option instanceof HTMLElement
+    ) {
+      return option.title ?? option.ariaLabel ?? option.innerText;
+    } else if (typeof option === 'string') {
+      return option;
     }
-    return option;
+
+    console.warn(
+      "Can't get text for existing dropdown option. If " +
+        "you're using HTMLElement dropdown options in node, ensure you're " +
+        'using jsdom-global or similar.',
+    );
+    return null;
   }
 
   /**
@@ -681,7 +700,10 @@ export class FieldDropdown extends Field<string> {
     suffix?: string;
   } {
     let hasImages = false;
-    const trimmedOptions = options.map(([label, value]): MenuOption => {
+    const trimmedOptions = options.map((option): MenuOption => {
+      if (option === FieldDropdown.SEPARATOR) return option;
+
+      const [label, value] = option;
       if (typeof label === 'string') {
         return [parsing.replaceMessageReferences(label), value];
       }
@@ -689,10 +711,9 @@ export class FieldDropdown extends Field<string> {
       hasImages = true;
       // Copy the image properties so they're not influenced by the original.
       // NOTE: No need to deep copy since image properties are only 1 level deep.
-      const imageLabel =
-        label.alt !== null
-          ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
-          : {...label};
+      const imageLabel = isImageProperties(label)
+        ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
+        : {...label};
       return [imageLabel, value];
     });
 
@@ -762,28 +783,31 @@ export class FieldDropdown extends Field<string> {
     }
     let foundError = false;
     for (let i = 0; i < options.length; i++) {
-      const tuple = options[i];
-      if (!Array.isArray(tuple)) {
+      const option = options[i];
+      if (!Array.isArray(option) && option !== FieldDropdown.SEPARATOR) {
         foundError = true;
         console.error(
-          `Invalid option[${i}]: Each FieldDropdown option must be an array.
-          Found: ${tuple}`,
+          `Invalid option[${i}]: Each FieldDropdown option must be an array or
+          the string literal 'separator'. Found: ${option}`,
         );
-      } else if (typeof tuple[1] !== 'string') {
+      } else if (typeof option[1] !== 'string') {
         foundError = true;
         console.error(
           `Invalid option[${i}]: Each FieldDropdown option id must be a string. 
-          Found ${tuple[1]} in: ${tuple}`,
+          Found ${option[1]} in: ${option}`,
         );
       } else if (
-        tuple[0] &&
-        typeof tuple[0] !== 'string' &&
-        typeof tuple[0].src !== 'string'
+        option[0] &&
+        typeof option[0] !== 'string' &&
+        !isImageProperties(option[0]) &&
+        !(
+          typeof HTMLElement !== 'undefined' && option[0] instanceof HTMLElement
+        )
       ) {
         foundError = true;
         console.error(
           `Invalid option[${i}]: Each FieldDropdown option must have a string 
-          label or image description. Found ${tuple[0]} in: ${tuple}`,
+          label, image description, or HTML element. Found ${option[0]} in: ${option}`,
         );
       }
     }
@@ -791,6 +815,27 @@ export class FieldDropdown extends Field<string> {
       throw TypeError('Found invalid FieldDropdown options.');
     }
   }
+}
+
+/**
+ * Returns whether or not an object conforms to the ImageProperties interface.
+ *
+ * @param obj The object to test.
+ * @returns True if the object conforms to ImageProperties, otherwise false.
+ */
+function isImageProperties(obj: any): obj is ImageProperties {
+  return (
+    obj &&
+    typeof obj === 'object' &&
+    'src' in obj &&
+    typeof obj.src === 'string' &&
+    'alt' in obj &&
+    typeof obj.alt === 'string' &&
+    'width' in obj &&
+    typeof obj.width === 'number' &&
+    'height' in obj &&
+    typeof obj.height === 'number'
+  );
 }
 
 /**
@@ -804,11 +849,15 @@ export interface ImageProperties {
 }
 
 /**
- * An individual option in the dropdown menu. The first element is the human-
- * readable value (text or image), and the second element is the language-
- * neutral value.
+ * An individual option in the dropdown menu. Can be either the string literal
+ * `separator` for a menu separator item, or an array for normal action menu
+ * items. In the latter case, the first element is the human-readable value
+ * (text, ImageProperties object, or HTML element), and the second element is
+ * the language-neutral value.
  */
-export type MenuOption = [string | ImageProperties, string];
+export type MenuOption =
+  | [string | ImageProperties | HTMLElement, string]
+  | 'separator';
 
 /**
  * A function that generates an array of menu options for FieldDropdown

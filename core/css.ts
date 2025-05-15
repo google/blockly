@@ -5,7 +5,6 @@
  */
 
 // Former goog.module ID: Blockly.Css
-
 /** Has CSS already been injected? */
 let injected = false;
 
@@ -83,15 +82,13 @@ let content = `
   -webkit-user-select: none;
 }
 
-.blocklyNonSelectable {
-  user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-}
-
 .blocklyBlockCanvas.blocklyCanvasTransitioning,
 .blocklyBubbleCanvas.blocklyCanvasTransitioning {
   transition: transform .5s;
+}
+
+.blocklyEmboss {
+  filter: var(--blocklyEmbossFilter);
 }
 
 .blocklyTooltipDiv {
@@ -121,15 +118,12 @@ let content = `
   box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
 }
 
-.blocklyDropDownDiv.blocklyFocused {
+.blocklyDropDownDiv:focus {
   box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
 }
 
 .blocklyDropDownContent {
   max-height: 300px;  /* @todo: spec for maximum height. */
-  overflow: auto;
-  overflow-x: hidden;
-  position: relative;
 }
 
 .blocklyDropDownArrow {
@@ -141,47 +135,14 @@ let content = `
   z-index: -1;
   background-color: inherit;
   border-color: inherit;
-}
-
-.blocklyDropDownButton {
-  display: inline-block;
-  float: left;
-  padding: 0;
-  margin: 4px;
-  border-radius: 4px;
-  outline: none;
-  border: 1px solid;
-  transition: box-shadow .1s;
-  cursor: pointer;
-}
-
-.blocklyArrowTop {
   border-top: 1px solid;
   border-left: 1px solid;
   border-top-left-radius: 4px;
   border-color: inherit;
 }
 
-.blocklyArrowBottom {
-  border-bottom: 1px solid;
-  border-right: 1px solid;
-  border-bottom-right-radius: 4px;
-  border-color: inherit;
-}
-
-.blocklyResizeSE {
-  cursor: se-resize;
-  fill: #aaa;
-}
-
-.blocklyResizeSW {
-  cursor: sw-resize;
-  fill: #aaa;
-}
-
-.blocklyResizeLine {
-  stroke: #515A5A;
-  stroke-width: 1;
+.blocklyHighlighted>.blocklyPath {
+  filter: var(--blocklyEmbossFilter);
 }
 
 .blocklyHighlightedConnectionPath {
@@ -234,7 +195,8 @@ let content = `
   display: none;
 }
 
-.blocklyDisabled>.blocklyPath {
+.blocklyDisabledPattern>.blocklyPath {
+  fill: var(--blocklyDisabledPattern);
   fill-opacity: .5;
   stroke-opacity: .5;
 }
@@ -251,7 +213,7 @@ let content = `
   stroke: none;
 }
 
-.blocklyNonEditableText>text {
+.blocklyNonEditableField>text {
   pointer-events: none;
 }
 
@@ -264,12 +226,15 @@ let content = `
   cursor: default;
 }
 
-.blocklyHidden {
-  display: none;
-}
-
-.blocklyFieldDropdown:not(.blocklyHidden) {
-  display: block;
+/*
+  Don't allow users to select text.  It gets annoying when trying to
+  drag a block and selected text moves instead.
+*/
+.blocklySvg text {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  cursor: inherit;
 }
 
 .blocklyIconGroup {
@@ -419,6 +384,9 @@ input[type=number] {
 }
 
 .blocklyWidgetDiv .blocklyMenu {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
   background: #fff;
   border: 1px solid transparent;
   box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
@@ -433,16 +401,21 @@ input[type=number] {
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
 }
 
-.blocklyWidgetDiv .blocklyMenu.blocklyFocused {
+.blocklyWidgetDiv .blocklyMenu:focus {
   box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
 }
 
 .blocklyDropDownDiv .blocklyMenu {
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
   background: inherit;  /* Compatibility with gapi, reset from goog-menu */
   border: inherit;  /* Compatibility with gapi, reset from goog-menu */
   font: normal 13px "Helvetica Neue", Helvetica, sans-serif;
   outline: none;
-  position: relative;  /* Compatibility with gapi, reset from goog-menu */
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100%;
   z-index: 20000;  /* Arbitrary, but some apps depend on it... */
 }
 
@@ -489,6 +462,14 @@ input[type=number] {
   margin-right: -24px;
 }
 
+.blocklyMenuSeparator {
+  background-color: #ccc;
+  height: 1px;
+  border: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
 .blocklyBlockDragSurface, .blocklyAnimationLayer {
   position: absolute;
   top: 0;
@@ -498,5 +479,32 @@ input[type=number] {
   overflow: visible !important;
   z-index: 80;
   pointer-events: none;
+}
+
+.blocklyField {
+  cursor: default;
+}
+
+.blocklyInputField {
+  cursor: text;
+}
+
+.blocklyDragging .blocklyField,
+.blocklyDragging .blocklyIconGroup {
+  cursor: grabbing;
+}
+
+.blocklyActiveFocus:is(
+  .blocklyFlyout,
+  .blocklyWorkspace,
+  .blocklyField,
+  .blocklyPath,
+  .blocklyHighlightedConnectionPath,
+  .blocklyComment,
+  .blocklyBubble,
+  .blocklyIconGroup,
+  .blocklyTextarea
+) {
+  outline-width: 0px;
 }
 `;

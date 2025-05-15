@@ -15,7 +15,6 @@ import {Connection} from '../measurables/connection.js';
 import type {InlineInput} from '../measurables/inline_input.js';
 import {OutputConnection} from '../measurables/output_connection.js';
 import type {Row} from '../measurables/row.js';
-import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
 import type {InsideCorners} from './constants.js';
 import type {RenderInfo} from './info.js';
@@ -96,20 +95,19 @@ export class Drawer extends BaseDrawer {
       return;
     }
     if (Types.isSpacer(row)) {
-      const spacerRow = row as SpacerRow;
-      const precedesStatement = spacerRow.precedesStatement;
-      const followsStatement = spacerRow.followsStatement;
+      const precedesStatement = row.precedesStatement;
+      const followsStatement = row.followsStatement;
       if (precedesStatement || followsStatement) {
         const insideCorners = this.constants_.INSIDE_CORNERS as InsideCorners;
         const cornerHeight = insideCorners.rightHeight;
         const remainingHeight =
-          spacerRow.height - (precedesStatement ? cornerHeight : 0);
+          row.height - (precedesStatement ? cornerHeight : 0);
         const bottomRightPath = followsStatement
           ? insideCorners.pathBottomRight
           : '';
         const verticalPath =
           remainingHeight > 0
-            ? svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight)
+            ? svgPaths.lineOnAxis('V', row.yPos + remainingHeight)
             : '';
         const topRightPath = precedesStatement
           ? insideCorners.pathTopRight
@@ -236,15 +234,16 @@ export class Drawer extends BaseDrawer {
   }
 
   /** Returns a path to highlight the given connection. */
-  drawConnectionHighlightPath(measurable: Connection) {
+  override drawConnectionHighlightPath(
+    measurable: Connection,
+  ): SVGElement | undefined {
     const conn = measurable.connectionModel;
     if (
       conn.type === ConnectionType.NEXT_STATEMENT ||
       conn.type === ConnectionType.PREVIOUS_STATEMENT ||
       (conn.type === ConnectionType.OUTPUT_VALUE && !measurable.isDynamicShape)
     ) {
-      super.drawConnectionHighlightPath(measurable);
-      return;
+      return super.drawConnectionHighlightPath(measurable);
     }
 
     let path = '';
@@ -263,7 +262,7 @@ export class Drawer extends BaseDrawer {
         (output.shape as DynamicShape).pathDown(output.height);
     }
     const block = conn.getSourceBlock();
-    block.pathObject.addConnectionHighlight?.(
+    return block.pathObject.addConnectionHighlight?.(
       conn,
       path,
       conn.getOffsetInBlock(),

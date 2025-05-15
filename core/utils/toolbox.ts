@@ -24,8 +24,6 @@ export interface BlockInfo {
   disabledReasons?: string[];
   enabled?: boolean;
   id?: string;
-  x?: number;
-  y?: number;
   collapsed?: boolean;
   inline?: boolean;
   data?: string;

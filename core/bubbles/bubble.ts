@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {ISelectable} from '../blockly.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
+import {getFocusManager} from '../focus_manager.js';
 import {IBubble} from '../interfaces/i_bubble.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import {ISelectable} from '../interfaces/i_selectable.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
 import {Coordinate} from '../utils/coordinate.js';
@@ -86,17 +88,24 @@ export abstract class Bubble implements IBubble, ISelectable {
 
   private dragStrategy = new BubbleDragStrategy(this, this.workspace);
 
+  private focusableElement: SVGElement | HTMLElement;
+
   /**
    * @param workspace The workspace this bubble belongs to.
    * @param anchor The anchor location of the thing this bubble is attached to.
    *     The tail of the bubble will point to this location.
    * @param ownerRect An optional rect we don't want the bubble to overlap with
    *     when automatically positioning.
+   * @param overriddenFocusableElement An optional replacement to the focusable
+   *     element that's represented by this bubble (as a focusable node). This
+   *     element will have its ID and tabindex overwritten. If not provided, the
+   *     focusable element of this node will default to the bubble's SVG root.
    */
   constructor(
     public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
+    overriddenFocusableElement?: SVGElement | HTMLElement,
   ) {
     this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(
@@ -106,11 +115,7 @@ export abstract class Bubble implements IBubble, ISelectable {
     );
     const embossGroup = dom.createSvgElement(
       Svg.G,
-      {
-        'filter': `url(#${
-          this.workspace.getRenderer().getConstants().embossFilterId
-        })`,
-      },
+      {'class': 'blocklyEmboss'},
       this.svgRoot,
     );
     this.tail = dom.createSvgElement(
@@ -130,6 +135,10 @@ export abstract class Bubble implements IBubble, ISelectable {
       embossGroup,
     );
     this.contentContainer = dom.createSvgElement(Svg.G, {}, this.svgRoot);
+
+    this.focusableElement = overriddenFocusableElement ?? this.svgRoot;
+    this.focusableElement.setAttribute('id', this.id);
+    this.focusableElement.setAttribute('tabindex', '-1');
 
     browserEvents.conditionalBind(
       this.background,
@@ -212,11 +221,13 @@ export abstract class Bubble implements IBubble, ISelectable {
     this.background.setAttribute('fill', colour);
   }
 
-  /** Brings the bubble to the front and passes the pointer event off to the gesture system. */
+  /**
+   * Passes the pointer event off to the gesture system and ensures the bubble
+   * is focused.
+   */
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
-    this.bringToFront();
-    common.setSelected(this);
+    getFocusManager().focusNode(this);
   }
 
   /** Positions the bubble relative to its anchor. Does not render its tail. */
@@ -651,9 +662,37 @@ export abstract class Bubble implements IBubble, ISelectable {
 
   select(): void {
     // Bubbles don't have any visual for being selected.
+    common.fireSelectedEvent(this);
   }
 
   unselect(): void {
     // Bubbles don't have any visual for being selected.
+    common.fireSelectedEvent(null);
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.focusableElement;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.workspace;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {
+    this.select();
+    this.bringToFront();
+  }
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {
+    this.unselect();
+  }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
   }
 }

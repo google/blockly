@@ -13,11 +13,13 @@ import * as common from '../common.js';
 import * as contextMenu from '../contextmenu.js';
 import {ContextMenuRegistry} from '../contextmenu_registry.js';
 import {CommentDragStrategy} from '../dragging/comment_drag_strategy.js';
+import {getFocusManager} from '../focus_manager.js';
 import {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import {IContextMenu} from '../interfaces/i_contextmenu.js';
 import {ICopyable} from '../interfaces/i_copyable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
+import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import * as layers from '../layers.js';
@@ -26,6 +28,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
+import * as svgMath from '../utils/svg_math.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentView} from './comment_view.js';
 import {WorkspaceComment} from './workspace_comment.js';
@@ -59,6 +62,8 @@ export class RenderedWorkspaceComment
     this.view.setSize(this.getSize());
     this.view.setEditable(this.isEditable());
     this.view.getSvgRoot().setAttribute('data-id', this.id);
+    this.view.getSvgRoot().setAttribute('id', this.id);
+    this.view.getSvgRoot().setAttribute('tabindex', '-1');
 
     this.addModelUpdateBindings();
 
@@ -103,6 +108,11 @@ export class RenderedWorkspaceComment
     // setText will trigger the change listener that updates
     // the model aka superclass.
     this.view.setText(text);
+  }
+
+  /** Sets the placeholder text displayed if the comment is empty. */
+  setPlaceholderText(text: string): void {
+    this.view.setPlaceholderText(text);
   }
 
   /** Sets the size of the comment. */
@@ -214,9 +224,8 @@ export class RenderedWorkspaceComment
         e.stopPropagation();
       } else {
         gesture.handleCommentStart(e, this);
-        this.workspace.getLayerManager()?.append(this, layers.BLOCK);
       }
-      common.setSelected(this);
+      getFocusManager().focusNode(this);
     }
   }
 
@@ -257,11 +266,13 @@ export class RenderedWorkspaceComment
   /** Visually highlights the comment. */
   select(): void {
     dom.addClass(this.getSvgRoot(), 'blocklySelected');
+    common.fireSelectedEvent(this);
   }
 
   /** Visually unhighlights the comment. */
   unselect(): void {
     dom.removeClass(this.getSvgRoot(), 'blocklySelected');
+    common.fireSelectedEvent(null);
   }
 
   /**
@@ -278,12 +289,31 @@ export class RenderedWorkspaceComment
   }
 
   /** Show a context menu for this comment. */
-  showContextMenu(e: PointerEvent): void {
+  showContextMenu(e: Event): void {
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-      ContextMenuRegistry.ScopeType.COMMENT,
-      {comment: this},
+      {comment: this, focusedNode: this},
+      e,
     );
-    contextMenu.show(e, menuOptions, this.workspace.RTL, this.workspace);
+
+    let location: Coordinate;
+    if (e instanceof PointerEvent) {
+      location = new Coordinate(e.clientX, e.clientY);
+    } else {
+      // Show the menu based on the location of the comment
+      const xy = svgMath.wsToScreenCoordinates(
+        this.workspace,
+        this.getRelativeToSurfaceXY(),
+      );
+      location = xy.translate(10, 10);
+    }
+
+    contextMenu.show(
+      e,
+      menuOptions,
+      this.workspace.RTL,
+      this.workspace,
+      location,
+    );
   }
 
   /** Snap this comment to the nearest grid point. */
@@ -296,5 +326,32 @@ export class RenderedWorkspaceComment
     if (alignedXY !== currentXY) {
       this.moveTo(alignedXY, ['snap']);
     }
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.getSvgRoot();
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.workspace;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {
+    this.select();
+    // Ensure that the comment is always at the top when focused.
+    this.workspace.getLayerManager()?.append(this, layers.BLOCK);
+  }
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {
+    this.unselect();
+  }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
   }
 }

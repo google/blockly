@@ -17,12 +17,15 @@ import * as eventUtils from './events/utils.js';
 import type {Field} from './field.js';
 import {IconType} from './icons/icon_types.js';
 import {inputTypes} from './inputs/input_types.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
 import * as renderManagement from './render_management.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';
-import type {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -87,14 +90,16 @@ export function saveWorkspaceComment(
  * @param variableList List of all variable models.
  * @returns Tree of XML elements.
  */
-export function variablesToDom(variableList: VariableModel[]): Element {
+export function variablesToDom(
+  variableList: IVariableModel<IVariableState>[],
+): Element {
   const variables = utilsXml.createElement('variables');
   for (let i = 0; i < variableList.length; i++) {
     const variable = variableList[i];
     const element = utilsXml.createElement('variable');
-    element.appendChild(utilsXml.createTextNode(variable.name));
-    if (variable.type) {
-      element.setAttribute('type', variable.type);
+    element.appendChild(utilsXml.createTextNode(variable.getName()));
+    if (variable.getType()) {
+      element.setAttribute('type', variable.getType());
     }
     element.id = variable.getId();
     variables.appendChild(element);
@@ -163,14 +168,10 @@ function fieldToDom(field: Field): Element | null {
  * @param element The XML element to which the field DOM should be attached.
  */
 function allFieldsToDom(block: Block, element: Element) {
-  for (let i = 0; i < block.inputList.length; i++) {
-    const input = block.inputList[i];
-    for (let j = 0; j < input.fieldRow.length; j++) {
-      const field = input.fieldRow[j];
-      const fieldDom = fieldToDom(field);
-      if (fieldDom) {
-        element.appendChild(fieldDom);
-      }
+  for (const field of block.getFields()) {
+    const fieldDom = fieldToDom(field);
+    if (fieldDom) {
+      element.appendChild(fieldDom);
     }
   }
 }
@@ -218,12 +219,24 @@ export function blockToDom(
     const comment = block.getIcon(IconType.COMMENT)!;
     const size = comment.getBubbleSize();
     const pinned = comment.bubbleIsVisible();
+    const location = comment.getBubbleLocation();
 
     const commentElement = utilsXml.createElement('comment');
     commentElement.appendChild(utilsXml.createTextNode(commentText));
     commentElement.setAttribute('pinned', `${pinned}`);
-    commentElement.setAttribute('h', String(size.height));
-    commentElement.setAttribute('w', String(size.width));
+    commentElement.setAttribute('h', `${size.height}`);
+    commentElement.setAttribute('w', `${size.width}`);
+    if (location) {
+      commentElement.setAttribute(
+        'x',
+        `${
+          block.workspace.RTL
+            ? block.workspace.getWidth() - (location.x + size.width)
+            : location.x
+        }`,
+      );
+      commentElement.setAttribute('y', `${location.y}`);
+    }
 
     element.appendChild(commentElement);
   }
@@ -690,7 +703,7 @@ export function domToVariables(xmlVariables: Element, workspace: Workspace) {
     const name = xmlChild.textContent;
 
     if (!name) return;
-    workspace.createVariable(name, type, id);
+    workspace.getVariableMap().createVariable(name, type ?? undefined, id);
   }
 }
 
@@ -794,6 +807,8 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
     const pinned = xmlChild.getAttribute('pinned') === 'true';
     const width = parseInt(xmlChild.getAttribute('w') ?? '50', 10);
     const height = parseInt(xmlChild.getAttribute('h') ?? '50', 10);
+    let x = parseInt(xmlChild.getAttribute('x') ?? '', 10);
+    const y = parseInt(xmlChild.getAttribute('y') ?? '', 10);
 
     block.setCommentText(text);
     const comment = block.getIcon(IconType.COMMENT)!;
@@ -802,8 +817,15 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
     }
     // Set the pinned state of the bubble.
     comment.setBubbleVisible(pinned);
+
     // Actually show the bubble after the block has been rendered.
-    setTimeout(() => comment.setBubbleVisible(pinned), 1);
+    setTimeout(() => {
+      if (!isNaN(x) && !isNaN(y)) {
+        x = block.workspace.RTL ? block.workspace.getWidth() - (x + width) : x;
+        comment.setBubbleLocation(new Coordinate(x, y));
+      }
+      comment.setBubbleVisible(pinned);
+    }, 1);
   }
 }
 

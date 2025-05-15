@@ -15,6 +15,7 @@
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import type {Field} from './field.js';
+import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';
@@ -82,6 +83,9 @@ let owner: Field | null = null;
 /** Whether the dropdown was positioned to a field or the source block. */
 let positionToField: boolean | null = null;
 
+/** Callback to FocusManager to return ephemeral focus when the div closes. */
+let returnEphemeralFocus: ReturnEphemeralFocus | null = null;
+
 /**
  * Dropdown bounds info object used to encapsulate sizing information about a
  * bounding element (bounding box and width/height).
@@ -133,15 +137,6 @@ export function createDom() {
   // Transition animation for transform: translate() and opacity.
   div.style.transition =
     'transform ' + ANIMATION_TIME + 's, ' + 'opacity ' + ANIMATION_TIME + 's';
-
-  // Handle focusin/out events to add a visual indicator when
-  // a child is focused or blurred.
-  div.addEventListener('focusin', function () {
-    dom.addClass(div, 'blocklyFocused');
-  });
-  div.addEventListener('focusout', function () {
-    dom.removeClass(div, 'blocklyFocused');
-  });
 }
 
 /**
@@ -166,14 +161,14 @@ export function getOwner(): Field | null {
  *
  * @returns Div to populate with content.
  */
-export function getContentDiv(): Element {
+export function getContentDiv(): HTMLDivElement {
   return content;
 }
 
 /** Clear the content of the drop-down. */
 export function clearContent() {
-  content.textContent = '';
-  content.style.width = '';
+  div.remove();
+  createDom();
 }
 
 /**
@@ -273,6 +268,11 @@ function getScaledBboxOfField(field: Field): Rect {
  * @param field The field to position the dropdown against.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the drop-down div's lifetime. Note that if a false value is
+ *     passed in here then callers should manage ephemeral focus directly
+ *     otherwise focus may not properly restore when the widget closes. Defaults
+ *     to true.
  * @returns True if the menu rendered below block; false if above.
  */
 function showPositionedByRect(
@@ -280,6 +280,7 @@ function showPositionedByRect(
   field: Field,
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
+  manageEphemeralFocus: boolean = true,
 ): boolean {
   // If we can fit it, render below the block.
   const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
@@ -304,6 +305,7 @@ function showPositionedByRect(
     primaryY,
     secondaryX,
     secondaryY,
+    manageEphemeralFocus,
     opt_onHide,
   );
 }
@@ -324,6 +326,8 @@ function showPositionedByRect(
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the widget div's lifetime.
  * @returns True if the menu rendered at the primary origin point.
  * @internal
  */
@@ -334,6 +338,7 @@ export function show<T>(
   primaryY: number,
   secondaryX: number,
   secondaryY: number,
+  manageEphemeralFocus: boolean,
   opt_onHide?: () => void,
 ): boolean {
   owner = newOwner as Field;
@@ -344,11 +349,11 @@ export function show<T>(
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   renderedClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  if (renderedClassName) {
-    dom.addClass(div, renderedClassName);
-  }
-  if (themeClassName) {
-    dom.addClass(div, themeClassName);
+  dom.addClass(div, renderedClassName);
+  dom.addClass(div, themeClassName);
+
+  if (manageEphemeralFocus) {
+    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
   }
 
   // When we change `translate` multiple times in close succession,
@@ -651,16 +656,6 @@ export function hideWithoutAnimation() {
     clearTimeout(animateOutTimer);
   }
 
-  // Reset style properties in case this gets called directly
-  // instead of hide() - see discussion on #2551.
-  div.style.transform = '';
-  div.style.left = '';
-  div.style.top = '';
-  div.style.opacity = '0';
-  div.style.display = 'none';
-  div.style.backgroundColor = '';
-  div.style.borderColor = '';
-
   if (onHide) {
     onHide();
     onHide = null;
@@ -668,15 +663,12 @@ export function hideWithoutAnimation() {
   clearContent();
   owner = null;
 
-  if (renderedClassName) {
-    dom.removeClass(div, renderedClassName);
-    renderedClassName = '';
-  }
-  if (themeClassName) {
-    dom.removeClass(div, themeClassName);
-    themeClassName = '';
-  }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
+
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
+  }
 }
 
 /**
@@ -703,19 +695,12 @@ function positionInternal(
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
+    const x = metrics.arrowX;
+    const y = metrics.arrowY;
+    const rotation = metrics.arrowAtTop ? 45 : 225;
     arrow.style.display = '';
-    arrow.style.transform =
-      'translate(' +
-      metrics.arrowX +
-      'px,' +
-      metrics.arrowY +
-      'px) rotate(45deg)';
-    arrow.setAttribute(
-      'class',
-      metrics.arrowAtTop
-        ? 'blocklyDropDownArrow blocklyArrowTop'
-        : 'blocklyDropDownArrow blocklyArrowBottom',
-    );
+    arrow.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+    arrow.setAttribute('class', 'blocklyDropDownArrow');
   } else {
     arrow.style.display = 'none';
   }

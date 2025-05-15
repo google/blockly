@@ -11,7 +11,7 @@
  */
 // Former goog.module ID: Blockly.MarkerManager
 
-import type {Cursor} from './keyboard_nav/cursor.js';
+import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -23,16 +23,10 @@ export class MarkerManager {
   static readonly LOCAL_MARKER = 'local_marker_1';
 
   /** The cursor. */
-  private cursor: Cursor | null = null;
-
-  /** The cursor's SVG element. */
-  private cursorSvg: SVGElement | null = null;
+  private cursor: LineCursor | null = null;
 
   /** The map of markers for the workspace. */
   private markers = new Map<string, Marker>();
-
-  /** The marker's SVG element. */
-  private markerSvg: SVGElement | null = null;
 
   /**
    * @param workspace The workspace for the marker manager.
@@ -50,10 +44,6 @@ export class MarkerManager {
     if (this.markers.has(id)) {
       this.unregisterMarker(id);
     }
-    marker.setDrawer(
-      this.workspace.getRenderer().makeMarkerDrawer(this.workspace, marker),
-    );
-    this.setMarkerSvg(marker.getDrawer().createDom());
     this.markers.set(id, marker);
   }
 
@@ -82,7 +72,7 @@ export class MarkerManager {
    *
    * @returns The cursor for this workspace.
    */
-  getCursor(): Cursor | null {
+  getCursor(): LineCursor | null {
     return this.cursor;
   }
 
@@ -103,70 +93,8 @@ export class MarkerManager {
    *
    * @param cursor The cursor used to move around this workspace.
    */
-  setCursor(cursor: Cursor) {
-    if (this.cursor && this.cursor.getDrawer()) {
-      this.cursor.getDrawer().dispose();
-    }
+  setCursor(cursor: LineCursor) {
     this.cursor = cursor;
-    if (this.cursor) {
-      const drawer = this.workspace
-        .getRenderer()
-        .makeMarkerDrawer(this.workspace, this.cursor);
-      this.cursor.setDrawer(drawer);
-      this.setCursorSvg(this.cursor.getDrawer().createDom());
-    }
-  }
-
-  /**
-   * Add the cursor SVG to this workspace SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement | null) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
-    this.workspace.getBlockCanvas()!.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
-  }
-
-  /**
-   * Add the marker SVG to this workspaces SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement | null) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (this.workspace.getBlockCanvas()) {
-      if (this.cursorSvg) {
-        this.workspace
-          .getBlockCanvas()!
-          .insertBefore(markerSvg, this.cursorSvg);
-      } else {
-        this.workspace.getBlockCanvas()!.appendChild(markerSvg);
-      }
-    }
-  }
-
-  /**
-   * Redraw the attached cursor SVG if needed.
-   *
-   * @internal
-   */
-  updateMarkers() {
-    if (this.workspace.keyboardAccessibilityMode && this.cursorSvg) {
-      this.workspace.getCursor()!.draw();
-    }
   }
 
   /**

@@ -48,6 +48,9 @@ export class TextInputBubble extends Bubble {
   /** Functions listening for changes to the size of this bubble. */
   private sizeChangeListeners: (() => void)[] = [];
 
+  /** Functions listening for changes to the location of this bubble. */
+  private locationChangeListeners: (() => void)[] = [];
+
   /** The text of this bubble. */
   private text = '';
 
@@ -77,11 +80,10 @@ export class TextInputBubble extends Bubble {
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
   ) {
-    super(workspace, anchor, ownerRect);
+    super(workspace, anchor, ownerRect, TextInputBubble.createTextArea());
     dom.addClass(this.svgRoot, 'blocklyTextInputBubble');
-    ({inputRoot: this.inputRoot, textArea: this.textArea} = this.createEditor(
-      this.contentContainer,
-    ));
+    this.textArea = this.getFocusableElement() as HTMLTextAreaElement;
+    this.inputRoot = this.createEditor(this.contentContainer, this.textArea);
     this.resizeGroup = this.createResizeHandle(this.svgRoot, workspace);
     this.setSize(this.DEFAULT_SIZE, true);
   }
@@ -123,11 +125,26 @@ export class TextInputBubble extends Bubble {
     this.sizeChangeListeners.push(listener);
   }
 
-  /** Creates the editor UI for this bubble. */
-  private createEditor(container: SVGGElement): {
-    inputRoot: SVGForeignObjectElement;
-    textArea: HTMLTextAreaElement;
-  } {
+  /** Adds a change listener to be notified when this bubble's location changes. */
+  addLocationChangeListener(listener: () => void) {
+    this.locationChangeListeners.push(listener);
+  }
+
+  /** Creates and returns the editable text area for this bubble's editor. */
+  private static createTextArea(): HTMLTextAreaElement {
+    const textArea = document.createElementNS(
+      dom.HTML_NS,
+      'textarea',
+    ) as HTMLTextAreaElement;
+    textArea.className = 'blocklyTextarea blocklyText';
+    return textArea;
+  }
+
+  /** Creates and returns the UI container element for this bubble's editor. */
+  private createEditor(
+    container: SVGGElement,
+    textArea: HTMLTextAreaElement,
+  ): SVGForeignObjectElement {
     const inputRoot = dom.createSvgElement(
       Svg.FOREIGNOBJECT,
       {
@@ -141,22 +158,13 @@ export class TextInputBubble extends Bubble {
     body.setAttribute('xmlns', dom.HTML_NS);
     body.className = 'blocklyMinimalBody';
 
-    const textArea = document.createElementNS(
-      dom.HTML_NS,
-      'textarea',
-    ) as HTMLTextAreaElement;
-    textArea.className = 'blocklyTextarea blocklyText';
     textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
-
     body.appendChild(textArea);
     inputRoot.appendChild(body);
 
     this.bindTextAreaEvents(textArea);
-    setTimeout(() => {
-      textArea.focus();
-    }, 0);
 
-    return {inputRoot, textArea};
+    return inputRoot;
   }
 
   /** Binds events to the text area element. */
@@ -166,13 +174,6 @@ export class TextInputBubble extends Bubble {
       e.stopPropagation();
     });
 
-    browserEvents.conditionalBind(
-      textArea,
-      'focus',
-      this,
-      this.onStartEdit,
-      true,
-    );
     browserEvents.conditionalBind(textArea, 'change', this, this.onTextChange);
   }
 
@@ -230,8 +231,23 @@ export class TextInputBubble extends Bubble {
 
   /** @returns the size of this bubble. */
   getSize(): Size {
-    // Overriden to be public.
+    // Overridden to be public.
     return super.getSize();
+  }
+
+  override moveDuringDrag(newLoc: Coordinate) {
+    super.moveDuringDrag(newLoc);
+    this.onLocationChange();
+  }
+
+  override setPositionRelativeToAnchor(left: number, top: number) {
+    super.setPositionRelativeToAnchor(left, top);
+    this.onLocationChange();
+  }
+
+  protected override positionByRect(rect = new Rect(0, 0, 0, 0)) {
+    super.positionByRect(rect);
+    this.onLocationChange();
   }
 
   /** Handles mouse down events on the resize target. */
@@ -291,17 +307,6 @@ export class TextInputBubble extends Bubble {
     this.onSizeChange();
   }
 
-  /**
-   * Handles starting an edit of the text area. Brings the bubble to the front.
-   */
-  private onStartEdit() {
-    if (this.bringToFront()) {
-      // Since the act of moving this node within the DOM causes a loss of
-      // focus, we need to reapply the focus.
-      this.textArea.focus();
-    }
-  }
-
   /** Handles a text change event for the text area. Calls event listeners. */
   private onTextChange() {
     this.text = this.textArea.value;
@@ -313,6 +318,13 @@ export class TextInputBubble extends Bubble {
   /** Handles a size change event for the text area. Calls event listeners. */
   private onSizeChange() {
     for (const listener of this.sizeChangeListeners) {
+      listener();
+    }
+  }
+
+  /** Handles a location change event for the text area. Calls event listeners. */
+  private onLocationChange() {
+    for (const listener of this.locationChangeListeners) {
       listener();
     }
   }

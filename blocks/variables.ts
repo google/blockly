@@ -21,7 +21,6 @@ import '../core/field_label.js';
 import {FieldVariable} from '../core/field_variable.js';
 import {Msg} from '../core/msg.js';
 import * as Variables from '../core/variables.js';
-import type {WorkspaceSvg} from '../core/workspace_svg.js';
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -165,11 +164,11 @@ const deleteOptionCallbackFactory = function (
   block: VariableBlock,
 ): () => void {
   return function () {
-    const workspace = block.workspace;
     const variableField = block.getField('VAR') as FieldVariable;
-    const variable = variableField.getVariable()!;
-    workspace.deleteVariableById(variable.getId());
-    (workspace as WorkspaceSvg).refreshToolboxSelection();
+    const variable = variableField.getVariable();
+    if (variable) {
+      Variables.deleteVariable(variable.getWorkspace(), variable, block);
+    }
   };
 };
 

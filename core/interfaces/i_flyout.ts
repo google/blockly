@@ -7,17 +7,18 @@
 // Former goog.module ID: Blockly.IFlyout
 
 import type {BlockSvg} from '../block_svg.js';
-import {FlyoutItem} from '../flyout_base.js';
+import type {FlyoutItem} from '../flyout_item.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {Svg} from '../utils/svg.js';
 import type {FlyoutDefinition} from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import {IFocusableTree} from './i_focusable_tree.js';
 import type {IRegistrable} from './i_registrable.js';
 
 /**
  * Interface for a flyout.
  */
-export interface IFlyout extends IRegistrable {
+export interface IFlyout extends IRegistrable, IFocusableTree {
   /** Whether the flyout is laid out horizontally or not. */
   horizontalLayout: boolean;
 

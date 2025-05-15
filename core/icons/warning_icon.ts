@@ -10,6 +10,7 @@ import type {BlockSvg} from '../block_svg.js';
 import {TextBubble} from '../bubbles/text_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import type {IBubble} from '../interfaces/i_bubble.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
 import {Size} from '../utils.js';
@@ -90,7 +91,7 @@ export class WarningIcon extends Icon implements IHasBubble {
       },
       this.svgRoot,
     );
-    dom.addClass(this.svgRoot!, 'blockly-icon-warning');
+    dom.addClass(this.svgRoot!, 'blocklyWarningIcon');
   }
 
   override dispose() {
@@ -195,6 +196,11 @@ export class WarningIcon extends Icon implements IHasBubble {
         'warning',
       ),
     );
+  }
+
+  /** See IHasBubble.getBubble. */
+  getBubble(): IBubble | null {
+    return this.textBubble;
   }
 
   /**

@@ -10,21 +10,12 @@ import type {Block} from '../../block.js';
 import type {BlockSvg} from '../../block_svg.js';
 import {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
-import {
-  InsertionMarkerManager,
-  PreviewType,
-} from '../../insertion_marker_manager.js';
 import type {IRegistrable} from '../../interfaces/i_registrable.js';
-import type {Marker} from '../../keyboard_nav/marker.js';
-import type {RenderedConnection} from '../../rendered_connection.js';
 import type {BlockStyle, Theme} from '../../theme.js';
-import * as deprecation from '../../utils/deprecation.js';
-import type {WorkspaceSvg} from '../../workspace_svg.js';
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 
 /**
@@ -79,17 +70,27 @@ export class Renderer implements IRegistrable {
   /**
    * Create any DOM elements that this renderer needs.
    * If you need to create additional DOM elements, override the
-   * {@link ConstantProvider#createDom} method instead.
+   * {@link blockRendering#ConstantProvider.createDom} method instead.
    *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
+   * @param injectionDivIfIsParent The div containing the parent workspace and
+   *   all related workspaces and block containers, if this renderer is for the
+   *   parent workspace. CSS variables representing SVG patterns will be scoped
+   *   to this container. Child workspaces should not override the CSS variables
+   *   created by the parent and thus do not need access to the injection div.
    * @internal
    */
-  createDom(svg: SVGElement, theme: Theme) {
+  createDom(
+    svg: SVGElement,
+    theme: Theme,
+    injectionDivIfIsParent?: HTMLElement,
+  ) {
     this.constants_.createDom(
       svg,
       this.name + '-' + theme.name,
       '.' + this.getClassName() + '.' + theme.getClassName(),
+      injectionDivIfIsParent,
     );
   }
 
@@ -98,8 +99,17 @@ export class Renderer implements IRegistrable {
    *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
+   * @param injectionDivIfIsParent The div containing the parent workspace and
+   *   all related workspaces and block containers, if this renderer is for the
+   *   parent workspace. CSS variables representing SVG patterns will be scoped
+   *   to this container. Child workspaces should not override the CSS variables
+   *   created by the parent and thus do not need access to the injection div.
    */
-  refreshDom(svg: SVGElement, theme: Theme) {
+  refreshDom(
+    svg: SVGElement,
+    theme: Theme,
+    injectionDivIfIsParent?: HTMLElement,
+  ) {
     const previousConstants = this.getConstants();
     previousConstants.dispose();
     this.constants_ = this.makeConstants_();
@@ -110,7 +120,7 @@ export class Renderer implements IRegistrable {
     this.constants_.randomIdentifier = previousConstants.randomIdentifier;
     this.constants_.setTheme(theme);
     this.constants_.init();
-    this.createDom(svg, theme);
+    this.createDom(svg, theme, injectionDivIfIsParent);
   }
 
   /**
@@ -152,17 +162,6 @@ export class Renderer implements IRegistrable {
    */
   protected makeDrawer_(block: BlockSvg, info: RenderInfo): Drawer {
     return new Drawer(block, info);
-  }
-
-  /**
-   * Create a new instance of the renderer's marker drawer.
-   *
-   * @param workspace The workspace the marker belongs to.
-   * @param marker The marker.
-   * @returns The object in charge of drawing the marker.
-   */
-  makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker): MarkerSvg {
-    return new MarkerSvg(workspace, this.getConstants(), marker);
   }
 
   /**
@@ -221,49 +220,6 @@ export class Renderer implements IRegistrable {
       topBlock as Block,
       orphanConnection as Connection,
     );
-  }
-
-  /**
-   * Chooses a connection preview method based on the available connection, the
-   * current dragged connection, and the block being dragged.
-   *
-   * @param closest The available connection.
-   * @param local The connection currently being dragged.
-   * @param topBlock The block currently being dragged.
-   * @returns The preview type to display.
-   *
-   * @deprecated v10 - This function is no longer respected. A custom
-   *    IConnectionPreviewer may be able to fulfill the functionality.
-   */
-  getConnectionPreviewMethod(
-    closest: RenderedConnection,
-    local: RenderedConnection,
-    topBlock: BlockSvg,
-  ): PreviewType {
-    deprecation.warn(
-      'getConnectionPreviewMethod',
-      'v10',
-      'v12',
-      'an IConnectionPreviewer, if it fulfills your use case.',
-    );
-    if (
-      local.type === ConnectionType.OUTPUT_VALUE ||
-      local.type === ConnectionType.PREVIOUS_STATEMENT
-    ) {
-      if (
-        !closest.isConnected() ||
-        this.orphanCanConnectAtEnd(
-          topBlock,
-          closest.targetBlock() as BlockSvg,
-          local.type,
-        )
-      ) {
-        return InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
-      }
-      return InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
-    }
-
-    return InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
   }
 
   /**

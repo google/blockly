@@ -151,8 +151,18 @@ export class ConstantProvider extends BaseConstantProvider {
    */
   SQUARED: Shape | null = null;
 
-  constructor() {
+  /**
+   * Creates a new ConstantProvider.
+   *
+   * @param gridUnit If set, defines the base unit used to calculate other
+   *     constants.
+   */
+  constructor(gridUnit?: number) {
     super();
+
+    if (gridUnit) {
+      this.GRID_UNIT = gridUnit;
+    }
 
     this.SMALL_PADDING = this.GRID_UNIT;
 
@@ -290,7 +300,10 @@ export class ConstantProvider extends BaseConstantProvider {
       svgPaths.point(71, -height),
       svgPaths.point(width, 0),
     ]);
-    return {height, width, path: mainPath};
+    // Height is actually the Y position of the control points defining the
+    // curve of the hat; the hat's actual rendered height is 3/4 of the control
+    // points' Y position, per https://stackoverflow.com/a/5327329
+    return {height: height * 0.75, width, path: mainPath};
   }
 
   /**
@@ -662,8 +675,13 @@ export class ConstantProvider extends BaseConstantProvider {
     return utilsColour.blend('#000', colour, 0.25) || colour;
   }
 
-  override createDom(svg: SVGElement, tagName: string, selector: string) {
-    super.createDom(svg, tagName, selector);
+  override createDom(
+    svg: SVGElement,
+    tagName: string,
+    selector: string,
+    injectionDivIfIsParent?: HTMLElement,
+  ) {
+    super.createDom(svg, tagName, selector, injectionDivIfIsParent);
     /*
         <defs>
           ... filters go here ...
@@ -782,6 +800,20 @@ export class ConstantProvider extends BaseConstantProvider {
     );
     this.replacementGlowFilterId = replacementGlowFilter.id;
     this.replacementGlowFilter = replacementGlowFilter;
+
+    if (injectionDivIfIsParent) {
+      // If this renderer is for the parent workspace, add CSS variables scoped
+      // to the injection div referencing the created patterns so that CSS can
+      // apply the patterns to any element in the injection div.
+      injectionDivIfIsParent.style.setProperty(
+        '--blocklySelectedGlowFilter',
+        `url(#${this.selectedGlowFilterId})`,
+      );
+      injectionDivIfIsParent.style.setProperty(
+        '--blocklyReplacementGlowFilter',
+        `url(#${this.replacementGlowFilterId})`,
+      );
+    }
   }
 
   override getCSS_(selector: string) {
@@ -801,14 +833,14 @@ export class ConstantProvider extends BaseConstantProvider {
       `${selector} .blocklyText {`,
       `fill: #fff;`,
       `}`,
-      `${selector} .blocklyNonEditableText>rect:not(.blocklyDropdownRect),`,
-      `${selector} .blocklyEditableText>rect:not(.blocklyDropdownRect) {`,
+      `${selector} .blocklyNonEditableField>rect:not(.blocklyDropdownRect),`,
+      `${selector} .blocklyEditableField>rect:not(.blocklyDropdownRect) {`,
       `fill: ${this.FIELD_BORDER_RECT_COLOUR};`,
       `}`,
-      `${selector} .blocklyNonEditableText>text,`,
-      `${selector} .blocklyEditableText>text,`,
-      `${selector} .blocklyNonEditableText>g>text,`,
-      `${selector} .blocklyEditableText>g>text {`,
+      `${selector} .blocklyNonEditableField>text,`,
+      `${selector} .blocklyEditableField>text,`,
+      `${selector} .blocklyNonEditableField>g>text,`,
+      `${selector} .blocklyEditableField>g>text {`,
       `fill: #575E75;`,
       `}`,
 
@@ -824,9 +856,9 @@ export class ConstantProvider extends BaseConstantProvider {
 
       // Editable field hover.
       `${selector} .blocklyDraggable:not(.blocklyDisabled)`,
-      ` .blocklyEditableText:not(.editing):hover>rect,`,
+      ` .blocklyEditableField:not(.blocklyEditing):hover>rect,`,
       `${selector} .blocklyDraggable:not(.blocklyDisabled)`,
-      ` .blocklyEditableText:not(.editing):hover>.blocklyPath {`,
+      ` .blocklyEditableField:not(.blocklyEditing):hover>.blocklyPath {`,
       `stroke: #fff;`,
       `stroke-width: 2;`,
       `}`,
@@ -858,14 +890,23 @@ export class ConstantProvider extends BaseConstantProvider {
       `}`,
 
       // Disabled outline paths.
-      `${selector} .blocklyDisabled > .blocklyOutlinePath {`,
-      `fill: url(#blocklyDisabledPattern${this.randomIdentifier})`,
+      `${selector} .blocklyDisabledPattern > .blocklyOutlinePath {`,
+      `fill: var(--blocklyDisabledPattern)`,
       `}`,
 
       // Insertion marker.
       `${selector} .blocklyInsertionMarker>.blocklyPath {`,
       `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
       `stroke: none;`,
+      `}`,
+
+      `${selector} .blocklySelected>.blocklyPath.blocklyPathSelected {`,
+      `fill: none;`,
+      `filter: var(--blocklySelectedGlowFilter);`,
+      `}`,
+
+      `${selector} .blocklyReplaceable>.blocklyPath {`,
+      `filter: var(--blocklyReplacementGlowFilter);`,
       `}`,
     ];
   }

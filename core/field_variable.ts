@@ -23,13 +23,14 @@ import {
   MenuOption,
 } from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
+import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
 import type {MenuItem} from './menuitem.js';
 import {Msg} from './msg.js';
+import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
-import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import * as Xml from './xml.js';
 
@@ -48,10 +49,9 @@ export class FieldVariable extends FieldDropdown {
    * dropdown.
    */
   variableTypes: string[] | null = [];
-  protected override size_: Size;
 
   /** The variable model associated with this field. */
-  private variable: VariableModel | null = null;
+  private variable: IVariableModel<IVariableState> | null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -69,7 +69,8 @@ export class FieldVariable extends FieldDropdown {
    *     field's value. Takes in a variable ID  & returns a validated variable
    *     ID, or null to abort the change.
    * @param variableTypes A list of the types of variables to include in the
-   *     dropdown. Will only be used if config is not provided.
+   *     dropdown. Pass `null` to include all types that exist on the
+   *     workspace. Will only be used if config is not provided.
    * @param defaultType The type of variable to create if this field's value
    *     is not explicitly set.  Defaults to ''. Will only be used if config
    *     is not provided.
@@ -81,7 +82,7 @@ export class FieldVariable extends FieldDropdown {
   constructor(
     varName: string | null | typeof Field.SKIP_SETUP,
     validator?: FieldVariableValidator,
-    variableTypes?: string[],
+    variableTypes?: string[] | null,
     defaultType?: string,
     config?: FieldVariableConfig,
   ) {
@@ -148,6 +149,11 @@ export class FieldVariable extends FieldDropdown {
     this.doValueUpdate_(variable.getId());
   }
 
+  override initView() {
+    super.initView();
+    dom.addClass(this.fieldGroup_!, 'blocklyVariableField');
+  }
+
   override shouldAddBorderRect_() {
     const block = this.getSourceBlock();
     if (!block) {
@@ -190,12 +196,12 @@ export class FieldVariable extends FieldDropdown {
     );
 
     // This should never happen :)
-    if (variableType !== null && variableType !== variable.type) {
+    if (variableType !== null && variableType !== variable.getType()) {
       throw Error(
         "Serialized variable type with id '" +
           variable.getId() +
           "' had type " +
-          variable.type +
+          variable.getType() +
           ', and ' +
           'does not match variable field that references it: ' +
           Xml.domToText(fieldElement) +
@@ -218,9 +224,9 @@ export class FieldVariable extends FieldDropdown {
     this.initModel();
 
     fieldElement.id = this.variable!.getId();
-    fieldElement.textContent = this.variable!.name;
-    if (this.variable!.type) {
-      fieldElement.setAttribute('variabletype', this.variable!.type);
+    fieldElement.textContent = this.variable!.getName();
+    if (this.variable!.getType()) {
+      fieldElement.setAttribute('variabletype', this.variable!.getType());
     }
     return fieldElement;
   }
@@ -243,8 +249,8 @@ export class FieldVariable extends FieldDropdown {
     this.initModel();
     const state = {'id': this.variable!.getId()};
     if (doFullSerialization) {
-      (state as AnyDuringMigration)['name'] = this.variable!.name;
-      (state as AnyDuringMigration)['type'] = this.variable!.type;
+      (state as AnyDuringMigration)['name'] = this.variable!.getName();
+      (state as AnyDuringMigration)['type'] = this.variable!.getType();
     }
     return state;
   }
@@ -301,7 +307,7 @@ export class FieldVariable extends FieldDropdown {
    *     is selected.
    */
   override getText(): string {
-    return this.variable ? this.variable.name : '';
+    return this.variable ? this.variable.getName() : '';
   }
 
   /**
@@ -312,8 +318,17 @@ export class FieldVariable extends FieldDropdown {
    * @returns The selected variable, or null if none was selected.
    * @internal
    */
-  getVariable(): VariableModel | null {
+  getVariable(): IVariableModel<IVariableState> | null {
     return this.variable;
+  }
+
+  /**
+   * Gets the type of this field's default variable.
+   *
+   * @returns The default type for this variable field.
+   */
+  protected getDefaultType(): string {
+    return this.defaultType;
   }
 
   /**
@@ -359,7 +374,7 @@ export class FieldVariable extends FieldDropdown {
       return null;
     }
     // Type Checks.
-    const type = variable.type;
+    const type = variable.getType();
     if (!this.typeIsAllowed(type)) {
       console.warn("Variable type doesn't match this field!  Type was " + type);
       return null;
@@ -407,25 +422,27 @@ export class FieldVariable extends FieldDropdown {
    * Return a list of variable types to include in the dropdown.
    *
    * @returns Array of variable types.
-   * @throws {Error} if variableTypes is an empty array.
    */
   private getVariableTypes(): string[] {
-    let variableTypes = this.variableTypes;
-    if (variableTypes === null) {
-      // If variableTypes is null, return all variable types.
-      if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
-        return this.sourceBlock_.workspace.getVariableTypes();
-      }
+    if (this.variableTypes) return this.variableTypes;
+
+    if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {
+      // We should include all types in the block's workspace,
+      // but the block is dead so just give up.
+      return [''];
     }
-    variableTypes = variableTypes || [''];
-    if (variableTypes.length === 0) {
-      // Throw an error if variableTypes is an empty list.
-      const name = this.getText();
-      throw Error(
-        "'variableTypes' of field variable " + name + ' was an empty list',
-      );
+
+    // If variableTypes is null, return all variable types in the workspace.
+    let allTypes = this.sourceBlock_.workspace.getVariableMap().getTypes();
+    if (this.sourceBlock_.isInFlyout) {
+      // If this block is in a flyout, we also need to check the potential variables
+      const potentialMap =
+        this.sourceBlock_.workspace.getPotentialVariableMap();
+      if (!potentialMap) return allTypes;
+      allTypes = Array.from(new Set([...allTypes, ...potentialMap.getTypes()]));
     }
-    return variableTypes;
+
+    return allTypes;
   }
 
   /**
@@ -439,11 +456,15 @@ export class FieldVariable extends FieldDropdown {
    *     value is not explicitly set.  Defaults to ''.
    */
   private setTypes(variableTypes: string[] | null = null, defaultType = '') {
-    // If you expected that the default type would be the same as the only entry
-    // in the variable types array, tell the Blockly team by commenting on
-    // #1499.
-    // Set the allowable variable types.  Null means all types on the workspace.
+    const name = this.getText();
     if (Array.isArray(variableTypes)) {
+      if (variableTypes.length === 0) {
+        // Throw an error if variableTypes is an empty list.
+        throw Error(
+          `'variableTypes' of field variable ${name} was an empty list. If you want to include all variable types, pass 'null' instead.`,
+        );
+      }
+
       // Make sure the default type is valid.
       let isInArray = false;
       for (let i = 0; i < variableTypes.length; i++) {
@@ -461,8 +482,7 @@ export class FieldVariable extends FieldDropdown {
       }
     } else if (variableTypes !== null) {
       throw Error(
-        "'variableTypes' was not an array in the definition of " +
-          'a FieldVariable',
+        `'variableTypes' was not an array or null in the definition of FieldVariable ${name}`,
       );
     }
     // Only update the field once all checks pass.
@@ -493,16 +513,14 @@ export class FieldVariable extends FieldDropdown {
     const id = menuItem.getValue();
     // Handle special cases.
     if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
-      if (id === internalConstants.RENAME_VARIABLE_ID) {
+      if (id === internalConstants.RENAME_VARIABLE_ID && this.variable) {
         // Rename variable.
-        Variables.renameVariable(
-          this.sourceBlock_.workspace,
-          this.variable as VariableModel,
-        );
+        Variables.renameVariable(this.sourceBlock_.workspace, this.variable);
         return;
-      } else if (id === internalConstants.DELETE_VARIABLE_ID) {
+      } else if (id === internalConstants.DELETE_VARIABLE_ID && this.variable) {
         // Delete variable.
-        this.sourceBlock_.workspace.deleteVariableById(this.variable!.getId());
+        const workspace = this.variable.getWorkspace();
+        Variables.deleteVariable(workspace, this.variable, this.sourceBlock_);
         return;
       }
     }
@@ -554,24 +572,37 @@ export class FieldVariable extends FieldDropdown {
       );
     }
     const name = this.getText();
-    let variableModelList: VariableModel[] = [];
-    if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
+    let variableModelList: IVariableModel<IVariableState>[] = [];
+    const sourceBlock = this.getSourceBlock();
+    if (sourceBlock && !sourceBlock.isDeadOrDying()) {
+      const workspace = sourceBlock.workspace;
       const variableTypes = this.getVariableTypes();
       // Get a copy of the list, so that adding rename and new variable options
       // doesn't modify the workspace's list.
       for (let i = 0; i < variableTypes.length; i++) {
         const variableType = variableTypes[i];
-        const variables =
-          this.sourceBlock_.workspace.getVariablesOfType(variableType);
+        const variables = workspace
+          .getVariableMap()
+          .getVariablesOfType(variableType);
         variableModelList = variableModelList.concat(variables);
+        if (workspace.isFlyout) {
+          variableModelList = variableModelList.concat(
+            workspace
+              .getPotentialVariableMap()
+              ?.getVariablesOfType(variableType) ?? [],
+          );
+        }
       }
     }
-    variableModelList.sort(VariableModel.compareByName);
+    variableModelList.sort(Variables.compareByName);
 
     const options: [string, string][] = [];
     for (let i = 0; i < variableModelList.length; i++) {
       // Set the UUID as the internal representation of the variable.
-      options[i] = [variableModelList[i].name, variableModelList[i].getId()];
+      options[i] = [
+        variableModelList[i].getName(),
+        variableModelList[i].getId(),
+      ];
     }
     options.push([
       Msg['RENAME_VARIABLE'],

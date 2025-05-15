@@ -437,7 +437,10 @@ function checkDropdownOptionsInTable(
   }
 
   const options = dropdown.getOptions();
-  for (const [, key] of options) {
+  for (const option of options) {
+    if (option === FieldDropdown.SEPARATOR) continue;
+
+    const [, key] = option;
     if (lookupTable[key] === undefined) {
       console.warn(
         `No tooltip mapping for value ${key} of field ` +

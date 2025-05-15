@@ -17,15 +17,15 @@ import type {BlockMove} from './events/events_block_move.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
-import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';
+import {idGenerator} from './utils.js';
 import * as Xml from './xml.js';
 
 /**
  * Class for a connection between blocks.
  */
-export class Connection implements IASTNodeLocationWithBlock {
+export class Connection {
   /** Constants for checking whether two connections are compatible. */
   static CAN_CONNECT = 0;
   static REASON_SELF_CONNECTION = 1;
@@ -55,6 +55,9 @@ export class Connection implements IASTNodeLocationWithBlock {
   /** DOM representation of a shadow block, or null if none. */
   private shadowDom: Element | null = null;
 
+  /** The unique ID of this connection. */
+  id: string;
+
   /**
    * Horizontal location of this connection.
    *
@@ -80,6 +83,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     public type: number,
   ) {
     this.sourceBlock_ = source;
+    this.id = `${source.id}_connection_${idGenerator.getNextUniqueId()}`;
   }
 
   /**
@@ -485,7 +489,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    *
    * Headless configurations (the default) do not have neighboring connection,
    * and always return an empty list (the default).
-   * {@link RenderedConnection#neighbours} overrides this behavior with a list
+   * {@link (RenderedConnection:class).neighbours} overrides this behavior with a list
    * computed from the rendered positioning.
    *
    * @param _maxLimit The maximum radius to another connection.

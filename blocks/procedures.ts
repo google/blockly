@@ -9,7 +9,6 @@
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import type {BlockDefinition} from '../core/blocks.js';
-import * as common from '../core/common.js';
 import {defineBlocks} from '../core/common.js';
 import {config} from '../core/config.js';
 import type {Connection} from '../core/connection.js';
@@ -27,15 +26,19 @@ import {FieldCheckbox} from '../core/field_checkbox.js';
 import {FieldLabel} from '../core/field_label.js';
 import * as fieldRegistry from '../core/field_registry.js';
 import {FieldTextInput} from '../core/field_textinput.js';
+import {getFocusManager} from '../core/focus_manager.js';
 import '../core/icons/comment_icon.js';
 import {MutatorIcon as Mutator} from '../core/icons/mutator_icon.js';
 import '../core/icons/warning_icon.js';
 import {Align} from '../core/inputs/align.js';
+import type {
+  IVariableModel,
+  IVariableState,
+} from '../core/interfaces/i_variable_model.js';
 import {Msg} from '../core/msg.js';
 import {Names} from '../core/names.js';
 import * as Procedures from '../core/procedures.js';
 import * as xmlUtils from '../core/utils/xml.js';
-import type {VariableModel} from '../core/variable_model.js';
 import * as Variables from '../core/variables.js';
 import type {Workspace} from '../core/workspace.js';
 import type {WorkspaceSvg} from '../core/workspace_svg.js';
@@ -48,7 +51,7 @@ export const blocks: {[key: string]: BlockDefinition} = {};
 type ProcedureBlock = Block & ProcedureMixin;
 interface ProcedureMixin extends ProcedureMixinType {
   arguments_: string[];
-  argumentVarModels_: VariableModel[];
+  argumentVarModels_: IVariableModel<IVariableState>[];
   callType_: string;
   paramIds_: string[];
   hasStatements_: boolean;
@@ -128,7 +131,7 @@ const PROCEDURE_DEF_COMMON = {
     for (let i = 0; i < this.argumentVarModels_.length; i++) {
       const parameter = xmlUtils.createElement('arg');
       const argModel = this.argumentVarModels_[i];
-      parameter.setAttribute('name', argModel.name);
+      parameter.setAttribute('name', argModel.getName());
       parameter.setAttribute('varid', argModel.getId());
       if (opt_paramIds && this.paramIds_) {
         parameter.setAttribute('paramId', this.paramIds_[i]);
@@ -196,7 +199,7 @@ const PROCEDURE_DEF_COMMON = {
         state['params'].push({
           // We don't need to serialize the name, but just in case we decide
           // to separate params from variables.
-          'name': this.argumentVarModels_[i].name,
+          'name': this.argumentVarModels_[i].getName(),
           'id': this.argumentVarModels_[i].getId(),
         });
       }
@@ -224,7 +227,7 @@ const PROCEDURE_DEF_COMMON = {
           param['name'],
           '',
         );
-        this.arguments_.push(variable.name);
+        this.arguments_.push(variable.getName());
         this.argumentVarModels_.push(variable);
       }
     }
@@ -352,7 +355,9 @@ const PROCEDURE_DEF_COMMON = {
    *
    * @returns List of variable models.
    */
-  getVarModels: function (this: ProcedureBlock): VariableModel[] {
+  getVarModels: function (
+    this: ProcedureBlock,
+  ): IVariableModel<IVariableState>[] {
     return this.argumentVarModels_;
   },
   /**
@@ -370,23 +375,23 @@ const PROCEDURE_DEF_COMMON = {
     newId: string,
   ) {
     const oldVariable = this.workspace.getVariableById(oldId)!;
-    if (oldVariable.type !== '') {
+    if (oldVariable.getType() !== '') {
       // Procedure arguments always have the empty type.
       return;
     }
-    const oldName = oldVariable.name;
+    const oldName = oldVariable.getName();
     const newVar = this.workspace.getVariableById(newId)!;
 
     let change = false;
     for (let i = 0; i < this.argumentVarModels_.length; i++) {
       if (this.argumentVarModels_[i].getId() === oldId) {
-        this.arguments_[i] = newVar.name;
+        this.arguments_[i] = newVar.getName();
         this.argumentVarModels_[i] = newVar;
         change = true;
       }
     }
     if (change) {
-      this.displayRenamedVar_(oldName, newVar.name);
+      this.displayRenamedVar_(oldName, newVar.getName());
       Procedures.mutateCallers(this);
     }
   },
@@ -398,9 +403,9 @@ const PROCEDURE_DEF_COMMON = {
    */
   updateVarName: function (
     this: ProcedureBlock & BlockSvg,
-    variable: VariableModel,
+    variable: IVariableModel<IVariableState>,
   ) {
-    const newName = variable.name;
+    const newName = variable.getName();
     let change = false;
     let oldName;
     for (let i = 0; i < this.argumentVarModels_.length; i++) {
@@ -473,12 +478,16 @@ const PROCEDURE_DEF_COMMON = {
         const getVarBlockState = {
           type: 'variables_get',
           fields: {
-            VAR: {name: argVar.name, id: argVar.getId(), type: argVar.type},
+            VAR: {
+              name: argVar.getName(),
+              id: argVar.getId(),
+              type: argVar.getType(),
+            },
           },
         };
         options.push({
           enabled: true,
-          text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name),
+          text: Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.getName()),
           callback: ContextMenu.callbackFactory(this, getVarBlockState),
         });
       }
@@ -620,30 +629,49 @@ type ArgumentBlock = Block & ArgumentMixin;
 interface ArgumentMixin extends ArgumentMixinType {}
 type ArgumentMixinType = typeof PROCEDURES_MUTATORARGUMENT;
 
-// TODO(#6920): This is kludgy.
-type FieldTextInputForArgument = FieldTextInput & {
-  oldShowEditorFn_(_e?: Event, quietInput?: boolean): void;
-  createdVariables_: VariableModel[];
-};
+/**
+ * Field responsible for editing procedure argument names.
+ */
+class ProcedureArgumentField extends FieldTextInput {
+  /**
+   * Whether or not this field is currently being edited interactively.
+   */
+  editingInteractively = false;
+
+  /**
+   * The procedure argument variable whose name is being interactively edited.
+   */
+  editingVariable?: IVariableModel<IVariableState>;
+
+  /**
+   * Displays the field editor.
+   *
+   * @param e The event that triggered display of the field editor.
+   */
+  protected override showEditor_(e?: Event) {
+    super.showEditor_(e);
+    this.editingInteractively = true;
+    this.editingVariable = undefined;
+  }
+
+  /**
+   * Handles cleanup when the field editor is dismissed.
+   */
+  override onFinishEditing_(value: string) {
+    super.onFinishEditing_(value);
+    this.editingInteractively = false;
+  }
+}
 
 const PROCEDURES_MUTATORARGUMENT = {
   /**
    * Mutator block for procedure argument.
    */
   init: function (this: ArgumentBlock) {
-    const field = fieldRegistry.fromJson({
-      type: 'field_input',
-      text: Procedures.DEFAULT_ARG,
-    }) as FieldTextInputForArgument;
-    field.setValidator(this.validator_);
-    // Hack: override showEditor to do just a little bit more work.
-    // We don't have a good place to hook into the start of a text edit.
-    field.oldShowEditorFn_ = (field as AnyDuringMigration).showEditor_;
-    const newShowEditorFn = function (this: typeof field) {
-      this.createdVariables_ = [];
-      this.oldShowEditorFn_();
-    };
-    (field as AnyDuringMigration).showEditor_ = newShowEditorFn;
+    const field = new ProcedureArgumentField(
+      Procedures.DEFAULT_ARG,
+      this.validator_,
+    );
 
     this.appendDummyInput()
       .appendField(Msg['PROCEDURES_MUTATORARG_TITLE'])
@@ -653,14 +681,6 @@ const PROCEDURES_MUTATORARGUMENT = {
     this.setStyle('procedure_blocks');
     this.setTooltip(Msg['PROCEDURES_MUTATORARG_TOOLTIP']);
     this.contextMenu = false;
-
-    // Create the default variable when we drag the block in from the flyout.
-    // Have to do this after installing the field on the block.
-    field.onFinishEditing_ = this.deleteIntermediateVars_;
-    // Create an empty list so onFinishEditing_ has something to look at, even
-    // though the editor was never opened.
-    field.createdVariables_ = [];
-    field.onFinishEditing_('x');
   },
 
   /**
@@ -674,11 +694,11 @@ const PROCEDURES_MUTATORARGUMENT = {
    * @returns Valid name, or null if a name was not specified.
    */
   validator_: function (
-    this: FieldTextInputForArgument,
+    this: ProcedureArgumentField,
     varName: string,
   ): string | null {
     const sourceBlock = this.getSourceBlock()!;
-    const outerWs = sourceBlock!.workspace.getRootWorkspace()!;
+    const outerWs = sourceBlock.workspace.getRootWorkspace()!;
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
@@ -707,42 +727,23 @@ const PROCEDURES_MUTATORARGUMENT = {
       return varName;
     }
 
-    let model = outerWs.getVariable(varName, '');
-    if (model && model.name !== varName) {
+    const model = outerWs.getVariable(varName, '');
+    if (model && model.getName() !== varName) {
       // Rename the variable (case change)
       outerWs.renameVariableById(model.getId(), varName);
     }
     if (!model) {
-      model = outerWs.createVariable(varName, '');
-      if (model && this.createdVariables_) {
-        this.createdVariables_.push(model);
+      if (this.editingInteractively) {
+        if (!this.editingVariable) {
+          this.editingVariable = outerWs.createVariable(varName, '');
+        } else {
+          outerWs.renameVariableById(this.editingVariable.getId(), varName);
+        }
+      } else {
+        outerWs.createVariable(varName, '');
       }
     }
     return varName;
-  },
-
-  /**
-   * Called when focusing away from the text field.
-   * Deletes all variables that were created as the user typed their intended
-   * variable name.
-   *
-   * @internal
-   * @param  newText The new variable name.
-   */
-  deleteIntermediateVars_: function (
-    this: FieldTextInputForArgument,
-    newText: string,
-  ) {
-    const outerWs = this.getSourceBlock()!.workspace.getRootWorkspace();
-    if (!outerWs) {
-      return;
-    }
-    for (let i = 0; i < this.createdVariables_.length; i++) {
-      const model = this.createdVariables_[i];
-      if (model.name !== newText) {
-        outerWs.deleteVariableById(model.getId());
-      }
-    }
   },
 };
 blocks['procedures_mutatorarg'] = PROCEDURES_MUTATORARGUMENT;
@@ -750,7 +751,7 @@ blocks['procedures_mutatorarg'] = PROCEDURES_MUTATORARGUMENT;
 /** Type of a block using the PROCEDURE_CALL_COMMON mixin. */
 type CallBlock = Block & CallMixin;
 interface CallMixin extends CallMixinType {
-  argumentVarModels_: VariableModel[];
+  argumentVarModels_: IVariableModel<IVariableState>[];
   arguments_: string[];
   defType_: string;
   quarkIds_: string[] | null;
@@ -1029,7 +1030,7 @@ const PROCEDURE_CALL_COMMON = {
    *
    * @returns List of variable models.
    */
-  getVarModels: function (this: CallBlock): VariableModel[] {
+  getVarModels: function (this: CallBlock): IVariableModel<IVariableState>[] {
     return this.argumentVarModels_;
   },
   /**
@@ -1177,7 +1178,7 @@ const PROCEDURE_CALL_COMMON = {
         const def = Procedures.getDefinition(name, workspace);
         if (def) {
           (workspace as WorkspaceSvg).centerOnBlock(def.id);
-          common.setSelected(def as BlockSvg);
+          getFocusManager().focusNode(def as BlockSvg);
         }
       },
     });

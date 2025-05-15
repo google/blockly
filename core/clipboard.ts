@@ -6,7 +6,7 @@
 
 // Former goog.module ID: Blockly.clipboard
 
-import {BlockPaster} from './clipboard/block_paster.js';
+import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 import * as registry from './clipboard/registry.js';
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import * as globalRegistry from './registry.js';
@@ -112,4 +112,4 @@ export const TEST_ONLY = {
   copyInternal,
 };
 
-export {BlockPaster, registry};
+export {BlockCopyData, BlockPaster, registry};

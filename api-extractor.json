@@ -352,6 +352,11 @@
       // Needs investigation.
       "ae-forgotten-export": {
         "logLevel": "none"
+      },
+
+      // We don't prefix our internal APIs with underscores.
+      "ae-internal-missing-underscore": {
+        "logLevel": "none"
       }
     },
 

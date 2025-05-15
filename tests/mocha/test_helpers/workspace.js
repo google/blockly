@@ -100,9 +100,7 @@ export function testAWorkspace() {
 
     test('deleteVariableById(id2) one usage', function () {
       // Deleting variable one usage should not trigger confirm dialog.
-      const stub = sinon
-        .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
-        .callsArgWith(1, true);
+      const stub = sinon.stub(window, 'confirm').returns(true);
       this.workspace.deleteVariableById('id2');
 
       sinon.assert.notCalled(stub);
@@ -110,13 +108,13 @@ export function testAWorkspace() {
       assert.isNull(variable);
       assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
       assertBlockVarModelName(this.workspace, 0, 'name1');
+
+      stub.restore();
     });
 
     test('deleteVariableById(id1) multiple usages confirm', function () {
       // Deleting variable with multiple usages triggers confirm dialog.
-      const stub = sinon
-        .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
-        .callsArgWith(1, true);
+      const stub = sinon.stub(window, 'confirm').returns(true);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);
@@ -124,13 +122,13 @@ export function testAWorkspace() {
       assert.isNull(variable);
       assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       assertBlockVarModelName(this.workspace, 0, 'name2');
+
+      stub.restore();
     });
 
     test('deleteVariableById(id1) multiple usages cancel', function () {
       // Deleting variable with multiple usages triggers confirm dialog.
-      const stub = sinon
-        .stub(Blockly.dialog.TEST_ONLY, 'confirmInternal')
-        .callsArgWith(1, false);
+      const stub = sinon.stub(window, 'confirm').returns(false);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);
@@ -139,6 +137,8 @@ export function testAWorkspace() {
       assertBlockVarModelName(this.workspace, 0, 'name1');
       assertBlockVarModelName(this.workspace, 1, 'name1');
       assertBlockVarModelName(this.workspace, 2, 'name2');
+
+      stub.restore();
     });
   });
 

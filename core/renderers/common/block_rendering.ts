@@ -33,7 +33,6 @@ import {Types} from '../measurables/types.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 import {Renderer} from './renderer.js';
 
@@ -94,7 +93,6 @@ export {
   InRowSpacer,
   IPathObject,
   JaggedEdge,
-  MarkerSvg,
   Measurable,
   NextConnection,
   OutputConnection,

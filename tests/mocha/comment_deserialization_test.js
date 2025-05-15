@@ -110,7 +110,7 @@ suite('Comment Deserialization', function () {
     test('Toolbox', function () {
       // Place from toolbox.
       const toolbox = this.workspace.getToolbox();
-      simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
+      simulateClick(toolbox.HtmlDiv.querySelector('.blocklyToolboxCategory'));
       simulateClick(
         toolbox.getFlyout().svgGroup_.querySelector('.blocklyPath'),
       );

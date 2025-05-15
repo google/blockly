@@ -6,7 +6,6 @@
 
 import * as Blockly from '../../build/src/core/blockly.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
-import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
   assertEventEquals,
@@ -518,85 +517,6 @@ suite('Events', function () {
           oldValue: 'old value',
           newValue: 'new value',
         }),
-      },
-      {
-        title: 'null to Block Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          thisObj.block,
-          true,
-          null,
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        ],
-        getExpectedJson: (thisObj) => ({
-          type: 'marker_move',
-          group: '',
-          isCursor: true,
-          blockId: thisObj.block.id,
-          oldNode: undefined,
-          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        }),
-      },
-      {
-        title: 'null to Workspace Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          null,
-          true,
-          null,
-          ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-        ],
-        getExpectedJson: (thisObj) => ({
-          type: 'marker_move',
-          group: '',
-          isCursor: true,
-          blockId: undefined,
-          oldNode: undefined,
-          newNode: ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-        }),
-      },
-      {
-        title: 'Workspace to Block Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          thisObj.block,
-          true,
-          ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        ],
-        getExpectedJson: (thisObj) => ({
-          type: 'marker_move',
-          group: '',
-          isCursor: true,
-          blockId: thisObj.block.id,
-          oldNode: ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-          newNode: new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-        }),
-      },
-      {
-        title: 'Block to Workspace Marker move',
-        class: Blockly.Events.MarkerMove,
-        getArgs: (thisObj) => [
-          null,
-          true,
-          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
-          ASTNode.createWorkspaceNode(
-            thisObj.workspace,
-            new Blockly.utils.Coordinate(0, 0),
-          ),
-        ],
       },
       {
         title: 'Selected',
@@ -1302,7 +1222,7 @@ suite('Events', function () {
         new Blockly.Events.BlockChange(block, 'field', 'VAR', 'id1', 'id2'),
         new Blockly.Events.Click(block),
       ];
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       assert.equal(filteredEvents.length, 4); // no event should have been removed.
       // test that the order hasn't changed
       assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
@@ -1320,7 +1240,7 @@ suite('Events', function () {
         new Blockly.Events.BlockCreate(block2),
         new Blockly.Events.BlockMove(block2),
       ];
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       assert.equal(filteredEvents.length, 4); // no event should have been removed.
     });
 
@@ -1330,7 +1250,7 @@ suite('Events', function () {
       addMoveEvent(events, block, 1, 1);
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       assert.equal(filteredEvents.length, 2); // duplicate moves should have been removed.
       // test that the order hasn't changed
       assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
@@ -1339,27 +1259,12 @@ suite('Events', function () {
       assert.equal(filteredEvents[1].newCoordinate.y, 3);
     });
 
-    test('Backward', function () {
-      const block = this.workspace.newBlock('field_variable_test_block', '1');
-      const events = [new Blockly.Events.BlockCreate(block)];
-      addMoveEvent(events, block, 1, 1);
-      addMoveEvent(events, block, 2, 2);
-      addMoveEvent(events, block, 3, 3);
-      const filteredEvents = eventUtils.filter(events, false);
-      assert.equal(filteredEvents.length, 2); // duplicate event should have been removed.
-      // test that the order hasn't changed
-      assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
-      assert.isTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
-      assert.equal(filteredEvents[1].newCoordinate.x, 1);
-      assert.equal(filteredEvents[1].newCoordinate.y, 1);
-    });
-
     test('Merge block move events', function () {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
       const events = [];
       addMoveEvent(events, block, 0, 0);
       addMoveEvent(events, block, 1, 1);
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       assert.equal(filteredEvents.length, 1); // second move event merged into first
       assert.equal(filteredEvents[0].newCoordinate.x, 1);
       assert.equal(filteredEvents[0].newCoordinate.y, 1);
@@ -1377,7 +1282,7 @@ suite('Events', function () {
           'item2',
         ),
       ];
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       assert.equal(filteredEvents.length, 1); // second change event merged into first
       assert.equal(filteredEvents[0].oldValue, 'item');
       assert.equal(filteredEvents[0].newValue, 'item2');
@@ -1388,7 +1293,7 @@ suite('Events', function () {
         new Blockly.Events.ViewportChange(1, 2, 3, this.workspace, 4),
         new Blockly.Events.ViewportChange(5, 6, 7, this.workspace, 8),
       ];
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       assert.equal(filteredEvents.length, 1); // second change event merged into first
       assert.equal(filteredEvents[0].viewTop, 5);
       assert.equal(filteredEvents[0].viewLeft, 6);
@@ -1408,7 +1313,7 @@ suite('Events', function () {
         new Blockly.Events.BubbleOpen(block3, true, 'warning'),
         new Blockly.Events.Click(block3),
       ];
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       // click event merged into corresponding *Open event
       assert.equal(filteredEvents.length, 3);
       assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BubbleOpen);
@@ -1427,7 +1332,7 @@ suite('Events', function () {
         new Blockly.Events.Click(block),
         new Blockly.Events.BlockDrag(block, true),
       ];
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       // click and stackclick should both exist
       assert.equal(filteredEvents.length, 2);
       assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
@@ -1447,7 +1352,7 @@ suite('Events', function () {
       const events = [];
       addMoveEventParent(events, block, null);
       addMoveEventParent(events, block, null);
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       // The two events should be merged, but because nothing has changed
       // they will be filtered out.
       assert.equal(filteredEvents.length, 0);
@@ -1468,7 +1373,7 @@ suite('Events', function () {
       events.push(new Blockly.Events.BlockDelete(block2));
       addMoveEvent(events, block1, 2, 2);
 
-      const filteredEvents = eventUtils.filter(events, true);
+      const filteredEvents = eventUtils.filter(events);
       // Nothing should have merged.
       assert.equal(filteredEvents.length, 4);
       // test that the order hasn't changed

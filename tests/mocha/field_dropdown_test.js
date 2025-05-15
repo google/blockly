@@ -92,9 +92,9 @@ suite('Dropdown Fields', function () {
       expectedText: 'a',
       args: [
         [
-          [{src: 'scrA', alt: 'a'}, 'A'],
-          [{src: 'scrB', alt: 'b'}, 'B'],
-          [{src: 'scrC', alt: 'c'}, 'C'],
+          [{src: 'scrA', alt: 'a', width: 10, height: 10}, 'A'],
+          [{src: 'scrB', alt: 'b', width: 10, height: 10}, 'B'],
+          [{src: 'scrC', alt: 'c', width: 10, height: 10}, 'C'],
         ],
       ],
     },
@@ -121,9 +121,9 @@ suite('Dropdown Fields', function () {
       args: [
         () => {
           return [
-            [{src: 'scrA', alt: 'a'}, 'A'],
-            [{src: 'scrB', alt: 'b'}, 'B'],
-            [{src: 'scrC', alt: 'c'}, 'C'],
+            [{src: 'scrA', alt: 'a', width: 10, height: 10}, 'A'],
+            [{src: 'scrB', alt: 'b', width: 10, height: 10}, 'B'],
+            [{src: 'scrC', alt: 'c', width: 10, height: 10}, 'C'],
           ];
         },
       ],

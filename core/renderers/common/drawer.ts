@@ -15,7 +15,6 @@ import type {ExternalValueInput} from '../measurables/external_value_input.js';
 import type {Field} from '../measurables/field.js';
 import type {Icon} from '../measurables/icon.js';
 import type {InlineInput} from '../measurables/inline_input.js';
-import type {PreviousConnection} from '../measurables/previous_connection.js';
 import type {Row} from '../measurables/row.js';
 import {Types} from '../measurables/types.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
@@ -116,13 +115,8 @@ export class Drawer {
         this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topLeft;
       } else if (Types.isRightRoundedCorner(elem)) {
         this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topRight;
-      } else if (
-        Types.isPreviousConnection(elem) &&
-        elem instanceof Connection
-      ) {
-        this.outlinePath_ += (
-          (elem as PreviousConnection).shape as Notch
-        ).pathLeft;
+      } else if (Types.isPreviousConnection(elem)) {
+        this.outlinePath_ += (elem.shape as Notch).pathLeft;
       } else if (Types.isHat(elem)) {
         this.outlinePath_ += this.constants_.START_HAT.path;
       } else if (Types.isSpacer(elem)) {
@@ -217,7 +211,7 @@ export class Drawer {
     let rightCornerYOffset = 0;
     let outlinePath = '';
     for (let i = elems.length - 1, elem; (elem = elems[i]); i--) {
-      if (Types.isNextConnection(elem) && elem instanceof Connection) {
+      if (Types.isNextConnection(elem)) {
         outlinePath += (elem.shape as Notch).pathRight;
       } else if (Types.isLeftSquareCorner(elem)) {
         outlinePath += svgPaths.lineOnAxis('H', bottomRow.xPos);
@@ -269,9 +263,9 @@ export class Drawer {
     for (let i = 0, row; (row = this.info_.rows[i]); i++) {
       for (let j = 0, elem; (elem = row.elements[j]); j++) {
         if (Types.isInlineInput(elem)) {
-          this.drawInlineInput_(elem as InlineInput);
+          this.drawInlineInput_(elem);
         } else if (Types.isIcon(elem) || Types.isField(elem)) {
-          this.layoutField_(elem as Field | Icon);
+          this.layoutField_(elem);
         }
       }
     }
@@ -295,13 +289,13 @@ export class Drawer {
     }
 
     if (Types.isIcon(fieldInfo)) {
-      const icon = (fieldInfo as Icon).icon;
+      const icon = fieldInfo.icon;
       icon.setOffsetInBlock(new Coordinate(xPos, yPos));
       if (this.info_.isInsertionMarker) {
         icon.hideForInsertionMarker();
       }
     } else {
-      const svgGroup = (fieldInfo as Field).field.getSvgRoot()!;
+      const svgGroup = fieldInfo.field.getSvgRoot()!;
       svgGroup.setAttribute(
         'transform',
         'translate(' + xPos + ',' + yPos + ')' + scale,
@@ -441,19 +435,16 @@ export class Drawer {
       for (const elem of row.elements) {
         if (!(elem instanceof Connection)) continue;
 
-        if (elem.highlighted) {
-          this.drawConnectionHighlightPath(elem);
-        } else {
-          this.block_.pathObject.removeConnectionHighlight?.(
-            elem.connectionModel,
-          );
+        const highlightSvg = this.drawConnectionHighlightPath(elem);
+        if (highlightSvg) {
+          highlightSvg.style.display = elem.highlighted ? '' : 'none';
         }
       }
     }
   }
 
   /** Returns a path to highlight the given connection. */
-  drawConnectionHighlightPath(measurable: Connection) {
+  drawConnectionHighlightPath(measurable: Connection): SVGElement | undefined {
     const conn = measurable.connectionModel;
     let path = '';
     if (
@@ -465,7 +456,7 @@ export class Drawer {
       path = this.getStatementConnectionHighlightPath(measurable);
     }
     const block = conn.getSourceBlock();
-    block.pathObject.addConnectionHighlight?.(
+    return block.pathObject.addConnectionHighlight?.(
       conn,
       path,
       conn.getOffsetInBlock(),

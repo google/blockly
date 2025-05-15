@@ -11,7 +11,6 @@
  */
 // Former goog.module ID: Blockly.WorkspaceDragger
 
-import * as common from './common.js';
 import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -56,11 +55,7 @@ export class WorkspaceDragger {
    *
    * @internal
    */
-  startDrag() {
-    if (common.getSelected()) {
-      common.getSelected()!.unselect();
-    }
-  }
+  startDrag() {}
 
   /**
    * Finish dragging the workspace and put everything back where it belongs.

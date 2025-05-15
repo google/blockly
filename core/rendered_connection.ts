@@ -13,15 +13,21 @@
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
-import * as common from './common.js';
 import {config} from './config.js';
 import {Connection} from './connection.js';
 import type {ConnectionDB} from './connection_db.js';
 import {ConnectionType} from './connection_type.js';
+import * as ContextMenu from './contextmenu.js';
+import {ContextMenuRegistry} from './contextmenu_registry.js';
 import * as eventUtils from './events/utils.js';
+import {IContextMenu} from './interfaces/i_contextmenu.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as svgMath from './utils/svg_math.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;
@@ -29,7 +35,10 @@ const BUMP_RANDOMNESS = 10;
 /**
  * Class for a connection between blocks that may be rendered on screen.
  */
-export class RenderedConnection extends Connection {
+export class RenderedConnection
+  extends Connection
+  implements IContextMenu, IFocusableNode
+{
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
   private readonly db: ConnectionDB;
@@ -187,15 +196,12 @@ export class RenderedConnection extends Connection {
       ? inferiorRootBlock
       : superiorRootBlock;
     // Raise it to the top for extra visibility.
-    const selected = common.getSelected() === dynamicRootBlock;
-    if (!selected) dynamicRootBlock.addSelect();
     if (dynamicRootBlock.RTL) {
       offsetX = -offsetX;
     }
     const dx = staticConnection.x + offsetX - dynamicConnection.x;
     const dy = staticConnection.y + offsetY - dynamicConnection.y;
     dynamicRootBlock.moveBy(dx, dy, ['bump']);
-    if (!selected) dynamicRootBlock.removeSelect();
   }
 
   /**
@@ -316,13 +322,28 @@ export class RenderedConnection extends Connection {
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
-    this.getSourceBlock().queueRender();
+
+    // Note that this needs to be done synchronously (vs. queuing a render pass)
+    // since only a displayed element can be focused, and this focusable node is
+    // implemented to make itself visible immediately prior to receiving DOM
+    // focus. It's expected that the connection's position should already be
+    // correct by this point (otherwise it will be corrected in a subsequent
+    // draw pass).
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) {
+      highlightSvg.style.display = '';
+    }
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
-    this.getSourceBlock().queueRender();
+
+    // Note that this is done synchronously for parity with highlight().
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) {
+      highlightSvg.style.display = 'none';
+    }
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */
@@ -533,21 +554,6 @@ export class RenderedConnection extends Connection {
     childBlock.updateDisabled();
     childBlock.queueRender();
 
-    // If either block being connected was selected, visually un- and reselect
-    // it. This has the effect of moving the selection path to the end of the
-    // list of child nodes in the DOM. Since SVG z-order is determined by node
-    // order in the DOM, this works around an issue where the selection outline
-    // path could be partially obscured by a new block inserted after it in the
-    // DOM.
-    const selection = common.getSelected();
-    const selectedBlock =
-      (selection === parentBlock && parentBlock) ||
-      (selection === childBlock && childBlock);
-    if (selectedBlock) {
-      selectedBlock.removeSelect();
-      selectedBlock.addSelect();
-    }
-
     // The input the child block is connected to (if any).
     const parentInput = parentBlock.getInputWithBlock(childBlock);
     if (parentInput) {
@@ -587,6 +593,75 @@ export class RenderedConnection extends Connection {
     super.setCheck(check);
     this.sourceBlock_.queueRender();
     return this;
+  }
+
+  /**
+   * Handles showing the context menu when it is opened on a connection.
+   * Note that typically the context menu can't be opened with the mouse
+   * on a connection, because you can't select a connection. But keyboard
+   * users may open the context menu with a keyboard shortcut.
+   *
+   * @param e Event that triggered the opening of the context menu.
+   */
+  showContextMenu(e: Event): void {
+    const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
+      {focusedNode: this},
+      e,
+    );
+
+    if (!menuOptions.length) return;
+
+    const block = this.getSourceBlock();
+    const workspace = block.workspace;
+
+    let location;
+    if (e instanceof PointerEvent) {
+      location = new Coordinate(e.clientX, e.clientY);
+    } else {
+      const connectionWSCoords = new Coordinate(this.x, this.y);
+      const connectionScreenCoords = svgMath.wsToScreenCoordinates(
+        workspace,
+        connectionWSCoords,
+      );
+      location = connectionScreenCoords.translate(block.RTL ? -5 : 5, 5);
+    }
+
+    ContextMenu.show(e, menuOptions, block.RTL, workspace, location);
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    const highlightSvg = this.findHighlightSvg();
+    if (highlightSvg) return highlightSvg;
+    throw new Error('No highlight SVG found corresponding to this connection.');
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.getSourceBlock().workspace as WorkspaceSvg;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {
+    this.highlight();
+  }
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {
+    this.unhighlight();
+  }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as
+      | unknown
+      | null as SVGElement | null;
   }
 }
 

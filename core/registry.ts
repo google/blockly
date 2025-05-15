@@ -14,12 +14,19 @@ import type {IConnectionPreviewer} from './interfaces/i_connection_previewer.js'
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDragger} from './interfaces/i_dragger.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import type {IIcon} from './interfaces/i_icon.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IPaster} from './interfaces/i_paster.js';
 import type {ISerializer} from './interfaces/i_serializer.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
-import type {Cursor} from './keyboard_nav/cursor.js';
+import type {IVariableMap} from './interfaces/i_variable_map.js';
+import type {
+  IVariableModel,
+  IVariableModelStatic,
+  IVariableState,
+} from './interfaces/i_variable_model.js';
+import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Options} from './options.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {Theme} from './theme.js';
@@ -71,7 +78,7 @@ export class Type<_T> {
     'connectionPreviewer',
   );
 
-  static CURSOR = new Type<Cursor>('cursor');
+  static CURSOR = new Type<LineCursor>('cursor');
 
   static EVENT = new Type<Abstract>('event');
 
@@ -93,6 +100,8 @@ export class Type<_T> {
     'flyoutsHorizontalToolbox',
   );
 
+  static FLYOUT_INFLATER = new Type<IFlyoutInflater>('flyoutInflater');
+
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
 
   /**
@@ -109,6 +118,14 @@ export class Type<_T> {
 
   /** @internal */
   static PASTER = new Type<IPaster<ICopyData, ICopyable<ICopyData>>>('paster');
+
+  static VARIABLE_MODEL = new Type<IVariableModelStatic<IVariableState>>(
+    'variableModel',
+  );
+
+  static VARIABLE_MAP = new Type<IVariableMap<IVariableModel<IVariableState>>>(
+    'variableMap',
+  );
 }
 
 /**

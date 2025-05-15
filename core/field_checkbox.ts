@@ -36,11 +36,6 @@ export class FieldCheckbox extends Field<CheckboxBool> {
   override SERIALIZABLE = true;
 
   /**
-   * Mouse cursor style when over the hotspot that initiates editability.
-   */
-  override CURSOR = 'default';
-
-  /**
    * NOTE: The default value is set in `Field`, so maintain that value instead
    * of overwriting it here or in the constructor.
    */
@@ -114,7 +109,7 @@ export class FieldCheckbox extends Field<CheckboxBool> {
     super.initView();
 
     const textElement = this.getTextElement();
-    dom.addClass(textElement, 'blocklyCheckbox');
+    dom.addClass(this.fieldGroup_!, 'blocklyCheckboxField');
     textElement.style.display = this.value_ ? 'block' : 'none';
   }
 

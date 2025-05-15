@@ -27,6 +27,7 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
@@ -100,8 +101,25 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   override SERIALIZABLE = true;
 
-  /** Mouse cursor style when over the hotspot that initiates the editor. */
-  override CURSOR = 'text';
+  /**
+   * Sets the size of this field. Although this appears to be a no-op, it must
+   * exist since the getter is overridden below.
+   */
+  protected override set size_(newValue: Size) {
+    super.size_ = newValue;
+  }
+
+  /**
+   * Returns the size of this field, with a minimum width of 14.
+   */
+  protected override get size_() {
+    const s = super.size_;
+    if (s.width < 14) {
+      s.width = 14;
+    }
+
+    return s;
+  }
 
   /**
    * @param value The initial value of the field. Should cast to a string.
@@ -149,9 +167,13 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     if (this.isFullBlockField()) {
       this.clickTarget_ = (this.sourceBlock_ as BlockSvg).getSvgRoot();
     }
+
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyInputField');
+    }
   }
 
-  protected override isFullBlockField(): boolean {
+  override isFullBlockField(): boolean {
     const block = this.getSourceBlock();
     if (!block) throw new UnattachedFieldError();
 
@@ -330,8 +352,16 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     undefined if triggered programmatically.
    * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
+   * @param manageEphemeralFocus Whether ephemeral focus should be managed as
+   *     part of the editor's inline editor (when the inline editor is shown).
+   *     Callers must manage ephemeral focus themselves if this is false.
+   *     Defaults to true.
    */
-  protected override showEditor_(_e?: Event, quietInput = false) {
+  protected override showEditor_(
+    _e?: Event,
+    quietInput = false,
+    manageEphemeralFocus: boolean = true,
+  ) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     if (
       !quietInput &&
@@ -340,7 +370,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     ) {
       this.showPromptEditor();
     } else {
-      this.showInlineEditor(quietInput);
+      this.showInlineEditor(quietInput, manageEphemeralFocus);
     }
   }
 
@@ -367,8 +397,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Create and show a text input editor that sits directly over the text input.
    *
    * @param quietInput True if editor should be created without focus.
+   * @param manageEphemeralFocus Whether ephemeral focus should be managed as
+   *     part of the field's inline editor (widget div).
    */
-  private showInlineEditor(quietInput: boolean) {
+  private showInlineEditor(quietInput: boolean, manageEphemeralFocus: boolean) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -378,6 +410,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       block.RTL,
       this.widgetDispose_.bind(this),
       this.workspace_,
+      manageEphemeralFocus,
     );
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
@@ -406,7 +439,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     const clickTarget = this.getClickTarget_();
     if (!clickTarget) throw new Error('A click target has not been set.');
-    dom.addClass(clickTarget, 'editing');
+    dom.addClass(clickTarget, 'blocklyEditing');
 
     const htmlInput = document.createElement('input');
     htmlInput.className = 'blocklyHtmlInput';
@@ -416,7 +449,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       'spellcheck',
       this.spellcheck_ as AnyDuringMigration,
     );
-    const scale = this.workspace_!.getScale();
+    const scale = this.workspace_!.getAbsoluteScale();
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
     div!.style.fontSize = fontSize;
     htmlInput.style.fontSize = fontSize;
@@ -501,7 +534,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     const clickTarget = this.getClickTarget_();
     if (!clickTarget) throw new Error('A click target has not been set.');
-    dom.removeClass(clickTarget, 'editing');
+    dom.removeClass(clickTarget, 'blocklyEditing');
   }
 
   /**
@@ -562,10 +595,27 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       WidgetDiv.hideIfOwner(this);
       dropDownDiv.hideWithoutAnimation();
     } else if (e.key === 'Tab') {
-      WidgetDiv.hideIfOwner(this);
-      dropDownDiv.hideWithoutAnimation();
-      (this.sourceBlock_ as BlockSvg).tab(this, !e.shiftKey);
       e.preventDefault();
+      const cursor = this.workspace_?.getCursor();
+
+      const isValidDestination = (node: IFocusableNode | null) =>
+        (node instanceof FieldInput ||
+          (node instanceof BlockSvg && node.isSimpleReporter())) &&
+        node !== this.getSourceBlock();
+
+      let target = e.shiftKey
+        ? cursor?.getPreviousNode(this, isValidDestination, false)
+        : cursor?.getNextNode(this, isValidDestination, false);
+      target =
+        target instanceof BlockSvg && target.isSimpleReporter()
+          ? target.getFields().next().value
+          : target;
+
+      if (target instanceof FieldInput) {
+        WidgetDiv.hideIfOwner(this);
+        dropDownDiv.hideWithoutAnimation();
+        target.showEditor();
+      }
     }
   }
 
@@ -670,15 +720,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
 
     if (!bumped) this.resizeEditor_();
 
-    return true;
-  }
-
-  /**
-   * Returns whether or not the field is tab navigable.
-   *
-   * @returns True if the field is tab navigable.
-   */
-  override isTabNavigable(): boolean {
     return true;
   }
 

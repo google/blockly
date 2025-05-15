@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {getFocusManager} from './focus_manager.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {IRenderedElement} from './interfaces/i_rendered_element.js';
 import * as layerNums from './layers.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -99,8 +101,12 @@ export class LayerManager {
    *
    * @internal
    */
-  moveToDragLayer(elem: IRenderedElement) {
+  moveToDragLayer(elem: IRenderedElement & IFocusableNode) {
     this.dragLayer?.appendChild(elem.getSvgRoot());
+
+    // Since moving the element to the drag layer will cause it to lose focus,
+    // ensure it regains focus (to ensure proper highlights & sent events).
+    getFocusManager().focusNode(elem);
   }
 
   /**
@@ -108,8 +114,12 @@ export class LayerManager {
    *
    * @internal
    */
-  moveOffDragLayer(elem: IRenderedElement, layerNum: number) {
+  moveOffDragLayer(elem: IRenderedElement & IFocusableNode, layerNum: number) {
     this.append(elem, layerNum);
+
+    // Since moving the element off the drag layer will cause it to lose focus,
+    // ensure it regains focus (to ensure proper highlights & sent events).
+    getFocusManager().focusNode(elem);
   }
 
   /**
@@ -122,7 +132,12 @@ export class LayerManager {
     if (!this.layers.has(layerNum)) {
       this.createLayer(layerNum);
     }
-    this.layers.get(layerNum)?.appendChild(elem.getSvgRoot());
+    const childElem = elem.getSvgRoot();
+    if (this.layers.get(layerNum)?.lastChild !== childElem) {
+      // Only append the child if it isn't already last (to avoid re-firing
+      // events like focused).
+      this.layers.get(layerNum)?.appendChild(childElem);
+    }
   }
 
   /**

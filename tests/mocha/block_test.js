@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as common from '../../build/src/core/common.js';
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
@@ -462,20 +461,6 @@ suite('Blocks', function () {
 
       teardown(function () {
         workspaceTeardown.call(this, this.workspace);
-      });
-
-      test('Disposing selected shadow unhighlights parent', function () {
-        const parentBlock = this.parentBlock;
-        common.setSelected(this.shadowChild);
-        assert.isTrue(
-          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
-          'Expected parent to be highlighted after selecting shadow child',
-        );
-        this.shadowChild.dispose();
-        assert.isFalse(
-          parentBlock.pathObject.svgRoot.classList.contains('blocklySelected'),
-          'Expected parent to be unhighlighted after deleting shadow child',
-        );
       });
     });
   });
@@ -1105,6 +1090,18 @@ suite('Blocks', function () {
         );
         this.textJoinBlock = this.printBlock.getInputTargetBlock('TEXT');
         this.textBlock = this.textJoinBlock.getInputTargetBlock('ADD0');
+        this.extraTopBlock = Blockly.Xml.domToBlock(
+          Blockly.utils.xml.textToDom(`
+            <block type="text_print">
+              <value name="TEXT">
+                <block type="text">
+                  <field name="TEXT">drag me</field>
+                </block>
+              </value>
+            </block>`),
+          this.workspace,
+        );
+        this.extraNestedBlock = this.extraTopBlock.getInputTargetBlock('TEXT');
       });
 
       function assertBlockIsOnlyChild(parent, child, inputName) {
@@ -1116,6 +1113,10 @@ suite('Blocks', function () {
         assert.equal(nonParent.getChildren().length, 0);
         assert.isNull(nonParent.getInputTargetBlock('TEXT'));
         assert.isNull(orphan.getParent());
+        assert.equal(
+          orphan.getSvgRoot().parentElement,
+          orphan.workspace.getCanvas(),
+        );
       }
       function assertOriginalSetup() {
         assertBlockIsOnlyChild(this.printBlock, this.textJoinBlock, 'TEXT');
@@ -1186,6 +1187,27 @@ suite('Blocks', function () {
           this.textBlock.setParent.bind(this.textBlock, null),
         );
         assertNonParentAndOrphan(this.textJoinBlock, this.textBlock, 'ADD0');
+      });
+      test('Setting parent to null with dragging block', function () {
+        this.extraTopBlock.setDragging(true);
+        this.textBlock.outputConnection.disconnect();
+        assert.doesNotThrow(
+          this.textBlock.setParent.bind(this.textBlock, null),
+        );
+        assertNonParentAndOrphan(this.textJoinBlock, this.textBlock, 'ADD0');
+        assert.equal(
+          this.textBlock.getSvgRoot().nextSibling,
+          this.extraTopBlock.getSvgRoot(),
+        );
+      });
+      test('Setting parent to null with non-top dragging block', function () {
+        this.extraNestedBlock.setDragging(true);
+        this.textBlock.outputConnection.disconnect();
+        assert.doesNotThrow(
+          this.textBlock.setParent.bind(this.textBlock, null),
+        );
+        assertNonParentAndOrphan(this.textJoinBlock, this.textBlock, 'ADD0');
+        assert.equal(this.textBlock.getSvgRoot().nextSibling, null);
       });
       test('Setting parent to null without disconnecting', function () {
         assert.throws(this.textBlock.setParent.bind(this.textBlock, null));
@@ -1420,6 +1442,10 @@ suite('Blocks', function () {
         getBubbleSize() {
           return Blockly.utils.Size(0, 0);
         }
+
+        setBubbleLocation() {}
+
+        getBubbleLocation() {}
 
         bubbleIsVisible() {
           return true;

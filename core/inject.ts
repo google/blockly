@@ -13,13 +13,11 @@ import * as common from './common.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Grid} from './grid.js';
-import {Msg} from './msg.js';
 import {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import {ShortcutRegistry} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
-import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -56,8 +54,6 @@ export function inject(
   if (opt_options?.rtl) {
     dom.addClass(subContainer, 'blocklyRTL');
   }
-  subContainer.tabIndex = 0;
-  aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 
   containerElement!.appendChild(subContainer);
   const svg = createDom(subContainer, options);
@@ -98,7 +94,7 @@ export function inject(
  * @param options Dictionary of options.
  * @returns Newly created SVG image.
  */
-function createDom(container: Element, options: Options): SVGElement {
+function createDom(container: HTMLElement, options: Options): SVGElement {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -126,7 +122,6 @@ function createDom(container: Element, options: Options): SVGElement {
       'xmlns:xlink': dom.XLINK_NS,
       'version': '1.1',
       'class': 'blocklySvg',
-      'tabindex': '0',
     },
     container,
   );
@@ -141,7 +136,12 @@ function createDom(container: Element, options: Options): SVGElement {
   // https://neil.fraser.name/news/2015/11/01/
   const rnd = String(Math.random()).substring(2);
 
-  options.gridPattern = Grid.createDom(rnd, options.gridOptions, defs);
+  options.gridPattern = Grid.createDom(
+    rnd,
+    options.gridOptions,
+    defs,
+    container,
+  );
   return svg;
 }
 
@@ -153,7 +153,7 @@ function createDom(container: Element, options: Options): SVGElement {
  * @returns Newly created main workspace.
  */
 function createMainWorkspace(
-  injectionDiv: Element,
+  injectionDiv: HTMLElement,
   svg: SVGElement,
   options: Options,
 ): WorkspaceSvg {

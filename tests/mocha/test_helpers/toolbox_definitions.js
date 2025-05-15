@@ -243,9 +243,8 @@ export function getBasicToolbox() {
 }
 
 export function getCollapsibleItem(toolbox) {
-  const contents = toolbox.contents_;
-  for (let i = 0; i < contents.length; i++) {
-    const item = contents[i];
+  const contents = toolbox.contents.values();
+  for (const item of contents) {
     if (item.isCollapsible()) {
       return item;
     }
@@ -253,9 +252,8 @@ export function getCollapsibleItem(toolbox) {
 }
 
 export function getNonCollapsibleItem(toolbox) {
-  const contents = toolbox.contents_;
-  for (let i = 0; i < contents.length; i++) {
-    const item = contents[i];
+  const contents = toolbox.contents.values();
+  for (const item of contents) {
     if (!item.isCollapsible()) {
       return item;
     }

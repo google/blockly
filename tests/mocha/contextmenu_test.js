@@ -6,7 +6,6 @@
 
 import {callbackFactory} from '../../build/src/core/contextmenu.js';
 import * as xmlUtils from '../../build/src/core/utils/xml.js';
-import * as Variables from '../../build/src/core/variables.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
@@ -32,9 +31,13 @@ suite('Context Menu', function () {
     });
 
     test('callback with xml state creates block', function () {
-      const xmlField = Variables.generateVariableFieldDom(
-        this.forLoopBlock.getField('VAR').getVariable(),
-      );
+      const variable = this.forLoopBlock.getField('VAR').getVariable();
+      const xmlField = document.createElement('field');
+      xmlField.setAttribute('name', 'VAR');
+      xmlField.setAttribute('id', variable.getId());
+      xmlField.setAttribute('variabletype', variable.getType());
+      xmlField.textContent = variable.getName();
+
       const xmlBlock = xmlUtils.createElement('block');
       xmlBlock.setAttribute('type', 'variables_get');
       xmlBlock.appendChild(xmlField);

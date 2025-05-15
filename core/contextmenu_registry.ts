@@ -13,6 +13,8 @@
 
 import type {BlockSvg} from './block_svg.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import {Coordinate} from './utils/coordinate.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -70,39 +72,60 @@ export class ContextMenuRegistry {
   }
 
   /**
-   * Gets the valid context menu options for the given scope type (e.g. block or
-   * workspace) and scope. Blocks are only shown if the preconditionFn shows
+   * Gets the valid context menu options for the given scope.
+   * Options are only included if the preconditionFn shows
    * they should not be hidden.
    *
-   * @param scopeType Type of scope where menu should be shown (e.g. on a block
-   *     or on a workspace)
    * @param scope Current scope of context menu (i.e., the exact workspace or
-   *     block being clicked on)
+   *     block being clicked on).
+   * @param menuOpenEvent Event that caused the menu to open.
    * @returns the list of ContextMenuOptions
    */
   getContextMenuOptions(
-    scopeType: ScopeType,
     scope: Scope,
+    menuOpenEvent: Event,
   ): ContextMenuOption[] {
     const menuOptions: ContextMenuOption[] = [];
     for (const item of this.registeredItems.values()) {
-      if (scopeType === item.scopeType) {
-        const precondition = item.preconditionFn(scope);
-        if (precondition !== 'hidden') {
-          const displayText =
-            typeof item.displayText === 'function'
-              ? item.displayText(scope)
-              : item.displayText;
-          const menuOption: ContextMenuOption = {
-            text: displayText,
-            enabled: precondition === 'enabled',
-            callback: item.callback,
-            scope,
-            weight: item.weight,
-          };
-          menuOptions.push(menuOption);
-        }
+      if (item.scopeType) {
+        // If the scopeType is present, check to make sure
+        // that the option is compatible with the current scope
+        if (item.scopeType === ScopeType.BLOCK && !scope.block) continue;
+        if (item.scopeType === ScopeType.COMMENT && !scope.comment) continue;
+        if (item.scopeType === ScopeType.WORKSPACE && !scope.workspace)
+          continue;
       }
+      let menuOption:
+        | ContextMenuRegistry.CoreContextMenuOption
+        | ContextMenuRegistry.SeparatorContextMenuOption
+        | ContextMenuRegistry.ActionContextMenuOption;
+      menuOption = {
+        scope,
+        weight: item.weight,
+      };
+
+      if (item.separator) {
+        menuOption = {
+          ...menuOption,
+          separator: true,
+        };
+      } else {
+        const precondition = item.preconditionFn(scope, menuOpenEvent);
+        if (precondition === 'hidden') continue;
+
+        const displayText =
+          typeof item.displayText === 'function'
+            ? item.displayText(scope)
+            : item.displayText;
+        menuOption = {
+          ...menuOption,
+          text: displayText,
+          callback: item.callback,
+          enabled: precondition === 'enabled',
+        };
+      }
+
+      menuOptions.push(menuOption);
     }
     menuOptions.sort(function (a, b) {
       return a.weight - b.weight;
@@ -124,49 +147,109 @@ export namespace ContextMenuRegistry {
   }
 
   /**
-   * The actual workspace/block where the menu is being rendered. This is passed
-   * to callback and displayText functions that depend on this information.
+   * The actual workspace/block/focused object where the menu is being
+   * rendered. This is passed to callback and displayText functions
+   * that depend on this information.
    */
   export interface Scope {
     block?: BlockSvg;
     workspace?: WorkspaceSvg;
     comment?: RenderedWorkspaceComment;
+    focusedNode?: IFocusableNode;
   }
 
   /**
-   * A menu item as entered in the registry.
+   * Fields common to all context menu registry items.
    */
-  export interface RegistryItem {
-    /**
-     * @param scope Object that provides a reference to the thing that had its
-     *     context menu opened.
-     * @param e The original event that triggered the context menu to open. Not
-     *     the event that triggered the click on the option.
-     */
-    callback: (scope: Scope, e: PointerEvent) => void;
-    scopeType: ScopeType;
-    displayText: ((p1: Scope) => string | HTMLElement) | string | HTMLElement;
-    preconditionFn: (p1: Scope) => string;
+  interface CoreRegistryItem {
+    scopeType?: ScopeType;
     weight: number;
     id: string;
   }
 
   /**
-   * A menu item as presented to contextmenu.js.
+   * A representation of a normal, clickable menu item in the registry.
    */
-  export interface ContextMenuOption {
+  interface ActionRegistryItem extends CoreRegistryItem {
+    /**
+     * @param scope Object that provides a reference to the thing that had its
+     *     context menu opened.
+     * @param menuOpenEvent The original event that triggered the context menu to open.
+     * @param menuSelectEvent The event that triggered the option being selected.
+     * @param location The location in screen coordinates where the menu was opened.
+     */
+    callback: (
+      scope: Scope,
+      menuOpenEvent: Event,
+      menuSelectEvent: Event,
+      location: Coordinate,
+    ) => void;
+    displayText: ((p1: Scope) => string | HTMLElement) | string | HTMLElement;
+    preconditionFn: (p1: Scope, menuOpenEvent: Event) => string;
+    separator?: never;
+  }
+
+  /**
+   * A representation of a menu separator item in the registry.
+   */
+  interface SeparatorRegistryItem extends CoreRegistryItem {
+    separator: true;
+    callback?: never;
+    displayText?: never;
+    preconditionFn?: never;
+  }
+
+  /**
+   * A menu item as entered in the registry.
+   */
+  export type RegistryItem = ActionRegistryItem | SeparatorRegistryItem;
+
+  /**
+   * Fields common to all context menu items as used by contextmenu.ts.
+   */
+  export interface CoreContextMenuOption {
+    scope: Scope;
+    weight: number;
+  }
+
+  /**
+   * A representation of a normal, clickable menu item in contextmenu.ts.
+   */
+  export interface ActionContextMenuOption extends CoreContextMenuOption {
     text: string | HTMLElement;
     enabled: boolean;
     /**
      * @param scope Object that provides a reference to the thing that had its
      *     context menu opened.
-     * @param e The original event that triggered the context menu to open. Not
-     *     the event that triggered the click on the option.
+     * @param menuOpenEvent The original event that triggered the context menu to open.
+     * @param menuSelectEvent The event that triggered the option being selected.
+     * @param location The location in screen coordinates where the menu was opened.
      */
-    callback: (scope: Scope, e: PointerEvent) => void;
-    scope: Scope;
-    weight: number;
+    callback: (
+      scope: Scope,
+      menuOpenEvent: Event,
+      menuSelectEvent: Event,
+      location: Coordinate,
+    ) => void;
+    separator?: never;
   }
+
+  /**
+   * A representation of a menu separator item in contextmenu.ts.
+   */
+  export interface SeparatorContextMenuOption extends CoreContextMenuOption {
+    separator: true;
+    text?: never;
+    enabled?: never;
+    callback?: never;
+  }
+
+  /**
+   * A menu item as presented to contextmenu.ts.
+   */
+  export type ContextMenuOption =
+    | ActionContextMenuOption
+    | SeparatorContextMenuOption;
 
   /**
    * A subset of ContextMenuOption corresponding to what was publicly
@@ -176,6 +259,7 @@ export namespace ContextMenuRegistry {
     text: string;
     enabled: boolean;
     callback: (p1: Scope) => void;
+    separator?: never;
   }
 
   /**

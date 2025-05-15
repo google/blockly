@@ -5,6 +5,7 @@
  */
 
 import * as eventUtils from '../../../build/src/core/events/utils.js';
+import {FocusManager} from '../../../build/src/core/focus_manager.js';
 
 /**
  * Safely disposes of Blockly workspace, logging any errors.
@@ -124,6 +125,18 @@ export function sharedTestSetup(options = {}) {
   };
   this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
+
+  // Set up FocusManager to run in isolation for this test.
+  this.globalDocumentEventListeners = [];
+  const testState = this;
+  const addDocumentEventListener = function (type, listener) {
+    testState.globalDocumentEventListeners.push({type, listener});
+    document.addEventListener(type, listener);
+  };
+  const specificFocusManager = new FocusManager(addDocumentEventListener);
+  this.oldGetFocusManager = FocusManager.getFocusManager;
+  FocusManager.getFocusManager = () => specificFocusManager;
+
   wrapDefineBlocksWithJsonArrayWithCleanup_(this.sharedCleanup);
   return {
     clock: this.clock,
@@ -184,6 +197,16 @@ export function sharedTestTeardown() {
     }
 
     Blockly.WidgetDiv.testOnly_setDiv(null);
+
+    // Remove the globally registered listener from FocusManager to avoid state
+    // being shared across test boundaries.
+    for (const registeredListener of this.globalDocumentEventListeners) {
+      const eventType = registeredListener.type;
+      const eventListener = registeredListener.listener;
+      document.removeEventListener(eventType, eventListener);
+    }
+    this.globalDocumentEventListeners = [];
+    FocusManager.getFocusManager = this.oldGetFocusManager;
   }
 }
 

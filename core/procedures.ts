@@ -42,6 +42,8 @@ import {IProcedureModel} from './interfaces/i_procedure_model.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import {ObservableProcedureMap} from './observable_procedure_map.js';
+import * as deprecation from './utils/deprecation.js';
+import type {FlyoutItemInfo} from './utils/toolbox.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
@@ -238,7 +240,7 @@ export function rename(this: Field, name: string): string {
  * @param workspace The workspace containing procedures.
  * @returns Array of XML block elements.
  */
-export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+function xmlFlyoutCategory(workspace: WorkspaceSvg): Element[] {
   const xmlList = [];
   if (Blocks['procedures_defnoreturn']) {
     // <block type="procedures_defnoreturn" gap="16">
@@ -320,6 +322,109 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   populateProcedures(tuple[0], 'procedures_callnoreturn');
   populateProcedures(tuple[1], 'procedures_callreturn');
   return xmlList;
+}
+
+/**
+ * Internal wrapper that returns the contents of the procedure category.
+ *
+ * @internal
+ * @param workspace The workspace to populate procedure blocks for.
+ */
+export function internalFlyoutCategory(
+  workspace: WorkspaceSvg,
+): FlyoutItemInfo[] {
+  return flyoutCategory(workspace, false);
+}
+
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: true,
+): Element[];
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml: false,
+): FlyoutItemInfo[];
+/**
+ * Construct the blocks required by the flyout for the procedure category.
+ *
+ * @param workspace The workspace containing procedures.
+ * @param useXml True to return the contents as XML, false to use JSON.
+ * @returns List of flyout contents as either XML or JSON.
+ */
+export function flyoutCategory(
+  workspace: WorkspaceSvg,
+  useXml = true,
+): Element[] | FlyoutItemInfo[] {
+  if (useXml) {
+    deprecation.warn(
+      'The XML return value of Blockly.Procedures.flyoutCategory()',
+      'v12',
+      'v13',
+      'the same method, but handle a return type of FlyoutItemInfo[] (JSON) instead.',
+    );
+    return xmlFlyoutCategory(workspace);
+  }
+  const blocks = [];
+  if (Blocks['procedures_defnoreturn']) {
+    blocks.push({
+      'kind': 'block',
+      'type': 'procedures_defnoreturn',
+      'gap': 16,
+      'fields': {
+        'NAME': Msg['PROCEDURES_DEFNORETURN_PROCEDURE'],
+      },
+    });
+  }
+  if (Blocks['procedures_defreturn']) {
+    blocks.push({
+      'kind': 'block',
+      'type': 'procedures_defreturn',
+      'gap': 16,
+      'fields': {
+        'NAME': Msg['PROCEDURES_DEFRETURN_PROCEDURE'],
+      },
+    });
+  }
+  if (Blocks['procedures_ifreturn']) {
+    blocks.push({
+      'kind': 'block',
+      'type': 'procedures_ifreturn',
+      'gap': 16,
+    });
+  }
+  if (blocks.length) {
+    // Add slightly larger gap between system blocks and user calls.
+    blocks[blocks.length - 1]['gap'] = 24;
+  }
+
+  /**
+   * Creates JSON block definitions for each of the given procedures.
+   *
+   * @param procedureList A list of procedures, each of which is defined by a
+   *     three-element list of name, parameter list, and return value boolean.
+   * @param templateName The type of the block to generate.
+   */
+  function populateProcedures(
+    procedureList: ProcedureTuple[],
+    templateName: string,
+  ) {
+    for (const [name, args] of procedureList) {
+      blocks.push({
+        'kind': 'block',
+        'type': templateName,
+        'gap': 16,
+        'extraState': {
+          'name': name,
+          'params': args,
+        },
+      });
+    }
+  }
+
+  const tuple = allProcedures(workspace);
+  populateProcedures(tuple[0], 'procedures_callnoreturn');
+  populateProcedures(tuple[1], 'procedures_callreturn');
+  return blocks;
 }
 
 /**

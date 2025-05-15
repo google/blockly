@@ -231,7 +231,6 @@ export class RenderInfo {
     if (hasHat) {
       const hat = new Hat(this.constants_);
       this.topRow.elements.push(hat);
-      this.topRow.capline = hat.ascenderHeight;
     } else if (hasPrevious) {
       this.topRow.hasPreviousConnection = true;
       this.topRow.connection = new PreviousConnection(
@@ -458,6 +457,11 @@ export class RenderInfo {
       }
     }
 
+    // Don't add padding after zero-width fields.
+    if (prev && Types.isField(prev) && prev.width === 0) {
+      return this.constants_.NO_PADDING;
+    }
+
     return this.constants_.MEDIUM_PADDING;
   }
 
@@ -672,20 +676,17 @@ export class RenderInfo {
       return row.yPos + elem.height / 2;
     }
     if (Types.isBottomRow(row)) {
-      const bottomRow = row as BottomRow;
-      const baseline =
-        bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
+      const baseline = row.yPos + row.height - row.descenderHeight;
       if (Types.isNextConnection(elem)) {
         return baseline + elem.height / 2;
       }
       return baseline - elem.height / 2;
     }
     if (Types.isTopRow(row)) {
-      const topRow = row as TopRow;
       if (Types.isHat(elem)) {
-        return topRow.capline - elem.height / 2;
+        return row.capline - elem.height / 2;
       }
-      return topRow.capline + elem.height / 2;
+      return row.capline + elem.height / 2;
     }
     return row.yPos + row.height / 2;
   }

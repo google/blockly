@@ -23,17 +23,17 @@ import * as dropDownDiv from './dropdowndiv.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
-import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
-import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
-import {MarkerManager} from './marker_manager.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
 import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
+import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
@@ -42,7 +42,7 @@ import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -67,12 +67,7 @@ export type FieldValidator<T = any> = (newValue: T) => T | null | undefined;
  * @typeParam T - The value stored on the field.
  */
 export abstract class Field<T = any>
-  implements
-    IASTNodeLocationSvg,
-    IASTNodeLocationWithBlock,
-    IKeyboardAccessible,
-    IRegistrable,
-    ISerializable
+  implements IKeyboardAccessible, IRegistrable, ISerializable, IFocusableNode
 {
   /**
    * To overwrite the default value which is set in **Field**, directly update
@@ -108,19 +103,28 @@ export abstract class Field<T = any>
    * field is not yet initialized. Is *not* guaranteed to be accurate.
    */
   private tooltip: Tooltip.TipInfo | null = null;
-  protected size_: Size;
+
+  /** This field's dimensions. */
+  private size: Size = new Size(0, 0);
 
   /**
-   * Holds the cursors svg element when the cursor is attached to the field.
-   * This is null if there is no cursor on the field.
+   * Gets the size of this field. Because getSize() and updateSize() have side
+   * effects, this acts as a shim for subclasses which wish to adjust field
+   * bounds when setting/getting the size without triggering unwanted rendering
+   * or other side effects. Note that subclasses must override *both* get and
+   * set if either is overridden; the implementation may just call directly
+   * through to super, but it must exist per the JS spec.
    */
-  private cursorSvg: SVGElement | null = null;
+  protected get size_(): Size {
+    return this.size;
+  }
 
   /**
-   * Holds the markers svg element when the marker is attached to the field.
-   * This is null if there is no marker on the field.
+   * Sets the size of this field.
    */
-  private markerSvg: SVGElement | null = null;
+  protected set size_(newValue: Size) {
+    this.size = newValue;
+  }
 
   /** The rendered field's SVG group element. */
   protected fieldGroup_: SVGGElement | null = null;
@@ -194,8 +198,8 @@ export abstract class Field<T = any>
    */
   SERIALIZABLE = false;
 
-  /** Mouse cursor style when over the hotspot that initiates the editor. */
-  CURSOR = '';
+  /** The unique ID of this field. */
+  private id_: string | null = null;
 
   /**
    * @param value The initial value of the field.
@@ -261,6 +265,7 @@ export abstract class Field<T = any>
       throw Error('Field already bound to a block');
     }
     this.sourceBlock_ = block;
+    this.id_ = `${block.id}_field_${idGenerator.getNextUniqueId()}`;
   }
 
   /**
@@ -304,7 +309,12 @@ export abstract class Field<T = any>
       // Field has already been initialized once.
       return;
     }
-    this.fieldGroup_ = dom.createSvgElement(Svg.G, {});
+    const id = this.id_;
+    if (!id) throw new Error('Expected ID to be defined prior to init.');
+    this.fieldGroup_ = dom.createSvgElement(Svg.G, {
+      'tabindex': '-1',
+      'id': id,
+    });
     if (!this.isVisible()) {
       this.fieldGroup_.style.display = 'none';
     }
@@ -324,6 +334,9 @@ export abstract class Field<T = any>
   protected initView() {
     this.createBorderRect_();
     this.createTextElement_();
+    if (this.fieldGroup_) {
+      dom.addClass(this.fieldGroup_, 'blocklyField');
+    }
   }
 
   /**
@@ -339,8 +352,10 @@ export abstract class Field<T = any>
    * intend because the behavior was kind of hacked in. If you are thinking
    * about overriding this function, post on the forum with your intended
    * behavior to see if there's another approach.
+   *
+   * @internal
    */
-  protected isFullBlockField(): boolean {
+  isFullBlockField(): boolean {
     return !this.borderRect_;
   }
 
@@ -374,7 +389,7 @@ export abstract class Field<T = any>
     this.textElement_ = dom.createSvgElement(
       Svg.TEXT,
       {
-        'class': 'blocklyText',
+        'class': 'blocklyText blocklyFieldText',
       },
       this.fieldGroup_,
     );
@@ -406,7 +421,6 @@ export abstract class Field<T = any>
    * called by Blockly.Xml.
    *
    * @param fieldElement The element containing info about the field's state.
-   * @internal
    */
   fromXml(fieldElement: Element) {
     // Any because gremlins live here. No touchie!
@@ -419,7 +433,6 @@ export abstract class Field<T = any>
    * @param fieldElement The element to populate with info about the field's
    *     state.
    * @returns The element containing info about the field's state.
-   * @internal
    */
   toXml(fieldElement: Element): Element {
     // Any because gremlins live here. No touchie!
@@ -438,7 +451,6 @@ export abstract class Field<T = any>
    *     {@link https://developers.devsite.google.com/blockly/guides/create-custom-blocks/fields/customizing-fields/creating#full_serialization_and_backing_data | field serialization docs}
    *     for more information.
    * @returns JSON serializable state.
-   * @internal
    */
   saveState(_doFullSerialization?: boolean): AnyDuringMigration {
     const legacyState = this.saveLegacyState(Field);
@@ -453,7 +465,6 @@ export abstract class Field<T = any>
    * called by the serialization system.
    *
    * @param state The state we want to apply to the field.
-   * @internal
    */
   loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(Field, state)) {
@@ -516,8 +527,6 @@ export abstract class Field<T = any>
 
   /**
    * Dispose of all DOM objects and events belonging to this editable field.
-   *
-   * @internal
    */
   dispose() {
     dropDownDiv.hideIfOwner(this);
@@ -538,13 +547,11 @@ export abstract class Field<T = any>
       return;
     }
     if (this.enabled_ && block.isEditable()) {
-      dom.addClass(group, 'blocklyEditableText');
-      dom.removeClass(group, 'blocklyNonEditableText');
-      group.style.cursor = this.CURSOR;
+      dom.addClass(group, 'blocklyEditableField');
+      dom.removeClass(group, 'blocklyNonEditableField');
     } else {
-      dom.addClass(group, 'blocklyNonEditableText');
-      dom.removeClass(group, 'blocklyEditableText');
-      group.style.cursor = '';
+      dom.addClass(group, 'blocklyNonEditableField');
+      dom.removeClass(group, 'blocklyEditableField');
     }
   }
 
@@ -833,12 +840,7 @@ export abstract class Field<T = any>
 
     let contentWidth = 0;
     if (this.textElement_) {
-      contentWidth = dom.getFastTextWidth(
-        this.textElement_,
-        constants!.FIELD_TEXT_FONTSIZE,
-        constants!.FIELD_TEXT_FONTWEIGHT,
-        constants!.FIELD_TEXT_FONTFAMILY,
-      );
+      contentWidth = dom.getTextWidth(this.textElement_);
       totalWidth += contentWidth;
     }
     if (!this.isFullBlockField()) {
@@ -918,17 +920,6 @@ export abstract class Field<T = any>
     if (this.isDirty_) {
       this.render_();
       this.isDirty_ = false;
-    } else if (this.visible_ && this.size_.width === 0) {
-      // If the field is not visible the width will be 0 as well, one of the
-      // problems with the old system.
-      this.render_();
-      // Don't issue a warning if the field is actually zero width.
-      if (this.size_.width !== 0) {
-        console.warn(
-          'Deprecated use of setting size_.width to 0 to rerender a' +
-            ' field. Set field.isDirty_ to true instead.',
-        );
-      }
     }
     return this.size_;
   }
@@ -992,10 +983,6 @@ export abstract class Field<T = any>
    */
   protected getDisplayText_(): string {
     let text = this.getText();
-    if (!text) {
-      // Prevent the field from disappearing if empty.
-      return Field.NBSP;
-    }
     if (text.length > this.maxDisplayLength) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 2) + '…';
@@ -1057,8 +1044,6 @@ export abstract class Field<T = any>
    * rerender this field and adjust for any sizing changes.
    * Other fields on the same block will not rerender, because their sizes have
    * already been recorded.
-   *
-   * @internal
    */
   forceRerender() {
     this.isDirty_ = true;
@@ -1317,7 +1302,6 @@ export abstract class Field<T = any>
    * Subclasses may override this.
    *
    * @returns True if this field has any variable references.
-   * @internal
    */
   referencesVariables(): boolean {
     return false;
@@ -1326,8 +1310,6 @@ export abstract class Field<T = any>
   /**
    * Refresh the variable name referenced by this field if this field references
    * variables.
-   *
-   * @internal
    */
   refreshVariableName() {}
   // NOP
@@ -1370,15 +1352,6 @@ export abstract class Field<T = any>
   }
 
   /**
-   * Returns whether or not the field is tab navigable.
-   *
-   * @returns True if the field is tab navigable.
-   */
-  isTabNavigable(): boolean {
-    return false;
-  }
-
-  /**
    * Handles the given keyboard shortcut.
    *
    * @param _shortcut The shortcut to be handled.
@@ -1388,62 +1361,32 @@ export abstract class Field<T = any>
     return false;
   }
 
-  /**
-   * Add the cursor SVG to this fields SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the field group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
     if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
+      throw Error('This field currently has no representative DOM element.');
     }
-    this.fieldGroup_.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
+    return this.fieldGroup_;
   }
 
-  /**
-   * Add the marker SVG to this fields SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the field group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
-    this.fieldGroup_.appendChild(markerSvg);
-    this.markerSvg = markerSvg;
-  }
-
-  /**
-   * Redraw any attached marker or cursor svgs if needed.
-   *
-   * @internal
-   */
-  updateMarkers_() {
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
     }
-    const workspace = block.workspace as WorkspaceSvg;
-    if (workspace.keyboardAccessibilityMode && this.cursorSvg) {
-      workspace.getCursor()!.draw();
-    }
-    if (workspace.keyboardAccessibilityMode && this.markerSvg) {
-      // TODO(#4592): Update all markers on the field.
-      workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
+    return block.workspace as WorkspaceSvg;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
   }
 
   /**

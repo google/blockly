@@ -12,6 +12,7 @@ import {Coordinate} from '../utils/coordinate.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import {Size} from '../utils/size.js';
 import {Workspace} from '../workspace.js';
+import {CommentView} from './comment_view.js';
 
 export class WorkspaceComment {
   /** The unique identifier for this comment. */
@@ -21,7 +22,7 @@ export class WorkspaceComment {
   private text = '';
 
   /** The size of the comment in workspace units. */
-  private size = new Size(120, 100);
+  private size: Size;
 
   /** Whether the comment is collapsed or not. */
   private collapsed = false;
@@ -56,6 +57,7 @@ export class WorkspaceComment {
     id?: string,
   ) {
     this.id = id && !workspace.getCommentById(id) ? id : idGenerator.genUid();
+    this.size = CommentView.defaultCommentSize;
 
     workspace.addTopComment(this);
 
@@ -142,7 +144,7 @@ export class WorkspaceComment {
    * workspace is read-only.
    */
   isEditable(): boolean {
-    return this.isOwnEditable() && !this.workspace.options.readOnly;
+    return this.isOwnEditable() && !this.workspace.isReadOnly();
   }
 
   /**
@@ -163,7 +165,7 @@ export class WorkspaceComment {
    * workspace is read-only.
    */
   isMovable() {
-    return this.isOwnMovable() && !this.workspace.options.readOnly;
+    return this.isOwnMovable() && !this.workspace.isReadOnly();
   }
 
   /**
@@ -187,7 +189,7 @@ export class WorkspaceComment {
     return (
       this.isOwnDeletable() &&
       !this.isDeadOrDying() &&
-      !this.workspace.options.readOnly
+      !this.workspace.isReadOnly()
     );
   }
 

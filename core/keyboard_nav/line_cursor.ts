@@ -377,7 +377,7 @@ export class LineCursor extends Marker {
     // Ensure the current node matches what's currently focused.
     const focused = getFocusManager().getFocusedNode();
     const block = this.getSourceBlockFromNode(focused);
-    if (!block || block.workspace === this.workspace) {
+    if (block && block.workspace === this.workspace) {
       // If the current focused node corresponds to a block then ensure that it
       // belongs to the correct workspace for this cursor.
       this.setCurNode(focused);

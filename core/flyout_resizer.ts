@@ -76,7 +76,17 @@ export class FlyoutResizer implements Blockly.IComponent {
       capabilities: []
     });
 
-    const initWidth = Number(localStorage.getItem(LocalStorageFlyoutWidthKey)) || minWidth;
+    let defaultWidth = window.innerWidth * 0.20;
+
+    if (this.maxWidth && defaultWidth > this.maxWidth) {
+      defaultWidth = this.maxWidth;
+    }
+
+    if (this.minWidth && defaultWidth < this.minWidth) {
+      defaultWidth = this.minWidth;
+    }
+
+    const initWidth = Number(localStorage.getItem(LocalStorageFlyoutWidthKey)) || defaultWidth;
     if (this.flyout_ instanceof Flyout) {
       this.flyout_.setWidth(initWidth);
       this.flyout_.setAutoClose(false);

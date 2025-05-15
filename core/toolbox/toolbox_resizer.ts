@@ -83,7 +83,17 @@ export class ToolboxResizer implements Blockly.IComponent {
       capabilities: []
     });
 
-    const initWidth = Number(localStorage.getItem(LocalStorageToolboxWidthKey)) || window.innerWidth * 0.20
+    let defaultWidth = window.innerWidth * 0.20;
+
+    if (this.maxWidth && defaultWidth > this.maxWidth) {
+      defaultWidth = this.maxWidth;
+    }
+
+    if (this.minWidth && defaultWidth < this.minWidth) {
+      defaultWidth = this.minWidth;
+    }
+
+    const initWidth = Number(localStorage.getItem(LocalStorageToolboxWidthKey)) || defaultWidth
     this.toolboxHtmlDiv.style.width = `${initWidth}px`;
 
     this.setToolboxSearchWidth();

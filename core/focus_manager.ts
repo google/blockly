@@ -547,6 +547,16 @@ export class FocusManager {
     dom.removeClass(element, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
   }
 
+  private recomputeSubtreeCssClasses(): void {
+    // Collect all focused elements.
+    const passiveElems = document.querySelectorAll(
+      FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
+    const activeElem = this.focusedNode?.getFocusableElement() ?? null;
+    const focusedElems = [...activeElem ? [activeElem] : [], ...passiveElems];
+
+    // For each element, collect all... TODO: finish.
+  }
+
   private static focusManager: FocusManager | null = null;
 
   /**

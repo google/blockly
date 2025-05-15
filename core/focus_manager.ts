@@ -56,40 +56,32 @@ export class FocusManager {
    */
   static readonly PASSIVE_FOCUS_NODE_CSS_CLASS_NAME = 'blocklyPassiveFocus';
 
-  focusedNode: IFocusableNode | null = null;
-  registeredTrees: Array<IFocusableTree> = [];
+  private focusedNode: IFocusableNode | null = null;
+  private previouslyFocusedNode: IFocusableNode | null = null;
+  private registeredTrees: Array<IFocusableTree> = [];
 
   private currentlyHoldsEphemeralFocus: boolean = false;
   private lockFocusStateChanges: boolean = false;
+  private recentlyLostAllFocus: boolean = false;
 
   constructor(
     addGlobalEventListener: (type: string, listener: EventListener) => void,
   ) {
-    // Register root document focus listeners for tracking when focus leaves all
-    // tracked focusable trees.
-    addGlobalEventListener('focusin', (event) => {
-      if (!(event instanceof FocusEvent)) return;
-
-      // The target that now has focus.
-      const activeElement = document.activeElement;
+    // Note that 'element' here is the element *gaining* focus.
+    const maybeFocus = (element: Element | EventTarget | null) => {
+      this.recentlyLostAllFocus = !element;
       let newNode: IFocusableNode | null | undefined = null;
-      if (
-        activeElement instanceof HTMLElement ||
-        activeElement instanceof SVGElement
-      ) {
-        // If the target losing focus maps to any tree, then it should be
-        // updated. Per the contract of findFocusableNodeFor only one tree
-        // should claim the element.
+      if (element instanceof HTMLElement || element instanceof SVGElement) {
+        // If the target losing or gaining focus maps to any tree, then it
+        // should be updated. Per the contract of findFocusableNodeFor only one
+        // tree should claim the element, so the search can be exited early.
         for (const tree of this.registeredTrees) {
-          newNode = FocusableTreeTraverser.findFocusableNodeFor(
-            activeElement,
-            tree,
-          );
+          newNode = FocusableTreeTraverser.findFocusableNodeFor(element, tree);
           if (newNode) break;
         }
       }
 
-      if (newNode) {
+      if (newNode && newNode.canBeFocused()) {
         const newTree = newNode.getFocusableTree();
         const oldTree = this.focusedNode?.getFocusableTree();
         if (newNode === newTree.getRootFocusableNode() && newTree !== oldTree) {
@@ -103,6 +95,26 @@ export class FocusManager {
       } else {
         this.defocusCurrentFocusedNode();
       }
+    };
+
+    // Register root document focus listeners for tracking when focus leaves all
+    // tracked focusable trees. Note that focusin and focusout can be somewhat
+    // overlapping in the information that they provide. This is fine because
+    // they both aim to check for focus changes on the element gaining or having
+    // received focus, and maybeFocus should behave relatively deterministic.
+    addGlobalEventListener('focusin', (event) => {
+      if (!(event instanceof FocusEvent)) return;
+
+      // When something receives focus, always use the current active element as
+      // the source of truth.
+      maybeFocus(document.activeElement);
+    });
+    addGlobalEventListener('focusout', (event) => {
+      if (!(event instanceof FocusEvent)) return;
+
+      // When something loses focus, it seems that document.activeElement may
+      // not necessarily be correct. Instead, use relatedTarget.
+      maybeFocus(event.relatedTarget);
     });
   }
 
@@ -155,7 +167,7 @@ export class FocusManager {
     const root = tree.getRootFocusableNode();
     if (focusedNode) this.removeHighlight(focusedNode);
     if (this.focusedNode === focusedNode || this.focusedNode === root) {
-      this.focusedNode = null;
+      this.updateFocusedNode(null);
     }
     this.removeHighlight(root);
   }
@@ -215,16 +227,25 @@ export class FocusManager {
   }
 
   /**
-   * Focuses DOM input on the selected node, and marks it as actively focused.
+   * Focuses DOM input on the specified node, and marks it as actively focused.
    *
    * Any previously focused node will be updated to be passively highlighted (if
    * it's in a different focusable tree) or blurred (if it's in the same one).
+   *
+   * **Important**: If the provided node is not able to be focused (e.g. its
+   * canBeFocused() method returns false), it will be ignored and any existing
+   * focus state will remain unchanged.
    *
    * @param focusableNode The node that should receive active focus.
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
     if (this.focusedNode === focusableNode) return; // State is unchanged.
+    if (!focusableNode.canBeFocused()) {
+      // This node can't be focused.
+      console.warn("Trying to focus a node that can't be focused.");
+      return;
+    }
 
     const nextTree = focusableNode.getFocusableTree();
     if (!this.isRegistered(nextTree)) {
@@ -232,17 +253,20 @@ export class FocusManager {
     }
 
     // Safety check for ensuring focusNode() doesn't get called for a node that
-    // isn't actually hooked up to its parent tree correctly (since this can
-    // cause weird inconsistencies).
+    // isn't actually hooked up to its parent tree correctly. This usually
+    // happens when calls to focusNode() interleave with asynchronous clean-up
+    // operations (which can happen due to ephemeral focus and in other cases).
+    // Fall back to a reasonable default since there's no valid node to focus.
     const matchedNode = FocusableTreeTraverser.findFocusableNodeFor(
       focusableNode.getFocusableElement(),
       nextTree,
     );
+    const prevNodeNextTree = FocusableTreeTraverser.findFocusedNode(nextTree);
+    let nodeToFocus = focusableNode;
     if (matchedNode !== focusableNode) {
-      throw Error(
-        `Attempting to focus node which isn't recognized by its parent tree: ` +
-          `${focusableNode}.`,
-      );
+      const nodeToRestore = nextTree.getRestoredFocusableNode(prevNodeNextTree);
+      const rootFallback = nextTree.getRootFocusableNode();
+      nodeToFocus = nodeToRestore ?? prevNodeNextTree ?? rootFallback;
     }
 
     const prevNode = this.focusedNode;
@@ -252,7 +276,6 @@ export class FocusManager {
     }
 
     // If there's a focused node in the new node's tree, ensure it's reset.
-    const prevNodeNextTree = FocusableTreeTraverser.findFocusedNode(nextTree);
     const nextTreeRoot = nextTree.getRootFocusableNode();
     if (prevNodeNextTree) {
       this.removeHighlight(prevNodeNextTree);
@@ -260,19 +283,19 @@ export class FocusManager {
     // For caution, ensure that the root is always reset since getFocusedNode()
     // is expected to return null if the root was highlighted, if the root is
     // not the node now being set to active.
-    if (nextTreeRoot !== focusableNode) {
+    if (nextTreeRoot !== nodeToFocus) {
       this.removeHighlight(nextTreeRoot);
     }
 
     if (!this.currentlyHoldsEphemeralFocus) {
       // Only change the actively focused node if ephemeral state isn't held.
-      this.activelyFocusNode(focusableNode, prevTree ?? null);
+      this.activelyFocusNode(nodeToFocus, prevTree ?? null);
     }
-    this.focusedNode = focusableNode;
+    this.updateFocusedNode(nodeToFocus);
   }
 
   /**
-   * Ephemerally captures focus for a selected element until the returned lambda
+   * Ephemerally captures focus for a specific element until the returned lambda
    * is called. This is expected to be especially useful for ephemeral UI flows
    * like dialogs.
    *
@@ -319,6 +342,22 @@ export class FocusManager {
 
       if (this.focusedNode) {
         this.activelyFocusNode(this.focusedNode, null);
+
+        // Even though focus was restored, check if it's lost again. It's
+        // possible for the browser to force focus away from all elements once
+        // the ephemeral element disappears. This ensures focus is restored.
+        const capturedNode = this.focusedNode;
+        setTimeout(() => {
+          // These checks are set up to minimize the risk that a legitimate
+          // focus change occurred within the delay that this would override.
+          if (
+            !this.focusedNode &&
+            this.previouslyFocusedNode === capturedNode &&
+            this.recentlyLostAllFocus
+          ) {
+            this.focusNode(capturedNode);
+          }
+        }, 0);
       }
     };
   }
@@ -340,6 +379,17 @@ export class FocusManager {
   }
 
   /**
+   * Updates the internally tracked focused node to the specified node, or null
+   * if focus is being lost. This also updates previous focus tracking.
+   *
+   * @param newFocusedNode The new node to set as focused.
+   */
+  private updateFocusedNode(newFocusedNode: IFocusableNode | null) {
+    this.previouslyFocusedNode = this.focusedNode;
+    this.focusedNode = newFocusedNode;
+  }
+
+  /**
    * Defocuses the current actively focused node tracked by the manager, iff
    * there's a node being tracked and the manager doesn't have ephemeral focus.
    */
@@ -349,14 +399,14 @@ export class FocusManager {
     // restored upon exiting ephemeral focus mode.
     if (this.focusedNode && !this.currentlyHoldsEphemeralFocus) {
       this.passivelyFocusNode(this.focusedNode, null);
-      this.focusedNode = null;
+      this.updateFocusedNode(null);
     }
   }
 
   /**
-   * Marks the specified node as actively focused, also calling related lifecycle
-   * callback methods for both the node and its parent tree. This ensures that
-   * the node is properly styled to indicate its active focus.
+   * Marks the specified node as actively focused, also calling related
+   * lifecycle callback methods for both the node and its parent tree. This
+   * ensures that the node is properly styled to indicate its active focus.
    *
    * This does not change the manager's currently tracked node, nor does it
    * change any other nodes.
@@ -406,6 +456,7 @@ export class FocusManager {
     }
     node.onNodeBlur();
     this.lockFocusStateChanges = false;
+
     if (node.getFocusableTree() !== nextTree) {
       this.setNodeToVisualPassiveFocus(node);
     }
@@ -446,19 +497,24 @@ export class FocusManager {
     dom.removeClass(element, FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME);
     dom.removeClass(element, FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
   }
+
+  private static focusManager: FocusManager | null = null;
+
+  /**
+   * Returns the page-global FocusManager.
+   *
+   * The returned instance is guaranteed to not change across function calls,
+   * but may change across page loads.
+   */
+  static getFocusManager(): FocusManager {
+    if (!FocusManager.focusManager) {
+      FocusManager.focusManager = new FocusManager(document.addEventListener);
+    }
+    return FocusManager.focusManager;
+  }
 }
 
-let focusManager: FocusManager | null = null;
-
-/**
- * Returns the page-global FocusManager.
- *
- * The returned instance is guaranteed to not change across function calls, but
- * may change across page loads.
- */
+/** Convenience function for FocusManager.getFocusManager. */
 export function getFocusManager(): FocusManager {
-  if (!focusManager) {
-    focusManager = new FocusManager(document.addEventListener);
-  }
-  return focusManager;
+  return FocusManager.getFocusManager();
 }

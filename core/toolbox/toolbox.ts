@@ -13,7 +13,6 @@
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import {BlockSvg} from '../block_svg.js';
-import type {BlocklyOptions} from '../blockly_options.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {ComponentManager} from '../component_manager.js';
@@ -36,7 +35,6 @@ import {isSelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.j
 import type {IStyleable} from '../interfaces/i_styleable.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
-import {Options} from '../options.js';
 import * as registry from '../registry.js';
 import type {KeyboardShortcut} from '../shortcut_registry.js';
 import * as Touch from '../touch.js';
@@ -334,18 +332,7 @@ export class Toolbox
    */
   protected createFlyout_(): IFlyout {
     const workspace = this.workspace_;
-    // TODO (#4247): Look into adding a makeFlyout method to Blockly Options.
-    const workspaceOptions = new Options({
-      'parentWorkspace': workspace,
-      'rtl': workspace.RTL,
-      'oneBasedIndex': workspace.options.oneBasedIndex,
-      'horizontalLayout': workspace.horizontalLayout,
-      'renderer': workspace.options.renderer,
-      'rendererOverrides': workspace.options.rendererOverrides,
-      'move': {
-        'scrollbars': true,
-      },
-    } as BlocklyOptions);
+    const workspaceOptions = workspace.copyOptionsForFlyout();
     // Options takes in either 'end' or 'start'. This has already been parsed to
     // be either 0 or 1, so set it after.
     workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
@@ -1107,6 +1094,11 @@ export class Toolbox
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
 
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {

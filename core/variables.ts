@@ -31,8 +31,9 @@ export const CATEGORY_NAME = 'VARIABLE';
 /**
  * Find all user-created variables that are in use in the workspace.
  * For use by generators.
+ *
  * To get a list of all variables on a workspace, including unused variables,
- * call Workspace.getAllVariables.
+ * call getAllVariables.
  *
  * @param ws The workspace to search for variables.
  * @returns Array of variable models.
@@ -61,6 +62,7 @@ export function allUsedVarModels(
 
 /**
  * Find all developer variables used by blocks in the workspace.
+ *
  * Developer variables are never shown to the user, but are declared as global
  * variables in the generated code.
  * To declare developer variables, define the getDeveloperVariables function on
@@ -146,7 +148,7 @@ export function flyoutCategory(
     },
     ...jsonFlyoutCategoryBlocks(
       workspace,
-      workspace.getVariablesOfType(''),
+      workspace.getVariableMap().getVariablesOfType(''),
       true,
     ),
   ];
@@ -268,7 +270,7 @@ function xmlFlyoutCategory(workspace: WorkspaceSvg): Element[] {
  * @returns Array of XML block elements.
  */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
-  const variableModelList = workspace.getVariablesOfType('');
+  const variableModelList = workspace.getVariableMap().getVariablesOfType('');
 
   const xmlList = [];
   if (variableModelList.length > 0) {
@@ -332,7 +334,10 @@ export function generateUniqueName(workspace: Workspace): string {
 function generateUniqueNameInternal(workspace: Workspace): string {
   return generateUniqueNameFromOptions(
     VAR_LETTER_OPTIONS.charAt(0),
-    workspace.getAllVariableNames(),
+    workspace
+      .getVariableMap()
+      .getAllVariables()
+      .map((v) => v.getName()),
   );
 }
 
@@ -415,7 +420,7 @@ export function createVariableButtonHandler(
       const existing = nameUsedWithAnyType(text, workspace);
       if (!existing) {
         // No conflict
-        workspace.createVariable(text, type);
+        workspace.getVariableMap().createVariable(text, type);
         if (opt_callback) opt_callback(text);
         return;
       }
@@ -478,7 +483,7 @@ export function renameVariable(
       );
       if (!existing && !procedure) {
         // No conflict.
-        workspace.renameVariableById(variable.getId(), newName);
+        workspace.getVariableMap().renameVariable(variable, newName);
         if (opt_callback) opt_callback(newName);
         return;
       }
@@ -762,6 +767,7 @@ function createVariable(
   opt_name?: string,
   opt_type?: string,
 ): IVariableModel<IVariableState> {
+  const variableMap = workspace.getVariableMap();
   const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
@@ -781,7 +787,7 @@ function createVariable(
     );
   } else {
     // In the main workspace, create a real variable.
-    variable = workspace.createVariable(opt_name, opt_type, id);
+    variable = variableMap.createVariable(opt_name, opt_type, id);
   }
   return variable;
 }

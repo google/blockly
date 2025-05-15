@@ -27,6 +27,7 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import * as aria from './utils/aria.js';
@@ -99,6 +100,26 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * are not. Editable fields should also be serializable.
    */
   override SERIALIZABLE = true;
+
+  /**
+   * Sets the size of this field. Although this appears to be a no-op, it must
+   * exist since the getter is overridden below.
+   */
+  protected override set size_(newValue: Size) {
+    super.size_ = newValue;
+  }
+
+  /**
+   * Returns the size of this field, with a minimum width of 14.
+   */
+  protected override get size_() {
+    const s = super.size_;
+    if (s.width < 14) {
+      s.width = 14;
+    }
+
+    return s;
+  }
 
   /**
    * @param value The initial value of the field. Should cast to a string.
@@ -331,8 +352,16 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     undefined if triggered programmatically.
    * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
+   * @param manageEphemeralFocus Whether ephemeral focus should be managed as
+   *     part of the editor's inline editor (when the inline editor is shown).
+   *     Callers must manage ephemeral focus themselves if this is false.
+   *     Defaults to true.
    */
-  protected override showEditor_(_e?: Event, quietInput = false) {
+  protected override showEditor_(
+    _e?: Event,
+    quietInput = false,
+    manageEphemeralFocus: boolean = true,
+  ) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     if (
       !quietInput &&
@@ -341,7 +370,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     ) {
       this.showPromptEditor();
     } else {
-      this.showInlineEditor(quietInput);
+      this.showInlineEditor(quietInput, manageEphemeralFocus);
     }
   }
 
@@ -368,8 +397,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Create and show a text input editor that sits directly over the text input.
    *
    * @param quietInput True if editor should be created without focus.
+   * @param manageEphemeralFocus Whether ephemeral focus should be managed as
+   *     part of the field's inline editor (widget div).
    */
-  private showInlineEditor(quietInput: boolean) {
+  private showInlineEditor(quietInput: boolean, manageEphemeralFocus: boolean) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -379,6 +410,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       block.RTL,
       this.widgetDispose_.bind(this),
       this.workspace_,
+      manageEphemeralFocus,
     );
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
@@ -562,6 +594,28 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       );
       WidgetDiv.hideIfOwner(this);
       dropDownDiv.hideWithoutAnimation();
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const cursor = this.workspace_?.getCursor();
+
+      const isValidDestination = (node: IFocusableNode | null) =>
+        (node instanceof FieldInput ||
+          (node instanceof BlockSvg && node.isSimpleReporter())) &&
+        node !== this.getSourceBlock();
+
+      let target = e.shiftKey
+        ? cursor?.getPreviousNode(this, isValidDestination, false)
+        : cursor?.getNextNode(this, isValidDestination, false);
+      target =
+        target instanceof BlockSvg && target.isSimpleReporter()
+          ? target.getFields().next().value
+          : target;
+
+      if (target instanceof FieldInput) {
+        WidgetDiv.hideIfOwner(this);
+        dropDownDiv.hideWithoutAnimation();
+        target.showEditor();
+      }
     }
   }
 

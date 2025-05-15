@@ -20,13 +20,14 @@ import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
+import {FlyoutNavigator} from './flyout_navigator.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
 import {getFocusManager} from './focus_manager.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import {IFocusableNode} from './interfaces/i_focusable_node.js';
-import {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {Options} from './options.js';
 import * as registry from './registry.js';
 import * as renderManagement from './render_management.js';
@@ -243,6 +244,7 @@ export abstract class Flyout
     this.workspace_.internalIsFlyout = true;
     // Keep the workspace visibility consistent with the flyout's visibility.
     this.workspace_.setVisible(this.visible);
+    this.workspace_.setNavigator(new FlyoutNavigator(this));
 
     /**
      * The unique id for this component that is used to register with the
@@ -697,7 +699,6 @@ export abstract class Flyout
                 this.horizontalLayout ? SeparatorAxis.X : SeparatorAxis.Y,
               ),
               SEPARATOR_TYPE,
-              false,
             ),
           );
         }
@@ -988,6 +989,11 @@ export abstract class Flyout
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;
@@ -1025,7 +1031,7 @@ export abstract class Flyout
     // not close the flyout. For anything else, do close it since the flyout is
     // no longer focused.
     if (toolbox && nextTree === toolbox) return;
-    if (nextTree == this.workspace_) return;
+    if (nextTree === this.workspace_) return;
     if (toolbox) toolbox.clearSelection();
     this.autoHide(false);
   }

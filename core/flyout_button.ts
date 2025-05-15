@@ -11,11 +11,13 @@
  */
 // Former goog.module ID: Blockly.FlyoutButton
 
-import type {IASTNodeLocationSvg} from './blockly.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IRenderedElement} from './interfaces/i_rendered_element.js';
+import {idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -29,7 +31,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a button or label in the flyout.
  */
 export class FlyoutButton
-  implements IASTNodeLocationSvg, IBoundedElement, IRenderedElement
+  implements IBoundedElement, IRenderedElement, IFocusableNode
 {
   /** The horizontal margin around the text in the button. */
   static TEXT_MARGIN_X = 5;
@@ -68,6 +70,9 @@ export class FlyoutButton
    */
   cursorSvg: SVGElement | null = null;
 
+  /** The unique ID for this FlyoutButton. */
+  private id: string;
+
   /**
    * @param workspace The workspace in which to place this button.
    * @param targetWorkspace The flyout's target workspace.
@@ -105,9 +110,10 @@ export class FlyoutButton
       cssClass += ' ' + this.cssClass;
     }
 
+    this.id = idGenerator.getNextUniqueId();
     this.svgGroup = dom.createSvgElement(
       Svg.G,
-      {'class': cssClass},
+      {'id': this.id, 'class': cssClass, 'tabindex': '-1'},
       this.workspace.getCanvas(),
     );
 
@@ -336,15 +342,6 @@ export class FlyoutButton
   }
 
   /**
-   * Required by IASTNodeLocationSvg, but not used. A marker cannot be set on a
-   * button. If the 'mark' shortcut is used on a button, its associated callback
-   * function is triggered.
-   */
-  setMarkerSvg() {
-    throw new Error('Attempted to set a marker on a button.');
-  }
-
-  /**
    * Do something when the button is clicked.
    *
    * @param e Pointer up event.
@@ -388,6 +385,27 @@ export class FlyoutButton
    */
   getSvgRoot() {
     return this.svgGroup;
+  }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    return this.svgGroup;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    return this.workspace;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
   }
 }
 

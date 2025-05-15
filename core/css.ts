@@ -490,41 +490,17 @@ input[type=number] {
   cursor: grabbing;
 }
 
-.blocklyActiveFocus:is(.blocklyField,.blocklyPath,.blocklyHighlightedConnectionPath) {
-  stroke: #ffa200;
-  stroke-width: 3px;
+.blocklyActiveFocus:is(
+  .blocklyFlyout,
+  .blocklyWorkspace,
+  .blocklyField,
+  .blocklyPath,
+  .blocklyHighlightedConnectionPath,
+  .blocklyComment,
+  .blocklyBubble,
+  .blocklyIconGroup,
+  .blocklyTextarea
+) {
   outline-width: 0px;
-}
-.blocklyActiveFocus > .blocklyFlyoutBackground, .blocklyActiveFocus > .blocklyMainBackground {
-  stroke: #ffa200;
-  stroke-width: 3px;
-}
-.blocklyActiveFocus:is(.blocklyFlyout,.blocklyWorkspace) {
-  outline-width: 0px;
-}
-.blocklyActiveFocus:is(.blocklyToolbox,.blocklyToolboxCategoryContainer) {
-  outline: 3px solid #ffa200;
-}
-
-.blocklyPassiveFocus:is(.blocklyField,.blocklyPath,.blocklyHighlightedConnectionPath) {
-  stroke: #ffa200;
-  stroke-dasharray: 5px 3px;
-  stroke-width: 3px;
-}
-.blocklyPassiveFocus > .blocklyFlyoutBackground, .blocklyPassiveFocus > .blocklyMainBackground {
-  stroke: #ffa200;
-  stroke-dasharray: 5px 3px;
-  stroke-width: 3px;
-}
-.blocklyPassiveFocus:is(.blocklyToolbox,.blocklyToolboxCategoryContainer) {
-  border: 3px dashed #ffa200;
-}
-
-.blocklySelected:is(.blocklyPath) {
-  stroke: #ffa200;
-  stroke-width: 5;
-}
-.blocklySelected>.blocklyPathLight {
-  display: none;
 }
 `;

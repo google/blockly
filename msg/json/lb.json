@@ -55,7 +55,7 @@
 	"CONTROLS_REPEAT_INPUT_DO": "maach",
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "Widderhuel soulaang",
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "widderhuele bis",
-	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Féiert d'Uweisungen aus, soulaang wéi de Wäert richteg ass",
+	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Féiert d'Uweisungen aus, soulaang wéi de Wäert wouer ass.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Féiert d'Uweisungen aus, soulaang wéi de Wäert falsch ass.",
 	"CONTROLS_FOR_TITLE": "zielt mat %1 vun %2 bis %3 mat %4",
 	"CONTROLS_FOREACH_TITLE": "fir all Element %1 an der Lëscht %2",

@@ -24,18 +24,6 @@ export class PathObject implements IPathObject {
   svgRoot: SVGElement;
   svgPath: SVGElement;
 
-  /**
-   * Holds the cursors svg element when the cursor is attached to the block.
-   * This is null if there is no cursor on the block.
-   */
-  cursorSvg: SVGElement | null = null;
-
-  /**
-   * Holds the markers svg element when the marker is attached to the block.
-   * This is null if there is no marker on the block.
-   */
-  markerSvg: SVGElement | null = null;
-
   constants: ConstantProvider;
   style: BlockStyle;
 
@@ -84,42 +72,6 @@ export class PathObject implements IPathObject {
   flipRTL() {
     // Mirror the block's path.
     this.svgPath.setAttribute('transform', 'scale(-1 1)');
-  }
-
-  /**
-   * Add the cursor SVG to this block's SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the block SVG
-   *     group.
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
-    this.svgRoot.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
-  }
-
-  /**
-   * Add the marker SVG to this block's SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the block SVG
-   *     group.
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (this.cursorSvg) {
-      this.svgRoot.insertBefore(markerSvg, this.cursorSvg);
-    } else {
-      this.svgRoot.appendChild(markerSvg);
-    }
-    this.markerSvg = markerSvg;
   }
 
   /**
@@ -273,13 +225,16 @@ export class PathObject implements IPathObject {
     offset: Coordinate,
     rtl: boolean,
   ): SVGElement {
+    const transformation =
+      `translate(${offset.x}, ${offset.y})` + (rtl ? ' scale(-1 1)' : '');
+
     const previousHighlight = this.connectionHighlights.get(connection);
     if (previousHighlight) {
-      // TODO: Fix the highlight seemingly being recreated every time it's focused.
-      // if (this.currentHighlightMatchesNew(connection, connectionPath, offset)) {
+      // Since a connection already exists, make sure that its path and
+      // transform are correct.
+      previousHighlight.setAttribute('d', connectionPath);
+      previousHighlight.setAttribute('transform', transformation);
       return previousHighlight;
-      // }
-      // this.removeConnectionHighlight(connection);
     }
 
     const highlight = dom.createSvgElement(
@@ -287,11 +242,10 @@ export class PathObject implements IPathObject {
       {
         'id': connection.id,
         'class': 'blocklyHighlightedConnectionPath',
-        // 'style': 'display: none;',
+        'style': 'display: none;',
         'tabindex': '-1',
         'd': connectionPath,
-        'transform':
-          `translate(${offset.x}, ${offset.y})` + (rtl ? ' scale(-1 1)' : ''),
+        'transform': transformation,
       },
       this.svgRoot,
     );
@@ -299,18 +253,6 @@ export class PathObject implements IPathObject {
     (highlight as any).renderedConnection = connection;
     this.connectionHighlights.set(connection, highlight);
     return highlight;
-  }
-
-  private currentHighlightMatchesNew(
-    connection: RenderedConnection,
-    newPath: string,
-    newOffset: Coordinate,
-  ): boolean {
-    const currPath = this.connectionHighlights
-      .get(connection)
-      ?.getAttribute('d');
-    const currOffset = this.highlightOffsets.get(connection);
-    return currPath === newPath && Coordinate.equals(currOffset, newOffset);
   }
 
   /**

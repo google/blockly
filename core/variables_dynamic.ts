@@ -148,7 +148,7 @@ export function flyoutCategory(
     },
     ...Variables.jsonFlyoutCategoryBlocks(
       workspace,
-      workspace.getAllVariables(),
+      workspace.getVariableMap().getAllVariables(),
       false,
       'variables_get_dynamic',
       'variables_set_dynamic',
@@ -203,7 +203,7 @@ function xmlFlyoutCategory(workspace: WorkspaceSvg): Element[] {
  * @returns Array of XML block elements.
  */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
-  const variableModelList = workspace.getAllVariables();
+  const variableModelList = workspace.getVariableMap().getAllVariables();
 
   const xmlList = [];
   if (variableModelList.length > 0) {

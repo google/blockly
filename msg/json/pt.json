@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Athena in Wonderland",
+			"B3rnas",
 			"Diniscoelho",
 			"Fúlvio",
 			"Hamilton Abreu",
@@ -332,6 +333,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "faz algo",
 	"PROCEDURES_BEFORE_PARAMS": "com:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "com:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Não é possível executar a função definida pelo usuário '%1' porque o bloco de definição está desabilitado.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Cria uma função que não tem retorno.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Descreva esta função...",
 	"PROCEDURES_DEFRETURN_RETURN": "retorna",

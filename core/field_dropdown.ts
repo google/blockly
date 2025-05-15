@@ -129,26 +129,11 @@ export class FieldDropdown extends Field<string> {
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
     if (menuGenerator === Field.SKIP_SETUP) return;
 
-    if (Array.isArray(menuGenerator)) {
-      this.validateOptions(menuGenerator);
-      const trimmed = this.trimOptions(menuGenerator);
-      this.menuGenerator_ = trimmed.options;
-      this.prefixField = trimmed.prefix || null;
-      this.suffixField = trimmed.suffix || null;
-    } else {
-      this.menuGenerator_ = menuGenerator;
-    }
-
-    /**
-     * The currently selected option. The field is initialized with the
-     * first option selected.
-     */
-    this.selectedOption = this.getOptions(false)[0];
+    this.setOptions(menuGenerator);
 
     if (config) {
       this.configure_(config);
     }
-    this.setValue(this.selectedOption[1]);
     if (validator) {
       this.setValidator(validator);
     }
@@ -418,6 +403,28 @@ export class FieldDropdown extends Field<string> {
   }
 
   /**
+   * Update the options on this dropdown. This will reset the selected item to
+   * the first item in the list.
+   *
+   * @param menuGenerator The array of options or a generator function.
+   */
+  setOptions(menuGenerator: MenuGenerator) {
+    if (Array.isArray(menuGenerator)) {
+      this.validateOptions(menuGenerator);
+      const trimmed = this.trimOptions(menuGenerator);
+      this.menuGenerator_ = trimmed.options;
+      this.prefixField = trimmed.prefix || null;
+      this.suffixField = trimmed.suffix || null;
+    } else {
+      this.menuGenerator_ = menuGenerator;
+    }
+    // The currently selected option. The field is initialized with the
+    // first option selected.
+    this.selectedOption = this.getOptions(false)[0];
+    this.setValue(this.selectedOption[1]);
+  }
+
+  /**
    * Ensure that the input value is a valid language-neutral option.
    *
    * @param newValue The input value.
@@ -626,7 +633,13 @@ export class FieldDropdown extends Field<string> {
   /**
    * Use the `getText_` developer hook to override the field's text
    * representation.  Get the selected option text.  If the selected option is
-   * an image we return the image alt text.
+   * an image we return the image alt text. If the selected option is
+   * an HTMLElement, return the title, ariaLabel, or innerText of the
+   * element.
+   *
+   * If you use HTMLElement options in Node.js and call this function,
+   * ensure that you are supplying an implementation of HTMLElement,
+   * such as through jsdom-global.
    *
    * @returns Selected option text.
    */
@@ -637,10 +650,21 @@ export class FieldDropdown extends Field<string> {
     const option = this.selectedOption[0];
     if (isImageProperties(option)) {
       return option.alt;
-    } else if (option instanceof HTMLElement) {
+    } else if (
+      typeof HTMLElement !== 'undefined' &&
+      option instanceof HTMLElement
+    ) {
       return option.title ?? option.ariaLabel ?? option.innerText;
+    } else if (typeof option === 'string') {
+      return option;
     }
-    return option;
+
+    console.warn(
+      "Can't get text for existing dropdown option. If " +
+        "you're using HTMLElement dropdown options in node, ensure you're " +
+        'using jsdom-global or similar.',
+    );
+    return null;
   }
 
   /**
@@ -776,7 +800,9 @@ export class FieldDropdown extends Field<string> {
         option[0] &&
         typeof option[0] !== 'string' &&
         !isImageProperties(option[0]) &&
-        !(option[0] instanceof HTMLElement)
+        !(
+          typeof HTMLElement !== 'undefined' && option[0] instanceof HTMLElement
+        )
       ) {
         foundError = true;
         console.error(

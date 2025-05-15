@@ -115,10 +115,12 @@ export class VarRename extends VarBase {
           'the constructor, or call fromJson',
       );
     }
+    const variableMap = workspace.getVariableMap();
+    const variable = variableMap.getVariableById(this.varId);
     if (forward) {
-      workspace.renameVariableById(this.varId, this.newName);
+      if (variable) variableMap.renameVariable(variable, this.newName);
     } else {
-      workspace.renameVariableById(this.varId, this.oldName);
+      if (variable) variableMap.renameVariable(variable, this.oldName);
     }
   }
 }

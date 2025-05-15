@@ -32,7 +32,6 @@ import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
 import * as Variables from './variables.js';
-import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**
@@ -50,7 +49,6 @@ export class FieldVariable extends FieldDropdown {
    * dropdown.
    */
   variableTypes: string[] | null = [];
-  protected override size_: Size;
 
   /** The variable model associated with this field. */
   private variable: IVariableModel<IVariableState> | null = null;
@@ -523,9 +521,6 @@ export class FieldVariable extends FieldDropdown {
         // Delete variable.
         const workspace = this.variable.getWorkspace();
         Variables.deleteVariable(workspace, this.variable, this.sourceBlock_);
-        if (workspace instanceof WorkspaceSvg) {
-          workspace.refreshToolboxSelection();
-        }
         return;
       }
     }
@@ -586,7 +581,9 @@ export class FieldVariable extends FieldDropdown {
       // doesn't modify the workspace's list.
       for (let i = 0; i < variableTypes.length; i++) {
         const variableType = variableTypes[i];
-        const variables = workspace.getVariablesOfType(variableType);
+        const variables = workspace
+          .getVariableMap()
+          .getVariablesOfType(variableType);
         variableModelList = variableModelList.concat(variables);
         if (workspace.isFlyout) {
           variableModelList = variableModelList.concat(

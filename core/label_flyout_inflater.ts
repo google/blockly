@@ -32,7 +32,7 @@ export class LabelFlyoutInflater implements IFlyoutInflater {
     );
     label.show();
 
-    return new FlyoutItem(label, LABEL_TYPE, true);
+    return new FlyoutItem(label, LABEL_TYPE);
   }
 
   /**

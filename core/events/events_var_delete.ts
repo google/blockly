@@ -106,10 +106,12 @@ export class VarDelete extends VarBase {
           'the constructor, or call fromJson',
       );
     }
+    const variableMap = workspace.getVariableMap();
     if (forward) {
-      workspace.deleteVariableById(this.varId);
+      const variable = variableMap.getVariableById(this.varId);
+      if (variable) variableMap.deleteVariable(variable);
     } else {
-      workspace.createVariable(this.varName, this.varType, this.varId);
+      variableMap.createVariable(this.varName, this.varType, this.varId);
     }
   }
 }

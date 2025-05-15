@@ -34,11 +34,11 @@ import type {BlockMove} from './events/events_block_move.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {FieldLabel} from './field_label.js';
+import {getFocusManager} from './focus_manager.js';
 import {IconType} from './icons/icon_types.js';
 import {MutatorIcon} from './icons/mutator_icon.js';
 import {WarningIcon} from './icons/warning_icon.js';
 import type {Input} from './inputs/input.js';
-import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
@@ -48,7 +48,6 @@ import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {IIcon} from './interfaces/i_icon.js';
 import * as internalConstants from './internal_constants.js';
-import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
 import {RenderedConnection} from './rendered_connection.js';
@@ -56,8 +55,8 @@ import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
+import {idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
@@ -73,7 +72,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 export class BlockSvg
   extends Block
   implements
-    IASTNodeLocationSvg,
     IBoundedElement,
     IContextMenu,
     ICopyable<BlockCopyData>,
@@ -213,7 +211,9 @@ export class BlockSvg
 
     // Expose this block's ID on its top-level SVG group.
     this.svgGroup.setAttribute('data-id', this.id);
-    svgPath.id = this.id;
+
+    // The page-wide unique ID of this Block used for focusing.
+    svgPath.id = idGenerator.getNextUniqueId();
     svgPath.setAttribute(
       'aria-label',
       this.type ? '"' + this.type + '" block' : 'Block',
@@ -268,20 +268,14 @@ export class BlockSvg
 
   /** Selects this block. Highlights the block visually. */
   select() {
-    if (this.isShadow()) {
-      this.getParent()?.select();
-      return;
-    }
     this.addSelect();
+    common.fireSelectedEvent(this);
   }
 
   /** Unselects this block. Unhighlights the block visually. */
   unselect() {
-    if (this.isShadow()) {
-      this.getParent()?.unselect();
-      return;
-    }
     this.removeSelect();
+    common.fireSelectedEvent(null);
   }
 
   /**
@@ -313,14 +307,22 @@ export class BlockSvg
       (newParent as BlockSvg).getSvgRoot().appendChild(svgRoot);
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
-      // root of the workspace.
-      const draggingBlock = this.workspace
+      // root of the workspace.  Try to insert it before any top-level
+      // block being dragged, but note that blocks can have the
+      // blocklyDragging class even if they're not top blocks (especially
+      // at start and end of a drag).
+      const draggingBlockElement = this.workspace
         .getCanvas()
         .querySelector('.blocklyDragging');
-      if (draggingBlock) {
-        this.workspace.getCanvas().insertBefore(svgRoot, draggingBlock);
+      const draggingParentElement = draggingBlockElement?.parentElement as
+        | SVGElement
+        | null
+        | undefined;
+      const canvas = this.workspace.getCanvas();
+      if (draggingParentElement === canvas) {
+        canvas.insertBefore(svgRoot, draggingBlockElement);
       } else {
-        this.workspace.getCanvas().appendChild(svgRoot);
+        canvas.appendChild(svgRoot);
       }
       this.translate(oldXY.x, oldXY.y);
     }
@@ -518,6 +520,21 @@ export class BlockSvg
   }
 
   /**
+   * Traverses child blocks to see if any of them have a warning.
+   *
+   * @returns true if any child has a warning, false otherwise.
+   */
+  private childHasWarning(): boolean {
+    const children = this.getChildren(false);
+    for (const child of children) {
+      if (child.getIcon(WarningIcon.TYPE) || child.childHasWarning()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Makes sure that when the block is collapsed, it is rendered correctly
    * for that state.
    */
@@ -540,10 +557,17 @@ export class BlockSvg
       this.updateDisabled();
       this.removeInput(collapsedInputName);
       dom.removeClass(this.svgGroup, 'blocklyCollapsed');
+      this.setWarningText(null, BlockSvg.COLLAPSED_WARNING_ID);
       return;
     }
 
     dom.addClass(this.svgGroup, 'blocklyCollapsed');
+    if (this.childHasWarning()) {
+      this.setWarningText(
+        Msg['COLLAPSED_WARNINGS_WARNING'],
+        BlockSvg.COLLAPSED_WARNING_ID,
+      );
+    }
 
     const text = this.toString(internalConstants.COLLAPSE_CHARS);
     const field = this.getField(collapsedFieldName);
@@ -834,25 +858,6 @@ export class BlockSvg
       blockAnimations.disposeUiEffect(this);
     }
 
-    // Selecting a shadow block highlights an ancestor block, but that highlight
-    // should be removed if the shadow block will be deleted. So, before
-    // deleting blocks and severing the connections between them, check whether
-    // doing so would delete a selected block and make sure that any associated
-    // parent is updated.
-    const selection = common.getSelected();
-    if (selection instanceof Block) {
-      let selectionAncestor: Block | null = selection;
-      while (selectionAncestor !== null) {
-        if (selectionAncestor === this) {
-          // The block to be deleted contains the selected block, so remove any
-          // selection highlight associated with the selected block before
-          // deleting them.
-          selection.unselect();
-        }
-        selectionAncestor = selectionAncestor.getParent();
-      }
-    }
-
     super.dispose(!!healStack);
     dom.removeNode(this.svgGroup);
   }
@@ -865,8 +870,7 @@ export class BlockSvg
     this.disposing = true;
     super.disposeInternal();
 
-    if (common.getSelected() === this) {
-      this.unselect();
+    if (getFocusManager().getFocusedNode() === this) {
       this.workspace.cancelCurrentGesture();
     }
 
@@ -1079,30 +1083,6 @@ export class BlockSvg
   }
 
   /**
-   * @deprecated v11 - Set whether the block is manually enabled or disabled.
-   * The user can toggle whether a block is disabled from a context menu
-   * option. A block may still be disabled for other reasons even if the user
-   * attempts to manually enable it, such as when the block is in an invalid
-   * location. This method is deprecated and setDisabledReason should be used
-   * instead.
-   *
-   * @param enabled True if enabled.
-   */
-  override setEnabled(enabled: boolean) {
-    deprecation.warn(
-      'setEnabled',
-      'v11',
-      'v12',
-      'the setDisabledReason method of BlockSvg',
-    );
-    const wasEnabled = this.isEnabled();
-    super.setEnabled(enabled);
-    if (this.isEnabled() !== wasEnabled && !this.getInheritedDisabled()) {
-      this.updateDisabled();
-    }
-  }
-
-  /**
    * Add or remove a reason why the block might be disabled. If a block has
    * any reasons to be disabled, then the block itself will be considered
    * disabled. A block could be disabled for multiple independent reasons
@@ -1262,6 +1242,7 @@ export class BlockSvg
    *     adjusting its parents.
    */
   bringToFront(blockOnly = false) {
+    const previouslyFocused = getFocusManager().getFocusedNode();
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this | null = this;
     if (block.isDeadOrDying()) {
@@ -1278,6 +1259,13 @@ export class BlockSvg
       if (blockOnly) break;
       block = block.getParent();
     } while (block);
+    if (previouslyFocused) {
+      // Bringing a block to the front of the stack doesn't fundamentally change
+      // the logical structure of the page, but it does change element ordering
+      // which can take automatically take away focus from a node. Ensure focus
+      // is restored to avoid a discontinuity.
+      getFocusManager().focusNode(previouslyFocused);
+    }
   }
 
   /**
@@ -1640,7 +1628,6 @@ export class BlockSvg
     this.tightenChildrenEfficiently();
 
     dom.stopTextWidthCache();
-    this.updateMarkers_();
   }
 
   /**
@@ -1658,44 +1645,6 @@ export class BlockSvg
       if (conn) conn.tightenEfficiently();
     }
     if (this.nextConnection) this.nextConnection.tightenEfficiently();
-  }
-
-  /** Redraw any attached marker or cursor svgs if needed. */
-  protected updateMarkers_() {
-    if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
-      this.workspace.getCursor()!.draw();
-    }
-    if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
-      // TODO(#4592): Update all markers on the block.
-      this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
-    for (const input of this.inputList) {
-      for (const field of input.fieldRow) {
-        field.updateMarkers_();
-      }
-    }
-  }
-
-  /**
-   * Add the cursor SVG to this block's SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the block SVG
-   *     group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    this.pathObject.setCursorSvg(cursorSvg);
-  }
-
-  /**
-   * Add the marker SVG to this block's SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the block SVG
-   *     group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    this.pathObject.setMarkerSvg(markerSvg);
   }
 
   /**
@@ -1840,13 +1789,16 @@ export class BlockSvg
 
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
-    common.setSelected(this);
+    this.select();
   }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
-    if (common.getSelected() === this) {
-      common.setSelected(null);
-    }
+    this.unselect();
+  }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
   }
 }

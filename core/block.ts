@@ -40,7 +40,6 @@ import {EndRowInput} from './inputs/end_row_input.js';
 import {Input} from './inputs/input.js';
 import {StatementInput} from './inputs/statement_input.js';
 import {ValueInput} from './inputs/value_input.js';
-import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import {isCommentIcon} from './interfaces/i_comment_icon.js';
 import {type IIcon} from './interfaces/i_icon.js';
 import type {
@@ -51,7 +50,6 @@ import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
@@ -61,7 +59,7 @@ import type {Workspace} from './workspace.js';
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  */
-export class Block implements IASTNodeLocation {
+export class Block {
   /**
    * An optional callback method to use whenever the block's parent workspace
    * changes. This is usually only called from the constructor, the block type
@@ -1409,47 +1407,6 @@ export class Block implements IASTNodeLocation {
    */
   isEnabled(): boolean {
     return this.disabledReasons.size === 0;
-  }
-
-  /** @deprecated v11 - Get or sets whether the block is manually disabled. */
-  private get disabled(): boolean {
-    deprecation.warn(
-      'disabled',
-      'v11',
-      'v12',
-      'the isEnabled or hasDisabledReason methods of Block',
-    );
-    return this.hasDisabledReason(constants.MANUALLY_DISABLED);
-  }
-
-  private set disabled(value: boolean) {
-    deprecation.warn(
-      'disabled',
-      'v11',
-      'v12',
-      'the setDisabledReason method of Block',
-    );
-    this.setDisabledReason(value, constants.MANUALLY_DISABLED);
-  }
-
-  /**
-   * @deprecated v11 - Set whether the block is manually enabled or disabled.
-   * The user can toggle whether a block is disabled from a context menu
-   * option. A block may still be disabled for other reasons even if the user
-   * attempts to manually enable it, such as when the block is in an invalid
-   * location. This method is deprecated and setDisabledReason should be used
-   * instead.
-   *
-   * @param enabled True if enabled.
-   */
-  setEnabled(enabled: boolean) {
-    deprecation.warn(
-      'setEnabled',
-      'v11',
-      'v12',
-      'the setDisabledReason method of Block',
-    );
-    this.setDisabledReason(!enabled, constants.MANUALLY_DISABLED);
   }
 
   /**

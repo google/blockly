@@ -32,13 +32,15 @@ export class FocusableTreeTraverser {
    * @returns The IFocusableNode currently with focus, or null if none.
    */
   static findFocusedNode(tree: IFocusableTree): IFocusableNode | null {
-    const root = tree.getRootFocusableNode().getFocusableElement();
+    const rootNode = tree.getRootFocusableNode();
+    if (!rootNode.canBeFocused()) return null;
+    const root = rootNode.getFocusableElement();
     if (
       dom.hasClass(root, FocusableTreeTraverser.ACTIVE_CLASS_NAME) ||
       dom.hasClass(root, FocusableTreeTraverser.PASSIVE_CSS_CLASS_NAME)
     ) {
       // The root has focus.
-      return tree.getRootFocusableNode();
+      return rootNode;
     }
 
     const activeEl = root.querySelector(this.ACTIVE_FOCUS_NODE_CSS_SELECTOR);
@@ -99,8 +101,9 @@ export class FocusableTreeTraverser {
     }
 
     // Second, check against the tree's root.
-    if (element === tree.getRootFocusableNode().getFocusableElement()) {
-      return tree.getRootFocusableNode();
+    const rootNode = tree.getRootFocusableNode();
+    if (rootNode.canBeFocused() && element === rootNode.getFocusableElement()) {
+      return rootNode;
     }
 
     // Third, check if the element has a node.

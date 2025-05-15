@@ -9,7 +9,6 @@
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-import * as common from './common.js';
 import {config} from './config.js';
 import type {
   ContextMenuOption,
@@ -17,6 +16,7 @@ import type {
 } from './contextmenu_registry.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
+import {getFocusManager} from './focus_manager.js';
 import {Menu} from './menu.js';
 import {MenuSeparator} from './menu_separator.js';
 import {MenuItem} from './menuitem.js';
@@ -289,7 +289,7 @@ export function callbackFactory(
     if (eventUtils.isEnabled() && !newBlock.isShadow()) {
       eventUtils.fire(new (eventUtils.get(EventType.BLOCK_CREATE))(newBlock));
     }
-    common.setSelected(newBlock);
+    getFocusManager().focusNode(newBlock);
     return newBlock;
   };
 }

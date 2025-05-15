@@ -33,6 +33,7 @@ import {
   ContextMenuRegistry,
 } from './contextmenu_registry.js';
 import * as dropDownDiv from './dropdowndiv.js';
+import {Abstract as AbstractEvent} from './events/events.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {Flyout} from './flyout_base.js';
@@ -40,28 +41,28 @@ import type {FlyoutButton} from './flyout_button.js';
 import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
-import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
+import {isAutoHideable} from './interfaces/i_autohideable.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
-import type {IFocusableNode} from './interfaces/i_focusable_node.js';
+import {
+  isFocusableNode,
+  type IFocusableNode,
+} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import {hasBubble} from './interfaces/i_has_bubble.js';
 import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
 import type {IToolbox} from './interfaces/i_toolbox.js';
-import type {
-  IVariableModel,
-  IVariableState,
-} from './interfaces/i_variable_model.js';
 import type {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {LayerManager} from './layer_manager.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
+import {Navigator} from './navigator.js';
 import {Options} from './options.js';
 import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
-import * as renderManagement from './render_management.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import type {Renderer} from './renderers/common/renderer.js';
 import type {ScrollbarPair} from './scrollbar_pair.js';
@@ -98,7 +99,7 @@ const ZOOM_TO_FIT_MARGIN = 20;
  */
 export class WorkspaceSvg
   extends Workspace
-  implements IASTNodeLocationSvg, IContextMenu, IFocusableNode, IFocusableTree
+  implements IContextMenu, IFocusableNode, IFocusableTree
 {
   /**
    * A wrapper function called when a resize event occurs.
@@ -314,6 +315,9 @@ export class WorkspaceSvg
   /** True if keyboard accessibility mode is on, false otherwise. */
   keyboardAccessibilityMode = false;
 
+  /** True iff a keyboard-initiated move ("drag") is in progress. */
+  keyboardMoveInProgress = false; // TODO(#8960): Delete this.
+
   /** The list of top-level bounded elements on the workspace. */
   private topBoundedElements: IBoundedElement[] = [];
 
@@ -331,6 +335,12 @@ export class WorkspaceSvg
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   svgBubbleCanvas_!: SVGElement;
   zoomControls_: ZoomControls | null = null;
+
+  /**
+   * Navigator that handles moving focus between items in this workspace in
+   * response to keyboard navigation commands.
+   */
+  private navigator = new Navigator();
 
   /**
    * @param options Dictionary of options.
@@ -396,6 +406,9 @@ export class WorkspaceSvg
       this.addChangeListener(Procedures.mutatorOpenListener);
     }
 
+    // Set up callbacks to refresh the toolbox when variables change
+    this.addChangeListener(this.variableChangeCallback.bind(this));
+
     /** Object in charge of storing and updating the workspace theme. */
     this.themeManager_ = this.options.parentWorkspace
       ? this.options.parentWorkspace.getThemeManager()
@@ -452,28 +465,6 @@ export class WorkspaceSvg
    */
   getComponentManager(): ComponentManager {
     return this.componentManager;
-  }
-
-  /**
-   * Add the cursor SVG to this workspaces SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    this.markerManager.setCursorSvg(cursorSvg);
-  }
-
-  /**
-   * Add the marker SVG to this workspaces SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the workspace
-   *     SVG group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    this.markerManager.setMarkerSvg(markerSvg);
   }
 
   /**
@@ -985,6 +976,28 @@ export class WorkspaceSvg
   }
 
   /**
+   * Creates a new set of options from this workspace's options with just the
+   * values that are relevant to a flyout.
+   *
+   * @returns A subset of this workspace's options.
+   */
+  copyOptionsForFlyout(): Options {
+    return new Options({
+      'parentWorkspace': this,
+      'rtl': this.RTL,
+      'oneBasedIndex': this.options.oneBasedIndex,
+      'horizontalLayout': this.horizontalLayout,
+      'renderer': this.options.renderer,
+      'rendererOverrides': this.options.rendererOverrides,
+      'plugins': this.options.plugins,
+      'modalInputs': this.options.modalInputs,
+      'move': {
+        'scrollbars': true,
+      },
+    } as BlocklyOptions);
+  }
+
+  /**
    * Add a flyout element in an element with the given tag name.
    *
    * @param tagName What type of tag the flyout belongs in.
@@ -992,17 +1005,7 @@ export class WorkspaceSvg
    * @internal
    */
   addFlyout(tagName: string | Svg<SVGSVGElement> | Svg<SVGGElement>): Element {
-    const workspaceOptions = new Options({
-      'parentWorkspace': this,
-      'rtl': this.RTL,
-      'oneBasedIndex': this.options.oneBasedIndex,
-      'horizontalLayout': this.horizontalLayout,
-      'renderer': this.options.renderer,
-      'rendererOverrides': this.options.rendererOverrides,
-      'move': {
-        'scrollbars': true,
-      },
-    } as BlocklyOptions);
+    const workspaceOptions = this.copyOptionsForFlyout();
     workspaceOptions.toolboxPosition = this.options.toolboxPosition;
     if (this.horizontalLayout) {
       const HorizontalFlyout = registry.getClassFromOptions(
@@ -1309,10 +1312,6 @@ export class WorkspaceSvg
       .flatMap((block) => block.getDescendants(false))
       .filter((block) => block.isInsertionMarker())
       .forEach((block) => block.queueRender());
-
-    renderManagement
-      .finishQueuedRenders()
-      .then(() => void this.markerManager.updateMarkers());
   }
 
   /**
@@ -1348,6 +1347,23 @@ export class WorkspaceSvg
   }
 
   /**
+   * Handles any necessary updates when a variable changes.
+   *
+   * @internal
+   */
+  private variableChangeCallback(event: AbstractEvent) {
+    switch (event.type) {
+      case EventType.VAR_CREATE:
+      case EventType.VAR_DELETE:
+      case EventType.VAR_RENAME:
+      case EventType.VAR_TYPE_CHANGE:
+        this.refreshToolboxSelection();
+        break;
+      default:
+    }
+  }
+
+  /**
    * Refresh the toolbox unless there's a drag in progress.
    *
    * @internal
@@ -1357,50 +1373,6 @@ export class WorkspaceSvg
     if (ws && !ws.currentGesture_ && ws.toolbox && ws.toolbox.getFlyout()) {
       ws.toolbox.refreshSelection();
     }
-  }
-
-  /**
-   * Rename a variable by updating its name in the variable map.  Update the
-   *     flyout to show the renamed variable immediately.
-   *
-   * @param id ID of the variable to rename.
-   * @param newName New variable name.
-   */
-  override renameVariableById(id: string, newName: string) {
-    super.renameVariableById(id, newName);
-    this.refreshToolboxSelection();
-  }
-
-  /**
-   * Delete a variable by the passed in ID.   Update the flyout to show
-   *     immediately that the variable is deleted.
-   *
-   * @param id ID of variable to delete.
-   */
-  override deleteVariableById(id: string) {
-    super.deleteVariableById(id);
-    this.refreshToolboxSelection();
-  }
-
-  /**
-   * Create a new variable with the given name.  Update the flyout to show the
-   *     new variable immediately.
-   *
-   * @param name The new variable's name.
-   * @param opt_type The type of the variable like 'int' or 'string'.
-   *     Does not need to be unique. Field_variable can filter variables based
-   * on their type. This will default to '' which is a specific type.
-   * @param opt_id The unique ID of the variable. This will default to a UUID.
-   * @returns The newly created variable.
-   */
-  override createVariable(
-    name: string,
-    opt_type?: string | null,
-    opt_id?: string | null,
-  ): IVariableModel<IVariableState> {
-    const newVar = super.createVariable(name, opt_type, opt_id);
-    this.refreshToolboxSelection();
-    return newVar;
   }
 
   /** Make a list of all the delete areas for this workspace. */
@@ -1503,12 +1475,47 @@ export class WorkspaceSvg
   }
 
   /**
-   * Is the user currently dragging a block or scrolling the flyout/workspace?
+   * Indicate whether a keyboard move is in progress or not.
    *
-   * @returns True if currently dragging or scrolling.
+   * Should be called with true when a keyboard move of an IDraggable
+   * is starts, and false when it finishes or is aborted.
+   *
+   * N.B.: This method is experimental and internal-only.  It is
+   * intended only to called only from the keyboard navigation plugin.
+   * Its signature and behaviour may be modified, or the method
+   * removed, at an time without notice and without being treated
+   * as a breaking change.
+   *
+   * TODO(#8960): Delete this.
+   *
+   * @internal
+   * @param inProgress Is a keyboard-initated move in progress?
+   */
+  setKeyboardMoveInProgress(inProgress: boolean) {
+    this.keyboardMoveInProgress = inProgress;
+  }
+
+  /**
+   * Returns true iff the user is currently engaged in a drag gesture,
+   * or if a keyboard-initated move is in progress.
+   *
+   * Dragging gestures normally entail moving a block or other item on
+   * the workspace, or scrolling the flyout/workspace.
+   *
+   * Keyboard-initated movements are implemnted using the dragging
+   * infrastructure and are intended to emulate (a subset of) drag
+   * gestures and so should typically be treated as if they were a
+   * gesture-based drag.
+   *
+   * @returns True iff a drag gesture or keyboard move is in porgress.
    */
   isDragging(): boolean {
-    return this.currentGesture_ !== null && this.currentGesture_.isDragging();
+    return (
+      // TODO(#8960): Query Mover.isMoving to see if move is in
+      // progress rather than relying on a status flag.
+      this.keyboardMoveInProgress ||
+      (this.currentGesture_ !== null && this.currentGesture_.isDragging())
+    );
   }
 
   /**
@@ -2415,7 +2422,17 @@ export class WorkspaceSvg
 
   /**
    * Look up the gesture that is tracking this touch stream on this workspace.
-   * May create a new gesture.
+   *
+   * Returns the gesture in progress, except:
+   *
+   * - If there is a keyboard-initiate move in progress then null will
+   *   be returned - after calling event.preventDefault() and
+   *   event.stopPropagation() to ensure the pointer event is ignored.
+   * - If there is a gesture in progress but event.type is
+   *   'pointerdown' then the in-progress gesture will be cancelled;
+   *   this will result in null being returned.
+   * - If no gesutre is in progress but event is a pointerdown then a
+   *   new gesture will be created and returned.
    *
    * @param e Pointer event.
    * @returns The gesture that is tracking this touch stream, or null if no
@@ -2423,28 +2440,29 @@ export class WorkspaceSvg
    * @internal
    */
   getGesture(e: PointerEvent): Gesture | null {
+    // TODO(#8960): Query Mover.isMoving to see if move is in progress
+    // rather than relying on .keyboardMoveInProgress status flag.
+    if (this.keyboardMoveInProgress) {
+      // Normally these would be called from Gesture.doStart.
+      e.preventDefault();
+      e.stopPropagation();
+      return null;
+    }
+
     const isStart = e.type === 'pointerdown';
-
-    const gesture = this.currentGesture_;
-    if (gesture) {
-      if (isStart && gesture.hasStarted()) {
-        console.warn('Tried to start the same gesture twice.');
-        // That's funny.  We must have missed a mouse up.
-        // Cancel it, rather than try to retrieve all of the state we need.
-        gesture.cancel();
-        return null;
-      }
-      return gesture;
+    if (isStart && this.currentGesture_?.hasStarted()) {
+      console.warn('Tried to start the same gesture twice.');
+      // That's funny.  We must have missed a mouse up.
+      // Cancel it, rather than try to retrieve all of the state we need.
+      this.currentGesture_.cancel(); // Sets this.currentGesture_ to null.
     }
-
-    // No gesture existed on this workspace, but this looks like the start of a
-    // new gesture.
-    if (isStart) {
+    if (!this.currentGesture_ && isStart) {
+      // No gesture existed on this workspace, but this looks like the
+      // start of a new gesture.
       this.currentGesture_ = new Gesture(e, this);
-      return this.currentGesture_;
     }
-    // No gesture existed and this event couldn't be the start of a new gesture.
-    return null;
+
+    return this.currentGesture_;
   }
 
   /**
@@ -2628,15 +2646,28 @@ export class WorkspaceSvg
     let deltaY = 0;
 
     if (bounds.left < viewport.left) {
-      deltaX = viewport.left - bounds.left;
+      deltaX = this.RTL
+        ? Math.min(
+            viewport.left - bounds.left,
+            viewport.right - bounds.right, // Don't move the right side out of view
+          )
+        : viewport.left - bounds.left;
     } else if (bounds.right > viewport.right) {
-      deltaX = viewport.right - bounds.right;
+      deltaX = this.RTL
+        ? viewport.right - bounds.right
+        : Math.max(
+            viewport.right - bounds.right,
+            viewport.left - bounds.left, // Don't move the left side out of view
+          );
     }
 
     if (bounds.top < viewport.top) {
       deltaY = viewport.top - bounds.top;
     } else if (bounds.bottom > viewport.bottom) {
-      deltaY = viewport.bottom - bounds.bottom;
+      deltaY = Math.max(
+        viewport.bottom - bounds.bottom,
+        viewport.top - bounds.top, // Don't move the top out of view
+      );
     }
 
     deltaX *= scale;
@@ -2660,6 +2691,11 @@ export class WorkspaceSvg
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}
 
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;
@@ -2681,6 +2717,24 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
+    // Check against flyout items if this workspace is part of a flyout. Note
+    // that blocks may match against this pass before reaching getBlockById()
+    // below (but only for a flyout workspace).
+    const flyout = this.targetWorkspace?.getFlyout();
+    if (this.isFlyout && flyout) {
+      for (const flyoutItem of flyout.getContents()) {
+        const elem = flyoutItem.getElement();
+        if (
+          isFocusableNode(elem) &&
+          elem.canBeFocused() &&
+          elem.getFocusableElement().id === id
+        ) {
+          return elem;
+        }
+      }
+    }
+
+    // Search for fields and connections (based on ID indicators).
     const fieldIndicatorIndex = id.indexOf('_field_');
     const connectionIndicatorIndex = id.indexOf('_connection_');
     if (fieldIndicatorIndex !== -1) {
@@ -2688,7 +2742,9 @@ export class WorkspaceSvg
       const block = this.getBlockById(blockId);
       if (block) {
         for (const field of block.getFields()) {
-          if (field.getFocusableElement().id === id) return field;
+          if (field.canBeFocused() && field.getFocusableElement().id === id) {
+            return field;
+          }
         }
       }
       return null;
@@ -2702,7 +2758,45 @@ export class WorkspaceSvg
       }
       return null;
     }
-    return this.getBlockById(id) as IFocusableNode;
+
+    // Search for a specific block.
+    const block = this.getAllBlocks(false).find(
+      (block) => block.getFocusableElement().id === id,
+    );
+    if (block) return block;
+
+    // Search for a workspace comment (semi-expensive).
+    for (const comment of this.getTopComments()) {
+      if (
+        comment instanceof RenderedWorkspaceComment &&
+        comment.canBeFocused() &&
+        comment.getFocusableElement().id === id
+      ) {
+        return comment;
+      }
+    }
+
+    // Search for icons and bubbles (which requires an expensive getAllBlocks).
+    const icons = this.getAllBlocks()
+      .map((block) => block.getIcons())
+      .flat();
+    for (const icon of icons) {
+      if (icon.canBeFocused() && icon.getFocusableElement().id === id) {
+        return icon;
+      }
+      if (hasBubble(icon)) {
+        const bubble = icon.getBubble();
+        if (
+          bubble &&
+          bubble.canBeFocused() &&
+          bubble.getFocusableElement().id === id
+        ) {
+          return bubble;
+        }
+      }
+    }
+
+    return null;
   }
 
   /** See IFocusableTree.onTreeFocus. */
@@ -2713,8 +2807,9 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.onTreeBlur. */
   onTreeBlur(nextTree: IFocusableTree | null): void {
-    // If the flyout loses focus, make sure to close it.
-    if (this.isFlyout && this.targetWorkspace) {
+    // If the flyout loses focus, make sure to close it unless focus is being
+    // lost to a different element on the page.
+    if (nextTree && this.isFlyout && this.targetWorkspace) {
       // Only hide the flyout if the flyout's workspace is losing focus and that
       // focus isn't returning to the flyout itself or the toolbox.
       const flyout = this.targetWorkspace.getFlyout();
@@ -2722,8 +2817,28 @@ export class WorkspaceSvg
       if (flyout && nextTree === flyout) return;
       if (toolbox && nextTree === toolbox) return;
       if (toolbox) toolbox.clearSelection();
-      if (flyout && flyout instanceof Flyout) flyout.autoHide(false);
+      if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
     }
+  }
+
+  /**
+   * Returns an object responsible for coordinating movement of focus between
+   * items on this workspace in response to keyboard navigation commands.
+   *
+   * @returns This workspace's Navigator instance.
+   */
+  getNavigator(): Navigator {
+    return this.navigator;
+  }
+
+  /**
+   * Sets the Navigator instance used by this workspace.
+   *
+   * @param newNavigator A Navigator object to coordinate movement between
+   *     elements on the workspace.
+   */
+  setNavigator(newNavigator: Navigator) {
+    this.navigator = newNavigator;
   }
 }
 

@@ -31,6 +31,10 @@ class FocusableNodeImpl {
   onNodeFocus() {}
 
   onNodeBlur() {}
+
+  canBeFocused() {
+    return true;
+  }
 }
 
 class FocusableTreeImpl {
@@ -38,6 +42,7 @@ class FocusableTreeImpl {
     this.nestedTrees = nestedTrees;
     this.idToNodeMap = {};
     this.rootNode = this.addNode(rootElement);
+    this.fallbackNode = null;
   }
 
   addNode(element) {
@@ -46,12 +51,16 @@ class FocusableTreeImpl {
     return node;
   }
 
+  removeNode(node) {
+    delete this.idToNodeMap[node.getFocusableElement().id];
+  }
+
   getRootFocusableNode() {
     return this.rootNode;
   }
 
   getRestoredFocusableNode() {
-    return null;
+    return this.fallbackNode;
   }
 
   getNestedTrees() {
@@ -71,26 +80,20 @@ suite('FocusManager', function () {
   const ACTIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
   const PASSIVE_FOCUS_NODE_CSS_SELECTOR = `.${FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME}`;
 
+  const createFocusableTree = function (rootElementId, nestedTrees) {
+    return new FocusableTreeImpl(
+      document.getElementById(rootElementId),
+      nestedTrees || [],
+    );
+  };
+  const createFocusableNode = function (tree, elementId) {
+    return tree.addNode(document.getElementById(elementId));
+  };
+
   setup(function () {
     sharedTestSetup.call(this);
 
-    const testState = this;
-    const addDocumentEventListener = function (type, listener) {
-      testState.globalDocumentEventListenerType = type;
-      testState.globalDocumentEventListener = listener;
-      document.addEventListener(type, listener);
-    };
-    this.focusManager = new FocusManager(addDocumentEventListener);
-
-    const createFocusableTree = function (rootElementId, nestedTrees) {
-      return new FocusableTreeImpl(
-        document.getElementById(rootElementId),
-        nestedTrees || [],
-      );
-    };
-    const createFocusableNode = function (tree, elementId) {
-      return tree.addNode(document.getElementById(elementId));
-    };
+    this.focusManager = getFocusManager();
 
     this.testFocusableTree1 = createFocusableTree('testFocusableTree1');
     this.testFocusableTree1Node1 = createFocusableNode(
@@ -159,12 +162,6 @@ suite('FocusManager', function () {
 
   teardown(function () {
     sharedTestTeardown.call(this);
-
-    // Remove the globally registered listener from FocusManager to avoid state being shared across
-    // test boundaries.
-    const eventType = this.globalDocumentEventListenerType;
-    const eventListener = this.globalDocumentEventListener;
-    document.removeEventListener(eventType, eventListener);
 
     // Ensure all node CSS styles are reset so that state isn't leaked between tests.
     const activeElems = document.querySelectorAll(
@@ -396,6 +393,31 @@ suite('FocusManager', function () {
 
       // There should be exactly 1 focus event fired from focusNode().
       assert.strictEqual(focusCount, 1);
+    });
+
+    test('for orphaned node returns tree root by default', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.testFocusableTree1.removeNode(this.testFocusableTree1Node1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      // Focusing an invalid node should fall back to the tree root when it has no restoration
+      // fallback node.
+      const currentNode = this.focusManager.getFocusedNode();
+      const treeRoot = this.testFocusableTree1.getRootFocusableNode();
+      assert.strictEqual(currentNode, treeRoot);
+    });
+
+    test('for orphaned node returns specified fallback node', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.testFocusableTree1.fallbackNode = this.testFocusableTree1Node2;
+      this.testFocusableTree1.removeNode(this.testFocusableTree1Node1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      // Focusing an invalid node should fall back to the restored fallback.
+      const currentNode = this.focusManager.getFocusedNode();
+      assert.strictEqual(currentNode, this.testFocusableTree1Node2);
     });
   });
 
@@ -831,6 +853,27 @@ suite('FocusManager', function () {
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4Node1,
         );
+      });
+
+      test('deletion after focusNode() returns null', function () {
+        const rootElem = document.createElement('div');
+        const nodeElem = document.createElement('div');
+        rootElem.setAttribute('id', 'focusRoot');
+        rootElem.setAttribute('tabindex', '-1');
+        nodeElem.setAttribute('id', 'focusNode');
+        nodeElem.setAttribute('tabindex', '-1');
+        nodeElem.textContent = 'Focusable node';
+        rootElem.appendChild(nodeElem);
+        document.body.appendChild(rootElem);
+        const root = createFocusableTree('focusRoot');
+        const node = createFocusableNode(root, 'focusNode');
+        this.focusManager.registerTree(root);
+        this.focusManager.focusNode(node);
+
+        node.getFocusableElement().remove();
+
+        assert.notStrictEqual(this.focusManager.getFocusedNode(), node);
+        rootElem.remove(); // Cleanup.
       });
     });
     suite('CSS classes', function () {
@@ -1723,6 +1766,27 @@ suite('FocusManager', function () {
           this.focusManager.getFocusedNode(),
           this.testFocusableNestedTree4Node1,
         );
+      });
+
+      test('deletion after focus() returns null', function () {
+        const rootElem = document.createElement('div');
+        const nodeElem = document.createElement('div');
+        rootElem.setAttribute('id', 'focusRoot');
+        rootElem.setAttribute('tabindex', '-1');
+        nodeElem.setAttribute('id', 'focusNode');
+        nodeElem.setAttribute('tabindex', '-1');
+        nodeElem.textContent = 'Focusable node';
+        rootElem.appendChild(nodeElem);
+        document.body.appendChild(rootElem);
+        const root = createFocusableTree('focusRoot');
+        const node = createFocusableNode(root, 'focusNode');
+        this.focusManager.registerTree(root);
+        document.getElementById('focusNode').focus();
+
+        node.getFocusableElement().remove();
+
+        assert.notStrictEqual(this.focusManager.getFocusedNode(), node);
+        rootElem.remove(); // Cleanup.
       });
     });
     suite('CSS classes', function () {

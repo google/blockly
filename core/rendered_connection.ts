@@ -13,7 +13,6 @@
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
-import * as common from './common.js';
 import {config} from './config.js';
 import {Connection} from './connection.js';
 import type {ConnectionDB} from './connection_db.js';
@@ -197,15 +196,12 @@ export class RenderedConnection
       ? inferiorRootBlock
       : superiorRootBlock;
     // Raise it to the top for extra visibility.
-    const selected = common.getSelected() === dynamicRootBlock;
-    if (!selected) dynamicRootBlock.addSelect();
     if (dynamicRootBlock.RTL) {
       offsetX = -offsetX;
     }
     const dx = staticConnection.x + offsetX - dynamicConnection.x;
     const dy = staticConnection.y + offsetY - dynamicConnection.y;
     dynamicRootBlock.moveBy(dx, dy, ['bump']);
-    if (!selected) dynamicRootBlock.removeSelect();
   }
 
   /**
@@ -326,21 +322,28 @@ export class RenderedConnection
   /** Add highlighting around this connection. */
   highlight() {
     this.highlighted = true;
+
+    // Note that this needs to be done synchronously (vs. queuing a render pass)
+    // since only a displayed element can be focused, and this focusable node is
+    // implemented to make itself visible immediately prior to receiving DOM
+    // focus. It's expected that the connection's position should already be
+    // correct by this point (otherwise it will be corrected in a subsequent
+    // draw pass).
     const highlightSvg = this.findHighlightSvg();
     if (highlightSvg) {
       highlightSvg.style.display = '';
     }
-    // this.getSourceBlock().queueRender();
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
     this.highlighted = false;
+
+    // Note that this is done synchronously for parity with highlight().
     const highlightSvg = this.findHighlightSvg();
     if (highlightSvg) {
-    highlightSvg.style.display = 'none';
+      highlightSvg.style.display = 'none';
     }
-    // this.getSourceBlock().queueRender();
   }
 
   /** Returns true if this connection is highlighted, false otherwise. */
@@ -551,21 +554,6 @@ export class RenderedConnection
     childBlock.updateDisabled();
     childBlock.queueRender();
 
-    // If either block being connected was selected, visually un- and reselect
-    // it. This has the effect of moving the selection path to the end of the
-    // list of child nodes in the DOM. Since SVG z-order is determined by node
-    // order in the DOM, this works around an issue where the selection outline
-    // path could be partially obscured by a new block inserted after it in the
-    // DOM.
-    const selection = common.getSelected();
-    const selectedBlock =
-      (selection === parentBlock && parentBlock) ||
-      (selection === childBlock && childBlock);
-    if (selectedBlock) {
-      selectedBlock.removeSelect();
-      selectedBlock.addSelect();
-    }
-
     // The input the child block is connected to (if any).
     const parentInput = parentBlock.getInputWithBlock(childBlock);
     if (parentInput) {
@@ -652,10 +640,7 @@ export class RenderedConnection
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     const highlightSvg = this.findHighlightSvg();
-    if (highlightSvg) {
-      highlightSvg.setAttribute('aria-label', 'Connection');
-      return highlightSvg;
-    }
+    if (highlightSvg) return highlightSvg;
     throw new Error('No highlight SVG found corresponding to this connection.');
   }
 
@@ -672,6 +657,19 @@ export class RenderedConnection
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
     this.unhighlight();
+  }
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
+  }
+
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as
+      | unknown
+      | null as SVGElement | null;
   }
 }
 

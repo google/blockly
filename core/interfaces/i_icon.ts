@@ -7,8 +7,9 @@
 import type {IconType} from '../icons/icon_types.js';
 import type {Coordinate} from '../utils/coordinate.js';
 import type {Size} from '../utils/size.js';
+import {IFocusableNode, isFocusableNode} from './i_focusable_node.js';
 
-export interface IIcon {
+export interface IIcon extends IFocusableNode {
   /**
    * @returns the IconType representing the type of the icon. This value should
    *     also be used to register the icon via `Blockly.icons.registry.register`.
@@ -109,6 +110,7 @@ export function isIcon(obj: any): obj is IIcon {
     obj.isShownWhenCollapsed !== undefined &&
     obj.setOffsetInBlock !== undefined &&
     obj.onLocationChange !== undefined &&
-    obj.onClick !== undefined
+    obj.onClick !== undefined &&
+    isFocusableNode(obj)
   );
 }

@@ -9,7 +9,6 @@
 import type {Block} from '../core/block.js';
 import type {BlockSvg} from '../core/block_svg.js';
 import type {BlockDefinition} from '../core/blocks.js';
-import * as common from '../core/common.js';
 import {defineBlocks} from '../core/common.js';
 import {config} from '../core/config.js';
 import type {Connection} from '../core/connection.js';
@@ -27,6 +26,7 @@ import {FieldCheckbox} from '../core/field_checkbox.js';
 import {FieldLabel} from '../core/field_label.js';
 import * as fieldRegistry from '../core/field_registry.js';
 import {FieldTextInput} from '../core/field_textinput.js';
+import {getFocusManager} from '../core/focus_manager.js';
 import '../core/icons/comment_icon.js';
 import {MutatorIcon as Mutator} from '../core/icons/mutator_icon.js';
 import '../core/icons/warning_icon.js';
@@ -1178,7 +1178,7 @@ const PROCEDURE_CALL_COMMON = {
         const def = Procedures.getDefinition(name, workspace);
         if (def) {
           (workspace as WorkspaceSvg).centerOnBlock(def.id);
-          common.setSelected(def as BlockSvg);
+          getFocusManager().focusNode(def as BlockSvg);
         }
       },
     });

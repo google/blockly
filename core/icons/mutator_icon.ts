@@ -14,6 +14,7 @@ import {BlockChange} from '../events/events_block_change.js';
 import {isBlockChange, isBlockCreate} from '../events/predicates.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
+import type {IBubble} from '../interfaces/i_bubble.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
 import {Coordinate} from '../utils/coordinate.js';
@@ -201,6 +202,11 @@ export class MutatorIcon extends Icon implements IHasBubble {
         'mutator',
       ),
     );
+  }
+
+  /** See IHasBubble.getBubble. */
+  getBubble(): IBubble | null {
+    return this.miniWorkspaceBubble;
   }
 
   /** @returns the configuration the mini workspace should have. */

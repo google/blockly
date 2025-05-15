@@ -268,6 +268,11 @@ function getScaledBboxOfField(field: Field): Rect {
  * @param field The field to position the dropdown against.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the drop-down div's lifetime. Note that if a false value is
+ *     passed in here then callers should manage ephemeral focus directly
+ *     otherwise focus may not properly restore when the widget closes. Defaults
+ *     to true.
  * @returns True if the menu rendered below block; false if above.
  */
 function showPositionedByRect(
@@ -275,6 +280,7 @@ function showPositionedByRect(
   field: Field,
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
+  manageEphemeralFocus: boolean = true,
 ): boolean {
   // If we can fit it, render below the block.
   const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
@@ -299,6 +305,7 @@ function showPositionedByRect(
     primaryY,
     secondaryX,
     secondaryY,
+    manageEphemeralFocus,
     opt_onHide,
   );
 }
@@ -319,6 +326,8 @@ function showPositionedByRect(
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the widget div's lifetime.
  * @returns True if the menu rendered at the primary origin point.
  * @internal
  */
@@ -329,6 +338,7 @@ export function show<T>(
   primaryY: number,
   secondaryX: number,
   secondaryY: number,
+  manageEphemeralFocus: boolean,
   opt_onHide?: () => void,
 ): boolean {
   owner = newOwner as Field;
@@ -342,7 +352,9 @@ export function show<T>(
   dom.addClass(div, renderedClassName);
   dom.addClass(div, themeClassName);
 
-  returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
+  if (manageEphemeralFocus) {
+    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
+  }
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -660,6 +672,11 @@ export function hideWithoutAnimation() {
   owner = null;
 
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
+
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
+  }
 }
 
 /**

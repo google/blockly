@@ -8,11 +8,13 @@ import * as blockAnimations from '../block_animations.js';
 import {BlockSvg} from '../block_svg.js';
 import {ComponentManager} from '../component_manager.js';
 import * as eventUtils from '../events/utils.js';
+import {getFocusManager} from '../focus_manager.js';
 import {IDeletable, isDeletable} from '../interfaces/i_deletable.js';
 import {IDeleteArea} from '../interfaces/i_delete_area.js';
 import {IDragTarget} from '../interfaces/i_drag_target.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
 import {IDragger} from '../interfaces/i_dragger.js';
+import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
@@ -129,6 +131,12 @@ export class Dragger implements IDragger {
       root.dispose();
     }
     eventUtils.setGroup(false);
+
+    if (!wouldDelete && isFocusableNode(this.draggable)) {
+      // Ensure focusable nodes that have finished dragging (but aren't being
+      // deleted) end with focus and selection.
+      getFocusManager().focusNode(this.draggable);
+    }
   }
 
   // We need to special case blocks for now so that we look at the root block

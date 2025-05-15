@@ -7,6 +7,9 @@ name: conventional-release-labels
 jobs:
   label:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - uses: bcoe/conventional-release-labels@v1
         with:

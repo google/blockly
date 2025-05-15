@@ -33,7 +33,6 @@ export {CommentDelete} from './events_comment_delete.js';
 export {CommentDrag, CommentDragJson} from './events_comment_drag.js';
 export {CommentMove, CommentMoveJson} from './events_comment_move.js';
 export {CommentResize, CommentResizeJson} from './events_comment_resize.js';
-export {MarkerMove, MarkerMoveJson} from './events_marker_move.js';
 export {Selected, SelectedJson} from './events_selected.js';
 export {ThemeChange, ThemeChangeJson} from './events_theme_change.js';
 export {
@@ -77,7 +76,6 @@ export const CREATE = EventType.BLOCK_CREATE;
 /** @deprecated Use BLOCK_DELETE instead */
 export const DELETE = EventType.BLOCK_DELETE;
 export const FINISHED_LOADING = EventType.FINISHED_LOADING;
-export const MARKER_MOVE = EventType.MARKER_MOVE;
 /** @deprecated Use BLOCK_MOVE instead */
 export const MOVE = EventType.BLOCK_MOVE;
 export const SELECTED = EventType.SELECTED;

@@ -70,7 +70,7 @@ export class BlockFlyoutInflater implements IFlyoutInflater {
     block.getDescendants(false).forEach((b) => (b.isInFlyout = true));
     this.addBlockListeners(block);
 
-    return new FlyoutItem(block, BLOCK_TYPE, true);
+    return new FlyoutItem(block, BLOCK_TYPE);
   }
 
   /**

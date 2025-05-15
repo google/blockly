@@ -155,8 +155,7 @@ export namespace ContextMenuRegistry {
     block?: BlockSvg;
     workspace?: WorkspaceSvg;
     comment?: RenderedWorkspaceComment;
-    // TODO(#8839): Remove any once Block, etc. implement IFocusableNode
-    focusedNode?: IFocusableNode | any;
+    focusedNode?: IFocusableNode;
   }
 
   /**

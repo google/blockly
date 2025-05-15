@@ -23,14 +23,11 @@ import * as dropDownDiv from './dropdowndiv.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import type {Input} from './inputs/input.js';
-import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
-import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {ISerializable} from './interfaces/i_serializable.js';
-import {MarkerManager} from './marker_manager.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
 import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
@@ -70,13 +67,7 @@ export type FieldValidator<T = any> = (newValue: T) => T | null | undefined;
  * @typeParam T - The value stored on the field.
  */
 export abstract class Field<T = any>
-  implements
-    IASTNodeLocationSvg,
-    IASTNodeLocationWithBlock,
-    IKeyboardAccessible,
-    IRegistrable,
-    ISerializable,
-    IFocusableNode
+  implements IKeyboardAccessible, IRegistrable, ISerializable, IFocusableNode
 {
   /**
    * To overwrite the default value which is set in **Field**, directly update
@@ -86,6 +77,9 @@ export abstract class Field<T = any>
    * `FieldImage.prototype.DEFAULT_VALUE = null;`
    */
   DEFAULT_VALUE: T | null = null;
+
+  /** Non-breaking space. */
+  static readonly NBSP = '\u00A0';
 
   /**
    * A value used to signal when a field's constructor should *not* set the
@@ -109,19 +103,28 @@ export abstract class Field<T = any>
    * field is not yet initialized. Is *not* guaranteed to be accurate.
    */
   private tooltip: Tooltip.TipInfo | null = null;
-  protected size_: Size;
+
+  /** This field's dimensions. */
+  private size: Size = new Size(0, 0);
 
   /**
-   * Holds the cursors svg element when the cursor is attached to the field.
-   * This is null if there is no cursor on the field.
+   * Gets the size of this field. Because getSize() and updateSize() have side
+   * effects, this acts as a shim for subclasses which wish to adjust field
+   * bounds when setting/getting the size without triggering unwanted rendering
+   * or other side effects. Note that subclasses must override *both* get and
+   * set if either is overridden; the implementation may just call directly
+   * through to super, but it must exist per the JS spec.
    */
-  private cursorSvg: SVGElement | null = null;
+  protected get size_(): Size {
+    return this.size;
+  }
 
   /**
-   * Holds the markers svg element when the marker is attached to the field.
-   * This is null if there is no marker on the field.
+   * Sets the size of this field.
    */
-  private markerSvg: SVGElement | null = null;
+  protected set size_(newValue: Size) {
+    this.size = newValue;
+  }
 
   /** The rendered field's SVG group element. */
   protected fieldGroup_: SVGGElement | null = null;
@@ -195,6 +198,7 @@ export abstract class Field<T = any>
    */
   SERIALIZABLE = false;
 
+  /** The unique ID of this field. */
   private id_: string | null = null;
 
   /**
@@ -984,6 +988,8 @@ export abstract class Field<T = any>
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 2) + '…';
     }
+    // Replace whitespace with non-breaking spaces so the text doesn't collapse.
+    text = text.replace(/\s/g, Field.NBSP);
     if (this.sourceBlock_ && this.sourceBlock_.RTL) {
       // The SVG is LTR, force text to be RTL by adding an RLM.
       text += '\u200F';
@@ -1356,62 +1362,32 @@ export abstract class Field<T = any>
     return false;
   }
 
-  /**
-   * Add the cursor SVG to this fields SVG group.
-   *
-   * @param cursorSvg The SVG root of the cursor to be added to the field group.
-   * @internal
-   */
-  setCursorSvg(cursorSvg: SVGElement) {
-    if (!cursorSvg) {
-      this.cursorSvg = null;
-      return;
-    }
-
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
     if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
+      throw Error('This field currently has no representative DOM element.');
     }
-    this.fieldGroup_.appendChild(cursorSvg);
-    this.cursorSvg = cursorSvg;
+    return this.fieldGroup_;
   }
 
-  /**
-   * Add the marker SVG to this fields SVG group.
-   *
-   * @param markerSvg The SVG root of the marker to be added to the field group.
-   * @internal
-   */
-  setMarkerSvg(markerSvg: SVGElement) {
-    if (!markerSvg) {
-      this.markerSvg = null;
-      return;
-    }
-
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
-    this.fieldGroup_.appendChild(markerSvg);
-    this.markerSvg = markerSvg;
-  }
-
-  /**
-   * Redraw any attached marker or cursor svgs if needed.
-   *
-   * @internal
-   */
-  updateMarkers_() {
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
     }
-    const workspace = block.workspace as WorkspaceSvg;
-    if (workspace.keyboardAccessibilityMode && this.cursorSvg) {
-      workspace.getCursor()!.draw();
-    }
-    if (workspace.keyboardAccessibilityMode && this.markerSvg) {
-      // TODO(#4592): Update all markers on the field.
-      workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
-    }
+    return block.workspace as WorkspaceSvg;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
+
+  /** See IFocusableNode.canBeFocused. */
+  canBeFocused(): boolean {
+    return true;
   }
 
   /** See IFocusableNode.getFocusableElement. */

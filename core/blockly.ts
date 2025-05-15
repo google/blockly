@@ -120,12 +120,10 @@ import * as inputs from './inputs.js';
 import {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
 import {LabelFlyoutInflater} from './label_flyout_inflater.js';
 import {SeparatorFlyoutInflater} from './separator_flyout_inflater.js';
+import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 
 import {Input} from './inputs/input.js';
 import {InsertionMarkerPreviewer} from './insertion_marker_previewer.js';
-import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
-import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IBubble} from './interfaces/i_bubble.js';
@@ -179,8 +177,7 @@ import {
 import {IVariableMap} from './interfaces/i_variable_map.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
-import {CursorOptions, LineCursor} from './keyboard_nav/line_cursor.js';
+import {LineCursor} from './keyboard_nav/line_cursor.js';
 import {Marker} from './keyboard_nav/marker.js';
 import type {LayerManager} from './layer_manager.js';
 import * as layers from './layers.js';
@@ -438,11 +435,20 @@ Names.prototype.populateProcedures = function (
 };
 // clang-format on
 
+export * from './flyout_navigator.js';
+export * from './interfaces/i_navigation_policy.js';
+export * from './keyboard_nav/block_navigation_policy.js';
+export * from './keyboard_nav/connection_navigation_policy.js';
+export * from './keyboard_nav/field_navigation_policy.js';
+export * from './keyboard_nav/flyout_button_navigation_policy.js';
+export * from './keyboard_nav/flyout_navigation_policy.js';
+export * from './keyboard_nav/flyout_separator_navigation_policy.js';
+export * from './keyboard_nav/workspace_navigation_policy.js';
+export * from './navigator.js';
 export * from './toast.js';
 
 // Re-export submodules that no longer declareLegacyNamespace.
 export {
-  ASTNode,
   Block,
   BlockSvg,
   BlocklyOptions,
@@ -457,7 +463,6 @@ export {
   ContextMenuItems,
   ContextMenuRegistry,
   Css,
-  CursorOptions,
   DeleteArea,
   DragTarget,
   Events,
@@ -533,13 +538,11 @@ export {
   FlyoutMetricsManager,
   FlyoutSeparator,
   FocusManager,
+  FocusableTreeTraverser,
   CodeGenerator as Generator,
   Gesture,
   Grid,
   HorizontalFlyout,
-  IASTNodeLocation,
-  IASTNodeLocationSvg,
-  IASTNodeLocationWithBlock,
   IAutoHideable,
   IBoundedElement,
   IBubble,

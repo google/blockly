@@ -56,6 +56,21 @@ export class FocusManager {
    */
   static readonly PASSIVE_FOCUS_NODE_CSS_CLASS_NAME = 'blocklyPassiveFocus';
 
+  static readonly ACTIVE_FOCUS_WITHIN_TREE_CSS_CLASS_NAME =
+    'blocklyTreeHasActiveFocus';
+
+  static readonly PASSIVE_FOCUS_WITHIN_TREE_CSS_CLASS_NAME =
+    'blocklyTreeHasPassiveFocus';
+
+  static readonly ACTIVE_FOCUS_WITHIN_SUBTREE_CSS_CLASS_NAME =
+    'blocklySubtreeHasActiveFocus';
+
+  static readonly PASSIVE_FOCUS_WITHIN_SUBTREE_CSS_CLASS_NAME =
+    'blocklySubtreeHasPassiveFocus';
+
+  static readonly WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME =
+    'blocklyWaitingForEphemeralFocus';
+
   private focusedNode: IFocusableNode | null = null;
   private previouslyFocusedNode: IFocusableNode | null = null;
   private registeredTrees: Array<IFocusableTree> = [];
@@ -324,8 +339,15 @@ export class FocusManager {
     }
     this.currentlyHoldsEphemeralFocus = true;
 
+    const currentFocusedElement = this.focusedNode?.getFocusableElement();
     if (this.focusedNode) {
       this.passivelyFocusNode(this.focusedNode, null);
+    }
+    if (currentFocusedElement) {
+      dom.addClass(
+        currentFocusedElement,
+        FocusManager.WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME,
+      );
     }
     focusableElement.focus();
 
@@ -339,6 +361,13 @@ export class FocusManager {
       }
       hasFinishedEphemeralFocus = true;
       this.currentlyHoldsEphemeralFocus = false;
+
+      if (currentFocusedElement) {
+        dom.removeClass(
+          currentFocusedElement,
+          FocusManager.WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME,
+        );
+      }
 
       if (this.focusedNode) {
         this.activelyFocusNode(this.focusedNode, null);
@@ -424,8 +453,18 @@ export class FocusManager {
     // node's focusable element (which *is* allowed to be invisible until the
     // node needs to be focused).
     this.lockFocusStateChanges = true;
-    if (node.getFocusableTree() !== prevTree) {
-      node.getFocusableTree().onTreeFocus(node, prevTree);
+    const nodeTree = node.getFocusableTree();
+    if (nodeTree !== prevTree) {
+      const treeRoot = nodeTree.getRootFocusableNode().getFocusableElement();
+      nodeTree.onTreeFocus(node, prevTree);
+      dom.addClass(
+        treeRoot,
+        FocusManager.ACTIVE_FOCUS_WITHIN_TREE_CSS_CLASS_NAME,
+      );
+      dom.removeClass(
+        treeRoot,
+        FocusManager.PASSIVE_FOCUS_WITHIN_TREE_CSS_CLASS_NAME,
+      );
     }
     node.onNodeFocus();
     this.lockFocusStateChanges = false;
@@ -451,8 +490,18 @@ export class FocusManager {
     nextTree: IFocusableTree | null,
   ): void {
     this.lockFocusStateChanges = true;
-    if (node.getFocusableTree() !== nextTree) {
-      node.getFocusableTree().onTreeBlur(nextTree);
+    const nodeTree = node.getFocusableTree();
+    if (nodeTree !== nextTree) {
+      const treeRoot = nodeTree.getRootFocusableNode().getFocusableElement();
+      nodeTree.onTreeBlur(nextTree);
+      dom.addClass(
+        treeRoot,
+        FocusManager.PASSIVE_FOCUS_WITHIN_TREE_CSS_CLASS_NAME,
+      );
+      dom.removeClass(
+        treeRoot,
+        FocusManager.ACTIVE_FOCUS_WITHIN_TREE_CSS_CLASS_NAME,
+      );
     }
     node.onNodeBlur();
     this.lockFocusStateChanges = false;

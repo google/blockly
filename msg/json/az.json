@@ -5,12 +5,14 @@
 			"Adil",
 			"Cekli829",
 			"Masalli qasimli",
-			"Şeyx Şamil"
+			"Şeyx Şamil",
+			"Əkrəm",
+			"Əkrəm Cəfər"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
 	"UNNAMED_KEY": "adsız",
-	"TODAY": "Bugün",
+	"TODAY": "Bu gün",
 	"DUPLICATE_BLOCK": "Dublikat",
 	"ADD_COMMENT": "Şərh əlavə et",
 	"REMOVE_COMMENT": "Şərhi sil",
@@ -220,8 +222,8 @@
 	"TEXT_TRIM_OPERATOR_RIGHT": "boşluqları yalnız sağ tərəfdən pozun",
 	"TEXT_PRINT_TITLE": "%1 - i çap elə",
 	"TEXT_PRINT_TOOLTIP": "Təyin olunmuş mətn, ədəd və ya hər hansı bir başqa elementi çap elə.",
-	"TEXT_PROMPT_TYPE_TEXT": "İstifadəçiyə mətn daxil etməsi üçün sorğunu/tələbi ismarıc ilə göndərin",
-	"TEXT_PROMPT_TYPE_NUMBER": "İstifadəçiyə ədəd daxil etməsi üçün sorğunu/tələbi ismarıc kimi göndərin",
+	"TEXT_PROMPT_TYPE_TEXT": "mesaj ehtiva edən mətn sorğusu",
+	"TEXT_PROMPT_TYPE_NUMBER": "mesaj ehtiva edən ədəd sorğusu",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "İstifadəçiyə ədəd daxil etməsi üçün sorğu/tələb göndərin.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "İstifadəçiyə mətn daxil etməsi üçün sorğu/tələb göndərin.",
 	"TEXT_COUNT_MESSAGE0": "%2 içindən %1 sayını hesabla",

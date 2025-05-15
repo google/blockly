@@ -342,6 +342,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "bir şey yap",
 	"PROCEDURES_BEFORE_PARAMS": "ile:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "ile:",
+	"PROCEDURES_CALL_DISABLED_DEF_WARNING": "Kullanıcı tanımlı '%1' işlevi, tanımlama bloğu devre dışı olduğundan çalıştırılamıyor.",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Çıkışı olmayan bir işlev oluşturur.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Bu işlevi açıklayın...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://tr.wikipedia.org/wiki/Altyordam",

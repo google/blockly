@@ -1,7 +1,6 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80",
 			"Chmee2",
 			"Clon",
 			"Dita",
@@ -12,6 +11,7 @@
 			"Ilimanaq29",
 			"Koo6",
 			"Matěj Grabovský",
+			"Mormegil",
 			"Patriccck",
 			"Patrik L.",
 			"Robins7",
@@ -53,6 +53,7 @@
 	"NEW_VARIABLE_TITLE": "Nový název proměnné:",
 	"VARIABLE_ALREADY_EXISTS": "Proměnná jménem '%1' již existuje",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Proměnná pojmenovaná jako '%1' již existuje pro jiný typ: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_A_PARAMETER": "Proměnná pojmenovaná „%1“ již jako parametr v proceduře „%2“ existuje.",
 	"DELETE_VARIABLE_CONFIRMATION": "Odstranit %1 použití proměnné '%2'",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Proměnnou '%1' není možné odstranit, protože je součástí definice funkce '%2'",
 	"DELETE_VARIABLE": "Odstranit proměnnou '%1'",

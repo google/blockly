@@ -126,15 +126,15 @@ suite('Disabling', function () {
         this.browser,
         'Logic',
         'controls_if',
-        10,
-        10,
+        15,
+        0,
       );
       const child = await dragBlockTypeFromFlyout(
         this.browser,
         'Logic',
         'logic_boolean',
-        110,
-        110,
+        100,
+        0,
       );
       await connect(this.browser, child, 'OUTPUT', parent, 'IF0');
       await this.browser.pause(PAUSE_TIME);
@@ -152,18 +152,20 @@ suite('Disabling', function () {
         this.browser,
         'Logic',
         'controls_if',
-        10,
-        10,
+        15,
+        0,
       );
       const child = await dragBlockTypeFromFlyout(
         this.browser,
         'Logic',
         'controls_if',
-        110,
-        110,
+        100,
+        0,
       );
+      await this.browser.pause(PAUSE_TIME);
       await connect(this.browser, child, 'PREVIOUS', parent, 'DO0');
 
+      await this.browser.pause(PAUSE_TIME);
       await contextMenuSelect(this.browser, parent, 'Disable Block');
 
       chai.assert.isTrue(await getIsDisabled(this.browser, child.id));
@@ -178,16 +180,17 @@ suite('Disabling', function () {
         this.browser,
         'Logic',
         'controls_if',
-        10,
-        10,
+        15,
+        0,
       );
       const child = await dragBlockTypeFromFlyout(
         this.browser,
         'Logic',
         'controls_if',
-        110,
-        110,
+        100,
+        0,
       );
+
       await connect(this.browser, child, 'PREVIOUS', parent, 'NEXT');
 
       await contextMenuSelect(this.browser, parent, 'Disable Block');

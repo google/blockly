@@ -165,28 +165,35 @@ export async function getBlockElementById(browser, id) {
  * causes problems if it has holes (e.g. statement inputs). Instead, this tries
  * to get the first text field on the block. It falls back on the block's SVG root.
  * @param browser The active WebdriverIO Browser object.
- * @param block The block to click, as an interactable element.
+ * @param blockId The id of the block to click, as an interactable element.
  * @param clickOptions The options to pass to webdriverio's element.click function.
  * @return A Promise that resolves when the actions are completed.
  */
-export async function clickBlock(browser, block, clickOptions) {
+export async function clickBlock(browser, blockId, clickOptions) {
   const findableId = 'clickTargetElement';
   // In the browser context, find the element that we want and give it a findable ID.
   await browser.execute(
     (blockId, newElemId) => {
       const block = Blockly.getMainWorkspace().getBlockById(blockId);
-      for (const input of block.inputList) {
-        for (const field of input.fieldRow) {
-          if (field instanceof Blockly.FieldLabel) {
-            field.getSvgRoot().id = newElemId;
-            return;
+      // Ensure the block we want to click is within the viewport.
+      Blockly.getMainWorkspace().scrollBoundsIntoView(
+        block.getBoundingRectangleWithoutChildren(),
+        10,
+      );
+      if (!block.isCollapsed()) {
+        for (const input of block.inputList) {
+          for (const field of input.fieldRow) {
+            if (field instanceof Blockly.FieldLabel) {
+              field.getSvgRoot().id = newElemId;
+              return;
+            }
           }
         }
       }
       // No label field found. Fall back to the block's SVG root.
-      block.getSvgRoot().id = findableId;
+      block.getSvgRoot().id = newElemId;
     },
-    block.id,
+    blockId,
     findableId,
   );
 
@@ -477,8 +484,8 @@ export async function dragBlockTypeFromFlyout(
 }
 
 /**
- * Drags the specified block type from the mutator flyout of the given block and
- * returns the root element of the block.
+ * Drags the specified block type from the mutator flyout of the given block
+ * and returns the root element of the block.
  *
  * @param browser The active WebdriverIO Browser object.
  * @param mutatorBlock The block with the mutator attached that we want to drag
@@ -512,7 +519,18 @@ export async function dragBlockFromMutatorFlyout(
   );
   const flyoutBlock = await getBlockElementById(browser, id);
   await flyoutBlock.dragAndDrop({x: x, y: y});
-  return await getSelectedBlockElement(browser);
+
+  const draggedBlockId = await browser.execute(
+    (mutatorBlockId, blockType) => {
+      return Blockly.getMainWorkspace()
+        .getBlockById(mutatorBlockId)
+        .mutator.getWorkspace()
+        .getBlocksByType(blockType)[0].id;
+    },
+    mutatorBlock.id,
+    type,
+  );
+  return await getBlockElementById(browser, draggedBlockId);
 }
 
 /**
@@ -526,8 +544,9 @@ export async function dragBlockFromMutatorFlyout(
  * @return A Promise that resolves when the actions are completed.
  */
 export async function contextMenuSelect(browser, block, itemText) {
-  await clickBlock(browser, block, {button: 2});
+  await clickBlock(browser, block.id, {button: 2});
 
+  await browser.pause(PAUSE_TIME);
   const item = await browser.$(`div=${itemText}`);
   await item.waitForExist();
   await item.click();

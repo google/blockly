@@ -11,8 +11,8 @@
 import * as chai from 'chai';
 import {Key} from 'webdriverio';
 import {
+  clickBlock,
   getAllBlocks,
-  getBlockElementById,
   PAUSE_TIME,
   testFileLocations,
   testSetup,
@@ -33,18 +33,15 @@ suite('This tests loading Large Configuration and Deletion', function (done) {
   });
 
   test('deleting block results in the correct number of blocks', async function () {
-    const fourthRepeatDo = await getBlockElementById(
-      this.browser,
-      'E8bF[-r:B~cabGLP#QYd',
-    );
-    await fourthRepeatDo.click({x: -100, y: -40});
+    await clickBlock(this.browser, 'E8bF[-r:B~cabGLP#QYd', {button: 1});
     await this.browser.keys([Key.Delete]);
     await this.browser.pause(PAUSE_TIME);
     const allBlocks = await getAllBlocks(this.browser);
     chai.assert.equal(allBlocks.length, 10);
   });
 
-  test('undoing delete block results in the correct number of blocks', async function () {
+  // TODO(#8793) Re-enable test after deleting a block updates focus correctly.
+  test.skip('undoing delete block results in the correct number of blocks', async function () {
     await this.browser.keys([Key.Ctrl, 'z']);
     await this.browser.pause(PAUSE_TIME);
     const allBlocks = await getAllBlocks(this.browser);

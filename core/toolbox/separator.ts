@@ -61,6 +61,7 @@ export class ToolboxSeparator extends ToolboxItem {
       dom.addClass(container, className);
     }
     this.htmlDiv = container;
+    this.htmlDiv.setAttribute('aria-label', 'Separator');
     return container;
   }
 

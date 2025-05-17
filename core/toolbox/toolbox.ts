@@ -146,6 +146,7 @@ export class Toolbox
     this.flyout = this.createFlyout_();
 
     this.HtmlDiv = this.createDom_(this.workspace_);
+    this.HtmlDiv.setAttribute('aria-label', 'Toolbox');
     const flyoutDom = this.flyout.createDom('svg');
     dom.addClass(flyoutDom, 'blocklyToolboxFlyout');
     dom.insertAfter(flyoutDom, svg);
@@ -965,7 +966,7 @@ export class Toolbox
    *
    * @returns True if a parent category was selected, false otherwise.
    */
-  private selectParent(): boolean {
+  selectParent(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
@@ -993,7 +994,7 @@ export class Toolbox
    *
    * @returns True if a child category was selected, false otherwise.
    */
-  private selectChild(): boolean {
+  selectChild(): boolean {
     if (!this.selectedItem_ || !this.selectedItem_.isCollapsible()) {
       return false;
     }
@@ -1012,7 +1013,7 @@ export class Toolbox
    *
    * @returns True if a next category was selected, false otherwise.
    */
-  private selectNext(): boolean {
+  selectNext(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
@@ -1037,7 +1038,7 @@ export class Toolbox
    *
    * @returns True if a previous category was selected, false otherwise.
    */
-  private selectPrevious(): boolean {
+  selectPrevious(): boolean {
     if (!this.selectedItem_) {
       return false;
     }

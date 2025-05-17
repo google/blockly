@@ -214,6 +214,10 @@ export class BlockSvg
 
     // The page-wide unique ID of this Block used for focusing.
     svgPath.id = idGenerator.getNextUniqueId();
+    svgPath.setAttribute(
+      'aria-label',
+      this.type ? '"' + this.type + '" block' : 'Block',
+    );
 
     this.doInit_();
   }

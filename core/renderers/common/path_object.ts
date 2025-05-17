@@ -105,13 +105,17 @@ export class PathObject implements IPathObject {
    *     removed.
    */
   protected setClass_(className: string, add: boolean) {
+    this.setClassOnElem_(this.svgRoot, className, add);
+  }
+
+  private setClassOnElem_(root: SVGElement, className: string, add: boolean) {
     if (!className) {
       return;
     }
     if (add) {
-      dom.addClass(this.svgRoot, className);
+      dom.addClass(root, className);
     } else {
-      dom.removeClass(this.svgRoot, className);
+      dom.removeClass(root, className);
     }
   }
 
@@ -161,7 +165,7 @@ export class PathObject implements IPathObject {
    * @param enable True if selection is enabled, false otherwise.
    */
   updateSelected(enable: boolean) {
-    this.setClass_('blocklySelected', enable);
+    this.setClassOnElem_(this.svgPath, 'blocklySelected', enable);
   }
 
   /**
@@ -245,6 +249,8 @@ export class PathObject implements IPathObject {
       },
       this.svgRoot,
     );
+    // TODO: Do this in a cleaner way. One possibility: create the path without 'd' or 'transform' in RenderedConnection, then just update it here (and keep registrations).
+    (highlight as any).renderedConnection = connection;
     this.connectionHighlights.set(connection, highlight);
     return highlight;
   }

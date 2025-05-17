@@ -1196,16 +1196,10 @@ export class ConstantProvider {
         `font-weight: ${this.FIELD_TEXT_FONTWEIGHT};`,
       `}`,
 
-      // Selection highlight.
-      `${selector} .blocklySelected>.blocklyPath {`,
-        `stroke: #fc3;`,
-        `stroke-width: 3px;`,
-      `}`,
-
       // Connection highlight.
-      `${selector} .blocklyHighlightedConnectionPath {`,
-        `stroke: #fc3;`,
-      `}`,
+      // `${selector} .blocklyHighlightedConnectionPath {`,
+      //   `stroke: #fc3;`,
+      // `}`,
 
       // Replaceable highlight.
       `${selector} .blocklyReplaceable .blocklyPath {`,

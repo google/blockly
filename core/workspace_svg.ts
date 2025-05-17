@@ -765,6 +765,7 @@ export class WorkspaceSvg
       // Only the top-level workspace should be tabbable.
       'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
+      'aria-label': 'Workspace',
     });
     if (injectionDiv) {
       aria.setState(

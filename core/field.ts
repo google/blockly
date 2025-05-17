@@ -314,6 +314,7 @@ export abstract class Field<T = any>
     this.fieldGroup_ = dom.createSvgElement(Svg.G, {
       'tabindex': '-1',
       'id': id,
+      'aria-label': 'Field ' + this.name,
     });
     if (!this.isVisible()) {
       this.fieldGroup_.style.display = 'none';
@@ -1388,6 +1389,29 @@ export abstract class Field<T = any>
   canBeFocused(): boolean {
     return true;
   }
+
+  /** See IFocusableNode.getFocusableElement. */
+  getFocusableElement(): HTMLElement | SVGElement {
+    if (!this.fieldGroup_) {
+      throw Error('This field currently has no representative DOM element.');
+    }
+    return this.fieldGroup_;
+  }
+
+  /** See IFocusableNode.getFocusableTree. */
+  getFocusableTree(): IFocusableTree {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+    return block.workspace as WorkspaceSvg;
+  }
+
+  /** See IFocusableNode.onNodeFocus. */
+  onNodeFocus(): void {}
+
+  /** See IFocusableNode.onNodeBlur. */
+  onNodeBlur(): void {}
 
   /**
    * Subclasses should reimplement this method to construct their Field

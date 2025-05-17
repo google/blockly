@@ -727,6 +727,7 @@ export class Gesture {
     if (this.targetBlock) {
       this.bringBlockToFront();
       this.targetBlock.workspace.hideChaff(!!this.flyout);
+      getFocusManager().focusNode(this.targetBlock);
       this.targetBlock.showContextMenu(e);
     } else if (this.startBubble) {
       this.startBubble.showContextMenu(e);
@@ -929,6 +930,9 @@ export class Gesture {
         'block',
       );
       eventUtils.fire(event);
+      if (this.targetBlock) {
+        getFocusManager().focusNode(this.targetBlock);
+      }
     }
     this.bringBlockToFront();
     eventUtils.setGroup(false);

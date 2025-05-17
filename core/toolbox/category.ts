@@ -192,6 +192,7 @@ export class ToolboxCategory
     aria.setRole(this.htmlDiv_, aria.Role.TREEITEM);
     aria.setState(this.htmlDiv_, aria.State.SELECTED, false);
     aria.setState(this.htmlDiv_, aria.State.LEVEL, this.level_ + 1);
+    this.htmlDiv_.setAttribute('aria-label', 'Category ' + this.name_);
 
     this.rowDiv_ = this.createRowContainer_();
     this.rowDiv_.style.pointerEvents = 'auto';

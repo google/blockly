@@ -147,18 +147,14 @@ let content = `
 
 .blocklyHighlightedConnectionPath {
   fill: none;
-  stroke: #fc3;
-  stroke-width: 4px;
+  // stroke: #fc3;
+  // stroke-width: 4px;
 }
 
 .blocklyPathLight {
   fill: none;
   stroke-linecap: round;
   stroke-width: 1;
-}
-
-.blocklySelected>.blocklyPathLight {
-  display: none;
 }
 
 .blocklyDraggable {

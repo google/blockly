@@ -595,6 +595,14 @@ export class RenderedConnection
     return this;
   }
 
+  private findHighlightSvg(): SVGElement | null {
+    // This cast is valid as TypeScript's definition is wrong. See:
+    // https://github.com/microsoft/TypeScript/issues/60996.
+    return document.getElementById(this.id) as
+      | unknown
+      | null as SVGElement | null;
+  }
+
   /**
    * Handles showing the context menu when it is opened on a connection.
    * Note that typically the context menu can't be opened with the mouse

@@ -309,6 +309,7 @@ export abstract class Flyout
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
       'tabindex': '0',
+      'aria-label': 'Flyout',
     });
     this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(

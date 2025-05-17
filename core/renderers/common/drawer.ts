@@ -439,6 +439,13 @@ export class Drawer {
         if (highlightSvg) {
           highlightSvg.style.display = elem.highlighted ? '' : 'none';
         }
+        // if (elem.highlighted) {
+        //   this.drawConnectionHighlightPath(elem);
+        // } else {
+        //   this.block_.pathObject.removeConnectionHighlight?.(
+        //     elem.connectionModel,
+        //   );
+        // }
       }
     }
   }

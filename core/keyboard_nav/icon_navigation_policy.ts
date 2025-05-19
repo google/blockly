@@ -16,10 +16,10 @@ export class IconNavigationPolicy implements INavigationPolicy<Icon> {
   /**
    * Returns the first child of the given icon.
    *
-   * @param current The icon to return the first child of.
+   * @param _current The icon to return the first child of.
    * @returns Null.
    */
-  getFirstChild(current: Icon): IFocusableNode | null {
+  getFirstChild(_current: Icon): IFocusableNode | null {
     return null;
   }
 

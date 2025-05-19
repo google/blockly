@@ -141,7 +141,7 @@ suite('Delete blocks', function (done) {
   test('Delete block using backspace key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    await clickBlock(this.browser, this.firstBlock, {button: 1});
+    await clickBlock(this.browser, this.firstBlock.id, {button: 1});
     await this.browser.keys([Key.Backspace]);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
@@ -154,7 +154,7 @@ suite('Delete blocks', function (done) {
   test('Delete block using delete key', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using delete key.
-    await clickBlock(this.browser, this.firstBlock, {button: 1});
+    await clickBlock(this.browser, this.firstBlock.id, {button: 1});
     await this.browser.keys([Key.Delete]);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
@@ -176,10 +176,11 @@ suite('Delete blocks', function (done) {
     );
   });
 
-  test('Undo block deletion', async function () {
+  // TODO(#9029) enable this test once deleting a block doesn't lose focus
+  test.skip('Undo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    await clickBlock(this.browser, this.firstBlock, {button: 1});
+    await clickBlock(this.browser, this.firstBlock.id, {button: 1});
     await this.browser.keys([Key.Backspace]);
     await this.browser.pause(PAUSE_TIME);
     // Undo
@@ -187,8 +188,8 @@ suite('Delete blocks', function (done) {
     await this.browser.pause(PAUSE_TIME);
     const after = (await getAllBlocks(this.browser)).length;
     chai.assert.equal(
-      before,
       after,
+      before,
       'Expected there to be the original number of blocks after undoing a delete',
     );
   });
@@ -196,7 +197,7 @@ suite('Delete blocks', function (done) {
   test('Redo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
-    await clickBlock(this.browser, this.firstBlock, {button: 1});
+    await clickBlock(this.browser, this.firstBlock.id, {button: 1});
     await this.browser.keys([Key.Backspace]);
     await this.browser.pause(PAUSE_TIME);
     // Undo

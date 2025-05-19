@@ -178,4 +178,13 @@ export abstract class Icon implements IIcon {
   canBeFocused(): boolean {
     return true;
   }
+
+  /**
+   * Returns the block that this icon is attached to.
+   *
+   * @returns The block this icon is attached to.
+   */
+  getSourceBlock(): Block {
+    return this.sourceBlock;
+  }
 }

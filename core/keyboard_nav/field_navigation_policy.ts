@@ -97,6 +97,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
   isNavigable(current: Field<any>): boolean {
     return (
       current.canBeFocused() &&
+      current.isVisible() &&
       (current.isClickable() || current.isCurrentlyEditable()) &&
       !(
         current.getSourceBlock()?.isSimpleReporter() &&

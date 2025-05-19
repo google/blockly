@@ -165,6 +165,30 @@ suite('Navigation', function () {
           'helpUrl': '',
         },
         {
+          'type': 'hidden_field',
+          'message0': '%1 %2 %3',
+          'args0': [
+            {
+              'type': 'field_input',
+              'name': 'ONE',
+              'text': 'default',
+            },
+            {
+              'type': 'field_input',
+              'name': 'TWO',
+              'text': 'default',
+            },
+            {
+              'type': 'field_input',
+              'name': 'THREE',
+              'text': 'default',
+            },
+          ],
+          'colour': 230,
+          'tooltip': '',
+          'helpUrl': '',
+        },
+        {
           'type': 'fields_and_input2',
           'message0': '%1 %2 %3 %4 bye',
           'args0': [
@@ -222,17 +246,61 @@ suite('Navigation', function () {
           'helpUrl': '',
           'nextStatement': null,
         },
+        {
+          'type': 'hidden_input',
+          'message0': '%1 hi %2 %3 %4 %5 %6',
+          'args0': [
+            {
+              'type': 'field_input',
+              'name': 'ONE',
+              'text': 'default',
+            },
+            {
+              'type': 'input_dummy',
+            },
+            {
+              'type': 'field_input',
+              'name': 'TWO',
+              'text': 'default',
+            },
+            {
+              'type': 'input_value',
+              'name': 'SECOND',
+            },
+            {
+              'type': 'field_input',
+              'name': 'THREE',
+              'text': 'default',
+            },
+            {
+              'type': 'input_value',
+              'name': 'THIRD',
+            },
+          ],
+          'previousStatement': null,
+          'nextStatement': null,
+          'colour': 230,
+          'tooltip': '',
+          'helpUrl': '',
+        },
       ]);
       const noNextConnection = this.workspace.newBlock('top_connection');
       const fieldAndInputs = this.workspace.newBlock('fields_and_input');
       const twoFields = this.workspace.newBlock('two_fields');
       const fieldAndInputs2 = this.workspace.newBlock('fields_and_input2');
       const noPrevConnection = this.workspace.newBlock('start_block');
+      const hiddenField = this.workspace.newBlock('hidden_field');
+      const hiddenInput = this.workspace.newBlock('hidden_input');
       this.blocks.noNextConnection = noNextConnection;
       this.blocks.fieldAndInputs = fieldAndInputs;
       this.blocks.twoFields = twoFields;
       this.blocks.fieldAndInputs2 = fieldAndInputs2;
       this.blocks.noPrevConnection = noPrevConnection;
+      this.blocks.hiddenField = hiddenField;
+      this.blocks.hiddenInput = hiddenInput;
+
+      hiddenField.inputList[0].fieldRow[1].setVisible(false);
+      hiddenInput.inputList[1].setVisible(false);
 
       const dummyInput = this.workspace.newBlock('dummy_input');
       const dummyInputValue = this.workspace.newBlock('dummy_inputValue');
@@ -322,6 +390,20 @@ suite('Navigation', function () {
         const nextNode = this.navigator.getNextSibling(field);
         assert.isNull(nextNode);
       });
+      test('skipsHiddenField', function () {
+        const field = this.blocks.hiddenField.inputList[0].fieldRow[0];
+        const field2 = this.blocks.hiddenField.inputList[0].fieldRow[2];
+        const nextNode = this.navigator.getNextSibling(field);
+        assert.equal(nextNode.name, field2.name);
+      });
+      test('skipsHiddenInput', function () {
+        const field = this.blocks.hiddenInput.inputList[0].fieldRow[0];
+        const nextNode = this.navigator.getNextSibling(field);
+        assert.equal(
+          nextNode,
+          this.blocks.hiddenInput.inputList[2].fieldRow[0],
+        );
+      });
     });
 
     suite('Previous', function () {
@@ -399,6 +481,20 @@ suite('Navigation', function () {
         const field2 = this.blocks.fieldAndInputs.inputList[0].fieldRow[0];
         const prevNode = this.navigator.getPreviousSibling(field);
         assert.equal(prevNode, field2);
+      });
+      test('skipsHiddenField', function () {
+        const field = this.blocks.hiddenField.inputList[0].fieldRow[2];
+        const field2 = this.blocks.hiddenField.inputList[0].fieldRow[0];
+        const prevNode = this.navigator.getPreviousSibling(field);
+        assert.equal(prevNode.name, field2.name);
+      });
+      test('skipsHiddenInput', function () {
+        const field = this.blocks.hiddenInput.inputList[2].fieldRow[0];
+        const nextNode = this.navigator.getPreviousSibling(field);
+        assert.equal(
+          nextNode,
+          this.blocks.hiddenInput.inputList[0].fieldRow[0],
+        );
       });
     });
 

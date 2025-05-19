@@ -14,7 +14,7 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import { Field } from '../field.js';
+import {Field} from '../field.js';
 import {getFocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {isFocusableNode} from '../interfaces/i_focusable_node.js';

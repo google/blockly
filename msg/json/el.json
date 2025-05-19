@@ -39,6 +39,7 @@
 	"DELETE_X_BLOCKS": "Διαγραφή %1 μπλοκ",
 	"DELETE_ALL_BLOCKS": "Να διαγραφούν όλα τα %1 μπλοκ;",
 	"CLEAN_UP": "Εκκαθάριση μπλοκ",
+	"CLOSE": "Κλείσιμο",
 	"COLLAPSE_BLOCK": "Σύμπτυξη μπλοκ",
 	"COLLAPSE_ALL": "Σύμπτυξη μπλοκ",
 	"EXPAND_BLOCK": "Ανάπτυξη μπλοκ",
@@ -352,5 +353,15 @@
 	"WORKSPACE_ARIA_LABEL": "Χώρος εργασίας Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Υπάρχουν προειδοποιήσεις στα συμπτυγμένα μπλοκ.",
 	"DIALOG_OK": "Εντάξει",
-	"DIALOG_CANCEL": "Ακύρωση"
+	"DIALOG_CANCEL": "Ακύρωση",
+	"DELETE_KEY": "Διαγραφή",
+	"WINDOWS": "Windows",
+	"MAC_OS": "macOS",
+	"CHROME_OS": "ChromeOS",
+	"LINUX": "Linux",
+	"CONTROL_KEY": "Ctrl",
+	"ALT_KEY": "Alt",
+	"CUT_SHORTCUT": "Αποκοπή (%1)",
+	"COPY_SHORTCUT": "Αντιγραφή (%1)",
+	"PASTE_SHORTCUT": "Επικόλληση (%1)"
 }

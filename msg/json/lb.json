@@ -18,6 +18,7 @@
 	"DELETE_X_BLOCKS": "%1 Bléck läschen",
 	"DELETE_ALL_BLOCKS": "All %1 Bléck läschen?",
 	"CLEAN_UP": "Bléck opraumen",
+	"CLOSE": "Zoumaachen",
 	"COLLAPSE_BLOCK": "Block zesummeklappen",
 	"COLLAPSE_ALL": "Bléck zesummeklappen",
 	"EXPAND_BLOCK": "Block opklappen",
@@ -152,5 +153,12 @@
 	"PROCEDURES_IFRETURN_WARNING": "Opgepasst: Dëse Block däerf nëmmen bannent enger Funktiounsdefitioun benotzt ginn.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sot eppes...",
 	"DIALOG_OK": "OK",
-	"DIALOG_CANCEL": "Ofbriechen"
+	"DIALOG_CANCEL": "Ofbriechen",
+	"WINDOWS": "Windows",
+	"MAC_OS": "macOS",
+	"CHROME_OS": "ChromeOS",
+	"LINUX": "Linux",
+	"UNKNOWN": "Onbekannt",
+	"COPY_SHORTCUT": "Kopéieren (%1)",
+	"SHORTCUTS_CODE_NAVIGATION": "Code-Navigatioun"
 }

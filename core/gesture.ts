@@ -143,12 +143,6 @@ export class Gesture {
   /** Boolean for sanity-checking that some code is only called once. */
   private gestureHasStarted = false;
 
-  /**
-   * True if dragging from the target block should duplicate the target block
-   * and drag the duplicate instead.  This has a lot of side effects.
-   */
-  private shouldDuplicateOnDrag_ = false;
-
   /** Boolean used internally to break a cycle in disposal. */
   protected isEnding_ = false;
 
@@ -356,6 +350,10 @@ export class Gesture {
     // If we drag a block out of the flyout, it updates `common.getSelected`
     // to return the new block.
     if (this.flyout) this.updateIsDraggingFromFlyout();
+
+    if (this.targetBlock !== null && isShadowArgumentLocal(this.targetBlock)){
+      this.duplicateOnDrag_(this.targetBlock)
+    }
 
     const selected = common.getSelected();
     if (selected && isDraggable(selected) && selected.isMovable()) {
@@ -1029,20 +1027,20 @@ export class Gesture {
     if (!this.startBlock && !this.startBubble) {
       this.startBlock = block;
 
-      this.shouldDuplicateOnDrag_ =
-        !(block as Block).disabled &&
-        !block.getInheritedDisabled() &&
-        !block.isInFlyout &&
-        isShadowArgumentLocal(block);
-
-      if (this.shouldDuplicateOnDrag_) {
-        this.duplicateOnDrag_(this.startBlock);
-      } else {
+      const isShadowArgument = !(block as Block).disabled &&
+          !block.getInheritedDisabled() &&
+          !block.isInFlyout &&
+          isShadowArgumentLocal(block);
+      
+      if (!isShadowArgument) {
         common.setSelected(this.startBlock);
+      } else {
+        common.setSelected(block.getParent())
       }
 
-      if (block.isInFlyout && block !== block.getRootBlock()) {
-        this.setTargetBlock(block.getRootBlock());
+      const rootBlock = block.getRootBlock()
+      if (block.isInFlyout && block !== rootBlock && !isShadowArgument) {
+        this.setTargetBlock(rootBlock);
       } else {
         this.setTargetBlock(block);
       }
@@ -1057,7 +1055,7 @@ export class Gesture {
    * @param block The block the gesture targets.
    */
   private setTargetBlock(block: BlockSvg) {
-    if (block.isShadow() && !this.shouldDuplicateOnDrag_) {
+    if (block.isShadow() && !isShadowArgumentLocal(block)) {
       // Non-null assertion is fine b/c it is an invariant that shadows always
       // have parents.
       this.setTargetBlock(block.getParent()!);

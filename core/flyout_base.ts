@@ -308,7 +308,6 @@ export abstract class Flyout
     // hide/show code will set up proper visibility and size later.
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
-      'tabindex': '0',
     });
     this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(
@@ -324,7 +323,7 @@ export abstract class Flyout
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
 
-    getFocusManager().registerTree(this);
+    getFocusManager().registerTree(this, true);
 
     return this.svgGroup_;
   }

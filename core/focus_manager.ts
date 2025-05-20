@@ -17,6 +17,13 @@ import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
  */
 export type ReturnEphemeralFocus = () => void;
 
+class TreeRegistration {
+  constructor(
+    readonly tree: IFocusableTree,
+    readonly rootShouldBeAutoTabbable: boolean,
+  ) {}
+}
+
 /**
  * A per-page singleton that manages Blockly focus across one or more
  * IFocusableTrees, and bidirectionally synchronizes this focus with the DOM.
@@ -58,7 +65,7 @@ export class FocusManager {
 
   private focusedNode: IFocusableNode | null = null;
   private previouslyFocusedNode: IFocusableNode | null = null;
-  private registeredTrees: Array<IFocusableTree> = [];
+  private registeredTrees: Array<TreeRegistration> = [];
 
   private currentlyHoldsEphemeralFocus: boolean = false;
   private lockFocusStateChanges: boolean = false;
@@ -75,7 +82,8 @@ export class FocusManager {
         // If the target losing or gaining focus maps to any tree, then it
         // should be updated. Per the contract of findFocusableNodeFor only one
         // tree should claim the element, so the search can be exited early.
-        for (const tree of this.registeredTrees) {
+        for (const reg of this.registeredTrees) {
+          const tree = reg.tree;
           newNode = FocusableTreeTraverser.findFocusableNodeFor(element, tree);
           if (newNode) break;
         }
@@ -128,13 +136,30 @@ export class FocusManager {
    * This function throws if the provided tree is already currently registered
    * in this manager. Use isRegistered to check in cases when it can't be
    * certain whether the tree has been registered.
+   *
+   * The tree's registration can be customized to configure automatic tab stops.
+   * This specifically provides capability for the user to be able to tab
+   * navigate to the root of the tree but only when the tree doesn't hold active
+   * focus.
+   *
+   * @param tree The IFocusableTree to register.
+   * @param rootShouldBeAutoTabbable Whether the root of this tree should be
+   *     added as a top-level page tab stop when it doesn't hold active focus.
    */
-  registerTree(tree: IFocusableTree): void {
+  registerTree(
+    tree: IFocusableTree,
+    rootShouldBeAutoTabbable: boolean = false,
+  ): void {
     this.ensureManagerIsUnlocked();
     if (this.isRegistered(tree)) {
       throw Error(`Attempted to re-register already registered tree: ${tree}.`);
     }
-    this.registeredTrees.push(tree);
+    this.registeredTrees.push(
+      new TreeRegistration(tree, rootShouldBeAutoTabbable),
+    );
+    if (rootShouldBeAutoTabbable) {
+      tree.getRootFocusableNode().getFocusableElement().tabIndex = 0;
+    }
   }
 
   /**
@@ -143,7 +168,12 @@ export class FocusManager {
    * unregisterTree.
    */
   isRegistered(tree: IFocusableTree): boolean {
-    return this.registeredTrees.findIndex((reg) => reg === tree) !== -1;
+    return !!this.lookUpRegistration(tree);
+  }
+
+  private lookUpRegistration(tree: IFocusableTree): TreeRegistration | null {
+    const index = this.registeredTrees.findIndex((reg) => reg.tree === tree);
+    return index !== -1 ? this.registeredTrees[index] : null;
   }
 
   /**
@@ -154,13 +184,19 @@ export class FocusManager {
    *
    * This function throws if the provided tree is not currently registered in
    * this manager.
+   *
+   * This function will reset the tree's root element tabindex if the tree was
+   * registered with automatic tab management.
    */
   unregisterTree(tree: IFocusableTree): void {
     this.ensureManagerIsUnlocked();
     if (!this.isRegistered(tree)) {
       throw Error(`Attempted to unregister not registered tree: ${tree}.`);
     }
-    const treeIndex = this.registeredTrees.findIndex((reg) => reg === tree);
+    const treeIndex = this.registeredTrees.findIndex(
+      (reg) => reg.tree === tree,
+    );
+    const registration = this.registeredTrees[treeIndex];
     this.registeredTrees.splice(treeIndex, 1);
 
     const focusedNode = FocusableTreeTraverser.findFocusedNode(tree);
@@ -170,6 +206,13 @@ export class FocusManager {
       this.updateFocusedNode(null);
     }
     this.removeHighlight(root);
+
+    if (registration.rootShouldBeAutoTabbable) {
+      tree
+        .getRootFocusableNode()
+        .getFocusableElement()
+        .removeAttribute('tabindex');
+    }
   }
 
   /**
@@ -235,6 +278,9 @@ export class FocusManager {
    * **Important**: If the provided node is not able to be focused (e.g. its
    * canBeFocused() method returns false), it will be ignored and any existing
    * focus state will remain unchanged.
+   *
+   * Note that this may update the specified node's element's tabindex to ensure
+   * that it can be properly read out by screenreaders while focused.
    *
    * @param focusableNode The node that should receive active focus.
    */
@@ -387,6 +433,28 @@ export class FocusManager {
   private updateFocusedNode(newFocusedNode: IFocusableNode | null) {
     this.previouslyFocusedNode = this.focusedNode;
     this.focusedNode = newFocusedNode;
+
+    // Only remove the tab index if it isn't a tree root that's auto managed.
+    const prevNode = this.previouslyFocusedNode;
+    if (prevNode) {
+      const prevTree = prevNode.getFocusableTree();
+      const prevTreeReg = this.lookUpRegistration(prevTree);
+      const treeIsTabManaged = prevTreeReg?.rootShouldBeAutoTabbable;
+      if (!treeIsTabManaged || prevNode !== prevTree.getRootFocusableNode()) {
+        // prevNode.getFocusableElement()?.removeAttribute('tabindex');
+      }
+    }
+
+    // Only overwrite the tab index if it isn't a tree root that's auto managed.
+    const nextNode = this.focusedNode;
+    if (nextNode) {
+      const nextTree = nextNode.getFocusableTree();
+      const nextTreeReg = this.lookUpRegistration(nextTree);
+      const treeIsTabManaged = nextTreeReg?.rootShouldBeAutoTabbable;
+      if (!treeIsTabManaged || nextNode !== nextTree.getRootFocusableNode()) {
+        // nextNode.getFocusableElement()?.setAttribute('tabindex', '-1');
+      }
+    }
   }
 
   /**
@@ -424,8 +492,19 @@ export class FocusManager {
     // node's focusable element (which *is* allowed to be invisible until the
     // node needs to be focused).
     this.lockFocusStateChanges = true;
-    if (node.getFocusableTree() !== prevTree) {
-      node.getFocusableTree().onTreeFocus(node, prevTree);
+    const tree = node.getFocusableTree();
+    if (tree !== prevTree) {
+      tree.onTreeFocus(node, prevTree);
+
+      const reg = this.lookUpRegistration(tree);
+      if (reg?.rootShouldBeAutoTabbable) {
+        // If this node's tree has its tab auto-managed, ensure that it's no
+        // longer tabbable now that it holds active focus.
+        tree
+          .getRootFocusableNode()
+          .getFocusableElement()
+          .removeAttribute('tabindex');
+      }
     }
     node.onNodeFocus();
     this.lockFocusStateChanges = false;
@@ -451,13 +530,21 @@ export class FocusManager {
     nextTree: IFocusableTree | null,
   ): void {
     this.lockFocusStateChanges = true;
-    if (node.getFocusableTree() !== nextTree) {
-      node.getFocusableTree().onTreeBlur(nextTree);
+    const tree = node.getFocusableTree();
+    if (tree !== nextTree) {
+      tree.onTreeBlur(nextTree);
+
+      const reg = this.lookUpRegistration(tree);
+      if (reg?.rootShouldBeAutoTabbable) {
+        // If this node's tree has its tab auto-managed, ensure that it's now
+        // tabbable since it no longer holds active focus.
+        tree.getRootFocusableNode().getFocusableElement().tabIndex = 0;
+      }
     }
     node.onNodeBlur();
     this.lockFocusStateChanges = false;
 
-    if (node.getFocusableTree() !== nextTree) {
+    if (tree !== nextTree) {
       this.setNodeToVisualPassiveFocus(node);
     }
   }

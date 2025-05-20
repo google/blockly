@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {IFocusableNode} from '../blockly.js';
 import * as browserEvents from '../browser_events.js';
 import {
   WorkspaceCommentCopyData,
@@ -42,7 +43,8 @@ export class RenderedWorkspaceComment
     ISelectable,
     IDeletable,
     ICopyable<WorkspaceCommentCopyData>,
-    IContextMenu
+    IContextMenu,
+    IFocusableNode
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -207,7 +209,12 @@ export class RenderedWorkspaceComment
   /** Disposes of the view. */
   override dispose() {
     this.disposing = true;
+    const focusManager = getFocusManager();
+    if (focusManager.getFocusedNode() === this) {
+      setTimeout(() => focusManager.focusTree(this.workspace), 0);
+    }
     if (!this.view.isDeadOrDying()) this.view.dispose();
+
     super.dispose();
   }
 

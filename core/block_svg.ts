@@ -856,7 +856,7 @@ export class BlockSvg
       if (parent) {
         focusManager.focusNode(parent);
       } else {
-        focusManager.focusTree(this.workspace);
+        setTimeout(() => focusManager.focusTree(this.workspace), 0);
       }
     }
 

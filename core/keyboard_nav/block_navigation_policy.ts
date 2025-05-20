@@ -21,6 +21,9 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @returns The first field or input of the given block, if any.
    */
   getFirstChild(current: BlockSvg): IFocusableNode | null {
+    const icons = current.getIcons();
+    if (icons.length) return icons[0];
+
     for (const input of current.inputList) {
       for (const field of input.fieldRow) {
         return field;

@@ -85,7 +85,8 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
         fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
       }
     }
-    return null;
+
+    return block.getIcons().pop() ?? null;
   }
 
   /**

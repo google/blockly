@@ -404,6 +404,29 @@ suite('Navigation', function () {
           this.blocks.hiddenInput.inputList[2].fieldRow[0],
         );
       });
+      test('from icon to icon', function () {
+        this.blocks.statementInput1.setCommentText('test');
+        this.blocks.statementInput1.setWarningText('test');
+        const icons = this.blocks.statementInput1.getIcons();
+        const nextNode = this.navigator.getNextSibling(icons[0]);
+        assert.equal(nextNode, icons[1]);
+      });
+      test('from icon to field', function () {
+        this.blocks.statementInput1.setCommentText('test');
+        this.blocks.statementInput1.setWarningText('test');
+        const icons = this.blocks.statementInput1.getIcons();
+        const nextNode = this.navigator.getNextSibling(icons[1]);
+        assert.equal(
+          nextNode,
+          this.blocks.statementInput1.inputList[0].fieldRow[0],
+        );
+      });
+      test('from icon to null', function () {
+        this.blocks.dummyInput.setCommentText('test');
+        const icons = this.blocks.dummyInput.getIcons();
+        const nextNode = this.navigator.getNextSibling(icons[0]);
+        assert.isNull(nextNode);
+      });
     });
 
     suite('Previous', function () {
@@ -496,6 +519,28 @@ suite('Navigation', function () {
           this.blocks.hiddenInput.inputList[0].fieldRow[0],
         );
       });
+      test('from icon to icon', function () {
+        this.blocks.statementInput1.setCommentText('test');
+        this.blocks.statementInput1.setWarningText('test');
+        const icons = this.blocks.statementInput1.getIcons();
+        const prevNode = this.navigator.getPreviousSibling(icons[1]);
+        assert.equal(prevNode, icons[0]);
+      });
+      test('from field to icon', function () {
+        this.blocks.statementInput1.setCommentText('test');
+        this.blocks.statementInput1.setWarningText('test');
+        const icons = this.blocks.statementInput1.getIcons();
+        const prevNode = this.navigator.getPreviousSibling(
+          this.blocks.statementInput1.inputList[0].fieldRow[0],
+        );
+        assert.equal(prevNode, icons[1]);
+      });
+      test('from icon to null', function () {
+        this.blocks.dummyInput.setCommentText('test');
+        const icons = this.blocks.dummyInput.getIcons();
+        const prevNode = this.navigator.getPreviousSibling(icons[0]);
+        assert.isNull(prevNode);
+      });
     });
 
     suite('In', function () {
@@ -562,6 +607,18 @@ suite('Navigation', function () {
       });
       test('fromWorkspaceToNull', function () {
         const inNode = this.navigator.getFirstChild(this.emptyWorkspace);
+        assert.isNull(inNode);
+      });
+      test('from block to icon', function () {
+        this.blocks.dummyInput.setCommentText('test');
+        const icons = this.blocks.dummyInput.getIcons();
+        const inNode = this.navigator.getFirstChild(this.blocks.dummyInput);
+        assert.equal(inNode, icons[0]);
+      });
+      test('from icon to null', function () {
+        this.blocks.dummyInput.setCommentText('test');
+        const icons = this.blocks.dummyInput.getIcons();
+        const inNode = this.navigator.getFirstChild(icons[0]);
         assert.isNull(inNode);
       });
     });
@@ -660,6 +717,12 @@ suite('Navigation', function () {
         const inputConnection = this.blocks.secondBlock;
         const outNode = this.navigator.getParent(this.blocks.outputNextBlock);
         assert.equal(outNode, inputConnection);
+      });
+      test('from icon to block', function () {
+        this.blocks.dummyInput.setCommentText('test');
+        const icons = this.blocks.dummyInput.getIcons();
+        const outNode = this.navigator.getParent(icons[0]);
+        assert.equal(outNode, this.blocks.dummyInput);
       });
     });
   });

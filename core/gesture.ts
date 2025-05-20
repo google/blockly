@@ -349,9 +349,9 @@ export class Gesture {
 
     // If we drag a block out of the flyout, it updates `common.getSelected`
     // to return the new block.
-    if (this.flyout) this.updateIsDraggingFromFlyout();
-
-    if (this.targetBlock !== null && isShadowArgumentLocal(this.targetBlock)){
+    if (this.flyout) {
+      this.updateIsDraggingFromFlyout();
+    } else if (this.targetBlock !== null && isShadowArgumentLocal(this.targetBlock)){
       this.duplicateOnDrag_(this.targetBlock)
     }
 

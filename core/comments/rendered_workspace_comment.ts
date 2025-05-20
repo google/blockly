@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IFocusableNode} from '../blockly.js';
 import * as browserEvents from '../browser_events.js';
 import {
   WorkspaceCommentCopyData,
@@ -20,6 +19,7 @@ import {IContextMenu} from '../interfaces/i_contextmenu.js';
 import {ICopyable} from '../interfaces/i_copyable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
+import {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import {ISelectable} from '../interfaces/i_selectable.js';

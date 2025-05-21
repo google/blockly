@@ -285,8 +285,6 @@ suite('Navigation', function () {
         },
         {
           'type': 'buttons',
-          'tooltip': '',
-          'helpUrl': '',
           'message0': 'If %1 %2 Then %3 %4 more %5 %6 %7',
           'args0': [
             {

@@ -6,13 +6,6 @@
 
 import {BlockSvg} from '../block_svg.js';
 import type {Field} from '../field.js';
-import {
-  DummyInput,
-  EndRowInput,
-  Input,
-  StatementInput,
-  ValueInput,
-} from '../inputs.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
@@ -61,7 +54,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * Returns the next peer node of the given block.
    *
    * @param current The block to find the following element of.
-   * @returns The first block of the next stack if the given block is a terminal
+   * @returns The first node of the next input/stack if the given block is a terminal
    *     block, or its next connection.
    */
   getNextSibling(current: BlockSvg): IFocusableNode | null {

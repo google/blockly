@@ -6,6 +6,13 @@
 
 import {BlockSvg} from '../block_svg.js';
 import type {Field} from '../field.js';
+import {
+  DummyInput,
+  EndRowInput,
+  Input,
+  StatementInput,
+  ValueInput,
+} from '../inputs.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
@@ -67,9 +74,12 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     let siblings: (BlockSvg | Field)[] = [];
     if (parent instanceof BlockSvg) {
       for (let i = 0, input; (input = parent.inputList[i]); i++) {
-        if (input.connection) {
+        if (
+          i == 0 ||
+          this.isStartOfRow(parent, input, parent.inputList[i - 1])
+        ) {
           siblings.push(...input.fieldRow);
-          const child = input.connection.targetBlock();
+          const child = input.connection?.targetBlock();
           if (child) {
             siblings.push(child as BlockSvg);
           }
@@ -161,5 +171,47 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    */
   isApplicable(current: any): current is BlockSvg {
     return current instanceof BlockSvg;
+  }
+
+  /**
+   * Checks whether an input is the first input on a row. This code is mostly
+   * identical to RenderInfo.
+   *
+   * @param block The block these inputs are on.
+   * @param currInput The current input.
+   * @param prevInput The previous input.
+   * @returns True if the current input is the start of a row.
+   */
+  protected isStartOfRow(
+    block: BlockSvg,
+    currInput: Input,
+    prevInput?: Input,
+  ): boolean {
+    // First input is always the start of a row
+    if (!prevInput) {
+      return true;
+    }
+    // If the previous input was an end-row input, then any following input
+    // should always be rendered on the next row.
+    if (prevInput instanceof EndRowInput) {
+      return true;
+    }
+    // A statement input or an input following one always gets a new row.
+    if (
+      currInput instanceof StatementInput ||
+      prevInput instanceof StatementInput
+    ) {
+      return true;
+    }
+    // Value inputs, dummy inputs, and any input following an external value
+    // input get a new row if inputs are not inlined.
+    if (
+      currInput instanceof ValueInput ||
+      currInput instanceof DummyInput ||
+      prevInput instanceof ValueInput
+    ) {
+      return !block.getInputsInline();
+    }
+    return false;
   }
 }

@@ -57,7 +57,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * Returns the next peer node of the given block.
    *
    * @param current The block to find the following element of.
-   * @returns The first block of the next stack if the given block is a terminal
+   * @returns The first node of the next input/stack if the given block is a terminal
    *     block, or its next connection.
    */
   getNextSibling(current: BlockSvg): IFocusableNode | null {
@@ -70,12 +70,10 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     let siblings: (BlockSvg | Field)[] = [];
     if (parent instanceof BlockSvg) {
       for (let i = 0, input; (input = parent.inputList[i]); i++) {
-        if (input.connection) {
-          siblings.push(...input.fieldRow);
-          const child = input.connection.targetBlock();
-          if (child) {
-            siblings.push(child as BlockSvg);
-          }
+        siblings.push(...input.fieldRow);
+        const child = input.connection?.targetBlock();
+        if (child) {
+          siblings.push(child as BlockSvg);
         }
       }
     } else if (parent instanceof WorkspaceSvg) {
@@ -114,12 +112,10 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     let siblings: (BlockSvg | Field)[] = [];
     if (parent instanceof BlockSvg) {
       for (let i = 0, input; (input = parent.inputList[i]); i++) {
-        if (input.connection) {
-          siblings.push(...input.fieldRow);
-          const child = input.connection.targetBlock();
-          if (child) {
-            siblings.push(child as BlockSvg);
-          }
+        siblings.push(...input.fieldRow);
+        const child = input.connection?.targetBlock();
+        if (child) {
+          siblings.push(child as BlockSvg);
         }
       }
     } else if (parent instanceof WorkspaceSvg) {

@@ -283,6 +283,61 @@ suite('Navigation', function () {
           'tooltip': '',
           'helpUrl': '',
         },
+        {
+          'type': 'buttons',
+          'message0': 'If %1 %2 Then %3 %4 more %5 %6 %7',
+          'args0': [
+            {
+              'type': 'field_image',
+              'name': 'BUTTON1',
+              'src': 'https://www.gstatic.com/codesite/ph/images/star_on.gif',
+              'width': 30,
+              'height': 30,
+              'alt': '*',
+            },
+            {
+              'type': 'input_value',
+              'name': 'VALUE1',
+              'check': '',
+            },
+            {
+              'type': 'field_image',
+              'name': 'BUTTON2',
+              'src': 'https://www.gstatic.com/codesite/ph/images/star_on.gif',
+              'width': 30,
+              'height': 30,
+              'alt': '*',
+            },
+            {
+              'type': 'input_dummy',
+              'name': 'DUMMY1',
+              'check': '',
+            },
+            {
+              'type': 'input_value',
+              'name': 'VALUE2',
+              'check': '',
+            },
+            {
+              'type': 'input_statement',
+              'name': 'STATEMENT1',
+              'check': 'Number',
+            },
+            {
+              'type': 'field_image',
+              'name': 'BUTTON3',
+              'src': 'https://www.gstatic.com/codesite/ph/images/star_on.gif',
+              'width': 30,
+              'height': 30,
+              'alt': '*',
+            },
+          ],
+          'previousStatement': null,
+          'nextStatement': null,
+          'colour': 230,
+          'tooltip': '',
+          'helpUrl': '',
+        },
       ]);
       const noNextConnection = this.workspace.newBlock('top_connection');
       const fieldAndInputs = this.workspace.newBlock('fields_and_input');
@@ -313,6 +368,27 @@ suite('Navigation', function () {
       const outputNextBlock = this.workspace.newBlock('output_next');
       this.blocks.secondBlock = secondBlock;
       this.blocks.outputNextBlock = outputNextBlock;
+
+      const buttonBlock = this.workspace.newBlock('buttons');
+      const buttonInput1 = this.workspace.newBlock('field_input');
+      const buttonInput2 = this.workspace.newBlock('field_input');
+      buttonBlock.inputList[0].connection.connect(
+        buttonInput1.outputConnection,
+      );
+      buttonBlock.inputList[2].connection.connect(
+        buttonInput2.outputConnection,
+      );
+      // Make buttons by adding a click handler
+      const clickHandler = function () {
+        return;
+      };
+      buttonBlock.getField('BUTTON1').setOnClickHandler(clickHandler);
+      buttonBlock.getField('BUTTON2').setOnClickHandler(clickHandler);
+      buttonBlock.getField('BUTTON3').setOnClickHandler(clickHandler);
+      this.blocks.buttonBlock = buttonBlock;
+      this.blocks.buttonInput1 = buttonInput1;
+      this.blocks.buttonInput2 = buttonInput2;
+
       this.workspace.cleanUp();
     });
     suite('Next', function () {
@@ -427,6 +503,20 @@ suite('Navigation', function () {
         const nextNode = this.navigator.getNextSibling(icons[0]);
         assert.isNull(nextNode);
       });
+      test('fromBlockToFieldInNextInput', function () {
+        const field = this.blocks.buttonBlock.getField('BUTTON2');
+        const prevNode = this.navigator.getNextSibling(
+          this.blocks.buttonInput1,
+        );
+        assert.equal(prevNode, field);
+      });
+      test('fromBlockToFieldSkippingInput', function () {
+        const field = this.blocks.buttonBlock.getField('BUTTON3');
+        const prevNode = this.navigator.getNextSibling(
+          this.blocks.buttonInput2,
+        );
+        assert.equal(prevNode, field);
+      });
     });
 
     suite('Previous', function () {
@@ -540,6 +630,20 @@ suite('Navigation', function () {
         const icons = this.blocks.dummyInput.getIcons();
         const prevNode = this.navigator.getPreviousSibling(icons[0]);
         assert.isNull(prevNode);
+      });
+      test('fromBlockToFieldInSameInput', function () {
+        const field = this.blocks.buttonBlock.getField('BUTTON1');
+        const prevNode = this.navigator.getPreviousSibling(
+          this.blocks.buttonInput1,
+        );
+        assert.equal(prevNode, field);
+      });
+      test('fromBlockToFieldInPrevInput', function () {
+        const field = this.blocks.buttonBlock.getField('BUTTON2');
+        const prevNode = this.navigator.getPreviousSibling(
+          this.blocks.buttonInput2,
+        );
+        assert.equal(prevNode, field);
       });
     });
 

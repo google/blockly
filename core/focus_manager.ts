@@ -240,6 +240,15 @@ export class FocusManager {
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
+    // Double check that state wasn't desynchronized in the background. Context:
+    // https://github.com/google/blockly-keyboard-experimentation/issues/87.
+    const currentFocusedElement = this.focusedNode?.getFocusableElement();
+    if (this.focusedNode && currentFocusedElement !== document.activeElement) {
+      // Ensure the node has actually been defocused since the DOM defocused it.
+      // In some cases this may result in an immediate re-focus, but that's fine
+      // since this logic at least guarantees eventual consistency.
+      this.defocusCurrentFocusedNode();
+    }
     if (this.focusedNode === focusableNode) return; // State is unchanged.
     if (!focusableNode.canBeFocused()) {
       // This node can't be focused.
@@ -292,6 +301,12 @@ export class FocusManager {
       this.activelyFocusNode(nodeToFocus, prevTree ?? null);
     }
     this.updateFocusedNode(nodeToFocus);
+    if (!this.currentlyHoldsEphemeralFocus) {
+      // Focus the actual element. This is done last since it can create a loop
+      // back to focusNode() (which will be short-circuited by the early exit
+      // logic above).
+      nodeToFocus.getFocusableElement().focus();
+    }
   }
 
   /**
@@ -342,6 +357,7 @@ export class FocusManager {
 
       if (this.focusedNode) {
         this.activelyFocusNode(this.focusedNode, null);
+        this.focusedNode.getFocusableElement().focus();
 
         // Even though focus was restored, check if it's lost again. It's
         // possible for the browser to force focus away from all elements once
@@ -411,6 +427,9 @@ export class FocusManager {
    * This does not change the manager's currently tracked node, nor does it
    * change any other nodes.
    *
+   * It is the caller's responsibility to actually call focus() for the node's
+   * element.
+   *
    * @param node The node to be actively focused.
    * @param prevTree The tree of the previously actively focused node, or null
    *     if there wasn't a previously actively focused node.
@@ -431,7 +450,6 @@ export class FocusManager {
     this.lockFocusStateChanges = false;
 
     this.setNodeToVisualActiveFocus(node);
-    node.getFocusableElement().focus();
   }
 
   /**

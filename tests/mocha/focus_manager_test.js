@@ -419,6 +419,29 @@ suite('FocusManager', function () {
       const currentNode = this.focusManager.getFocusedNode();
       assert.strictEqual(currentNode, this.testFocusableTree1Node2);
     });
+
+    test('restores focus when element quietly loses focus', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+      // Remove the FocusManager's listeners to simulate not receiving a focus
+      // event when focus is lost. This can happen in Firefox and Safari when an
+      // element is removed and then re-added to the DOM. This is a contrived
+      // setup to achieve the same outcome on all browsers. For context, see:
+      // https://github.com/google/blockly-keyboard-experimentation/issues/87.
+      for (const registeredListener of this.globalDocumentEventListeners) {
+        const eventType = registeredListener.type;
+        const eventListener = registeredListener.listener;
+        document.removeEventListener(eventType, eventListener);
+      }
+      document.body.focus();
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      const currentNode = this.focusManager.getFocusedNode();
+      const currentElem = currentNode?.getFocusableElement();
+      assert.strictEqual(currentNode, this.testFocusableTree1Node1);
+      assert.strictEqual(document.activeElement, currentElem);
+    });
   });
 
   suite('getFocusManager()', function () {

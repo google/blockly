@@ -169,7 +169,7 @@ export class Toolbox
         ComponentManager.Capability.DRAG_TARGET,
       ],
     });
-    getFocusManager().registerTree(this);
+    getFocusManager().registerTree(this, true);
   }
 
   /**

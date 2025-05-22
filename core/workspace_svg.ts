@@ -762,8 +762,6 @@ export class WorkspaceSvg
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {
       'class': 'blocklyWorkspace',
-      // Only the top-level workspace should be tabbable.
-      'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
     });
     if (injectionDiv) {
@@ -849,7 +847,8 @@ export class WorkspaceSvg
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
 
-    getFocusManager().registerTree(this);
+    // Only the top-level workspace should be tabbable.
+    getFocusManager().registerTree(this, !!this.injectionDiv);
 
     return this.svgGroup_;
   }

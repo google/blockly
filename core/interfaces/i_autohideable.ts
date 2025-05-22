@@ -23,5 +23,5 @@ export interface IAutoHideable extends IComponent {
 
 /** Returns true if the given object is autohideable. */
 export function isAutoHideable(obj: any): obj is IAutoHideable {
-  return typeof obj.autoHide === 'function';
+  return obj && typeof obj.autoHide === 'function';
 }

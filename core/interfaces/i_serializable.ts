@@ -25,6 +25,8 @@ export interface ISerializable {
 /** Type guard that checks whether the given object is a ISerializable. */
 export function isSerializable(obj: any): obj is ISerializable {
   return (
-    typeof obj.saveState === 'function' && typeof obj.loadState === 'function'
+    typeof obj &&
+    obj.saveState === 'function' &&
+    typeof obj.loadState === 'function'
   );
 }

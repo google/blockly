@@ -98,19 +98,19 @@ export interface IIcon extends IFocusableNode {
 /** Type guard that checks whether the given object is an IIcon. */
 export function isIcon(obj: any): obj is IIcon {
   return (
-    typeof obj.getType === 'function' &&
-    typeof obj.initView === 'function' &&
-    typeof obj.dispose === 'function' &&
-    typeof obj.getWeight === 'function' &&
-    typeof obj.getSize === 'function' &&
-    typeof obj.applyColour === 'function' &&
-    typeof obj.hideForInsertionMarker === 'function' &&
-    typeof obj.updateEditable === 'function' &&
-    typeof obj.updateCollapsed === 'function' &&
-    typeof obj.isShownWhenCollapsed === 'function' &&
-    typeof obj.setOffsetInBlock === 'function' &&
-    typeof obj.onLocationChange === 'function' &&
-    typeof obj.onClick === 'function' &&
-    isFocusableNode(obj)
+    isFocusableNode(obj) &&
+    typeof (obj as IIcon).getType === 'function' &&
+    typeof (obj as IIcon).initView === 'function' &&
+    typeof (obj as IIcon).dispose === 'function' &&
+    typeof (obj as IIcon).getWeight === 'function' &&
+    typeof (obj as IIcon).getSize === 'function' &&
+    typeof (obj as IIcon).applyColour === 'function' &&
+    typeof (obj as IIcon).hideForInsertionMarker === 'function' &&
+    typeof (obj as IIcon).updateEditable === 'function' &&
+    typeof (obj as IIcon).updateCollapsed === 'function' &&
+    typeof (obj as IIcon).isShownWhenCollapsed === 'function' &&
+    typeof (obj as IIcon).setOffsetInBlock === 'function' &&
+    typeof (obj as IIcon).onLocationChange === 'function' &&
+    typeof (obj as IIcon).onClick === 'function'
   );
 }

@@ -21,6 +21,7 @@ export interface IObservable {
  */
 export function isObservable(obj: any): obj is IObservable {
   return (
+    obj &&
     typeof obj.startPublishing === 'function' &&
     typeof obj.stopPublishing === 'function'
   );

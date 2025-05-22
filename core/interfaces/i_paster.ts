@@ -21,5 +21,5 @@ export interface IPaster<U extends ICopyData, T extends ICopyable<U>> {
 export function isPaster(
   obj: any,
 ): obj is IPaster<ICopyData, ICopyable<ICopyData>> {
-  return typeof obj.paste === 'function';
+  return obj && typeof obj.paste === 'function';
 }

@@ -32,10 +32,10 @@ export interface ISelectable extends IFocusableNode {
 /** Checks whether the given object is an ISelectable. */
 export function isSelectable(obj: any): obj is ISelectable {
   return (
-    typeof obj.id === 'string' &&
-    typeof obj.workspace === 'function' &&
-    typeof obj.select === 'function' &&
-    typeof obj.unselect === 'function' &&
-    isFocusableNode(obj)
+    isFocusableNode(obj) &&
+    typeof (obj as ISelectable).id === 'string' &&
+    typeof (obj as ISelectable).workspace === 'function' &&
+    typeof (obj as ISelectable).select === 'function' &&
+    typeof (obj as ISelectable).unselect === 'function'
   );
 }

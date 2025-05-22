@@ -27,6 +27,7 @@ export interface IDeletable {
 /** Returns whether the given object is an IDeletable. */
 export function isDeletable(obj: any): obj is IDeletable {
   return (
+    obj &&
     typeof obj.isDeletable === 'function' &&
     typeof obj.dispose === 'function' &&
     typeof obj.setDeleteStyle === 'function'

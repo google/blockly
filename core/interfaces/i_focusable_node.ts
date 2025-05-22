@@ -105,13 +105,13 @@ export interface IFocusableNode {
  * @param object The object to test.
  * @returns Whether the provided object can be used as an IFocusableNode.
  */
-export function isFocusableNode(object: any | null): object is IFocusableNode {
+export function isFocusableNode(obj: any): obj is IFocusableNode {
   return (
-    object &&
-    'getFocusableElement' in object &&
-    'getFocusableTree' in object &&
-    'onNodeFocus' in object &&
-    'onNodeBlur' in object &&
-    'canBeFocused' in object
+    obj &&
+    typeof obj.getFocusableElement === 'function' &&
+    typeof obj.getFocusableTree === 'function' &&
+    typeof obj.onNodeFocus === 'function' &&
+    typeof obj.onNodeBlur === 'function' &&
+    typeof obj.canBeFocused === 'function'
   );
 }

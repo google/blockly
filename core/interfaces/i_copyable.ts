@@ -35,5 +35,5 @@ export type ICopyData = ICopyable.ICopyData;
 
 /** @returns true if the given object is an ICopyable. */
 export function isCopyable(obj: any): obj is ICopyable<ICopyData> {
-  return obj.toCopyData !== undefined;
+  return typeof obj.toCopyData === 'function';
 }

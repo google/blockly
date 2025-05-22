@@ -131,14 +131,14 @@ export interface IFocusableTree {
  * @param object The object to test.
  * @returns Whether the provided object can be used as an IFocusableTree.
  */
-export function isFocusableTree(object: any | null): object is IFocusableTree {
+export function isFocusableTree(obj: any): obj is IFocusableTree {
   return (
-    object &&
-    'getRootFocusableNode' in object &&
-    'getRestoredFocusableNode' in object &&
-    'getNestedTrees' in object &&
-    'lookUpFocusableNode' in object &&
-    'onTreeFocus' in object &&
-    'onTreeBlur' in object
+    obj &&
+    typeof obj.getRootFocusableNode === 'function' &&
+    typeof obj.getRestoredFocusableNode === 'function' &&
+    typeof obj.getNestedTrees === 'function' &&
+    typeof obj.lookUpFocusableNode === 'function' &&
+    typeof obj.onTreeFocus === 'function' &&
+    typeof obj.onTreeBlur === 'function'
   );
 }

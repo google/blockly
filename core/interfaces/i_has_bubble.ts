@@ -30,6 +30,7 @@ export interface IHasBubble {
 /** Type guard that checks whether the given object is a IHasBubble. */
 export function hasBubble(obj: any): obj is IHasBubble {
   return (
-    obj.bubbleIsVisible !== undefined && obj.setBubbleVisible !== undefined
+    typeof obj.bubbleIsVisible === 'function' &&
+    typeof obj.setBubbleVisible === 'function'
   );
 }

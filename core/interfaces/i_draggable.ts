@@ -62,11 +62,11 @@ export interface IDragStrategy {
 /** Returns whether the given object is an IDraggable or not. */
 export function isDraggable(obj: any): obj is IDraggable {
   return (
-    obj.getRelativeToSurfaceXY !== undefined &&
-    obj.isMovable !== undefined &&
-    obj.startDrag !== undefined &&
-    obj.drag !== undefined &&
-    obj.endDrag !== undefined &&
-    obj.revertDrag !== undefined
+    typeof obj.getRelativeToSurfaceXY === 'function' &&
+    typeof obj.isMovable === 'function' &&
+    typeof obj.startDrag === 'function' &&
+    typeof obj.drag === 'function' &&
+    typeof obj.endDrag === 'function' &&
+    typeof obj.revertDrag === 'function'
   );
 }

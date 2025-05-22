@@ -98,19 +98,19 @@ export interface IIcon extends IFocusableNode {
 /** Type guard that checks whether the given object is an IIcon. */
 export function isIcon(obj: any): obj is IIcon {
   return (
-    obj.getType !== undefined &&
-    obj.initView !== undefined &&
-    obj.dispose !== undefined &&
-    obj.getWeight !== undefined &&
-    obj.getSize !== undefined &&
-    obj.applyColour !== undefined &&
-    obj.hideForInsertionMarker !== undefined &&
-    obj.updateEditable !== undefined &&
-    obj.updateCollapsed !== undefined &&
-    obj.isShownWhenCollapsed !== undefined &&
-    obj.setOffsetInBlock !== undefined &&
-    obj.onLocationChange !== undefined &&
-    obj.onClick !== undefined &&
+    typeof obj.getType === 'function' &&
+    typeof obj.initView === 'function' &&
+    typeof obj.dispose === 'function' &&
+    typeof obj.getWeight === 'function' &&
+    typeof obj.getSize === 'function' &&
+    typeof obj.applyColour === 'function' &&
+    typeof obj.hideForInsertionMarker === 'function' &&
+    typeof obj.updateEditable === 'function' &&
+    typeof obj.updateCollapsed === 'function' &&
+    typeof obj.isShownWhenCollapsed === 'function' &&
+    typeof obj.setOffsetInBlock === 'function' &&
+    typeof obj.onLocationChange === 'function' &&
+    typeof obj.onClick === 'function' &&
     isFocusableNode(obj)
   );
 }

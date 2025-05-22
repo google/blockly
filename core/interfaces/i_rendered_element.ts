@@ -15,5 +15,5 @@ export interface IRenderedElement {
  * @returns True if the given object is an IRenderedElement.
  */
 export function isRenderedElement(obj: any): obj is IRenderedElement {
-  return obj['getSvgRoot'] !== undefined;
+  return typeof obj.getSvgRoot === 'function';
 }

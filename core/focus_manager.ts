@@ -63,7 +63,7 @@ export class FocusManager {
   private currentlyHoldsEphemeralFocus: boolean = false;
   private lockFocusStateChanges: boolean = false;
   private recentlyLostAllFocus: boolean = false;
-  private isUpdatingFocusNode: boolean = false;
+  private isUpdatingFocusedNode: boolean = false;
 
   constructor(
     addGlobalEventListener: (type: string, listener: EventListener) => void,
@@ -71,7 +71,7 @@ export class FocusManager {
     // Note that 'element' here is the element *gaining* focus.
     const maybeFocus = (element: Element | EventTarget | null) => {
       // Skip processing the event if the focused node is currently updating.
-      if (this.isUpdatingFocusNode) return;
+      if (this.isUpdatingFocusedNode) return;
 
       this.recentlyLostAllFocus = !element;
       let newNode: IFocusableNode | null | undefined = null;
@@ -247,7 +247,7 @@ export class FocusManager {
     if (!this.currentlyHoldsEphemeralFocus) {
       // Disable state syncing from DOM events since possible calls to focus()
       // below will loop a call back to focusNode().
-      this.isUpdatingFocusNode = true;
+      this.isUpdatingFocusedNode = true;
     }
 
     // Double check that state wasn't desynchronized in the background. See:
@@ -314,7 +314,7 @@ export class FocusManager {
     this.updateFocusedNode(nodeToFocus);
     if (!this.currentlyHoldsEphemeralFocus) {
       // Reenable state syncing from DOM events.
-      this.isUpdatingFocusNode = false;
+      this.isUpdatingFocusedNode = false;
     }
   }
 

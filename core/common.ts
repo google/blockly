@@ -8,11 +8,13 @@
 
 import type {Block} from './block.js';
 import {BlockDefinition, Blocks} from './blocks.js';
+import * as browserEvents from './browser_events.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {getFocusManager} from './focus_manager.js';
 import {ISelectable, isSelectable} from './interfaces/i_selectable.js';
+import {ShortcutRegistry} from './shortcut_registry.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -308,6 +310,33 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
     }
     Blocks[type] = definition;
   }
+}
+
+/**
+ * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
+ * is not visible.
+ *
+ * @internal
+ * @param e Key down event.
+ */
+// TODO (https://github.com/google/blockly/issues/1998) handle cases where there
+// are multiple workspaces and non-main workspaces are able to accept input.
+export function globalShortcutHandler(e: KeyboardEvent) {
+  const mainWorkspace = getMainWorkspace() as WorkspaceSvg;
+  if (!mainWorkspace) {
+    return;
+  }
+
+  if (
+    browserEvents.isTargetInput(e) ||
+    (mainWorkspace.rendered && !mainWorkspace.isVisible())
+  ) {
+    // When focused on an HTML text input widget, don't trap any keys.
+    // Ignore keypresses on rendered workspaces that have been explicitly
+    // hidden.
+    return;
+  }
+  ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
 }
 
 export const TEST_ONLY = {defineBlocksWithJsonArrayInternal};

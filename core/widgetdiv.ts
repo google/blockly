@@ -6,6 +6,7 @@
 
 // Former goog.module ID: Blockly.WidgetDiv
 
+import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {Field} from './field.js';
 import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
@@ -69,11 +70,19 @@ export function createDom() {
   if (document.querySelector('.' + containerClassName)) {
     containerDiv = document.querySelector('.' + containerClassName);
   } else {
-    containerDiv = document.createElement('div') as HTMLDivElement;
+    containerDiv = document.createElement('div');
     containerDiv.className = containerClassName;
   }
+  if (!containerDiv) return;
 
-  container.appendChild(containerDiv!);
+  browserEvents.conditionalBind(
+    containerDiv,
+    'keydown',
+    null,
+    common.globalShortcutHandler,
+  );
+
+  container.appendChild(containerDiv);
 }
 
 /**

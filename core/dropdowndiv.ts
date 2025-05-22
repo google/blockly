@@ -122,6 +122,7 @@ export function createDom() {
   }
   div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
+  div.tabIndex = -1;
   const parentDiv = common.getParentContainer() || document.body;
   parentDiv.appendChild(div);
 
@@ -192,6 +193,11 @@ export function setColour(backgroundColour: string, borderColour: string) {
  * @param block Block to position the drop-down around.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the drop-down div's lifetime. Note that if a false value is
+ *     passed in here then callers should manage ephemeral focus directly
+ *     otherwise focus may not properly restore when the widget closes. Defaults
+ *     to true.
  * @returns True if the menu rendered below block; false if above.
  */
 export function showPositionedByBlock<T>(
@@ -199,10 +205,12 @@ export function showPositionedByBlock<T>(
   block: BlockSvg,
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
+  manageEphemeralFocus: boolean = true,
 ): boolean {
   return showPositionedByRect(
     getScaledBboxOfBlock(block),
     field as Field,
+    manageEphemeralFocus,
     opt_onHide,
     opt_secondaryYOffset,
   );
@@ -217,17 +225,24 @@ export function showPositionedByBlock<T>(
  * @param field The field to position the dropdown against.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the drop-down div's lifetime. Note that if a false value is
+ *     passed in here then callers should manage ephemeral focus directly
+ *     otherwise focus may not properly restore when the widget closes. Defaults
+ *     to true.
  * @returns True if the menu rendered below block; false if above.
  */
 export function showPositionedByField<T>(
   field: Field<T>,
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
+  manageEphemeralFocus: boolean = true,
 ): boolean {
   positionToField = true;
   return showPositionedByRect(
     getScaledBboxOfField(field as Field),
     field as Field,
+    manageEphemeralFocus,
     opt_onHide,
     opt_secondaryYOffset,
   );
@@ -271,16 +286,15 @@ function getScaledBboxOfField(field: Field): Rect {
  * @param manageEphemeralFocus Whether ephemeral focus should be managed
  *     according to the drop-down div's lifetime. Note that if a false value is
  *     passed in here then callers should manage ephemeral focus directly
- *     otherwise focus may not properly restore when the widget closes. Defaults
- *     to true.
+ *     otherwise focus may not properly restore when the widget closes.
  * @returns True if the menu rendered below block; false if above.
  */
 function showPositionedByRect(
   bBox: Rect,
   field: Field,
+  manageEphemeralFocus: boolean,
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
-  manageEphemeralFocus: boolean = true,
 ): boolean {
   // If we can fit it, render below the block.
   const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
@@ -352,10 +366,6 @@ export function show<T>(
   dom.addClass(div, renderedClassName);
   dom.addClass(div, themeClassName);
 
-  if (manageEphemeralFocus) {
-    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
-  }
-
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
   // Since we want the translation to initial X, Y to be immediate,
@@ -364,7 +374,15 @@ export function show<T>(
   // making the dropdown appear to fly in from (0, 0).
   // Using both `left`, `top` for the initial translation and then `translate`
   // for the animated transition to final X, Y is a workaround.
-  return positionInternal(primaryX, primaryY, secondaryX, secondaryY);
+  const atOrigin = positionInternal(primaryX, primaryY, secondaryX, secondaryY);
+
+  // Ephemeral focus must happen after the div is fully visible in order to
+  // ensure that it properly receives focus.
+  if (manageEphemeralFocus) {
+    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
+  }
+
+  return atOrigin;
 }
 
 const internal = {

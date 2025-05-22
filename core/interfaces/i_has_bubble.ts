@@ -31,6 +31,7 @@ export interface IHasBubble {
 export function hasBubble(obj: any): obj is IHasBubble {
   return (
     typeof obj.bubbleIsVisible === 'function' &&
-    typeof obj.setBubbleVisible === 'function'
+    typeof obj.setBubbleVisible === 'function' &&
+    typeof obj.getBubble === 'function'
   );
 }

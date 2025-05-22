@@ -23,6 +23,7 @@
 	"DELETE_X_BLOCKS": "Kkes %1 n yiḥedran",
 	"DELETE_ALL_BLOCKS": "Kkes akk %1 n yiḥedran?",
 	"CLEAN_UP": "Sfeḍ iḥedran",
+	"CLOSE": "Mdel",
 	"COLLAPSE_BLOCK": "Fneẓ iḥder",
 	"COLLAPSE_ALL": "Fneẓ iḥedran",
 	"EXPAND_BLOCK": "Snefli iḥder",
@@ -327,5 +328,6 @@
 	"LINUX": "Linux",
 	"UNKNOWN": "Arussin",
 	"CONTROL_KEY": "Ctrl",
+	"COPY_SHORTCUT": "Nɣel (%1)",
 	"SHORTCUTS_GENERAL": "Amatu"
 }

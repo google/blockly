@@ -19,6 +19,7 @@
 	"DELETE_X_BLOCKS": "%1 ਬਲਾਕ ਮਿਟਾਉ",
 	"DELETE_ALL_BLOCKS": "ਕੀ ਸਾਰੇ %1 ਬਲਾਕ ਮਿਟਾਉਣੇ ਹਨ?",
 	"CLEAN_UP": "ਬਲਾਕ ਸਾਫ਼ ਕਰੋ",
+	"CLOSE": "ਬੰਦ ਕਰੋ",
 	"COLLAPSE_BLOCK": "ਬਲਾਕ ਸਮੇਟੋ",
 	"COLLAPSE_ALL": "ਬਲਾਕਾਂ ਨੂੰ ਸਮੇਟੋ",
 	"EXPAND_BLOCK": "ਬਲਾਕ ਫੈਲਾਉ",
@@ -71,5 +72,12 @@
 	"LISTS_SORT_ORDER_DESCENDING": "ਲਹਿੰਦੀ ਤਰਤੀਬ ਵਿੱਚ",
 	"PROCEDURES_DEFRETURN_RETURN": "ਮੋੜੋ",
 	"DIALOG_OK": "ਠੀਕ ਹੈ।",
-	"DIALOG_CANCEL": "ਰੱਦ ਕਰੋ"
+	"DIALOG_CANCEL": "ਰੱਦ ਕਰੋ",
+	"DELETE_KEY": "ਮਿਟਾਓ",
+	"LINUX": "ਲੀਨਕਸ",
+	"UNKNOWN": "ਅਣਜਾਣ",
+	"OPTION_KEY": "⌥ ਚੋਣ",
+	"ALT_KEY": "ਬਦਲਵਾਂ",
+	"SHORTCUTS_GENERAL": "ਆਮ",
+	"SHORTCUTS_EDITING": "ਸੁਧਾਈ"
 }

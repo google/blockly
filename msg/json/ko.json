@@ -38,6 +38,7 @@
 	"DELETE_X_BLOCKS": "블록 %1개 삭제",
 	"DELETE_ALL_BLOCKS": "모든 블록 %1개를 삭제하겠습니까?",
 	"CLEAN_UP": "블록 정리",
+	"CLOSE": "닫기",
 	"COLLAPSE_BLOCK": "블록 축소",
 	"COLLAPSE_ALL": "블록 축소",
 	"EXPAND_BLOCK": "블록 확장",
@@ -373,5 +374,11 @@
 	"WORKSPACE_ARIA_LABEL": "Blockly 워크스페이스",
 	"COLLAPSED_WARNINGS_WARNING": "접힌 블록이 경고를 포함하고 있습니다.",
 	"DIALOG_OK": "확인",
-	"DIALOG_CANCEL": "취소"
+	"DIALOG_CANCEL": "취소",
+	"WINDOWS": "윈도",
+	"MAC_OS": "macOS",
+	"CHROME_OS": "크롬OS",
+	"LINUX": "리눅스",
+	"UNKNOWN": "알 수 없음",
+	"CONTROL_KEY": "Ctrl"
 }

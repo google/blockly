@@ -71,6 +71,7 @@ export function createDom() {
   } else {
     containerDiv = document.createElement('div') as HTMLDivElement;
     containerDiv.className = containerClassName;
+    containerDiv.tabIndex = -1;
   }
 
   container.appendChild(containerDiv!);

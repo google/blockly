@@ -435,9 +435,6 @@ export class FocusManager {
    * This does not change the manager's currently tracked node, nor does it
    * change any other nodes.
    *
-   * It is the caller's responsibility to actually call focus() for the node's
-   * element.
-   *
    * @param node The node to be actively focused.
    * @param prevTree The tree of the previously actively focused node, or null
    *     if there wasn't a previously actively focused node.

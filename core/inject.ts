@@ -15,7 +15,6 @@ import * as dropDownDiv from './dropdowndiv.js';
 import {Grid} from './grid.js';
 import {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
-import {ShortcutRegistry} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import * as dom from './utils/dom.js';
@@ -72,17 +71,12 @@ export function inject(
     common.setMainWorkspace(workspace);
   });
 
-  browserEvents.conditionalBind(subContainer, 'keydown', null, onKeyDown);
   browserEvents.conditionalBind(
-    dropDownDiv.getContentDiv(),
+    subContainer,
     'keydown',
     null,
-    onKeyDown,
+    common.globalShortcutHandler,
   );
-  const widgetContainer = WidgetDiv.getDiv();
-  if (widgetContainer) {
-    browserEvents.conditionalBind(widgetContainer, 'keydown', null, onKeyDown);
-  }
 
   return workspace;
 }
@@ -290,32 +284,6 @@ function init(mainWorkspace: WorkspaceSvg) {
   if (options.hasSounds) {
     loadSounds(options.pathToMedia, mainWorkspace);
   }
-}
-
-/**
- * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
- * is not visible.
- *
- * @param e Key down event.
- */
-// TODO (https://github.com/google/blockly/issues/1998) handle cases where there
-// are multiple workspaces and non-main workspaces are able to accept input.
-function onKeyDown(e: KeyboardEvent) {
-  const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
-  if (!mainWorkspace) {
-    return;
-  }
-
-  if (
-    browserEvents.isTargetInput(e) ||
-    (mainWorkspace.rendered && !mainWorkspace.isVisible())
-  ) {
-    // When focused on an HTML text input widget, don't trap any keys.
-    // Ignore keypresses on rendered workspaces that have been explicitly
-    // hidden.
-    return;
-  }
-  ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
 }
 
 /**

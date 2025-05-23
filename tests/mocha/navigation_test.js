@@ -369,17 +369,26 @@ suite('Navigation', function () {
       this.blocks.secondBlock = secondBlock;
       this.blocks.outputNextBlock = outputNextBlock;
 
-      const buttonBlock = this.workspace.newBlock('buttons');
-      const buttonInput1 = this.workspace.newBlock('field_input');
-      const buttonInput2 = this.workspace.newBlock('field_input');
-      const buttonNext = this.workspace.newBlock('input_statement');
+      const buttonBlock = this.workspace.newBlock('buttons', 'button_block');
+      const buttonInput1 = this.workspace.newBlock(
+        'field_input',
+        'button_input1',
+      );
+      const buttonInput2 = this.workspace.newBlock(
+        'field_input',
+        'button_input2',
+      );
+      const buttonNext = this.workspace.newBlock(
+        'input_statement',
+        'button_next',
+      );
       buttonBlock.inputList[0].connection.connect(
         buttonInput1.outputConnection,
       );
       buttonBlock.inputList[2].connection.connect(
         buttonInput2.outputConnection,
       );
-      buttonBlock.nextConnection.connect(buttonNext.prevConnection);
+      buttonBlock.nextConnection.connect(buttonNext.previousConnection);
       // Make buttons by adding a click handler
       const clickHandler = function () {
         return;
@@ -523,10 +532,7 @@ suite('Navigation', function () {
       test('skipsChildrenOfCollapsedBlocks', function () {
         this.blocks.buttonBlock.setCollapsed(true);
         const nextNode = this.navigator.getNextSibling(this.blocks.buttonBlock);
-        assert.equal(
-          nextNode.getSvgRoot().id,
-          this.blocks.buttonNext.getSvgRoot().id,
-        );
+        assert.equal(nextNode.id, this.blocks.buttonNext.id);
       });
     });
 
@@ -661,10 +667,7 @@ suite('Navigation', function () {
         const prevNode = this.navigator.getPreviousSibling(
           this.blocks.buttonNext,
         );
-        assert.equal(
-          prevNode.getSvgRoot().id,
-          this.blocks.buttonBlock.getSvgRoot().id,
-        );
+        assert.equal(prevNode.id, this.blocks.buttonBlock.id);
       });
     });
 
@@ -744,6 +747,11 @@ suite('Navigation', function () {
         this.blocks.dummyInput.setCommentText('test');
         const icons = this.blocks.dummyInput.getIcons();
         const inNode = this.navigator.getFirstChild(icons[0]);
+        assert.isNull(inNode);
+      });
+      test('skipsChildrenOfCollapsedBlocks', function () {
+        this.blocks.buttonBlock.setCollapsed(true);
+        const inNode = this.navigator.getFirstChild(this.blocks.buttonBlock);
         assert.isNull(inNode);
       });
     });

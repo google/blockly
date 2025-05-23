@@ -653,7 +653,7 @@ export class RenderedConnection
 
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
-    return this.sourceBlock_.canBeFocused();
+    return true;
   }
 
   private findHighlightSvg(): SVGElement | null {

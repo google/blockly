@@ -1386,9 +1386,6 @@ export abstract class Field<T = any>
 
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
-    if (this.sourceBlock_) {
-      return (this.sourceBlock_ as BlockSvg).canBeFocused();
-    }
     return true;
   }
 

@@ -1806,6 +1806,6 @@ export class BlockSvg
 
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
-    return this.getSvgRoot().style.display != 'none';
+    return true;
   }
 }

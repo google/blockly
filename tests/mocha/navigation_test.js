@@ -372,12 +372,14 @@ suite('Navigation', function () {
       const buttonBlock = this.workspace.newBlock('buttons');
       const buttonInput1 = this.workspace.newBlock('field_input');
       const buttonInput2 = this.workspace.newBlock('field_input');
+      const buttonNext = this.workspace.newBlock('input_statement');
       buttonBlock.inputList[0].connection.connect(
         buttonInput1.outputConnection,
       );
       buttonBlock.inputList[2].connection.connect(
         buttonInput2.outputConnection,
       );
+      buttonBlock.nextConnection.connect(buttonNext.prevConnection);
       // Make buttons by adding a click handler
       const clickHandler = function () {
         return;
@@ -388,6 +390,7 @@ suite('Navigation', function () {
       this.blocks.buttonBlock = buttonBlock;
       this.blocks.buttonInput1 = buttonInput1;
       this.blocks.buttonInput2 = buttonInput2;
+      this.blocks.buttonNext = buttonNext;
 
       this.workspace.cleanUp();
     });
@@ -505,17 +508,25 @@ suite('Navigation', function () {
       });
       test('fromBlockToFieldInNextInput', function () {
         const field = this.blocks.buttonBlock.getField('BUTTON2');
-        const prevNode = this.navigator.getNextSibling(
+        const nextNode = this.navigator.getNextSibling(
           this.blocks.buttonInput1,
         );
-        assert.equal(prevNode, field);
+        assert.equal(nextNode, field);
       });
       test('fromBlockToFieldSkippingInput', function () {
         const field = this.blocks.buttonBlock.getField('BUTTON3');
-        const prevNode = this.navigator.getNextSibling(
+        const nextNode = this.navigator.getNextSibling(
           this.blocks.buttonInput2,
         );
-        assert.equal(prevNode, field);
+        assert.equal(nextNode, field);
+      });
+      test('skipsChildrenOfCollapsedBlocks', function () {
+        this.blocks.buttonBlock.setCollapsed(true);
+        const nextNode = this.navigator.getNextSibling(this.blocks.buttonBlock);
+        assert.equal(
+          nextNode.getSvgRoot().id,
+          this.blocks.buttonNext.getSvgRoot().id,
+        );
       });
     });
 
@@ -644,6 +655,16 @@ suite('Navigation', function () {
           this.blocks.buttonInput2,
         );
         assert.equal(prevNode, field);
+      });
+      test('skipsChildrenOfCollapsedBlocks', function () {
+        this.blocks.buttonBlock.setCollapsed(true);
+        const prevNode = this.navigator.getPreviousSibling(
+          this.blocks.buttonNext,
+        );
+        assert.equal(
+          prevNode.getSvgRoot().id,
+          this.blocks.buttonBlock.getSvgRoot().id,
+        );
       });
     });
 

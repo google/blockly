@@ -48,6 +48,9 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
     let fieldIdx = input.fieldRow.indexOf(current) + 1;
     for (let i = curIdx; i < block.inputList.length; i++) {
       const newInput = block.inputList[i];
+      if (!newInput.isVisible()) {
+        continue;
+      }
       const fieldRow = newInput.fieldRow;
       if (fieldIdx < fieldRow.length) return fieldRow[fieldIdx];
       fieldIdx = 0;
@@ -73,6 +76,9 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
     let fieldIdx = parentInput.fieldRow.indexOf(current) - 1;
     for (let i = curIdx; i >= 0; i--) {
       const input = block.inputList[i];
+      if (!input.isVisible()) {
+        continue;
+      }
       if (input.connection?.targetBlock() && input !== parentInput) {
         return input.connection.targetBlock() as BlockSvg;
       }

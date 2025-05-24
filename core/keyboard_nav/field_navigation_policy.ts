@@ -48,15 +48,14 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
     let fieldIdx = input.fieldRow.indexOf(current) + 1;
     for (let i = curIdx; i < block.inputList.length; i++) {
       const newInput = block.inputList[i];
-      if (!newInput.isVisible()) {
-        continue;
+      if (newInput.isVisible()) {
+        const fieldRow = newInput.fieldRow;
+        if (fieldIdx < fieldRow.length) return fieldRow[fieldIdx];
+        if (newInput.connection?.targetBlock()) {
+          return newInput.connection.targetBlock() as BlockSvg;
+        }
       }
-      const fieldRow = newInput.fieldRow;
-      if (fieldIdx < fieldRow.length) return fieldRow[fieldIdx];
       fieldIdx = 0;
-      if (newInput.connection?.targetBlock()) {
-        return newInput.connection.targetBlock() as BlockSvg;
-      }
     }
     return null;
   }
@@ -76,15 +75,13 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
     let fieldIdx = parentInput.fieldRow.indexOf(current) - 1;
     for (let i = curIdx; i >= 0; i--) {
       const input = block.inputList[i];
-      if (!input.isVisible()) {
-        continue;
+      if (input.isVisible()) {
+        if (input.connection?.targetBlock() && input !== parentInput) {
+          return input.connection.targetBlock() as BlockSvg;
+        }
+        const fieldRow = input.fieldRow;
+        if (fieldIdx > -1) return fieldRow[fieldIdx];
       }
-      if (input.connection?.targetBlock() && input !== parentInput) {
-        return input.connection.targetBlock() as BlockSvg;
-      }
-      const fieldRow = input.fieldRow;
-      if (fieldIdx > -1) return fieldRow[fieldIdx];
-
       // Reset the fieldIdx to the length of the field row of the previous
       // input.
       if (i - 1 >= 0) {

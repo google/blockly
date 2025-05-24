@@ -17,6 +17,7 @@ import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
 import {Rect} from './utils/rect.js';
+import * as svgMath from './utils/svg_math.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -212,8 +213,22 @@ export function registerPaste() {
     preconditionFn(workspace) {
       return !workspace.isReadOnly() && !Gesture.inProgress();
     },
-    callback() {
+    callback(workspace: WorkspaceSvg, e: Event) {
       if (!copyData || !copyWorkspace) return false;
+
+      if (e instanceof PointerEvent) {
+        // The event that triggers a shortcut would conventionally be a KeyboardEvent.
+        // However, it may be a PointerEvent if a context menu item was used as a
+        // wrapper for this callback, in which case the new block(s) should be pasted
+        // at the mouse coordinates where the menu was opened, and this PointerEvent
+        // is where the menu was opened.
+        const mouseCoords = svgMath.screenToWsCoordinates(
+          copyWorkspace,
+          new Coordinate(e.clientX, e.clientY),
+        );
+        return !!clipboard.paste(copyData, copyWorkspace, mouseCoords);
+      }
+
       if (!copyCoords) {
         // If we don't have location data about the original copyable, let the
         // paster determine position.

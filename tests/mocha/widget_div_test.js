@@ -287,6 +287,29 @@ suite('WidgetDiv', function () {
     });
   });
 
+  suite('Keyboard Shortcuts', function () {
+    test('Escape dismisses WidgetDiv', function () {
+      let hidden = false;
+      Blockly.WidgetDiv.show(
+        this,
+        false,
+        () => {
+          hidden = true;
+        },
+        this.workspace,
+        false,
+      );
+      assert.isFalse(hidden);
+      Blockly.WidgetDiv.getDiv().dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+          keyCode: 27, // example values.
+        }),
+      );
+      assert.isTrue(hidden);
+    });
+  });
+
   suite('show()', function () {
     test('shows nowhere', function () {
       const block = this.setUpBlockWithField();

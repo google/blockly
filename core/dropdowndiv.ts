@@ -13,6 +13,7 @@
 // Former goog.module ID: Blockly.dropDownDiv
 
 import type {BlockSvg} from './block_svg.js';
+import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import type {Field} from './field.js';
 import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
@@ -86,6 +87,9 @@ let positionToField: boolean | null = null;
 /** Callback to FocusManager to return ephemeral focus when the div closes. */
 let returnEphemeralFocus: ReturnEphemeralFocus | null = null;
 
+/** Identifier for shortcut keydown listener used to unbind it. */
+let keydownListener: browserEvents.Data | null = null;
+
 /**
  * Dropdown bounds info object used to encapsulate sizing information about a
  * bounding element (bounding box and width/height).
@@ -130,6 +134,13 @@ export function createDom() {
   content.className = 'blocklyDropDownContent';
   div.appendChild(content);
 
+  keydownListener = browserEvents.conditionalBind(
+    content,
+    'keydown',
+    null,
+    common.globalShortcutHandler,
+  );
+
   arrow = document.createElement('div');
   arrow.className = 'blocklyDropDownArrow';
   div.appendChild(arrow);
@@ -168,6 +179,10 @@ export function getContentDiv(): HTMLDivElement {
 
 /** Clear the content of the drop-down. */
 export function clearContent() {
+  if (keydownListener) {
+    browserEvents.unbind(keydownListener);
+    keydownListener = null;
+  }
   div.remove();
   createDom();
 }

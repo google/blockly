@@ -67,13 +67,13 @@ export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
 export function createDom() {
   const container = common.getParentContainer() || document.body;
 
-  if (document.querySelector('.' + containerClassName)) {
-    containerDiv = document.querySelector('.' + containerClassName);
+  const existingContainer = document.querySelector('div.' + containerClassName);
+  if (existingContainer) {
+    containerDiv = existingContainer as HTMLDivElement;
   } else {
     containerDiv = document.createElement('div');
     containerDiv.className = containerClassName;
   }
-  if (!containerDiv) return;
 
   browserEvents.conditionalBind(
     containerDiv,

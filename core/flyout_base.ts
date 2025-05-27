@@ -22,7 +22,6 @@ import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutNavigator} from './flyout_navigator.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
-import {getFocusManager} from './focus_manager.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
@@ -323,8 +322,6 @@ export abstract class Flyout
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
 
-    getFocusManager().registerTree(this, true);
-
     return this.svgGroup_;
   }
 
@@ -406,7 +403,6 @@ export abstract class Flyout
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
-    getFocusManager().unregisterTree(this);
   }
 
   /**
@@ -972,13 +968,12 @@ export abstract class Flyout
 
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
-    if (!this.svgGroup_) throw new Error('Flyout DOM is not yet created.');
-    return this.svgGroup_;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
-    return this;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableNode.onNodeFocus. */
@@ -989,31 +984,29 @@ export abstract class Flyout
 
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
-    return true;
+    return false;
   }
 
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
-    return this;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableTree.getRestoredFocusableNode. */
   getRestoredFocusableNode(
     _previousNode: IFocusableNode | null,
   ): IFocusableNode | null {
-    return null;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableTree.getNestedTrees. */
   getNestedTrees(): Array<IFocusableTree> {
-    return [this.workspace_];
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(_id: string): IFocusableNode | null {
-    // No focusable node needs to be returned since the flyout's subtree is a
-    // workspace that will manage its own focusable state.
-    return null;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableTree.onTreeFocus. */
@@ -1023,14 +1016,7 @@ export abstract class Flyout
   ): void {}
 
   /** See IFocusableTree.onTreeBlur. */
-  onTreeBlur(nextTree: IFocusableTree | null): void {
-    const toolbox = this.targetWorkspace.getToolbox();
-    // If focus is moving to either the toolbox or the flyout's workspace, do
-    // not close the flyout. For anything else, do close it since the flyout is
-    // no longer focused.
-    if (toolbox && nextTree === toolbox) return;
-    if (nextTree === this.workspace_) return;
-    if (toolbox) toolbox.clearSelection();
-    this.autoHide(false);
+  onTreeBlur(_nextTree: IFocusableTree | null): void {
+    throw new Error('Flyouts are not directly focusable.');
   }
 }

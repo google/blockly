@@ -200,7 +200,6 @@ export class Toolbox
    */
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = document.createElement('div');
-    toolboxContainer.tabIndex = 0;
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolbox');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');

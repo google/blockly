@@ -25,6 +25,9 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     if (icons.length) return icons[0];
 
     for (const input of current.inputList) {
+      if (!input.isVisible()) {
+        continue;
+      }
       for (const field of input.fieldRow) {
         return field;
       }
@@ -70,6 +73,9 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     let siblings: (BlockSvg | Field)[] = [];
     if (parent instanceof BlockSvg) {
       for (let i = 0, input; (input = parent.inputList[i]); i++) {
+        if (!input.isVisible()) {
+          continue;
+        }
         siblings.push(...input.fieldRow);
         const child = input.connection?.targetBlock();
         if (child) {
@@ -112,6 +118,9 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     let siblings: (BlockSvg | Field)[] = [];
     if (parent instanceof BlockSvg) {
       for (let i = 0, input; (input = parent.inputList[i]); i++) {
+        if (!input.isVisible()) {
+          continue;
+        }
         siblings.push(...input.fieldRow);
         const child = input.connection?.targetBlock();
         if (child) {

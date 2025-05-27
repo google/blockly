@@ -13,10 +13,26 @@ import {
 suite('WidgetDiv', function () {
   setup(function () {
     sharedTestSetup.call(this);
-    this.workspace = Blockly.inject('blocklyDiv', {});
+    this.workspace = Blockly.inject('blocklyDiv');
+    this.setUpBlockWithField = function () {
+      const blockJson = {
+        'type': 'text',
+        'id': 'block_id',
+        'x': 10,
+        'y': 20,
+        'fields': {
+          'TEXT': '',
+        },
+      };
+      Blockly.serialization.blocks.append(blockJson, this.workspace);
+      return this.workspace.getBlockById('block_id');
+    };
+    // The workspace needs to be visible for focus-specific tests.
+    document.getElementById('blocklyDiv').style.visibility = 'visible';
   });
   teardown(function () {
     sharedTestTeardown.call(this);
+    document.getElementById('blocklyDiv').style.visibility = 'hidden';
   });
 
   suite('positionWithAnchor', function () {
@@ -270,6 +286,7 @@ suite('WidgetDiv', function () {
       });
     });
   });
+
   suite('Keyboard Shortcuts', function () {
     test('Escape dismisses WidgetDiv', function () {
       let hidden = false;
@@ -290,6 +307,121 @@ suite('WidgetDiv', function () {
         }),
       );
       assert.isTrue(hidden);
+    });
+  });
+
+  suite('show()', function () {
+    test('shows nowhere', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+
+      Blockly.WidgetDiv.show(field, false, () => {});
+
+      // By default the div will not have a position.
+      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      assert.strictEqual(widgetDivElem.style.display, 'block');
+      assert.strictEqual(widgetDivElem.style.left, '');
+      assert.strictEqual(widgetDivElem.style.top, '');
+    });
+
+    test('with hide callback does not call callback', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      const onHideCallback = sinon.stub();
+
+      Blockly.WidgetDiv.show(field, false, () => {});
+
+      // Simply showing the div should never call the hide callback.
+      assert.strictEqual(onHideCallback.callCount, 0);
+    });
+
+    test('without managed ephemeral focus does not change focused node', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+
+      Blockly.WidgetDiv.show(field, false, () => {}, null, false);
+
+      // Since managing ephemeral focus is disabled the current focused node shouldn't be changed.
+      const blockFocusableElem = block.getFocusableElement();
+      assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
+      assert.strictEqual(document.activeElement, blockFocusableElem);
+    });
+
+    test('with managed ephemeral focus focuses widget div', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+
+      Blockly.WidgetDiv.show(field, false, () => {}, null, true);
+
+      // Managing ephemeral focus won't change getFocusedNode() but will change the actual element
+      // with DOM focus.
+      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
+      assert.strictEqual(document.activeElement, widgetDivElem);
+    });
+  });
+
+  suite('hide()', function () {
+    test('initially keeps display empty', function () {
+      Blockly.WidgetDiv.hide();
+
+      // The display property starts as empty and stays that way until an owner is attached.
+      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      assert.strictEqual(widgetDivElem.style.display, '');
+    });
+
+    test('for showing div hides div', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.WidgetDiv.show(field, false, () => {});
+
+      Blockly.WidgetDiv.hide();
+
+      // Technically this will trigger a CSS animation, but the property is still set to 0.
+      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      assert.strictEqual(widgetDivElem.style.display, 'none');
+    });
+
+    test('for showing div and hide callback calls callback', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      const onHideCallback = sinon.stub();
+      Blockly.WidgetDiv.show(field, false, onHideCallback);
+
+      Blockly.WidgetDiv.hide();
+
+      // Hiding the div should trigger the hide callback.
+      assert.strictEqual(onHideCallback.callCount, 1);
+    });
+
+    test('for showing div without ephemeral focus does not change focus', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+      Blockly.WidgetDiv.show(field, false, () => {}, null, false);
+
+      Blockly.WidgetDiv.hide();
+
+      // Hiding the div shouldn't change what would have already been focused.
+      const blockFocusableElem = block.getFocusableElement();
+      assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
+      assert.strictEqual(document.activeElement, blockFocusableElem);
+    });
+
+    test('for showing div with ephemeral focus restores DOM focus', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+      Blockly.WidgetDiv.show(field, false, () => {}, null, true);
+
+      Blockly.WidgetDiv.hide();
+
+      // Hiding the div should restore focus back to the block.
+      const blockFocusableElem = block.getFocusableElement();
+      assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
+      assert.strictEqual(document.activeElement, blockFocusableElem);
     });
   });
 });

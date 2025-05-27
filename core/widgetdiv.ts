@@ -73,6 +73,7 @@ export function createDom() {
   } else {
     containerDiv = document.createElement('div');
     containerDiv.className = containerClassName;
+    containerDiv.tabIndex = -1;
   }
 
   browserEvents.conditionalBind(

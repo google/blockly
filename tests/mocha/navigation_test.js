@@ -369,15 +369,26 @@ suite('Navigation', function () {
       this.blocks.secondBlock = secondBlock;
       this.blocks.outputNextBlock = outputNextBlock;
 
-      const buttonBlock = this.workspace.newBlock('buttons');
-      const buttonInput1 = this.workspace.newBlock('field_input');
-      const buttonInput2 = this.workspace.newBlock('field_input');
+      const buttonBlock = this.workspace.newBlock('buttons', 'button_block');
+      const buttonInput1 = this.workspace.newBlock(
+        'field_input',
+        'button_input1',
+      );
+      const buttonInput2 = this.workspace.newBlock(
+        'field_input',
+        'button_input2',
+      );
+      const buttonNext = this.workspace.newBlock(
+        'input_statement',
+        'button_next',
+      );
       buttonBlock.inputList[0].connection.connect(
         buttonInput1.outputConnection,
       );
       buttonBlock.inputList[2].connection.connect(
         buttonInput2.outputConnection,
       );
+      buttonBlock.nextConnection.connect(buttonNext.previousConnection);
       // Make buttons by adding a click handler
       const clickHandler = function () {
         return;
@@ -388,6 +399,7 @@ suite('Navigation', function () {
       this.blocks.buttonBlock = buttonBlock;
       this.blocks.buttonInput1 = buttonInput1;
       this.blocks.buttonInput2 = buttonInput2;
+      this.blocks.buttonNext = buttonNext;
 
       this.workspace.cleanUp();
     });
@@ -505,17 +517,22 @@ suite('Navigation', function () {
       });
       test('fromBlockToFieldInNextInput', function () {
         const field = this.blocks.buttonBlock.getField('BUTTON2');
-        const prevNode = this.navigator.getNextSibling(
+        const nextNode = this.navigator.getNextSibling(
           this.blocks.buttonInput1,
         );
-        assert.equal(prevNode, field);
+        assert.equal(nextNode, field);
       });
       test('fromBlockToFieldSkippingInput', function () {
         const field = this.blocks.buttonBlock.getField('BUTTON3');
-        const prevNode = this.navigator.getNextSibling(
+        const nextNode = this.navigator.getNextSibling(
           this.blocks.buttonInput2,
         );
-        assert.equal(prevNode, field);
+        assert.equal(nextNode, field);
+      });
+      test('skipsChildrenOfCollapsedBlocks', function () {
+        this.blocks.buttonBlock.setCollapsed(true);
+        const nextNode = this.navigator.getNextSibling(this.blocks.buttonBlock);
+        assert.equal(nextNode.id, this.blocks.buttonNext.id);
       });
     });
 
@@ -645,6 +662,13 @@ suite('Navigation', function () {
         );
         assert.equal(prevNode, field);
       });
+      test('skipsChildrenOfCollapsedBlocks', function () {
+        this.blocks.buttonBlock.setCollapsed(true);
+        const prevNode = this.navigator.getPreviousSibling(
+          this.blocks.buttonNext,
+        );
+        assert.equal(prevNode.id, this.blocks.buttonBlock.id);
+      });
     });
 
     suite('In', function () {
@@ -723,6 +747,11 @@ suite('Navigation', function () {
         this.blocks.dummyInput.setCommentText('test');
         const icons = this.blocks.dummyInput.getIcons();
         const inNode = this.navigator.getFirstChild(icons[0]);
+        assert.isNull(inNode);
+      });
+      test('skipsChildrenOfCollapsedBlocks', function () {
+        this.blocks.buttonBlock.setCollapsed(true);
+        const inNode = this.navigator.getFirstChild(this.blocks.buttonBlock);
         assert.isNull(inNode);
       });
     });

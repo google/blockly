@@ -63,12 +63,16 @@ export class FocusManager {
   private currentlyHoldsEphemeralFocus: boolean = false;
   private lockFocusStateChanges: boolean = false;
   private recentlyLostAllFocus: boolean = false;
+  private isUpdatingFocusedNode: boolean = false;
 
   constructor(
     addGlobalEventListener: (type: string, listener: EventListener) => void,
   ) {
     // Note that 'element' here is the element *gaining* focus.
     const maybeFocus = (element: Element | EventTarget | null) => {
+      // Skip processing the event if the focused node is currently updating.
+      if (this.isUpdatingFocusedNode) return;
+
       this.recentlyLostAllFocus = !element;
       let newNode: IFocusableNode | null | undefined = null;
       if (element instanceof HTMLElement || element instanceof SVGElement) {
@@ -240,7 +244,23 @@ export class FocusManager {
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
-    if (this.focusedNode === focusableNode) return; // State is unchanged.
+    if (!this.currentlyHoldsEphemeralFocus) {
+      // Disable state syncing from DOM events since possible calls to focus()
+      // below will loop a call back to focusNode().
+      this.isUpdatingFocusedNode = true;
+    }
+
+    // Double check that state wasn't desynchronized in the background. See:
+    // https://github.com/google/blockly-keyboard-experimentation/issues/87.
+    // This is only done for the case where the same node is being focused twice
+    // since other cases should automatically correct (due to the rest of the
+    // routine running as normal).
+    const prevFocusedElement = this.focusedNode?.getFocusableElement();
+    const hasDesyncedState = prevFocusedElement !== document.activeElement;
+    if (this.focusedNode === focusableNode && !hasDesyncedState) {
+      return; // State is unchanged.
+    }
+
     if (!focusableNode.canBeFocused()) {
       // This node can't be focused.
       console.warn("Trying to focus a node that can't be focused.");
@@ -292,6 +312,10 @@ export class FocusManager {
       this.activelyFocusNode(nodeToFocus, prevTree ?? null);
     }
     this.updateFocusedNode(nodeToFocus);
+    if (!this.currentlyHoldsEphemeralFocus) {
+      // Reenable state syncing from DOM events.
+      this.isUpdatingFocusedNode = false;
+    }
   }
 
   /**

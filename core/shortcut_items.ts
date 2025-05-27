@@ -112,6 +112,12 @@ let copyCoords: Coordinate | null = null;
  * - Additionally, both .isMovable() and .isDeletable() must return
  *   true (i.e., can currently be moved and deleted).
  *
+ * TODO(#9098): Revise these criteria.  The latter criteria prevents
+ * shadow blocks from being copied; additionally, there are likely to
+ * be other circumstances were it is desirable to allow movable /
+ * copyable copies of a currently-unmovable / -copyable block to be
+ * made.
+ *
  * @param focused The focused object.
  */
 function isCopyable(

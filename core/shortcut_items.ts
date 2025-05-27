@@ -10,8 +10,8 @@ import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as eventUtils from './events/utils.js';
 import {Gesture} from './gesture.js';
-import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
-import {isDeletable} from './interfaces/i_deletable.js';
+import {ICopyData, isCopyable as isICopyable} from './interfaces/i_copyable.js';
+import {isDeletable as isIDeletable} from './interfaces/i_deletable.js';
 import {isDraggable} from './interfaces/i_draggable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -61,7 +61,7 @@ export function registerDelete() {
       return (
         !workspace.isReadOnly() &&
         focused != null &&
-        isDeletable(focused) &&
+        isIDeletable(focused) &&
         focused.isDeletable() &&
         !Gesture.inProgress()
       );
@@ -75,7 +75,7 @@ export function registerDelete() {
       const focused = scope.focusedNode;
       if (focused instanceof BlockSvg) {
         focused.checkAndDelete();
-      } else if (isDeletable(focused) && focused.isDeletable()) {
+      } else if (isIDeletable(focused) && focused.isDeletable()) {
         eventUtils.setGroup(true);
         focused.dispose();
         eventUtils.setGroup(false);
@@ -114,7 +114,7 @@ export function registerCopy() {
         focused.isDeletable() &&
         isDraggable(focused) &&
         focused.isMovable() &&
-        isCopyable(focused)
+        isICopyable(focused)
       );
     },
     callback(workspace, e, shortcut, scope) {
@@ -123,7 +123,7 @@ export function registerCopy() {
       e.preventDefault();
       workspace.hideChaff();
       const focused = scope.focusedNode;
-      if (!focused || !isCopyable(focused)) return false;
+      if (!focused || !isICopyable(focused)) return false;
       copyData = focused.toCopyData();
       copyWorkspace =
         focused.workspace instanceof WorkspaceSvg
@@ -162,7 +162,7 @@ export function registerCut() {
         focused.isDeletable() &&
         isDraggable(focused) &&
         focused.isMovable() &&
-        isCopyable(focused) &&
+        isICopyable(focused) &&
         !focused.workspace.isFlyout
       );
     },
@@ -176,9 +176,9 @@ export function registerCut() {
         focused.checkAndDelete();
         return true;
       } else if (
-        isDeletable(focused) &&
+        isIDeletable(focused) &&
         focused.isDeletable() &&
-        isCopyable(focused)
+        isICopyable(focused)
       ) {
         copyData = focused.toCopyData();
         copyWorkspace = workspace;

@@ -113,4 +113,39 @@ suite('DropDownDiv', function () {
       assert.isNotOk(metrics.arrowAtTop);
     });
   });
+
+  suite('Keyboard Shortcuts', function () {
+    setup(function () {
+      sharedTestSetup.call(this);
+      this.boundsStub = sinon
+        .stub(Blockly.DropDownDiv.TEST_ONLY, 'getBoundsInfo')
+        .returns({
+          left: 0,
+          right: 100,
+          top: 0,
+          bottom: 100,
+          width: 100,
+          height: 100,
+        });
+      this.workspace = Blockly.inject('blocklyDiv', {});
+    });
+    teardown(function () {
+      sharedTestTeardown.call(this);
+      this.boundsStub.restore();
+    });
+    test('Escape dismisses DropDownDiv', function () {
+      let hidden = false;
+      Blockly.DropDownDiv.show(this, false, 0, 0, 0, 0, false, () => {
+        hidden = true;
+      });
+      assert.isFalse(hidden);
+      Blockly.DropDownDiv.getContentDiv().dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+          keyCode: 27, // example values.
+        }),
+      );
+      assert.isTrue(hidden);
+    });
+  });
 });

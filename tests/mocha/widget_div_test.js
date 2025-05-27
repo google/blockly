@@ -13,6 +13,7 @@ import {
 suite('WidgetDiv', function () {
   setup(function () {
     sharedTestSetup.call(this);
+    this.workspace = Blockly.inject('blocklyDiv', {});
   });
   teardown(function () {
     sharedTestTeardown.call(this);
@@ -267,6 +268,28 @@ suite('WidgetDiv', function () {
           this.widgetSize.height,
         );
       });
+    });
+  });
+  suite('Keyboard Shortcuts', function () {
+    test('Escape dismisses WidgetDiv', function () {
+      let hidden = false;
+      Blockly.WidgetDiv.show(
+        this,
+        false,
+        () => {
+          hidden = true;
+        },
+        this.workspace,
+        false,
+      );
+      assert.isFalse(hidden);
+      Blockly.WidgetDiv.getDiv().dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+          keyCode: 27, // example values.
+        }),
+      );
+      assert.isTrue(hidden);
     });
   });
 });

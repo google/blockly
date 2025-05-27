@@ -138,7 +138,6 @@ suite('DropDownDiv', function () {
 
   suite('Keyboard Shortcuts', function () {
     setup(function () {
-      sharedTestSetup.call(this);
       this.boundsStub = sinon
         .stub(Blockly.DropDownDiv.TEST_ONLY, 'getBoundsInfo')
         .returns({
@@ -152,7 +151,6 @@ suite('DropDownDiv', function () {
       this.workspace = Blockly.inject('blocklyDiv', {});
     });
     teardown(function () {
-      sharedTestTeardown.call(this);
       this.boundsStub.restore();
     });
     test('Escape dismisses DropDownDiv', function () {

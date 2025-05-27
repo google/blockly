@@ -419,6 +419,91 @@ suite('FocusManager', function () {
       const currentNode = this.focusManager.getFocusedNode();
       assert.strictEqual(currentNode, this.testFocusableTree1Node2);
     });
+
+    test('restores focus when element quietly loses focus', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+      // Remove the FocusManager's listeners to simulate not receiving a focus
+      // event when focus is lost. This can happen in Firefox and Safari when an
+      // element is removed and then re-added to the DOM. This is a contrived
+      // setup to achieve the same outcome on all browsers. For context, see:
+      // https://github.com/google/blockly-keyboard-experimentation/issues/87.
+      for (const registeredListener of this.globalDocumentEventListeners) {
+        const eventType = registeredListener.type;
+        const eventListener = registeredListener.listener;
+        document.removeEventListener(eventType, eventListener);
+      }
+      document.body.focus();
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      const currentNode = this.focusManager.getFocusedNode();
+      const currentElem = currentNode?.getFocusableElement();
+      assert.strictEqual(currentNode, this.testFocusableTree1Node1);
+      assert.strictEqual(document.activeElement, currentElem);
+    });
+
+    test('restores focus when element and new node focused', function () {
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+      // Remove the FocusManager's listeners to simulate not receiving a focus
+      // event when focus is lost. This can happen in Firefox and Safari when an
+      // element is removed and then re-added to the DOM. This is a contrived
+      // setup to achieve the same outcome on all browsers. For context, see:
+      // https://github.com/google/blockly-keyboard-experimentation/issues/87.
+      for (const registeredListener of this.globalDocumentEventListeners) {
+        const eventType = registeredListener.type;
+        const eventListener = registeredListener.listener;
+        document.removeEventListener(eventType, eventListener);
+      }
+      document.body.focus();
+
+      this.focusManager.focusNode(this.testFocusableTree1Node2);
+
+      const currentNode = this.focusManager.getFocusedNode();
+      const currentElem = currentNode?.getFocusableElement();
+      assert.strictEqual(currentNode, this.testFocusableTree1Node2);
+      assert.strictEqual(document.activeElement, currentElem);
+    });
+
+    test('for unfocused node calls onNodeFocus once', function () {
+      sinon.spy(this.testFocusableTree1Node1, 'onNodeFocus');
+      this.focusManager.registerTree(this.testFocusableTree1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      assert.strictEqual(this.testFocusableTree1Node1.onNodeFocus.callCount, 1);
+    });
+
+    test('for previously focused node calls onNodeBlur once', function () {
+      sinon.spy(this.testFocusableTree1Node1, 'onNodeBlur');
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node2);
+
+      assert.strictEqual(this.testFocusableTree1Node1.onNodeBlur.callCount, 1);
+    });
+
+    test('for unfocused tree calls onTreeFocus once', function () {
+      sinon.spy(this.testFocusableTree1, 'onTreeFocus');
+      this.focusManager.registerTree(this.testFocusableTree1);
+
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      assert.strictEqual(this.testFocusableTree1.onTreeFocus.callCount, 1);
+    });
+
+    test('for previously focused tree calls onTreeBlur once', function () {
+      sinon.spy(this.testFocusableTree1, 'onTreeBlur');
+      this.focusManager.registerTree(this.testFocusableTree1);
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.focusNode(this.testFocusableTree1Node1);
+
+      this.focusManager.focusNode(this.testFocusableTree2Node1);
+
+      assert.strictEqual(this.testFocusableTree1.onTreeBlur.callCount, 1);
+    });
   });
 
   suite('getFocusManager()', function () {

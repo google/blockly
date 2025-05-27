@@ -319,8 +319,6 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
  * @internal
  * @param e Key down event.
  */
-// TODO (https://github.com/google/blockly/issues/1998) handle cases where there
-// are multiple workspaces and non-main workspaces are able to accept input.
 export function globalShortcutHandler(e: KeyboardEvent) {
   const mainWorkspace = getMainWorkspace() as WorkspaceSvg;
   if (!mainWorkspace) {

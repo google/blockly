@@ -17,7 +17,18 @@ import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
  */
 export type ReturnEphemeralFocus = () => void;
 
+/**
+ * Represents an IFocusableTree that has been registered for focus management in
+ * FocusManager.
+ */
 class TreeRegistration {
+  /**
+   * Constructs a new TreeRegistration.
+   *
+   * @param tree The tree being registered.
+   * @param rootShouldBeAutoTabbable Whether the tree should have automatic
+   *     top-level tab management.
+   */
   constructor(
     readonly tree: IFocusableTree,
     readonly rootShouldBeAutoTabbable: boolean,
@@ -144,7 +155,9 @@ export class FocusManager {
    * The tree's registration can be customized to configure automatic tab stops.
    * This specifically provides capability for the user to be able to tab
    * navigate to the root of the tree but only when the tree doesn't hold active
-   * focus.
+   * focus. If this functionality is disabled then the tree's root will
+   * automatically be made focusable (but not tabbable) when it is first focused
+   * in the same way as any other focusable node.
    *
    * @param tree The IFocusableTree to register.
    * @param rootShouldBeAutoTabbable Whether the root of this tree should be
@@ -175,6 +188,10 @@ export class FocusManager {
     return !!this.lookUpRegistration(tree);
   }
 
+  /**
+   * Returns the TreeRegistration for the specified tree, or null if the tree is
+   * not currently registered.
+   */
   private lookUpRegistration(tree: IFocusableTree): TreeRegistration | null {
     const index = this.registeredTrees.findIndex((reg) => reg.tree === tree);
     return index !== -1 ? this.registeredTrees[index] : null;

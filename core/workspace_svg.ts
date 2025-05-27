@@ -848,12 +848,7 @@ export class WorkspaceSvg
     );
 
     // Only the top-level and flyout workspaces should be tabbable.
-    const isTopLevelWorkspace = !!this.injectionDiv;
-    const shouldBeTabbable = isTopLevelWorkspace || this.isFlyout;
-    if (!shouldBeTabbable) {
-      this.svgGroup_.tabIndex = -1;
-    }
-    getFocusManager().registerTree(this, shouldBeTabbable);
+    getFocusManager().registerTree(this, !!this.injectionDiv || this.isFlyout);
 
     return this.svgGroup_;
   }

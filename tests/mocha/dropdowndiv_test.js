@@ -170,7 +170,7 @@ suite('DropDownDiv', function () {
       assert.isTrue(hidden);
     });
   });
-  
+
   suite('show()', function () {
     test('without bounds set throws error', function () {
       const block = this.setUpBlockWithField();

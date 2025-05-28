@@ -10,9 +10,17 @@ import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as eventUtils from './events/utils.js';
 import {Gesture} from './gesture.js';
-import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
-import {isDeletable} from './interfaces/i_deletable.js';
-import {isDraggable} from './interfaces/i_draggable.js';
+import {
+  ICopyable,
+  ICopyData,
+  isCopyable as isICopyable,
+} from './interfaces/i_copyable.js';
+import {
+  IDeletable,
+  isDeletable as isIDeletable,
+} from './interfaces/i_deletable.js';
+import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
+import {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
@@ -62,7 +70,7 @@ export function registerDelete() {
       return (
         !workspace.isReadOnly() &&
         focused != null &&
-        isDeletable(focused) &&
+        isIDeletable(focused) &&
         focused.isDeletable() &&
         !Gesture.inProgress()
       );
@@ -76,7 +84,7 @@ export function registerDelete() {
       const focused = scope.focusedNode;
       if (focused instanceof BlockSvg) {
         focused.checkAndDelete();
-      } else if (isDeletable(focused) && focused.isDeletable()) {
+      } else if (isIDeletable(focused) && focused.isDeletable()) {
         eventUtils.setGroup(true);
         focused.dispose();
         eventUtils.setGroup(false);
@@ -91,6 +99,39 @@ export function registerDelete() {
 let copyData: ICopyData | null = null;
 let copyWorkspace: WorkspaceSvg | null = null;
 let copyCoords: Coordinate | null = null;
+
+/**
+ * Determine if a focusable node can be copied using cut or copy.
+ *
+ * Unfortunately the ICopyable interface doesn't include an isCopyable
+ * method, so we must use some other criteria to make the decision.
+ * Specifically,
+ *
+ * - It must be an ICopyable.
+ * - So that a pasted copy can be manipluated and/or disposed of, it
+ *   must be both an IDraggable and an IDeletable.
+ * - Additionally, both .isMovable() and .isDeletable() must return
+ *   true (i.e., can currently be moved and deleted).
+ *
+ * TODO(#9098): Revise these criteria.  The latter criteria prevents
+ * shadow blocks from being copied; additionally, there are likely to
+ * be other circumstances were it is desirable to allow movable /
+ * copyable copies of a currently-unmovable / -copyable block to be
+ * made.
+ *
+ * @param focused The focused object.
+ */
+function isCopyable(
+  focused: IFocusableNode,
+): focused is ICopyable<ICopyData> & IDeletable & IDraggable {
+  return (
+    isICopyable(focused) &&
+    isIDeletable(focused) &&
+    focused.isDeletable() &&
+    isDraggable(focused) &&
+    focused.isMovable()
+  );
+}
 
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
@@ -110,11 +151,7 @@ export function registerCopy() {
       return (
         !workspace.isReadOnly() &&
         !Gesture.inProgress() &&
-        focused != null &&
-        isDeletable(focused) &&
-        focused.isDeletable() &&
-        isDraggable(focused) &&
-        focused.isMovable() &&
+        !!focused &&
         isCopyable(focused)
       );
     },
@@ -124,7 +161,7 @@ export function registerCopy() {
       e.preventDefault();
       workspace.hideChaff();
       const focused = scope.focusedNode;
-      if (!focused || !isCopyable(focused)) return false;
+      if (!focused || !isICopyable(focused)) return false;
       copyData = focused.toCopyData();
       copyWorkspace =
         focused.workspace instanceof WorkspaceSvg
@@ -158,13 +195,11 @@ export function registerCut() {
       return (
         !workspace.isReadOnly() &&
         !Gesture.inProgress() &&
-        focused != null &&
-        isDeletable(focused) &&
-        focused.isDeletable() &&
-        isDraggable(focused) &&
-        focused.isMovable() &&
+        !!focused &&
         isCopyable(focused) &&
-        !focused.workspace.isFlyout
+        // Extra criteria for cut (not just copy):
+        !focused.workspace.isFlyout &&
+        focused.isDeletable()
       );
     },
     callback(workspace, e, shortcut, scope) {
@@ -177,9 +212,9 @@ export function registerCut() {
         focused.checkAndDelete();
         return true;
       } else if (
-        isDeletable(focused) &&
+        isIDeletable(focused) &&
         focused.isDeletable() &&
-        isCopyable(focused)
+        isICopyable(focused)
       ) {
         copyData = focused.toCopyData();
         copyWorkspace = workspace;

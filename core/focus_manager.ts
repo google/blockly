@@ -194,7 +194,7 @@ export class FocusManager {
    */
   private lookUpRegistration(tree: IFocusableTree): TreeRegistration | null {
     const index = this.registeredTrees.findIndex((reg) => reg.tree === tree);
-    return index !== -1 ? this.registeredTrees[index] : null;
+    return this.registeredTrees[index] ?? null;
   }
 
   /**
@@ -522,6 +522,7 @@ export class FocusManager {
     // node needs to be focused).
     this.lockFocusStateChanges = true;
     const tree = node.getFocusableTree();
+    const elem = node.getFocusableElement();
     const nextTreeReg = this.lookUpRegistration(tree);
     const treeIsTabManaged = nextTreeReg?.rootShouldBeAutoTabbable;
     if (tree !== prevTree) {
@@ -538,11 +539,11 @@ export class FocusManager {
 
     // Only overwrite the tab index if it isn't a tree root that's auto managed.
     if (!treeIsTabManaged || node !== tree.getRootFocusableNode()) {
-      node.getFocusableElement().tabIndex = -1;
+      if (!elem.hasAttribute('tabindex')) elem.tabIndex = -1;
     }
 
     this.setNodeToVisualActiveFocus(node);
-    node.getFocusableElement().focus();
+    elem.focus();
   }
 
   /**

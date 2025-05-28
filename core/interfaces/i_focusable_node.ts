@@ -35,6 +35,9 @@ export interface IFocusableNode {
    * never be returned). Also, the returned element will have its tabindex
    * overwritten throughout the lifecycle of this node and FocusManager.
    *
+   * If a node requires the ability to be focused directly without first being
+   * focused via FocusManager then it must set its own tab index.
+   *
    * @returns The HTMLElement or SVGElement which can both receive focus and be
    *     visually represented as actively or passively focused for this node.
    */

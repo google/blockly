@@ -108,7 +108,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
 /**
  * Returns a list of the navigable children of the given block.
  *
- * @param The block to retrieve the navigable children of.
+ * @param block The block to retrieve the navigable children of.
  * @returns A list of navigable/focusable children of the given block.
  */
 function getBlockNavigationCandidates(block: BlockSvg): IFocusableNode[] {

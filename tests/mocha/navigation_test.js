@@ -72,6 +72,20 @@ suite('Navigation', function () {
         'tooltip': '',
         'helpUrl': '',
       },
+      {
+        'type': 'double_value_input',
+        'message0': '%1 %2',
+        'args0': [
+          {
+            'type': 'input_value',
+            'name': 'NAME1',
+          },
+          {
+            'type': 'input_value',
+            'name': 'NAME2',
+          },
+        ],
+      },
     ]);
     this.workspace = Blockly.inject('blocklyDiv', {});
     this.navigator = this.workspace.getNavigator();
@@ -80,6 +94,7 @@ suite('Navigation', function () {
     const statementInput3 = this.workspace.newBlock('input_statement');
     const statementInput4 = this.workspace.newBlock('input_statement');
     const fieldWithOutput = this.workspace.newBlock('field_input');
+    const doubleValueInput = this.workspace.newBlock('double_value_input');
     const valueInput = this.workspace.newBlock('value_input');
 
     statementInput1.nextConnection.connect(statementInput2.previousConnection);
@@ -97,6 +112,7 @@ suite('Navigation', function () {
       statementInput4: statementInput4,
       fieldWithOutput: fieldWithOutput,
       valueInput: valueInput,
+      doubleValueInput,
     };
   });
   teardown(function () {
@@ -431,16 +447,9 @@ suite('Navigation', function () {
         assert.equal(nextNode, prevConnection);
       });
       test('fromInputToInput', function () {
-        const input = this.blocks.statementInput1.inputList[0];
+        const input = this.blocks.doubleValueInput.inputList[0];
         const inputConnection =
-          this.blocks.statementInput1.inputList[1].connection;
-        const nextNode = this.navigator.getNextSibling(input.connection);
-        assert.equal(nextNode, inputConnection);
-      });
-      test('fromInputToStatementInput', function () {
-        const input = this.blocks.fieldAndInputs2.inputList[1];
-        const inputConnection =
-          this.blocks.fieldAndInputs2.inputList[2].connection;
+          this.blocks.doubleValueInput.inputList[1].connection;
         const nextNode = this.navigator.getNextSibling(input.connection);
         assert.equal(nextNode, inputConnection);
       });
@@ -575,6 +584,11 @@ suite('Navigation', function () {
         assert.equal(prevNode, this.blocks.statementInput1);
       });
       test('fromInputToField', function () {
+        // Disconnect the block that was connected to the input we're testing,
+        // because we only navigate to/from empty input connections (if they're
+        // connected navigation targets the connected block, bypassing the
+        // connection).
+        this.blocks.fieldWithOutput.outputConnection.disconnect();
         const input = this.blocks.statementInput1.inputList[0];
         const prevNode = this.navigator.getPreviousSibling(input.connection);
         assert.equal(prevNode, input.fieldRow[1]);
@@ -585,9 +599,9 @@ suite('Navigation', function () {
         assert.isNull(prevNode);
       });
       test('fromInputToInput', function () {
-        const input = this.blocks.fieldAndInputs2.inputList[2];
+        const input = this.blocks.doubleValueInput.inputList[1];
         const inputConnection =
-          this.blocks.fieldAndInputs2.inputList[1].connection;
+          this.blocks.doubleValueInput.inputList[0].connection;
         const prevNode = this.navigator.getPreviousSibling(input.connection);
         assert.equal(prevNode, inputConnection);
       });
@@ -711,10 +725,10 @@ suite('Navigation', function () {
         const inNode = this.navigator.getFirstChild(input.connection);
         assert.equal(inNode, previousConnection);
       });
-      test('fromBlockToField', function () {
-        const field = this.blocks.valueInput.getField('NAME');
+      test('fromBlockToInput', function () {
+        const connection = this.blocks.valueInput.inputList[0].connection;
         const inNode = this.navigator.getFirstChild(this.blocks.valueInput);
-        assert.equal(inNode, field);
+        assert.equal(inNode, connection);
       });
       test('fromBlockToField', function () {
         const inNode = this.navigator.getFirstChild(
@@ -731,7 +745,10 @@ suite('Navigation', function () {
         const inNode = this.navigator.getFirstChild(
           this.blocks.dummyInputValue,
         );
-        assert.equal(inNode, null);
+        assert.equal(
+          inNode,
+          this.blocks.dummyInputValue.inputList[1].connection,
+        );
       });
       test('fromOuputToNull', function () {
         const output = this.blocks.fieldWithOutput.outputConnection;
@@ -787,13 +804,10 @@ suite('Navigation', function () {
         const outNode = this.navigator.getParent(input.connection);
         assert.equal(outNode, this.blocks.statementInput1);
       });
-      test('fromOutputToInput', function () {
+      test('fromOutputToBlock', function () {
         const output = this.blocks.fieldWithOutput.outputConnection;
         const outNode = this.navigator.getParent(output);
-        assert.equal(
-          outNode,
-          this.blocks.statementInput1.inputList[0].connection,
-        );
+        assert.equal(outNode, this.blocks.fieldWithOutput);
       });
       test('fromOutputToBlock', function () {
         const output = this.blocks.fieldWithOutput2.outputConnection;
@@ -805,43 +819,29 @@ suite('Navigation', function () {
         const outNode = this.navigator.getParent(field);
         assert.equal(outNode, this.blocks.statementInput1);
       });
-      test('fromPreviousToInput', function () {
-        const previous = this.blocks.statementInput3.previousConnection;
-        const inputConnection =
-          this.blocks.statementInput2.inputList[1].connection;
-        const outNode = this.navigator.getParent(previous);
-        assert.equal(outNode, inputConnection);
-      });
       test('fromPreviousToBlock', function () {
         const previous = this.blocks.statementInput2.previousConnection;
         const outNode = this.navigator.getParent(previous);
-        assert.equal(outNode, this.blocks.statementInput1);
-      });
-      test('fromNextToInput', function () {
-        const next = this.blocks.statementInput3.nextConnection;
-        const inputConnection =
-          this.blocks.statementInput2.inputList[1].connection;
-        const outNode = this.navigator.getParent(next);
-        assert.equal(outNode, inputConnection);
+        assert.equal(outNode, this.blocks.statementInput2);
       });
       test('fromNextToBlock', function () {
         const next = this.blocks.statementInput2.nextConnection;
         const outNode = this.navigator.getParent(next);
-        assert.equal(outNode, this.blocks.statementInput1);
+        assert.equal(outNode, this.blocks.statementInput2);
       });
       test('fromNextToBlock_NoPreviousConnection', function () {
         const next = this.blocks.secondBlock.nextConnection;
         const outNode = this.navigator.getParent(next);
-        assert.equal(outNode, this.blocks.noPrevConnection);
+        assert.equal(outNode, this.blocks.secondBlock);
       });
-      /**
-       * This is where there is a block with both an output connection and a
-       * next connection attached to an input.
-       */
-      test('fromNextToInput_OutputAndPreviousConnection', function () {
+      // /**
+      //  * This is where there is a block with both an output connection and a
+      //  * next connection attached to an input.
+      //  */
+      test('fromNextToBlock_OutputAndPreviousConnection', function () {
         const next = this.blocks.outputNextBlock.nextConnection;
         const outNode = this.navigator.getParent(next);
-        assert.equal(outNode, this.blocks.secondBlock.inputList[0].connection);
+        assert.equal(outNode, this.blocks.outputNextBlock);
       });
       test('fromBlockToWorkspace', function () {
         const outNode = this.navigator.getParent(this.blocks.statementInput2);

@@ -5,6 +5,7 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
+import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
 import type {Icon} from '../icons/icon.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';

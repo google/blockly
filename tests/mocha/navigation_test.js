@@ -534,6 +534,13 @@ suite('Navigation', function () {
         const nextNode = this.navigator.getNextSibling(this.blocks.buttonBlock);
         assert.equal(nextNode.id, this.blocks.buttonNext.id);
       });
+      test('fromFieldSkipsHiddenInputs', function () {
+        this.blocks.buttonBlock.inputList[2].setVisible(false);
+        const fieldStart = this.blocks.buttonBlock.getField('BUTTON2');
+        const fieldEnd = this.blocks.buttonBlock.getField('BUTTON3');
+        const nextNode = this.navigator.getNextSibling(fieldStart);
+        assert.equal(nextNode.name, fieldEnd.name);
+      });
     });
 
     suite('Previous', function () {
@@ -668,6 +675,13 @@ suite('Navigation', function () {
           this.blocks.buttonNext,
         );
         assert.equal(prevNode.id, this.blocks.buttonBlock.id);
+      });
+      test('fromFieldSkipsHiddenInputs', function () {
+        this.blocks.buttonBlock.inputList[2].setVisible(false);
+        const fieldStart = this.blocks.buttonBlock.getField('BUTTON3');
+        const fieldEnd = this.blocks.buttonBlock.getField('BUTTON2');
+        const nextNode = this.navigator.getPreviousSibling(fieldStart);
+        assert.equal(nextNode.name, fieldEnd.name);
       });
     });
 

@@ -5,9 +5,12 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
+import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
+import type {Icon} from '../icons/icon.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
+import {RenderedConnection} from '../rendered_connection.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
@@ -21,21 +24,8 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @returns The first field or input of the given block, if any.
    */
   getFirstChild(current: BlockSvg): IFocusableNode | null {
-    const icons = current.getIcons();
-    if (icons.length) return icons[0];
-
-    for (const input of current.inputList) {
-      if (!input.isVisible()) {
-        continue;
-      }
-      for (const field of input.fieldRow) {
-        return field;
-      }
-      if (input.connection?.targetBlock())
-        return input.connection.targetBlock() as BlockSvg;
-    }
-
-    return null;
+    const candidates = getBlockNavigationCandidates(current);
+    return candidates[0];
   }
 
   /**
@@ -66,36 +56,10 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
   getNextSibling(current: BlockSvg): IFocusableNode | null {
     if (current.nextConnection?.targetBlock()) {
       return current.nextConnection?.targetBlock();
-    }
-
-    const parent = this.getParent(current);
-    let navigatingCrossStacks = false;
-    let siblings: (BlockSvg | Field)[] = [];
-    if (parent instanceof BlockSvg) {
-      for (let i = 0, input; (input = parent.inputList[i]); i++) {
-        if (!input.isVisible()) {
-          continue;
-        }
-        siblings.push(...input.fieldRow);
-        const child = input.connection?.targetBlock();
-        if (child) {
-          siblings.push(child as BlockSvg);
-        }
-      }
-    } else if (parent instanceof WorkspaceSvg) {
-      siblings = parent.getTopBlocks(true);
-      navigatingCrossStacks = true;
-    } else {
-      return null;
-    }
-
-    const currentIndex = siblings.indexOf(
-      navigatingCrossStacks ? current.getRootBlock() : current,
-    );
-    if (currentIndex >= 0 && currentIndex < siblings.length - 1) {
-      return siblings[currentIndex + 1];
-    } else if (currentIndex === siblings.length - 1 && navigatingCrossStacks) {
-      return siblings[0];
+    } else if (current.outputConnection?.targetBlock()) {
+      return navigateBlock(current, 1);
+    } else if (this.getParent(current) instanceof WorkspaceSvg) {
+      return navigateStacks(current, 1);
     }
 
     return null;
@@ -111,44 +75,13 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
   getPreviousSibling(current: BlockSvg): IFocusableNode | null {
     if (current.previousConnection?.targetBlock()) {
       return current.previousConnection?.targetBlock();
+    } else if (current.outputConnection?.targetBlock()) {
+      return navigateBlock(current, -1);
+    } else if (this.getParent(current) instanceof WorkspaceSvg) {
+      return navigateStacks(current, -1);
     }
 
-    const parent = this.getParent(current);
-    let navigatingCrossStacks = false;
-    let siblings: (BlockSvg | Field)[] = [];
-    if (parent instanceof BlockSvg) {
-      for (let i = 0, input; (input = parent.inputList[i]); i++) {
-        if (!input.isVisible()) {
-          continue;
-        }
-        siblings.push(...input.fieldRow);
-        const child = input.connection?.targetBlock();
-        if (child) {
-          siblings.push(child as BlockSvg);
-        }
-      }
-    } else if (parent instanceof WorkspaceSvg) {
-      siblings = parent.getTopBlocks(true);
-      navigatingCrossStacks = true;
-    } else {
-      return null;
-    }
-
-    const currentIndex = siblings.indexOf(current);
-    let result: IFocusableNode | null = null;
-    if (currentIndex >= 1) {
-      result = siblings[currentIndex - 1];
-    } else if (currentIndex === 0 && navigatingCrossStacks) {
-      result = siblings[siblings.length - 1];
-    }
-
-    // If navigating to a previous stack, our previous sibling is the last
-    // block in it.
-    if (navigatingCrossStacks && result instanceof BlockSvg) {
-      return result.lastConnectionInStack(false)?.getSourceBlock() ?? result;
-    }
-
-    return result;
+    return null;
   }
 
   /**
@@ -170,4 +103,64 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
   isApplicable(current: any): current is BlockSvg {
     return current instanceof BlockSvg;
   }
+}
+
+function getBlockNavigationCandidates(block: BlockSvg): IFocusableNode[] {
+  const candidates: IFocusableNode[] = block.getIcons();
+
+  for (const input of block.inputList) {
+    if (!input.isVisible()) continue;
+    candidates.push(...input.fieldRow);
+    if (input.connection?.targetBlock()) {
+      candidates.push(input.connection.targetBlock() as BlockSvg);
+    } else if (input.connection?.type === ConnectionType.INPUT_VALUE) {
+      candidates.push(input.connection as RenderedConnection);
+    }
+  }
+
+  return candidates;
+}
+
+export function navigateStacks(current: BlockSvg, delta: number) {
+  const stacks = current.workspace.getTopBlocks(true);
+  const currentIndex = stacks.indexOf(current.getRootBlock());
+  const targetIndex = currentIndex + delta;
+  let result: BlockSvg | null = null;
+  if (targetIndex >= 0 && targetIndex < stacks.length) {
+    result = stacks[targetIndex];
+  } else if (targetIndex < 0) {
+    result = stacks[stacks.length - 1];
+  } else if (targetIndex >= stacks.length) {
+    result = stacks[0];
+  }
+
+  // When navigating to a previous stack, our previous sibling is the last
+  // block in it.
+  if (delta < 0 && result) {
+    return result.lastConnectionInStack(false)?.getSourceBlock() ?? result;
+  }
+
+  return result;
+}
+
+export function navigateBlock(
+  current: Icon | Field | RenderedConnection | BlockSvg,
+  delta: number,
+): IFocusableNode | null {
+  const block =
+    current instanceof BlockSvg
+      ? current.outputConnection.targetBlock()
+      : current.getSourceBlock();
+  if (!(block instanceof BlockSvg)) return null;
+
+  const candidates = getBlockNavigationCandidates(block);
+  const currentIndex = candidates.indexOf(current);
+  if (currentIndex === -1) return null;
+
+  const targetIndex = currentIndex + delta;
+  if (targetIndex >= 0 && targetIndex < candidates.length) {
+    return candidates[targetIndex];
+  }
+
+  return null;
 }

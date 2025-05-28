@@ -5,7 +5,6 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
 import type {Icon} from '../icons/icon.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
@@ -105,6 +104,12 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
   }
 }
 
+/**
+ * Returns a list of the navigable children of the given block.
+ *
+ * @param The block to retrieve the navigable children of.
+ * @returns A list of navigable/focusable children of the given block.
+ */
 function getBlockNavigationCandidates(block: BlockSvg): IFocusableNode[] {
   const candidates: IFocusableNode[] = block.getIcons();
 
@@ -121,6 +126,17 @@ function getBlockNavigationCandidates(block: BlockSvg): IFocusableNode[] {
   return candidates;
 }
 
+/**
+ * Returns the next/previous stack relative to the given block's stack.
+ *
+ * @param current The block whose stack will be navigated relative to.
+ * @param delta The difference in index to navigate; positive values navigate
+ *     to the nth next stack, while negative values navigate to the nth previous
+ *     stack.
+ * @returns The first block in the stack offset by `delta` relative to the
+ *     current block's stack, or the last block in the stack offset by `delta`
+ *     relative to the current block's stack when navigating backwards.
+ */
 export function navigateStacks(current: BlockSvg, delta: number) {
   const stacks = current.workspace.getTopBlocks(true);
   const currentIndex = stacks.indexOf(current.getRootBlock());
@@ -143,6 +159,14 @@ export function navigateStacks(current: BlockSvg, delta: number) {
   return result;
 }
 
+/**
+ * Returns the next navigable item relative to the provided block child.
+ *
+ * @param current The navigable block child item to navigate relative to.
+ * @param delta The difference in index to navigate; positive values navigate
+ *     forward by n, while negative values navigate backwards by n.
+ * @returns The navigable block child offset by `delta` relative to `current`.
+ */
 export function navigateBlock(
   current: Icon | Field | RenderedConnection | BlockSvg,
   delta: number,

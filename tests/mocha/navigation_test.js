@@ -834,10 +834,10 @@ suite('Navigation', function () {
         const outNode = this.navigator.getParent(next);
         assert.equal(outNode, this.blocks.secondBlock);
       });
-      // /**
-      //  * This is where there is a block with both an output connection and a
-      //  * next connection attached to an input.
-      //  */
+      /**
+       * This is where there is a block with both an output connection and a
+       * next connection attached to an input.
+       */
       test('fromNextToBlock_OutputAndPreviousConnection', function () {
         const next = this.blocks.outputNextBlock.nextConnection;
         const outNode = this.navigator.getParent(next);

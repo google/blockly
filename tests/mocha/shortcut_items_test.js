@@ -181,13 +181,13 @@ suite('Keyboard Shortcut Items', function () {
         runReadOnlyTest(keyEvent, testCaseName);
       });
     });
-    // Do not copy a block if a gesture is in progress.
-    suite('Gesture in progress', function () {
+    // Do not copy a block if a drag is in progress.
+    suite('Drag in progress', function () {
       testCases.forEach(function (testCase) {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
+          sinon.stub(this.workspace, 'isDragging').returns(true);
           this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
@@ -201,7 +201,7 @@ suite('Keyboard Shortcut Items', function () {
         const keyEvent = testCase[1];
         test(testCaseName, function () {
           sinon
-            .stub(Blockly.common.getSelected(), 'isDeletable')
+            .stub(Blockly.common.getSelected(), 'isOwnDeletable')
             .returns(false);
           this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
@@ -215,7 +215,9 @@ suite('Keyboard Shortcut Items', function () {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          sinon.stub(Blockly.common.getSelected(), 'isMovable').returns(false);
+          sinon
+            .stub(Blockly.common.getSelected(), 'isOwnMovable')
+            .returns(false);
           this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);

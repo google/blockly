@@ -213,7 +213,9 @@ export function registerCopy() {
         : targetWorkspace;
       if (!targetWorkspace) return false;
 
-      targetWorkspace.hideChaff();
+      if (!focused.workspace.isFlyout) {
+        targetWorkspace.hideChaff();
+      }
       copyData = focused.toCopyData();
       copyWorkspace = targetWorkspace;
       copyCoords =

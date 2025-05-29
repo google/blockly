@@ -966,12 +966,20 @@ export abstract class Flyout
     return null;
   }
 
-  /** See IFocusableNode.getFocusableElement. */
+  /**
+   * See IFocusableNode.getFocusableElement.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getFocusableElement(): HTMLElement | SVGElement {
     throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableNode.getFocusableTree. */
+  /**
+   * See IFocusableNode.getFocusableTree.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getFocusableTree(): IFocusableTree {
     throw new Error('Flyouts are not directly focusable.');
   }
@@ -987,24 +995,40 @@ export abstract class Flyout
     return false;
   }
 
-  /** See IFocusableTree.getRootFocusableNode. */
+  /**
+   * See IFocusableNode.getRootFocusableNode.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getRootFocusableNode(): IFocusableNode {
     throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableTree.getRestoredFocusableNode. */
+  /**
+   * See IFocusableNode.getRestoredFocusableNode.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getRestoredFocusableNode(
     _previousNode: IFocusableNode | null,
   ): IFocusableNode | null {
     throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableTree.getNestedTrees. */
+  /**
+   * See IFocusableNode.getNestedTrees.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getNestedTrees(): Array<IFocusableTree> {
     throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableTree.lookUpFocusableNode. */
+  /**
+   * See IFocusableNode.lookUpFocusableNode.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   lookUpFocusableNode(_id: string): IFocusableNode | null {
     throw new Error('Flyouts are not directly focusable.');
   }
@@ -1015,7 +1039,11 @@ export abstract class Flyout
     _previousTree: IFocusableTree | null,
   ): void {}
 
-  /** See IFocusableTree.onTreeBlur. */
+  /**
+   * See IFocusableNode.onTreeBlur.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   onTreeBlur(_nextTree: IFocusableTree | null): void {
     throw new Error('Flyouts are not directly focusable.');
   }

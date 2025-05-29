@@ -193,8 +193,7 @@ export class FocusManager {
    * not currently registered.
    */
   private lookUpRegistration(tree: IFocusableTree): TreeRegistration | null {
-    const index = this.registeredTrees.findIndex((reg) => reg.tree === tree);
-    return this.registeredTrees[index] ?? null;
+    return this.registeredTrees.find((reg) => reg.tree === tree) ?? null;
   }
 
   /**
@@ -307,8 +306,8 @@ export class FocusManager {
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
-    const mustRestoreUpdatingNodeFlag = !this.currentlyHoldsEphemeralFocus;
-    if (mustRestoreUpdatingNodeFlag) {
+    const mustRestoreUpdatingNode = !this.currentlyHoldsEphemeralFocus;
+    if (mustRestoreUpdatingNode) {
       // Disable state syncing from DOM events since possible calls to focus()
       // below will loop a call back to focusNode().
       this.isUpdatingFocusedNode = true;
@@ -322,7 +321,7 @@ export class FocusManager {
     const prevFocusedElement = this.focusedNode?.getFocusableElement();
     const hasDesyncedState = prevFocusedElement !== document.activeElement;
     if (this.focusedNode === focusableNode && !hasDesyncedState) {
-      if (mustRestoreUpdatingNodeFlag) {
+      if (mustRestoreUpdatingNode) {
         // Reenable state syncing from DOM events.
         this.isUpdatingFocusedNode = false;
       }
@@ -333,7 +332,7 @@ export class FocusManager {
       // This node can't be focused.
       console.warn("Trying to focus a node that can't be focused.");
 
-      if (mustRestoreUpdatingNodeFlag) {
+      if (mustRestoreUpdatingNode) {
         // Reenable state syncing from DOM events.
         this.isUpdatingFocusedNode = false;
       }
@@ -385,7 +384,7 @@ export class FocusManager {
       this.activelyFocusNode(nodeToFocus, prevTree ?? null);
     }
     this.updateFocusedNode(nodeToFocus);
-    if (mustRestoreUpdatingNodeFlag) {
+    if (mustRestoreUpdatingNode) {
       // Reenable state syncing from DOM events.
       this.isUpdatingFocusedNode = false;
     }
@@ -537,7 +536,16 @@ export class FocusManager {
     node.onNodeFocus();
     this.lockFocusStateChanges = false;
 
-    // Only overwrite the tab index if it isn't a tree root that's auto managed.
+    // The tab index should be set in all cases where:
+    // - It doesn't overwrite an pre-set tab index for the node.
+    // - The node is part of a tree whose tab index is unmanaged.
+    // OR
+    // - The node is part of a managed tree but this isn't the root. Managed
+    //   roots are ignored since they are always overwritten to have a tab index
+    //   of -1 with active focus so that they cannot be tab navigated.
+    //
+    // Setting the tab index ensures that the node's focusable element can
+    // actually receive DOM focus.
     if (!treeIsTabManaged || node !== tree.getRootFocusableNode()) {
       if (!elem.hasAttribute('tabindex')) elem.tabIndex = -1;
     }

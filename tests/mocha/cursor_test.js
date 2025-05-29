@@ -246,7 +246,7 @@ suite('Cursor', function () {
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node, this.blockA);
+        assert.equal(node, this.blockA.inputList[0].connection);
       });
     });
     suite('one c-hat block', function () {
@@ -340,7 +340,7 @@ suite('Cursor', function () {
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
         const blockB = this.workspace.getBlockById('B');
-        assert.equal(node, blockB);
+        assert.equal(node, blockB.inputList[0].connection);
       });
     });
 

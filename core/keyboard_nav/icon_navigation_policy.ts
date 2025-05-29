@@ -8,6 +8,7 @@ import {BlockSvg} from '../block_svg.js';
 import {Icon} from '../icons/icon.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
+import {navigateBlock} from './block_navigation_policy.js';
 
 /**
  * Set of rules controlling keyboard navigation from an icon.
@@ -40,21 +41,7 @@ export class IconNavigationPolicy implements INavigationPolicy<Icon> {
    * @returns The next icon, field or input following this icon, if any.
    */
   getNextSibling(current: Icon): IFocusableNode | null {
-    const block = current.getSourceBlock() as BlockSvg;
-    const icons = block.getIcons();
-    const currentIndex = icons.indexOf(current);
-    if (currentIndex >= 0 && currentIndex + 1 < icons.length) {
-      return icons[currentIndex + 1];
-    }
-
-    for (const input of block.inputList) {
-      if (input.fieldRow.length) return input.fieldRow[0];
-
-      if (input.connection?.targetBlock())
-        return input.connection.targetBlock() as BlockSvg;
-    }
-
-    return null;
+    return navigateBlock(current, 1);
   }
 
   /**
@@ -64,14 +51,7 @@ export class IconNavigationPolicy implements INavigationPolicy<Icon> {
    * @returns The icon's previous icon, if any.
    */
   getPreviousSibling(current: Icon): IFocusableNode | null {
-    const block = current.getSourceBlock() as BlockSvg;
-    const icons = block.getIcons();
-    const currentIndex = icons.indexOf(current);
-    if (currentIndex >= 1) {
-      return icons[currentIndex - 1];
-    }
-
-    return null;
+    return navigateBlock(current, -1);
   }
 
   /**

@@ -278,7 +278,9 @@ export class ShortcutRegistry {
    *     Undefined if no shortcuts exist.
    */
   getShortcutNamesByKeyCode(keyCode: string): string[] | undefined {
-    return this.keyMap.get(keyCode) || [];
+    // Copy the list of shortcuts in case one of them unregisters itself
+    // in its callback.
+    return this.keyMap.get(keyCode)?.slice() || [];
   }
 
   /**

@@ -34,16 +34,15 @@ async function testMutator(browser, delta) {
     browser,
     'Logic',
     'controls_if',
-    delta * 50,
+    delta * 150,
     50,
   );
   await openMutatorForBlock(browser, mutatorBlock);
-  await browser.pause(PAUSE_TIME);
   await dragBlockFromMutatorFlyout(
     browser,
     mutatorBlock,
     'controls_if_elseif',
-    delta * 50,
+    delta * 150,
     50,
   );
   await browser.pause(PAUSE_TIME);
@@ -67,8 +66,8 @@ async function testMutator(browser, delta) {
       'g:nth-child(2) > svg:nth-child(1) > g > g.blocklyBlockCanvas > ' +
       'g.blocklyDraggable',
   );
-  // For some reason this needs a lot more time.
-  await browser.pause(2000);
+
+  await browser.pause(PAUSE_TIME);
   await connect(
     browser,
     await getBlockElementById(browser, elseIfQuarkId),

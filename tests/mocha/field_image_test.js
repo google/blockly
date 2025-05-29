@@ -20,6 +20,7 @@ import {
 suite('Image Fields', function () {
   setup(function () {
     sharedTestSetup.call(this);
+    this.workspace = Blockly.inject('blocklyDiv');
   });
   teardown(function () {
     sharedTestTeardown.call(this);
@@ -235,6 +236,115 @@ suite('Image Fields', function () {
           flipRtl: true,
         });
         assert.isTrue(field.getFlipRtl());
+      });
+    });
+    suite('isClickable', function () {
+      setup(function () {
+        this.onClick = function () {
+          console.log('on click');
+        };
+        this.setUpBlockWithFieldImages = function () {
+          const blockJson = {
+            'type': 'text',
+            'id': 'block_id',
+            'x': 0,
+            'y': 0,
+            'fields': {
+              'TEXT': '',
+            },
+          };
+          Blockly.serialization.blocks.append(blockJson, this.workspace);
+          return this.workspace.getBlockById('block_id');
+        };
+        this.extractFieldImage = function (block) {
+          const fields = Array.from(block.getFields());
+          // Sanity check (as a precondition).
+          assert.strictEqual(fields.length, 3);
+          const imageField = fields[0];
+          // Sanity check (as a precondition).
+          assert.isTrue(imageField instanceof Blockly.FieldImage);
+          return imageField;
+        };
+      });
+
+      test('Unattached field without click handler returns false', function () {
+        const field = new Blockly.FieldImage('src', 10, 10, null);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
+      });
+      test('Unattached field with click handler returns false', function () {
+        const field = new Blockly.FieldImage('src', 10, 10, this.onClick);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
+      });
+      test('For attached but disabled field without click handler returns false', function () {
+        const block = this.setUpBlockWithFieldImages();
+        const field = this.extractFieldImage(block);
+        field.setEnabled(false);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
+      });
+      test('For attached but disabled field with click handler returns false', function () {
+        const block = this.setUpBlockWithFieldImages();
+        const field = this.extractFieldImage(block);
+        field.setEnabled(false);
+        field.setOnClickHandler(this.onClick);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
+      });
+      test('For attached, enabled, but not editable field without click handler returns false', function () {
+        const block = this.setUpBlockWithFieldImages();
+        const field = this.extractFieldImage(block);
+        block.setEditable(false);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
+      });
+      test('For attached, enabled, but not editable field with click handler returns false', function () {
+        const block = this.setUpBlockWithFieldImages();
+        const field = this.extractFieldImage(block);
+        block.setEditable(false);
+        field.setOnClickHandler(this.onClick);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
+      });
+      test('For attached, enabled, editable field without click handler returns false', function () {
+        const block = this.setUpBlockWithFieldImages();
+        const field = this.extractFieldImage(block);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
+      });
+      test('For attached, enabled, editable field with click handler returns true', function () {
+        const block = this.setUpBlockWithFieldImages();
+        const field = this.extractFieldImage(block);
+        field.setOnClickHandler(this.onClick);
+
+        const isClickable = field.isClickable();
+
+        assert.isTrue(isClickable);
+      });
+      test('For attached, enabled, editable field with removed click handler returns false', function () {
+        const block = this.setUpBlockWithFieldImages();
+        const field = this.extractFieldImage(block);
+        field.setOnClickHandler(this.onClick);
+        field.setOnClickHandler(null);
+
+        const isClickable = field.isClickable();
+
+        assert.isFalse(isClickable);
       });
     });
   });

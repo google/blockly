@@ -19,6 +19,7 @@ import {IContextMenu} from '../interfaces/i_contextmenu.js';
 import {ICopyable} from '../interfaces/i_copyable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
+import {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
@@ -42,7 +43,8 @@ export class RenderedWorkspaceComment
     ISelectable,
     IDeletable,
     ICopyable<WorkspaceCommentCopyData>,
-    IContextMenu
+    IContextMenu,
+    IFocusableNode
 {
   /** The class encompassing the svg elements making up the workspace comment. */
   private view: CommentView;
@@ -63,7 +65,6 @@ export class RenderedWorkspaceComment
     this.view.setEditable(this.isEditable());
     this.view.getSvgRoot().setAttribute('data-id', this.id);
     this.view.getSvgRoot().setAttribute('id', this.id);
-    this.view.getSvgRoot().setAttribute('tabindex', '-1');
 
     this.addModelUpdateBindings();
 
@@ -207,7 +208,12 @@ export class RenderedWorkspaceComment
   /** Disposes of the view. */
   override dispose() {
     this.disposing = true;
+    const focusManager = getFocusManager();
+    if (focusManager.getFocusedNode() === this) {
+      setTimeout(() => focusManager.focusTree(this.workspace), 0);
+    }
     if (!this.view.isDeadOrDying()) this.view.dispose();
+
     super.dispose();
   }
 

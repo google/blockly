@@ -31,6 +31,7 @@ import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
 import {IDragger} from './interfaces/i_dragger.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IIcon} from './interfaces/i_icon.js';
+import {keyboardNavigationController} from './keyboard_navigation_controller.js';
 import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
@@ -541,8 +542,10 @@ export class Gesture {
       // have higher priority than workspaces. The ordering within drags does
       // not matter, because the three types of dragging are exclusive.
       if (this.dragger) {
+        keyboardNavigationController.setIsActive(false);
         this.dragger.onDragEnd(e, this.currentDragDeltaXY);
       } else if (this.workspaceDragger) {
+        keyboardNavigationController.setIsActive(false);
         this.workspaceDragger.endDrag(this.currentDragDeltaXY);
       } else if (this.isBubbleClick()) {
         // Do nothing, bubbles don't currently respond to clicks.
@@ -742,6 +745,8 @@ export class Gesture {
     // TODO: Handle right-click on a bubble.
     e.preventDefault();
     e.stopPropagation();
+
+    keyboardNavigationController.setIsActive(false);
 
     this.dispose();
   }

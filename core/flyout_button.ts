@@ -113,7 +113,7 @@ export class FlyoutButton
     this.id = idGenerator.getNextUniqueId();
     this.svgGroup = dom.createSvgElement(
       Svg.G,
-      {'id': this.id, 'class': cssClass, 'tabindex': '-1'},
+      {'id': this.id, 'class': cssClass},
       this.workspace.getCanvas(),
     );
 

@@ -22,7 +22,10 @@ import '../events/events_toolbox_item_select.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import {getFocusManager} from '../focus_manager.js';
-import type {IAutoHideable} from '../interfaces/i_autohideable.js';
+import {
+  isAutoHideable,
+  type IAutoHideable,
+} from '../interfaces/i_autohideable.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 import {isDeletable} from '../interfaces/i_deletable.js';
 import type {IDraggable} from '../interfaces/i_draggable.js';
@@ -169,7 +172,7 @@ export class Toolbox
         ComponentManager.Capability.DRAG_TARGET,
       ],
     });
-    getFocusManager().registerTree(this);
+    getFocusManager().registerTree(this, true);
   }
 
   /**
@@ -200,7 +203,6 @@ export class Toolbox
    */
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = document.createElement('div');
-    toolboxContainer.tabIndex = 0;
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolbox');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
@@ -1142,7 +1144,16 @@ export class Toolbox
   }
 
   /** See IFocusableTree.onTreeBlur. */
-  onTreeBlur(_nextTree: IFocusableTree | null): void {}
+  onTreeBlur(nextTree: IFocusableTree | null): void {
+    // If navigating to anything other than the toolbox's flyout then clear the
+    // selection so that the toolbox's flyout can automatically close.
+    if (!nextTree || nextTree !== this.flyout?.getWorkspace()) {
+      this.clearSelection();
+      if (this.flyout && isAutoHideable(this.flyout)) {
+        this.flyout.autoHide(false);
+      }
+    }
+  }
 }
 
 /** CSS for Toolbox.  See css.js for use. */

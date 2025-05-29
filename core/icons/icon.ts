@@ -59,7 +59,6 @@ export abstract class Icon implements IIcon {
     const svgBlock = this.sourceBlock as BlockSvg;
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyIconGroup',
-      'tabindex': '-1',
       'id': this.id,
     });
     svgBlock.getSvgRoot().appendChild(this.svgRoot);

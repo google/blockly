@@ -65,7 +65,6 @@ export class RenderedWorkspaceComment
     this.view.setEditable(this.isEditable());
     this.view.getSvgRoot().setAttribute('data-id', this.id);
     this.view.getSvgRoot().setAttribute('id', this.id);
-    this.view.getSvgRoot().setAttribute('tabindex', '-1');
 
     this.addModelUpdateBindings();
 

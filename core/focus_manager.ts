@@ -459,6 +459,13 @@ export class FocusManager {
   }
 
   /**
+   * @returns whether something is currently holding ephemeral focus
+   */
+  ephemeralFocusTaken(): boolean {
+    return this.currentlyHoldsEphemeralFocus;
+  }
+
+  /**
    * Ensures that the manager is currently allowing operations that change its
    * internal focus state (such as via focusNode()).
    *

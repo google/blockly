@@ -9,6 +9,7 @@
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as eventUtils from './events/utils.js';
+import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {
   ICopyable,
@@ -72,7 +73,9 @@ export function registerDelete() {
         focused != null &&
         isIDeletable(focused) &&
         focused.isDeletable() &&
-        !Gesture.inProgress()
+        !Gesture.inProgress() &&
+        // Don't delete the block if a field editor is open
+        !getFocusManager().ephemeralFocusTaken()
       );
     },
     callback(workspace, e, shortcut, scope) {
@@ -152,7 +155,8 @@ export function registerCopy() {
         !workspace.isReadOnly() &&
         !Gesture.inProgress() &&
         !!focused &&
-        isCopyable(focused)
+        isCopyable(focused) &&
+        !getFocusManager().ephemeralFocusTaken()
       );
     },
     callback(workspace, e, shortcut, scope) {
@@ -199,7 +203,8 @@ export function registerCut() {
         isCopyable(focused) &&
         // Extra criteria for cut (not just copy):
         !focused.workspace.isFlyout &&
-        focused.isDeletable()
+        focused.isDeletable() &&
+        !getFocusManager().ephemeralFocusTaken()
       );
     },
     callback(workspace, e, shortcut, scope) {
@@ -246,7 +251,11 @@ export function registerPaste() {
   const pasteShortcut: KeyboardShortcut = {
     name: names.PASTE,
     preconditionFn(workspace) {
-      return !workspace.isReadOnly() && !Gesture.inProgress();
+      return (
+        !workspace.isReadOnly() &&
+        !Gesture.inProgress() &&
+        !getFocusManager().ephemeralFocusTaken()
+      );
     },
     callback(workspace: WorkspaceSvg, e: Event) {
       if (!copyData || !copyWorkspace) return false;
@@ -305,7 +314,11 @@ export function registerUndo() {
   const undoShortcut: KeyboardShortcut = {
     name: names.UNDO,
     preconditionFn(workspace) {
-      return !workspace.isReadOnly() && !Gesture.inProgress();
+      return (
+        !workspace.isReadOnly() &&
+        !Gesture.inProgress() &&
+        !getFocusManager().ephemeralFocusTaken()
+      );
     },
     callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
@@ -340,7 +353,11 @@ export function registerRedo() {
   const redoShortcut: KeyboardShortcut = {
     name: names.REDO,
     preconditionFn(workspace) {
-      return !Gesture.inProgress() && !workspace.isReadOnly();
+      return (
+        !Gesture.inProgress() &&
+        !workspace.isReadOnly() &&
+        !getFocusManager().ephemeralFocusTaken()
+      );
     },
     callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.

@@ -104,9 +104,11 @@ export class LayerManager {
   moveToDragLayer(elem: IRenderedElement & IFocusableNode) {
     this.dragLayer?.appendChild(elem.getSvgRoot());
 
-    // Since moving the element to the drag layer will cause it to lose focus,
-    // ensure it regains focus (to ensure proper highlights & sent events).
-    getFocusManager().focusNode(elem);
+    if (elem.canBeFocused()) {
+      // Since moving the element to the drag layer will cause it to lose focus,
+      // ensure it regains focus (to ensure proper highlights & sent events).
+      getFocusManager().focusNode(elem);
+    }
   }
 
   /**
@@ -117,9 +119,11 @@ export class LayerManager {
   moveOffDragLayer(elem: IRenderedElement & IFocusableNode, layerNum: number) {
     this.append(elem, layerNum);
 
-    // Since moving the element off the drag layer will cause it to lose focus,
-    // ensure it regains focus (to ensure proper highlights & sent events).
-    getFocusManager().focusNode(elem);
+    if (elem.canBeFocused()) {
+      // Since moving the element off the drag layer will cause it to lose focus,
+      // ensure it regains focus (to ensure proper highlights & sent events).
+      getFocusManager().focusNode(elem);
+    }
   }
 
   /**

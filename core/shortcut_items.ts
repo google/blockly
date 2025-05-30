@@ -130,8 +130,7 @@ function isCopyable(
     isIDeletable(focused) &&
     focused.isOwnDeletable() &&
     isDraggable(focused) &&
-    focused.isOwnMovable() &&
-    focused.isOwnEditable()
+    focused.isOwnMovable()
   );
 }
 
@@ -164,8 +163,7 @@ function isCuttable(focused: IFocusableNode): boolean {
     isIDeletable(focused) &&
     focused.isDeletable() &&
     isDraggable(focused) &&
-    focused.isMovable() &&
-    focused.isEditable()
+    focused.isMovable()
   );
 }
 

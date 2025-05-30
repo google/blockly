@@ -849,6 +849,17 @@ export class BlockSvg
     Tooltip.dispose();
     ContextMenu.hide();
 
+    // If this block was focused, focus its parent or workspace instead.
+    const focusManager = getFocusManager();
+    if (focusManager.getFocusedNode() === this) {
+      const parent = this.getParent();
+      if (parent) {
+        focusManager.focusNode(parent);
+      } else {
+        setTimeout(() => focusManager.focusTree(this.workspace), 0);
+      }
+    }
+
     if (animate) {
       this.unplug(healStack);
       blockAnimations.disposeUiEffect(this);

@@ -762,8 +762,6 @@ export class WorkspaceSvg
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {
       'class': 'blocklyWorkspace',
-      // Only the top-level workspace should be tabbable.
-      'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
     });
     if (injectionDiv) {
@@ -849,7 +847,8 @@ export class WorkspaceSvg
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
 
-    getFocusManager().registerTree(this);
+    // Only the top-level and flyout workspaces should be tabbable.
+    getFocusManager().registerTree(this, !!this.injectionDiv || this.isFlyout);
 
     return this.svgGroup_;
   }
@@ -2807,13 +2806,13 @@ export class WorkspaceSvg
   /** See IFocusableTree.onTreeBlur. */
   onTreeBlur(nextTree: IFocusableTree | null): void {
     // If the flyout loses focus, make sure to close it unless focus is being
-    // lost to a different element on the page.
-    if (nextTree && this.isFlyout && this.targetWorkspace) {
+    // lost to the toolbox or ephemeral focus.
+    if (this.isFlyout && this.targetWorkspace) {
       // Only hide the flyout if the flyout's workspace is losing focus and that
-      // focus isn't returning to the flyout itself or the toolbox.
+      // focus isn't returning to the flyout itself, the toolbox, or ephemeral.
+      if (getFocusManager().ephemeralFocusTaken()) return;
       const flyout = this.targetWorkspace.getFlyout();
       const toolbox = this.targetWorkspace.getToolbox();
-      if (flyout && nextTree === flyout) return;
       if (toolbox && nextTree === toolbox) return;
       if (toolbox) toolbox.clearSelection();
       if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);

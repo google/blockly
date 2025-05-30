@@ -505,6 +505,6 @@ input[type=number] {
   .blocklyIconGroup,
   .blocklyTextarea
 ) {
-  outline-width: 0px;
+  outline: none;
 }
 `;

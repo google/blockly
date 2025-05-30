@@ -9,14 +9,24 @@
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as eventUtils from './events/utils.js';
+import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
-import {ICopyData, isCopyable} from './interfaces/i_copyable.js';
-import {isDeletable} from './interfaces/i_deletable.js';
-import {isDraggable} from './interfaces/i_draggable.js';
+import {
+  ICopyable,
+  ICopyData,
+  isCopyable as isICopyable,
+} from './interfaces/i_copyable.js';
+import {
+  IDeletable,
+  isDeletable as isIDeletable,
+} from './interfaces/i_deletable.js';
+import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
+import {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import {KeyCodes} from './utils/keycodes.js';
 import {Rect} from './utils/rect.js';
+import * as svgMath from './utils/svg_math.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
 /**
@@ -61,9 +71,11 @@ export function registerDelete() {
       return (
         !workspace.isReadOnly() &&
         focused != null &&
-        isDeletable(focused) &&
+        isIDeletable(focused) &&
         focused.isDeletable() &&
-        !Gesture.inProgress()
+        !Gesture.inProgress() &&
+        // Don't delete the block if a field editor is open
+        !getFocusManager().ephemeralFocusTaken()
       );
     },
     callback(workspace, e, shortcut, scope) {
@@ -75,7 +87,7 @@ export function registerDelete() {
       const focused = scope.focusedNode;
       if (focused instanceof BlockSvg) {
         focused.checkAndDelete();
-      } else if (isDeletable(focused) && focused.isDeletable()) {
+      } else if (isIDeletable(focused) && focused.isDeletable()) {
         eventUtils.setGroup(true);
         focused.dispose();
         eventUtils.setGroup(false);
@@ -92,6 +104,73 @@ let copyWorkspace: WorkspaceSvg | null = null;
 let copyCoords: Coordinate | null = null;
 
 /**
+ * Determine if a focusable node can be copied.
+ *
+ * Unfortunately the ICopyable interface doesn't include an isCopyable
+ * method, so we must use some other criteria to make the decision.
+ * Specifically,
+ *
+ * - It must be an ICopyable.
+ * - So that a pasted copy can be manipluated and/or disposed of, it
+ *   must be both an IDraggable and an IDeletable.
+ * - Additionally, both .isOwnMovable() and .isOwnDeletable() must return
+ *   true (i.e., the copy could be moved and deleted).
+ *
+ * TODO(#9098): Revise these criteria.  The latter criteria prevents
+ * shadow blocks from being copied; additionally, there are likely to
+ * be other circumstances were it is desirable to allow movable /
+ * copyable copies of a currently-unmovable / -copyable block to be
+ * made.
+ *
+ * @param focused The focused object.
+ */
+function isCopyable(
+  focused: IFocusableNode,
+): focused is ICopyable<ICopyData> & IDeletable & IDraggable {
+  if (!(focused instanceof BlockSvg)) return false;
+  return (
+    isICopyable(focused) &&
+    isIDeletable(focused) &&
+    focused.isOwnDeletable() &&
+    isDraggable(focused) &&
+    focused.isOwnMovable()
+  );
+}
+
+/**
+ * Determine if a focusable node can be cut.
+ *
+ * Unfortunately the ICopyable interface doesn't include an isCuttable
+ * method, so we must use some other criteria to make the decision.
+ * Specifically,
+ *
+ * - It must be an ICopyable.
+ * - So that a pasted copy can be manipluated and/or disposed of, it
+ *   must be both an IDraggable and an IDeletable.
+ * - Additionally, both .isMovable() and .isDeletable() must return
+ *   true (i.e., can currently be moved and deleted). This is the main
+ *   difference with isCopyable.
+ *
+ * TODO(#9098): Revise these criteria.  The latter criteria prevents
+ * shadow blocks from being copied; additionally, there are likely to
+ * be other circumstances were it is desirable to allow movable /
+ * copyable copies of a currently-unmovable / -copyable block to be
+ * made.
+ *
+ * @param focused The focused object.
+ */
+function isCuttable(focused: IFocusableNode): boolean {
+  if (!(focused instanceof BlockSvg)) return false;
+  return (
+    isICopyable(focused) &&
+    isIDeletable(focused) &&
+    focused.isDeletable() &&
+    isDraggable(focused) &&
+    focused.isMovable()
+  );
+}
+
+/**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
  */
 export function registerCopy() {
@@ -106,14 +185,17 @@ export function registerCopy() {
     name: names.COPY,
     preconditionFn(workspace, scope) {
       const focused = scope.focusedNode;
+      if (!(focused instanceof BlockSvg)) return false;
+
+      const targetWorkspace = workspace.isFlyout
+        ? workspace.targetWorkspace
+        : workspace;
       return (
-        !workspace.isReadOnly() &&
-        !Gesture.inProgress() &&
-        focused != null &&
-        isDeletable(focused) &&
-        focused.isDeletable() &&
-        isDraggable(focused) &&
-        focused.isMovable() &&
+        !!focused &&
+        !!targetWorkspace &&
+        !targetWorkspace.isReadOnly() &&
+        !targetWorkspace.isDragging() &&
+        !getFocusManager().ephemeralFocusTaken() &&
         isCopyable(focused)
       );
     },
@@ -121,17 +203,27 @@ export function registerCopy() {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
-      workspace.hideChaff();
+
       const focused = scope.focusedNode;
       if (!focused || !isCopyable(focused)) return false;
-      copyData = focused.toCopyData();
-      copyWorkspace =
+      let targetWorkspace: WorkspaceSvg | null =
         focused.workspace instanceof WorkspaceSvg
           ? focused.workspace
           : workspace;
-      copyCoords = isDraggable(focused)
-        ? focused.getRelativeToSurfaceXY()
-        : null;
+      targetWorkspace = targetWorkspace.isFlyout
+        ? targetWorkspace.targetWorkspace
+        : targetWorkspace;
+      if (!targetWorkspace) return false;
+
+      if (!focused.workspace.isFlyout) {
+        targetWorkspace.hideChaff();
+      }
+      copyData = focused.toCopyData();
+      copyWorkspace = targetWorkspace;
+      copyCoords =
+        isDraggable(focused) && focused.workspace == targetWorkspace
+          ? focused.getRelativeToSurfaceXY()
+          : null;
       return !!copyData;
     },
     keyCodes: [ctrlC, metaC],
@@ -155,15 +247,11 @@ export function registerCut() {
     preconditionFn(workspace, scope) {
       const focused = scope.focusedNode;
       return (
+        !!focused &&
         !workspace.isReadOnly() &&
-        !Gesture.inProgress() &&
-        focused != null &&
-        isDeletable(focused) &&
-        focused.isDeletable() &&
-        isDraggable(focused) &&
-        focused.isMovable() &&
-        isCopyable(focused) &&
-        !focused.workspace.isFlyout
+        !workspace.isDragging() &&
+        !getFocusManager().ephemeralFocusTaken() &&
+        isCuttable(focused)
       );
     },
     callback(workspace, e, shortcut, scope) {
@@ -176,9 +264,9 @@ export function registerCut() {
         focused.checkAndDelete();
         return true;
       } else if (
-        isDeletable(focused) &&
+        isIDeletable(focused) &&
         focused.isDeletable() &&
-        isCopyable(focused)
+        isICopyable(focused)
       ) {
         copyData = focused.toCopyData();
         copyWorkspace = workspace;
@@ -210,10 +298,33 @@ export function registerPaste() {
   const pasteShortcut: KeyboardShortcut = {
     name: names.PASTE,
     preconditionFn(workspace) {
-      return !workspace.isReadOnly() && !Gesture.inProgress();
+      const targetWorkspace = workspace.isFlyout
+        ? workspace.targetWorkspace
+        : workspace;
+      return (
+        !!copyData &&
+        !!targetWorkspace &&
+        !targetWorkspace.isReadOnly() &&
+        !targetWorkspace.isDragging() &&
+        !getFocusManager().ephemeralFocusTaken()
+      );
     },
-    callback() {
+    callback(workspace: WorkspaceSvg, e: Event) {
       if (!copyData || !copyWorkspace) return false;
+
+      if (e instanceof PointerEvent) {
+        // The event that triggers a shortcut would conventionally be a KeyboardEvent.
+        // However, it may be a PointerEvent if a context menu item was used as a
+        // wrapper for this callback, in which case the new block(s) should be pasted
+        // at the mouse coordinates where the menu was opened, and this PointerEvent
+        // is where the menu was opened.
+        const mouseCoords = svgMath.screenToWsCoordinates(
+          copyWorkspace,
+          new Coordinate(e.clientX, e.clientY),
+        );
+        return !!clipboard.paste(copyData, copyWorkspace, mouseCoords);
+      }
+
       if (!copyCoords) {
         // If we don't have location data about the original copyable, let the
         // paster determine position.
@@ -255,7 +366,11 @@ export function registerUndo() {
   const undoShortcut: KeyboardShortcut = {
     name: names.UNDO,
     preconditionFn(workspace) {
-      return !workspace.isReadOnly() && !Gesture.inProgress();
+      return (
+        !workspace.isReadOnly() &&
+        !Gesture.inProgress() &&
+        !getFocusManager().ephemeralFocusTaken()
+      );
     },
     callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.
@@ -290,7 +405,11 @@ export function registerRedo() {
   const redoShortcut: KeyboardShortcut = {
     name: names.REDO,
     preconditionFn(workspace) {
-      return !Gesture.inProgress() && !workspace.isReadOnly();
+      return (
+        !Gesture.inProgress() &&
+        !workspace.isReadOnly() &&
+        !getFocusManager().ephemeralFocusTaken()
+      );
     },
     callback(workspace, e) {
       // 'z' for undo 'Z' is for redo.

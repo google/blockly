@@ -9,6 +9,7 @@ import {ConnectionType} from '../connection_type.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 import {RenderedConnection} from '../rendered_connection.js';
+import {navigateBlock} from './block_navigation_policy.js';
 
 /**
  * Set of rules controlling keyboard navigation from a connection.
@@ -37,17 +38,7 @@ export class ConnectionNavigationPolicy
    * @returns The given connection's parent connection or block.
    */
   getParent(current: RenderedConnection): IFocusableNode | null {
-    if (current.type === ConnectionType.OUTPUT_VALUE) {
-      return current.targetConnection ?? current.getSourceBlock();
-    } else if (current.getParentInput()) {
-      return current.getSourceBlock();
-    }
-
-    const topBlock = current.getSourceBlock().getTopStackBlock();
-    return (
-      (this.getParentConnection(topBlock)?.targetConnection?.getParentInput()
-        ?.connection as RenderedConnection) ?? topBlock
-    );
+    return current.getSourceBlock();
   }
 
   /**
@@ -58,19 +49,7 @@ export class ConnectionNavigationPolicy
    */
   getNextSibling(current: RenderedConnection): IFocusableNode | null {
     if (current.getParentInput()) {
-      const parentInput = current.getParentInput();
-      const block = parentInput?.getSourceBlock();
-      if (!block || !parentInput) return null;
-
-      const curIdx = block.inputList.indexOf(parentInput);
-      for (let i = curIdx + 1; i < block.inputList.length; i++) {
-        const input = block.inputList[i];
-        const fieldRow = input.fieldRow;
-        if (fieldRow.length) return fieldRow[0];
-        if (input.connection) return input.connection as RenderedConnection;
-      }
-
-      return null;
+      return navigateBlock(current, 1);
     } else if (current.type === ConnectionType.NEXT_STATEMENT) {
       const nextBlock = current.targetConnection;
       // If this connection is the last one in the stack, our next sibling is
@@ -103,20 +82,7 @@ export class ConnectionNavigationPolicy
    */
   getPreviousSibling(current: RenderedConnection): IFocusableNode | null {
     if (current.getParentInput()) {
-      const parentInput = current.getParentInput();
-      const block = parentInput?.getSourceBlock();
-      if (!block || !parentInput) return null;
-
-      const curIdx = block.inputList.indexOf(parentInput);
-      for (let i = curIdx; i >= 0; i--) {
-        const input = block.inputList[i];
-        if (input.connection && input !== parentInput) {
-          return input.connection as RenderedConnection;
-        }
-        const fieldRow = input.fieldRow;
-        if (fieldRow.length) return fieldRow[fieldRow.length - 1];
-      }
-      return null;
+      return navigateBlock(current, -1);
     } else if (
       current.type === ConnectionType.PREVIOUS_STATEMENT ||
       current.type === ConnectionType.OUTPUT_VALUE

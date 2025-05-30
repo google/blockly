@@ -22,7 +22,6 @@ import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutNavigator} from './flyout_navigator.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
-import {getFocusManager} from './focus_manager.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
@@ -308,7 +307,6 @@ export abstract class Flyout
     // hide/show code will set up proper visibility and size later.
     this.svgGroup_ = dom.createSvgElement(tagName, {
       'class': 'blocklyFlyout',
-      'tabindex': '0',
     });
     this.svgGroup_.style.display = 'none';
     this.svgBackground_ = dom.createSvgElement(
@@ -323,8 +321,6 @@ export abstract class Flyout
     this.workspace_
       .getThemeManager()
       .subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
-
-    getFocusManager().registerTree(this);
 
     return this.svgGroup_;
   }
@@ -407,7 +403,6 @@ export abstract class Flyout
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
     }
-    getFocusManager().unregisterTree(this);
   }
 
   /**
@@ -971,15 +966,22 @@ export abstract class Flyout
     return null;
   }
 
-  /** See IFocusableNode.getFocusableElement. */
+  /**
+   * See IFocusableNode.getFocusableElement.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getFocusableElement(): HTMLElement | SVGElement {
-    if (!this.svgGroup_) throw new Error('Flyout DOM is not yet created.');
-    return this.svgGroup_;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableNode.getFocusableTree. */
+  /**
+   * See IFocusableNode.getFocusableTree.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getFocusableTree(): IFocusableTree {
-    return this;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableNode.onNodeFocus. */
@@ -990,31 +992,45 @@ export abstract class Flyout
 
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
-    return true;
+    return false;
   }
 
-  /** See IFocusableTree.getRootFocusableNode. */
+  /**
+   * See IFocusableNode.getRootFocusableNode.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getRootFocusableNode(): IFocusableNode {
-    return this;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableTree.getRestoredFocusableNode. */
+  /**
+   * See IFocusableNode.getRestoredFocusableNode.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getRestoredFocusableNode(
     _previousNode: IFocusableNode | null,
   ): IFocusableNode | null {
-    return null;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableTree.getNestedTrees. */
+  /**
+   * See IFocusableNode.getNestedTrees.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   getNestedTrees(): Array<IFocusableTree> {
-    return [this.workspace_];
+    throw new Error('Flyouts are not directly focusable.');
   }
 
-  /** See IFocusableTree.lookUpFocusableNode. */
+  /**
+   * See IFocusableNode.lookUpFocusableNode.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
   lookUpFocusableNode(_id: string): IFocusableNode | null {
-    // No focusable node needs to be returned since the flyout's subtree is a
-    // workspace that will manage its own focusable state.
-    return null;
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /** See IFocusableTree.onTreeFocus. */
@@ -1023,15 +1039,12 @@ export abstract class Flyout
     _previousTree: IFocusableTree | null,
   ): void {}
 
-  /** See IFocusableTree.onTreeBlur. */
-  onTreeBlur(nextTree: IFocusableTree | null): void {
-    const toolbox = this.targetWorkspace.getToolbox();
-    // If focus is moving to either the toolbox or the flyout's workspace, do
-    // not close the flyout. For anything else, do close it since the flyout is
-    // no longer focused.
-    if (toolbox && nextTree === toolbox) return;
-    if (nextTree === this.workspace_) return;
-    if (toolbox) toolbox.clearSelection();
-    this.autoHide(false);
+  /**
+   * See IFocusableNode.onTreeBlur.
+   *
+   * @deprecated v12: Use the Flyout's workspace for focus operations, instead.
+   */
+  onTreeBlur(_nextTree: IFocusableTree | null): void {
+    throw new Error('Flyouts are not directly focusable.');
   }
 }

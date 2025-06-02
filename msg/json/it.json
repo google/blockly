@@ -14,7 +14,8 @@
 			"Nerimic",
 			"Samuele2002",
 			"Sarah Bernabei",
-			"Selven"
+			"Selven",
+			"Wheelygay"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -119,6 +120,9 @@
 	"LOGIC_TERNARY_TOOLTIP": "Verifica la condizione in 'test'. Se questa è vera restituisce il valore 'se vero' altrimenti restituisce il valore 'se falso'.",
 	"MATH_NUMBER_HELPURL": "https://it.wikipedia.org/wiki/Numero",
 	"MATH_NUMBER_TOOLTIP": "Un numero.",
+	"MATH_TRIG_SIN": "sen",
+	"MATH_TRIG_COS": "cos",
+	"MATH_TRIG_TAN": "tan",
 	"MATH_ARITHMETIC_HELPURL": "https://it.wikipedia.org/wiki/Aritmetica",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "Restituisce la somma dei due numeri.",
 	"MATH_ARITHMETIC_TOOLTIP_MINUS": "Restituisce la differenza dei due numeri.",
@@ -262,6 +266,7 @@
 	"LISTS_GET_INDEX_GET": "prendi",
 	"LISTS_GET_INDEX_GET_REMOVE": "prendi e rimuovi",
 	"LISTS_GET_INDEX_REMOVE": "rimuovi",
+	"LISTS_GET_INDEX_FROM_START": "#",
 	"LISTS_GET_INDEX_FROM_END": "# dalla fine",
 	"LISTS_GET_INDEX_FIRST": "primo",
 	"LISTS_GET_INDEX_LAST": "ultimo",
@@ -360,5 +365,6 @@
 	"CUT_SHORTCUT": "Taglia (%1)",
 	"COPY_SHORTCUT": "Copia (%1)",
 	"PASTE_SHORTCUT": "Incolla (%1)",
-	"SHORTCUTS_GENERAL": "Generale"
+	"SHORTCUTS_GENERAL": "Generale",
+	"SHORTCUTS_EDITING": "Modifica"
 }

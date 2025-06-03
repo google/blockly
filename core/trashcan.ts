@@ -14,6 +14,7 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
+import * as Css from './css.js';
 import {DeleteArea} from './delete_area.js';
 import type {Abstract} from './events/events_abstract.js';
 import './events/events_trashcan_open.js';
@@ -28,7 +29,6 @@ import type {UiMetrics} from './metrics_manager.js';
 import * as uiPosition from './positionable_helpers.js';
 import * as registry from './registry.js';
 import type * as blocks from './serialization/blocks.js';
-import {SPRITE} from './sprites.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
@@ -150,61 +150,21 @@ export class Trashcan
         </g>
         */
     this.svgGroup = dom.createSvgElement(Svg.G, {'class': 'blocklyTrash'});
-    let clip;
-    const rnd = String(Math.random()).substring(2);
-    clip = dom.createSvgElement(
-      Svg.CLIPPATH,
-      {'id': 'blocklyTrashBodyClipPath' + rnd},
-      this.svgGroup,
-    );
-    dom.createSvgElement(
-      Svg.RECT,
-      {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT},
-      clip,
-    );
-    const body = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'width': SPRITE.width,
-        'x': -SPRITE_LEFT,
-        'height': SPRITE.height,
-        'y': -SPRITE_TOP,
-        'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
-      },
-      this.svgGroup,
-    );
-    body.setAttributeNS(
-      dom.XLINK_NS,
-      'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url,
-    );
-
-    clip = dom.createSvgElement(
-      Svg.CLIPPATH,
-      {'id': 'blocklyTrashLidClipPath' + rnd},
-      this.svgGroup,
-    );
-    dom.createSvgElement(
-      Svg.RECT,
-      {'width': WIDTH, 'height': LID_HEIGHT},
-      clip,
-    );
     this.svgLid = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'width': SPRITE.width,
-        'x': -SPRITE_LEFT,
-        'height': SPRITE.height,
-        'y': -SPRITE_TOP,
-        'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
-      },
+      Svg.G,
+      {'class': 'blocklyTrashLid'},
       this.svgGroup,
     );
-    this.svgLid.setAttributeNS(
-      dom.XLINK_NS,
-      'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url,
+    this.svgLid.innerHTML = `<path d="M 2,9 v 6 h 42 v -6 h -10.5 l -3,-3 h -15 l -3,3 z" />`;
+    const body = dom.createSvgElement(
+      Svg.G,
+      {'class': 'blocklyTrashBody'},
+      this.svgGroup,
     );
+    body.innerHTML = `
+      <rect width="36" height="20" x="5" y="18" />
+      <rect width="36" height="42" x="5" y="18" rx="4" ry="4" />
+    `;
 
     // bindEventWithChecks_ quashes events too aggressively. See:
     // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
@@ -728,3 +688,8 @@ const OPACITY_MAX = 0.8;
  * animation the lid will be open to this angle.
  */
 const MAX_LID_ANGLE = 45;
+
+Css.register(`
+.blocklyTrash {
+  fill: #888;
+`);

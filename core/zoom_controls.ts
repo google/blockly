@@ -22,7 +22,6 @@ import * as eventUtils from './events/utils.js';
 import type {IPositionable} from './interfaces/i_positionable.js';
 import type {UiMetrics} from './metrics_manager.js';
 import * as uiPosition from './positionable_helpers.js';
-import {SPRITE} from './sprites.js';
 import * as Touch from './touch.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
@@ -102,13 +101,12 @@ export class ZoomControls implements IPositionable {
     // Each filter/pattern needs a unique ID for the case of multiple Blockly
     // instances on a page.  Browser behaviour becomes undefined otherwise.
     // https://neil.fraser.name/news/2015/11/01/
-    const rnd = String(Math.random()).substring(2);
-    this.createZoomOutSvg(rnd);
-    this.createZoomInSvg(rnd);
+    this.createZoomOutSvg();
+    this.createZoomInSvg();
     if (this.workspace.isMovable()) {
       // If we zoom to the center and the workspace isn't movable we could
       // loose blocks at the edges of the workspace.
-      this.createZoomResetSvg(rnd);
+      this.createZoomResetSvg();
     }
     return this.svgGroup;
   }
@@ -238,12 +236,8 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Create the zoom in icon and its event handler.
-   *
-   * @param rnd The random string to use as a suffix in the clip path's ID.
-   *     These IDs must be unique in case there are multiple Blockly instances
-   *     on the same page.
    */
-  private createZoomOutSvg(rnd: string) {
+  private createZoomOutSvg() {
     /* This markup will be generated and added to the .svgGroup:
         <g class="blocklyZoom">
           <clipPath id="blocklyZoomoutClipPath837493">
@@ -259,35 +253,10 @@ export class ZoomControls implements IPositionable {
       {'class': 'blocklyZoom blocklyZoomOut'},
       this.svgGroup,
     );
-    const clip = dom.createSvgElement(
-      Svg.CLIPPATH,
-      {'id': 'blocklyZoomoutClipPath' + rnd},
-      this.zoomOutGroup,
-    );
-    dom.createSvgElement(
-      Svg.RECT,
-      {
-        'width': 32,
-        'height': 32,
-      },
-      clip,
-    );
-    const zoomoutSvg = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'width': SPRITE.width,
-        'height': SPRITE.height,
-        'x': -64,
-        'y': -92,
-        'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')',
-      },
-      this.zoomOutGroup,
-    );
-    zoomoutSvg.setAttributeNS(
-      dom.XLINK_NS,
-      'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url,
-    );
+    this.zoomOutGroup.innerHTML = `
+    <circle r="15" cx="16" cy="16" />
+    <path d="m 9.6,16 h12.8" />
+`;
 
     // Attach listener.
     this.boundEvents.push(
@@ -302,12 +271,8 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Create the zoom out icon and its event handler.
-   *
-   * @param rnd The random string to use as a suffix in the clip path's ID.
-   *     These IDs must be unique in case there are multiple Blockly instances
-   *     on the same page.
    */
-  private createZoomInSvg(rnd: string) {
+  private createZoomInSvg() {
     /* This markup will be generated and added to the .svgGroup:
         <g class="blocklyZoom">
           <clipPath id="blocklyZoominClipPath837493">
@@ -323,35 +288,11 @@ export class ZoomControls implements IPositionable {
       {'class': 'blocklyZoom blocklyZoomIn'},
       this.svgGroup,
     );
-    const clip = dom.createSvgElement(
-      Svg.CLIPPATH,
-      {'id': 'blocklyZoominClipPath' + rnd},
-      this.zoomInGroup,
-    );
-    dom.createSvgElement(
-      Svg.RECT,
-      {
-        'width': 32,
-        'height': 32,
-      },
-      clip,
-    );
-    const zoominSvg = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'width': SPRITE.width,
-        'height': SPRITE.height,
-        'x': -32,
-        'y': -92,
-        'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')',
-      },
-      this.zoomInGroup,
-    );
-    zoominSvg.setAttributeNS(
-      dom.XLINK_NS,
-      'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url,
-    );
+    this.zoomInGroup.innerHTML = `
+    <circle r="15" cx="16" cy="16" />
+    <path d="m 16,8.6 v12.8" />
+    <path d="m 9.6,16 h12.8" />
+`;
 
     // Attach listener.
     this.boundEvents.push(
@@ -383,12 +324,8 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Create the zoom reset icon and its event handler.
-   *
-   * @param rnd The random string to use as a suffix in the clip path's ID.
-   *     These IDs must be unique in case there are multiple Blockly instances
-   *     on the same page.
    */
-  private createZoomResetSvg(rnd: string) {
+  private createZoomResetSvg() {
     /* This markup will be generated and added to the .svgGroup:
         <g class="blocklyZoom">
           <clipPath id="blocklyZoomresetClipPath837493">
@@ -404,27 +341,14 @@ export class ZoomControls implements IPositionable {
       {'class': 'blocklyZoom blocklyZoomReset'},
       this.svgGroup,
     );
-    const clip = dom.createSvgElement(
-      Svg.CLIPPATH,
-      {'id': 'blocklyZoomresetClipPath' + rnd},
-      this.zoomResetGroup,
-    );
-    dom.createSvgElement(Svg.RECT, {'width': 32, 'height': 32}, clip);
-    const zoomresetSvg = dom.createSvgElement(
-      Svg.IMAGE,
-      {
-        'width': SPRITE.width,
-        'height': SPRITE.height,
-        'y': -92,
-        'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')',
-      },
-      this.zoomResetGroup,
-    );
-    zoomresetSvg.setAttributeNS(
-      dom.XLINK_NS,
-      'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url,
-    );
+    this.zoomResetGroup.innerHTML = `
+    <circle r="11.5" cx="16" cy="16" />
+    <circle r="4.3" cx="16" cy="16" class="center" />
+    <path d="m 28,16 h3" />
+    <path d="m 1,16 h3" />
+    <path d="m 16,28 v3" />
+    <path d="m 16,1 v3" />
+`;
 
     // Attach event listeners.
     this.boundEvents.push(
@@ -479,15 +403,29 @@ export class ZoomControls implements IPositionable {
 
 /** CSS for zoom controls.  See css.js for use. */
 Css.register(`
-.blocklyZoom>image, .blocklyZoom>svg>image {
+.blocklyZoom {
   opacity: .4;
+  pointer-events: bounding-box;
 }
 
-.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {
+.blocklyZoom:hover {
   opacity: .6;
 }
 
-.blocklyZoom>image:active, .blocklyZoom>svg>image:active {
+.blocklyZoom:active {
   opacity: .8;
+}
+
+.blocklyZoom>* {
+  fill:#fff;
+  fill-opacity:0.005;
+  stroke:#888;
+  stroke-width:2;
+  stroke-linecap:round;
+}
+.blocklyZoom>circle.center {
+  fill: #888;
+  fill-opacity: 1;
+  stroke-width: 0;
 }
 `);

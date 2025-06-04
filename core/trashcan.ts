@@ -435,12 +435,6 @@ export class Trashcan
 
     this.setLidAngle(this.lidOpen * MAX_LID_ANGLE);
 
-    // Linear interpolation between min and max.
-    const opacity = OPACITY_MIN + this.lidOpen * (OPACITY_MAX - OPACITY_MIN);
-    if (this.svgGroup) {
-      this.svgGroup.style.opacity = `${opacity}`;
-    }
-
     if (this.lidOpen > this.minOpenness && this.lidOpen < 1) {
       this.lidTask = setTimeout(
         this.animateLid.bind(this),
@@ -677,12 +671,6 @@ const ANIMATION_LENGTH = 80;
 /** The number of frames in the animation. */
 const ANIMATION_FRAMES = 4;
 
-/** The minimum (resting) opacity of the trashcan and lid. */
-const OPACITY_MIN = 0.4;
-
-/** The maximum (hovered) opacity of the trashcan and lid. */
-const OPACITY_MAX = 0.8;
-
 /**
  * The maximum angle the trashcan lid can opens to. At the end of the open
  * animation the lid will be open to this angle.
@@ -692,4 +680,10 @@ const MAX_LID_ANGLE = 45;
 Css.register(`
 .blocklyTrash {
   fill: #888;
+  opacity: 0.4;
+  transition: opacity .08s linear;
+}
+.blocklyTrash:hover {
+  opacity: 0.8;
+}
 `);

@@ -8,20 +8,13 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
-import { RenderedWorkspaceComment } from './comments.js';
+import {RenderedWorkspaceComment} from './comments.js';
 import * as eventUtils from './events/utils.js';
 import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
-import {
-  ICopyable,
-  ICopyData,
-  isCopyable as isICopyable,
-} from './interfaces/i_copyable.js';
-import {
-  IDeletable,
-  isDeletable as isIDeletable,
-} from './interfaces/i_deletable.js';
-import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
+import {ICopyData, isCopyable as isICopyable} from './interfaces/i_copyable.js';
+import {isDeletable as isIDeletable} from './interfaces/i_deletable.js';
+import {isDraggable} from './interfaces/i_draggable.js';
 import {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -182,17 +175,27 @@ export function registerCopy() {
       e.preventDefault();
 
       const focused = scope.focusedNode;
-      if (!focused || !isCopyable(focused)) return false;
-      let targetWorkspace: WorkspaceSvg | null =
-        focused.workspace instanceof WorkspaceSvg
-          ? focused.workspace
+      if (!focused || !isICopyable(focused) || !isCopyable(focused))
+        return false;
+      let targetWorkspace: WorkspaceSvg | null;
+      let hideChaff = false;
+      if (focused instanceof BlockSvg) {
+        hideChaff = !focused.workspace.isFlyout;
+        targetWorkspace =
+          focused.workspace instanceof WorkspaceSvg
+            ? focused.workspace
+            : workspace;
+        targetWorkspace = targetWorkspace.isFlyout
+          ? targetWorkspace.targetWorkspace
+          : targetWorkspace;
+      } else {
+        targetWorkspace = workspace.isFlyout
+          ? workspace.targetWorkspace
           : workspace;
-      targetWorkspace = targetWorkspace.isFlyout
-        ? targetWorkspace.targetWorkspace
-        : targetWorkspace;
+      }
       if (!targetWorkspace) return false;
 
-      if (!focused.workspace.isFlyout) {
+      if (hideChaff) {
         targetWorkspace.hideChaff();
       }
       copyData = focused.toCopyData();

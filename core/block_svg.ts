@@ -1721,6 +1721,16 @@ export class BlockSvg
     this.dragStrategy = dragStrategy;
   }
 
+  /** Returns whether this block is copyable or not. */
+  isCopyable(): boolean {
+    return this.isOwnDeletable() && this.isOwnMovable();
+  }
+
+  /** Returns whether this block is cuttable or not. */
+  isCuttable(): boolean {
+    return this.isDeletable() && this.isMovable();
+  }
+
   /** Returns whether this block is movable or not. */
   override isMovable(): boolean {
     return this.dragStrategy.isMovable();

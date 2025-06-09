@@ -15,6 +15,20 @@ export interface ICopyable<T extends ICopyData> extends ISelectable {
    * @returns Copy metadata.
    */
   toCopyData(): T | null;
+
+  /**
+   * Whether this instance is currently copyable.
+   *
+   * @returns True if it can currently be copied.
+   */
+  isCopyable?(): boolean;
+
+  /**
+   * Whether this instance is currently cuttable.
+   *
+   * @returns True if it can currently be cut.
+   */
+  isCuttable?(): boolean;
 }
 
 export namespace ICopyable {
@@ -25,7 +39,7 @@ export namespace ICopyable {
 
 export type ICopyData = ICopyable.ICopyData;
 
-/** @returns true if the given object is copyable. */
+/** @returns true if the given object is an ICopyable. */
 export function isCopyable(obj: any): obj is ICopyable<ICopyData> {
   return obj.toCopyData !== undefined;
 }

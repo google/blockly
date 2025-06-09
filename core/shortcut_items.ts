@@ -8,6 +8,7 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
+import { RenderedWorkspaceComment } from './comments.js';
 import * as eventUtils from './events/utils.js';
 import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
@@ -106,68 +107,44 @@ let copyCoords: Coordinate | null = null;
 /**
  * Determine if a focusable node can be copied.
  *
- * Unfortunately the ICopyable interface doesn't include an isCopyable
- * method, so we must use some other criteria to make the decision.
- * Specifically,
- *
- * - It must be an ICopyable.
- * - So that a pasted copy can be manipluated and/or disposed of, it
- *   must be both an IDraggable and an IDeletable.
- * - Additionally, both .isOwnMovable() and .isOwnDeletable() must return
- *   true (i.e., the copy could be moved and deleted).
- *
- * TODO(#9098): Revise these criteria.  The latter criteria prevents
- * shadow blocks from being copied; additionally, there are likely to
- * be other circumstances were it is desirable to allow movable /
- * copyable copies of a currently-unmovable / -copyable block to be
- * made.
+ * This will use the isCopyable method if the node implements it, otherwise
+ * it will fall back to checking if the node is deletable and draggable not
+ * considering the workspace's edit state.
  *
  * @param focused The focused object.
  */
-function isCopyable(
-  focused: IFocusableNode,
-): focused is ICopyable<ICopyData> & IDeletable & IDraggable {
-  if (!(focused instanceof BlockSvg)) return false;
-  return (
-    isICopyable(focused) &&
-    isIDeletable(focused) &&
-    focused.isOwnDeletable() &&
-    isDraggable(focused) &&
-    focused.isOwnMovable()
-  );
+function isCopyable(focused: IFocusableNode): boolean {
+  if (!isICopyable(focused) || !isIDeletable(focused) || !isDraggable(focused))
+    return false;
+  if (focused.isCopyable !== undefined) {
+    return focused.isCopyable();
+  } else if (
+    focused instanceof BlockSvg ||
+    focused instanceof RenderedWorkspaceComment
+  ) {
+    return focused.isOwnDeletable() && focused.isOwnMovable();
+  }
+  // This isn't a class Blockly knows about, so fall back to the stricter
+  // checks for deletable and movable.
+  return focused.isDeletable() && focused.isMovable();
 }
 
 /**
  * Determine if a focusable node can be cut.
  *
- * Unfortunately the ICopyable interface doesn't include an isCuttable
- * method, so we must use some other criteria to make the decision.
- * Specifically,
- *
- * - It must be an ICopyable.
- * - So that a pasted copy can be manipluated and/or disposed of, it
- *   must be both an IDraggable and an IDeletable.
- * - Additionally, both .isMovable() and .isDeletable() must return
- *   true (i.e., can currently be moved and deleted). This is the main
- *   difference with isCopyable.
- *
- * TODO(#9098): Revise these criteria.  The latter criteria prevents
- * shadow blocks from being copied; additionally, there are likely to
- * be other circumstances were it is desirable to allow movable /
- * copyable copies of a currently-unmovable / -copyable block to be
- * made.
+ * This will use the isCuttable method if the node implements it, otherwise
+ * it will fall back to checking if the node can be moved and deleted in its
+ * current workspace.
  *
  * @param focused The focused object.
  */
 function isCuttable(focused: IFocusableNode): boolean {
-  if (!(focused instanceof BlockSvg)) return false;
-  return (
-    isICopyable(focused) &&
-    isIDeletable(focused) &&
-    focused.isDeletable() &&
-    isDraggable(focused) &&
-    focused.isMovable()
-  );
+  if (!isICopyable(focused) || !isIDeletable(focused) || !isDraggable(focused))
+    return false;
+  if (focused.isCuttable !== undefined) {
+    return focused.isCuttable();
+  }
+  return focused.isMovable() && focused.isDeletable();
 }
 
 /**

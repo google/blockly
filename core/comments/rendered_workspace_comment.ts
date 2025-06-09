@@ -244,6 +244,16 @@ export class RenderedWorkspaceComment
     }
   }
 
+  /** Returns whether this comment is copyable or not */
+  isCopyable(): boolean {
+    return this.isOwnMovable() && this.isOwnDeletable();
+  }
+
+  /** Returns whether this comment is cuttable or not */
+  isCuttable(): boolean {
+    return this.isMovable() && this.isDeletable();
+  }
+
   /** Returns whether this comment is movable or not. */
   isMovable(): boolean {
     return this.dragStrategy.isMovable();

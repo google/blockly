@@ -791,6 +791,7 @@ export class Block {
   isDeletable(): boolean {
     return (
       this.deletable &&
+      !this.isInFlyout &&
       !this.shadow &&
       !this.isDeadOrDying() &&
       !this.workspace.isReadOnly()
@@ -824,6 +825,7 @@ export class Block {
   isMovable(): boolean {
     return (
       this.movable &&
+      !this.isInFlyout &&
       !this.shadow &&
       !this.isDeadOrDying() &&
       !this.workspace.isReadOnly()

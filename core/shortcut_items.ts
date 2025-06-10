@@ -175,7 +175,7 @@ export function registerCopy() {
         : workspace;
       if (!targetWorkspace) return false;
 
-      if (focused.workspace.isFlyout) {
+      if (!focused.workspace.isFlyout) {
         targetWorkspace.hideChaff();
       }
       copyData = focused.toCopyData();

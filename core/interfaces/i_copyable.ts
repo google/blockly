@@ -22,13 +22,6 @@ export interface ICopyable<T extends ICopyData> extends ISelectable {
    * @returns True if it can currently be copied.
    */
   isCopyable?(): boolean;
-
-  /**
-   * Whether this instance is currently cuttable.
-   *
-   * @returns True if it can currently be cut.
-   */
-  isCuttable?(): boolean;
 }
 
 export namespace ICopyable {

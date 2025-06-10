@@ -125,19 +125,13 @@ function isCopyable(focused: IFocusableNode): boolean {
 /**
  * Determine if a focusable node can be cut.
  *
- * This will use the isCuttable method if the node implements it, otherwise
- * it will fall back to checking if the node can be moved and deleted in its
- * current workspace.
+ * This will check if the node can be both copied and deleted in its current
+ * workspace.
  *
  * @param focused The focused object.
  */
 function isCuttable(focused: IFocusableNode): boolean {
-  if (!isICopyable(focused) || !isIDeletable(focused) || !isDraggable(focused))
-    return false;
-  if (focused.isCuttable !== undefined) {
-    return focused.isCuttable();
-  }
-  return focused.isMovable() && focused.isDeletable();
+  return isCopyable(focused) && isIDeletable(focused) && focused.isDeletable();
 }
 
 /**

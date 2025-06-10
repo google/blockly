@@ -1726,11 +1726,6 @@ export class BlockSvg
     return this.isOwnDeletable() && this.isOwnMovable();
   }
 
-  /** Returns whether this block is cuttable or not. */
-  isCuttable(): boolean {
-    return this.isDeletable() && this.isMovable();
-  }
-
   /** Returns whether this block is movable or not. */
   override isMovable(): boolean {
     return this.dragStrategy.isMovable();

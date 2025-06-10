@@ -149,7 +149,6 @@ export function registerCopy() {
     name: names.COPY,
     preconditionFn(workspace, scope) {
       const focused = scope.focusedNode;
-      if (!(focused instanceof BlockSvg)) return false;
 
       const targetWorkspace = workspace.isFlyout
         ? workspace.targetWorkspace
@@ -171,25 +170,12 @@ export function registerCopy() {
       const focused = scope.focusedNode;
       if (!focused || !isICopyable(focused) || !isCopyable(focused))
         return false;
-      let targetWorkspace: WorkspaceSvg | null;
-      let hideChaff = false;
-      if (focused instanceof BlockSvg) {
-        hideChaff = !focused.workspace.isFlyout;
-        targetWorkspace =
-          focused.workspace instanceof WorkspaceSvg
-            ? focused.workspace
-            : workspace;
-        targetWorkspace = targetWorkspace.isFlyout
-          ? targetWorkspace.targetWorkspace
-          : targetWorkspace;
-      } else {
-        targetWorkspace = workspace.isFlyout
-          ? workspace.targetWorkspace
-          : workspace;
-      }
+      const targetWorkspace = workspace.isFlyout
+        ? workspace.targetWorkspace
+        : workspace;
       if (!targetWorkspace) return false;
 
-      if (hideChaff) {
+      if (focused.workspace.isFlyout) {
         targetWorkspace.hideChaff();
       }
       copyData = focused.toCopyData();
@@ -230,27 +216,21 @@ export function registerCut() {
     },
     callback(workspace, e, shortcut, scope) {
       const focused = scope.focusedNode;
+      if (!focused || !isCuttable(focused) || !isICopyable(focused)) {
+        return false;
+      }
+      copyData = focused.toCopyData();
+      copyWorkspace = workspace;
+      copyCoords = isDraggable(focused)
+        ? focused.getRelativeToSurfaceXY()
+        : null;
 
       if (focused instanceof BlockSvg) {
-        copyData = focused.toCopyData();
-        copyWorkspace = workspace;
-        copyCoords = focused.getRelativeToSurfaceXY();
         focused.checkAndDelete();
-        return true;
-      } else if (
-        isIDeletable(focused) &&
-        focused.isDeletable() &&
-        isICopyable(focused)
-      ) {
-        copyData = focused.toCopyData();
-        copyWorkspace = workspace;
-        copyCoords = isDraggable(focused)
-          ? focused.getRelativeToSurfaceXY()
-          : null;
+      } else if (isIDeletable(focused)) {
         focused.dispose();
-        return true;
       }
-      return false;
+      return !!copyData;
     },
     keyCodes: [ctrlX, metaX],
   };

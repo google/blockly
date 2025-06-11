@@ -384,7 +384,7 @@ export class LineCursor extends Marker {
       this.setCurNode(focused);
     }
 
-    return super.getCurNode();
+    return focused;
   }
 
   /**
@@ -396,8 +396,6 @@ export class LineCursor extends Marker {
    * @param newNode The new location of the cursor.
    */
   override setCurNode(newNode: IFocusableNode | null) {
-    super.setCurNode(newNode);
-
     if (isFocusableNode(newNode)) {
       getFocusManager().focusNode(newNode);
     }

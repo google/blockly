@@ -41,6 +41,7 @@ import type {FlyoutButton} from './flyout_button.js';
 import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
+import {MutatorIcon} from './icons/mutator_icon.js';
 import {isAutoHideable} from './interfaces/i_autohideable.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
@@ -2680,7 +2681,7 @@ export class WorkspaceSvg
 
   /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
-    return this;
+    return (this.isMutator && this.options.parentWorkspace) || this;
   }
 
   /** See IFocusableNode.onNodeFocus. */
@@ -2710,7 +2711,22 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.getNestedTrees. */
   getNestedTrees(): Array<IFocusableTree> {
-    return [];
+    const nestedWorkspaces = this.getAllBlocks()
+      .map((block) => block.getIcons())
+      .flat()
+      .filter(
+        (icon): icon is MutatorIcon =>
+          icon instanceof MutatorIcon && icon.bubbleIsVisible(),
+      )
+      .map((icon) => icon.getBubble()?.getWorkspace())
+      .filter((workspace) => !!workspace);
+
+    const ownFlyout = this.getFlyout(true);
+    if (ownFlyout) {
+      nestedWorkspaces.push(ownFlyout.getWorkspace());
+    }
+
+    return nestedWorkspaces;
   }
 
   /** See IFocusableTree.lookUpFocusableNode. */

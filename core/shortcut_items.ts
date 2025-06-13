@@ -94,7 +94,6 @@ export function registerDelete() {
 }
 
 let copyData: ICopyData | null = null;
-let copyWorkspace: WorkspaceSvg | null = null;
 let copyCoords: Coordinate | null = null;
 
 /**
@@ -156,7 +155,6 @@ export function registerCopy() {
       return (
         !!focused &&
         !!targetWorkspace &&
-        !targetWorkspace.isReadOnly() &&
         !targetWorkspace.isDragging() &&
         !getFocusManager().ephemeralFocusTaken() &&
         isCopyable(focused)
@@ -179,7 +177,6 @@ export function registerCopy() {
         targetWorkspace.hideChaff();
       }
       copyData = focused.toCopyData();
-      copyWorkspace = targetWorkspace;
       copyCoords =
         isDraggable(focused) && focused.workspace == targetWorkspace
           ? focused.getRelativeToSurfaceXY()
@@ -220,7 +217,6 @@ export function registerCut() {
         return false;
       }
       copyData = focused.toCopyData();
-      copyWorkspace = workspace;
       copyCoords = isDraggable(focused)
         ? focused.getRelativeToSurfaceXY()
         : null;
@@ -264,7 +260,11 @@ export function registerPaste() {
       );
     },
     callback(workspace: WorkspaceSvg, e: Event) {
-      if (!copyData || !copyWorkspace) return false;
+      if (!copyData) return false;
+      const targetWorkspace = workspace.isFlyout
+        ? workspace.targetWorkspace
+        : workspace;
+      if (!targetWorkspace || targetWorkspace.isReadOnly()) return false;
 
       if (e instanceof PointerEvent) {
         // The event that triggers a shortcut would conventionally be a KeyboardEvent.
@@ -273,19 +273,19 @@ export function registerPaste() {
         // at the mouse coordinates where the menu was opened, and this PointerEvent
         // is where the menu was opened.
         const mouseCoords = svgMath.screenToWsCoordinates(
-          copyWorkspace,
+          targetWorkspace,
           new Coordinate(e.clientX, e.clientY),
         );
-        return !!clipboard.paste(copyData, copyWorkspace, mouseCoords);
+        return !!clipboard.paste(copyData, targetWorkspace, mouseCoords);
       }
 
       if (!copyCoords) {
         // If we don't have location data about the original copyable, let the
         // paster determine position.
-        return !!clipboard.paste(copyData, copyWorkspace);
+        return !!clipboard.paste(copyData, targetWorkspace);
       }
 
-      const {left, top, width, height} = copyWorkspace
+      const {left, top, width, height} = targetWorkspace
         .getMetricsManager()
         .getViewMetrics(true);
       const viewportRect = new Rect(top, top + height, left, left + width);
@@ -293,12 +293,12 @@ export function registerPaste() {
       if (viewportRect.contains(copyCoords.x, copyCoords.y)) {
         // If the original copyable is inside the viewport, let the paster
         // determine position.
-        return !!clipboard.paste(copyData, copyWorkspace);
+        return !!clipboard.paste(copyData, targetWorkspace);
       }
 
       // Otherwise, paste in the middle of the viewport.
       const centerCoords = new Coordinate(left + width / 2, top + height / 2);
-      return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
+      return !!clipboard.paste(copyData, targetWorkspace, centerCoords);
     },
     keyCodes: [ctrlV, metaV],
   };

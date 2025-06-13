@@ -48,6 +48,16 @@ suite('Keyboard Shortcut Items', function () {
   }
 
   /**
+   * Creates a workspace comment and set it as the focused node.
+   * @param {Blockly.Workspace} workspace The workspace to create a new comment on.
+   */
+  function setSelectedComment(workspace) {
+    const comment = workspace.newComment();
+    sinon.stub(Blockly.getFocusManager(), 'getFocusedNode').returns(comment);
+    return comment;
+  }
+
+  /**
    * Creates a test for not running keyDown events when the workspace is in read only mode.
    * @param {Object} keyEvent Mocked key down event. Use createKeyDownEvent.
    * @param {string=} opt_name An optional name for the test case.
@@ -241,6 +251,22 @@ suite('Keyboard Shortcut Items', function () {
       sinon.assert.notCalled(this.copySpy);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
+    // Copy a comment.
+    test('Workspace comment', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          Blockly.getFocusManager().getFocusedNode.restore();
+          this.comment = setSelectedComment(this.workspace);
+          this.copySpy = sinon.spy(this.comment, 'toCopyData');
+
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.calledOnce(this.copySpy);
+          sinon.assert.calledOnce(this.hideChaffSpy);
+        });
+      });
+    });
   });
 
   suite('Cut', function () {
@@ -352,6 +378,24 @@ suite('Keyboard Shortcut Items', function () {
       sinon.assert.notCalled(this.copySpy);
       sinon.assert.notCalled(this.disposeSpy);
       sinon.assert.notCalled(this.hideChaffSpy);
+    });
+
+    // Cut a comment.
+    suite('Workspace comment', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          Blockly.getFocusManager().getFocusedNode.restore();
+          this.comment = setSelectedComment(this.workspace);
+          this.copySpy = sinon.spy(this.comment, 'toCopyData');
+          this.disposeSpy = sinon.spy(this.comment, 'dispose');
+
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.calledOnce(this.copySpy);
+          sinon.assert.calledOnce(this.disposeSpy);
+        });
+      });
     });
   });
 

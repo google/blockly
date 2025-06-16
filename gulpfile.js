@@ -30,7 +30,7 @@ module.exports = {
   deps: buildTasks.deps,
   minify: buildTasks.minify,
   build: buildTasks.build,
-  package: packageTasks.package,
+  pack: packageTasks.pack,
   publish: releaseTasks.publish,
   publishBeta: releaseTasks.publishBeta,
   prepareDemos: appengineTasks.prepareDemos,

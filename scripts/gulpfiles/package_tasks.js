@@ -237,9 +237,13 @@ function cleanReleaseDir() {
  * This task prepares the files to be included in the NPM by copying
  * them into the release directory.
  *
+ * This task was formerly called "package" but was renamed in
+ * preparation for porting gulpfiles to ESM because "package" is a
+ * reserved word.
+ *
  * Prerequisite: build.
  */
-const package = gulp.series(
+const pack = gulp.series(
     gulp.parallel(
         build.cleanBuildDir,
         cleanReleaseDir),
@@ -258,5 +262,5 @@ const package = gulp.series(
 module.exports = {
   // Main sequence targets.  Each should invoke any immediate prerequisite(s).
   cleanReleaseDir: cleanReleaseDir,
-  package: package,
+  pack,
 };

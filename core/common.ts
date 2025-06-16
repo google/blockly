@@ -320,6 +320,8 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
  * @param e Key down event.
  */
 export function globalShortcutHandler(e: KeyboardEvent) {
+  // This would ideally just be a `focusedTree instanceof WorkspaceSvg`, but
+  // importing `WorkspaceSvg` (as opposed to just its type) causes cycles.
   let workspace: WorkspaceSvg = getMainWorkspace() as WorkspaceSvg;
   const focusedTree = getFocusManager().getFocusedTree();
   for (const ws of getAllWorkspaces()) {

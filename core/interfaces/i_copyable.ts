@@ -17,7 +17,8 @@ export interface ICopyable<T extends ICopyData> extends ISelectable {
   toCopyData(): T | null;
 
   /**
-   * Whether this instance is currently copyable.
+   * Whether this instance is currently copyable. The standard implementation
+   * is to return true if isOwnDeletable and isOwnMovable return true.
    *
    * @returns True if it can currently be copied.
    */

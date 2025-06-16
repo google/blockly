@@ -165,7 +165,11 @@ export class WorkspaceComment {
    * workspace is read-only.
    */
   isMovable() {
-    return this.isOwnMovable() && !this.workspace.isReadOnly();
+    return (
+      this.isOwnMovable() &&
+      !this.workspace.isReadOnly() &&
+      !this.workspace.isFlyout
+    );
   }
 
   /**
@@ -189,7 +193,8 @@ export class WorkspaceComment {
     return (
       this.isOwnDeletable() &&
       !this.isDeadOrDying() &&
-      !this.workspace.isReadOnly()
+      !this.workspace.isReadOnly() &&
+      !this.workspace.isFlyout
     );
   }
 

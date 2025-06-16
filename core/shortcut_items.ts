@@ -108,7 +108,7 @@ let copyCoords: Coordinate | null = null;
 function isCopyable(focused: IFocusableNode): boolean {
   if (!isICopyable(focused) || !isIDeletable(focused) || !isDraggable(focused))
     return false;
-  if (focused.isCopyable !== undefined) {
+  if (focused.isCopyable) {
     return focused.isCopyable();
   } else if (
     focused instanceof BlockSvg ||

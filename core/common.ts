@@ -320,21 +320,28 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
  * @param e Key down event.
  */
 export function globalShortcutHandler(e: KeyboardEvent) {
-  const mainWorkspace = getMainWorkspace() as WorkspaceSvg;
-  if (!mainWorkspace) {
-    return;
+  // This would ideally just be a `focusedTree instanceof WorkspaceSvg`, but
+  // importing `WorkspaceSvg` (as opposed to just its type) causes cycles.
+  let workspace: WorkspaceSvg = getMainWorkspace() as WorkspaceSvg;
+  const focusedTree = getFocusManager().getFocusedTree();
+  for (const ws of getAllWorkspaces()) {
+    if (focusedTree === (ws as WorkspaceSvg)) {
+      workspace = ws as WorkspaceSvg;
+      break;
+    }
   }
 
   if (
     browserEvents.isTargetInput(e) ||
-    (mainWorkspace.rendered && !mainWorkspace.isVisible())
+    !workspace ||
+    (workspace.rendered && !workspace.isFlyout && !workspace.isVisible())
   ) {
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
     // hidden.
     return;
   }
-  ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
+  ShortcutRegistry.registry.onKeyDown(workspace, e);
 }
 
 export const TEST_ONLY = {defineBlocksWithJsonArrayInternal};

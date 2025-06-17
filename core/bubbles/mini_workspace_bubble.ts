@@ -195,6 +195,10 @@ export class MiniWorkspaceBubble extends Bubble {
     )
       return;
 
+    // Disable autolayout if a keyboard move is in progress to prevent the
+    // mutator bubble from jumping around.
+    this.autoLayout &&= !this.miniWorkspace.keyboardMoveInProgress;
+
     const currSize = this.getSize();
     const newSize = this.calculateWorkspaceSize();
     if (

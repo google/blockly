@@ -11,8 +11,6 @@
 import * as gulp from 'gulp';
 import concat from 'gulp-concat';
 import replace from 'gulp-replace';
-import rename from 'gulp-rename';  // unused
-import insert from 'gulp-insert';  // unused
 import umd from 'gulp-umd';
 
 import * as path from 'path';

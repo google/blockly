@@ -1621,10 +1621,10 @@ Blockly.Msg.DIALOG_CANCEL = 'Cancel';
 /** @type {string} */
 /// menu label - Contextual menu item that moves the keyboard navigation cursor
 /// into a subitem of the focused block.
-Blockly.Msg.EDIT_BLOCK_CONTENTS = 'Edit Block contents (%1)';
+Blockly.Msg.EDIT_BLOCK_CONTENTS = 'Edit Block contents';
 /** @type {string} */
 /// menu label - Contextual menu item that starts a keyboard-driven block move.
-Blockly.Msg.MOVE_BLOCK = 'Move Block (%1)';
+Blockly.Msg.MOVE_BLOCK = 'Move Block';
 /** @type {string} */
 /// Name of the Microsoft Windows operating system displayed in a list of 
 /// keyboard shortcuts.
@@ -1659,13 +1659,13 @@ Blockly.Msg.OPTION_KEY = '⌥ Option';
 Blockly.Msg.ALT_KEY = 'Alt';
 /** @type {string} */
 /// menu label - Contextual menu item that cuts the focused item.
-Blockly.Msg.CUT_SHORTCUT = 'Cut (%1)';
+Blockly.Msg.CUT_SHORTCUT = 'Cut';
 /** @type {string} */
 /// menu label - Contextual menu item that copies the focused item.
-Blockly.Msg.COPY_SHORTCUT = 'Copy (%1)';
+Blockly.Msg.COPY_SHORTCUT = 'Copy';
 /** @type {string} */
 /// menu label - Contextual menu item that pastes the previously copied item.
-Blockly.Msg.PASTE_SHORTCUT = 'Paste (%1)';
+Blockly.Msg.PASTE_SHORTCUT = 'Paste';
 /** @type {string} */
 /// Alert message shown to prompt users to review available keyboard shortcuts.
 Blockly.Msg.HELP_PROMPT = 'Press %1 for help on keyboard controls';

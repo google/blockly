@@ -11,7 +11,7 @@
 
 import asyncDone from 'async-done';
 import * as gulp from 'gulp';
-import * as gzip from 'gulp-gzip';
+import gzip from 'gulp-gzip';
 import * as fs from 'fs';
 import * as path from 'path';
 import {execSync} from 'child_process';

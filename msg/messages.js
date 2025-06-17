@@ -1619,64 +1619,9 @@ Blockly.Msg.DIALOG_OK = 'OK';
 Blockly.Msg.DIALOG_CANCEL = 'Cancel';
 
 /** @type {string} */
-/// menu label - Contextual menu item that deletes the focused block.
-Blockly.Msg.DELETE_SHORTCUT = 'Delete block (%1)';
-/** @type {string} */
-/// menu label - Keyboard shortcut for the Delete key, shown at the end of a
-/// menu item that deletes the focused block.
-Blockly.Msg.DELETE_KEY = 'Del';
-/** @type {string} */
 /// menu label - Contextual menu item that moves the keyboard navigation cursor
 /// into a subitem of the focused block.
 Blockly.Msg.EDIT_BLOCK_CONTENTS = 'Edit Block contents (%1)';
-/** @type {string} */
-/// menu label - Contextual menu item that prompts the user to choose a block to
-/// insert into the program at the focused location.
-Blockly.Msg.INSERT_BLOCK = 'Insert Block (%1)';
-/** @type {string} */
-/// keyboard shortcut label - Contextual menu item that starts a keyboard-driven 
-/// move of the focused block.
-Blockly.Msg.START_MOVE = 'Start move';
-/** @type {string} */
-/// keyboard shortcut label - Contextual menu item that ends a keyboard-driven
-/// move of the focused block.
-Blockly.Msg.FINISH_MOVE = 'Finish move';
-/** @type {string} */
-/// keyboard shortcut label - Contextual menu item that ends a keyboard-drive
-/// move of the focused block by returning it to its original location.
-Blockly.Msg.ABORT_MOVE = 'Abort move';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block to the
-/// next valid location to the left.
-Blockly.Msg.MOVE_LEFT_CONSTRAINED = 'Move left, constrained';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block to the
-/// next valid location to the right.
-Blockly.Msg.MOVE_RIGHT_CONSTRAINED = 'Move right constrained';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block to the
-/// next valid location above it.
-Blockly.Msg.MOVE_UP_CONSTRAINED = 'Move up, constrained';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block to the
-/// next valid location below it.
-Blockly.Msg.MOVE_DOWN_CONSTRAINED = 'Move down constrained';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block freely
-/// to the left.
-Blockly.Msg.MOVE_LEFT_UNCONSTRAINED = 'Move left, unconstrained';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block freely
-/// to the right.
-Blockly.Msg.MOVE_RIGHT_UNCONSTRAINED = 'Move right, unconstrained';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block freely
-/// upwards.
-Blockly.Msg.MOVE_UP_UNCONSTRAINED = 'Move up unconstrained';
-/** @type {string} */
-/// keyboard shortcut label - Description of shortcut that moves a block freely
-/// downwards.
-Blockly.Msg.MOVE_DOWN_UNCONSTRAINED = 'Move down, unconstrained';
 /** @type {string} */
 /// menu label - Contextual menu item that starts a keyboard-driven block move.
 Blockly.Msg.MOVE_BLOCK = 'Move Block (%1)';

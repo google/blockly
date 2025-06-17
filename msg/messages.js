@@ -1680,3 +1680,16 @@ Blockly.Msg.SHORTCUTS_EDITING = 'Editing'
 /// shortcut list section header - Label for keyboard shortcuts related to
 /// moving around the workspace.
 Blockly.Msg.SHORTCUTS_CODE_NAVIGATION = 'Code navigation';
+/** @type {string} */
+/// Message shown to inform users how to move blocks to arbitrary locations
+/// with the keyboard.
+Blockly.Msg.KEYBOARD_NAV_UNCONSTRAINED_MOVE_HINT = 'Hold %1 and use arrow keys to move freely, then %2 to accept the position';
+/** @type {string} */
+/// Message shown to inform users how to move blocks with the keyboard.
+Blockly.Msg.KEYBOARD_NAV_CONSTRAINED_MOVE_HINT = 'Use the arrow keys to move, then %1 to accept the position';
+/** @type {string} */
+/// Message shown when an item is copied in keyboard navigation mode.
+Blockly.Msg.KEYBOARD_NAV_COPIED_HINT = 'Copied. Press %1 to paste.';
+/** @type {string} */
+/// Message shown when an item is cut in keyboard navigation mode.
+Blockly.Msg.KEYBOARD_NAV_CUT_HINT = 'Cut. Press %1 to paste.';

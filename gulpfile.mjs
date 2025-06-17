@@ -22,7 +22,7 @@ import {
   deployDemos,
   deployDemosBeta,
   prepareDemos,
-} from './scripts/gulpfiles/appengine_tasks.js';
+} from './scripts/gulpfiles/appengine_tasks.mjs';
 import {
   build,
   buildAdvancedCompilationTest,
@@ -31,21 +31,21 @@ import {
   messages,
   minify,
   tsc,
-} from './scripts/gulpfiles/build_tasks.js';
-import {docs} from './scripts/gulpfiles/docs_tasks.js';
+} from './scripts/gulpfiles/build_tasks.mjs';
+import {docs} from './scripts/gulpfiles/docs_tasks.mjs';
 import {
   createRC,
   syncDevelop,
   syncMaster,
   updateGithubPages,
-} from './scripts/gulpfiles/git_tasks.js';
-import {cleanReleaseDir, pack} from './scripts/gulpfiles/package_tasks.js';
+} from './scripts/gulpfiles/git_tasks.mjs';
+import {cleanReleaseDir, pack} from './scripts/gulpfiles/package_tasks.mjs';
 import {
   publish,
   publishBeta,
   recompile,
-} from './scripts/gulpfiles/release_tasks.js';
-import {generators, test} from './scripts/gulpfiles/test_tasks.js';
+} from './scripts/gulpfiles/release_tasks.mjs';
+import {generators, test} from './scripts/gulpfiles/test_tasks.mjs';
 
 const clean = parallel(cleanBuildDir, cleanReleaseDir);
 

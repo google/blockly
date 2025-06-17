@@ -8,15 +8,15 @@
  * @fileoverview Gulp scripts for releasing Blockly.
  */
 
-const execSync = require('child_process').execSync;
-const fs = require('fs');
-const gulp = require('gulp');
-const readlineSync = require('readline-sync');
+import {execSync} from 'child_process';
+import * as fs from 'fs';
+import * as gulp from 'gulp';
+import * as readlineSync from 'readline-sync';
 
-const gitTasks = require('./git_tasks');
-const packageTasks = require('./package_tasks');
-const {getPackageJson} = require('./helper_tasks');
-const {RELEASE_DIR} = require('./config');
+import * as gitTasks from './git_tasks.mjs';
+import * as packageTasks from './package_tasks.mjs';
+import {getPackageJson} from './helper_tasks.mjs';
+import {RELEASE_DIR} from './config.mjs';
 
 
 // Gets the current major version.
@@ -147,7 +147,7 @@ function updateBetaVersion(done) {
 }
 
 // Rebuild, package and publish to npm.
-const publish = gulp.series(
+export const publish = gulp.series(
   packageTasks.pack,  // Does clean + build.
   checkBranch,
   checkReleaseDir,
@@ -155,7 +155,7 @@ const publish = gulp.series(
 );
 
 // Rebuild, package and publish a beta version of Blockly.
-const publishBeta = gulp.series(
+export const publishBeta = gulp.series(
   updateBetaVersion,
   packageTasks.pack,  // Does clean + build.
   checkBranch,
@@ -165,19 +165,10 @@ const publishBeta = gulp.series(
 
 // Switch to a new branch, update the version number, build Blockly
 // and check in the resulting built files.
-const recompileDevelop = gulp.series(
+export const recompile = gulp.series(
   gitTasks.syncDevelop(),
   gitTasks.createRebuildBranch,
   updateVersionPrompt,
   packageTasks.pack,  // Does clean + build.
   gitTasks.pushRebuildBranch
   );
-
-module.exports = {
-  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
-  publishBeta,
-  publish,
-
-  // Legacy target, to be deleted.
-  recompile: recompileDevelop,
-};

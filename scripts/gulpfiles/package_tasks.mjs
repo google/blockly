@@ -8,20 +8,19 @@
  * @fileoverview Gulp tasks to package Blockly for distribution on NPM.
  */
 
-const gulp = require('gulp');
-gulp.concat = require('gulp-concat');
-gulp.replace = require('gulp-replace');
-gulp.rename = require('gulp-rename');
-gulp.insert = require('gulp-insert');
-gulp.umd = require('gulp-umd');
-gulp.replace = require('gulp-replace');
+import * as gulp from 'gulp';
+import concat from 'gulp-concat';
+import replace from 'gulp-replace';
+import rename from 'gulp-rename';  // unused
+import insert from 'gulp-insert';  // unused
+import umd from 'gulp-umd';
 
-const path = require('path');
-const fs = require('fs');
-const {rimraf} = require('rimraf');
-const build = require('./build_tasks');
-const {getPackageJson} = require('./helper_tasks');
-const {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
+import * as path from 'path';
+import * as fs from 'fs';
+import {rimraf} from 'rimraf';
+import * as build from './build_tasks.mjs';
+import {getPackageJson} from './helper_tasks.mjs';
+import {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} from './config.mjs';
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
@@ -32,7 +31,7 @@ const TEMPLATE_DIR = 'scripts/package/templates';
  * @param {Array<Object>} dependencies An array of dependencies to inject.
  */
 function packageUMD(namespace, dependencies, template = 'umd.template') {
-  return gulp.umd({
+  return umd({
     dependencies: function () { return dependencies; },
     namespace: function () { return namespace; },
     exports: function () { return namespace; },
@@ -88,7 +87,7 @@ function packageCoreNode() {
 function packageLocales() {
   // Remove references to goog.provide and goog.require.
   return gulp.src(`${LANG_BUILD_DIR}/*.js`)
-      .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
+      .pipe(replace(/goog\.[^\n]+/g, ''))
       .pipe(packageUMD('Blockly.Msg', [], 'umd-msg.template'))
       .pipe(gulp.dest(`${RELEASE_DIR}/msg`));
 };
@@ -107,7 +106,7 @@ function packageUMDBundle() {
     `${RELEASE_DIR}/javascript_compressed.js`,
   ];
   return gulp.src(srcs)
-      .pipe(gulp.concat('blockly.min.js'))
+      .pipe(concat('blockly.min.js'))
       .pipe(gulp.dest(`${RELEASE_DIR}`));
 };
 
@@ -140,7 +139,7 @@ function packageUMDBundle() {
  * @param {Function} done Callback to call when done.
  */
 function packageLegacyEntrypoints(done) {
-  for (entrypoint of [
+  for (const entrypoint of [
     'core', 'blocks', 'dart', 'javascript', 'lua', 'php', 'python'
   ]) {
     const bundle =
@@ -218,14 +217,14 @@ function packageDTS() {
       .pipe(gulp.src(`${TYPINGS_BUILD_DIR}/**/*.d.ts`, {ignore: [
 	`${TYPINGS_BUILD_DIR}/blocks/**/*`,
       ]}))
-      .pipe(gulp.replace('AnyDuringMigration', 'any'))
+      .pipe(replace('AnyDuringMigration', 'any'))
       .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
  * This task cleans the release directory (by deleting it).
  */
-function cleanReleaseDir() {
+export function cleanReleaseDir() {
   // Sanity check.
   if (RELEASE_DIR === '.' || RELEASE_DIR === '/') {
     return Promise.reject(`Refusing to rm -rf ${RELEASE_DIR}`);
@@ -243,7 +242,7 @@ function cleanReleaseDir() {
  *
  * Prerequisite: build.
  */
-const pack = gulp.series(
+export const pack = gulp.series(
     gulp.parallel(
         build.cleanBuildDir,
         cleanReleaseDir),
@@ -258,9 +257,3 @@ const pack = gulp.series(
         packageReadme,
         packageDTS)
     );
-
-module.exports = {
-  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
-  cleanReleaseDir: cleanReleaseDir,
-  pack,
-};

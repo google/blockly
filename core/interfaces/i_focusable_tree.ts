@@ -128,7 +128,7 @@ export interface IFocusableTree {
  * Determines whether the provided object fulfills the contract of
  * IFocusableTree.
  *
- * @param object The object to test.
+ * @param obj The object to test.
  * @returns Whether the provided object can be used as an IFocusableTree.
  */
 export function isFocusableTree(obj: any): obj is IFocusableTree {

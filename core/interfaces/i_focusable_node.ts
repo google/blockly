@@ -102,7 +102,7 @@ export interface IFocusableNode {
  * Determines whether the provided object fulfills the contract of
  * IFocusableNode.
  *
- * @param object The object to test.
+ * @param obj The object to test.
  * @returns Whether the provided object can be used as an IFocusableNode.
  */
 export function isFocusableNode(obj: any): obj is IFocusableNode {

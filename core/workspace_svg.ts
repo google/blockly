@@ -2713,9 +2713,28 @@ export class WorkspaceSvg
     return [];
   }
 
+  /**
+   * Used for searching for a specific workspace comment.
+   * We can't use this.getWorkspaceCommentById because the workspace
+   * comment ids might not be globally unique, but the id assigned to
+   * the focusable element for the comment should be.
+   */
+  private searchForWorkspaceComment(
+    id: string,
+  ): RenderedWorkspaceComment | undefined {
+    for (const comment of this.getTopComments()) {
+      if (
+        comment instanceof RenderedWorkspaceComment &&
+        comment.canBeFocused() &&
+        comment.getFocusableElement().id === id
+      ) {
+        return comment;
+      }
+    }
+  }
+
   /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
-    if (!id) return null;
     // Check against flyout items if this workspace is part of a flyout. Note
     // that blocks may match against this pass before reaching getBlockById()
     // below (but only for a flyout workspace).
@@ -2760,28 +2779,26 @@ export class WorkspaceSvg
 
     // Search for a specific workspace comment editor
     // (only if id seems like it is one).
-    const commentEditorIndicator = id.indexOf('_textarea_');
+    const commentEditorIndicator = id.indexOf('_comment_textarea_');
     if (commentEditorIndicator !== -1) {
       const commentId = id.substring(0, commentEditorIndicator);
-      const comment = this.getCommentById(commentId);
-      if (
-        comment instanceof RenderedWorkspaceComment &&
-        comment.canBeFocused() &&
-        comment.view.commentEditor
-      ) {
-        return comment.view.commentEditor;
+      const comment = this.searchForWorkspaceComment(commentId);
+      if (comment) {
+        return comment.getEditorFocusableNode();
       }
     }
 
     // Search for a specific block.
+    // Don't use `getBlockById` because the block ID is not guaranteeed
+    // to be globally unique, but the ID on the focusable element is.
     const block = this.getAllBlocks(false).find(
       (block) => block.getFocusableElement().id === id,
     );
     if (block) return block;
 
-    // Search for a workspace comment.
-    const comment = this.getCommentById(id);
-    if (comment instanceof RenderedWorkspaceComment && comment.canBeFocused()) {
+    // Search for a workspace comment (semi-expensive).
+    const comment = this.searchForWorkspaceComment(id);
+    if (comment) {
       return comment;
     }
 

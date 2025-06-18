@@ -333,6 +333,13 @@ export class RenderedWorkspaceComment
     }
   }
 
+  /**
+   * @returns The FocusableNode representing the editor portion of this comment.
+   */
+  getEditorFocusableNode(): IFocusableNode {
+    return this.view.getEditorFocusableNode();
+  }
+
   /** See IFocusableNode.getFocusableElement. */
   getFocusableElement(): HTMLElement | SVGElement {
     return this.getSvgRoot();

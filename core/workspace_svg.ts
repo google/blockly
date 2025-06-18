@@ -2715,6 +2715,7 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.lookUpFocusableNode. */
   lookUpFocusableNode(id: string): IFocusableNode | null {
+    if (!id) return null;
     // Check against flyout items if this workspace is part of a flyout. Note
     // that blocks may match against this pass before reaching getBlockById()
     // below (but only for a flyout workspace).
@@ -2757,21 +2758,31 @@ export class WorkspaceSvg
       return null;
     }
 
+    // Search for a specific workspace comment editor
+    // (only if id seems like it is one).
+    const commentEditorIndicator = id.indexOf('_textarea_');
+    if (commentEditorIndicator !== -1) {
+      const commentId = id.substring(0, commentEditorIndicator);
+      const comment = this.getCommentById(commentId);
+      if (
+        comment instanceof RenderedWorkspaceComment &&
+        comment.canBeFocused() &&
+        comment.view.commentEditor
+      ) {
+        return comment.view.commentEditor;
+      }
+    }
+
     // Search for a specific block.
     const block = this.getAllBlocks(false).find(
       (block) => block.getFocusableElement().id === id,
     );
     if (block) return block;
 
-    // Search for a workspace comment (semi-expensive).
-    for (const comment of this.getTopComments()) {
-      if (
-        comment instanceof RenderedWorkspaceComment &&
-        comment.canBeFocused() &&
-        comment.getFocusableElement().id === id
-      ) {
-        return comment;
-      }
+    // Search for a workspace comment.
+    const comment = this.getCommentById(id);
+    if (comment instanceof RenderedWorkspaceComment && comment.canBeFocused()) {
+      return comment;
     }
 
     // Search for icons and bubbles (which requires an expensive getAllBlocks).

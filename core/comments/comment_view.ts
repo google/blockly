@@ -15,6 +15,7 @@ import * as drag from '../utils/drag.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
+import {CommentEditor} from './comment_editor.js';
 
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
@@ -106,7 +107,12 @@ export class CommentView implements IRenderedElement {
   /** The default size of newly created comments. */
   static defaultCommentSize = new Size(120, 100);
 
-  constructor(readonly workspace: WorkspaceSvg) {
+  public commentEditor: CommentEditor | undefined;
+
+  constructor(
+    readonly workspace: WorkspaceSvg,
+    private commentId?: string,
+  ) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable blocklyDraggable',
     });
@@ -240,26 +246,12 @@ export class CommentView implements IRenderedElement {
     foreignObject: SVGForeignObjectElement;
     textArea: HTMLTextAreaElement;
   } {
-    const foreignObject = dom.createSvgElement(
-      Svg.FOREIGNOBJECT,
-      {
-        'class': 'blocklyCommentForeignObject',
-      },
+    this.commentEditor = new CommentEditor(
+      this.workspace,
       svgRoot,
+      this.commentId,
     );
-    const body = document.createElementNS(dom.HTML_NS, 'body');
-    body.setAttribute('xmlns', dom.HTML_NS);
-    body.className = 'blocklyMinimalBody';
-    const textArea = document.createElementNS(
-      dom.HTML_NS,
-      'textarea',
-    ) as HTMLTextAreaElement;
-    dom.addClass(textArea, 'blocklyCommentText');
-    dom.addClass(textArea, 'blocklyTextarea');
-    dom.addClass(textArea, 'blocklyText');
-    body.appendChild(textArea);
-    foreignObject.appendChild(body);
-
+    const {foreignObject, textArea} = this.commentEditor;
     browserEvents.conditionalBind(textArea, 'change', this, this.onTextChange);
 
     return {foreignObject, textArea};

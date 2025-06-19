@@ -34,7 +34,7 @@ export function isSelectable(obj: any): obj is ISelectable {
   return (
     isFocusableNode(obj) &&
     typeof (obj as ISelectable).id === 'string' &&
-    typeof (obj as ISelectable).workspace === 'function' &&
+    typeof (obj as ISelectable).workspace === 'object' &&
     typeof (obj as ISelectable).select === 'function' &&
     typeof (obj as ISelectable).unselect === 'function'
   );

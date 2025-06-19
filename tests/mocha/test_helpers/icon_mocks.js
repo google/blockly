@@ -4,7 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export class MockIcon {
+export class MockFocusable {
+  getFocusableElement() {}
+  getFocusableTree() {}
+  onNodeFocus() {}
+  onNodeBlur() {}
+  canBeFocused() {}
+}
+
+export class MockIcon extends MockFocusable {
+
   getType() {
     return new Blockly.icons.IconType('mock icon');
   }
@@ -94,4 +103,9 @@ export class MockBubbleIcon extends MockIcon {
   setBubbleVisible(visible) {
     this.visible = visible;
   }
+
+  getBubble() {
+    return null;
+  }
+}
 }

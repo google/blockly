@@ -1453,6 +1453,10 @@ suite('Blocks', function () {
 
         setBubbleVisible() {}
 
+        getBubble() {
+          return null;
+        }
+
         saveState() {
           return {};
         }

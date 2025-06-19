@@ -1429,7 +1429,7 @@ suite('Blocks', function () {
     });
 
     suite('Constructing registered comment classes', function () {
-      class MockComment extends MockIcon {
+      class MockComment extends MockBubbleIcon {
         getType() {
           return IconType.COMMENT;
         }
@@ -1449,16 +1449,6 @@ suite('Blocks', function () {
         setBubbleLocation() {}
 
         getBubbleLocation() {}
-
-        bubbleIsVisible() {
-          return true;
-        }
-
-        setBubbleVisible() {}
-
-        getBubble() {
-          return null;
-        }
 
         saveState() {
           return {};

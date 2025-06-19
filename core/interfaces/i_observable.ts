@@ -20,5 +20,9 @@ export interface IObservable {
  * @internal
  */
 export function isObservable(obj: any): obj is IObservable {
-  return obj.startPublishing !== undefined && obj.stopPublishing !== undefined;
+  return (
+    obj &&
+    typeof obj.startPublishing === 'function' &&
+    typeof obj.stopPublishing === 'function'
+  );
 }

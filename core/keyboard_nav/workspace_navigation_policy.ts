@@ -62,7 +62,7 @@ export class WorkspaceNavigationPolicy
    * @returns True if the given workspace can be focused.
    */
   isNavigable(current: WorkspaceSvg): boolean {
-    return current.canBeFocused();
+    return current.canBeFocused() && !current.isMutator;
   }
 
   /**

@@ -64,9 +64,8 @@ export class Navigator {
   getFirstChild(current: IFocusableNode): IFocusableNode | null {
     const result = this.get(current)?.getFirstChild(current);
     if (!result) return null;
-    // If the child isn't navigable, don't traverse into it; check its peers.
     if (!this.get(result)?.isNavigable(result)) {
-      return this.getNextSibling(result);
+      return this.getFirstChild(result) || this.getNextSibling(result);
     }
     return result;
   }

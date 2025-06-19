@@ -116,7 +116,7 @@ export class CommentView implements IRenderedElement {
       textPreviewNode: this.textPreviewNode,
     } = this.createTopBar(this.svgRoot, workspace));
 
-    this.commentEditor = this.createTextArea(this.svgRoot);
+    this.commentEditor = this.createTextArea();
 
     this.resizeHandle = this.createResizeHandle(this.svgRoot, workspace);
 
@@ -229,7 +229,7 @@ export class CommentView implements IRenderedElement {
   /**
    * Creates the text area where users can type. Registers event listeners.
    */
-  private createTextArea(svgRoot: SVGGElement) {
+  private createTextArea() {
     const commentEditor = new CommentEditor(this.workspace, this.commentId);
 
     this.svgRoot.appendChild(commentEditor.getDom());

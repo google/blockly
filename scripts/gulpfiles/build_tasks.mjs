@@ -727,9 +727,9 @@ function compileAdvancedCompilationTest() {
   };
   return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())
-      .pipe(gulp.sourcemaps.init())
+      .pipe(sourcemaps.init())
       .pipe(compile(options))
-      .pipe(gulp.sourcemaps.write(
+      .pipe(sourcemaps.write(
           '.', {includeContent: false, sourceRoot: '../../'}))
       .pipe(gulp.dest('./tests/compile/'));
 }

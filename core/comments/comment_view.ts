@@ -6,6 +6,7 @@
 
 import * as browserEvents from '../browser_events.js';
 import * as css from '../css.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import * as layers from '../layers.js';
 import * as touch from '../touch.js';
@@ -15,6 +16,7 @@ import * as drag from '../utils/drag.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
+import {CommentEditor} from './comment_editor.js';
 
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
@@ -46,11 +48,8 @@ export class CommentView implements IRenderedElement {
   /** The resize handle element. */
   private resizeHandle: SVGImageElement;
 
-  /** The foreignObject containing the HTML text area. */
-  private foreignObject: SVGForeignObjectElement;
-
-  /** The text area where the user can type. */
-  private textArea: HTMLTextAreaElement;
+  /** The part of the comment view that contains the textarea to edit the comment. */
+  private commentEditor: CommentEditor;
 
   /** The current size of the comment in workspace units. */
   private size: Size;
@@ -63,14 +62,6 @@ export class CommentView implements IRenderedElement {
 
   /** The current location of the comment in workspace coordinates. */
   private location: Coordinate = new Coordinate(0, 0);
-
-  /** The current text of the comment. Updates on  text area change. */
-  private text: string = '';
-
-  /** Listeners for changes to text. */
-  private textChangeListeners: Array<
-    (oldText: string, newText: string) => void
-  > = [];
 
   /** Listeners for changes to size. */
   private sizeChangeListeners: Array<(oldSize: Size, newSize: Size) => void> =
@@ -106,7 +97,10 @@ export class CommentView implements IRenderedElement {
   /** The default size of newly created comments. */
   static defaultCommentSize = new Size(120, 100);
 
-  constructor(readonly workspace: WorkspaceSvg) {
+  constructor(
+    readonly workspace: WorkspaceSvg,
+    private commentId?: string,
+  ) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable blocklyDraggable',
     });
@@ -122,8 +116,7 @@ export class CommentView implements IRenderedElement {
       textPreviewNode: this.textPreviewNode,
     } = this.createTopBar(this.svgRoot, workspace));
 
-    ({foreignObject: this.foreignObject, textArea: this.textArea} =
-      this.createTextArea(this.svgRoot));
+    this.commentEditor = this.createTextArea();
 
     this.resizeHandle = this.createResizeHandle(this.svgRoot, workspace);
 
@@ -236,33 +229,32 @@ export class CommentView implements IRenderedElement {
   /**
    * Creates the text area where users can type. Registers event listeners.
    */
-  private createTextArea(svgRoot: SVGGElement): {
-    foreignObject: SVGForeignObjectElement;
-    textArea: HTMLTextAreaElement;
-  } {
-    const foreignObject = dom.createSvgElement(
-      Svg.FOREIGNOBJECT,
-      {
-        'class': 'blocklyCommentForeignObject',
-      },
-      svgRoot,
+  private createTextArea() {
+    // When the user is done editing comment, focus the entire comment.
+    const onFinishEditing = () => this.svgRoot.focus();
+    const commentEditor = new CommentEditor(
+      this.workspace,
+      this.commentId,
+      onFinishEditing,
     );
-    const body = document.createElementNS(dom.HTML_NS, 'body');
-    body.setAttribute('xmlns', dom.HTML_NS);
-    body.className = 'blocklyMinimalBody';
-    const textArea = document.createElementNS(
-      dom.HTML_NS,
-      'textarea',
-    ) as HTMLTextAreaElement;
-    dom.addClass(textArea, 'blocklyCommentText');
-    dom.addClass(textArea, 'blocklyTextarea');
-    dom.addClass(textArea, 'blocklyText');
-    body.appendChild(textArea);
-    foreignObject.appendChild(body);
 
-    browserEvents.conditionalBind(textArea, 'change', this, this.onTextChange);
+    this.svgRoot.appendChild(commentEditor.getDom());
 
-    return {foreignObject, textArea};
+    commentEditor.addTextChangeListener((oldText, newText) => {
+      this.updateTextPreview(newText);
+      // Update size in case our minimum size increased.
+      this.setSize(this.size);
+    });
+
+    return commentEditor;
+  }
+
+  /**
+   *
+   * @returns The FocusableNode representing the editor portion of this comment.
+   */
+  getEditorFocusableNode(): IFocusableNode {
+    return this.commentEditor;
   }
 
   /** Creates the DOM elements for the comment resize handle. */
@@ -324,7 +316,7 @@ export class CommentView implements IRenderedElement {
 
     this.updateHighlightRect(size);
     this.updateTopBarSize(size);
-    this.updateTextAreaSize(size, topBarSize);
+    this.commentEditor.updateSize(size, topBarSize);
     this.updateDeleteIconPosition(size, topBarSize, deleteSize);
     this.updateFoldoutIconPosition(topBarSize, foldoutSize);
     this.updateTextPreviewSize(
@@ -360,7 +352,7 @@ export class CommentView implements IRenderedElement {
     foldoutSize: Size,
     deleteSize: Size,
   ): Size {
-    this.updateTextPreview(this.textArea.value ?? '');
+    this.updateTextPreview(this.commentEditor.getText() ?? '');
     const textPreviewWidth = dom.getTextWidth(this.textPreview);
 
     const foldoutMargin = this.calcFoldoutMargin(topBarSize, foldoutSize);
@@ -406,19 +398,6 @@ export class CommentView implements IRenderedElement {
   /** Updates the size of the top bar to reflect the new size. */
   private updateTopBarSize(size: Size) {
     this.topBarBackground.setAttribute('width', `${size.width}`);
-  }
-
-  /** Updates the size of the text area elements to reflect the new size. */
-  private updateTextAreaSize(size: Size, topBarSize: Size) {
-    this.foreignObject.setAttribute(
-      'height',
-      `${size.height - topBarSize.height}`,
-    );
-    this.foreignObject.setAttribute('width', `${size.width}`);
-    this.foreignObject.setAttribute('y', `${topBarSize.height}`);
-    if (this.workspace.RTL) {
-      this.foreignObject.setAttribute('x', `${-size.width}`);
-    }
   }
 
   /**
@@ -652,12 +631,11 @@ export class CommentView implements IRenderedElement {
     if (this.editable) {
       dom.addClass(this.svgRoot, 'blocklyEditable');
       dom.removeClass(this.svgRoot, 'blocklyReadonly');
-      this.textArea.removeAttribute('readonly');
     } else {
       dom.removeClass(this.svgRoot, 'blocklyEditable');
       dom.addClass(this.svgRoot, 'blocklyReadonly');
-      this.textArea.setAttribute('readonly', 'true');
     }
+    this.commentEditor.setEditable(editable);
   }
 
   /** Returns the current location of the comment in workspace coordinates. */
@@ -678,49 +656,29 @@ export class CommentView implements IRenderedElement {
     );
   }
 
-  /** Retursn the current text of the comment. */
+  /** Returns the current text of the comment. */
   getText() {
-    return this.text;
+    return this.commentEditor.getText();
   }
 
   /** Sets the current text of the comment. */
   setText(text: string) {
-    this.textArea.value = text;
-    this.onTextChange();
+    this.commentEditor.setText(text);
   }
 
   /** Sets the placeholder text displayed for an empty comment. */
   setPlaceholderText(text: string) {
-    this.textArea.placeholder = text;
+    this.commentEditor.setPlaceholderText(text);
   }
 
-  /** Registers a callback that listens for text changes. */
+  /** Registers a callback that listens for text changes on the comment editor. */
   addTextChangeListener(listener: (oldText: string, newText: string) => void) {
-    this.textChangeListeners.push(listener);
+    this.commentEditor.addTextChangeListener(listener);
   }
 
-  /** Removes the given listener from the list of text change listeners. */
+  /** Removes the given listener from the comment editor. */
   removeTextChangeListener(listener: () => void) {
-    this.textChangeListeners.splice(
-      this.textChangeListeners.indexOf(listener),
-      1,
-    );
-  }
-
-  /**
-   * Triggers listeners when the text of the comment changes, either
-   * programmatically or manually by the user.
-   */
-  private onTextChange() {
-    const oldText = this.text;
-    this.text = this.textArea.value;
-    this.updateTextPreview(this.text);
-    // Update size in case our minimum size increased.
-    this.setSize(this.size);
-    // Loop through listeners backwards in case they remove themselves.
-    for (let i = this.textChangeListeners.length - 1; i >= 0; i--) {
-      this.textChangeListeners[i](oldText, this.text);
-    }
+    this.commentEditor.removeTextChangeListener(listener);
   }
 
   /** Updates the preview text element to reflect the given text. */
@@ -882,6 +840,11 @@ css.register(`
 
 .blocklyCommentHighlight {
   fill: none;
+}
+
+.blocklyCommentText.blocklyActiveFocus {
+  border-color: #fc3;
+  border-width: 2px;
 }
 
 .blocklySelected .blocklyCommentHighlight {

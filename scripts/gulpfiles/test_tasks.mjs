@@ -9,19 +9,19 @@
  */
 /* eslint-env node */
 
-const asyncDone = require('async-done');
-const gulp = require('gulp');
-const gzip = require('gulp-gzip');
-const fs = require('fs');
-const path = require('path');
-const {execSync} = require('child_process');
-const {rimraf} = require('rimraf');
+import asyncDone from 'async-done';
+import * as gulp from 'gulp';
+import gzip from 'gulp-gzip';
+import * as fs from 'fs';
+import * as path from 'path';
+import {execSync} from 'child_process';
+import {rimraf} from 'rimraf';
 
-const {RELEASE_DIR, TEST_TSC_OUTPUT_DIR} = require('./config');
+import {RELEASE_DIR, TEST_TSC_OUTPUT_DIR} from './config.mjs';
 
-const {runMochaTestsInBrowser} = require('../../tests/mocha/webdriver.js');
-const {runGeneratorsInBrowser} = require('../../tests/generators/webdriver.js');
-const {runCompileCheckInBrowser} = require('../../tests/compile/webdriver.js');
+import {runMochaTestsInBrowser} from '../../tests/mocha/webdriver.js';
+import {runGeneratorsInBrowser} from '../../tests/generators/webdriver.js';
+import {runCompileCheckInBrowser} from '../../tests/compile/webdriver.js';
 
 const OUTPUT_DIR = 'build/generators';
 const GOLDEN_DIR = 'tests/generators/golden';
@@ -321,7 +321,7 @@ function checkResult(suffix) {
  * Run generator tests inside a browser and check the results.
  * @return {Promise} Asynchronous result.
  */
-async function generators() {
+export async function generators() {
   return runTestTask('generators', async () => {
     // Clean up.
     rimraf.sync(OUTPUT_DIR);
@@ -396,10 +396,6 @@ const tasks = [
   advancedCompileInBrowser
 ];
 
-const test = gulp.series(...tasks, reportTestResult);
+export const test = gulp.series(...tasks, reportTestResult);
 
 
-module.exports = {
-  test,
-  generators,
-};

@@ -1,9 +1,9 @@
-const {execSync} = require('child_process');
-const {Extractor} = require('markdown-tables-to-json');
-const fs = require('fs');
-const gulp = require('gulp');
-const header = require('gulp-header');
-const replace = require('gulp-replace');
+import {execSync} from 'child_process';
+import {Extractor} from 'markdown-tables-to-json';
+import * as fs from 'fs';
+import * as gulp from 'gulp';
+import * as header from 'gulp-header';
+import * as replace from 'gulp-replace';
 
 const DOCS_DIR = 'docs';
 
@@ -140,8 +140,7 @@ const createToc = function(done) {
   done();
 }
 
-const docs = gulp.series(
+export const docs = gulp.series(
     generateApiJson, removeRenames, generateDocs,
     gulp.parallel(prependBook, createToc));
 
-module.exports = {docs};

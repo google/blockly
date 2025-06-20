@@ -8,11 +8,11 @@
  * @fileoverview Git-related gulp tasks for Blockly.
  */
 
-const gulp = require('gulp');
-const execSync = require('child_process').execSync;
+import * as gulp from 'gulp';
+import {execSync} from 'child_process';
 
-const buildTasks = require('./build_tasks');
-const packageTasks = require('./package_tasks');
+import * as buildTasks from './build_tasks.mjs';
+import * as packageTasks from './package_tasks.mjs';
 
 const UPSTREAM_URL = 'https://github.com/google/blockly.git';
 
@@ -63,7 +63,7 @@ function syncBranch(branchName) {
  * Stash current state, check out develop, and sync with
  * google/blockly.
  */
-function syncDevelop() {
+export function syncDevelop() {
   return syncBranch('develop');
 };
 
@@ -71,7 +71,7 @@ function syncDevelop() {
  * Stash current state, check out master, and sync with
  * google/blockly.
  */
-function syncMaster() {
+export function syncMaster() {
   return syncBranch('master');
 };
 
@@ -111,7 +111,7 @@ function checkoutBranch(branchName) {
  * Create and push an RC branch.
  * Note that this pushes to google/blockly.
  */
-const createRC = gulp.series(
+export const createRC = gulp.series(
   syncDevelop(),
   function(done) {
     const branchName = getRCBranchName();
@@ -122,7 +122,7 @@ const createRC = gulp.series(
 );
 
 /** Create the rebuild branch. */
-function createRebuildBranch(done) {
+export function createRebuildBranch(done) {
   const branchName = getRebuildBranchName();
   console.log(`make-rebuild-branch: creating branch ${branchName}`);
   execSync(`git switch -C ${branchName}`, { stdio: 'inherit' });
@@ -130,7 +130,7 @@ function createRebuildBranch(done) {
 }
 
 /** Push the rebuild branch to origin. */
-function pushRebuildBranch(done) {
+export function pushRebuildBranch(done) {
   console.log('push-rebuild-branch: committing rebuild');
   execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
   const branchName = getRebuildBranchName();
@@ -145,7 +145,7 @@ function pushRebuildBranch(done) {
  *
  * Prerequisites (invoked): clean, build.
  */
-const updateGithubPages = gulp.series(
+export const updateGithubPages = gulp.series(
   function(done) {
     execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
     execSync('git switch -C gh-pages', { stdio: 'inherit' });
@@ -165,17 +165,3 @@ const updateGithubPages = gulp.series(
     done();
   }
 );
-
-module.exports = {
-  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
-  updateGithubPages,
-
-  // Manually-invokable targets that invoke prerequisites.
-  createRC,
-
-  // Legacy script-only targets, to be deleted.
-  syncDevelop,
-  syncMaster,
-  createRebuildBranch,
-  pushRebuildBranch,
-};

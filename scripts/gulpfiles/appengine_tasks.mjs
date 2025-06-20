@@ -8,16 +8,16 @@
  * @fileoverview Gulp script to deploy Blockly demos on appengine.
  */
 
-const gulp = require('gulp');
+import * as gulp from 'gulp';
 
-const fs = require('fs');
-const path = require('path');
-const execSync = require('child_process').execSync;
-const buildTasks = require('./build_tasks.js');
-const packageTasks = require('./package_tasks.js');
-const {rimraf} = require('rimraf');
+import * as fs from 'fs';
+import * as path from 'path';
+import {execSync} from 'child_process';
+import * as buildTasks from './build_tasks.mjs';
+import {getPackageJson} from './helper_tasks.mjs';
+import * as packageTasks from './package_tasks.mjs';
+import {rimraf} from 'rimraf';
 
-const packageJson = require('../../package.json');
 const demoTmpDir = '../_deploy';
 const demoStaticTmpDir = '../_deploy/static';
 
@@ -123,7 +123,7 @@ function deployToAndClean(demoVersion) {
  */
 function getDemosVersion() {
   // Replace all '.' with '-' e.g. 9-3-3-beta-2
-  return packageJson.version.replace(/\./g, '-');
+  return getPackageJson().version.replace(/\./g, '-');
 }
 
 /**
@@ -162,7 +162,7 @@ function deployBetaAndClean(done) {
  *
  * Prerequisites (invoked): clean, build
  */
-const prepareDemos = gulp.series(
+export const prepareDemos = gulp.series(
     prepareDeployDir,
     gulp.parallel(
         gulp.series(
@@ -180,16 +180,9 @@ const prepareDemos = gulp.series(
 /**
  * Deploys demos.
  */
-const deployDemos = gulp.series(prepareDemos, deployAndClean);
+export const deployDemos = gulp.series(prepareDemos, deployAndClean);
 
 /**
  * Deploys beta version of demos (version appended with -beta).
  */
-const deployDemosBeta = gulp.series(prepareDemos, deployBetaAndClean);
-
-module.exports = {
-  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
-  deployDemos: deployDemos,
-  deployDemosBeta: deployDemosBeta,
-  prepareDemos: prepareDemos
-};
+export const deployDemosBeta = gulp.series(prepareDemos, deployBetaAndClean);

@@ -33,6 +33,7 @@ export class CommentEditor implements IFocusableNode {
   constructor(
     public workspace: WorkspaceSvg,
     commentId?: string,
+    private onFinishEditing?: () => void,
   ) {
     this.foreignObject = dom.createSvgElement(Svg.FOREIGNOBJECT, {
       'class': 'blocklyCommentForeignObject',
@@ -75,6 +76,14 @@ export class CommentEditor implements IFocusableNode {
         getFocusManager().focusNode(this);
       },
     );
+
+    // Register listener for keydown events that would finish editing.
+    browserEvents.conditionalBind(
+      this.textArea,
+      'keydown',
+      this,
+      this.handleKeyDown,
+    );
   }
 
   /** Gets the dom structure for this comment editor. */
@@ -86,6 +95,7 @@ export class CommentEditor implements IFocusableNode {
   getText(): string {
     return this.text;
   }
+
   /** Sets the current text of the comment and fires change listeners. */
   setText(text: string) {
     this.textArea.value = text;
@@ -102,6 +112,18 @@ export class CommentEditor implements IFocusableNode {
     // Loop through listeners backwards in case they remove themselves.
     for (let i = this.textChangeListeners.length - 1; i >= 0; i--) {
       this.textChangeListeners[i](oldText, this.text);
+    }
+  }
+
+  /**
+   * Do something when the user indicates they've finished editing.
+   *
+   * @param e Keyboard event.
+   */
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape' || (e.key === 'Enter' && (e.ctrlKey || e.metaKey))) {
+      if (this.onFinishEditing) this.onFinishEditing();
+      e.stopPropagation();
     }
   }
 

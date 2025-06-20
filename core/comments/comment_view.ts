@@ -230,7 +230,13 @@ export class CommentView implements IRenderedElement {
    * Creates the text area where users can type. Registers event listeners.
    */
   private createTextArea() {
-    const commentEditor = new CommentEditor(this.workspace, this.commentId);
+    // When the user is done editing comment, focus the entire comment.
+    const onFinishEditing = () => this.svgRoot.focus();
+    const commentEditor = new CommentEditor(
+      this.workspace,
+      this.commentId,
+      onFinishEditing,
+    );
 
     this.svgRoot.appendChild(commentEditor.getDom());
 

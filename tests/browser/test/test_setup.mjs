@@ -286,6 +286,7 @@ export async function getBlockTypeFromCategory(
     await category.click();
   }
 
+  await browser.pause(PAUSE_TIME);
   const id = await browser.execute((blockType) => {
     return Blockly.getMainWorkspace()
       .getFlyout()
@@ -293,6 +294,55 @@ export async function getBlockTypeFromCategory(
       .getBlocksByType(blockType)[0].id;
   }, blockType);
   return getBlockElementById(browser, id);
+}
+
+/**
+ * @param browser The active WebdriverIO Browser object.
+ * @param categoryName The name of the toolbox category to search.
+ *     Null if the toolbox has no categories (simple).
+ * @param blockType The type of the block to search for.
+ * @return A Promise that resolves to a reasonable drag target element of the
+ *     first block with the given type in the given category.
+ */
+export async function getDraggableBlockElementByType(
+  browser,
+  categoryName,
+  blockType,
+) {
+  if (categoryName) {
+    const category = await getCategory(browser, categoryName);
+    await category.click();
+  }
+
+  const findableId = 'dragTargetElement';
+  // In the browser context, find the element that we want and give it a findable ID.
+  await browser.execute(
+    (blockType, newElemId) => {
+      const block = Blockly.getMainWorkspace()
+        .getFlyout()
+        .getWorkspace()
+        .getBlocksByType(blockType)[0];
+      if (!block.isCollapsed()) {
+        for (const input of block.inputList) {
+          for (const field of input.fieldRow) {
+            if (field instanceof Blockly.FieldLabel) {
+              const svgRoot = field.getSvgRoot();
+              if (svgRoot) {
+                svgRoot.id = newElemId;
+                return;
+              }
+            }
+          }
+        }
+      }
+      // No label field found. Fall back to the block's SVG root.
+      block.getSvgRoot().id = newElemId;
+    },
+    blockType,
+    findableId,
+  );
+  // In the test context, get the Webdriverio Element that we've identified.
+  return await browser.$(`#${findableId}`);
 }
 
 /**

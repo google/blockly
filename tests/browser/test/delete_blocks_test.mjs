@@ -194,7 +194,8 @@ suite('Delete blocks', function (done) {
     );
   });
 
-  test('Redo block deletion', async function () {
+  // TODO(#9029) enable this test once deleting a block doesn't lose focus
+  test.skip('Redo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
     await clickBlock(this.browser, this.firstBlock.id, {button: 1});

@@ -47,7 +47,7 @@ export class RenderedWorkspaceComment
     IFocusableNode
 {
   /** The class encompassing the svg elements making up the workspace comment. */
-  private view: CommentView;
+  view: CommentView;
 
   public readonly workspace: WorkspaceSvg;
 
@@ -59,7 +59,7 @@ export class RenderedWorkspaceComment
 
     this.workspace = workspace;
 
-    this.view = new CommentView(workspace);
+    this.view = new CommentView(workspace, this.id);
     // Set the size to the default size as defined in the superclass.
     this.view.setSize(this.getSize());
     this.view.setEditable(this.isEditable());
@@ -224,13 +224,7 @@ export class RenderedWorkspaceComment
   private startGesture(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
-      if (browserEvents.isTargetInput(e)) {
-        // If the text area was the focus, don't allow this event to bubble up
-        // and steal focus away from the editor/comment.
-        e.stopPropagation();
-      } else {
-        gesture.handleCommentStart(e, this);
-      }
+      gesture.handleCommentStart(e, this);
       getFocusManager().focusNode(this);
     }
   }
@@ -337,6 +331,13 @@ export class RenderedWorkspaceComment
     if (alignedXY !== currentXY) {
       this.moveTo(alignedXY, ['snap']);
     }
+  }
+
+  /**
+   * @returns The FocusableNode representing the editor portion of this comment.
+   */
+  getEditorFocusableNode(): IFocusableNode {
+    return this.view.getEditorFocusableNode();
   }
 
   /** See IFocusableNode.getFocusableElement. */

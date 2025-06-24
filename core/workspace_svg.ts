@@ -22,6 +22,7 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
+import {COMMENT_EDITOR_FOCUS_IDENTIFIER} from './comments/comment_editor.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
 import * as common from './common.js';
@@ -2779,7 +2780,7 @@ export class WorkspaceSvg
 
     // Search for a specific workspace comment editor
     // (only if id seems like it is one).
-    const commentEditorIndicator = id.indexOf('_comment_textarea_');
+    const commentEditorIndicator = id.indexOf(COMMENT_EDITOR_FOCUS_IDENTIFIER);
     if (commentEditorIndicator !== -1) {
       const commentId = id.substring(0, commentEditorIndicator);
       const comment = this.searchForWorkspaceComment(commentId);

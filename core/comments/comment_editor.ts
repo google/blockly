@@ -13,6 +13,12 @@ import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
+/**
+ * String added to the ID of a workspace comment to identify
+ * the focusable node for the comment editor.
+ */
+export const COMMENT_EDITOR_FOCUS_IDENTIFIER = '_comment_textarea_';
+
 /** The part of a comment that can be typed into. */
 export class CommentEditor implements IFocusableNode {
   id?: string;
@@ -52,7 +58,7 @@ export class CommentEditor implements IFocusableNode {
     this.foreignObject.appendChild(body);
 
     if (commentId) {
-      this.id = commentId + '_comment_textarea_';
+      this.id = commentId + COMMENT_EDITOR_FOCUS_IDENTIFIER;
       this.textArea.setAttribute('id', this.id);
     }
 

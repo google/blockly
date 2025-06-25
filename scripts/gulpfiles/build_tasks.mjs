@@ -243,7 +243,6 @@ const JSCOMP_ERROR = [
   'underscore',
   'unknownDefines',
   // 'unusedLocalVariables',  // Disabled; see note in JSCOMP_OFF.
-  'unusedPrivateMembers',
   'uselessCode',
   'untranspilableFeatures',
   // 'visibility',  // Disabled; see note in JSCOMP_OFF.

@@ -19,9 +19,7 @@ import * as fsPromises from 'fs/promises';
 import {exec, execSync} from 'child_process';
 
 import {globSync} from 'glob';
-// For v20250609.0.0 and later:
-// import {gulp as closureCompiler} from 'google-closure-compiler';
-import ClosureCompiler from 'google-closure-compiler';
+import {gulp as closureCompiler} from 'google-closure-compiler';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 import {rimraf} from 'rimraf';
@@ -30,8 +28,6 @@ import {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DI
 import {getPackageJson} from './helper_tasks.mjs';
 
 import {posixPath, quote} from '../helpers.js';
-
-const closureCompiler = ClosureCompiler.gulp();
 
 const argv = yargs(hideBin(process.argv)).parse();
 

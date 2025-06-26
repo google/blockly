@@ -24,7 +24,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @returns The first field or input of the given block, if any.
    */
   getFirstChild(current: BlockSvg): IFocusableNode | null {
-    const candidates = getBlockNavigationCandidates(current);
+    const candidates = getBlockNavigationCandidates(current, true);
     return candidates[0];
   }
 
@@ -58,6 +58,8 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
       return current.nextConnection?.targetBlock();
     } else if (current.outputConnection?.targetBlock()) {
       return navigateBlock(current, 1);
+    } else if (current.getSurroundParent()) {
+      return navigateBlock(current.getTopStackBlock(), 1);
     } else if (this.getParent(current) instanceof WorkspaceSvg) {
       return navigateStacks(current, 1);
     }
@@ -111,14 +113,27 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
  * @param block The block to retrieve the navigable children of.
  * @returns A list of navigable/focusable children of the given block.
  */
-function getBlockNavigationCandidates(block: BlockSvg): IFocusableNode[] {
+function getBlockNavigationCandidates(
+  block: BlockSvg,
+  forward: boolean,
+): IFocusableNode[] {
   const candidates: IFocusableNode[] = block.getIcons();
 
   for (const input of block.inputList) {
     if (!input.isVisible()) continue;
     candidates.push(...input.fieldRow);
     if (input.connection?.targetBlock()) {
-      candidates.push(input.connection.targetBlock() as BlockSvg);
+      const connectedBlock = input.connection.targetBlock() as BlockSvg;
+      if (input.connection.type === ConnectionType.NEXT_STATEMENT && !forward) {
+        const lastStackBlock = connectedBlock
+          .lastConnectionInStack(false)
+          ?.getSourceBlock();
+        if (lastStackBlock) {
+          candidates.push(lastStackBlock);
+        }
+      } else {
+        candidates.push(connectedBlock);
+      }
     } else if (input.connection?.type === ConnectionType.INPUT_VALUE) {
       candidates.push(input.connection as RenderedConnection);
     }
@@ -174,11 +189,11 @@ export function navigateBlock(
 ): IFocusableNode | null {
   const block =
     current instanceof BlockSvg
-      ? current.outputConnection.targetBlock()
+      ? (current.outputConnection?.targetBlock() ?? current.getSurroundParent())
       : current.getSourceBlock();
   if (!(block instanceof BlockSvg)) return null;
 
-  const candidates = getBlockNavigationCandidates(block);
+  const candidates = getBlockNavigationCandidates(block, delta > 0);
   const currentIndex = candidates.indexOf(current);
   if (currentIndex === -1) return null;
 

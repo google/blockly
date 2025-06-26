@@ -20,9 +20,10 @@ export interface IProcedureBlock {
 export function isProcedureBlock(
   block: Block | IProcedureBlock,
 ): block is IProcedureBlock {
+  block = block as IProcedureBlock;
   return (
-    (block as IProcedureBlock).getProcedureModel !== undefined &&
-    (block as IProcedureBlock).doProcedureUpdate !== undefined &&
-    (block as IProcedureBlock).isProcedureDef !== undefined
+    typeof block.getProcedureModel === 'function' &&
+    typeof block.doProcedureUpdate === 'function' &&
+    typeof block.isProcedureDef === 'function'
   );
 }

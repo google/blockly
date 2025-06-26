@@ -8,19 +8,13 @@
 
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
+import {RenderedWorkspaceComment} from './comments.js';
 import * as eventUtils from './events/utils.js';
 import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
-import {
-  ICopyable,
-  ICopyData,
-  isCopyable as isICopyable,
-} from './interfaces/i_copyable.js';
-import {
-  IDeletable,
-  isDeletable as isIDeletable,
-} from './interfaces/i_deletable.js';
-import {IDraggable, isDraggable} from './interfaces/i_draggable.js';
+import {ICopyData, isCopyable as isICopyable} from './interfaces/i_copyable.js';
+import {isDeletable as isIDeletable} from './interfaces/i_deletable.js';
+import {isDraggable} from './interfaces/i_draggable.js';
 import {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -100,74 +94,43 @@ export function registerDelete() {
 }
 
 let copyData: ICopyData | null = null;
-let copyWorkspace: WorkspaceSvg | null = null;
 let copyCoords: Coordinate | null = null;
 
 /**
  * Determine if a focusable node can be copied.
  *
- * Unfortunately the ICopyable interface doesn't include an isCopyable
- * method, so we must use some other criteria to make the decision.
- * Specifically,
- *
- * - It must be an ICopyable.
- * - So that a pasted copy can be manipluated and/or disposed of, it
- *   must be both an IDraggable and an IDeletable.
- * - Additionally, both .isOwnMovable() and .isOwnDeletable() must return
- *   true (i.e., the copy could be moved and deleted).
- *
- * TODO(#9098): Revise these criteria.  The latter criteria prevents
- * shadow blocks from being copied; additionally, there are likely to
- * be other circumstances were it is desirable to allow movable /
- * copyable copies of a currently-unmovable / -copyable block to be
- * made.
+ * This will use the isCopyable method if the node implements it, otherwise
+ * it will fall back to checking if the node is deletable and draggable not
+ * considering the workspace's edit state.
  *
  * @param focused The focused object.
  */
-function isCopyable(
-  focused: IFocusableNode,
-): focused is ICopyable<ICopyData> & IDeletable & IDraggable {
-  if (!(focused instanceof BlockSvg)) return false;
-  return (
-    isICopyable(focused) &&
-    isIDeletable(focused) &&
-    focused.isOwnDeletable() &&
-    isDraggable(focused) &&
-    focused.isOwnMovable()
-  );
+function isCopyable(focused: IFocusableNode): boolean {
+  if (!isICopyable(focused) || !isIDeletable(focused) || !isDraggable(focused))
+    return false;
+  if (focused.isCopyable) {
+    return focused.isCopyable();
+  } else if (
+    focused instanceof BlockSvg ||
+    focused instanceof RenderedWorkspaceComment
+  ) {
+    return focused.isOwnDeletable() && focused.isOwnMovable();
+  }
+  // This isn't a class Blockly knows about, so fall back to the stricter
+  // checks for deletable and movable.
+  return focused.isDeletable() && focused.isMovable();
 }
 
 /**
  * Determine if a focusable node can be cut.
  *
- * Unfortunately the ICopyable interface doesn't include an isCuttable
- * method, so we must use some other criteria to make the decision.
- * Specifically,
- *
- * - It must be an ICopyable.
- * - So that a pasted copy can be manipluated and/or disposed of, it
- *   must be both an IDraggable and an IDeletable.
- * - Additionally, both .isMovable() and .isDeletable() must return
- *   true (i.e., can currently be moved and deleted). This is the main
- *   difference with isCopyable.
- *
- * TODO(#9098): Revise these criteria.  The latter criteria prevents
- * shadow blocks from being copied; additionally, there are likely to
- * be other circumstances were it is desirable to allow movable /
- * copyable copies of a currently-unmovable / -copyable block to be
- * made.
+ * This will check if the node can be both copied and deleted in its current
+ * workspace.
  *
  * @param focused The focused object.
  */
 function isCuttable(focused: IFocusableNode): boolean {
-  if (!(focused instanceof BlockSvg)) return false;
-  return (
-    isICopyable(focused) &&
-    isIDeletable(focused) &&
-    focused.isDeletable() &&
-    isDraggable(focused) &&
-    focused.isMovable()
-  );
+  return isCopyable(focused) && isIDeletable(focused) && focused.isDeletable();
 }
 
 /**
@@ -185,7 +148,6 @@ export function registerCopy() {
     name: names.COPY,
     preconditionFn(workspace, scope) {
       const focused = scope.focusedNode;
-      if (!(focused instanceof BlockSvg)) return false;
 
       const targetWorkspace = workspace.isFlyout
         ? workspace.targetWorkspace
@@ -193,7 +155,6 @@ export function registerCopy() {
       return (
         !!focused &&
         !!targetWorkspace &&
-        !targetWorkspace.isReadOnly() &&
         !targetWorkspace.isDragging() &&
         !getFocusManager().ephemeralFocusTaken() &&
         isCopyable(focused)
@@ -205,21 +166,17 @@ export function registerCopy() {
       e.preventDefault();
 
       const focused = scope.focusedNode;
-      if (!focused || !isCopyable(focused)) return false;
-      let targetWorkspace: WorkspaceSvg | null =
-        focused.workspace instanceof WorkspaceSvg
-          ? focused.workspace
-          : workspace;
-      targetWorkspace = targetWorkspace.isFlyout
-        ? targetWorkspace.targetWorkspace
-        : targetWorkspace;
+      if (!focused || !isICopyable(focused) || !isCopyable(focused))
+        return false;
+      const targetWorkspace = workspace.isFlyout
+        ? workspace.targetWorkspace
+        : workspace;
       if (!targetWorkspace) return false;
 
       if (!focused.workspace.isFlyout) {
         targetWorkspace.hideChaff();
       }
       copyData = focused.toCopyData();
-      copyWorkspace = targetWorkspace;
       copyCoords =
         isDraggable(focused) && focused.workspace == targetWorkspace
           ? focused.getRelativeToSurfaceXY()
@@ -256,27 +213,20 @@ export function registerCut() {
     },
     callback(workspace, e, shortcut, scope) {
       const focused = scope.focusedNode;
+      if (!focused || !isCuttable(focused) || !isICopyable(focused)) {
+        return false;
+      }
+      copyData = focused.toCopyData();
+      copyCoords = isDraggable(focused)
+        ? focused.getRelativeToSurfaceXY()
+        : null;
 
       if (focused instanceof BlockSvg) {
-        copyData = focused.toCopyData();
-        copyWorkspace = workspace;
-        copyCoords = focused.getRelativeToSurfaceXY();
         focused.checkAndDelete();
-        return true;
-      } else if (
-        isIDeletable(focused) &&
-        focused.isDeletable() &&
-        isICopyable(focused)
-      ) {
-        copyData = focused.toCopyData();
-        copyWorkspace = workspace;
-        copyCoords = isDraggable(focused)
-          ? focused.getRelativeToSurfaceXY()
-          : null;
+      } else if (isIDeletable(focused)) {
         focused.dispose();
-        return true;
       }
-      return false;
+      return !!copyData;
     },
     keyCodes: [ctrlX, metaX],
   };
@@ -310,7 +260,11 @@ export function registerPaste() {
       );
     },
     callback(workspace: WorkspaceSvg, e: Event) {
-      if (!copyData || !copyWorkspace) return false;
+      if (!copyData) return false;
+      const targetWorkspace = workspace.isFlyout
+        ? workspace.targetWorkspace
+        : workspace;
+      if (!targetWorkspace || targetWorkspace.isReadOnly()) return false;
 
       if (e instanceof PointerEvent) {
         // The event that triggers a shortcut would conventionally be a KeyboardEvent.
@@ -319,19 +273,19 @@ export function registerPaste() {
         // at the mouse coordinates where the menu was opened, and this PointerEvent
         // is where the menu was opened.
         const mouseCoords = svgMath.screenToWsCoordinates(
-          copyWorkspace,
+          targetWorkspace,
           new Coordinate(e.clientX, e.clientY),
         );
-        return !!clipboard.paste(copyData, copyWorkspace, mouseCoords);
+        return !!clipboard.paste(copyData, targetWorkspace, mouseCoords);
       }
 
       if (!copyCoords) {
         // If we don't have location data about the original copyable, let the
         // paster determine position.
-        return !!clipboard.paste(copyData, copyWorkspace);
+        return !!clipboard.paste(copyData, targetWorkspace);
       }
 
-      const {left, top, width, height} = copyWorkspace
+      const {left, top, width, height} = targetWorkspace
         .getMetricsManager()
         .getViewMetrics(true);
       const viewportRect = new Rect(top, top + height, left, left + width);
@@ -339,12 +293,12 @@ export function registerPaste() {
       if (viewportRect.contains(copyCoords.x, copyCoords.y)) {
         // If the original copyable is inside the viewport, let the paster
         // determine position.
-        return !!clipboard.paste(copyData, copyWorkspace);
+        return !!clipboard.paste(copyData, targetWorkspace);
       }
 
       // Otherwise, paste in the middle of the viewport.
       const centerCoords = new Coordinate(left + width / 2, top + height / 2);
-      return !!clipboard.paste(copyData, copyWorkspace, centerCoords);
+      return !!clipboard.paste(copyData, targetWorkspace, centerCoords);
     },
     keyCodes: [ctrlV, metaV],
   };
@@ -390,12 +344,12 @@ export function registerUndo() {
  */
 export function registerRedo() {
   const ctrlShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.SHIFT,
     KeyCodes.CTRL,
+    KeyCodes.SHIFT,
   ]);
   const metaShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.SHIFT,
     KeyCodes.META,
+    KeyCodes.SHIFT,
   ]);
   // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
   const ctrlY = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Y, [

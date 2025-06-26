@@ -31,17 +31,17 @@ export interface ICommentIcon extends IIcon, IHasBubble, ISerializable {
 }
 
 /** Checks whether the given object is an ICommentIcon. */
-export function isCommentIcon(obj: object): obj is ICommentIcon {
+export function isCommentIcon(obj: any): obj is ICommentIcon {
   return (
     isIcon(obj) &&
     hasBubble(obj) &&
     isSerializable(obj) &&
-    (obj as any)['setText'] !== undefined &&
-    (obj as any)['getText'] !== undefined &&
-    (obj as any)['setBubbleSize'] !== undefined &&
-    (obj as any)['getBubbleSize'] !== undefined &&
-    (obj as any)['setBubbleLocation'] !== undefined &&
-    (obj as any)['getBubbleLocation'] !== undefined &&
+    typeof (obj as any).setText === 'function' &&
+    typeof (obj as any).getText === 'function' &&
+    typeof (obj as any).setBubbleSize === 'function' &&
+    typeof (obj as any).getBubbleSize === 'function' &&
+    typeof (obj as any).setBubbleLocation === 'function' &&
+    typeof (obj as any).getBubbleLocation === 'function' &&
     obj.getType() === IconType.COMMENT
   );
 }

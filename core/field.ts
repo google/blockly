@@ -265,6 +265,12 @@ export abstract class Field<T = any>
       throw Error('Field already bound to a block');
     }
     this.sourceBlock_ = block;
+    if (block.id.includes('_field')) {
+      console.warn(
+        `Field ID indicator is contained in block ID. This may cause ` +
+          `problems with focus: ${block.id}.`,
+      );
+    }
     this.id_ = `${block.id}_field_${idGenerator.getNextUniqueId()}`;
   }
 

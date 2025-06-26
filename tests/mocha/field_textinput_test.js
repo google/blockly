@@ -23,11 +23,50 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('Text Input Fields', function () {
-  setup(function () {
+  setup(async function () {
     sharedTestSetup.call(this);
+
+    this.workspace = Blockly.inject('blocklyDiv');
+    const blockJson = {
+      'type': 'math_arithmetic',
+      'id': 'test_arithmetic_block',
+      'fields': {
+        'OP': 'ADD',
+      },
+      'inputs': {
+        'A': {
+          'shadow': {
+            'type': 'math_number',
+            'id': 'left_input_block',
+            'name': 'test_name',
+            'fields': {
+              'NUM': 1,
+            },
+          },
+        },
+        'B': {
+          'shadow': {
+            'type': 'math_number',
+            'id': 'right_input_block',
+            'fields': {
+              'NUM': 2,
+            },
+          },
+        },
+      },
+    };
+    Blockly.serialization.blocks.append(blockJson, this.workspace);
+
+    // The workspace actually needs to be visible for focus.
+    document.getElementById('blocklyDiv').style.visibility = 'visible';
+
+    this.getFieldFromShadowBlock = function (shadowBlock) {
+      return shadowBlock.getFields().next().value;
+    };
   });
   teardown(function () {
     sharedTestTeardown.call(this);
+    document.getElementById('blocklyDiv').style.visibility = 'hidden';
   });
   /**
    * Configuration for field tests with invalid values.
@@ -292,6 +331,168 @@ suite('Text Input Fields', function () {
 
     test('Simple', function () {
       this.assertValue('test text');
+    });
+  });
+
+  suite('Use editor', function () {
+    setup(function () {
+      this.simulateTypingIntoInput = (inputElem, newText) => {
+        // Typing into an input field changes its value directly and then fires
+        // an InputEvent (which FieldInput relies on to automatically
+        // synchronize its state).
+        inputElem.value = newText;
+        inputElem.dispatchEvent(new InputEvent('input'));
+      };
+    });
+
+    test('No editor open by default', function () {
+      // The editor is only opened if its indicated that it should be open.
+      assert.isNull(document.querySelector('.blocklyHtmlInput'));
+    });
+
+    test('Type in editor with escape does not change field value', async function () {
+      const block = this.workspace.getBlockById('left_input_block');
+      const field = this.getFieldFromShadowBlock(block);
+      field.showEditor();
+      // This must be called to avoid editor resize logic throwing an error.
+      await Blockly.renderManagement.finishQueuedRenders();
+
+      // Change the value of the field's input through its editor.
+      const fieldEditor = document.querySelector('.blocklyHtmlInput');
+      this.simulateTypingIntoInput(fieldEditor, 'updated value');
+      fieldEditor.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+        }),
+      );
+
+      // 'Escape' will avoid saving the edited field value and close the editor.
+      assert.equal(field.getValue(), 1);
+      assert.isNull(document.querySelector('.blocklyHtmlInput'));
+    });
+
+    test('Type in editor with enter changes field value', async function () {
+      const block = this.workspace.getBlockById('left_input_block');
+      const field = this.getFieldFromShadowBlock(block);
+      field.showEditor();
+      // This must be called to avoid editor resize logic throwing an error.
+      await Blockly.renderManagement.finishQueuedRenders();
+
+      // Change the value of the field's input through its editor.
+      const fieldEditor = document.querySelector('.blocklyHtmlInput');
+      this.simulateTypingIntoInput(fieldEditor, '10');
+      fieldEditor.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Enter',
+        }),
+      );
+
+      // 'Enter' will save the edited result and close the editor.
+      assert.equal(field.getValue(), 10);
+      assert.isNull(document.querySelector('.blocklyHtmlInput'));
+    });
+
+    test('Not finishing editing does not return ephemeral focus', async function () {
+      const block = this.workspace.getBlockById('left_input_block');
+      const field = this.getFieldFromShadowBlock(block);
+      Blockly.getFocusManager().focusNode(field);
+      field.showEditor();
+      // This must be called to avoid editor resize logic throwing an error.
+      await Blockly.renderManagement.finishQueuedRenders();
+
+      // Change the value of the field's input through its editor.
+      const fieldEditor = document.querySelector('.blocklyHtmlInput');
+      this.simulateTypingIntoInput(fieldEditor, '10');
+
+      // If the editor doesn't restore focus then the current focused element is
+      // still the editor.
+      assert.strictEqual(document.activeElement, fieldEditor);
+    });
+
+    test('Finishing editing returns ephemeral focus', async function () {
+      const block = this.workspace.getBlockById('left_input_block');
+      const field = this.getFieldFromShadowBlock(block);
+      Blockly.getFocusManager().focusNode(field);
+      field.showEditor();
+      // This must be called to avoid editor resize logic throwing an error.
+      await Blockly.renderManagement.finishQueuedRenders();
+
+      // Change the value of the field's input through its editor.
+      const fieldEditor = document.querySelector('.blocklyHtmlInput');
+      this.simulateTypingIntoInput(fieldEditor, '10');
+      fieldEditor.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+        }),
+      );
+
+      // Verify that exiting the editor restores focus back to the field.
+      assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), field);
+      assert.strictEqual(document.activeElement, field.getFocusableElement());
+    });
+
+    test('Opening an editor, tabbing, then editing changes the second field', async function () {
+      const leftInputBlock = this.workspace.getBlockById('left_input_block');
+      const rightInputBlock = this.workspace.getBlockById('right_input_block');
+      const leftField = this.getFieldFromShadowBlock(leftInputBlock);
+      const rightField = this.getFieldFromShadowBlock(rightInputBlock);
+      leftField.showEditor();
+      // This must be called to avoid editor resize logic throwing an error.
+      await Blockly.renderManagement.finishQueuedRenders();
+
+      // Tab, then edit and close the editor.
+      document.querySelector('.blocklyHtmlInput').dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Tab',
+        }),
+      );
+      const rightFieldEditor = document.querySelector('.blocklyHtmlInput');
+      this.simulateTypingIntoInput(rightFieldEditor, '15');
+      rightFieldEditor.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Enter',
+        }),
+      );
+
+      // Verify that only the right field changed (due to the tab).
+      assert.equal(leftField.getValue(), 1);
+      assert.equal(rightField.getValue(), 15);
+      assert.isNull(document.querySelector('.blocklyHtmlInput'));
+    });
+
+    test('Opening an editor, tabbing, then editing changes focus to the second field', async function () {
+      const leftInputBlock = this.workspace.getBlockById('left_input_block');
+      const rightInputBlock = this.workspace.getBlockById('right_input_block');
+      const leftField = this.getFieldFromShadowBlock(leftInputBlock);
+      const rightField = this.getFieldFromShadowBlock(rightInputBlock);
+      Blockly.getFocusManager().focusNode(leftField);
+      leftField.showEditor();
+      // This must be called to avoid editor resize logic throwing an error.
+      await Blockly.renderManagement.finishQueuedRenders();
+
+      // Tab, then edit and close the editor.
+      document.querySelector('.blocklyHtmlInput').dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Tab',
+        }),
+      );
+      const rightFieldEditor = document.querySelector('.blocklyHtmlInput');
+      this.simulateTypingIntoInput(rightFieldEditor, '15');
+      rightFieldEditor.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Enter',
+        }),
+      );
+
+      // Verify that the tab causes focus to change to the right field.
+      assert.strictEqual(
+        Blockly.getFocusManager().getFocusedNode(),
+        rightField,
+      );
+      assert.strictEqual(
+        document.activeElement,
+        rightField.getFocusableElement(),
+      );
     });
   });
 });

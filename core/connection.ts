@@ -83,6 +83,12 @@ export class Connection {
     public type: number,
   ) {
     this.sourceBlock_ = source;
+    if (source.id.includes('_connection')) {
+      console.warn(
+        `Connection ID indicator is contained in block ID. This may cause ` +
+          `problems with focus: ${source.id}.`,
+      );
+    }
     this.id = `${source.id}_connection_${idGenerator.getNextUniqueId()}`;
   }
 

@@ -174,8 +174,15 @@ export class FocusManager {
     this.registeredTrees.push(
       new TreeRegistration(tree, rootShouldBeAutoTabbable),
     );
+    const rootElement = tree.getRootFocusableNode().getFocusableElement();
+    if (!rootElement.id || rootElement.id === 'null') {
+      throw Error(
+        `Attempting to register a tree with a root element that has an ` +
+          `invalid ID: ${tree}.`,
+      );
+    }
     if (rootShouldBeAutoTabbable) {
-      tree.getRootFocusableNode().getFocusableElement().tabIndex = 0;
+      rootElement.tabIndex = 0;
     }
   }
 
@@ -349,8 +356,12 @@ export class FocusManager {
     // happens when calls to focusNode() interleave with asynchronous clean-up
     // operations (which can happen due to ephemeral focus and in other cases).
     // Fall back to a reasonable default since there's no valid node to focus.
+    const focusableNodeElement = focusableNode.getFocusableElement();
+    if (!focusableNodeElement.id || focusableNodeElement.id === 'null') {
+      console.warn('Trying to focus a node that has an invalid ID.');
+    }
     const matchedNode = FocusableTreeTraverser.findFocusableNodeFor(
-      focusableNode.getFocusableElement(),
+      focusableNodeElement,
       nextTree,
     );
     const prevNodeNextTree = FocusableTreeTraverser.findFocusedNode(nextTree);

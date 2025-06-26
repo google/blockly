@@ -79,8 +79,8 @@ export class FocusableTreeTraverser {
    * traversed but its nodes will never be returned here per the contract of
    * IFocusableTree.lookUpFocusableNode.
    *
-   * The provided element must have a non-null ID that conforms to the contract
-   * mentioned in IFocusableNode.
+   * The provided element must have a non-null, non-empty ID that conforms to
+   * the contract mentioned in IFocusableNode.
    *
    * @param element The HTML or SVG element being sought.
    * @param tree The tree under which the provided element may be a descendant.

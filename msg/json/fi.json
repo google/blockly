@@ -348,7 +348,5 @@
 	"COLLAPSED_WARNINGS_WARNING": "Supistetut lohkot sisältävät varoituksia.",
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Peru",
-	"START_MOVE": "Aloita siirto",
-	"ABORT_MOVE": "Peru siirto",
 	"UNKNOWN": "Tuntematon"
 }

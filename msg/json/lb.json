@@ -159,6 +159,7 @@
 	"CHROME_OS": "ChromeOS",
 	"LINUX": "Linux",
 	"UNKNOWN": "Onbekannt",
-	"COPY_SHORTCUT": "Kopéieren (%1)",
-	"SHORTCUTS_CODE_NAVIGATION": "Code-Navigatioun"
+	"COPY_SHORTCUT": "Kopéieren",
+	"SHORTCUTS_CODE_NAVIGATION": "Code-Navigatioun",
+	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "Benotzt d'Feiltaste fir ze réckelen an dann %1 fir d'Positioun ze validéieren"
 }

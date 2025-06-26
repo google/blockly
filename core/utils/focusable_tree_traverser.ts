@@ -90,6 +90,10 @@ export class FocusableTreeTraverser {
     element: HTMLElement | SVGElement,
     tree: IFocusableTree,
   ): IFocusableNode | null {
+    // Note that the null check is due to Element.setAttribute() converting null
+    // to a string.
+    if (!element.id || element.id === 'null') return null;
+
     // First, match against subtrees.
     const subTreeMatches = tree.getNestedTrees().map((tree) => {
       return FocusableTreeTraverser.findFocusableNodeFor(element, tree);

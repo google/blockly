@@ -348,6 +348,80 @@ suite('FocusableTreeTraverser', function () {
   });
 
   suite('findFocusableNodeFor()', function () {
+    test('for element without ID returns null', function () {
+      const tree = this.testFocusableTree1;
+      const rootNode = tree.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      const oldId = rootElem.id;
+      // Normally it's not valid to miss an ID, but it can realistically happen.
+      rootElem.removeAttribute('id');
+
+      const finding = FocusableTreeTraverser.findFocusableNodeFor(
+        rootElem,
+        tree,
+      );
+      // Restore the ID for other tests.
+      rootElem.setAttribute('id', oldId);
+
+      assert.isNull(finding);
+    });
+
+    test('for element with null ID returns null', function () {
+      const tree = this.testFocusableTree1;
+      const rootNode = tree.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      const oldId = rootElem.id;
+      // Normally it's not valid to miss an ID, but it can realistically happen.
+      rootElem.setAttribute('id', null);
+
+      const finding = FocusableTreeTraverser.findFocusableNodeFor(
+        rootElem,
+        tree,
+      );
+      // Restore the ID for other tests.
+      rootElem.setAttribute('id', oldId);
+
+      assert.isNull(finding);
+    });
+
+    test('for element with null ID string returns null', function () {
+      const tree = this.testFocusableTree1;
+      const rootNode = tree.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      const oldId = rootElem.id;
+      // This is a quirky version of the null variety above that's actually
+      // functionallity equivalent (since 'null' is converted to a string).
+      rootElem.setAttribute('id', 'null');
+
+      const finding = FocusableTreeTraverser.findFocusableNodeFor(
+        rootElem,
+        tree,
+      );
+      // Restore the ID for other tests.
+      rootElem.setAttribute('id', oldId);
+
+      assert.isNull(finding);
+    });
+
+    test('for element with empty ID returns null', function () {
+      const tree = this.testFocusableTree1;
+      const rootNode = tree.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      const oldId = rootElem.id;
+      // An empty ID is invalid since it will potentially conflict with other
+      // elements, and element IDs must be unique for focus management.
+      rootElem.setAttribute('id', '');
+
+      const finding = FocusableTreeTraverser.findFocusableNodeFor(
+        rootElem,
+        tree,
+      );
+      // Restore the ID for other tests.
+      rootElem.setAttribute('id', oldId);
+
+      assert.isNull(finding);
+    });
+
     test('for root element returns root', function () {
       const tree = this.testFocusableTree1;
       const rootNode = tree.getRootFocusableNode();

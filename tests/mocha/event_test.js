@@ -355,6 +355,7 @@ suite('Events', function () {
 
     suite('With variable getter blocks', function () {
       setup(function () {
+        this.TEST_BLOCK_ID = 'test_block_id';
         this.genUidStub = createGenUidStubWithReturns([
           this.TEST_BLOCK_ID,
           'test_var_id',

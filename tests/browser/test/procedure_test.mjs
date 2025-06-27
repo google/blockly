@@ -32,8 +32,7 @@ suite('Testing Connecting Blocks', function (done) {
     this.browser.on('dialog', (dialog) => {});
   });
 
-  test.only('Testing Procedure', async function () {
-
+  test('Testing Procedure', async function () {
     // Drag out first function
     let proceduresDefReturn = await getDraggableBlockElementByType(
       this.browser,

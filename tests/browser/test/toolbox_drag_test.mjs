@@ -11,6 +11,7 @@
 import * as chai from 'chai';
 import {
   getCategory,
+  getDraggableBlockElementByType,
   PAUSE_TIME,
   screenDirection,
   scrollFlyout,
@@ -82,6 +83,32 @@ async function elementInBounds(browser, element) {
 }
 
 /**
+ * Get the type of the nth block in the specified category.
+ * @param browser The active WebdriverIO Browser object.
+ * @param categoryName The name of the category to inspect.
+ * @param n The index of the block to get
+ * @returns A Promise resolving to the type the block in the specified
+ *     category's flyout at index i.
+ */
+async function getNthBlockType(browser, categoryName, n) {
+  const category = await getCategory(browser, categoryName);
+  await category.click();
+  await browser.pause(PAUSE_TIME);
+
+  const blockType = await browser.execute((i) => {
+    return Blockly.getMainWorkspace()
+      .getFlyout()
+      .getWorkspace()
+      .getTopBlocks(false)[i].type;
+  }, n);
+
+  // Unicode escape to close flyout.
+  await browser.keys(['\uE00C']);
+  await browser.pause(PAUSE_TIME);
+  return blockType;
+}
+
+/**
  * Get how many top-level blocks there are in the specified category.
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the category to inspect.
@@ -145,14 +172,16 @@ async function openCategories(browser, categoryList, directionMultiplier) {
           await browser.pause(PAUSE_TIME);
           continue;
         }
-        const flyoutBlock = await browser.$(
-          `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + i * 2})`,
+        const blockType = await getNthBlockType(browser, categoryName, i);
+        const flyoutBlock = await getDraggableBlockElementByType(
+          browser,
+          categoryName,
+          blockType,
         );
         while (!(await elementInBounds(browser, flyoutBlock))) {
           await scrollFlyout(browser, 0, 50);
         }
-
-        await flyoutBlock.dragAndDrop({x: directionMultiplier * 50, y: 0});
+        await flyoutBlock.click();
         await browser.pause(PAUSE_TIME);
         // Should be one top level block on the workspace.
         const topBlockCount = await browser.execute(() => {

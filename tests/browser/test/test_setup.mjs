@@ -62,6 +62,7 @@ export async function driverSetup() {
   // Use Selenium to bring up the page
   console.log('Starting webdriverio...');
   driver = await webdriverio.remote(options);
+  driver.setWindowSize(800, 600);
   return driver;
 }
 

@@ -86,6 +86,7 @@ export class FocusManager {
   static readonly PASSIVE_FOCUS_WITHIN_SUBTREE_CSS_CLASS_NAME =
     'blocklySubtreeHasPassiveFocus';
 
+  // Represents the single node that will receive active focus when ephemeral focus ends.
   static readonly WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME =
     'blocklyWaitingForEphemeralFocus';
 
@@ -380,6 +381,12 @@ export class FocusManager {
     const prevTree = prevNode?.getFocusableTree();
     if (prevNode) {
       this.passivelyFocusNode(prevNode, nextTree);
+      if (this.currentlyHoldsEphemeralFocus) {
+        dom.removeClass(
+          prevNode.getFocusableElement(),
+          FocusManager.WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME,
+        );
+      }
     }
 
     // If there's a focused node in the new node's tree, ensure it's reset.
@@ -397,6 +404,11 @@ export class FocusManager {
     if (!this.currentlyHoldsEphemeralFocus) {
       // Only change the actively focused node if ephemeral state isn't held.
       this.activelyFocusNode(nodeToFocus, prevTree ?? null);
+    } else {
+      dom.addClass(
+        nodeToFocus.getFocusableElement(),
+        FocusManager.WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME,
+      );
     }
     this.updateFocusedNode(nodeToFocus);
     if (mustRestoreUpdatingNode) {
@@ -435,13 +447,10 @@ export class FocusManager {
     }
     this.currentlyHoldsEphemeralFocus = true;
 
-    const currentFocusedElement = this.focusedNode?.getFocusableElement();
     if (this.focusedNode) {
       this.passivelyFocusNode(this.focusedNode, null);
-    }
-    if (currentFocusedElement) {
       dom.addClass(
-        currentFocusedElement,
+        this.focusedNode.getFocusableElement(),
         FocusManager.WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME,
       );
     }
@@ -458,15 +467,12 @@ export class FocusManager {
       hasFinishedEphemeralFocus = true;
       this.currentlyHoldsEphemeralFocus = false;
 
-      if (currentFocusedElement) {
-        dom.removeClass(
-          currentFocusedElement,
-          FocusManager.WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME,
-        );
-      }
-
       if (this.focusedNode) {
         this.activelyFocusNode(this.focusedNode, null);
+        dom.removeClass(
+          this.focusedNode.getFocusableElement(),
+          FocusManager.WAITING_FOR_EPHEMERAL_FOCUS_CSS_CLASS_NAME,
+        );
 
         // Even though focus was restored, check if it's lost again. It's
         // possible for the browser to force focus away from all elements once
@@ -684,11 +690,11 @@ export class FocusManager {
 
   private recomputeSubtreeCssClasses(): void {
     // Collect all focused elements.
-    const passiveElems = document.querySelectorAll(
-      FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME);
-    const activeElem = this.focusedNode?.getFocusableElement() ?? null;
-    const focusedElems = [...activeElem ? [activeElem] : [], ...passiveElems];
-
+    // const passiveElems = document.querySelectorAll(
+    //   FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+    // );
+    // const activeElem = this.focusedNode?.getFocusableElement() ?? null;
+    // const focusedElems = [...(activeElem ? [activeElem] : []), ...passiveElems];
     // For each element, collect all... TODO: finish.
   }
 

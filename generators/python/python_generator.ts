@@ -76,6 +76,8 @@ export class PythonGenerator extends CodeGenerator {
     [Order.LOGICAL_OR, Order.LOGICAL_OR],
   ];
 
+  INDENT = '    '; // 4 spaces as per PEP-8.
+
   /**
    * Empty loops or conditionals are not allowed in Python.
    */

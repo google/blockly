@@ -117,7 +117,7 @@ export class CommentView implements IRenderedElement {
       foldoutIcon: this.foldoutIcon,
       textPreview: this.textPreview,
       textPreviewNode: this.textPreviewNode,
-    } = this.createTopBar(this.svgRoot, workspace));
+    } = this.createTopBar(this.svgRoot));
 
     this.commentEditor = this.createTextArea();
 
@@ -150,10 +150,7 @@ export class CommentView implements IRenderedElement {
    * Creates the top bar and the elements visually within it.
    * Registers event listeners.
    */
-  private createTopBar(
-    svgRoot: SVGGElement,
-    workspace: WorkspaceSvg,
-  ): {
+  private createTopBar(svgRoot: SVGGElement): {
     topBarGroup: SVGGElement;
     topBarBackground: SVGRectElement;
     deleteIcon: DeleteCommentIcon;

@@ -8,7 +8,9 @@ import {BlockSvg} from '../block_svg.js';
 import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
 import type {Icon} from '../icons/icon.js';
+import type {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
+import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 import {RenderedConnection} from '../rendered_connection.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
@@ -61,7 +63,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     } else if (current.getSurroundParent()) {
       return navigateBlock(current.getTopStackBlock(), 1);
     } else if (this.getParent(current) instanceof WorkspaceSvg) {
-      return navigateStacks(current, 1);
+      return navigateStacks(current, current.workspace, 1);
     }
 
     return null;
@@ -80,7 +82,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     } else if (current.outputConnection?.targetBlock()) {
       return navigateBlock(current, -1);
     } else if (this.getParent(current) instanceof WorkspaceSvg) {
-      return navigateStacks(current, -1);
+      return navigateStacks(current, current.workspace, -1);
     }
 
     return null;
@@ -143,21 +145,29 @@ function getBlockNavigationCandidates(
 }
 
 /**
- * Returns the next/previous stack relative to the given block's stack.
+ * Returns the next/previous stack relative to the given element's stack.
  *
- * @param current The block whose stack will be navigated relative to.
+ * @param current The element whose stack will be navigated relative to.
  * @param delta The difference in index to navigate; positive values navigate
  *     to the nth next stack, while negative values navigate to the nth previous
  *     stack.
- * @returns The first block in the stack offset by `delta` relative to the
- *     current block's stack, or the last block in the stack offset by `delta`
- *     relative to the current block's stack when navigating backwards.
+ * @returns The first element in the stack offset by `delta` relative to the
+ *     current element's stack, or the last element in the stack offset by
+ * `delta` relative to the current element's stack when navigating backwards.
  */
-export function navigateStacks(current: BlockSvg, delta: number) {
-  const stacks = current.workspace.getTopBlocks(true);
-  const currentIndex = stacks.indexOf(current.getRootBlock());
+export function navigateStacks(
+  current: IFocusableNode,
+  workspace: WorkspaceSvg,
+  delta: number,
+) {
+  const stacks: IFocusableNode[] = workspace
+    .getTopBoundedElements(true)
+    .filter((element: IBoundedElement) => isFocusableNode(element));
+  const currentIndex = stacks.indexOf(
+    current instanceof BlockSvg ? current.getRootBlock() : current,
+  );
   const targetIndex = currentIndex + delta;
-  let result: BlockSvg | null = null;
+  let result: IFocusableNode | null = null;
   if (targetIndex >= 0 && targetIndex < stacks.length) {
     result = stacks[targetIndex];
   } else if (targetIndex < 0) {
@@ -166,9 +176,9 @@ export function navigateStacks(current: BlockSvg, delta: number) {
     result = stacks[0];
   }
 
-  // When navigating to a previous stack, our previous sibling is the last
+  // When navigating to a previous block stack, our previous sibling is the last
   // block in it.
-  if (delta < 0 && result) {
+  if (delta < 0 && result instanceof BlockSvg) {
     return result.lastConnectionInStack(false)?.getSourceBlock() ?? result;
   }
 

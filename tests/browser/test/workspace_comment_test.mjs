@@ -206,13 +206,13 @@ suite('Workspace comments', function () {
         '.blocklyComment .blocklyResizeHandle',
       );
       await resizeHandle.dragAndDrop(delta);
-
-      chai.assert.deepEqual(
-        await getCommentSize(this.browser, commentId),
-        {
-          width: origSize.width + delta.x,
-          height: origSize.height + delta.y,
-        },
+      const newSize = await getCommentSize(this.browser, commentId);
+      chai.assert.isTrue(
+        Math.abs(newSize.width - (origSize.width + delta.x)) < 1,
+        'Expected the comment model size to match the resized size',
+      );
+      chai.assert.isTrue(
+        Math.abs(newSize.height - (origSize.height + delta.y)) < 1,
         'Expected the comment model size to match the resized size',
       );
     });

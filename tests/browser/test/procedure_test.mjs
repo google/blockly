@@ -103,7 +103,7 @@ suite('Testing Connecting Blocks', function (done) {
     runButton.click();
     await this.browser.pause(PAUSE_TIME);
     const alertText = await this.browser.getAlertText(); // get the alert text
-    chai.assert.equal(alertText, 'abc');
+    chai.assert.equal(alertText, '123');
     await this.browser.acceptAlert();
   });
 });

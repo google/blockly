@@ -63,6 +63,7 @@ export async function driverSetup() {
   console.log('Starting webdriverio...');
   driver = await webdriverio.remote(options);
   driver.setWindowSize(800, 600);
+  driver.setViewport({width: 800, height: 600});
   return driver;
 }
 

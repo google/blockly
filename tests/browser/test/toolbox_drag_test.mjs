@@ -10,11 +10,10 @@
 
 import * as chai from 'chai';
 import {
+  dragBlockTypeFromFlyout,
   getCategory,
-  getDraggableBlockElementByType,
   PAUSE_TIME,
   screenDirection,
-  scrollFlyout,
   testFileLocations,
   testSetup,
 } from './test_setup.mjs';
@@ -56,31 +55,6 @@ const testCategories = [
   'Style',
   'Serialization',
 ];
-
-/**
- * Check whether an element is fully inside the bounds of the Blockly div. You can use this
- * to determine whether a block on the workspace or flyout is inside the Blockly div.
- * This does not check whether there are other Blockly elements (such as a toolbox or
- * flyout) on top of the element. A partially visible block is considered out of bounds.
- * @param browser The active WebdriverIO Browser object.
- * @param element The element to look for.
- * @returns A Promise resolving to true if the element is in bounds and false otherwise.
- */
-async function elementInBounds(browser, element) {
-  return await browser.execute((elem) => {
-    const rect = elem.getBoundingClientRect();
-
-    const blocklyDiv = document.getElementById('blocklyDiv');
-    const blocklyRect = blocklyDiv.getBoundingClientRect();
-
-    const vertInView =
-      rect.top >= blocklyRect.top && rect.bottom <= blocklyRect.bottom;
-    const horInView =
-      rect.left >= blocklyRect.left && rect.right <= blocklyRect.right;
-
-    return vertInView && horInView;
-  }, element);
-}
 
 /**
  * Get the type of the nth block in the specified category.
@@ -173,15 +147,7 @@ async function openCategories(browser, categoryList, directionMultiplier) {
           continue;
         }
         const blockType = await getNthBlockType(browser, categoryName, i);
-        const flyoutBlock = await getDraggableBlockElementByType(
-          browser,
-          categoryName,
-          blockType,
-        );
-        while (!(await elementInBounds(browser, flyoutBlock))) {
-          await scrollFlyout(browser, 0, 50);
-        }
-        await flyoutBlock.click();
+        dragBlockTypeFromFlyout(browser, categoryName, blockType, 50, 20);
         await browser.pause(PAUSE_TIME);
         // Should be one top level block on the workspace.
         const topBlockCount = await browser.execute(() => {

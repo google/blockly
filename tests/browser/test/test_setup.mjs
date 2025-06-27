@@ -216,7 +216,7 @@ export async function clickBlock(browser, blockId, clickOptions) {
  * @return A Promise that resolves when the actions are completed.
  */
 export async function clickWorkspace(browser) {
-  const workspace = await browser.$('#blocklyDiv > div > svg.blocklySvg > g');
+  const workspace = await browser.$('svg.blocklySvg > g');
   await workspace.click();
   await browser.pause(PAUSE_TIME);
 }
@@ -499,6 +499,9 @@ export async function switchRTL(browser) {
  */
 export async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
   const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
+  while (!(await elementInBounds(browser, flyoutBlock))) {
+    await scrollFlyout(browser, 0, 50);
+  }
   await flyoutBlock.dragAndDrop({x: x, y: y});
   return await getSelectedBlockElement(browser);
 }
@@ -525,13 +528,42 @@ export async function dragBlockTypeFromFlyout(
   x,
   y,
 ) {
-  const flyoutBlock = await getBlockTypeFromCategory(
+  const flyoutBlock = await getDraggableBlockElementByType(
     browser,
     categoryName,
     type,
   );
+  while (!(await elementInBounds(browser, flyoutBlock))) {
+    await scrollFlyout(browser, 0, 50);
+  }
   await flyoutBlock.dragAndDrop({x: x, y: y});
+  await browser.pause(PAUSE_TIME);
   return await getSelectedBlockElement(browser);
+}
+
+/**
+ * Check whether an element is fully inside the bounds of the Blockly div. You can use this
+ * to determine whether a block on the workspace or flyout is inside the Blockly div.
+ * This does not check whether there are other Blockly elements (such as a toolbox or
+ * flyout) on top of the element. A partially visible block is considered out of bounds.
+ * @param browser The active WebdriverIO Browser object.
+ * @param element The element to look for.
+ * @returns A Promise resolving to true if the element is in bounds and false otherwise.
+ */
+async function elementInBounds(browser, element) {
+  return await browser.execute((elem) => {
+    const rect = elem.getBoundingClientRect();
+
+    const blocklyDiv = document.getElementsByClassName('blocklySvg')[0];
+    const blocklyRect = blocklyDiv.getBoundingClientRect();
+
+    const vertInView =
+      rect.top >= blocklyRect.top && rect.bottom <= blocklyRect.bottom;
+    const horInView =
+      rect.left >= blocklyRect.left && rect.right <= blocklyRect.right;
+
+    return vertInView && horInView;
+  }, element);
 }
 
 /**

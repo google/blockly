@@ -2266,8 +2266,8 @@ export class WorkspaceSvg
    *
    * @param comment comment to add.
    */
-  override addTopComment(comment: WorkspaceComment) {
-    this.addTopBoundedElement(comment as RenderedWorkspaceComment);
+  override addTopComment(comment: RenderedWorkspaceComment) {
+    this.addTopBoundedElement(comment);
     super.addTopComment(comment);
   }
 
@@ -2276,9 +2276,29 @@ export class WorkspaceSvg
    *
    * @param comment comment to remove.
    */
-  override removeTopComment(comment: WorkspaceComment) {
-    this.removeTopBoundedElement(comment as RenderedWorkspaceComment);
+  override removeTopComment(comment: RenderedWorkspaceComment) {
+    this.removeTopBoundedElement(comment);
     super.removeTopComment(comment);
+  }
+
+  /**
+   * Returns a list of comments on this workspace.
+   *
+   * @param ordered If true, sorts the comments based on their position.
+   * @returns A list of workspace comments.
+   */
+  override getTopComments(ordered = false): RenderedWorkspaceComment[] {
+    return super.getTopComments(ordered) as RenderedWorkspaceComment[];
+  }
+
+  /**
+   * Returns the workspace comment with the given ID, if any.
+   *
+   * @param id The ID of the comment to retrieve.
+   * @returns The workspace comment with the given ID, or null.
+   */
+  override getCommentById(id: string): RenderedWorkspaceComment | null {
+    return super.getCommentById(id) as RenderedWorkspaceComment | null;
   }
 
   override getRootWorkspace(): WorkspaceSvg | null {
@@ -2308,8 +2328,15 @@ export class WorkspaceSvg
    *
    * @returns The top-level bounded elements.
    */
-  getTopBoundedElements(): IBoundedElement[] {
-    return new Array<IBoundedElement>().concat(this.topBoundedElements);
+  getTopBoundedElements(ordered = false): IBoundedElement[] {
+    const elements = new Array<IBoundedElement>().concat(
+      this.topBoundedElements,
+    );
+    if (ordered) {
+      elements.sort(this.sortByOrigin.bind(this));
+    }
+
+    return elements;
   }
 
   /**

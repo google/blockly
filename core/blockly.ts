@@ -173,6 +173,10 @@ import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
 import {LineCursor} from './keyboard_nav/line_cursor.js';
 import {Marker} from './keyboard_nav/marker.js';
+import {
+  KeyboardNavigationController,
+  keyboardNavigationController,
+} from './keyboard_navigation_controller.js';
 import type {LayerManager} from './layer_manager.js';
 import * as layers from './layers.js';
 import {MarkerManager} from './marker_manager.js';
@@ -580,6 +584,7 @@ export {
   ImageProperties,
   Input,
   InsertionMarkerPreviewer,
+  KeyboardNavigationController,
   LabelFlyoutInflater,
   LayerManager,
   Marker,
@@ -631,6 +636,7 @@ export {
   isSelectable,
   isSerializable,
   isVariableBackedParameterModel,
+  keyboardNavigationController,
   layers,
   renderManagement,
   serialization,

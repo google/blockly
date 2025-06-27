@@ -8,6 +8,7 @@ import type {BlockSvg} from '../block_svg.js';
 import {Field} from '../field.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
+import {navigateBlock} from './block_navigation_policy.js';
 
 /**
  * Set of rules controlling keyboard navigation from a field.
@@ -40,22 +41,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
    * @returns The next field or input in the given field's block.
    */
   getNextSibling(current: Field<any>): IFocusableNode | null {
-    const input = current.getParentInput();
-    const block = current.getSourceBlock();
-    if (!block) return null;
-
-    const curIdx = block.inputList.indexOf(input);
-    let fieldIdx = input.fieldRow.indexOf(current) + 1;
-    for (let i = curIdx; i < block.inputList.length; i++) {
-      const newInput = block.inputList[i];
-      const fieldRow = newInput.fieldRow;
-      if (fieldIdx < fieldRow.length) return fieldRow[fieldIdx];
-      fieldIdx = 0;
-      if (newInput.connection?.targetBlock()) {
-        return newInput.connection.targetBlock() as BlockSvg;
-      }
-    }
-    return null;
+    return navigateBlock(current, 1);
   }
 
   /**
@@ -65,27 +51,7 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
    * @returns The preceding field or input in the given field's block.
    */
   getPreviousSibling(current: Field<any>): IFocusableNode | null {
-    const parentInput = current.getParentInput();
-    const block = current.getSourceBlock();
-    if (!block) return null;
-
-    const curIdx = block.inputList.indexOf(parentInput);
-    let fieldIdx = parentInput.fieldRow.indexOf(current) - 1;
-    for (let i = curIdx; i >= 0; i--) {
-      const input = block.inputList[i];
-      if (input.connection?.targetBlock() && input !== parentInput) {
-        return input.connection.targetBlock() as BlockSvg;
-      }
-      const fieldRow = input.fieldRow;
-      if (fieldIdx > -1) return fieldRow[fieldIdx];
-
-      // Reset the fieldIdx to the length of the field row of the previous
-      // input.
-      if (i - 1 >= 0) {
-        fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
-      }
-    }
-    return null;
+    return navigateBlock(current, -1);
   }
 
   /**
@@ -97,8 +63,8 @@ export class FieldNavigationPolicy implements INavigationPolicy<Field<any>> {
   isNavigable(current: Field<any>): boolean {
     return (
       current.canBeFocused() &&
-      current.isClickable() &&
-      current.isCurrentlyEditable() &&
+      current.isVisible() &&
+      (current.isClickable() || current.isCurrentlyEditable()) &&
       !(
         current.getSourceBlock()?.isSimpleReporter() &&
         current.isFullBlockField()

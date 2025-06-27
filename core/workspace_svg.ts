@@ -22,6 +22,7 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
+import {COMMENT_EDITOR_FOCUS_IDENTIFIER} from './comments/comment_editor.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
 import * as common from './common.js';
@@ -41,6 +42,7 @@ import type {FlyoutButton} from './flyout_button.js';
 import {getFocusManager} from './focus_manager.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
+import {MutatorIcon} from './icons/mutator_icon.js';
 import {isAutoHideable} from './interfaces/i_autohideable.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {IContextMenu} from './interfaces/i_contextmenu.js';
@@ -762,8 +764,6 @@ export class WorkspaceSvg
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {
       'class': 'blocklyWorkspace',
-      // Only the top-level workspace should be tabbable.
-      'tabindex': injectionDiv ? '0' : '-1',
       'id': this.id,
     });
     if (injectionDiv) {
@@ -849,7 +849,8 @@ export class WorkspaceSvg
       isParentWorkspace ? this.getInjectionDiv() : undefined,
     );
 
-    getFocusManager().registerTree(this);
+    // Only the top-level and flyout workspaces should be tabbable.
+    getFocusManager().registerTree(this, !!this.injectionDiv || this.isFlyout);
 
     return this.svgGroup_;
   }
@@ -2681,7 +2682,7 @@ export class WorkspaceSvg
 
   /** See IFocusableNode.getFocusableTree. */
   getFocusableTree(): IFocusableTree {
-    return this;
+    return (this.isMutator && this.options.parentWorkspace) || this;
   }
 
   /** See IFocusableNode.onNodeFocus. */
@@ -2711,7 +2712,42 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.getNestedTrees. */
   getNestedTrees(): Array<IFocusableTree> {
-    return [];
+    const nestedWorkspaces = this.getAllBlocks()
+      .map((block) => block.getIcons())
+      .flat()
+      .filter(
+        (icon): icon is MutatorIcon =>
+          icon instanceof MutatorIcon && icon.bubbleIsVisible(),
+      )
+      .map((icon) => icon.getBubble()?.getWorkspace())
+      .filter((workspace) => !!workspace);
+
+    const ownFlyout = this.getFlyout(true);
+    if (ownFlyout) {
+      nestedWorkspaces.push(ownFlyout.getWorkspace());
+    }
+
+    return nestedWorkspaces;
+  }
+
+  /**
+   * Used for searching for a specific workspace comment.
+   * We can't use this.getWorkspaceCommentById because the workspace
+   * comment ids might not be globally unique, but the id assigned to
+   * the focusable element for the comment should be.
+   */
+  private searchForWorkspaceComment(
+    id: string,
+  ): RenderedWorkspaceComment | undefined {
+    for (const comment of this.getTopComments()) {
+      if (
+        comment instanceof RenderedWorkspaceComment &&
+        comment.canBeFocused() &&
+        comment.getFocusableElement().id === id
+      ) {
+        return comment;
+      }
+    }
   }
 
   /** See IFocusableTree.lookUpFocusableNode. */
@@ -2758,21 +2794,29 @@ export class WorkspaceSvg
       return null;
     }
 
+    // Search for a specific workspace comment editor
+    // (only if id seems like it is one).
+    const commentEditorIndicator = id.indexOf(COMMENT_EDITOR_FOCUS_IDENTIFIER);
+    if (commentEditorIndicator !== -1) {
+      const commentId = id.substring(0, commentEditorIndicator);
+      const comment = this.searchForWorkspaceComment(commentId);
+      if (comment) {
+        return comment.getEditorFocusableNode();
+      }
+    }
+
     // Search for a specific block.
+    // Don't use `getBlockById` because the block ID is not guaranteeed
+    // to be globally unique, but the ID on the focusable element is.
     const block = this.getAllBlocks(false).find(
       (block) => block.getFocusableElement().id === id,
     );
     if (block) return block;
 
     // Search for a workspace comment (semi-expensive).
-    for (const comment of this.getTopComments()) {
-      if (
-        comment instanceof RenderedWorkspaceComment &&
-        comment.canBeFocused() &&
-        comment.getFocusableElement().id === id
-      ) {
-        return comment;
-      }
+    const comment = this.searchForWorkspaceComment(id);
+    if (comment) {
+      return comment;
     }
 
     // Search for icons and bubbles (which requires an expensive getAllBlocks).
@@ -2807,13 +2851,13 @@ export class WorkspaceSvg
   /** See IFocusableTree.onTreeBlur. */
   onTreeBlur(nextTree: IFocusableTree | null): void {
     // If the flyout loses focus, make sure to close it unless focus is being
-    // lost to a different element on the page.
-    if (nextTree && this.isFlyout && this.targetWorkspace) {
+    // lost to the toolbox or ephemeral focus.
+    if (this.isFlyout && this.targetWorkspace) {
       // Only hide the flyout if the flyout's workspace is losing focus and that
-      // focus isn't returning to the flyout itself or the toolbox.
+      // focus isn't returning to the flyout itself, the toolbox, or ephemeral.
+      if (getFocusManager().ephemeralFocusTaken()) return;
       const flyout = this.targetWorkspace.getFlyout();
       const toolbox = this.targetWorkspace.getToolbox();
-      if (flyout && nextTree === flyout) return;
       if (toolbox && nextTree === toolbox) return;
       if (toolbox) toolbox.clearSelection();
       if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);

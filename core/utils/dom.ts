@@ -289,13 +289,13 @@ export function getFastTextWidthWithSizeString(
     // Initialize the HTML canvas context and set the font.
     // The context font must match blocklyText's fontsize and font-family
     // set in CSS.
-    canvasContext = computeCanvas.getContext('2d') as CanvasRenderingContext2D;
+    canvasContext = computeCanvas.getContext('2d');
   }
-  // Set the desired font size and family.
-  canvasContext.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
 
   // Measure the text width using the helper canvas context.
-  if (text) {
+  if (text && canvasContext) {
+    // Set the desired font size and family.
+    canvasContext.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
     width = canvasContext.measureText(text).width;
   } else {
     width = 0;

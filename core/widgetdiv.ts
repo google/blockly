@@ -6,6 +6,7 @@
 
 // Former goog.module ID: Blockly.WidgetDiv
 
+import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {Field} from './field.js';
 import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
@@ -66,14 +67,23 @@ export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
 export function createDom() {
   const container = common.getParentContainer() || document.body;
 
-  if (document.querySelector('.' + containerClassName)) {
-    containerDiv = document.querySelector('.' + containerClassName);
+  const existingContainer = document.querySelector('div.' + containerClassName);
+  if (existingContainer) {
+    containerDiv = existingContainer as HTMLDivElement;
   } else {
-    containerDiv = document.createElement('div') as HTMLDivElement;
+    containerDiv = document.createElement('div');
     containerDiv.className = containerClassName;
+    containerDiv.tabIndex = -1;
   }
 
-  container.appendChild(containerDiv!);
+  browserEvents.conditionalBind(
+    containerDiv,
+    'keydown',
+    null,
+    common.globalShortcutHandler,
+  );
+
+  container.appendChild(containerDiv);
 }
 
 /**
@@ -84,12 +94,18 @@ export function createDom() {
  * @param newDispose Optional cleanup function to be run when the widget is
  *     closed.
  * @param workspace The workspace associated with the widget owner.
+ * @param manageEphemeralFocus Whether ephemeral focus should be managed
+ *     according to the widget div's lifetime. Note that if a false value is
+ *     passed in here then callers should manage ephemeral focus directly
+ *     otherwise focus may not properly restore when the widget closes. Defaults
+ *     to true.
  */
 export function show(
   newOwner: unknown,
   rtl: boolean,
   newDispose: () => void,
   workspace?: WorkspaceSvg | null,
+  manageEphemeralFocus: boolean = true,
 ) {
   hide();
   owner = newOwner;
@@ -114,7 +130,9 @@ export function show(
   if (themeClassName) {
     dom.addClass(div, themeClassName);
   }
-  returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
+  if (manageEphemeralFocus) {
+    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
+  }
 }
 
 /**

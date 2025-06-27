@@ -31,7 +31,7 @@ suite('Basic block tests', function (done) {
 
   test('Drag three blocks into the workspace', async function () {
     for (let i = 1; i <= 3; i++) {
-      await dragNthBlockFromFlyout(this.browser, 'Align', 0, 250, 50 * i);
+      await dragNthBlockFromFlyout(this.browser, 'Align', 0, 50, 50);
       chai.assert.equal((await getAllBlocks(this.browser)).length, i);
     }
   });

@@ -5,9 +5,12 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
+import {ConnectionType} from '../connection_type.js';
 import type {Field} from '../field.js';
+import type {Icon} from '../icons/icon.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
+import {RenderedConnection} from '../rendered_connection.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
@@ -21,15 +24,8 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * @returns The first field or input of the given block, if any.
    */
   getFirstChild(current: BlockSvg): IFocusableNode | null {
-    for (const input of current.inputList) {
-      for (const field of input.fieldRow) {
-        return field;
-      }
-      if (input.connection?.targetBlock())
-        return input.connection.targetBlock() as BlockSvg;
-    }
-
-    return null;
+    const candidates = getBlockNavigationCandidates(current, true);
+    return candidates[0];
   }
 
   /**
@@ -54,41 +50,18 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
    * Returns the next peer node of the given block.
    *
    * @param current The block to find the following element of.
-   * @returns The first block of the next stack if the given block is a terminal
+   * @returns The first node of the next input/stack if the given block is a terminal
    *     block, or its next connection.
    */
   getNextSibling(current: BlockSvg): IFocusableNode | null {
     if (current.nextConnection?.targetBlock()) {
       return current.nextConnection?.targetBlock();
-    }
-
-    const parent = this.getParent(current);
-    let navigatingCrossStacks = false;
-    let siblings: (BlockSvg | Field)[] = [];
-    if (parent instanceof BlockSvg) {
-      for (let i = 0, input; (input = parent.inputList[i]); i++) {
-        if (input.connection) {
-          siblings.push(...input.fieldRow);
-          const child = input.connection.targetBlock();
-          if (child) {
-            siblings.push(child as BlockSvg);
-          }
-        }
-      }
-    } else if (parent instanceof WorkspaceSvg) {
-      siblings = parent.getTopBlocks(true);
-      navigatingCrossStacks = true;
-    } else {
-      return null;
-    }
-
-    const currentIndex = siblings.indexOf(
-      navigatingCrossStacks ? current.getRootBlock() : current,
-    );
-    if (currentIndex >= 0 && currentIndex < siblings.length - 1) {
-      return siblings[currentIndex + 1];
-    } else if (currentIndex === siblings.length - 1 && navigatingCrossStacks) {
-      return siblings[0];
+    } else if (current.outputConnection?.targetBlock()) {
+      return navigateBlock(current, 1);
+    } else if (current.getSurroundParent()) {
+      return navigateBlock(current.getTopStackBlock(), 1);
+    } else if (this.getParent(current) instanceof WorkspaceSvg) {
+      return navigateStacks(current, 1);
     }
 
     return null;
@@ -104,43 +77,13 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
   getPreviousSibling(current: BlockSvg): IFocusableNode | null {
     if (current.previousConnection?.targetBlock()) {
       return current.previousConnection?.targetBlock();
+    } else if (current.outputConnection?.targetBlock()) {
+      return navigateBlock(current, -1);
+    } else if (this.getParent(current) instanceof WorkspaceSvg) {
+      return navigateStacks(current, -1);
     }
 
-    const parent = this.getParent(current);
-    let navigatingCrossStacks = false;
-    let siblings: (BlockSvg | Field)[] = [];
-    if (parent instanceof BlockSvg) {
-      for (let i = 0, input; (input = parent.inputList[i]); i++) {
-        if (input.connection) {
-          siblings.push(...input.fieldRow);
-          const child = input.connection.targetBlock();
-          if (child) {
-            siblings.push(child as BlockSvg);
-          }
-        }
-      }
-    } else if (parent instanceof WorkspaceSvg) {
-      siblings = parent.getTopBlocks(true);
-      navigatingCrossStacks = true;
-    } else {
-      return null;
-    }
-
-    const currentIndex = siblings.indexOf(current);
-    let result: IFocusableNode | null = null;
-    if (currentIndex >= 1) {
-      result = siblings[currentIndex - 1];
-    } else if (currentIndex === 0 && navigatingCrossStacks) {
-      result = siblings[siblings.length - 1];
-    }
-
-    // If navigating to a previous stack, our previous sibling is the last
-    // block in it.
-    if (navigatingCrossStacks && result instanceof BlockSvg) {
-      return result.lastConnectionInStack(false)?.getSourceBlock() ?? result;
-    }
-
-    return result;
+    return null;
   }
 
   /**
@@ -162,4 +105,102 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
   isApplicable(current: any): current is BlockSvg {
     return current instanceof BlockSvg;
   }
+}
+
+/**
+ * Returns a list of the navigable children of the given block.
+ *
+ * @param block The block to retrieve the navigable children of.
+ * @returns A list of navigable/focusable children of the given block.
+ */
+function getBlockNavigationCandidates(
+  block: BlockSvg,
+  forward: boolean,
+): IFocusableNode[] {
+  const candidates: IFocusableNode[] = block.getIcons();
+
+  for (const input of block.inputList) {
+    if (!input.isVisible()) continue;
+    candidates.push(...input.fieldRow);
+    if (input.connection?.targetBlock()) {
+      const connectedBlock = input.connection.targetBlock() as BlockSvg;
+      if (input.connection.type === ConnectionType.NEXT_STATEMENT && !forward) {
+        const lastStackBlock = connectedBlock
+          .lastConnectionInStack(false)
+          ?.getSourceBlock();
+        if (lastStackBlock) {
+          candidates.push(lastStackBlock);
+        }
+      } else {
+        candidates.push(connectedBlock);
+      }
+    } else if (input.connection?.type === ConnectionType.INPUT_VALUE) {
+      candidates.push(input.connection as RenderedConnection);
+    }
+  }
+
+  return candidates;
+}
+
+/**
+ * Returns the next/previous stack relative to the given block's stack.
+ *
+ * @param current The block whose stack will be navigated relative to.
+ * @param delta The difference in index to navigate; positive values navigate
+ *     to the nth next stack, while negative values navigate to the nth previous
+ *     stack.
+ * @returns The first block in the stack offset by `delta` relative to the
+ *     current block's stack, or the last block in the stack offset by `delta`
+ *     relative to the current block's stack when navigating backwards.
+ */
+export function navigateStacks(current: BlockSvg, delta: number) {
+  const stacks = current.workspace.getTopBlocks(true);
+  const currentIndex = stacks.indexOf(current.getRootBlock());
+  const targetIndex = currentIndex + delta;
+  let result: BlockSvg | null = null;
+  if (targetIndex >= 0 && targetIndex < stacks.length) {
+    result = stacks[targetIndex];
+  } else if (targetIndex < 0) {
+    result = stacks[stacks.length - 1];
+  } else if (targetIndex >= stacks.length) {
+    result = stacks[0];
+  }
+
+  // When navigating to a previous stack, our previous sibling is the last
+  // block in it.
+  if (delta < 0 && result) {
+    return result.lastConnectionInStack(false)?.getSourceBlock() ?? result;
+  }
+
+  return result;
+}
+
+/**
+ * Returns the next navigable item relative to the provided block child.
+ *
+ * @param current The navigable block child item to navigate relative to.
+ * @param delta The difference in index to navigate; positive values navigate
+ *     forward by n, while negative values navigate backwards by n.
+ * @returns The navigable block child offset by `delta` relative to `current`.
+ */
+export function navigateBlock(
+  current: Icon | Field | RenderedConnection | BlockSvg,
+  delta: number,
+): IFocusableNode | null {
+  const block =
+    current instanceof BlockSvg
+      ? (current.outputConnection?.targetBlock() ?? current.getSurroundParent())
+      : current.getSourceBlock();
+  if (!(block instanceof BlockSvg)) return null;
+
+  const candidates = getBlockNavigationCandidates(block, delta > 0);
+  const currentIndex = candidates.indexOf(current);
+  if (currentIndex === -1) return null;
+
+  const targetIndex = currentIndex + delta;
+  if (targetIndex >= 0 && targetIndex < candidates.length) {
+    return candidates[targetIndex];
+  }
+
+  return null;
 }

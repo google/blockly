@@ -352,8 +352,16 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    *     undefined if triggered programmatically.
    * @param quietInput True if editor should be created without focus.
    *     Defaults to false.
+   * @param manageEphemeralFocus Whether ephemeral focus should be managed as
+   *     part of the editor's inline editor (when the inline editor is shown).
+   *     Callers must manage ephemeral focus themselves if this is false.
+   *     Defaults to true.
    */
-  protected override showEditor_(_e?: Event, quietInput = false) {
+  protected override showEditor_(
+    _e?: Event,
+    quietInput = false,
+    manageEphemeralFocus: boolean = true,
+  ) {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     if (
       !quietInput &&
@@ -362,7 +370,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     ) {
       this.showPromptEditor();
     } else {
-      this.showInlineEditor(quietInput);
+      this.showInlineEditor(quietInput, manageEphemeralFocus);
     }
   }
 
@@ -389,8 +397,10 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Create and show a text input editor that sits directly over the text input.
    *
    * @param quietInput True if editor should be created without focus.
+   * @param manageEphemeralFocus Whether ephemeral focus should be managed as
+   *     part of the field's inline editor (widget div).
    */
-  private showInlineEditor(quietInput: boolean) {
+  private showInlineEditor(quietInput: boolean, manageEphemeralFocus: boolean) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
@@ -400,6 +410,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       block.RTL,
       this.widgetDispose_.bind(this),
       this.workspace_,
+      manageEphemeralFocus,
     );
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;

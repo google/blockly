@@ -60,6 +60,33 @@ suite('Cursor', function () {
           'tooltip': '',
           'helpUrl': '',
         },
+        {
+          'type': 'multi_statement_input',
+          'message0': '%1 %2',
+          'args0': [
+            {
+              'type': 'input_statement',
+              'name': 'FIRST',
+            },
+            {
+              'type': 'input_statement',
+              'name': 'SECOND',
+            },
+          ],
+        },
+        {
+          'type': 'simple_statement',
+          'message0': '%1',
+          'args0': [
+            {
+              'type': 'field_input',
+              'name': 'NAME',
+              'text': 'default',
+            },
+          ],
+          'previousStatement': null,
+          'nextStatement': null,
+        },
       ]);
       this.workspace = Blockly.inject('blocklyDiv', {});
       this.cursor = this.workspace.getCursor();
@@ -145,6 +172,112 @@ suite('Cursor', function () {
       assert.equal(curNode, this.blocks.D.nextConnection);
     });
   });
+
+  suite('Multiple statement inputs', function () {
+    setup(function () {
+      sharedTestSetup.call(this);
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': 'multi_statement_input',
+          'message0': '%1 %2',
+          'args0': [
+            {
+              'type': 'input_statement',
+              'name': 'FIRST',
+            },
+            {
+              'type': 'input_statement',
+              'name': 'SECOND',
+            },
+          ],
+        },
+        {
+          'type': 'simple_statement',
+          'message0': '%1',
+          'args0': [
+            {
+              'type': 'field_input',
+              'name': 'NAME',
+              'text': 'default',
+            },
+          ],
+          'previousStatement': null,
+          'nextStatement': null,
+        },
+      ]);
+      this.workspace = Blockly.inject('blocklyDiv', {});
+      this.cursor = this.workspace.getCursor();
+
+      this.multiStatement1 = createRenderedBlock(
+        this.workspace,
+        'multi_statement_input',
+      );
+      this.multiStatement2 = createRenderedBlock(
+        this.workspace,
+        'multi_statement_input',
+      );
+      this.firstStatement = createRenderedBlock(
+        this.workspace,
+        'simple_statement',
+      );
+      this.secondStatement = createRenderedBlock(
+        this.workspace,
+        'simple_statement',
+      );
+      this.thirdStatement = createRenderedBlock(
+        this.workspace,
+        'simple_statement',
+      );
+      this.fourthStatement = createRenderedBlock(
+        this.workspace,
+        'simple_statement',
+      );
+      this.multiStatement1
+        .getInput('FIRST')
+        .connection.connect(this.firstStatement.previousConnection);
+      this.firstStatement.nextConnection.connect(
+        this.secondStatement.previousConnection,
+      );
+      this.multiStatement1
+        .getInput('SECOND')
+        .connection.connect(this.thirdStatement.previousConnection);
+      this.multiStatement2
+        .getInput('FIRST')
+        .connection.connect(this.fourthStatement.previousConnection);
+    });
+
+    teardown(function () {
+      sharedTestTeardown.call(this);
+    });
+
+    test('In - from field in nested statement block to next nested statement block', function () {
+      this.cursor.setCurNode(this.secondStatement.getField('NAME'));
+      this.cursor.in();
+      const curNode = this.cursor.getCurNode();
+      assert.equal(curNode, this.thirdStatement);
+    });
+    test('In - from field in nested statement block to next stack', function () {
+      this.cursor.setCurNode(this.thirdStatement.getField('NAME'));
+      this.cursor.in();
+      const curNode = this.cursor.getCurNode();
+      assert.equal(curNode, this.multiStatement2);
+    });
+
+    test('Out - from nested statement block to last field of previous nested statement block', function () {
+      this.cursor.setCurNode(this.thirdStatement);
+      this.cursor.out();
+      const curNode = this.cursor.getCurNode();
+      assert.equal(curNode, this.secondStatement.getField('NAME'));
+    });
+
+    test('Out - from root block to last field of last nested statement block in previous stack', function () {
+      this.cursor.setCurNode(this.multiStatement2);
+      this.cursor.out();
+      const curNode = this.cursor.getCurNode();
+      assert.equal(curNode, this.thirdStatement.getField('NAME'));
+    });
+  });
+
   suite('Searching', function () {
     setup(function () {
       sharedTestSetup.call(this);
@@ -246,7 +379,7 @@ suite('Cursor', function () {
       });
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
-        assert.equal(node, this.blockA);
+        assert.equal(node, this.blockA.inputList[0].connection);
       });
     });
     suite('one c-hat block', function () {
@@ -340,7 +473,7 @@ suite('Cursor', function () {
       test('getLastNode', function () {
         const node = this.cursor.getLastNode();
         const blockB = this.workspace.getBlockById('B');
-        assert.equal(node, blockB);
+        assert.equal(node, blockB.inputList[0].connection);
       });
     });
 

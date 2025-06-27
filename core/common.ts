@@ -8,11 +8,13 @@
 
 import type {Block} from './block.js';
 import {BlockDefinition, Blocks} from './blocks.js';
+import * as browserEvents from './browser_events.js';
 import type {Connection} from './connection.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
 import {getFocusManager} from './focus_manager.js';
 import {ISelectable, isSelectable} from './interfaces/i_selectable.js';
+import {ShortcutRegistry} from './shortcut_registry.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -308,6 +310,38 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
     }
     Blocks[type] = definition;
   }
+}
+
+/**
+ * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
+ * is not visible.
+ *
+ * @internal
+ * @param e Key down event.
+ */
+export function globalShortcutHandler(e: KeyboardEvent) {
+  // This would ideally just be a `focusedTree instanceof WorkspaceSvg`, but
+  // importing `WorkspaceSvg` (as opposed to just its type) causes cycles.
+  let workspace: WorkspaceSvg = getMainWorkspace() as WorkspaceSvg;
+  const focusedTree = getFocusManager().getFocusedTree();
+  for (const ws of getAllWorkspaces()) {
+    if (focusedTree === (ws as WorkspaceSvg)) {
+      workspace = ws as WorkspaceSvg;
+      break;
+    }
+  }
+
+  if (
+    browserEvents.isTargetInput(e) ||
+    !workspace ||
+    (workspace.rendered && !workspace.isFlyout && !workspace.isVisible())
+  ) {
+    // When focused on an HTML text input widget, don't trap any keys.
+    // Ignore keypresses on rendered workspaces that have been explicitly
+    // hidden.
+    return;
+  }
+  ShortcutRegistry.registry.onKeyDown(workspace, e);
 }
 
 export const TEST_ONLY = {defineBlocksWithJsonArrayInternal};

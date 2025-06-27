@@ -225,6 +225,8 @@ export class ToolboxCategory
    */
   protected createContainer_(): HTMLDivElement {
     const container = document.createElement('div');
+    // Ensure that the category has a tab index to ensure it receives focus when
+    // clicked (since clicking isn't managed by the toolbox).
     container.tabIndex = -1;
     container.id = this.getId();
     const className = this.cssConfig_['container'];

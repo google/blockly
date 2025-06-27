@@ -50,7 +50,7 @@ export class PathObject implements IPathObject {
     /** The primary path of the block. */
     this.svgPath = dom.createSvgElement(
       Svg.PATH,
-      {'class': 'blocklyPath', 'tabindex': '-1'},
+      {'class': 'blocklyPath'},
       this.svgRoot,
     );
 
@@ -239,7 +239,6 @@ export class PathObject implements IPathObject {
         'id': connection.id,
         'class': 'blocklyHighlightedConnectionPath',
         'style': 'display: none;',
-        'tabindex': '-1',
         'd': connectionPath,
         'transform': transformation,
       },

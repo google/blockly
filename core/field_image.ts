@@ -213,6 +213,17 @@ export class FieldImage extends Field<string> {
   }
 
   /**
+   * Check whether this field should be clickable.
+   *
+   * @returns Whether this field is clickable.
+   */
+  isClickable(): boolean {
+    // Images are only clickable if they have a click handler and fulfill the
+    // contract to be clickable: enabled and attached to an editable block.
+    return super.isClickable() && !!this.clickHandler;
+  }
+
+  /**
    * If field click is called, and click handler defined,
    * call the handler.
    */

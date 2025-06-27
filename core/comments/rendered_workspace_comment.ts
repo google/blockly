@@ -19,6 +19,7 @@ import {IContextMenu} from '../interfaces/i_contextmenu.js';
 import {ICopyable} from '../interfaces/i_copyable.js';
 import {IDeletable} from '../interfaces/i_deletable.js';
 import {IDraggable} from '../interfaces/i_draggable.js';
+import {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
@@ -42,10 +43,11 @@ export class RenderedWorkspaceComment
     ISelectable,
     IDeletable,
     ICopyable<WorkspaceCommentCopyData>,
-    IContextMenu
+    IContextMenu,
+    IFocusableNode
 {
   /** The class encompassing the svg elements making up the workspace comment. */
-  private view: CommentView;
+  view: CommentView;
 
   public readonly workspace: WorkspaceSvg;
 
@@ -57,13 +59,12 @@ export class RenderedWorkspaceComment
 
     this.workspace = workspace;
 
-    this.view = new CommentView(workspace);
+    this.view = new CommentView(workspace, this.id);
     // Set the size to the default size as defined in the superclass.
     this.view.setSize(this.getSize());
     this.view.setEditable(this.isEditable());
     this.view.getSvgRoot().setAttribute('data-id', this.id);
     this.view.getSvgRoot().setAttribute('id', this.id);
-    this.view.getSvgRoot().setAttribute('tabindex', '-1');
 
     this.addModelUpdateBindings();
 
@@ -207,7 +208,12 @@ export class RenderedWorkspaceComment
   /** Disposes of the view. */
   override dispose() {
     this.disposing = true;
+    const focusManager = getFocusManager();
+    if (focusManager.getFocusedNode() === this) {
+      setTimeout(() => focusManager.focusTree(this.workspace), 0);
+    }
     if (!this.view.isDeadOrDying()) this.view.dispose();
+
     super.dispose();
   }
 
@@ -218,13 +224,7 @@ export class RenderedWorkspaceComment
   private startGesture(e: PointerEvent) {
     const gesture = this.workspace.getGesture(e);
     if (gesture) {
-      if (browserEvents.isTargetInput(e)) {
-        // If the text area was the focus, don't allow this event to bubble up
-        // and steal focus away from the editor/comment.
-        e.stopPropagation();
-      } else {
-        gesture.handleCommentStart(e, this);
-      }
+      gesture.handleCommentStart(e, this);
       getFocusManager().focusNode(this);
     }
   }
@@ -236,6 +236,11 @@ export class RenderedWorkspaceComment
     } else {
       dom.removeClass(this.getSvgRoot(), 'blocklyDraggingDelete');
     }
+  }
+
+  /** Returns whether this comment is copyable or not */
+  isCopyable(): boolean {
+    return this.isOwnMovable() && this.isOwnDeletable();
   }
 
   /** Returns whether this comment is movable or not. */
@@ -326,6 +331,13 @@ export class RenderedWorkspaceComment
     if (alignedXY !== currentXY) {
       this.moveTo(alignedXY, ['snap']);
     }
+  }
+
+  /**
+   * @returns The FocusableNode representing the editor portion of this comment.
+   */
+  getEditorFocusableNode(): IFocusableNode {
+    return this.view.getEditorFocusableNode();
   }
 
   /** See IFocusableNode.getFocusableElement. */

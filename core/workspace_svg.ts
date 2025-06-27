@@ -2859,8 +2859,9 @@ export class WorkspaceSvg
       const flyout = this.targetWorkspace.getFlyout();
       const toolbox = this.targetWorkspace.getToolbox();
       if (toolbox && nextTree === toolbox) return;
-      if (toolbox) toolbox.clearSelection();
-      if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
+      // TODO: Figure out how to fix this.
+      // if (toolbox) toolbox.clearSelection();
+      // if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
     }
   }
 

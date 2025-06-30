@@ -370,5 +370,9 @@
 	"HELP_PROMPT": "اضغط على %1 للحصول على مساعدة بشأن عناصر التحكم بلوحة المفاتيح",
 	"SHORTCUTS_GENERAL": "عام",
 	"SHORTCUTS_EDITING": "التحرير",
-	"SHORTCUTS_CODE_NAVIGATION": "التنقل عبر الكود"
+	"SHORTCUTS_CODE_NAVIGATION": "التنقل عبر الكود",
+	"KEYBOARD_NAV_UNCONSTRAINED_MOVE_HINT": "اضغط باستمرار على %1 واستخدم مفاتيح الأسهم للتحرك بحرية، ثم اضغط على %2 لقبول الموضع",
+	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "استخدم مفاتيح الأسهم للتحرك، ثم استخدم %1 لقبول الموضع",
+	"KEYBOARD_NAV_COPIED_HINT": "تم النسخ. اضغط %1 للصق.",
+	"KEYBOARD_NAV_CUT_HINT": "قص. اضغط على %1 للصق."
 }

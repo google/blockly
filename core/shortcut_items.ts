@@ -344,12 +344,12 @@ export function registerUndo() {
  */
 export function registerRedo() {
   const ctrlShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.SHIFT,
     KeyCodes.CTRL,
+    KeyCodes.SHIFT,
   ]);
   const metaShiftZ = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [
-    KeyCodes.SHIFT,
     KeyCodes.META,
+    KeyCodes.SHIFT,
   ]);
   // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
   const ctrlY = ShortcutRegistry.registry.createSerializedKey(KeyCodes.Y, [

@@ -8,6 +8,7 @@ import * as browserEvents from '../browser_events.js';
 import {getFocusManager} from '../focus_manager.js';
 import {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import * as touch from '../touch.js';
 import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
@@ -80,6 +81,7 @@ export class CommentEditor implements IFocusableNode {
         // and steal focus away from the editor/comment.
         e.stopPropagation();
         getFocusManager().focusNode(this);
+        touch.clearTouchIdentifier();
       },
     );
 

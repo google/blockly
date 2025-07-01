@@ -22,9 +22,9 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
-import {COMMENT_COLLAPSE_ICON_FOCUS_IDENTIFIER} from './comments/collapse_comment_icon.js';
+import {COMMENT_COLLAPSE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/collapse_comment_bar_button.js';
 import {COMMENT_EDITOR_FOCUS_IDENTIFIER} from './comments/comment_editor.js';
-import {COMMENT_DELETE_ICON_FOCUS_IDENTIFIER} from './comments/delete_comment_icon.js';
+import {COMMENT_DELETE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/delete_comment_bar_button.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
 import * as common from './common.js';
@@ -2827,8 +2827,8 @@ export class WorkspaceSvg
     // indicates the presence of one.
     const commentIdSeparatorIndex = Math.max(
       id.indexOf(COMMENT_EDITOR_FOCUS_IDENTIFIER),
-      id.indexOf(COMMENT_COLLAPSE_ICON_FOCUS_IDENTIFIER),
-      id.indexOf(COMMENT_DELETE_ICON_FOCUS_IDENTIFIER),
+      id.indexOf(COMMENT_COLLAPSE_BAR_BUTTON_FOCUS_IDENTIFIER),
+      id.indexOf(COMMENT_DELETE_BAR_BUTTON_FOCUS_IDENTIFIER),
     );
     if (commentIdSeparatorIndex !== -1) {
       const commentId = id.substring(0, commentIdSeparatorIndex);
@@ -2839,8 +2839,8 @@ export class WorkspaceSvg
         } else {
           return (
             comment.view
-              .getCommentIcons()
-              .find((icon) => icon.getFocusableElement().id.includes(id)) ??
+              .getCommentBarButtons()
+              .find((button) => button.getFocusableElement().id.includes(id)) ??
             null
           );
         }

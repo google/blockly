@@ -10,20 +10,20 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {RenderedWorkspaceComment} from './rendered_workspace_comment.js';
 
 /**
- * Actionable icon displayed on a comment's top bar.
+ * Button displayed on a comment's top bar.
  */
-export abstract class CommentIcon implements IFocusableNode {
+export abstract class CommentBarButton implements IFocusableNode {
   /**
-   * SVG image displayed by this icon.
+   * SVG image displayed on this button.
    */
   protected abstract readonly icon: SVGImageElement;
 
   /**
-   * Creates a new CollapseCommentIcon instance.
+   * Creates a new CommentBarButton instance.
    *
-   * @param id The ID of this icon's parent comment.
-   * @param workspace The workspace this icon's parent comment is displayed on.
-   * @param container An SVG group that this icon should be a child of.
+   * @param id The ID of this button's parent comment.
+   * @param workspace The workspace this button's parent comment is on.
+   * @param container An SVG group that this button should be a child of.
    */
   constructor(
     protected readonly id: string,
@@ -32,35 +32,37 @@ export abstract class CommentIcon implements IFocusableNode {
   ) {}
 
   /**
-   * Returns whether or not this icon is currently visible.
+   * Returns whether or not this button is currently visible.
    */
   isVisible(): boolean {
     return this.icon.checkVisibility();
   }
 
   /**
-   * Returns the parent comment of this comment icon.
+   * Returns the parent comment of this comment bar button.
    */
   getParentComment(): RenderedWorkspaceComment {
     const comment = this.workspace.getCommentById(this.id);
     if (!comment) {
-      throw new Error(`Comment icon ${this.id} has no corresponding comment`);
+      throw new Error(
+        `Comment bar button ${this.id} has no corresponding comment`,
+      );
     }
 
     return comment;
   }
 
-  /** Adjusts the position of this icon within its parent container. */
+  /** Adjusts the position of this button within its parent container. */
   abstract reposition(): void;
 
-  /** Perform the action this icon should take when it is acted on. */
+  /** Perform the action this button should take when it is acted on. */
   abstract performAction(e?: Event): void;
 
   /**
-   * Returns the dimensions of this icon in SVG units.
+   * Returns the dimensions of this button in SVG units.
    *
    * @param includeMargin True to include the margin when calculating the size.
-   * @returns The size of this icon.
+   * @returns The size of this button.
    */
   getSize(includeMargin = false): Rect {
     const bounds = this.icon.getBBox();
@@ -75,28 +77,28 @@ export abstract class CommentIcon implements IFocusableNode {
     return rect;
   }
 
-  /** Returns the margin in SVG units surrounding this icon. */
+  /** Returns the margin in SVG units surrounding this button. */
   getMargin(): number {
     return (this.container.getBBox().height - this.icon.getBBox().height) / 2;
   }
 
-  /** Returns a DOM element representing this icon that can receive focus. */
+  /** Returns a DOM element representing this button that can receive focus. */
   getFocusableElement() {
     return this.icon;
   }
 
-  /** Returns the workspace this icon is a child of. */
+  /** Returns the workspace this button is a child of. */
   getFocusableTree() {
     return this.workspace;
   }
 
-  /** Called when this icon's focusable DOM element gains focus. */
+  /** Called when this button's focusable DOM element gains focus. */
   onNodeFocus() {}
 
-  /** Called when this icon's focusable DOM element loses focus. */
+  /** Called when this button's focusable DOM element loses focus. */
   onNodeBlur() {}
 
-  /** Returns whether or not this icon can be focused. True if it is visible. */
+  /** Returns whether this button can be focused. True if it is visible. */
   canBeFocused() {
     return this.isVisible();
   }

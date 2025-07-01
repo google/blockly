@@ -16,10 +16,10 @@ import * as drag from '../utils/drag.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import {CollapseCommentIcon} from './collapse_comment_icon.js';
+import {CollapseCommentBarButton} from './collapse_comment_bar_button.js';
+import {CommentBarButton} from './comment_bar_button.js';
 import {CommentEditor} from './comment_editor.js';
-import type {CommentIcon} from './comment_icon.js';
-import {DeleteCommentIcon} from './delete_comment_icon.js';
+import {DeleteCommentBarButton} from './delete_comment_bar_button.js';
 
 export class CommentView implements IRenderedElement {
   /** The root group element of the comment view. */
@@ -36,11 +36,11 @@ export class CommentView implements IRenderedElement {
   /** The rect background for the top bar. */
   private topBarBackground: SVGRectElement;
 
-  /** The delete icon that goes in the top bar. */
-  private deleteIcon: DeleteCommentIcon;
+  /** The delete button that goes in the top bar. */
+  private deleteButton: DeleteCommentBarButton;
 
-  /** The foldout icon that goes in the top bar. */
-  private foldoutIcon: CollapseCommentIcon;
+  /** The foldout button that goes in the top bar. */
+  private foldoutButton: CollapseCommentBarButton;
 
   /** The text element that goes in the top bar. */
   private textPreview: SVGTextElement;
@@ -113,8 +113,8 @@ export class CommentView implements IRenderedElement {
     ({
       topBarGroup: this.topBarGroup,
       topBarBackground: this.topBarBackground,
-      deleteIcon: this.deleteIcon,
-      foldoutIcon: this.foldoutIcon,
+      deleteButton: this.deleteButton,
+      foldoutButton: this.foldoutButton,
       textPreview: this.textPreview,
       textPreviewNode: this.textPreviewNode,
     } = this.createTopBar(this.svgRoot));
@@ -153,8 +153,8 @@ export class CommentView implements IRenderedElement {
   private createTopBar(svgRoot: SVGGElement): {
     topBarGroup: SVGGElement;
     topBarBackground: SVGRectElement;
-    deleteIcon: DeleteCommentIcon;
-    foldoutIcon: CollapseCommentIcon;
+    deleteButton: DeleteCommentBarButton;
+    foldoutButton: CollapseCommentBarButton;
     textPreview: SVGTextElement;
     textPreviewNode: Text;
   } {
@@ -172,12 +172,12 @@ export class CommentView implements IRenderedElement {
       },
       topBarGroup,
     );
-    const deleteIcon = new DeleteCommentIcon(
+    const deleteButton = new DeleteCommentBarButton(
       this.commentId,
       this.workspace,
       topBarGroup,
     );
-    const foldoutIcon = new CollapseCommentIcon(
+    const foldoutButton = new CollapseCommentBarButton(
       this.commentId,
       this.workspace,
       topBarGroup,
@@ -195,8 +195,8 @@ export class CommentView implements IRenderedElement {
     return {
       topBarGroup,
       topBarBackground,
-      deleteIcon,
-      foldoutIcon,
+      deleteButton,
+      foldoutButton,
       textPreview,
       textPreviewNode,
     };
@@ -288,8 +288,8 @@ export class CommentView implements IRenderedElement {
     this.updateHighlightRect(size);
     this.updateTopBarSize(size);
     this.commentEditor.updateSize(size, topBarSize);
-    this.deleteIcon.reposition();
-    this.foldoutIcon.reposition();
+    this.deleteButton.reposition();
+    this.foldoutButton.reposition();
     this.updateTextPreviewSize(size, topBarSize, textPreviewSize);
     this.updateResizeHandlePosition(size, resizeSize);
   }
@@ -317,13 +317,13 @@ export class CommentView implements IRenderedElement {
     const textPreviewWidth = dom.getTextWidth(this.textPreview);
 
     let width = textPreviewWidth;
-    if (this.foldoutIcon.isVisible()) {
-      width += this.foldoutIcon.getSize(true).getWidth();
+    if (this.foldoutButton.isVisible()) {
+      width += this.foldoutButton.getSize(true).getWidth();
     } else if (textPreviewWidth) {
       width += 4; // Arbitrary margin before text.
     }
-    if (this.deleteIcon.isVisible()) {
-      width += this.deleteIcon.getSize(true).getWidth();
+    if (this.deleteButton.isVisible()) {
+      width += this.deleteButton.getSize(true).getWidth();
     } else if (textPreviewWidth) {
       width += 4; // Arbitrary margin after text.
     }
@@ -357,8 +357,8 @@ export class CommentView implements IRenderedElement {
     textPreviewSize: Size,
   ) {
     const textPreviewMargin = (topBarSize.height - textPreviewSize.height) / 2;
-    const foldoutSize = this.foldoutIcon.getSize(true);
-    const deleteSize = this.deleteIcon.getSize(true);
+    const foldoutSize = this.foldoutButton.getSize(true);
+    const deleteSize = this.deleteButton.getSize(true);
 
     const textPreviewWidth =
       size.width - foldoutSize.getWidth() - deleteSize.getWidth();
@@ -612,8 +612,8 @@ export class CommentView implements IRenderedElement {
   /** Disposes of this comment view. */
   dispose() {
     this.disposing = true;
-    this.foldoutIcon.dispose();
-    this.deleteIcon.dispose();
+    this.foldoutButton.dispose();
+    this.deleteButton.dispose();
     dom.removeNode(this.svgRoot);
     // Loop through listeners backwards in case they remove themselves.
     for (let i = this.disposeListeners.length - 1; i >= 0; i--) {
@@ -648,8 +648,8 @@ export class CommentView implements IRenderedElement {
   /**
    * @internal
    */
-  getCommentIcons(): CommentIcon[] {
-    return [this.foldoutIcon, this.deleteIcon];
+  getCommentBarButtons(): CommentBarButton[] {
+    return [this.foldoutButton, this.deleteButton];
   }
 }
 
@@ -675,14 +675,14 @@ css.register(`
   cursor: inherit;
 }
 
-.blocklyDeleteIcon {
+.blocklydeleteButton {
   width: 20px;
   height: 20px;
   display: none;
   cursor: pointer;
 }
 
-.blocklyFoldoutIcon {
+.blocklyfoldoutButton {
   width: 20px;
   height: 20px;
   transform-origin: 12px 12px;
@@ -717,7 +717,7 @@ css.register(`
   display: none;
 }
 
-.blocklyCollapsed.blocklyComment .blocklyFoldoutIcon {
+.blocklyCollapsed.blocklyComment .blocklyfoldoutButton {
   transform: rotate(-90deg);
 }
 

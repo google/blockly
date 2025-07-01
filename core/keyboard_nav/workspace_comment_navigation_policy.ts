@@ -19,10 +19,10 @@ export class WorkspaceCommentNavigationPolicy
    * Returns the first child of the given workspace comment.
    *
    * @param current The workspace comment to return the first child of.
-   * @returns The first child icon of the given comment.
+   * @returns The first child button of the given comment.
    */
   getFirstChild(current: RenderedWorkspaceComment): IFocusableNode | null {
-    return current.view.getCommentIcons()[0];
+    return current.view.getCommentBarButtons()[0];
   }
 
   /**

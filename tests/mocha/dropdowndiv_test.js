@@ -155,7 +155,7 @@ suite('DropDownDiv', function () {
     });
     test('Escape dismisses DropDownDiv', function () {
       let hidden = false;
-      Blockly.DropDownDiv.show(this, false, 0, 0, 0, 0, false, () => {
+      Blockly.DropDownDiv.show(this, false, 0, 0, 0, 0, false, false, () => {
         hidden = true;
       });
       assert.isFalse(hidden);

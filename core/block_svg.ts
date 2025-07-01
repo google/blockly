@@ -299,8 +299,19 @@ export class BlockSvg
     }
 
     const oldXY = this.getRelativeToSurfaceXY();
+    const focusedNode = getFocusManager().getFocusedNode();
+    const restoreFocus = this.getSvgRoot().contains(
+      focusedNode?.getFocusableElement() ?? null,
+    );
     if (newParent) {
       (newParent as BlockSvg).getSvgRoot().appendChild(svgRoot);
+      // appendChild() clears focus state, so re-focus the previously focused
+      // node in case it was this block and would otherwise lose its focus. Once
+      // Element.moveBefore() has better browser support, it should be used
+      // instead.
+      if (restoreFocus && focusedNode) {
+        getFocusManager().focusNode(focusedNode);
+      }
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.  Try to insert it before any top-level
@@ -319,6 +330,13 @@ export class BlockSvg
         canvas.insertBefore(svgRoot, draggingBlockElement);
       } else {
         canvas.appendChild(svgRoot);
+        // appendChild() clears focus state, so re-focus the previously focused
+        // node in case it was this block and would otherwise lose its focus. Once
+        // Element.moveBefore() has better browser support, it should be used
+        // instead.
+        if (restoreFocus && focusedNode) {
+          getFocusManager().focusNode(focusedNode);
+        }
       }
       this.translate(oldXY.x, oldXY.y);
     }
@@ -849,10 +867,30 @@ export class BlockSvg
     Tooltip.dispose();
     ContextMenu.hide();
 
-    // If this block was focused, focus its parent or workspace instead.
+    // If this block (or a descendant) was focused, focus its parent or
+    // workspace instead.
     const focusManager = getFocusManager();
-    if (focusManager.getFocusedNode() === this) {
-      const parent = this.getParent();
+    if (
+      this.getSvgRoot().contains(
+        focusManager.getFocusedNode()?.getFocusableElement() ?? null,
+      )
+    ) {
+      let parent: BlockSvg | undefined | null = this.getParent();
+      if (!parent) {
+        // In some cases, blocks are disconnected from their parents before
+        // being deleted. Attempt to infer if there was a parent by checking
+        // for a connection within a radius of 0. Even if this wasn't a parent,
+        // it must be adjacent to this block and so is as good an option as any
+        // to focus after deleting.
+        const connection = this.outputConnection ?? this.previousConnection;
+        if (connection) {
+          const targetConnection = connection.closest(
+            0,
+            new Coordinate(0, 0),
+          ).connection;
+          parent = targetConnection?.getSourceBlock();
+        }
+      }
       if (parent) {
         focusManager.focusNode(parent);
       } else {

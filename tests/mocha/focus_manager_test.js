@@ -249,6 +249,54 @@ suite('FocusManager', function () {
       // The second register should not fail since the tree was previously unregistered.
     });
 
+    test('for tree with missing ID throws error', function () {
+      const rootNode = this.testFocusableTree1.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      const oldId = rootElem.id;
+      rootElem.removeAttribute('id');
+
+      const errorMsgRegex =
+        /Attempting to register a tree with a root element that has an invalid ID.+?/;
+      assert.throws(
+        () => this.focusManager.registerTree(this.testFocusableTree1),
+        errorMsgRegex,
+      );
+      // Restore the ID for other tests.
+      rootElem.id = oldId;
+    });
+
+    test('for tree with null ID throws error', function () {
+      const rootNode = this.testFocusableTree1.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      const oldId = rootElem.id;
+      rootElem.setAttribute('id', null);
+
+      const errorMsgRegex =
+        /Attempting to register a tree with a root element that has an invalid ID.+?/;
+      assert.throws(
+        () => this.focusManager.registerTree(this.testFocusableTree1),
+        errorMsgRegex,
+      );
+      // Restore the ID for other tests.
+      rootElem.id = oldId;
+    });
+
+    test('for tree with empty throws error', function () {
+      const rootNode = this.testFocusableTree1.getRootFocusableNode();
+      const rootElem = rootNode.getFocusableElement();
+      const oldId = rootElem.id;
+      rootElem.setAttribute('id', '');
+
+      const errorMsgRegex =
+        /Attempting to register a tree with a root element that has an invalid ID.+?/;
+      assert.throws(
+        () => this.focusManager.registerTree(this.testFocusableTree1),
+        errorMsgRegex,
+      );
+      // Restore the ID for other tests.
+      rootElem.id = oldId;
+    });
+
     test('for unmanaged tree does not overwrite tab index', function () {
       this.focusManager.registerTree(this.testFocusableTree1, false);
 

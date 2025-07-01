@@ -22,7 +22,9 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
+import {COMMENT_COLLAPSE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/collapse_comment_bar_button.js';
 import {COMMENT_EDITOR_FOCUS_IDENTIFIER} from './comments/comment_editor.js';
+import {COMMENT_DELETE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/delete_comment_bar_button.js';
 import {RenderedWorkspaceComment} from './comments/rendered_workspace_comment.js';
 import {WorkspaceComment} from './comments/workspace_comment.js';
 import * as common from './common.js';
@@ -2266,8 +2268,8 @@ export class WorkspaceSvg
    *
    * @param comment comment to add.
    */
-  override addTopComment(comment: WorkspaceComment) {
-    this.addTopBoundedElement(comment as RenderedWorkspaceComment);
+  override addTopComment(comment: RenderedWorkspaceComment) {
+    this.addTopBoundedElement(comment);
     super.addTopComment(comment);
   }
 
@@ -2276,9 +2278,29 @@ export class WorkspaceSvg
    *
    * @param comment comment to remove.
    */
-  override removeTopComment(comment: WorkspaceComment) {
-    this.removeTopBoundedElement(comment as RenderedWorkspaceComment);
+  override removeTopComment(comment: RenderedWorkspaceComment) {
+    this.removeTopBoundedElement(comment);
     super.removeTopComment(comment);
+  }
+
+  /**
+   * Returns a list of comments on this workspace.
+   *
+   * @param ordered If true, sorts the comments based on their position.
+   * @returns A list of workspace comments.
+   */
+  override getTopComments(ordered = false): RenderedWorkspaceComment[] {
+    return super.getTopComments(ordered) as RenderedWorkspaceComment[];
+  }
+
+  /**
+   * Returns the workspace comment with the given ID, if any.
+   *
+   * @param id The ID of the comment to retrieve.
+   * @returns The workspace comment with the given ID, or null.
+   */
+  override getCommentById(id: string): RenderedWorkspaceComment | null {
+    return super.getCommentById(id) as RenderedWorkspaceComment | null;
   }
 
   override getRootWorkspace(): WorkspaceSvg | null {
@@ -2308,8 +2330,15 @@ export class WorkspaceSvg
    *
    * @returns The top-level bounded elements.
    */
-  getTopBoundedElements(): IBoundedElement[] {
-    return new Array<IBoundedElement>().concat(this.topBoundedElements);
+  getTopBoundedElements(ordered = false): IBoundedElement[] {
+    const elements = new Array<IBoundedElement>().concat(
+      this.topBoundedElements,
+    );
+    if (ordered) {
+      elements.sort(this.sortByOrigin.bind(this));
+    }
+
+    return elements;
   }
 
   /**
@@ -2794,19 +2823,32 @@ export class WorkspaceSvg
       return null;
     }
 
-    // Search for a specific workspace comment editor
-    // (only if id seems like it is one).
-    const commentEditorIndicator = id.indexOf(COMMENT_EDITOR_FOCUS_IDENTIFIER);
-    if (commentEditorIndicator !== -1) {
-      const commentId = id.substring(0, commentEditorIndicator);
+    // Search for a specific workspace comment or comment icon if the ID
+    // indicates the presence of one.
+    const commentIdSeparatorIndex = Math.max(
+      id.indexOf(COMMENT_EDITOR_FOCUS_IDENTIFIER),
+      id.indexOf(COMMENT_COLLAPSE_BAR_BUTTON_FOCUS_IDENTIFIER),
+      id.indexOf(COMMENT_DELETE_BAR_BUTTON_FOCUS_IDENTIFIER),
+    );
+    if (commentIdSeparatorIndex !== -1) {
+      const commentId = id.substring(0, commentIdSeparatorIndex);
       const comment = this.searchForWorkspaceComment(commentId);
       if (comment) {
-        return comment.getEditorFocusableNode();
+        if (id.indexOf(COMMENT_EDITOR_FOCUS_IDENTIFIER) > -1) {
+          return comment.getEditorFocusableNode();
+        } else {
+          return (
+            comment.view
+              .getCommentBarButtons()
+              .find((button) => button.getFocusableElement().id.includes(id)) ??
+            null
+          );
+        }
       }
     }
 
     // Search for a specific block.
-    // Don't use `getBlockById` because the block ID is not guaranteeed
+    // Don't use `getBlockById` because the block ID is not guaranteed
     // to be globally unique, but the ID on the focusable element is.
     const block = this.getAllBlocks(false).find(
       (block) => block.getFocusableElement().id === id,

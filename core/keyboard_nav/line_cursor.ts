@@ -14,6 +14,7 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
+import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
 import {Field} from '../field.js';
 import {getFocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
@@ -38,11 +39,11 @@ export class LineCursor extends Marker {
   }
 
   /**
-   * Moves the cursor to the next previous connection, next connection or block
-   * in the pre order traversal. Finds the next node in the pre order traversal.
+   * Moves the cursor to the next block or workspace comment in the pre-order
+   * traversal.
    *
-   * @returns The next node, or null if the current node is
-   *     not set or there is no next value.
+   * @returns The next node, or null if the current node is not set or there is
+   *     no next value.
    */
   next(): IFocusableNode | null {
     const curNode = this.getCurNode();
@@ -53,8 +54,9 @@ export class LineCursor extends Marker {
       curNode,
       (candidate: IFocusableNode | null) => {
         return (
-          candidate instanceof BlockSvg &&
-          !candidate.outputConnection?.targetBlock()
+          (candidate instanceof BlockSvg &&
+            !candidate.outputConnection?.targetBlock()) ||
+          candidate instanceof RenderedWorkspaceComment
         );
       },
       true,
@@ -87,11 +89,11 @@ export class LineCursor extends Marker {
     return newNode;
   }
   /**
-   * Moves the cursor to the previous next connection or previous connection in
-   * the pre order traversal.
+   * Moves the cursor to the previous block or workspace comment in the
+   * pre-order traversal.
    *
-   * @returns The previous node, or null if the current node
-   *     is not set or there is no previous value.
+   * @returns The previous node, or null if the current node is not set or there
+   *     is no previous value.
    */
   prev(): IFocusableNode | null {
     const curNode = this.getCurNode();
@@ -102,8 +104,9 @@ export class LineCursor extends Marker {
       curNode,
       (candidate: IFocusableNode | null) => {
         return (
-          candidate instanceof BlockSvg &&
-          !candidate.outputConnection?.targetBlock()
+          (candidate instanceof BlockSvg &&
+            !candidate.outputConnection?.targetBlock()) ||
+          candidate instanceof RenderedWorkspaceComment
         );
       },
       true,

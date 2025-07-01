@@ -351,15 +351,20 @@ export class FocusManager {
       throw Error(`Attempted to focus unregistered node: ${focusableNode}.`);
     }
 
+    const focusableNodeElement = focusableNode.getFocusableElement();
+    if (!focusableNodeElement.id || focusableNodeElement.id === 'null') {
+      // Warn that the ID is invalid, but continue execution since an invalid ID
+      // will result in an unmatched (null) node. Since a request to focus
+      // something was initiated, the code below will attempt to find the next
+      // best thing to focus, instead.
+      console.warn('Trying to focus a node that has an invalid ID.');
+    }
+
     // Safety check for ensuring focusNode() doesn't get called for a node that
     // isn't actually hooked up to its parent tree correctly. This usually
     // happens when calls to focusNode() interleave with asynchronous clean-up
     // operations (which can happen due to ephemeral focus and in other cases).
     // Fall back to a reasonable default since there's no valid node to focus.
-    const focusableNodeElement = focusableNode.getFocusableElement();
-    if (!focusableNodeElement.id || focusableNodeElement.id === 'null') {
-      console.warn('Trying to focus a node that has an invalid ID.');
-    }
     const matchedNode = FocusableTreeTraverser.findFocusableNodeFor(
       focusableNodeElement,
       nextTree,

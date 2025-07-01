@@ -84,8 +84,8 @@ export class Connection {
   ) {
     this.sourceBlock_ = source;
     if (source.id.includes('_connection')) {
-      console.warn(
-        `Connection ID indicator is contained in block ID. This may cause ` +
+      throw new Error(
+        `Connection ID indicator is contained in block ID. This will cause ` +
           `problems with focus: ${source.id}.`,
       );
     }

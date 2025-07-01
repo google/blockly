@@ -615,7 +615,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       if (target instanceof FieldInput) {
         WidgetDiv.hideIfOwner(this);
         dropDownDiv.hideWithoutAnimation();
-        getFocusManager().focusNode(target);
+        const targetSourceBlock = target.getSourceBlock();
+        if (
+          target.isFullBlockField() &&
+          targetSourceBlock &&
+          targetSourceBlock instanceof BlockSvg
+        ) {
+          getFocusManager().focusNode(targetSourceBlock);
+        } else getFocusManager().focusNode(target);
         target.showEditor();
       }
     }

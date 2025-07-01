@@ -266,7 +266,7 @@ export abstract class Field<T = any>
     }
     this.sourceBlock_ = block;
     if (block.id.includes('_field')) {
-      console.warn(
+      throw new Error(
         `Field ID indicator is contained in block ID. This may cause ` +
           `problems with focus: ${block.id}.`,
       );

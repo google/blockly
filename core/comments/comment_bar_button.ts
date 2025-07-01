@@ -59,7 +59,7 @@ export abstract class CommentBarButton implements IFocusableNode {
   abstract performAction(e?: Event): void;
 
   /**
-   * Returns the dimensions of this button in SVG units.
+   * Returns the dimensions of this button in workspace coordinates.
    *
    * @param includeMargin True to include the margin when calculating the size.
    * @returns The size of this button.

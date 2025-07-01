@@ -148,6 +148,7 @@ function getBlockNavigationCandidates(
  * Returns the next/previous stack relative to the given element's stack.
  *
  * @param current The element whose stack will be navigated relative to.
+ * @param workspace The workspace to navigate between stacks on.
  * @param delta The difference in index to navigate; positive values navigate
  *     to the nth next stack, while negative values navigate to the nth previous
  *     stack.

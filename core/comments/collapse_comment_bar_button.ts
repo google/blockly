@@ -18,7 +18,7 @@ export const COMMENT_COLLAPSE_BAR_BUTTON_FOCUS_IDENTIFIER =
   '_collapse_bar_button';
 
 /**
- * Icon that toggles the collapsed state of a comment.
+ * Button that toggles the collapsed state of a comment.
  */
 export class CollapseCommentBarButton extends CommentBarButton {
   /**

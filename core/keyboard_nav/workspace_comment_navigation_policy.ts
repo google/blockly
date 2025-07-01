@@ -42,7 +42,7 @@ export class WorkspaceCommentNavigationPolicy
    * @returns The next workspace comment or block stack, if any.
    */
   getNextSibling(current: RenderedWorkspaceComment): IFocusableNode | null {
-    return navigateStacks(current, current.workspace, 1);
+    return navigateStacks(current, 1);
   }
 
   /**
@@ -52,7 +52,7 @@ export class WorkspaceCommentNavigationPolicy
    * @returns The previous workspace comment or block stack, if any.
    */
   getPreviousSibling(current: RenderedWorkspaceComment): IFocusableNode | null {
-    return navigateStacks(current, current.workspace, -1);
+    return navigateStacks(current, -1);
   }
 
   /**

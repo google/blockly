@@ -12,6 +12,7 @@ import type {IBoundedElement} from '../interfaces/i_bounded_element.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
+import type {ISelectable} from '../interfaces/i_selectable.js';
 import {RenderedConnection} from '../rendered_connection.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
@@ -63,7 +64,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     } else if (current.getSurroundParent()) {
       return navigateBlock(current.getTopStackBlock(), 1);
     } else if (this.getParent(current) instanceof WorkspaceSvg) {
-      return navigateStacks(current, current.workspace, 1);
+      return navigateStacks(current, 1);
     }
 
     return null;
@@ -82,7 +83,7 @@ export class BlockNavigationPolicy implements INavigationPolicy<BlockSvg> {
     } else if (current.outputConnection?.targetBlock()) {
       return navigateBlock(current, -1);
     } else if (this.getParent(current) instanceof WorkspaceSvg) {
-      return navigateStacks(current, current.workspace, -1);
+      return navigateStacks(current, -1);
     }
 
     return null;
@@ -148,7 +149,6 @@ function getBlockNavigationCandidates(
  * Returns the next/previous stack relative to the given element's stack.
  *
  * @param current The element whose stack will be navigated relative to.
- * @param workspace The workspace to navigate between stacks on.
  * @param delta The difference in index to navigate; positive values navigate
  *     to the nth next stack, while negative values navigate to the nth previous
  *     stack.
@@ -156,12 +156,8 @@ function getBlockNavigationCandidates(
  *     current element's stack, or the last element in the stack offset by
  * `delta` relative to the current element's stack when navigating backwards.
  */
-export function navigateStacks(
-  current: IFocusableNode,
-  workspace: WorkspaceSvg,
-  delta: number,
-) {
-  const stacks: IFocusableNode[] = workspace
+export function navigateStacks(current: ISelectable, delta: number) {
+  const stacks: IFocusableNode[] = (current.workspace as WorkspaceSvg)
     .getTopBoundedElements(true)
     .filter((element: IBoundedElement) => isFocusableNode(element));
   const currentIndex = stacks.indexOf(

@@ -675,14 +675,14 @@ css.register(`
   cursor: inherit;
 }
 
-.blocklydeleteButton {
+.blocklyDeleteIcon {
   width: 20px;
   height: 20px;
   display: none;
   cursor: pointer;
 }
 
-.blocklyfoldoutButton {
+.blocklyFoldoutIcon {
   width: 20px;
   height: 20px;
   transform-origin: 12px 12px;
@@ -717,7 +717,7 @@ css.register(`
   display: none;
 }
 
-.blocklyCollapsed.blocklyComment .blocklyfoldoutButton {
+.blocklyCollapsed.blocklyComment .blocklyFoldoutIcon {
   transform: rotate(-90deg);
 }
 

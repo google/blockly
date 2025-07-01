@@ -7,8 +7,6 @@
 /**
  * @fileoverview Javascript for Block Library's Storage Class.
  * Depends on Block Library for its namespace.
- *
- * @author quachtina96 (Tina Quach)
  */
 
 'use strict';
@@ -26,7 +24,7 @@ function BlockLibraryStorage(blockLibraryName, opt_blocks) {
   if (!opt_blocks) {
     // Initialize this.blocks by loading from local storage.
     this.loadFromLocalStorage();
-    if (this.blocks == null) {
+    if (this.blocks === null) {
       this.blocks = Object.create(null);
       // The line above is equivalent of {} except that this object is TRULY
       // empty. It doesn't have built-in attributes/functions such as length or
@@ -91,7 +89,7 @@ BlockLibraryStorage.prototype.removeBlock = function(blockType) {
 BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
   var xml = this.blocks[blockType] || null;
   if (xml) {
-    var xml = Blockly.Xml.textToDom(xml);
+    var xml = Blockly.utils.xml.textToDom(xml);
   }
   return xml;
 };

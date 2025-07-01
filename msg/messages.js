@@ -103,6 +103,9 @@ Blockly.Msg.DELETE_ALL_BLOCKS = 'Delete all %1 blocks?';
 /// context menu - Reposition all the blocks so that they form a neat line.
 Blockly.Msg.CLEAN_UP = 'Clean up Blocks';
 /** @type {string} */
+/// toast notification - Accessibility label for close button.
+Blockly.Msg.CLOSE = 'Close';
+/** @type {string} */
 /// context menu - Make the appearance of the selected block smaller by hiding some information about it.
 Blockly.Msg.COLLAPSE_BLOCK = 'Collapse Block';
 /** @type {string} */
@@ -1154,9 +1157,9 @@ Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = 'Returns true if the list is empty.';
 Blockly.Msg.LISTS_INLIST = 'in list';
 
 /** @type {string} */
-/// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list
-/// https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list].
-Blockly.Msg.LISTS_INDEX_OF_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list';
+/// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list
+/// https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list].
+Blockly.Msg.LISTS_INDEX_OF_HELPURL = 'https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list';
 /** @type {string} */
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @type {string} */
@@ -1176,7 +1179,9 @@ Blockly.Msg.LISTS_INDEX_OF_LAST = 'find last occurrence of item';
 Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the list. Returns %1 if item is not found.';
 
 /** @type {string} */
-Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
+/// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list
+/// https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list].
+Blockly.Msg.LISTS_GET_INDEX_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list';
 /** @type {string} */
 /// dropdown - Indicates that the user wishes to
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
@@ -1489,6 +1494,12 @@ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = 'with:';
 /// function with parameters].
 Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = 'with:';
 /** @type {string} */
+/// warning - This appears if a block that runs a function can't run because the function
+/// definition block is disabled. See
+/// [https://blockly-demo.appspot.com/static/demos/code/index.html#q947d7 this sample of a
+/// disabled function definition and call block].
+Blockly.Msg.PROCEDURES_CALL_DISABLED_DEF_WARNING = 'Can\'t run the user-defined function "%1" because the definition block is disabled.';
+/** @type {string} */
 /// {{Optional|Supply translation only if your language requires it.  Most do not.}}
 /// block text - This appears next to the function's "body", the blocks that should be
 /// run when the function is called, as shown in
@@ -1606,3 +1617,79 @@ Blockly.Msg.DIALOG_OK = 'OK';
 /** @type {string} */
 /// button label - Pressing this button cancels a proposed action.\n{{Identical|Cancel}}
 Blockly.Msg.DIALOG_CANCEL = 'Cancel';
+
+/** @type {string} */
+/// menu label - Contextual menu item that moves the keyboard navigation cursor
+/// into a subitem of the focused block.
+Blockly.Msg.EDIT_BLOCK_CONTENTS = 'Edit Block contents';
+/** @type {string} */
+/// menu label - Contextual menu item that starts a keyboard-driven block move.
+Blockly.Msg.MOVE_BLOCK = 'Move Block';
+/** @type {string} */
+/// Name of the Microsoft Windows operating system displayed in a list of 
+/// keyboard shortcuts.
+Blockly.Msg.WINDOWS = 'Windows';
+/** @type {string} */
+/// Name of the Apple macOS operating system displayed in a list of keyboard
+/// shortcuts,
+Blockly.Msg.MAC_OS = 'macOS';
+/** @type {string} */
+/// Name of the Google ChromeOS operating system displayed in a list of keyboard
+/// shortcuts.
+Blockly.Msg.CHROME_OS = 'ChromeOS';
+/** @type {string} */
+/// Name of the GNU/Linux operating system displayed in a list of keyboard
+/// shortcuts.
+Blockly.Msg.LINUX = 'Linux';
+/** @type {string} */
+/// Placeholder name for an operating system that can't be identified in a list
+/// of keyboard shortcuts.
+Blockly.Msg.UNKNOWN = 'Unknown';
+/** @type {string} */
+/// Representation of the Control key used in keyboard shortcuts.
+Blockly.Msg.CONTROL_KEY = 'Ctrl';
+/** @type {string} */
+/// Representation of the Mac Command key used in keyboard shortcuts.
+Blockly.Msg.COMMAND_KEY = '⌘ Command';
+/** @type {string} */
+/// Representation of the Mac Option key used in keyboard shortcuts.
+Blockly.Msg.OPTION_KEY = '⌥ Option';
+/** @type {string} */
+/// Representation of the Alt key used in keyboard shortcuts.
+Blockly.Msg.ALT_KEY = 'Alt';
+/** @type {string} */
+/// menu label - Contextual menu item that cuts the focused item.
+Blockly.Msg.CUT_SHORTCUT = 'Cut';
+/** @type {string} */
+/// menu label - Contextual menu item that copies the focused item.
+Blockly.Msg.COPY_SHORTCUT = 'Copy';
+/** @type {string} */
+/// menu label - Contextual menu item that pastes the previously copied item.
+Blockly.Msg.PASTE_SHORTCUT = 'Paste';
+/** @type {string} */
+/// Alert message shown to prompt users to review available keyboard shortcuts.
+Blockly.Msg.HELP_PROMPT = 'Press %1 for help on keyboard controls';
+/** @type {string} */
+/// shortcut list section header - Label for general purpose keyboard shortcuts.
+Blockly.Msg.SHORTCUTS_GENERAL = 'General';
+/** @type {string} */
+/// shortcut list section header - Label for keyboard shortcuts related to
+/// editing a workspace.
+Blockly.Msg.SHORTCUTS_EDITING = 'Editing'
+/** @type {string} */
+/// shortcut list section header - Label for keyboard shortcuts related to
+/// moving around the workspace.
+Blockly.Msg.SHORTCUTS_CODE_NAVIGATION = 'Code navigation';
+/** @type {string} */
+/// Message shown to inform users how to move blocks to arbitrary locations
+/// with the keyboard.
+Blockly.Msg.KEYBOARD_NAV_UNCONSTRAINED_MOVE_HINT = 'Hold %1 and use arrow keys to move freely, then %2 to accept the position';
+/** @type {string} */
+/// Message shown to inform users how to move blocks with the keyboard.
+Blockly.Msg.KEYBOARD_NAV_CONSTRAINED_MOVE_HINT = 'Use the arrow keys to move, then %1 to accept the position';
+/** @type {string} */
+/// Message shown when an item is copied in keyboard navigation mode.
+Blockly.Msg.KEYBOARD_NAV_COPIED_HINT = 'Copied. Press %1 to paste.';
+/** @type {string} */
+/// Message shown when an item is cut in keyboard navigation mode.
+Blockly.Msg.KEYBOARD_NAV_CUT_HINT = 'Cut. Press %1 to paste.';

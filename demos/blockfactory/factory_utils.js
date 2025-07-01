@@ -10,7 +10,6 @@
  * Exporter applications within Blockly Factory. Holds functions to generate
  * block definitions and generator stubs and to create and download files.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
  * (Juan Carlos Orozco)
  */
 'use strict';
@@ -81,10 +80,10 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     return '  var ' + root + '_' + name;
   }
   // The makevar function lives in the original update generator.
-  var language = generatorLanguage;
+  var language = generatorLanguage.toLowerCase();
   var code = [];
-  code.push("Blockly." + language + "['" + block.type +
-            "'] = function(block) {");
+  code.push(`${language}.${language}Generator.forBlock['${block.type}'] = ` +
+            'function(block, generator) {');
 
   // Generate getters for any fields or inputs.
   for (var i = 0, input; input = block.inputList[i]; i++) {
@@ -94,42 +93,34 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
         continue;
       }
       if (field instanceof Blockly.FieldVariable) {
-        // Subclass of Blockly.FieldDropdown, must test first.
-        code.push(makeVar('variable', name) +
-                  " = Blockly." + language +
-                  ".nameDB_.getName(block.getFieldValue('" + name +
-                  "'), Blockly.Variables.NAME_TYPE);");
-      } else if (field instanceof Blockly.FieldAngle) {
-        // Subclass of Blockly.FieldTextInput, must test first.
-        code.push(makeVar('angle', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (field instanceof Blockly.FieldColour) {
-        code.push(makeVar('colour', name) +
-                  " = block.getFieldValue('" + name + "');");
+        // FieldVariable is subclass of FieldDropdown; must test first.
+        code.push(`${makeVar('variable', name)} = ` +
+                  `generator.nameDB_.getName(block.getFieldValue('${name}'), ` +
+                  `Blockly.Variables.NAME_TYPE);`);
       } else if (field instanceof Blockly.FieldCheckbox) {
-        code.push(makeVar('checkbox', name) +
-                  " = block.getFieldValue('" + name + "') == 'TRUE';");
-      } else if (field instanceof Blockly.FieldDropdown) {
-        code.push(makeVar('dropdown', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (field instanceof Blockly.FieldNumber) {
-        code.push(makeVar('number', name) +
-                  " = block.getFieldValue('" + name + "');");
-      } else if (field instanceof Blockly.FieldTextInput) {
-        code.push(makeVar('text', name) +
-                  " = block.getFieldValue('" + name + "');");
+        code.push(`${makeVar('checkbox', name)} = ` +
+                  `block.getFieldValue('${name}') === 'TRUE';`);
+      } else {
+        let prefix =
+            // Angle is subclass of FieldTextInput; must test first.
+            field instanceof Blockly.FieldAngle ? 'angle' :
+            field instanceof Blockly.FieldColour ? 'colour' :
+            field instanceof Blockly.FieldDropdown ? 'dropdown' :
+            field instanceof Blockly.FieldNumber ? 'number' :
+            field instanceof Blockly.FieldTextInput ? 'text' :
+            'field';  // Default if subclass not found.
+        code.push(`${makeVar(prefix, name)} = block.getFieldValue('${name}');`);
       }
     }
     var name = input.name;
     if (name) {
-      if (input.type == Blockly.INPUT_VALUE) {
-        code.push(makeVar('value', name) +
-                  " = Blockly." + language + ".valueToCode(block, '" + name +
-                  "', Blockly." + language + ".ORDER_ATOMIC);");
-      } else if (input.type == Blockly.NEXT_STATEMENT) {
-        code.push(makeVar('statements', name) +
-                  " = Blockly." + language + ".statementToCode(block, '" +
-                  name + "');");
+      if (input.type === Blockly.INPUT_VALUE) {
+        code.push(`${makeVar('value', name)} = ` +
+                  `generator.valueToCode(block, '${name}', ` +
+                  `${language}.Order.ATOMIC);`);
+      } else if (input.type === Blockly.NEXT_STATEMENT) {
+        code.push(`${makeVar('statements', name)} = ` +
+                  `generator.statementToCode(block, '${name}');`);
       }
     }
   }
@@ -172,11 +163,11 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   var lastInput = null;
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (contentsBlock.isEnabled() && !contentsBlock.getInheritedDisabled()) {
       var fields = FactoryUtils.getFieldsJson_(
           contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
-        if (typeof fields[i] == 'string') {
+        if (typeof fields[i] === 'string') {
           message.push(fields[i].replace(/%/g, '%%'));
         } else {
           args.push(fields[i]);
@@ -186,7 +177,8 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
 
       var input = {type: contentsBlock.type};
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type != 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy' &&
+          contentsBlock.type !== 'input_end_row') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
       var check = JSON.parse(
@@ -195,7 +187,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
         input.check = check;
       }
       var align = contentsBlock.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         input.align = align;
       }
       args.push(input);
@@ -206,12 +198,12 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Remove last input if dummy and not empty.
-  if (lastInput && lastInput.type == 'input_dummy') {
+  if (lastInput && lastInput.type === 'input_dummy') {
     var fields = lastInput.getInputTargetBlock('FIELDS');
-    if (fields && FactoryUtils.getFieldsJson_(fields).join('').trim() != '') {
+    if (fields && FactoryUtils.getFieldsJson_(fields).join('').trim() !== '') {
       var align = lastInput.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
-        JS.lastDummyAlign0 = align;
+      if (align !== 'LEFT') {
+        JS.implicitAlign0 = align;
       }
       args.pop();
       message.pop();
@@ -222,9 +214,9 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     JS.args0 = args;
   }
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+  if (rootBlock.getFieldValue('INLINE') === 'EXT') {
     JS.inputsInline = false;
-  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  } else if (rootBlock.getFieldValue('INLINE') === 'INT') {
     JS.inputsInline = true;
   }
   // Generate output, or next/previous connections.
@@ -255,7 +247,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
   }
   // Generate colour.
   var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
-  if (colourBlock && !colourBlock.disabled) {
+  if (colourBlock && colourBlock.isEnabled()) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     JS.colour = hue;
   }
@@ -281,13 +273,15 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   // Generate inputs.
   var TYPES = {'input_value': 'appendValueInput',
                'input_statement': 'appendStatementInput',
-               'input_dummy': 'appendDummyInput'};
+               'input_dummy': 'appendDummyInput',
+               'input_end_row': 'appendEndRowInput'};
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   while (contentsBlock) {
-    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+    if (contentsBlock.isEnabled() && !contentsBlock.getInheritedDisabled()) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type != 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy' &&
+          contentsBlock.type !== 'input_end_row') {
         name =
             JSON.stringify(contentsBlock.getFieldValue('INPUTNAME'));
       }
@@ -297,7 +291,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
         code.push('        .setCheck(' + check + ')');
       }
       var align = contentsBlock.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
       }
       var fields = FactoryUtils.getFieldsJs_(
@@ -312,9 +306,9 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+  if (rootBlock.getFieldValue('INLINE') === 'EXT') {
     code.push('    this.setInputsInline(false);');
-  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  } else if (rootBlock.getFieldValue('INLINE') === 'INT') {
     code.push('    this.setInputsInline(true);');
   }
   // Generate output, or next/previous connections.
@@ -339,7 +333,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   }
   // Generate colour.
   var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
-  if (colourBlock && !colourBlock.disabled) {
+  if (colourBlock && colourBlock.isEnabled()) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     if (!isNaN(hue)) {
       code.push('    this.setColour(' + hue + ');');
@@ -383,7 +377,7 @@ FactoryUtils.connectionLineJs_ = function(functionName, typeName, workspace) {
 FactoryUtils.getFieldsJs_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (block.isEnabled() && !block.getInheritedDisabled()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
@@ -410,11 +404,11 @@ FactoryUtils.getFieldsJs_ = function(block) {
             Number(block.getFieldValue('PRECISION'))
           ];
           // Remove any trailing arguments that aren't needed.
-          if (args[3] == 0) {
+          if (args[3] === 0) {
             args.pop();
-            if (args[2] == Infinity) {
+            if (args[2] === Infinity) {
               args.pop();
-              if (args[1] == -Infinity) {
+              if (args[1] === -Infinity) {
                 args.pop();
               }
             }
@@ -490,7 +484,7 @@ FactoryUtils.getFieldsJs_ = function(block) {
 FactoryUtils.getFieldsJson_ = function(block) {
   var fields = [];
   while (block) {
-    if (!block.disabled && !block.getInheritedDisabled()) {
+    if (block.isEnabled() && !block.getInheritedDisabled()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
@@ -541,7 +535,7 @@ FactoryUtils.getFieldsJson_ = function(block) {
           fields.push({
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            checked: block.getFieldValue('CHECKED') == 'TRUE'
+            checked: block.getFieldValue('CHECKED') === 'TRUE'
           });
           break;
         case 'field_colour':
@@ -579,7 +573,7 @@ FactoryUtils.getFieldsJson_ = function(block) {
             width: Number(block.getFieldValue('WIDTH')),
             height: Number(block.getFieldValue('HEIGHT')),
             alt: block.getFieldValue('ALT'),
-            flipRtl: block.getFieldValue('FLIP_RTL') == 'TRUE'
+            flipRtl: block.getFieldValue('FLIP_RTL') === 'TRUE'
           });
           break;
       }
@@ -598,11 +592,11 @@ FactoryUtils.getFieldsJson_ = function(block) {
  */
 FactoryUtils.getOptTypesFrom = function(block, name) {
   var types = FactoryUtils.getTypesFrom_(block, name);
-  if (types.length == 0) {
+  if (types.length === 0) {
     return undefined;
-  } else if (types.indexOf('null') != -1) {
+  } else if (types.includes('null')) {
     return 'null';
-  } else if (types.length == 1) {
+  } else if (types.length === 1) {
     return types[0];
   } else {
     return '[' + types.join(', ') + ']';
@@ -620,11 +614,11 @@ FactoryUtils.getOptTypesFrom = function(block, name) {
 FactoryUtils.getTypesFrom_ = function(block, name) {
   var typeBlock = block.getInputTargetBlock(name);
   var types;
-  if (!typeBlock || typeBlock.disabled) {
+  if (!typeBlock || !typeBlock.isEnabled()) {
     types = [];
-  } else if (typeBlock.type == 'type_other') {
+  } else if (typeBlock.type === 'type_other') {
     types = [JSON.stringify(typeBlock.getFieldValue('TYPE'))];
-  } else if (typeBlock.type == 'type_group') {
+  } else if (typeBlock.type === 'type_group') {
     types = [];
     for (var n = 0; n < typeBlock.typeCount_; n++) {
       types = types.concat(FactoryUtils.getTypesFrom_(typeBlock, 'TYPE' + n));
@@ -652,7 +646,7 @@ FactoryUtils.getTypesFrom_ = function(block, name) {
 FactoryUtils.getRootBlock = function(workspace) {
   var blocks = workspace.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.type == 'factory_base') {
+    if (block.type === 'factory_base') {
       return block;
     }
   }
@@ -735,7 +729,7 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
 FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
   var indexOfStartBracket = blockDef.indexOf('[\'');
   var indexOfEndBracket = blockDef.indexOf('\']');
-  if (indexOfStartBracket != -1 && indexOfEndBracket != -1) {
+  if (indexOfStartBracket !== -1 && indexOfEndBracket !== -1) {
     return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
   } else {
     throw Error('Could not parse block type out of JavaScript block ' +
@@ -777,9 +771,9 @@ FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
   var defStart = blockDefsString.indexOf('Blockly.Blocks');
 
-  while (blockDefsString.indexOf('Blockly.Blocks', defStart) != -1) {
+  while (blockDefsString.includes('Blockly.Blocks', defStart)) {
     var nextStart = blockDefsString.indexOf('Blockly.Blocks', defStart + 1);
-    if (nextStart == -1) {
+    if (nextStart === -1) {
       // This is the last block definition.
       nextStart = blockDefsString.length;
     }
@@ -807,12 +801,12 @@ FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
   // are balanced.
   for (var i = 0; i < blockDefsString.length; i++) {
     var currentChar = blockDefsString[i];
-    if (currentChar == '{') {
+    if (currentChar === '{') {
       unbalancedBracketCount++;
     }
-    else if (currentChar == '}') {
+    else if (currentChar === '}') {
       unbalancedBracketCount--;
-      if (unbalancedBracketCount == 0 && i > 0) {
+      if (unbalancedBracketCount === 0 && i > 0) {
         // The brackets are balanced. We've got a complete block definition.
         var blockDef = blockDefsString.substring(defStart, i + 1);
         blockDefArray.push(blockDef);
@@ -833,7 +827,7 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
   var blockTypes = [];
 
   // Define blocks and get block types.
-  if (format == 'JSON') {
+  if (format === 'JSON') {
     var blockDefArray = FactoryUtils.parseJsonBlockDefinitions(blockDefsString);
 
     // Populate array of blocktypes and define each block.
@@ -848,7 +842,7 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
         }
       };
     }
-  } else if (format == 'JavaScript') {
+  } else if (format === 'JavaScript') {
     var blockDefArray = FactoryUtils.parseJsBlockDefinitions(blockDefsString);
 
     // Populate array of block types.
@@ -890,8 +884,8 @@ FactoryUtils.injectCode = function(code, id) {
  */
 FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   // Each XML element should contain a single child element with a 'block' tag
-  if (blockXml1.tagName.toLowerCase() != 'xml' ||
-      blockXml2.tagName.toLowerCase() != 'xml') {
+  if (blockXml1.tagName.toLowerCase() !== 'xml' ||
+      blockXml2.tagName.toLowerCase() !== 'xml') {
     throw Error('Expected two XML elements, received elements with tag ' +
         'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
   }
@@ -916,7 +910,7 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   blockXmlText2 = blockXmlText2.replace(/\s+/g, '');
 
   // Return whether or not changes have been saved.
-  return blockXmlText1 == blockXmlText2;
+  return blockXmlText1 === blockXmlText2;
 };
 
 /**
@@ -982,11 +976,11 @@ FactoryUtils.hasVariableField = function(block) {
  */
 FactoryUtils.isProcedureBlock = function(block) {
   return block &&
-      (block.type == 'procedures_defnoreturn' ||
-      block.type == 'procedures_defreturn' ||
-      block.type == 'procedures_callnoreturn' ||
-      block.type == 'procedures_callreturn' ||
-      block.type == 'procedures_ifreturn');
+      (block.type === 'procedures_defnoreturn' ||
+      block.type === 'procedures_defreturn' ||
+      block.type === 'procedures_callnoreturn' ||
+      block.type === 'procedures_callreturn' ||
+      block.type === 'procedures_ifreturn');
 };
 
 /**
@@ -1021,7 +1015,7 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
  */
 FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
   var tooltipBlock = rootBlock.getInputTargetBlock('TOOLTIP');
-  if (tooltipBlock && !tooltipBlock.disabled) {
+  if (tooltipBlock && tooltipBlock.isEnabled()) {
     return tooltipBlock.getFieldValue('TEXT');
   }
   return '';
@@ -1035,7 +1029,7 @@ FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
  */
 FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
   var helpUrlBlock = rootBlock.getInputTargetBlock('HELPURL');
-  if (helpUrlBlock && !helpUrlBlock.disabled) {
+  if (helpUrlBlock && helpUrlBlock.isEnabled()) {
     return helpUrlBlock.getFieldValue('TEXT');
   }
   return '';

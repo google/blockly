@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Generate .js files defining Blockly core and language messages.
 #
@@ -37,12 +37,13 @@ def string_is_ascii(s):
 def load_constants(filename):
   """Read in constants file, which must be output in every language."""
   constant_defs = read_json_file(filename)
+  if '#' in constant_defs:  # Delete any comment.
+    del constant_defs['#']
   constants_text = '\n'
   for key in constant_defs:
     value = constant_defs[key]
     value = value.replace('"', '\\"')
-    constants_text += u'\nBlockly.Msg["{0}"] = \"{1}\";'.format(
-        key, value)
+    constants_text += u'\nBlockly.Msg["{0}"] = \"{1}\";'.format(key, value)
   return constants_text
 
 def main():
@@ -86,6 +87,8 @@ def main():
   # Read in synonyms file, which must be output in every language.
   synonym_defs = read_json_file(os.path.join(
       os.curdir, args.source_synonym_file))
+  if '#' in synonym_defs:  # Delete any comment.
+    del synonym_defs['#']
 
   # synonym_defs is also being sorted to ensure the same order is kept
   synonym_text = '\n'.join([u'Blockly.Msg["{0}"] = Blockly.Msg["{1}"];'
@@ -122,6 +125,8 @@ def main():
             """// This file was automatically generated.  Do not modify.
 
 'use strict';
+
+var Blockly = Blockly || {{ Msg: Object.create(null) }};
 
 """.format(target_lang.replace('-', '.')))
         # For each key in the source language file, output the target value

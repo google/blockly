@@ -6,17 +6,16 @@
 
 /**
  * @fileoverview Generating PHP for unit test blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 
-Blockly.PHP['unittest_main'] = function(block) {
+phpGenerator.forBlock['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.PHP.nameDB_.getName('unittestResults',
+  var resultsVar = phpGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.PHP.provideFunction_(
+  var functionName = phpGenerator.provideFunction_(
       'unittest_report',
-      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      [ 'function ' + phpGenerator.FUNCTION_NAME_PLACEHOLDER_ + '() {',
           '  global ' + resultsVar + ';',
           '  // Create test report.',
           '  $report = array();',
@@ -52,7 +51,7 @@ Blockly.PHP['unittest_main'] = function(block) {
       block.getFieldValue('SUITE_NAME') +
        '\\n");\n';
   // Run tests (unindented).
-  code += Blockly.PHP.statementToCode(block, 'DO')
+  code += phpGenerator.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
   // Send the report to the console (that's where errors will go anyway).
   code += 'print(' + functionName + '());\n';
@@ -61,12 +60,12 @@ Blockly.PHP['unittest_main'] = function(block) {
   return code;
 };
 
-Blockly.PHP['unittest_main'].defineAssert_ = function(block) {
-  var resultsVar = Blockly.PHP.nameDB_.getName('unittestResults',
+function phpDefineAssert() {
+  var resultsVar = phpGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.PHP.provideFunction_(
+  var functionName = phpGenerator.provideFunction_(
       'assertEquals',
-      ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + phpGenerator.FUNCTION_NAME_PLACEHOLDER_ +
       '($actual, $expected, $message) {',
       '  global ' + resultsVar + ';',
       '  // Asserts that a value equals another value.',
@@ -87,24 +86,24 @@ Blockly.PHP['unittest_main'].defineAssert_ = function(block) {
   return functionName;
 };
 
-Blockly.PHP['unittest_assertequals'] = function(block) {
+phpGenerator.forBlock['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
-  var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
-    Blockly.PHP.ORDER_NONE) || '';
-  var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
-          Blockly.PHP.ORDER_NONE) || 'null';
-  var expected = Blockly.PHP.valueToCode(block, 'EXPECTED',
-          Blockly.PHP.ORDER_NONE) || 'null';
-  return Blockly.PHP['unittest_main'].defineAssert_() +
+  var message = phpGenerator.valueToCode(block, 'MESSAGE',
+    phpGenerator.ORDER_NONE) || '';
+  var actual = phpGenerator.valueToCode(block, 'ACTUAL',
+          phpGenerator.ORDER_NONE) || 'null';
+  var expected = phpGenerator.valueToCode(block, 'EXPECTED',
+          phpGenerator.ORDER_NONE) || 'null';
+  return phpDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-Blockly.PHP['unittest_assertvalue'] = function(block) {
+phpGenerator.forBlock['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
-  var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
-    Blockly.PHP.ORDER_NONE) || '';
-  var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
-          Blockly.PHP.ORDER_NONE) || 'null';
+  var message = phpGenerator.valueToCode(block, 'MESSAGE',
+    phpGenerator.ORDER_NONE) || '';
+  var actual = phpGenerator.valueToCode(block, 'ACTUAL',
+          phpGenerator.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
   if (expected == 'TRUE') {
       expected = 'true';
@@ -113,18 +112,18 @@ Blockly.PHP['unittest_assertvalue'] = function(block) {
   } else if (expected == 'NULL') {
       expected = 'null';
   }
-  return Blockly.PHP['unittest_main'].defineAssert_() +
+  return phpDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-Blockly.PHP['unittest_fail'] = function(block) {
+phpGenerator.forBlock['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.PHP.nameDB_.getName('unittestResults',
+  var resultsVar = phpGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
-  var functionName = Blockly.PHP.provideFunction_(
+  var message = phpGenerator.quote_(block.getFieldValue('MESSAGE'));
+  var functionName = phpGenerator.provideFunction_(
       'unittest_fail',
-      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      [ 'function ' + phpGenerator.FUNCTION_NAME_PLACEHOLDER_ +
       '($message) {',
           '  global ' + resultsVar + ';',
           '  // Always assert an error.',
@@ -136,20 +135,20 @@ Blockly.PHP['unittest_fail'] = function(block) {
   return functionName + '(' + message + ');\n';
 };
 
-Blockly.PHP['unittest_adjustindex'] = function(block) {
-  var index = Blockly.PHP.valueToCode(block, 'INDEX',
-      Blockly.PHP.ORDER_ADDITION) || '0';
+phpGenerator.forBlock['unittest_adjustindex'] = function(block) {
+  var index = phpGenerator.valueToCode(block, 'INDEX',
+      phpGenerator.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
   if (block.workspace.options.oneBasedIndex) {
-    if (Blockly.isNumber(index)) {
+    if (Blockly.utils.string.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
-      return [Number(index) + 1, Blockly.PHP.ORDER_ATOMIC];
+      return [Number(index) + 1, phpGenerator.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
-      index = index + ' + 1';
+      index += ' + 1';
     }
-  } else if (Blockly.isNumber(index)) {
-    return [index, Blockly.PHP.ORDER_ATOMIC];
+  } else if (Blockly.utils.string.isNumber(index)) {
+    return [index, phpGenerator.ORDER_ATOMIC];
   }
-  return [index, Blockly.PHP.ORDER_ADDITION];
+  return [index, phpGenerator.ORDER_ADDITION];
 };

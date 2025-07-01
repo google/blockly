@@ -1,4 +1,4 @@
-runtime: python37
+runtime: python312
 
 handlers:
 # Redirect obsolete URLs.
@@ -12,6 +12,58 @@ handlers:
   upload: redirect.html
 # Apps was disbanded on 20 Nov 2014.
 - url: /static/apps/.*
+  static_files: redirect.html
+  upload: redirect.html
+# Certain demos were moved on 25 Nov 2022.
+- url: /static/demos/fixed/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/resizable/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/toolbox/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/maxBlocks/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/generator/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/headless/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/interpreter/step-execution.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/interpreter/async-execution.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/graph/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/rtl/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/custom-dialogs/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/custom-fields/turtle/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/custom-fields/pitch/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/mirror/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/plane/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/keyboard_nav/.*
+  static_files: redirect.html
+  upload: redirect.html
+- url: /static/demos/custom-fields/.*
   static_files: redirect.html
   upload: redirect.html
 
@@ -50,4 +102,3 @@ handlers:
 - url: /.*
   script: auto
   secure: always
-  

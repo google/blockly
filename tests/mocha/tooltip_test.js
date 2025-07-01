@@ -4,41 +4,79 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Tooltip', function() {
+import {assert} from '../../node_modules/chai/chai.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+  workspaceTeardown,
+} from './test_helpers/setup_teardown.js';
 
-  setup(function() {
+suite('Tooltip', function () {
+  setup(function () {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
+
+    Blockly.defineBlocksWithJsonArray([
+      {
+        'type': 'test_block',
+        'message0': '%1',
+        'args0': [
+          {
+            'type': 'field_input',
+            'name': 'FIELD',
+          },
+        ],
+      },
+    ]);
   });
 
-  teardown(function() {
+  teardown(function () {
+    delete Blockly.Blocks['test_block'];
     sharedTestTeardown.call(this);
   });
 
-  suite('set/getTooltip', function() {
-    setup(function() {
-      Blockly.defineBlocksWithJsonArray([
-        {
-          "type": "test_block",
-          "message0": "%1",
-          "args0": [
-            {
-              "type": "field_input",
-              "name": "FIELD"
-            }
-          ]
-        }
-      ]);
+  suite('Custom Tooltip', function () {
+    setup(function () {
+      this.renderedWorkspace = Blockly.inject('blocklyDiv', {});
     });
 
-    teardown(function() {
-      delete Blockly.Blocks["test_block"];
+    teardown(function () {
+      workspaceTeardown.call(this, this.renderedWorkspace);
     });
 
-    var tooltipText = 'testTooltip';
+    test('Custom function is called', function () {
+      // Custom tooltip function is registered and should be called when mouse
+      // events are fired.
+      let wasCalled = false;
+      const customFn = function () {
+        wasCalled = true;
+      };
+      Blockly.Tooltip.setCustomTooltip(customFn);
+
+      this.block = this.renderedWorkspace.newBlock('test_block');
+      this.block.setTooltip('Test Tooltip');
+
+      // Fire pointer events directly on the relevant SVG.
+      this.block.pathObject.svgPath.dispatchEvent(
+        new PointerEvent('pointerover'),
+      );
+      this.block.pathObject.svgPath.dispatchEvent(
+        new PointerEvent('pointermove'),
+      );
+      this.clock.runAll();
+
+      assert.isTrue(
+        wasCalled,
+        'Expected custom tooltip function to have been called',
+      );
+    });
+  });
+
+  suite('set/getTooltip', function () {
+    const tooltipText = 'testTooltip';
 
     function assertTooltip(obj) {
-      chai.assert.equal(obj.getTooltip(), tooltipText);
+      assert.equal(obj.getTooltip(), tooltipText);
     }
 
     function setStringTooltip(obj) {
@@ -62,7 +100,7 @@ suite('Tooltip', function() {
     function setFunctionReturningObjectTooltip(obj) {
       obj.setTooltip(() => {
         return {
-          tooltip: tooltipText
+          tooltip: tooltipText,
         };
       });
     }
@@ -71,118 +109,124 @@ suite('Tooltip', function() {
       obj.setTooltip({tooltip: tooltipText});
     }
 
-    suite('Headless Blocks', function() {
-      setup(function() {
+    suite('Headless Blocks', function () {
+      setup(function () {
         this.block = this.workspace.newBlock('test_block');
       });
 
-      test('String', function() {
+      test('String', function () {
         setStringTooltip(this.block);
         assertTooltip(this.block);
       });
 
-      test('Function', function() {
+      test('Function', function () {
         setFunctionTooltip(this.block);
         assertTooltip(this.block);
       });
 
-      test('Nested Function', function() {
+      test('Nested Function', function () {
         setNestedFunctionTooltip(this.block);
         assertTooltip(this.block);
       });
 
-      test('Function returning object', function() {
+      test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.block);
-        chai.assert.throws(this.block.getTooltip.bind(this.block),
-            'Tooltip function must return a string.');
+        assert.throws(
+          this.block.getTooltip.bind(this.block),
+          'Tooltip function must return a string.',
+        );
       });
 
-      test('Object', function() {
+      test('Object', function () {
         setObjectTooltip(this.block);
         assertTooltip(this.block);
       });
     });
 
-    suite('Rendered Blocks', function() {
-      setup(function() {
+    suite('Rendered Blocks', function () {
+      setup(function () {
         this.renderedWorkspace = Blockly.inject('blocklyDiv');
         this.block = this.renderedWorkspace.newBlock('test_block');
         this.block.initSvg();
         this.block.render();
       });
 
-      teardown(function() {
+      teardown(function () {
         workspaceTeardown.call(this, this.renderedWorkspace);
       });
 
-      test('String', function() {
+      test('String', function () {
         setStringTooltip(this.block);
         assertTooltip(this.block);
       });
 
-      test('Function', function() {
+      test('Function', function () {
         setFunctionTooltip(this.block);
         assertTooltip(this.block);
       });
 
-      test('Nested Function', function() {
+      test('Nested Function', function () {
         setNestedFunctionTooltip(this.block);
         assertTooltip(this.block);
       });
 
-      test('Function returning object', function() {
+      test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.block);
-        chai.assert.throws(this.block.getTooltip.bind(this.block),
-            'Tooltip function must return a string.');
+        assert.throws(
+          this.block.getTooltip.bind(this.block),
+          'Tooltip function must return a string.',
+        );
       });
 
-      test('Object', function() {
+      test('Object', function () {
         setObjectTooltip(this.block);
         assertTooltip(this.block);
       });
     });
 
-    suite('Headless Fields', function() {
-      setup(function() {
+    suite('Headless Fields', function () {
+      setup(function () {
         this.block = this.workspace.newBlock('test_block');
         this.field = this.block.getField('FIELD');
       });
 
-      test('String', function() {
+      test('String', function () {
         setStringTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Function', function() {
+      test('Function', function () {
         setFunctionTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Nested Function', function() {
+      test('Nested Function', function () {
         setNestedFunctionTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Function returning object', function() {
+      test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.field);
-        chai.assert.throws(this.field.getTooltip.bind(this.field),
-            'Tooltip function must return a string.');
+        assert.throws(
+          this.field.getTooltip.bind(this.field),
+          'Tooltip function must return a string.',
+        );
       });
 
-      test('Object', function() {
+      test('Object', function () {
         setObjectTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Null', function() {
+      test('Null', function () {
         setStringTooltip(this.block);
         this.field.setTooltip(null);
         assertTooltip(this.field);
       });
     });
 
-    suite('Rendered Fields', function() {
-      setup(function() {
+    suite('Rendered Fields', function () {
+      setup(function () {
         this.renderedWorkspace = Blockly.inject('blocklyDiv');
         this.block = this.renderedWorkspace.newBlock('test_block');
         this.block.initSvg();
@@ -190,37 +234,39 @@ suite('Tooltip', function() {
         this.field = this.block.getField('FIELD');
       });
 
-      teardown(function() {
+      teardown(function () {
         workspaceTeardown.call(this, this.renderedWorkspace);
       });
 
-      test('String', function() {
+      test('String', function () {
         setStringTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Function', function() {
+      test('Function', function () {
         setFunctionTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Nested Function', function() {
+      test('Nested Function', function () {
         setNestedFunctionTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Function returning object', function() {
+      test('Function returning object', function () {
         setFunctionReturningObjectTooltip(this.field);
-        chai.assert.throws(this.field.getTooltip.bind(this.field),
-            'Tooltip function must return a string.');
+        assert.throws(
+          this.field.getTooltip.bind(this.field),
+          'Tooltip function must return a string.',
+        );
       });
 
-      test('Object', function() {
+      test('Object', function () {
         setObjectTooltip(this.field);
         assertTooltip(this.field);
       });
 
-      test('Null', function() {
+      test('Null', function () {
         setStringTooltip(this.block);
         this.field.setTooltip(null);
         assertTooltip(this.field);

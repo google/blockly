@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Unit test blocks for Blockly.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -21,7 +20,7 @@ Blockly.Blocks['unittest_main'] = {
     this.setTooltip('Executes the enclosed unit tests,\n' +
                     'then prints a summary.');
   },
-  getDeveloperVars: function() {
+  getDeveloperVariables: function() {
     return ['unittestResults'];
   }
 };
@@ -41,7 +40,7 @@ Blockly.Blocks['unittest_assertequals'] = {
         .appendField('expected');
     this.setTooltip('Tests that "actual == expected".');
   },
-  getDeveloperVars: function() {
+  getDeveloperVariables: function() {
     return ['unittestResults'];
   }
 };
@@ -61,7 +60,7 @@ Blockly.Blocks['unittest_assertvalue'] = {
         [['true', 'TRUE'], ['false', 'FALSE'], ['null', 'NULL']]), 'EXPECTED');
     this.setTooltip('Tests that the value is true, false, or null.');
   },
-  getDeveloperVars: function() {
+  getDeveloperVariables: function() {
     return ['unittestResults'];
   }
 };
@@ -77,7 +76,7 @@ Blockly.Blocks['unittest_fail'] = {
         .appendField('fail');
     this.setTooltip('Records an error.');
   },
-  getDeveloperVars: function() {
+  getDeveloperVariables: function() {
     return ['unittestResults'];
   }
 };

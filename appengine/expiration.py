@@ -39,13 +39,14 @@ def delete_expired():
     results = query.fetch(limit=QUERY_LIMIT, keys_only=True)
     for x in results:
       x.delete()
+  return len(results)
 
 
 def app(environ, start_response):
-  out = ""
   headers = [
     ("Content-Type", "text/plain")
   ]
   start_response("200 OK", headers)
-  delete_expired()
+  n = delete_expired()
+  out = "%d records deleted." % n
   return [out.encode("utf-8")]

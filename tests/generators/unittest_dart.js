@@ -6,17 +6,16 @@
 
 /**
  * @fileoverview Generating Dart for unit test blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-Blockly.Dart['unittest_main'] = function(block) {
+dartGenerator.forBlock['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.Dart.nameDB_.getName('unittestResults',
+  var resultsVar = dartGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.Dart.provideFunction_(
+  var functionName = dartGenerator.provideFunction_(
       'unittest_report',
-      [ 'String ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      [ 'String ' + dartGenerator.FUNCTION_NAME_PLACEHOLDER_ + '() {',
         '  // Create test report.',
         '  List report = [];',
         '  StringBuffer summary = new StringBuffer();',
@@ -51,7 +50,7 @@ Blockly.Dart['unittest_main'] = function(block) {
       block.getFieldValue('SUITE_NAME') +
        '\');\n';
   // Run tests (unindented).
-  code += Blockly.Dart.statementToCode(block, 'DO')
+  code += dartGenerator.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
   // Print the report to the console (that's where errors will go anyway).
   code += 'print(' + functionName + '());\n';
@@ -60,12 +59,12 @@ Blockly.Dart['unittest_main'] = function(block) {
   return code;
 };
 
-Blockly.Dart['unittest_main'].defineAssert_ = function() {
-  var resultsVar = Blockly.Dart.nameDB_.getName('unittestResults',
+function dartDefineAssert() {
+  var resultsVar = dartGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.Dart.provideFunction_(
+  var functionName = dartGenerator.provideFunction_(
       'unittest_assertequals',
-      [ 'void ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+      [ 'void ' + dartGenerator.FUNCTION_NAME_PLACEHOLDER_ +
           '(dynamic actual, dynamic expected, String message) {',
         '  // Asserts that a value equals another value.',
         '  if (' + resultsVar + ' == null) {',
@@ -97,44 +96,44 @@ Blockly.Dart['unittest_main'].defineAssert_ = function() {
   return functionName;
 };
 
-Blockly.Dart['unittest_assertequals'] = function(block) {
+dartGenerator.forBlock['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
-  var message = Blockly.Dart.valueToCode(block, 'MESSAGE',
-      Blockly.Dart.ORDER_NONE) || '';
-  var actual = Blockly.Dart.valueToCode(block, 'ACTUAL',
-      Blockly.Dart.ORDER_NONE) || 'null';
-  var expected = Blockly.Dart.valueToCode(block, 'EXPECTED',
-      Blockly.Dart.ORDER_NONE) || 'null';
-  return Blockly.Dart['unittest_main'].defineAssert_() +
+  var message = dartGenerator.valueToCode(block, 'MESSAGE',
+      dartGenerator.ORDER_NONE) || '';
+  var actual = dartGenerator.valueToCode(block, 'ACTUAL',
+      dartGenerator.ORDER_NONE) || 'null';
+  var expected = dartGenerator.valueToCode(block, 'EXPECTED',
+      dartGenerator.ORDER_NONE) || 'null';
+  return dartDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-Blockly.Dart['unittest_assertvalue'] = function(block) {
+dartGenerator.forBlock['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
-  var message = Blockly.Dart.valueToCode(block, 'MESSAGE',
-      Blockly.Dart.ORDER_NONE) || '';
-  var actual = Blockly.Dart.valueToCode(block, 'ACTUAL',
-      Blockly.Dart.ORDER_NONE) || 'null';
+  var message = dartGenerator.valueToCode(block, 'MESSAGE',
+      dartGenerator.ORDER_NONE) || '';
+  var actual = dartGenerator.valueToCode(block, 'ACTUAL',
+      dartGenerator.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
-  if (expected == 'TRUE') {
+  if (expected === 'TRUE') {
     expected = 'true';
-  } else if (expected == 'FALSE') {
+  } else if (expected === 'FALSE') {
     expected = 'false';
-  } else if (expected == 'NULL') {
+  } else if (expected === 'NULL') {
     expected = 'null';
   }
-  return Blockly.Dart['unittest_main'].defineAssert_() +
+  return dartDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-Blockly.Dart['unittest_fail'] = function(block) {
+dartGenerator.forBlock['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.Dart.nameDB_.getName('unittestResults',
+  var resultsVar = dartGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var message = Blockly.Dart.quote_(block.getFieldValue('MESSAGE'));
-  var functionName = Blockly.Dart.provideFunction_(
+  var message = dartGenerator.quote_(block.getFieldValue('MESSAGE'));
+  var functionName = dartGenerator.provideFunction_(
       'unittest_fail',
-      [ 'void ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+      [ 'void ' + dartGenerator.FUNCTION_NAME_PLACEHOLDER_ +
           '(String message) {',
         '  // Always assert an error.',
         '  if (' + resultsVar + ' == null) {',
@@ -145,20 +144,20 @@ Blockly.Dart['unittest_fail'] = function(block) {
   return functionName + '(' + message + ');\n';
 };
 
-Blockly.Dart['unittest_adjustindex'] = function(block) {
-  var index = Blockly.Dart.valueToCode(block, 'INDEX',
-      Blockly.Dart.ORDER_ADDITIVE) || '0';
+dartGenerator.forBlock['unittest_adjustindex'] = function(block) {
+  var index = dartGenerator.valueToCode(block, 'INDEX',
+      dartGenerator.ORDER_ADDITIVE) || '0';
   // Adjust index if using one-based indexing.
   if (block.workspace.options.oneBasedIndex) {
-    if (Blockly.isNumber(index)) {
+    if (Blockly.utils.string.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
-      return [Number(index) + 1, Blockly.Dart.ORDER_ATOMIC];
+      return [Number(index) + 1, dartGenerator.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
-      index = index + ' + 1';
+      index += ' + 1';
     }
-  } else if (Blockly.isNumber(index)) {
-    return [index, Blockly.Dart.ORDER_ATOMIC];
+  } else if (Blockly.utils.string.isNumber(index)) {
+    return [index, dartGenerator.ORDER_ATOMIC];
   }
-  return [index, Blockly.Dart.ORDER_ADDITIVE];
+  return [index, dartGenerator.ORDER_ADDITIVE];
 };

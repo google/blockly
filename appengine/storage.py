@@ -15,15 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-"""Store and retrieve XML with App Engine.
+"""Store and retrieve Blockly XML/JSON with App Engine.
 """
 
 __author__ = "q.neutron@gmail.com (Quynh Neutron)"
 
-import cgi
 import hashlib
-from random import randint
 from google.cloud import ndb
+from random import randint
+from urllib.parse import unquote
 
 
 class Xml(ndb.Model):
@@ -31,6 +31,7 @@ class Xml(ndb.Model):
   xml_hash = ndb.IntegerProperty()
   xml_content = ndb.TextProperty()
   last_accessed = ndb.DateTimeProperty(auto_now=True)
+
 
 def keyGen():
   # Generate a random string of length KEY_LEN.
@@ -40,13 +41,28 @@ def keyGen():
   return "".join([CHARS[randint(0, max_index)] for x in range(KEY_LEN)])
 
 
+# Parse POST data (e.g. a=1&b=2) into a dictionary (e.g. {"a": 1, "b": 2}).
+# Very minimal parser.  Does not combine repeated names (a=1&a=2), ignores
+# valueless names (a&b), does not support isindex or multipart/form-data.
+def parse_post(environ):
+  fp = environ["wsgi.input"]
+  data = fp.read().decode()
+  parts = data.split("&")
+  dict = {}
+  for part in parts:
+    tuple = part.split("=", 1)
+    if len(tuple) == 2:
+      dict[tuple[0]] = unquote(tuple[1])
+  return dict
+
+
 def xmlToKey(xml_content):
-  # Store XML and return a generated key.
+  # Store XML/JSON and return a generated key.
   xml_hash = int(hashlib.sha1(xml_content.encode("utf-8")).hexdigest(), 16)
   xml_hash = int(xml_hash % (2 ** 64) - (2 ** 63))
-  lookup_query = Xml.query(Xml.xml_hash == xml_hash)
   client = ndb.Client()
   with client.context():
+    lookup_query = Xml.query(Xml.xml_hash == xml_hash)
     lookup_result = lookup_query.get()
     if lookup_result:
       xml_key = lookup_result.key.string_id()
@@ -65,7 +81,7 @@ def xmlToKey(xml_content):
 
 
 def keyToXml(key_provided):
-  # Retrieve stored XML based on the provided key.
+  # Retrieve stored XML/JSON based on the provided key.
   # Normalize the string.
   key_provided = key_provided.lower().strip()
   # Check datastore for a match.
@@ -80,20 +96,30 @@ def keyToXml(key_provided):
     with client.context():
       result.put()
     xml = result.xml_content
+    # Add a poison line to prevent raw content from being served.
+    xml = "{[(< UNTRUSTED CONTENT >)]}\n" + xml
   return xml
 
 
 def app(environ, start_response):
-  forms = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-  if "xml" in forms:
-    out = xmlToKey(forms["xml"].value)
-  elif "key" in forms:
-    out = keyToXml(forms["key"].value)
-  else:
-    out = ""
-
   headers = [
     ("Content-Type", "text/plain")
   ]
+  if environ["REQUEST_METHOD"] != "POST":
+    start_response("405 Method Not Allowed", headers)
+    return ["Storage only accepts POST".encode("utf-8")]
+  if ("CONTENT_TYPE" in environ and
+      environ["CONTENT_TYPE"] != "application/x-www-form-urlencoded"):
+    start_response("405 Method Not Allowed", headers)
+    return ["Storage only accepts application/x-www-form-urlencoded".encode("utf-8")]
+
+  forms = parse_post(environ)
+  if "xml" in forms:
+    out = xmlToKey(forms["xml"])
+  elif "key" in forms:
+    out = keyToXml(forms["key"])
+  else:
+    out = ""
+
   start_response("200 OK", headers)
   return [out.encode("utf-8")]

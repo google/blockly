@@ -17,8 +17,6 @@
  *
  * The <code>exampleBlocklyBlock</code> is usually the block loaded into the
  * preview workspace after manually entering the block definition.
- *
- * @author JC-Orozco (Juan Carlos Orozco), AnmAtAnm (Andrew n marshall)
  */
 'use strict';
 
@@ -73,7 +71,7 @@ BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
  * requested type.
  *
  * @param {string} type Type name of desired connection constraint.
- * @return {!Element} The <block> representing the the constraint type.
+ * @return {!Element} The <block> representing the constraint type.
  * @private
  */
 BlockDefinitionExtractor.buildBlockForType_ = function(type) {
@@ -289,14 +287,16 @@ BlockDefinitionExtractor.parseInputs_ = function(block) {
  * @private
  */
 BlockDefinitionExtractor.input_ = function(input, align) {
-  var isDummy = (input.type === Blockly.DUMMY_INPUT);
+  var hasConnector = (input.type === Blockly.inputs.inputTypes.VALUE || input.type === Blockly.inputs.inputTypes.STATEMENT);
   var inputTypeAttr =
-      isDummy ? 'input_dummy' :
-      (input.type === Blockly.INPUT_VALUE) ? 'input_value' : 'input_statement';
+      input.type === Blockly.inputs.inputTypes.DUMMY ? 'input_dummy' :
+      input.type === Blockly.inputs.inputTypes.END_ROW ? 'input_end_row' :
+      input.type === Blockly.inputs.inputTypes.VALUE ? 'input_value' :
+      'input_statement';
   var inputDefBlock =
       BlockDefinitionExtractor.newDomElement_('block', {type: inputTypeAttr});
 
-  if (!isDummy) {
+  if (hasConnector) {
     inputDefBlock.append(BlockDefinitionExtractor.newDomElement_(
         'field', {name: 'INPUTNAME'}, input.name));
   }
@@ -309,7 +309,7 @@ BlockDefinitionExtractor.input_ = function(input, align) {
   fieldsDef.append(fieldsXml);
   inputDefBlock.append(fieldsDef);
 
-  if (!isDummy) {
+  if (hasConnector) {
     var typeValue = BlockDefinitionExtractor.newDomElement_(
         'value', {name: 'TYPE'});
     typeValue.append(
@@ -717,7 +717,7 @@ BlockDefinitionExtractor.colourBlockFromHue_ = function(hue) {
   var colourBlock = BlockDefinitionExtractor.newDomElement_(
       'block', {type: 'colour_hue'});
   colourBlock.append(BlockDefinitionExtractor.newDomElement_('mutation', {
-    colour: Blockly.hueToRgb(hue)
+    colour: Blockly.utils.colour.hueToHex(hue)
   }));
   colourBlock.append(BlockDefinitionExtractor.newDomElement_(
       'field', {name: 'HUE'}, hue.toString()));

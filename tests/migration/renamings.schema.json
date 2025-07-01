@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/google/blockly/tests/migration/renamings-schema.json",
+  "title": "Renamings",
+  "description": "A file containing information about module and module export renamings",
+  "type": "object",
+  "patternProperties": {
+    "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$": {
+      "$ref": "#/$defs/version"
+    }
+  },
+  "properties": {
+    "develop": {"$ref": "#/$defs/version"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "version": {
+      "description": "All the renamings that happened in a paricular release.",
+      "type": "array",
+      "items": {
+        "description": "All the renamings in/of a particular module.",
+        "type": "object",
+        "properties": {
+          "oldName": {"$ref": "#/$defs/dottedIdentifier"},
+          "newName": {"$ref": "#/$defs/dottedIdentifier"},
+          "newExport": {"$ref": "#/$defs/dottedIdentifier"},
+          "oldPath": {"$ref": "#/$defs/dottedIdentifier"},
+          "newPath": {"$ref": "#/$defs/dottedIdentifier"},
+          "exports": {
+            "description": "A list of the exports that have been renamed.",
+            "type": "object",
+            "patternProperties": {
+              "^[A-Za-z$_][A-Za-z0-9$_]*(\\.[A-Za-z$_][A-Za-z0-9$_]*)*$": {
+                "description": "A single renamed (or moved) export.",
+                "type": "object",
+                "properties": {
+                  "newModule": {"$ref": "#/$defs/dottedIdentifier"},
+                  "newExport": {"$ref": "#/$defs/dottedIdentifier"},
+                  "oldPath": {"$ref": "#/$defs/dottedIdentifier"},
+                  "newPath": {"$ref": "#/$defs/dottedIdentifier"},
+                  "getMethod": {"$ref": "#/$defs/dottedIdentifier"},
+                  "setMethod": {"$ref": "#/$defs/dottedIdentifier"}
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": ["oldName"],
+        "additionalProperties": false
+      }
+    },
+    "dottedIdentifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z$_][A-Za-z0-9$_]*(\\.[A-Za-z$_][A-Za-z0-9$_]*)*$"
+    }
+  }
+}

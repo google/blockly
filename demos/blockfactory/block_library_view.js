@@ -7,8 +7,6 @@
 /**
  * @fileoverview Javascript for BlockLibraryView class. It manages the display
  * of the Block Library dropdown, save, and delete buttons.
- *
- * @author quachtina96 (Tina Quach)
  */
 
 'use strict';
@@ -64,7 +62,7 @@ BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
   // if null or invalid block type selected.
   for (var blockType in this.optionMap) {
     var option = this.optionMap[blockType];
-    if (blockType == blockTypeToSelect) {
+    if (blockType === blockTypeToSelect) {
       this.selectOption_(option);
     } else {
       this.deselectOption_(option);
@@ -106,36 +104,36 @@ BlockLibraryView.prototype.updateButtons =
     // User is editing a block.
 
     if (!isInLibrary) {
-      // Block type has not been saved to library yet. Disable the delete button
-      // and allow user to save.
+      // Block type has not been saved to the library yet.
+      // Disable the delete button.
       this.saveButton.textContent = 'Save "' + blockType + '"';
-      this.saveButton.disabled = false;
       this.deleteButton.disabled = true;
     } else {
-      // Block type has already been saved. Disable the save button unless the
-      // there are unsaved changes (checked below).
+      // A version of the block type has already been saved.
+      // Enable the delete button.
       this.saveButton.textContent = 'Update "' + blockType + '"';
-      this.saveButton.disabled = true;
       this.deleteButton.disabled = false;
     }
     this.deleteButton.textContent = 'Delete "' + blockType + '"';
 
-    // If changes to block have been made and are not saved, make button
-    // green to encourage user to save the block.
+    this.saveButton.classList.remove('button_alert', 'button_warn');
     if (!savedChanges) {
-      var buttonFormatClass = 'button_warn';
+      var buttonFormatClass;
 
-      // If block type is the default, 'block_type', make button red to alert
-      // user.
-      if (blockType == 'block_type') {
+      var isReserved = reservedBlockFactoryBlocks.has(blockType);
+      if (isReserved || blockType === 'block_type') {
+        // Make button red to alert user that the block type can't be saved.
         buttonFormatClass = 'button_alert';
+      } else {
+        // Block type has not been saved to library yet or has unsaved changes.
+        // Make the button green to encourage the user to save the block.
+        buttonFormatClass = 'button_warn';
       }
       this.saveButton.classList.add(buttonFormatClass);
       this.saveButton.disabled = false;
 
     } else {
       // No changes to save.
-      this.saveButton.classList.remove('button_alert', 'button_warn');
       this.saveButton.disabled = true;
     }
 

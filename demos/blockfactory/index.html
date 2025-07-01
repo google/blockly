@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly Demo: Blockly Developer Tools</title>
-  <script src="../../blockly_compressed.js"></script>
-  <script src="../../javascript_compressed.js"></script>
-  <script src="../../msg/js/en.js"></script>
-  <script src="../../blocks_compressed.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/blockly_compressed.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/blocks_compressed.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/javascript_compressed.js"></script>
+  <script src="https://unpkg.com/blockly@10.4.3/msg/en.js"></script>
   <script src="analytics.js"></script>
   <script src="block_definition_extractor.js"></script>
   <script src="factory_utils.js"></script>
@@ -31,7 +31,7 @@
   <script src="/storage.js"></script>
   <link rel="stylesheet" href="factory.css">
   <link rel="stylesheet" href="cp.css">
-  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script>
     var blocklyFactory;
     var init = function() {
@@ -53,6 +53,9 @@
     <button class="privacyButton" title="Open Google privacy policy"><a class="privacyLink" href="https://policies.google.com/privacy">Privacy</a>
     </button>
   </h1>
+  <div id="legacyBanner">
+    This version of Developer Tools is only compatible with Blockly version 10 and earlier. Try the <a target="_blank" href="https://google.github.io/blockly-samples/examples/developer-tools/index.html">new Block Factory</a> and <a target="_blank" href="https://developers.google.com/blockly/guides/create-custom-blocks/blockly-developer-tools#import_from_legacy_block_factory">learn how to migrate your blocks</a>.
+  </div>
   <div id="tabContainer">
     <div id="blockFactory_tab" class="tab tabon">Block Factory</div>
     <div id="blocklibraryExporter_tab" class="tab taboff">Block Exporter</div>
@@ -143,9 +146,9 @@
         <div class="dropdown">
         <button id="button_importBlocks">Import Custom Blocks</button>
           <div id="dropdownDiv_importBlocks" class="dropdown-content">
-            <input type="file" id="input_importBlocksJson" accept=".js, .json, .txt" class="inputfile"</input>
+            <input type="file" id="input_importBlocksJson" accept=".js, .json, .txt" class="inputfile">
             <label for="input_importBlocksJson">From JSON</label>
-            <input type="file" id="input_importBlocksJs" accept=".js, .txt" class="inputfile"</input>
+            <input type="file" id="input_importBlocksJs" accept=".js, .txt" class="inputfile">
             <label for="input_importBlocksJs">From Javascript</label>
           </div>
         </div>
@@ -153,9 +156,9 @@
         <div class="dropdown">
         <button id="button_load">Load to Edit</button>
           <div id="dropdownDiv_load" class="dropdown-content">
-            <input type="file" id="input_loadToolbox" accept=".xml" class="inputfile"></input>
+            <input type="file" id="input_loadToolbox" accept=".xml" class="inputfile">
             <label for="input_loadToolbox">Toolbox</label>
-            <input type="file" id="input_loadPreload" accept=".xml" class="inputfile"</input>
+            <input type="file" id="input_loadPreload" accept=".xml" class="inputfile">
             <label for="input_loadPreload">Workspace Blocks</label>
           </div>
         </div>
@@ -339,6 +342,9 @@
               <button id="localSaveButton" title="Save block library XML to a local file.">
                 <span>Download Block Library</span>
               </button>
+              <button id="exportAsJson" title="Export block library for import into the new Block Factory.">
+                <span>Export Block Library</span>
+              </button>
             </td>
           </tr>
         </table>
@@ -369,7 +375,7 @@
                     // Manual JavaScript works but requires use of eval().
                     // TODO(#1269): Replace eval() with JS-Interpreter before
                     //              re-enabling "Manual JavaScript" mode.
-                    if (document.location.href.indexOf('file://') == 0) {
+                    if (document.location.href.startsWith('file://')) {
                       document.write(
                           '<option value="Manual-JS">Manual JavaScript&hellip;</option>');
                     }
@@ -422,6 +428,7 @@
         </value>
       </block>
       <block type="input_dummy"></block>
+      <block type="input_end_row"></block>
     </category>
     <category name="Field">
       <block type="field_static"></block>

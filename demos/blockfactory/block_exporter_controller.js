@@ -9,8 +9,6 @@
  * users to export block definitions and generator stubs of their saved blocks
  * easily using a visual interface. Depends on Block Exporter View and Block
  * Exporter Tools classes. Interacts with Export Settings in the index.html.
- *
- * @author quachtina96 (Tina Quach)
  */
 
 'use strict';
@@ -93,7 +91,7 @@ BlockExporterController.prototype.export = function() {
       BlocklyDevTools.Analytics.onExport(
           BlocklyDevTools.Analytics.BLOCK_DEFINITIONS,
           {
-            format: (definitionFormat == 'JSON' ?
+            format: (definitionFormat === 'JSON' ?
                 BlocklyDevTools.Analytics.FORMAT_JSON :
                 BlocklyDevTools.Analytics.FORMAT_JS)
           });
@@ -226,9 +224,9 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
   var unstoredCustomBlockTypes = [];
 
   for (var i = 0, blockType; blockType = this.usedBlockTypes[i]; i++) {
-    if (storedBlockTypes.indexOf(blockType) != -1) {
+    if (storedBlockTypes.includes(blockType)) {
       sharedBlockTypes.push(blockType);
-    } else if (StandardCategories.coreBlockTypes.indexOf(blockType) == -1) {
+    } else if (!StandardCategories.coreBlockTypes.includes(blockType)) {
       unstoredCustomBlockTypes.push(blockType);
     }
   }

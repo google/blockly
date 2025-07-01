@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Type definitions for the Blockly <%= locale %> locale.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 /// <reference path="msg.d.ts" />

@@ -77,7 +77,7 @@ export abstract class CommentBarButton implements IFocusableNode {
     return rect;
   }
 
-  /** Returns the margin in SVG units surrounding this button. */
+  /** Returns the margin in workspace coordinates surrounding this button. */
   getMargin(): number {
     return (this.container.getBBox().height - this.icon.getBBox().height) / 2;
   }

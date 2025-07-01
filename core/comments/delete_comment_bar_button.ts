@@ -73,6 +73,9 @@ export class DeleteCommentBarButton extends CommentBarButton {
    */
   override reposition() {
     const margin = this.getMargin();
+    // Reset to 0 so that our position doesn't force the parent container to
+    // grow.
+    this.icon.setAttribute('x', `0`);
     const containerSize = this.container.getBBox();
     this.icon.setAttribute('y', `${margin}`);
     this.icon.setAttribute(

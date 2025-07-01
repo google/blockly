@@ -43,6 +43,7 @@ import type {KeyboardShortcut} from '../shortcut_registry.js';
 import * as Touch from '../touch.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
+import * as idGenerator from '../utils/idgenerator.js';
 import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -185,6 +186,7 @@ export class Toolbox
     const svg = workspace.getParentSvg();
 
     const container = this.createContainer_();
+    container.id = idGenerator.getNextUniqueId();
 
     this.contentsDiv_ = this.createContentsContainer_();
     aria.setRole(this.contentsDiv_, aria.Role.TREE);

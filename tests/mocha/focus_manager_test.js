@@ -6106,5 +6106,41 @@ suite('FocusManager', function () {
       );
       assert.strictEqual(document.activeElement, nodeElem);
     });
+
+    test('with focus on non-ephemeral element ephemeral ended does not restore to focused node', function () {
+      this.focusManager.registerTree(this.testFocusableTree2);
+      this.focusManager.registerTree(this.testFocusableGroup2);
+      this.focusManager.focusNode(this.testFocusableTree2Node1);
+      const ephemeralElement = document.getElementById(
+        'nonTreeGroupForEphemeralFocus',
+      );
+      const ephemeralElement2 = document.getElementById(
+        'nonTreeElementForEphemeralFocus2',
+      );
+      const finishFocusCallback =
+        this.focusManager.takeEphemeralFocus(ephemeralElement);
+      // Force focus away, triggering the callback's automatic returning logic.
+      ephemeralElement2.focus();
+
+      finishFocusCallback();
+
+      // The original node should not be focused since the ephemeral element
+      // lost its own DOM focus while ephemeral focus was active. Instead, the
+      // newly active element should still hold focus.
+      const activeElems = Array.from(
+        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
+      );
+      const passiveElems = Array.from(
+        document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR),
+      );
+      assert.isEmpty(activeElems);
+      assert.strictEqual(passiveElems.length, 1);
+      assert.includesClass(
+        this.testFocusableTree2Node1.getFocusableElement().classList,
+        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
+      );
+      assert.strictEqual(document.activeElement, ephemeralElement2);
+      assert.isFalse(this.focusManager.ephemeralFocusTaken());
+    });
   });
 });

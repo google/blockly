@@ -131,14 +131,16 @@ export class FocusManager {
       }
 
       const ephemeralFocusElem = this.ephemerallyFocusedElement;
-      if (ephemeralFocusElem && this.ephemeralDomFocusChangedCallback) {
+      if (ephemeralFocusElem) {
         const hadFocus = this.ephemerallyFocusedElementCurrentlyHasFocus;
         const hasFocus =
           !!element &&
           element instanceof Node &&
           ephemeralFocusElem.contains(element);
         if (hadFocus !== hasFocus) {
-          this.ephemeralDomFocusChangedCallback(hasFocus);
+          if (this.ephemeralDomFocusChangedCallback) {
+            this.ephemeralDomFocusChangedCallback(hasFocus);
+          }
           this.ephemerallyFocusedElementCurrentlyHasFocus = hasFocus;
         }
       }
@@ -490,6 +492,7 @@ export class FocusManager {
     focusableElement.focus();
     this.ephemerallyFocusedElementCurrentlyHasFocus = true;
 
+    const focusedNodeAtStart = this.focusedNode;
     let hasFinishedEphemeralFocus = false;
     return () => {
       if (hasFinishedEphemeralFocus) {
@@ -501,9 +504,20 @@ export class FocusManager {
       hasFinishedEphemeralFocus = true;
       this.ephemerallyFocusedElement = null;
       this.ephemeralDomFocusChangedCallback = null;
+
+      const hadEphemeralFocusAtEnd =
+        this.ephemerallyFocusedElementCurrentlyHasFocus;
       this.ephemerallyFocusedElementCurrentlyHasFocus = false;
 
-      if (this.focusedNode) {
+      // If the user forced away DOM focus during ephemeral focus, then
+      // determine whether focus should be restored back to a focusable node
+      // after ephemeral focus ends. Generally it shouldn't be, but in some
+      // cases (such as the user focusing an actual focusable node) it then
+      // should be.
+      const hasNewFocusedNode = focusedNodeAtStart !== this.focusedNode;
+      const shouldRestoreToNode = hasNewFocusedNode || hadEphemeralFocusAtEnd;
+
+      if (this.focusedNode && shouldRestoreToNode) {
         this.activelyFocusNode(this.focusedNode, null);
 
         // Even though focus was restored, check if it's lost again. It's
@@ -521,6 +535,11 @@ export class FocusManager {
             this.focusNode(capturedNode);
           }
         }, 0);
+      } else {
+        // If the ephemeral element lost focus then do not force it back since
+        // that likely will override the user's own attempt to move focus away
+        // from the ephemeral experience.
+        this.defocusCurrentFocusedNode();
       }
     };
   }

@@ -719,7 +719,6 @@ export function hideWithoutAnimation() {
     onHide();
     onHide = null;
   }
-  clearContent();
   owner = null;
 
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
@@ -728,6 +727,13 @@ export function hideWithoutAnimation() {
     returnEphemeralFocus();
     returnEphemeralFocus = null;
   }
+
+  // Content must be cleared after returning ephemeral focus since otherwise it
+  // may force focus changes which could desynchronize the focus manager and
+  // make it think the user directed focus away from the drop-down div (which
+  // will then notify it to not restore focus back to any previously focused
+  // node).
+  clearContent();
 }
 
 /**

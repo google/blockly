@@ -213,7 +213,7 @@ export function setColour(backgroundColour: string, borderColour: string) {
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes. Defaults
  *     to true.
- * @param manageEphemeralFocus Whether the drop-down should automatically hide
+ * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
  *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered below block; false if above.
  */
@@ -249,7 +249,7 @@ export function showPositionedByBlock<T>(
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes. Defaults
  *     to true.
- * @param manageEphemeralFocus Whether the drop-down should automatically hide
+ * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
  *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered below block; false if above.
  */
@@ -310,7 +310,7 @@ function getScaledBboxOfField(field: Field): Rect {
  *     according to the drop-down div's lifetime. Note that if a false value is
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes.
- * @param manageEphemeralFocus Whether the drop-down should automatically hide
+ * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
  *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered below block; false if above.
  */
@@ -369,7 +369,7 @@ function showPositionedByRect(
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param manageEphemeralFocus Whether ephemeral focus should be managed
  *     according to the widget div's lifetime.
- * @param manageEphemeralFocus Whether the drop-down should automatically hide
+ * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
  *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered at the primary origin point.
  * @internal

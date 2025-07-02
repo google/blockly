@@ -17,6 +17,12 @@ import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
  */
 export type ReturnEphemeralFocus = () => void;
 
+/**
+ * Type declaration for an optional callback to observe when an element with
+ * ephemeral focus has its DOM focus changed before ephemeral focus is returned.
+ *
+ * See FocusManager.takeEphemeralFocus for more details.
+ */
 export type EphemeralFocusChangedInDom = (hasDomFocus: boolean) => void;
 
 /**
@@ -81,7 +87,7 @@ export class FocusManager {
   private registeredTrees: Array<TreeRegistration> = [];
 
   private ephemerallyFocusedElement: HTMLElement | SVGElement | null = null;
-  private ephemeralFocusChangedInDomCallback: EphemeralFocusChangedInDom | null =
+  private ephemeralDomFocusChangedCallback: EphemeralFocusChangedInDom | null =
     null;
   private ephemerallyFocusedElementCurrentlyHasFocus: boolean = false;
   private lockFocusStateChanges: boolean = false;
@@ -125,14 +131,14 @@ export class FocusManager {
       }
 
       const ephemeralFocusElem = this.ephemerallyFocusedElement;
-      if (ephemeralFocusElem && this.ephemeralFocusChangedInDomCallback) {
+      if (ephemeralFocusElem && this.ephemeralDomFocusChangedCallback) {
         const hadFocus = this.ephemerallyFocusedElementCurrentlyHasFocus;
         const hasFocus =
           !!element &&
           element instanceof Node &&
           ephemeralFocusElem.contains(element);
         if (hadFocus !== hasFocus) {
-          this.ephemeralFocusChangedInDomCallback(hasFocus);
+          this.ephemeralDomFocusChangedCallback(hasFocus);
           this.ephemerallyFocusedElementCurrentlyHasFocus = hasFocus;
         }
       }
@@ -441,6 +447,28 @@ export class FocusManager {
    * the returned lambda is called. Additionally, only 1 ephemeral focus context
    * can be active at any given time (attempting to activate more than one
    * simultaneously will result in an error being thrown).
+   *
+   * Some notes about the ephemeral focus tracking callback:
+   * - This method will be called initially with a value of 'true' indicating
+   *   that the ephemeral element has been focused, so callers can rely on that,
+   *   if needed, for initialization logic.
+   * - It's safe to end ephemeral focus in this callback (and is encouraged for
+   *   callers that wish to automatically end ephemeral focus when the user
+   *   directs focus outside of the element).
+   * - The element AND all of its descendants are tracked for focus. That means
+   *   the callback will ONLY be called with a value of 'false' if focus
+   *   completely leaves the DOM tree for the provided focusable element.
+   * - It's invalid to return focus on the very first call to the callback,
+   *   however this is expected to be impossible, anyway, since this method
+   *   won't return until after the first call to the callback (thus there will
+   *   be no means to return ephemeral focus).
+   *
+   * @param focusableElement The element that should be focused until returned.
+   * @param onFocusChangedInDom An optional callback which will be notified
+   *     whenever the provided element's focus changes before ephemeral focus is
+   *     returned. See the details above for specifics.
+   * @returns A ReturnEphemeralFocus that must be called when ephemeral focus
+   *     should end.
    */
   takeEphemeralFocus(
     focusableElement: HTMLElement | SVGElement,
@@ -454,7 +482,7 @@ export class FocusManager {
       );
     }
     this.ephemerallyFocusedElement = focusableElement;
-    this.ephemeralFocusChangedInDomCallback = onFocusChangedInDom;
+    this.ephemeralDomFocusChangedCallback = onFocusChangedInDom;
 
     if (this.focusedNode) {
       this.passivelyFocusNode(this.focusedNode, null);
@@ -472,7 +500,7 @@ export class FocusManager {
       }
       hasFinishedEphemeralFocus = true;
       this.ephemerallyFocusedElement = null;
-      this.ephemeralFocusChangedInDomCallback = null;
+      this.ephemeralDomFocusChangedCallback = null;
       this.ephemerallyFocusedElementCurrentlyHasFocus = false;
 
       if (this.focusedNode) {

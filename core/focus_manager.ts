@@ -18,6 +18,14 @@ import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 export type ReturnEphemeralFocus = () => void;
 
 /**
+ * Type declaration for an optional callback to observe when an element with
+ * ephemeral focus has its DOM focus changed before ephemeral focus is returned.
+ *
+ * See FocusManager.takeEphemeralFocus for more details.
+ */
+export type EphemeralFocusChangedInDom = (hasDomFocus: boolean) => void;
+
+/**
  * Represents an IFocusableTree that has been registered for focus management in
  * FocusManager.
  */
@@ -78,7 +86,10 @@ export class FocusManager {
   private previouslyFocusedNode: IFocusableNode | null = null;
   private registeredTrees: Array<TreeRegistration> = [];
 
-  private currentlyHoldsEphemeralFocus: boolean = false;
+  private ephemerallyFocusedElement: HTMLElement | SVGElement | null = null;
+  private ephemeralDomFocusChangedCallback: EphemeralFocusChangedInDom | null =
+    null;
+  private ephemerallyFocusedElementCurrentlyHasFocus: boolean = false;
   private lockFocusStateChanges: boolean = false;
   private recentlyLostAllFocus: boolean = false;
   private isUpdatingFocusedNode: boolean = false;
@@ -117,6 +128,21 @@ export class FocusManager {
         }
       } else {
         this.defocusCurrentFocusedNode();
+      }
+
+      const ephemeralFocusElem = this.ephemerallyFocusedElement;
+      if (ephemeralFocusElem) {
+        const hadFocus = this.ephemerallyFocusedElementCurrentlyHasFocus;
+        const hasFocus =
+          !!element &&
+          element instanceof Node &&
+          ephemeralFocusElem.contains(element);
+        if (hadFocus !== hasFocus) {
+          if (this.ephemeralDomFocusChangedCallback) {
+            this.ephemeralDomFocusChangedCallback(hasFocus);
+          }
+          this.ephemerallyFocusedElementCurrentlyHasFocus = hasFocus;
+        }
       }
     };
 
@@ -313,7 +339,7 @@ export class FocusManager {
    */
   focusNode(focusableNode: IFocusableNode): void {
     this.ensureManagerIsUnlocked();
-    const mustRestoreUpdatingNode = !this.currentlyHoldsEphemeralFocus;
+    const mustRestoreUpdatingNode = !this.ephemerallyFocusedElement;
     if (mustRestoreUpdatingNode) {
       // Disable state syncing from DOM events since possible calls to focus()
       // below will loop a call back to focusNode().
@@ -395,7 +421,7 @@ export class FocusManager {
       this.removeHighlight(nextTreeRoot);
     }
 
-    if (!this.currentlyHoldsEphemeralFocus) {
+    if (!this.ephemerallyFocusedElement) {
       // Only change the actively focused node if ephemeral state isn't held.
       this.activelyFocusNode(nodeToFocus, prevTree ?? null);
     }
@@ -423,24 +449,50 @@ export class FocusManager {
    * the returned lambda is called. Additionally, only 1 ephemeral focus context
    * can be active at any given time (attempting to activate more than one
    * simultaneously will result in an error being thrown).
+   *
+   * Important details regarding the onFocusChangedInDom callback:
+   * - This method will be called initially with a value of 'true' indicating
+   *   that the ephemeral element has been focused, so callers can rely on that,
+   *   if needed, for initialization logic.
+   * - It's safe to end ephemeral focus in this callback (and is encouraged for
+   *   callers that wish to automatically end ephemeral focus when the user
+   *   directs focus outside of the element).
+   * - The element AND all of its descendants are tracked for focus. That means
+   *   the callback will ONLY be called with a value of 'false' if focus
+   *   completely leaves the DOM tree for the provided focusable element.
+   * - It's invalid to return focus on the very first call to the callback,
+   *   however this is expected to be impossible, anyway, since this method
+   *   won't return until after the first call to the callback (thus there will
+   *   be no means to return ephemeral focus).
+   *
+   * @param focusableElement The element that should be focused until returned.
+   * @param onFocusChangedInDom An optional callback which will be notified
+   *     whenever the provided element's focus changes before ephemeral focus is
+   *     returned. See the details above for specifics.
+   * @returns A ReturnEphemeralFocus that must be called when ephemeral focus
+   *     should end.
    */
   takeEphemeralFocus(
     focusableElement: HTMLElement | SVGElement,
+    onFocusChangedInDom: EphemeralFocusChangedInDom | null = null,
   ): ReturnEphemeralFocus {
     this.ensureManagerIsUnlocked();
-    if (this.currentlyHoldsEphemeralFocus) {
+    if (this.ephemerallyFocusedElement) {
       throw Error(
         `Attempted to take ephemeral focus when it's already held, ` +
           `with new element: ${focusableElement}.`,
       );
     }
-    this.currentlyHoldsEphemeralFocus = true;
+    this.ephemerallyFocusedElement = focusableElement;
+    this.ephemeralDomFocusChangedCallback = onFocusChangedInDom;
 
     if (this.focusedNode) {
       this.passivelyFocusNode(this.focusedNode, null);
     }
     focusableElement.focus();
+    this.ephemerallyFocusedElementCurrentlyHasFocus = true;
 
+    const focusedNodeAtStart = this.focusedNode;
     let hasFinishedEphemeralFocus = false;
     return () => {
       if (hasFinishedEphemeralFocus) {
@@ -450,9 +502,22 @@ export class FocusManager {
         );
       }
       hasFinishedEphemeralFocus = true;
-      this.currentlyHoldsEphemeralFocus = false;
+      this.ephemerallyFocusedElement = null;
+      this.ephemeralDomFocusChangedCallback = null;
 
-      if (this.focusedNode) {
+      const hadEphemeralFocusAtEnd =
+        this.ephemerallyFocusedElementCurrentlyHasFocus;
+      this.ephemerallyFocusedElementCurrentlyHasFocus = false;
+
+      // If the user forced away DOM focus during ephemeral focus, then
+      // determine whether focus should be restored back to a focusable node
+      // after ephemeral focus ends. Generally it shouldn't be, but in some
+      // cases (such as the user focusing an actual focusable node) it then
+      // should be.
+      const hasNewFocusedNode = focusedNodeAtStart !== this.focusedNode;
+      const shouldRestoreToNode = hasNewFocusedNode || hadEphemeralFocusAtEnd;
+
+      if (this.focusedNode && shouldRestoreToNode) {
         this.activelyFocusNode(this.focusedNode, null);
 
         // Even though focus was restored, check if it's lost again. It's
@@ -470,6 +535,11 @@ export class FocusManager {
             this.focusNode(capturedNode);
           }
         }, 0);
+      } else {
+        // If the ephemeral element lost focus then do not force it back since
+        // that likely will override the user's own attempt to move focus away
+        // from the ephemeral experience.
+        this.defocusCurrentFocusedNode();
       }
     };
   }
@@ -478,7 +548,7 @@ export class FocusManager {
    * @returns whether something is currently holding ephemeral focus
    */
   ephemeralFocusTaken(): boolean {
-    return this.currentlyHoldsEphemeralFocus;
+    return !!this.ephemerallyFocusedElement;
   }
 
   /**
@@ -516,7 +586,7 @@ export class FocusManager {
     // The current node will likely be defocused while ephemeral focus is held,
     // but internal manager state shouldn't change since the node should be
     // restored upon exiting ephemeral focus mode.
-    if (this.focusedNode && !this.currentlyHoldsEphemeralFocus) {
+    if (this.focusedNode && !this.ephemerallyFocusedElement) {
       this.passivelyFocusNode(this.focusedNode, null);
       this.updateFocusedNode(null);
     }

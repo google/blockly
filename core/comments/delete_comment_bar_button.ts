@@ -5,6 +5,7 @@
  */
 
 import * as browserEvents from '../browser_events.js';
+import {getFocusManager} from '../focus_manager.js';
 import * as touch from '../touch.js';
 import * as dom from '../utils/dom.js';
 import {Svg} from '../utils/svg.js';
@@ -98,5 +99,6 @@ export class DeleteCommentBarButton extends CommentBarButton {
 
     this.getParentComment().dispose();
     e?.stopPropagation();
+    getFocusManager().focusNode(this.workspace);
   }
 }

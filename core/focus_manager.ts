@@ -448,7 +448,7 @@ export class FocusManager {
    * can be active at any given time (attempting to activate more than one
    * simultaneously will result in an error being thrown).
    *
-   * Some notes about the ephemeral focus tracking callback:
+   * Important details regarding the onFocusChangedInDom callback:
    * - This method will be called initially with a value of 'true' indicating
    *   that the ephemeral element has been focused, so callers can rely on that,
    *   if needed, for initialization logic.

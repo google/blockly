@@ -900,10 +900,16 @@ export class ConstantProvider extends BaseConstantProvider {
       `stroke: none;`,
       `}`,
 
-      `${selector} .blocklySelected>.blocklyPath.blocklyPathSelected {`,
-      `fill: none;`,
-      `filter: var(--blocklySelectedGlowFilter);`,
+      // Selection highlight.
+      `${selector} .blocklySelected>.blocklyPath {`,
+      `stroke: #fc3;`,
+      `stroke-width: 6px;`,
       `}`,
+
+      // `${selector} .blocklySelected>.blocklyPath.blocklyPathSelected {`,
+      // `fill: none;`,
+      // `filter: var(--blocklySelectedGlowFilter);`,
+      // `}`,
 
       `${selector} .blocklyReplaceable>.blocklyPath {`,
       `filter: var(--blocklyReplacementGlowFilter);`,

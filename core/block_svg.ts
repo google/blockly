@@ -55,7 +55,6 @@ import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
-import {idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
@@ -211,9 +210,6 @@ export class BlockSvg
 
     // Expose this block's ID on its top-level SVG group.
     this.svgGroup.setAttribute('data-id', this.id);
-
-    // The page-wide unique ID of this Block used for focusing.
-    svgPath.id = idGenerator.getNextUniqueId();
 
     this.doInit_();
   }

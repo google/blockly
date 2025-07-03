@@ -366,8 +366,8 @@
 	"SHORTCUTS_GENERAL": "כללי",
 	"SHORTCUTS_EDITING": "עריכה",
 	"SHORTCUTS_CODE_NAVIGATION": "ניווט בקוד",
-	"KEYBOARD_NAV_UNCONSTRAINED_MOVE_HINT": "יש להחזיק %1 ולהשתמש במקשי החיצים כדי לנוע בחופשיות ואז על %2 כדי לקבע במקום",
-	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "יש להשתמש במקשי החיצים כדי לנוע, לאחר מכן על %1 כדי לקבע במקום",
+	"KEYBOARD_NAV_UNCONSTRAINED_MOVE_HINT": "יש להחזיק %1 ולהשתמש במקשי החיצים כדי לנוע בחופשיות ואז %2 כדי לקבע במקום",
+	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "יש להשתמש במקשי החיצים כדי לנוע ולאחר מכן %1 כדי לקבע במקום",
 	"KEYBOARD_NAV_COPIED_HINT": "הועתקה. יש ללחוץ על %1 להדבקה.",
 	"KEYBOARD_NAV_CUT_HINT": "נגזרה. יש ללחוץ על %1 להדבקה."
 }

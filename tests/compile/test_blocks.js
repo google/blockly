@@ -7,15 +7,12 @@
 /**
  * @fileoverview Test blocks for advanced compilation.
  */
-'use strict';
 
-goog.provide('Blockly.Constants.TestBlocks');
+// Former goog.module ID: testBlocks
 
-goog.require('Blockly');
-goog.require('Blockly.Blocks');
+import {defineBlocksWithJsonArray}  from '../../build/src/core/common.js';
 
-
-Blockly.defineBlocksWithJsonArray([
+defineBlocksWithJsonArray([
     {
       'type': 'test_style_hex1',
       'message0': 'Block color: Bright purple %1 %2 %3 %4',

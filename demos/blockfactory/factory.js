@@ -10,8 +10,6 @@
  * generate a preview block and starter code for the block (block definition and
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
- *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
  */
 'use strict';
 
@@ -66,18 +64,25 @@ BlockFactory.updateBlocksFlagDelayed = false;
  */
 BlockFactory.STARTER_BLOCK_XML_TEXT =
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="factory_base" deletable="false" movable="false">' +
-    '<value name="TOOLTIP">' +
-    '<block type="text" deletable="false" movable="false">' +
-    '<field name="TEXT"></field></block></value>' +
-    '<value name="HELPURL">' +
-    '<block type="text" deletable="false" movable="false">' +
-    '<field name="TEXT"></field></block></value>' +
-    '<value name="COLOUR">' +
-    '<block type="colour_hue">' +
-    '<mutation colour="#5b67a5"></mutation>' +
-    '<field name="HUE">230</field>' +
-    '</block></value></block></xml>';
+      '<block type="factory_base" deletable="false" movable="false">' +
+        '<value name="TOOLTIP">' +
+          '<block type="text" deletable="false" movable="false">' +
+            '<field name="TEXT"></field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="HELPURL">' +
+          '<block type="text" deletable="false" movable="false">' +
+            '<field name="TEXT"></field>' +
+          '</block>' +
+        '</value>' +
+        '<value name="COLOUR">' +
+          '<block type="colour_hue">' +
+            '<mutation colour="#5b67a5"></mutation>' +
+            '<field name="HUE">230</field>' +
+          '</block>' +
+        '</value>' +
+      '</block>' +
+    '</xml>';
 
 /**
  * Change the language code format.
@@ -86,9 +91,9 @@ BlockFactory.formatChange = function() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
-  if (document.getElementById('format').value == 'Manual-JSON' ||
-      document.getElementById('format').value == 'Manual-JS') {
-    Blockly.hideChaff();
+  if (document.getElementById('format').value === 'Manual-JSON' ||
+      document.getElementById('format').value === 'Manual-JS') {
+    Blockly.common.getMainWorkspace().hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
     languageTA.style.display = 'block';
@@ -123,9 +128,9 @@ BlockFactory.updateLanguage = function() {
 
   if (!BlockFactory.updateBlocksFlag) {
     var format = document.getElementById('format').value;
-    if (format == 'Manual-JSON') {
+    if (format === 'Manual-JSON') {
       format = 'JSON';
-    } else if (format == 'Manual-JS') {
+    } else if (format === 'Manual-JS') {
       format = 'JavaScript';
     }
 
@@ -159,11 +164,11 @@ BlockFactory.updateGenerator = function(block) {
 BlockFactory.updatePreview = function() {
   // Toggle between LTR/RTL if needed (also used in first display).
   var newDir = document.getElementById('direction').value;
-  if (BlockFactory.oldDir != newDir) {
+  if (BlockFactory.oldDir !== newDir) {
     if (BlockFactory.previewWorkspace) {
       BlockFactory.previewWorkspace.dispose();
     }
-    var rtl = newDir == 'rtl';
+    var rtl = newDir === 'rtl';
     BlockFactory.previewWorkspace = Blockly.inject('preview',
         {rtl: rtl,
          media: '../../media/',
@@ -179,25 +184,39 @@ BlockFactory.updatePreview = function() {
     return;
   }
 
-  // Backup Blockly.Blocks object so that main workspace and preview don't
-  // collide if user creates a 'factory_base' block, for instance.
-  var backupBlocks = Blockly.Blocks;
-  try {
-    // Make a shallow copy.
-    Blockly.Blocks = Object.create(null);
-    for (var prop in backupBlocks) {
-      Blockly.Blocks[prop] = backupBlocks[prop];
+  // Don't let the user create a block type that already exists,
+  // because it doesn't work.
+  var warnExistingBlock = function(blockType) {
+    if (reservedBlockFactoryBlocks.has(blockType)) {
+      var text = `You can't make a block called ${blockType} in this tool ` +
+          `because that name is reserved.`;
+      FactoryUtils.getRootBlock(BlockFactory.mainWorkspace).setWarningText(text);
+      console.error(text);
+      return true;
     }
+    return false;
+  }
 
-    if (format == 'JSON') {
+  var blockType = 'block_type';
+  var blockCreated = false;
+  try {
+    if (format === 'JSON') {
       var json = JSON.parse(code);
-      Blockly.Blocks[json.type || BlockFactory.UNNAMED] = {
+      blockType = json.type || BlockFactory.UNNAMED;
+      if (warnExistingBlock(blockType)) {
+        return;
+      }
+      Blockly.Blocks[blockType] = {
         init: function() {
           this.jsonInit(json);
         }
       };
-    } else if (format == 'JavaScript') {
+    } else if (format === 'JavaScript') {
       try {
+        blockType = FactoryUtils.getBlockTypeFromJsDefinition(code);
+        if (warnExistingBlock(blockType)) {
+          return;
+        }
         eval(code);
       } catch (e) {
         // TODO: Display error in the UI
@@ -205,19 +224,7 @@ BlockFactory.updatePreview = function() {
         return;
       }
     }
-
-    // Look for a block on Blockly.Blocks that does not match the backup.
-    var blockType = null;
-    for (var type in Blockly.Blocks) {
-      if (typeof Blockly.Blocks[type].init == 'function' &&
-          Blockly.Blocks[type] != backupBlocks[type]) {
-        blockType = type;
-        break;
-      }
-    }
-    if (!blockType) {
-      return;
-    }
+    blockCreated = true;
 
     // Create the preview block.
     var previewBlock = BlockFactory.previewWorkspace.newBlock(blockType);
@@ -232,11 +239,11 @@ BlockFactory.updatePreview = function() {
     // Warn user only if their block type is already exists in Blockly's
     // standard library.
     var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
-    if (StandardCategories.coreBlockTypes.indexOf(blockType) != -1) {
+    if (StandardCategories.coreBlockTypes.includes(blockType)) {
       rootBlock.setWarningText('A core Blockly block already exists ' +
           'under this name.');
 
-    } else if (blockType == 'block_type') {
+    } else if (blockType === 'block_type') {
       // Warn user to let them know they can't save a block under the default
       // name 'block_type'
       rootBlock.setWarningText('You cannot save a block with the default ' +
@@ -251,7 +258,12 @@ BlockFactory.updatePreview = function() {
     BlockFactory.updateBlocksFlag = false
     BlockFactory.updateBlocksFlagDelayed = false
   } finally {
-    Blockly.Blocks = backupBlocks;
+    // Remove the newly-created block.
+    // We have to check if the block was actually created so that we don't remove
+    // one of the built-in blocks, like factory_base.
+    if (blockCreated) {
+      delete Blockly.Blocks[blockType];
+    }
   }
 };
 
@@ -282,7 +294,7 @@ BlockFactory.disableEnableLink = function() {
   var linkButton = document.getElementById('linkButton');
   var saveBlockButton = document.getElementById('localSaveButton');
   var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
-  var disabled = document.getElementById('format').value.substr(0, 6) == 'Manual';
+  var disabled = document.getElementById('format').value.substr(0, 6) === 'Manual';
   linkButton.disabled = disabled;
   saveBlockButton.disabled = disabled;
   saveToLibButton.disabled = disabled;
@@ -293,7 +305,7 @@ BlockFactory.disableEnableLink = function() {
  */
 BlockFactory.showStarterBlock = function() {
   BlockFactory.mainWorkspace.clear();
-  var xml = Blockly.Xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
+  var xml = Blockly.utils.xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
   Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
 };
 
@@ -306,11 +318,11 @@ BlockFactory.isStarterBlock = function() {
       // The starter block does not have blocks nested into the factory_base block.
       rootBlock.getChildren().length > 0 ||
       // The starter block's name is the default, 'block_type'.
-      rootBlock.getFieldValue('NAME').trim().toLowerCase() != 'block_type' ||
+      rootBlock.getFieldValue('NAME').trim().toLowerCase() !== 'block_type' ||
       // The starter block has no connections.
-      rootBlock.getFieldValue('CONNECTIONS') != 'NONE' ||
+      rootBlock.getFieldValue('CONNECTIONS') !== 'NONE' ||
       // The starter block has automatic inputs.
-      rootBlock.getFieldValue('INLINE') != 'AUTO'
+      rootBlock.getFieldValue('INLINE') !== 'AUTO'
       );
 };
 
@@ -323,4 +335,4 @@ BlockFactory.manualEdit = function() {
   BlockFactory.updateBlocksFlag = true;
   BlockFactory.updateBlocksFlagDelayed = true;
   BlockFactory.updateLanguage();
-}
+};

@@ -19,6 +19,6 @@ var MSG = {
   httpRequestError: "Der var et problem med forespørgslen.",
   linkAlert: "Del dine blokke med dette link:\n\n%1",
   hashError: "Beklager, '%1' passer ikke med nogen gemt Blockly fil.",
-  xmlError: "Kunne ikke hente din gemte fil.  Måske er den lavet med en anden udgave af Blockly?",
-  badXml: "Fejl under fortolkningen af XML:\n%1\n\nVælg 'OK' for at opgive dine ændringer eller 'Afbryd' for at redigere XML-filen yderligere."
+  loadError: "Kunne ikke hente din gemte fil.  Måske er den lavet med en anden udgave af Blockly?",
+  parseError: "Fejl under fortolkningen af %1:\n%2\n\nVælg 'OK' for at opgive dine ændringer eller 'Afbryd' for at redigere %1-filen yderligere."
 };

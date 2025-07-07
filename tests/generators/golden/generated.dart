@@ -1,6 +1,6 @@
 import 'dart:math' as Math;
 
-var unittestResults, test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list, proc_z, func_z, x, proc_w, func_c, if2, i, loglist, changing_list, list_copy;
+var unittestResults, test_name, naked, proc_x, proc_y, func_x, func_y, func_a, n, ok, log, count, varToChange, rand, item, text, number_of_calls, list, proc_z, func_z, x, proc_w, func_c, if2, loglist, changing_list, list_copy;
 
 String unittest_report() {
   // Create test report.
@@ -440,12 +440,16 @@ void test_number_properties() {
   unittest_assertequals(42 % 2 == 0, true, 'even');
   unittest_assertequals(42.1 % 2 == 1, false, 'odd');
   unittest_assertequals(math_isPrime(5), true, 'prime 5');
+  unittest_assertequals(math_isPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)');
   unittest_assertequals(math_isPrime(25), false, 'prime 25');
   unittest_assertequals(math_isPrime(-31.1), false, 'prime negative');
   unittest_assertequals(Math.pi % 1 == 0, false, 'whole');
   unittest_assertequals(double.infinity > 0, true, 'positive');
+  unittest_assertequals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)');
   unittest_assertequals(-42 < 0, true, 'negative');
+  unittest_assertequals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)');
   unittest_assertequals(42 % 2 == 0, true, 'divisible');
+  unittest_assertequals(!false, true, 'divisible by 0');
 }
 
 /// Tests the "round" block.
@@ -937,20 +941,6 @@ void test_replace() {
   unittest_assertequals(''.replaceAll('a', 'chicken'), '', 'empty source');
 }
 
-/// Tests the "multiline" block.
-void test_multiline() {
-  unittest_assertequals('', '', 'no text');
-  unittest_assertequals('Google', 'Google', 'simple');
-  unittest_assertequals('paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'paragraph' + '\n' +
-  'with newlines' + '\n' +
-  'yup', 'no compile error with newlines');
-  unittest_assertequals(text_count('bark bark' + '\n' +
-  'bark bark bark' + '\n' +
-  'bark bark bark bark', 'bark'), 9, 'count with newlines');
-}
-
 /// Checks that the number of calls is one in order
 /// to confirm that a function was only called once.
 void check_number_of_calls2(test_name) {
@@ -1380,10 +1370,10 @@ void test_split() {
 
 List lists_sort(List list, String type, int direction) {
   var compareFuncs = {
-    "NUMERIC": (a, b) => (direction * a.compareTo(b)).toInt(),
-    "TEXT": (a, b) => direction * a.toString().compareTo(b.toString()),
-    "IGNORE_CASE":
-       (a, b) => direction *
+    'NUMERIC': (a, b) => (direction * a.compareTo(b)).toInt(),
+    'TEXT': (a, b) => direction * a.toString().compareTo(b.toString()),
+    'IGNORE_CASE':
+      (a, b) => direction *
       a.toString().toLowerCase().compareTo(b.toString().toLowerCase())
   };
   list = new List.from(list);
@@ -1420,80 +1410,6 @@ void test_lists_reverse() {
   unittest_assertequals(list, [8, 18, -1, 64], 'reverse a copy original');
   list = [];
   unittest_assertequals(new List.from(list.reversed), [], 'empty list');
-}
-
-/// Describe this function...
-void test_colour_picker() {
-  unittest_assertequals('#ff6600', '#ff6600', 'static colour');
-}
-
-String colour_rgb(num r, num g, num b) {
-  num rn = (Math.max(Math.min(r, 100), 0) * 2.55).round();
-  String rs = rn.toInt().toRadixString(16);
-  rs = '0$rs';
-  rs = rs.substring(rs.length - 2);
-  num gn = (Math.max(Math.min(g, 100), 0) * 2.55).round();
-  String gs = gn.toInt().toRadixString(16);
-  gs = '0$gs';
-  gs = gs.substring(gs.length - 2);
-  num bn = (Math.max(Math.min(b, 100), 0) * 2.55).round();
-  String bs = bn.toInt().toRadixString(16);
-  bs = '0$bs';
-  bs = bs.substring(bs.length - 2);
-  return '#$rs$gs$bs';
-}
-
-/// Describe this function...
-void test_rgb() {
-  unittest_assertequals(colour_rgb(100, 40, 0), '#ff6600', 'from rgb');
-}
-
-String colour_random() {
-  String hex = '0123456789abcdef';
-  var rnd = new Math.Random();
-  return '#${hex[rnd.nextInt(16)]}${hex[rnd.nextInt(16)]}'
-      '${hex[rnd.nextInt(16)]}${hex[rnd.nextInt(16)]}'
-      '${hex[rnd.nextInt(16)]}${hex[rnd.nextInt(16)]}';
-}
-
-/// Describe this function...
-void test_colour_random() {
-  for (int count4 = 0; count4 < 100; count4++) {
-    item = colour_random();
-    unittest_assertequals(item.length, 7, ['length of random colour string: ',item].join());
-    unittest_assertequals(item[0], '#', ['format of random colour string: ',item].join());
-    for (i = 1; i <= 6; i++) {
-      unittest_assertequals(0 != 'abcdefABDEF0123456789'.indexOf(item[((i + 1) - 1)]) + 1, true, ['contents of random colour string: ',item,' at index: ',i + 1].join());
-    }
-  }
-}
-
-String colour_blend(String c1, String c2, num ratio) {
-  ratio = Math.max(Math.min(ratio, 1), 0);
-  int r1 = int.parse('0x${c1.substring(1, 3)}');
-  int g1 = int.parse('0x${c1.substring(3, 5)}');
-  int b1 = int.parse('0x${c1.substring(5, 7)}');
-  int r2 = int.parse('0x${c2.substring(1, 3)}');
-  int g2 = int.parse('0x${c2.substring(3, 5)}');
-  int b2 = int.parse('0x${c2.substring(5, 7)}');
-  num rn = (r1 * (1 - ratio) + r2 * ratio).round();
-  String rs = rn.toInt().toRadixString(16);
-  num gn = (g1 * (1 - ratio) + g2 * ratio).round();
-  String gs = gn.toInt().toRadixString(16);
-  num bn = (b1 * (1 - ratio) + b2 * ratio).round();
-  String bs = bn.toInt().toRadixString(16);
-  rs = '0$rs';
-  rs = rs.substring(rs.length - 2);
-  gs = '0$gs';
-  gs = gs.substring(gs.length - 2);
-  bs = '0$bs';
-  bs = bs.substring(bs.length - 2);
-  return '#$rs$gs$bs';
-}
-
-/// Describe this function...
-void test_blend() {
-  unittest_assertequals(colour_blend('#ff0000', colour_rgb(100, 40, 0), 0.4), '#ff2900', 'blend');
 }
 
 /// Describe this function...
@@ -1638,7 +1554,6 @@ main() {
   test_count_text();
   test_text_reverse();
   test_replace();
-  test_multiline();
   print(unittest_report());
   unittestResults = null;
 
@@ -1664,15 +1579,6 @@ main() {
   test_sort_ignoreCase();
   test_sort_numeric();
   test_lists_reverse();
-  print(unittest_report());
-  unittestResults = null;
-
-  unittestResults = [];
-  print('\n====================\n\nRunning suite: Colour');
-  test_colour_picker();
-  test_blend();
-  test_rgb();
-  test_colour_random();
   print(unittest_report());
   unittestResults = null;
 

@@ -6,17 +6,16 @@
 
 /**
  * @fileoverview Generating Python for unit test blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-Blockly.Python['unittest_main'] = function(block) {
+pythonGenerator.forBlock['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.Python.nameDB_.getName('unittestResults',
+  var resultsVar = pythonGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.Python.provideFunction_(
+  var functionName = pythonGenerator.provideFunction_(
       'unittest_report',
-      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '():',
+      ['def ' + pythonGenerator.FUNCTION_NAME_PLACEHOLDER_ + '():',
        '  # Create test report.',
        '  report = []',
        '  summary = []',
@@ -48,7 +47,7 @@ Blockly.Python['unittest_main'] = function(block) {
       block.getFieldValue('SUITE_NAME') +
        '\')\n';
   // Run tests (unindented).
-  code += Blockly.Python.statementToCode(block, 'DO')
+  code += pythonGenerator.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
   // Print the report.
   code += 'print(' + functionName + '())\n';
@@ -57,12 +56,12 @@ Blockly.Python['unittest_main'] = function(block) {
   return code;
 };
 
-Blockly.Python['unittest_main'].defineAssert_ = function() {
-  var resultsVar = Blockly.Python.nameDB_.getName('unittestResults',
+function pythonDefineAssert() {
+  var resultsVar = pythonGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.Python.provideFunction_(
+  var functionName = pythonGenerator.provideFunction_(
       'assertEquals',
-      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ +
+      ['def ' + pythonGenerator.FUNCTION_NAME_PLACEHOLDER_ +
           '(actual, expected, message):',
        '  # Asserts that a value equals another value.',
        '  if ' + resultsVar + ' == None:',
@@ -75,24 +74,24 @@ Blockly.Python['unittest_main'].defineAssert_ = function() {
   return functionName;
 };
 
-Blockly.Python['unittest_assertequals'] = function(block) {
+pythonGenerator.forBlock['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
-  var message = Blockly.Python.valueToCode(block, 'MESSAGE',
-      Blockly.Python.ORDER_NONE) || '';
-  var actual = Blockly.Python.valueToCode(block, 'ACTUAL',
-      Blockly.Python.ORDER_NONE) || 'None';
-  var expected = Blockly.Python.valueToCode(block, 'EXPECTED',
-      Blockly.Python.ORDER_NONE) || 'None';
-  return Blockly.Python['unittest_main'].defineAssert_() +
+  var message = pythonGenerator.valueToCode(block, 'MESSAGE',
+      pythonGenerator.ORDER_NONE) || '';
+  var actual = pythonGenerator.valueToCode(block, 'ACTUAL',
+      pythonGenerator.ORDER_NONE) || 'None';
+  var expected = pythonGenerator.valueToCode(block, 'EXPECTED',
+      pythonGenerator.ORDER_NONE) || 'None';
+  return pythonDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ')\n';
 };
 
-Blockly.Python['unittest_assertvalue'] = function(block) {
+pythonGenerator.forBlock['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
-  var message = Blockly.Python.valueToCode(block, 'MESSAGE',
-      Blockly.Python.ORDER_NONE) || '';
-  var actual = Blockly.Python.valueToCode(block, 'ACTUAL',
-      Blockly.Python.ORDER_NONE) || 'None';
+  var message = pythonGenerator.valueToCode(block, 'MESSAGE',
+      pythonGenerator.ORDER_NONE) || '';
+  var actual = pythonGenerator.valueToCode(block, 'ACTUAL',
+      pythonGenerator.ORDER_NONE) || 'None';
   var expected = block.getFieldValue('EXPECTED');
   if (expected == 'TRUE') {
     expected = 'True';
@@ -101,18 +100,18 @@ Blockly.Python['unittest_assertvalue'] = function(block) {
   } else if (expected == 'NULL') {
     expected = 'None';
   }
-  return Blockly.Python['unittest_main'].defineAssert_() +
+  return pythonDefineAssert() +
       '(' + actual + ', ' + expected + ', ' + message + ')\n';
 };
 
-Blockly.Python['unittest_fail'] = function(block) {
+pythonGenerator.forBlock['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.Python.nameDB_.getName('unittestResults',
+  var resultsVar = pythonGenerator.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var message = Blockly.Python.quote_(block.getFieldValue('MESSAGE'));
-  var functionName = Blockly.Python.provideFunction_(
+  var message = pythonGenerator.quote_(block.getFieldValue('MESSAGE'));
+  var functionName = pythonGenerator.provideFunction_(
       'fail',
-      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(message):',
+      ['def ' + pythonGenerator.FUNCTION_NAME_PLACEHOLDER_ + '(message):',
        '  # Always assert an error.',
        '  if ' + resultsVar + ' == None:',
        '    raise Exception("Orphaned assert equals: " + message)',
@@ -120,20 +119,20 @@ Blockly.Python['unittest_fail'] = function(block) {
   return functionName + '(' + message + ')\n';
 };
 
-Blockly.Python['unittest_adjustindex'] = function(block) {
-  var index = Blockly.Python.valueToCode(block, 'INDEX',
-      Blockly.Python.ORDER_ADDITIVE) || '0';
+pythonGenerator.forBlock['unittest_adjustindex'] = function(block) {
+  var index = pythonGenerator.valueToCode(block, 'INDEX',
+      pythonGenerator.ORDER_ADDITIVE) || '0';
   // Adjust index if using one-based indexing.
   if (block.workspace.options.oneBasedIndex) {
-    if (Blockly.isNumber(index)) {
+    if (Blockly.utils.string.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
-      return [Number(index) + 1, Blockly.Python.ORDER_ATOMIC];
+      return [Number(index) + 1, pythonGenerator.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
-      index = index + ' + 1';
+      index += ' + 1';
     }
-  } else if (Blockly.isNumber(index)) {
-    return [index, Blockly.Python.ORDER_ATOMIC];
+  } else if (Blockly.utils.string.isNumber(index)) {
+    return [index, pythonGenerator.ORDER_ATOMIC];
   }
-  return [index, Blockly.Python.ORDER_ADDITIVE];
+  return [index, pythonGenerator.ORDER_ADDITIVE];
 };

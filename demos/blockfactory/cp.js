@@ -105,7 +105,7 @@ function cp_open(e) {
       } else {
         div.innerHTML = 'X';
       }
-      if (currentColour == colour.toLowerCase()) {
+      if (currentColour === colour.toLowerCase()) {
         div.className = 'cp_current'
       }
     }

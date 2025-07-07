@@ -1,28 +1,14 @@
 # Blockly
 
-Google's Blockly is a web-based, visual programming editor.  Users can drag
-blocks together to build programs.  All code is free and open source.
+Google's Blockly is a web-based, visual programming editor. Users can drag
+blocks together to build programs. All code is free and open source.
 
 The source for this module is in the [Blockly repo](http://github.com/google/blockly).
-
-## Installation
-
-You can install this package either via ``npm`` or ``unpkg``.
-
-### npm
-```bash
-npm install blockly
-```
-
-### unpkg
-```html
-<script src="https://unpkg.com/blockly/blockly.min.js"></script>
-```
 
 ## Example Usage
 
 ```js
-import Blockly from 'blockly';
+import * as Blockly from 'blockly/core';
 Blockly.inject('blocklyDiv', {
     ...
 })
@@ -32,45 +18,75 @@ Blockly.inject('blocklyDiv', {
 
 For samples on how to integrate Blockly into your project, view the list of samples at [blockly-samples](https://github.com/google/blockly-samples).
 
+## Installation
 
-### Importing Blockly
+You can install this package either via `npm` or `unpkg`.
 
-When you import Blockly with ``import * as Blockly from 'blockly';`` you'll get the default modules:
-Blockly core, Blockly built-in blocks, the JavaScript generator and the English lang files. 
+### unpkg
 
-If you need more flexibility, you'll want to define your imports more carefully: 
+```html
+<script src="https://unpkg.com/blockly/blockly.min.js"></script>
+```
 
-#### Blockly Core
+When importing from unpkg, you can access imports from the global namespace.
 
 ```js
+// Access Blockly.
+Blockly.thing;
+// Access the default blocks.
+Blockly.Blocks['block_type'];
+// Access the javascript generator.
+javascript.javascriptGenerator;
+```
+
+### npm
+
+```bash
+npm install blockly
+```
+
+## Imports
+
+Note: Using import of our package targets requires you to use a bundler (like webpack), since Blockly is packaged as a UMD, rather than an ESM.
+
+```js
+// Import Blockly core.
 import * as Blockly from 'blockly/core';
+// Import the default blocks.
+import * as libraryBlocks from 'blockly/blocks';
+// Import a generator.
+import {javascriptGenerator} from 'blockly/javascript';
+// Import a message file.
+import * as En from 'blockly/msg/en';
 ```
 
-#### Blockly built in blocks
+## Requires
 
 ```js
-import 'blockly/blocks';
+// Require Blockly core.
+const Blockly = require('blockly/core');
+// Require the default blocks.
+const libraryBlocks = require('blockly/blocks');
+// Require a generator.
+const {javascriptGenerator} = require('blockly/javascript');
+// Require a message file.
+const En = require('blockly/msg/en');
 ```
 
-#### Blockly Generators
-If your application needs to generate code from the Blockly blocks, you'll want to include a generator.
+## Applying messages
+
+Once you have the message files, you also need to apply them.
 
 ```js
-import 'blockly/python';
+Blockly.setLocal(En);
 ```
-to include the Python generator, you can also import ``blockly/javascript``, ``blockly/php``, ``blockly/dart`` and ``blockly/lua``.
-
-#### Blockly Languages
-
-```js
-import * as Fr from 'blockly/msg/fr';
-Blockly.setLocale(Fr);
-```
-
-To import the French lang files. Once you've imported the specific lang module, you'll also want to set the locale in Blockly.
 
 For a full list of supported Blockly locales, see: [https://github.com/google/blockly/tree/master/msg/js](https://github.com/google/blockly/tree/master/msg/js)
 
+## Docs
+
+For more information about how to use Blockly, check out our
+[devsite](https://developers.google.com/blockly/guides/overview).
 
 ## License
 

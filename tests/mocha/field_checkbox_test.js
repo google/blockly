@@ -4,18 +4,33 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Checkbox Fields', function() {
-  setup(function() {
+import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
+import {defineRowBlock} from './test_helpers/block_definitions.js';
+import {
+  assertFieldValue,
+  runConstructorSuiteTests,
+  runFromJsonSuiteTests,
+  runSetValueTests,
+} from './test_helpers/fields.js';
+import {
+  sharedTestSetup,
+  sharedTestTeardown,
+  workspaceTeardown,
+} from './test_helpers/setup_teardown.js';
+
+suite('Checkbox Fields', function () {
+  setup(function () {
     sharedTestSetup.call(this);
   });
-  teardown(function() {
+  teardown(function () {
     sharedTestTeardown.call(this);
   });
   /**
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var invalidValueTestCases = [
+  const invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
@@ -29,17 +44,33 @@ suite('Checkbox Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var validValueTestCases = [
-    {title: 'Boolean true', value: true, expectedValue: 'TRUE',
-      expectedText: 'true'},
-    {title: 'Boolean false', value: false, expectedValue: 'FALSE',
-      expectedText: 'false'},
-    {title: 'String TRUE', value: 'TRUE', expectedValue: 'TRUE',
-      expectedText: 'true'},
-    {title: 'String FALSE', value: 'FALSE', expectedValue: 'FALSE',
-      expectedText: 'false'},
+  const validValueTestCases = [
+    {
+      title: 'Boolean true',
+      value: true,
+      expectedValue: 'TRUE',
+      expectedText: 'true',
+    },
+    {
+      title: 'Boolean false',
+      value: false,
+      expectedValue: 'FALSE',
+      expectedText: 'false',
+    },
+    {
+      title: 'String TRUE',
+      value: 'TRUE',
+      expectedValue: 'TRUE',
+      expectedText: 'true',
+    },
+    {
+      title: 'String FALSE',
+      value: 'FALSE',
+      expectedValue: 'FALSE',
+      expectedText: 'false',
+    },
   ];
-  var addArgsAndJson = function(testCase) {
+  const addArgsAndJson = function (testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'checked': testCase.value};
   };
@@ -50,102 +81,137 @@ suite('Checkbox Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  var defaultFieldValue = 'FALSE';
+  const defaultFieldValue = 'FALSE';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldCheckbox} field The field to check.
    */
-  var assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(
-        field, defaultFieldValue, defaultFieldValue.toLowerCase());
+  const assertFieldDefault = function (field) {
+    assertFieldValue(field, defaultFieldValue, defaultFieldValue.toLowerCase());
   };
   /**
    * Asserts that the field properties are correct based on the test case.
    * @param {!Blockly.FieldCheckbox} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  var validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(
-        field, testCase.expectedValue, testCase.expectedValue.toLowerCase());
+  const validTestCaseAssertField = function (field, testCase) {
+    assertFieldValue(
+      field,
+      testCase.expectedValue,
+      testCase.expectedValue.toLowerCase(),
+    );
   };
 
-  testHelpers.runConstructorSuiteTests(
-      Blockly.FieldCheckbox, validValueTestCases, invalidValueTestCases,
-      validTestCaseAssertField, assertFieldDefault);
+  runConstructorSuiteTests(
+    Blockly.FieldCheckbox,
+    validValueTestCases,
+    invalidValueTestCases,
+    validTestCaseAssertField,
+    assertFieldDefault,
+  );
 
-  testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldCheckbox, validValueTestCases, invalidValueTestCases,
-      validTestCaseAssertField, assertFieldDefault);
+  runFromJsonSuiteTests(
+    Blockly.FieldCheckbox,
+    validValueTestCases,
+    invalidValueTestCases,
+    validTestCaseAssertField,
+    assertFieldDefault,
+  );
 
-  suite('setValue', function() {
-    suite('True -> New Value', function() {
-      setup(function() {
+  suite('setValue', function () {
+    suite('True -> New Value', function () {
+      setup(function () {
         this.field = new Blockly.FieldCheckbox('TRUE');
       });
-      testHelpers.runSetValueTests(
-          validValueTestCases, invalidValueTestCases, 'TRUE', 'true');
+      runSetValueTests(
+        validValueTestCases,
+        invalidValueTestCases,
+        'TRUE',
+        'true',
+      );
     });
-    suite('False -> New Value', function() {
-      setup(function() {
+    suite('False -> New Value', function () {
+      setup(function () {
         this.field = new Blockly.FieldCheckbox('FALSE');
       });
-      testHelpers.runSetValueTests(
-          validValueTestCases, invalidValueTestCases, 'FALSE', 'false');
+      runSetValueTests(
+        validValueTestCases,
+        invalidValueTestCases,
+        'FALSE',
+        'false',
+      );
     });
   });
-  suite('Validators', function() {
-    setup(function() {
+  suite('Validators', function () {
+    setup(function () {
       this.field = new Blockly.FieldCheckbox(true);
     });
-    var testSuites = [
-      {title: 'Null Validator',
-        validator:
-            function() {
-              return null;
-            },
-        value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Always True Validator',
-        validator:
-            function() {
-              return 'TRUE';
-            },
-        value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Always False Validator',
-        validator:
-            function() {
-              return 'TRUE';
-            },
-        value: 'FALSE', expectedValue: 'TRUE'},
-      {title: 'Returns Undefined Validator', validator: function() {},
-        value: 'FALSE', expectedValue: 'FALSE'},
+    const testSuites = [
+      {
+        title: 'Null Validator',
+        validator: function () {
+          return null;
+        },
+        value: 'FALSE',
+        expectedValue: 'TRUE',
+      },
+      {
+        title: 'Always True Validator',
+        validator: function () {
+          return 'TRUE';
+        },
+        value: 'FALSE',
+        expectedValue: 'TRUE',
+      },
+      {
+        title: 'Always False Validator',
+        validator: function () {
+          return 'TRUE';
+        },
+        value: 'FALSE',
+        expectedValue: 'TRUE',
+      },
+      {
+        title: 'Returns Undefined Validator',
+        validator: function () {},
+        value: 'FALSE',
+        expectedValue: 'FALSE',
+      },
     ];
-    testSuites.forEach(function(suiteInfo) {
-      suite(suiteInfo.title, function() {
-        setup(function() {
+    testSuites.forEach(function (suiteInfo) {
+      suite(suiteInfo.title, function () {
+        setup(function () {
           this.field.setValidator(suiteInfo.validator);
         });
-        test('New Value', function() {
+        test('New Value', function () {
           this.field.setValue(suiteInfo.value);
-          testHelpers.assertFieldValue(
-              this.field, suiteInfo.expectedValue,
-              String(suiteInfo.expectedValue).toLowerCase());
+          assertFieldValue(
+            this.field,
+            suiteInfo.expectedValue,
+            String(suiteInfo.expectedValue).toLowerCase(),
+          );
         });
       });
     });
   });
-  suite('Customizations', function() {
-    suite('Check Character', function() {
+  suite('Customizations', function () {
+    suite('Check Character', function () {
       function assertCharacter(field, char) {
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
-            Blockly.utils.Svg.G, {}, null);
+          Blockly.utils.Svg.G,
+          {},
+          null,
+        );
         field.sourceBlock_ = {
           RTL: false,
           rendered: true,
           workspace: {
-            keyboardAccessibilityMode: false
+            keyboardAccessibilityMode: false,
           },
-          render: function() { field.render_(); },
-          bumpNeighbours: function() {}
+          queueRender: function () {
+            field.render_();
+          },
+          bumpNeighbours: function () {},
         };
         field.constants_ = {
           FIELD_CHECKBOX_X_OFFSET: 2,
@@ -158,50 +224,76 @@ suite('Checkbox Fields', function() {
         };
         field.initView();
         field.render_();
-        chai.assert(field.textContent_.nodeValue, char);
+        assert(field.textContent_.nodeValue, char);
       }
-      test('Constant', function() {
-        var checkChar = Blockly.FieldCheckbox.CHECK_CHAR;
+      test('Constant', function () {
+        const checkChar = Blockly.FieldCheckbox.CHECK_CHAR;
         // Note: Developers shouldn't actually do this. IMO they should change
         // the file and then recompile. But this is fine for testing.
         Blockly.FieldCheckbox.CHECK_CHAR = '\u2661';
-        var field = new Blockly.FieldCheckbox(true);
+        const field = new Blockly.FieldCheckbox(true);
         assertCharacter(field, '\u2661');
         Blockly.FieldCheckbox.CHECK_CHAR = checkChar;
       });
-      test('JS Constructor', function() {
-        var field = new Blockly.FieldCheckbox(true, null, {
-          checkCharacter: '\u2661'
+      test('JS Constructor', function () {
+        const field = new Blockly.FieldCheckbox(true, null, {
+          checkCharacter: '\u2661',
         });
         assertCharacter(field, '\u2661');
       });
-      test('JSON Definition', function() {
-        var field = Blockly.FieldCheckbox.fromJson({
-          checkCharacter: '\u2661'
+      test('JSON Definition', function () {
+        const field = Blockly.FieldCheckbox.fromJson({
+          checkCharacter: '\u2661',
         });
         assertCharacter(field, '\u2661');
       });
-      test('setCheckCharacter', function() {
-        var field = new Blockly.FieldCheckbox();
+      test('setCheckCharacter', function () {
+        const field = new Blockly.FieldCheckbox();
         assertCharacter(field, Blockly.FieldCheckbox.CHECK_CHAR);
         field.setCheckCharacter('\u2661');
         // Don't call assertCharacter b/c we don't want to re-initialize.
-        chai.assert.equal(field.textContent_.nodeValue, '\u2661');
+        assert.equal(field.textContent_.nodeValue, '\u2661');
       });
-      test('setCheckCharacter Before Init', function() {
-        var field = new Blockly.FieldCheckbox();
+      test('setCheckCharacter Before Init', function () {
+        const field = new Blockly.FieldCheckbox();
         field.setCheckCharacter('\u2661');
         assertCharacter(field, '\u2661');
       });
-      test('Remove Custom Character', function() {
-        var field = new Blockly.FieldCheckbox(true, null, {
-          'checkCharacter': '\u2661'
+      test('Remove Custom Character', function () {
+        const field = new Blockly.FieldCheckbox(true, null, {
+          'checkCharacter': '\u2661',
         });
         assertCharacter(field, '\u2661');
         field.setCheckCharacter(null);
-        chai.assert(field.textContent_.nodeValue,
-            Blockly.FieldCheckbox.CHECK_CHAR);
+        assert(field.textContent_.nodeValue, Blockly.FieldCheckbox.CHECK_CHAR);
       });
+    });
+  });
+
+  suite('Serialization', function () {
+    setup(function () {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldCheckbox(value);
+        block.getInput('INPUT').appendField(field, 'CHECK');
+        const jso = Blockly.serialization.blocks.save(block);
+        assert.deepEqual(jso['fields'], {'CHECK': value});
+      };
+    });
+
+    teardown(function () {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('True', function () {
+      this.assertValue(true);
+    });
+
+    test('False', function () {
+      this.assertValue(false);
     });
   });
 });

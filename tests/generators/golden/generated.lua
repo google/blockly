@@ -450,12 +450,16 @@ function test_number_properties()
   assertEquals(42 % 2 == 0, true, 'even')
   assertEquals(42.1 % 2 == 1, false, 'odd')
   assertEquals(math_isPrime(5), true, 'prime 5')
+  assertEquals(math_isPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)')
   assertEquals(math_isPrime(25), false, 'prime 25')
   assertEquals(math_isPrime(-31.1), false, 'prime negative')
   assertEquals(math.pi % 1 == 0, false, 'whole')
   assertEquals(math.huge > 0, true, 'positive')
+  assertEquals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)')
   assertEquals(-42 < 0, true, 'negative')
+  assertEquals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)')
   assertEquals(42 % 2 == 0, true, 'divisible')
+  assertEquals(not nil, true, 'divisible by 0')
 end
 
 
@@ -521,23 +525,23 @@ function math_median(t)
   if #t == 0 then
     return 0
   end
-  local temp={}
+  local temp = {}
   for _, v in ipairs(t) do
-    if type(v) == "number" then
+    if type(v) == 'number' then
       table.insert(temp, v)
     end
   end
   table.sort(temp)
   if #temp % 2 == 0 then
-    return (temp[#temp/2] + temp[(#temp/2)+1]) / 2
+    return (temp[#temp / 2] + temp[(#temp / 2) + 1]) / 2
   else
-    return temp[math.ceil(#temp/2)]
+    return temp[math.ceil(#temp / 2)]
   end
 end
 
 function math_modes(t)
   -- Source: http://lua-users.org/wiki/SimpleStats
-  local counts={}
+  local counts = {}
   for _, v in ipairs(t) do
     if counts[v] == nil then
       counts[v] = 1
@@ -551,7 +555,7 @@ function math_modes(t)
       biggestCount = v
     end
   end
-  local temp={}
+  local temp = {}
   for k, v in pairs(counts) do
     if v == biggestCount then
       table.insert(temp, k)
@@ -703,9 +707,8 @@ function firstIndexOf(str, substr)
   local i = string.find(str, substr, 1, true)
   if i == nil then
     return 0
-  else
-    return i
   end
+  return i
 end
 
 function lastIndexOf(str, substr)
@@ -1009,21 +1012,6 @@ function test_replace()
   assertEquals(text_replace('aaaaa', 'aaaaa', ''), '', 'empty replacement 2')
   assertEquals(text_replace('aaaaa', 'a', ''), '', 'empty replacement 3')
   assertEquals(text_replace('', 'a', 'chicken'), '', 'empty source')
-end
-
-
--- Tests the "multiline" block.
-function test_multiline()
-  assertEquals('', '', 'no text')
-  assertEquals('Google', 'Google', 'simple')
-  assertEquals('paragraph' .. '\n' ..
-  'with newlines' .. '\n' ..
-  'yup', 'paragraph' .. '\n' ..
-  'with newlines' .. '\n' ..
-  'yup', 'no compile error with newlines')
-  assertEquals(text_count('bark bark' .. '\n' ..
-  'bark bark bark' .. '\n' ..
-  'bark bark bark bark', 'bark'), 9, 'count with newlines')
 end
 
 
@@ -1643,58 +1631,6 @@ end
 
 
 -- Describe this function...
-function test_colour_picker()
-  assertEquals('#ff6600', '#ff6600', 'static colour')
-end
-
-
-function colour_rgb(r, g, b)
-  r = math.floor(math.min(100, math.max(0, r)) * 2.55 + .5)
-  g = math.floor(math.min(100, math.max(0, g)) * 2.55 + .5)
-  b = math.floor(math.min(100, math.max(0, b)) * 2.55 + .5)
-  return string.format("#%02x%02x%02x", r, g, b)
-end
-
--- Describe this function...
-function test_rgb()
-  assertEquals(colour_rgb(100, 40, 0), '#ff6600', 'from rgb')
-end
-
-
--- Describe this function...
-function test_colour_random()
-  for count4 = 1, 100 do
-    item = string.format("#%06x", math.random(0, 2^24 - 1))
-    assertEquals(#item, 7, 'length of random colour string: ' .. item)
-    assertEquals(string.sub(item, 1, 1), '#', 'format of random colour string: ' .. item)
-    for i = 1, 6, 1 do
-      assertEquals(0 ~= firstIndexOf('abcdefABDEF0123456789', text_char_at(item, i + 1)), true, table.concat({'contents of random colour string: ', item, ' at index: ', i + 1}))
-    end
-  end
-end
-
-
-function colour_blend(colour1, colour2, ratio)
-  local r1 = tonumber(string.sub(colour1, 2, 3), 16)
-  local r2 = tonumber(string.sub(colour2, 2, 3), 16)
-  local g1 = tonumber(string.sub(colour1, 4, 5), 16)
-  local g2 = tonumber(string.sub(colour2, 4, 5), 16)
-  local b1 = tonumber(string.sub(colour1, 6, 7), 16)
-  local b2 = tonumber(string.sub(colour2, 6, 7), 16)
-  local ratio = math.min(1, math.max(0, ratio))
-  local r = math.floor(r1 * (1 - ratio) + r2 * ratio + .5)
-  local g = math.floor(g1 * (1 - ratio) + g2 * ratio + .5)
-  local b = math.floor(b1 * (1 - ratio) + b2 * ratio + .5)
-  return string.format("#%02x%02x%02x", r, g, b)
-end
-
--- Describe this function...
-function test_blend()
-  assertEquals(colour_blend('#ff0000', colour_rgb(100, 40, 0), 0.4), '#ff2900', 'blend')
-end
-
-
--- Describe this function...
 function test_procedure()
   procedure_1(8, 2)
   assertEquals(proc_z, 4, 'procedure with global')
@@ -1843,7 +1779,6 @@ test_trim()
 test_count_text()
 test_text_reverse()
 test_replace()
-test_multiline()
 print(unittest_report())
 unittestResults = nil
 
@@ -1869,15 +1804,6 @@ test_sort_alphabetic()
 test_sort_ignoreCase()
 test_sort_numeric()
 test_lists_reverse()
-print(unittest_report())
-unittestResults = nil
-
-unittestResults = {}
-print('\n====================\n\nRunning suite: Colour')
-test_colour_picker()
-test_blend()
-test_rgb()
-test_colour_random()
 print(unittest_report())
 unittestResults = nil
 

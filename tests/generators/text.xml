@@ -46,11 +46,6 @@
                                                             <next>
                                                               <block type="procedures_callnoreturn">
                                                                 <mutation name="test replace"></mutation>
-                                                                <next>
-                                                                  <block type="procedures_callnoreturn">
-                                                                    <mutation name="test multiline"></mutation>
-                                                                  </block>
-                                                                </next>
                                                               </block>
                                                             </next>
                                                           </block>
@@ -4644,95 +4639,6 @@
                         </next>
                       </block>
                     </next>
-                  </block>
-                </next>
-              </block>
-            </next>
-          </block>
-        </next>
-      </block>
-    </statement>
-  </block>
-  <block type="procedures_defnoreturn" x="13" y="14063">
-    <field name="NAME">test multiline</field>
-    <comment pinned="false" h="80" w="160">Tests the "multiline" block.</comment>
-    <statement name="STACK">
-      <block type="unittest_assertequals" inline="false">
-        <value name="MESSAGE">
-          <block type="text">
-            <field name="TEXT">no text</field>
-          </block>
-        </value>
-        <value name="ACTUAL">
-          <block type="text_multiline">
-            <field name="TEXT"></field>
-          </block>
-        </value>
-        <value name="EXPECTED">
-          <block type="text">
-            <field name="TEXT"></field>
-          </block>
-        </value>
-        <next>
-          <block type="unittest_assertequals" inline="false">
-            <value name="MESSAGE">
-              <block type="text">
-                <field name="TEXT">simple</field>
-              </block>
-            </value>
-            <value name="ACTUAL">
-              <block type="text_multiline">
-                <field name="TEXT">Google</field>
-              </block>
-            </value>
-            <value name="EXPECTED">
-              <block type="text">
-                <field name="TEXT">Google</field>
-              </block>
-            </value>
-            <next>
-              <block type="unittest_assertequals" inline="false">
-                <value name="MESSAGE">
-                  <block type="text">
-                    <field name="TEXT">no compile error with newlines</field>
-                  </block>
-                </value>
-                <value name="ACTUAL">
-                  <block type="text_multiline">
-                    <field name="TEXT">paragraph&#10;with newlines&#10;yup</field>
-                  </block>
-                </value>
-                <value name="EXPECTED">
-                  <block type="text_multiline">
-                    <field name="TEXT">paragraph&#10;with newlines&#10;yup</field>
-                  </block>
-                </value>
-                <next>
-                  <block type="unittest_assertequals" inline="false">
-                    <value name="MESSAGE">
-                      <block type="text">
-                        <field name="TEXT">count with newlines</field>
-                      </block>
-                    </value>
-                    <value name="ACTUAL">
-                      <block type="text_count">
-                        <value name="SUB">
-                          <block type="text">
-                            <field name="TEXT">bark</field>
-                          </block>
-                        </value>
-                        <value name="TEXT">
-                          <block type="text_multiline">
-                            <field name="TEXT">bark bark&#10;bark bark bark&#10;bark bark bark bark</field>
-                          </block>
-                        </value>
-                      </block>
-                    </value>
-                    <value name="EXPECTED">
-                      <block type="math_number">
-                        <field name="NUM">9</field>
-                      </block>
-                    </value>
                   </block>
                 </next>
               </block>

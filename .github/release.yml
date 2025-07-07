@@ -1,0 +1,32 @@
+# release.yml
+
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - 'PR: chore'
+    authors:
+      - dependabot
+  categories:
+    - title: Breaking changes 🛠
+      labels:
+        - breaking change
+    - title: Deprecations 🧹 - APIs that may be removed in future releases
+      labels:
+        - deprecation
+    - title: New features ✨
+      labels:
+        - 'PR: feature'
+    - title: Bug fixes 🐛
+      labels:
+        - 'PR: fix'
+    - title: Cleanup ♻️
+      labels:
+        - 'PR: docs'
+        - 'PR: refactor'
+    - title: Reverted changes ⎌
+      labels:
+        - 'PR: revert'
+    - title: Other changes
+      labels:
+        - '*'

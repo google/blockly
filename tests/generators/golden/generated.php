@@ -53,7 +53,7 @@ function unittest_fail($message) {
 
 // Describe this function...
 function test_if() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   if (false) {
     unittest_fail('if false');
   }
@@ -91,7 +91,7 @@ function test_if() {
 
 // Describe this function...
 function test_ifelse() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $ok = false;
   if (true) {
     $ok = true;
@@ -110,7 +110,7 @@ function test_ifelse() {
 
 // Describe this function...
 function test_equalities() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(2 == 2, true, 'Equal yes');
   assertEquals(3 == 4, false, 'Equal no');
   assertEquals(5 != 6, true, 'Not equal yes');
@@ -127,7 +127,7 @@ function test_equalities() {
 
 // Describe this function...
 function test_and() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(true && true, true, 'And true/true');
   assertEquals(false && true, false, 'And false/true');
   assertEquals(true && false, false, 'And true/false');
@@ -136,7 +136,7 @@ function test_and() {
 
 // Describe this function...
 function test_or() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(true || true, true, 'Or true/true');
   assertEquals(false || true, true, 'Or false/true');
   assertEquals(true || false, true, 'Or true/false');
@@ -145,14 +145,14 @@ function test_or() {
 
 // Describe this function...
 function test_ternary() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(true ? 42 : 99, 42, 'if true');
   assertEquals(false ? 42 : 99, 99, 'if true');
 }
 
 // Describe this function...
 function test_foreach() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $log = '';
   foreach (array('a', 'b', 'c') as $x) {
     $log .= $x;
@@ -162,7 +162,7 @@ function test_foreach() {
 
 // Describe this function...
 function test_repeat() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $count = 0;
   for ($count2 = 0; $count2 < 10; $count2++) {
     $count += 1;
@@ -172,7 +172,7 @@ function test_repeat() {
 
 // Describe this function...
 function test_while() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   while (false) {
     unittest_fail('while 0');
   }
@@ -193,7 +193,7 @@ function test_while() {
 
 // Describe this function...
 function test_repeat_ext() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $count = 0;
   for ($count3 = 0; $count3 < 10; $count3++) {
     $count += 1;
@@ -203,7 +203,7 @@ function test_repeat_ext() {
 
 // Describe this function...
 function test_count_by() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $log = '';
   for ($x = 1; $x <= 8; $x += 2) {
     $log .= $x;
@@ -256,7 +256,7 @@ function test_count_by() {
 
 // Describe this function...
 function test_count_loops() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $log = '';
   for ($x = 1; $x <= 8; $x++) {
     $log .= $x;
@@ -293,7 +293,7 @@ function test_count_loops() {
 
 // Describe this function...
 function test_continue() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $log = '';
   $count = 0;
   while ($count != 8) {
@@ -334,7 +334,7 @@ function test_continue() {
 
 // Describe this function...
 function test_break() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $count = 1;
   while ($count != 10) {
     if ($count == 5) {
@@ -371,7 +371,7 @@ function test_break() {
 
 // Tests the "single" block.
 function test_single() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(sqrt(25), 5, 'sqrt');
   assertEquals(abs(-25), 25, 'abs');
   assertEquals(-(-25), 25, 'negate');
@@ -384,7 +384,7 @@ function test_single() {
 // Tests the "arithmetic" block for all operations and checks
 // parenthesis are properly generated for different orders.
 function test_arithmetic() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(1 + 2, 3, 'add');
   assertEquals(1 - 2, -1, 'subtract');
   assertEquals(1 - (0 + 2), -1, 'subtract order with add');
@@ -399,7 +399,7 @@ function test_arithmetic() {
 
 // Tests the "trig" block.
 function test_trig() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(sin(90 / 180 * pi()), 1, 'sin');
   assertEquals(cos(180 / 180 * pi()), -1, 'cos');
   assertEquals(tan(0 / 180 * pi()), 0, 'tan');
@@ -410,7 +410,7 @@ function test_trig() {
 
 // Tests the "constant" blocks.
 function test_constant() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(floor(M_PI * 1000), 3141, 'const pi');
   assertEquals(floor(M_E * 1000), 2718, 'const e');
   assertEquals(floor(((1 + sqrt(5)) / 2) * 1000), 1618, 'const golden');
@@ -440,21 +440,25 @@ function math_isPrime($n) {
 
 // Tests the "number property" blocks.
 function test_number_properties() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(42 % 2 == 0, true, 'even');
   assertEquals(42.1 % 2 == 1, false, 'odd');
   assertEquals(math_isPrime(5), true, 'prime 5');
+  assertEquals(math_isPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)');
   assertEquals(math_isPrime(25), false, 'prime 25');
   assertEquals(math_isPrime(-31.1), false, 'prime negative');
   assertEquals(is_int(M_PI), false, 'whole');
   assertEquals(INF > 0, true, 'positive');
+  assertEquals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)');
   assertEquals(-42 < 0, true, 'negative');
+  assertEquals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)');
   assertEquals(42 % 2 == 0, true, 'divisible');
+  assertEquals(!false, true, 'divisible by 0');
 }
 
 // Tests the "round" block.
 function test_round() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(round(42.42), 42, 'round');
   assertEquals(ceil(-42.42), -42, 'round up');
   assertEquals(floor(42.42), 42, 'round down');
@@ -462,7 +466,7 @@ function test_round() {
 
 // Tests the "change" block.
 function test_change() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $varToChange = 100;
   $varToChange += 42;
   assertEquals($varToChange, 142, 'change');
@@ -474,8 +478,8 @@ function math_mean($myList) {
 
 function math_median($arr) {
   sort($arr,SORT_NUMERIC);
-  return (count($arr) % 2) ? $arr[floor(count($arr)/2)] :
-      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2) - 1]) / 2;
+  return (count($arr) % 2) ? $arr[floor(count($arr) / 2)] :
+      ($arr[floor(count($arr) / 2)] + $arr[floor(count($arr) / 2) - 1]) / 2;
 }
 
 function math_modes($values) {
@@ -508,7 +512,7 @@ function indexOf($haystack, $needle) {
 
 // Tests the "list operation" blocks.
 function test_operations_on_list() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(array_sum((array(3, 4, 5))), 12, 'sum');
   assertEquals(min((array(3, 4, 5))), 3, 'min');
   assertEquals(max((array(3, 4, 5))), 5, 'max');
@@ -522,13 +526,13 @@ function test_operations_on_list() {
 
 // Tests the "mod" block.
 function test_mod() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(42 % 5, 2, 'mod');
 }
 
 // Tests the "constrain" block.
 function test_constraint() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(min(max(100, 0), 42), 42, 'constraint');
 }
 
@@ -541,7 +545,7 @@ function math_random_int($a, $b) {
 
 // Tests the "random integer" block.
 function test_random_integer() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $rand = math_random_int(5, 10);
   assertEquals($rand >= 5 && $rand <= 10, true, 'randRange');
   assertEquals(is_int($rand), true, 'randInteger');
@@ -549,14 +553,14 @@ function test_random_integer() {
 
 // Tests the "random fraction" block.
 function test_random_fraction() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $rand = (float)rand()/(float)getrandmax();
   assertEquals($rand >= 0 && $rand <= 1, true, 'randFloat');
 }
 
 // Describe this function...
 function test_atan2() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(atan2(5, -5) / pi() * 180, 135, 'atan2');
   assertEquals(atan2(-12, 0) / pi() * 180, -90, 'atan2');
 }
@@ -564,14 +568,14 @@ function test_atan2() {
 // Checks that the number of calls is one in order
 // to confirm that a function was only called once.
 function check_number_of_calls($test_name) {
-  global $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $test_name .= 'number of calls';
   assertEquals($number_of_calls, 1, $test_name);
 }
 
 // Tests the "create text with" block with varying number of inputs.
 function test_create_text() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals('', '', 'no text');
   assertEquals('Hello', 'Hello', 'create single');
   assertEquals(-1, '-1', 'create single number');
@@ -583,13 +587,13 @@ function test_create_text() {
 
 // Creates an empty string for use with the empty test.
 function get_empty() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   return '';
 }
 
 // Tests the "is empty" block".
 function test_empty_text() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(empty('Google'), false, 'not empty');
   assertEquals(empty(''), true, 'empty');
   assertEquals(empty(get_empty()), true, 'empty complex');
@@ -599,14 +603,13 @@ function test_empty_text() {
 function length($value) {
   if (is_string($value)) {
     return strlen($value);
-  } else {
-    return count($value);
   }
+  return count($value);
 }
 
 // Tests the "length" block.
 function test_text_length() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(length(''), 0, 'zero length');
   assertEquals(length('Google'), 6, 'non-zero length');
   assertEquals(length(true ? 'car' : null), 3, 'length order');
@@ -614,7 +617,7 @@ function test_text_length() {
 
 // Tests the "append text" block with different types of parameters.
 function test_append() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $item = 'Miserable';
   $item .= 'Failure';
   assertEquals($item, 'MiserableFailure', 'append text');
@@ -638,7 +641,7 @@ function text_lastIndexOf($text, $search) {
 
 // Tests the "find" block with a variable.
 function test_find_text_simple() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = 'Banana';
   assertEquals(text_indexOf($text, 'an'), 2, 'find first simple');
   assertEquals(text_lastIndexOf($text, 'an'), 4, 'find last simple');
@@ -647,14 +650,14 @@ function test_find_text_simple() {
 
 // Creates a string for use with the find test.
 function get_fruit() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls += 1;
   return 'Banana';
 }
 
 // Tests the "find" block with a function call.
 function test_find_text_complex() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls = 0;
   assertEquals(text_indexOf(get_fruit(), 'an'), 2, 'find first complex');
   check_number_of_calls('find first complex');
@@ -681,7 +684,7 @@ function text_random_letter($text) {
 
 // Tests the "get letter" block with a variable.
 function test_get_text_simple() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = 'Blockly';
   assertEquals(substr($text, 0, 1), 'B', 'get first simple');
   assertEquals(substr($text, -1), 'y', 'get last simple');
@@ -695,14 +698,14 @@ function test_get_text_simple() {
 
 // Creates a string for use with the get test.
 function get_Blockly() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls += 1;
   return 'Blockly';
 }
 
 // Tests the "get letter" block with a function call.
 function test_get_text_complex() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = 'Blockly';
   $number_of_calls = 0;
   assertEquals(substr(get_Blockly(), 0, 1), 'B', 'get first complex');
@@ -739,7 +742,7 @@ function test_get_text_complex() {
 
 // Creates a string for use with the substring test.
 function get_numbers() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls += 1;
   return '123456789';
 }
@@ -767,7 +770,7 @@ function text_get_substring($text, $where1, $at1, $where2, $at2) {
 
 // Tests the "get substring" block with a variable.
 function test_substring_simple() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = '123456789';
   assertEquals(text_get_substring($text, 'FROM_START', 1, 'FROM_START', 2), '23', 'substring # simple');
   assertEquals(text_get_substring($text, 'FROM_START', ((true ? 2 : null) - 1), 'FROM_START', ((true ? 3 : null) - 1)), '23', 'substring # simple order');
@@ -789,7 +792,7 @@ function test_substring_simple() {
 
 // Tests the "get substring" block with a function call.
 function test_substring_complex() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls = 0;
   assertEquals(text_get_substring(get_numbers(), 'FROM_START', 1, 'FROM_START', 2), '23', 'substring # complex');
   check_number_of_calls('substring # complex');
@@ -838,7 +841,7 @@ function test_substring_complex() {
 
 // Tests the "change casing" block.
 function test_case() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = 'Hello World';
   assertEquals(strtoupper($text), 'HELLO WORLD', 'uppercase');
   assertEquals(strtoupper(true ? $text : null), 'HELLO WORLD', 'uppercase order');
@@ -852,7 +855,7 @@ function test_case() {
 
 // Tests the "trim" block.
 function test_trim() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = '   abc def   ';
   assertEquals(trim($text), 'abc def', 'trim both');
   assertEquals(trim(true ? $text : null), 'abc def', 'trim both order');
@@ -864,7 +867,7 @@ function test_trim() {
 
 // Tests the "trim" block.
 function test_count_text() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = 'woolloomooloo';
   assertEquals(strlen('o') === 0 ? strlen($text) + 1 : substr_count($text, 'o'), 8, 'len 1');
   assertEquals(strlen('oo') === 0 ? strlen($text) + 1 : substr_count($text, 'oo'), 4, 'len 2');
@@ -877,7 +880,7 @@ function test_count_text() {
 
 // Tests the "trim" block.
 function test_text_reverse() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(strrev(''), '', 'empty string');
   assertEquals(strrev('a'), 'a', 'len 1');
   assertEquals(strrev('ab'), 'ba', 'len 2');
@@ -886,7 +889,7 @@ function test_text_reverse() {
 
 // Tests the "trim" block.
 function test_replace() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(str_replace('oo', '123', 'woolloomooloo'), 'w123ll123m123l123', 'replace all instances 1');
   assertEquals(str_replace('.oo', 'X', 'woolloomooloo'), 'woolloomooloo', 'literal string replacement');
   assertEquals(str_replace('abc', 'X', 'woolloomooloo'), 'woolloomooloo', 'not found');
@@ -896,27 +899,10 @@ function test_replace() {
   assertEquals(str_replace('a', 'chicken', ''), '', 'empty source');
 }
 
-// Tests the "multiline" block.
-function test_multiline() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
-  assertEquals('', '', 'no text');
-  assertEquals('Google', 'Google', 'simple');
-  assertEquals('paragraph' . "\n" .
-  'with newlines' . "\n" .
-  'yup', 'paragraph' . "\n" .
-  'with newlines' . "\n" .
-  'yup', 'no compile error with newlines');
-  assertEquals(strlen('bark') === 0 ? strlen('bark bark' . "\n" .
-  'bark bark bark' . "\n" .
-  'bark bark bark bark') + 1 : substr_count('bark bark' . "\n" .
-  'bark bark bark' . "\n" .
-  'bark bark bark bark', 'bark'), 9, 'count with newlines');
-}
-
 // Checks that the number of calls is one in order
 // to confirm that a function was only called once.
 function check_number_of_calls2($test_name) {
-  global $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $test_name .= 'number of calls';
   assertEquals($number_of_calls, 1, $test_name);
 }
@@ -931,7 +917,7 @@ function lists_repeat($value, $count) {
 
 // Tests the "create list with" and "create empty list" blocks.
 function test_create_lists() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(array(), array(), 'create empty');
   assertEquals(array(true, 'love'), array(true, 'love'), 'create items');
   assertEquals(lists_repeat('Eject', 3), array('Eject', 'Eject', 'Eject'), 'create repeated');
@@ -940,13 +926,13 @@ function test_create_lists() {
 
 // Creates an empty list for use with the empty test.
 function get_empty_list() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   return array();
 }
 
 // Tests the "is empty" block.
 function test_lists_empty() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(empty((array(0))), false, 'not empty');
   assertEquals(empty((array())), true, 'empty');
   assertEquals(empty((get_empty_list())), true, 'empty complex');
@@ -955,7 +941,7 @@ function test_lists_empty() {
 
 // Tests the "length" block.
 function test_lists_length() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(length(array()), 0, 'zero length');
   assertEquals(length(array('cat')), 1, 'one length');
   assertEquals(length(array('cat', true, array())), 3, 'three length');
@@ -972,7 +958,7 @@ function lastIndexOf($haystack, $needle) {
 
 // Tests the "find" block with a variable.
 function test_find_lists_simple() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Alice', 'Eve', 'Bob', 'Eve');
   assertEquals(indexOf($list2, 'Eve'), 2, 'find first simple');
   assertEquals(lastIndexOf($list2, 'Eve'), 4, 'find last simple');
@@ -981,14 +967,14 @@ function test_find_lists_simple() {
 
 // Creates a list for use with the find test.
 function get_names() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls += 1;
   return array('Alice', 'Eve', 'Bob', 'Eve');
 }
 
 // Tests the "find" block with a function call.
 function test_find_lists_complex() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls = 0;
   assertEquals(indexOf(get_names(), 'Eve'), 2, 'find first complex');
   check_number_of_calls('find first complex');
@@ -1015,7 +1001,7 @@ function lists_get_random_item($list) {
 
 // Tests the "get" block with a variable.
 function test_get_lists_simple() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Kirk', 'Spock', 'McCoy');
   assertEquals($list2[0], 'Kirk', 'get first simple');
   assertEquals(end($list2), 'McCoy', 'get last simple');
@@ -1029,7 +1015,7 @@ function test_get_lists_simple() {
 
 // Tests the "get" block with create list call.
 function test_get_lists_create_list() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(array('Kirk', 'Spock', 'McCoy')[0], 'Kirk', 'get first create list');
   assertEquals(end(array('Kirk', 'Spock', 'McCoy')), 'McCoy', 'get last simple');
   assertEquals(indexOf(array('Kirk', 'Spock', 'McCoy'), lists_get_random_item(array('Kirk', 'Spock', 'McCoy'))) > 0, true, 'get random simple');
@@ -1042,14 +1028,14 @@ function test_get_lists_create_list() {
 
 // Creates a list for use with the get test.
 function get_star_wars() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls += 1;
   return array('Kirk', 'Spock', 'McCoy');
 }
 
 // Tests the "get" block with a function call.
 function test_get_lists_complex() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Kirk', 'Spock', 'McCoy');
   $number_of_calls = 0;
   assertEquals(get_star_wars()[0], 'Kirk', 'get first complex');
@@ -1092,7 +1078,7 @@ function lists_get_remove_random_item(&$list) {
 
 // Tests the "get and remove" block.
 function test_getRemove() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Kirk', 'Spock', 'McCoy');
   assertEquals(array_shift($list2), 'Kirk', 'getremove first');
   assertEquals($list2, array('Spock', 'McCoy'), 'getremove first list');
@@ -1132,7 +1118,7 @@ function lists_remove_random_item(&$list) {
 
 // Tests the "remove" block.
 function test_remove() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Kirk', 'Spock', 'McCoy');
   array_shift($list2);
   assertEquals($list2, array('Spock', 'McCoy'), 'remove first list');
@@ -1177,7 +1163,7 @@ function lists_set_from_end(&$list, $at, $value) {
 
 // Tests the "set" block.
 function test_set() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Picard', 'Riker', 'Crusher');
   $list2[0] = 'Jean-Luc';
   assertEquals($list2, array('Jean-Luc', 'Riker', 'Crusher'), 'set first list');
@@ -1221,7 +1207,7 @@ function lists_insert_from_end(&$list, $at, $value) {
 
 // Tests the "insert" block.
 function test_insert() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Picard', 'Riker', 'Crusher');
   array_unshift($list2, 'Data');
   assertEquals($list2, array('Data', 'Picard', 'Riker', 'Crusher'), 'insert first list');
@@ -1261,7 +1247,7 @@ function test_insert() {
 
 // Tests the "get sub-list" block with a variable.
 function test_sublist_simple() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Columbia', 'Challenger', 'Discovery', 'Atlantis', 'Endeavour');
   assertEquals(array_slice($list2, 1, 2 - 1 + 1), array('Challenger', 'Discovery'), 'sublist # simple');
   assertEquals(array_slice($list2, ((true ? 2 : null) - 1), ((true ? 3 : null) - 1) - ((true ? 2 : null) - 1) + 1), array('Challenger', 'Discovery'), 'sublist # simple order');
@@ -1287,7 +1273,7 @@ function test_sublist_simple() {
 
 // Creates a list for use with the sublist test.
 function get_space_shuttles() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls += 1;
   return array('Columbia', 'Challenger', 'Discovery', 'Atlantis', 'Endeavour');
 }
@@ -1315,7 +1301,7 @@ function lists_get_sublist($list, $where1, $at1, $where2, $at2) {
 
 // Tests the "get sub-list" block with a function call.
 function test_sublist_complex() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $number_of_calls = 0;
   assertEquals(array_slice(get_space_shuttles(), 1, 2 - 1 + 1), array('Challenger', 'Discovery'), 'sublist # start complex');
   check_number_of_calls('sublist # start complex');
@@ -1364,7 +1350,7 @@ function test_sublist_complex() {
 
 // Tests the "join" block.
 function test_join() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Vulcan', 'Klingon', 'Borg');
   assertEquals(implode(',', $list2), 'Vulcan,Klingon,Borg', 'join');
   assertEquals(implode(',', true ? $list2 : null), 'Vulcan,Klingon,Borg', 'join order');
@@ -1372,7 +1358,7 @@ function test_join() {
 
 // Tests the "split" block.
 function test_split() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $text = 'Vulcan,Klingon,Borg';
   assertEquals(explode(',', $text), array('Vulcan', 'Klingon', 'Borg'), 'split');
   assertEquals(explode(',', true ? $text : null), array('Vulcan', 'Klingon', 'Borg'), 'split order');
@@ -1380,9 +1366,9 @@ function test_split() {
 
 function lists_sort($list, $type, $direction) {
   $sortCmpFuncs = array(
-    "NUMERIC" => "strnatcasecmp",
-    "TEXT" => "strcmp",
-    "IGNORE_CASE" => "strcasecmp"
+    'NUMERIC' => 'strnatcasecmp',
+    'TEXT' => 'strcmp',
+    'IGNORE_CASE' => 'strcasecmp'
   );
   $sortCmp = $sortCmpFuncs[$type];
   $list2 = $list;
@@ -1395,7 +1381,7 @@ function lists_sort($list, $type, $direction) {
 
 // Tests the "alphabetic sort" block.
 function test_sort_alphabetic() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Vulcan', 'klingon', 'Borg');
   assertEquals(lists_sort($list2, "TEXT", 1), array('Borg', 'Vulcan', 'klingon'), 'sort alphabetic ascending');
   assertEquals(lists_sort(true ? $list2 : null, "TEXT", 1), array('Borg', 'Vulcan', 'klingon'), 'sort alphabetic ascending order');
@@ -1403,7 +1389,7 @@ function test_sort_alphabetic() {
 
 // Tests the "alphabetic sort ignore case" block.
 function test_sort_ignoreCase() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array('Vulcan', 'klingon', 'Borg');
   assertEquals(lists_sort($list2, "IGNORE_CASE", 1), array('Borg', 'klingon', 'Vulcan'), 'sort ignore case ascending');
   assertEquals(lists_sort(true ? $list2 : null, "IGNORE_CASE", 1), array('Borg', 'klingon', 'Vulcan'), 'sort ignore case ascending order');
@@ -1411,7 +1397,7 @@ function test_sort_ignoreCase() {
 
 // Tests the "numeric sort" block.
 function test_sort_numeric() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array(8, 18, -1);
   assertEquals(lists_sort($list2, "NUMERIC", -1), array(18, 8, -1), 'sort numeric descending');
   assertEquals(lists_sort(true ? $list2 : null, "NUMERIC", -1), array(18, 8, -1), 'sort numeric descending order');
@@ -1419,7 +1405,7 @@ function test_sort_numeric() {
 
 // Tests the "list reverse" block.
 function test_lists_reverse() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $list2 = array(8, 18, -1, 64);
   assertEquals(array_reverse($list2), array(64, -1, 18, 8), 'reverse a copy');
   assertEquals($list2, array(8, 18, -1, 64), 'reverse a copy original');
@@ -1428,72 +1414,8 @@ function test_lists_reverse() {
 }
 
 // Describe this function...
-function test_colour_picker() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
-  assertEquals('#ff6600', '#ff6600', 'static colour');
-}
-
-function colour_rgb($r, $g, $b) {
-  $r = round(max(min($r, 100), 0) * 2.55);
-  $g = round(max(min($g, 100), 0) * 2.55);
-  $b = round(max(min($b, 100), 0) * 2.55);
-  $hex = '#';
-  $hex .= str_pad(dechex($r), 2, '0', STR_PAD_LEFT);
-  $hex .= str_pad(dechex($g), 2, '0', STR_PAD_LEFT);
-  $hex .= str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
-  return $hex;
-}
-
-// Describe this function...
-function test_rgb() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
-  assertEquals(colour_rgb(100, 40, 0), '#ff6600', 'from rgb');
-}
-
-function colour_random() {
-  return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-}
-
-// Describe this function...
-function test_colour_random() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
-  for ($count4 = 0; $count4 < 100; $count4++) {
-    $item = colour_random();
-    assertEquals(length($item), 7, 'length of random colour string: ' . $item);
-    assertEquals(substr($item, 0, 1), '#', 'format of random colour string: ' . $item);
-    for ($i = 1; $i <= 6; $i++) {
-      assertEquals(0 != text_indexOf('abcdefABDEF0123456789', substr($item, (($i + 1) - 1), 1)), true, implode('', array('contents of random colour string: ',$item,' at index: ',$i + 1)));
-    }
-  }
-}
-
-function colour_blend($c1, $c2, $ratio) {
-  $ratio = max(min($ratio, 1), 0);
-  $r1 = hexdec(substr($c1, 1, 2));
-  $g1 = hexdec(substr($c1, 3, 2));
-  $b1 = hexdec(substr($c1, 5, 2));
-  $r2 = hexdec(substr($c2, 1, 2));
-  $g2 = hexdec(substr($c2, 3, 2));
-  $b2 = hexdec(substr($c2, 5, 2));
-  $r = round($r1 * (1 - $ratio) + $r2 * $ratio);
-  $g = round($g1 * (1 - $ratio) + $g2 * $ratio);
-  $b = round($b1 * (1 - $ratio) + $b2 * $ratio);
-  $hex = '#';
-  $hex .= str_pad(dechex($r), 2, '0', STR_PAD_LEFT);
-  $hex .= str_pad(dechex($g), 2, '0', STR_PAD_LEFT);
-  $hex .= str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
-  return $hex;
-}
-
-// Describe this function...
-function test_blend() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
-  assertEquals(colour_blend('#ff0000', colour_rgb(100, 40, 0), 0.4), '#ff2900', 'blend');
-}
-
-// Describe this function...
 function test_procedure() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   procedure_1(8, 2);
   assertEquals($proc_z, 4, 'procedure with global');
   $proc_w = false;
@@ -1506,13 +1428,13 @@ function test_procedure() {
 
 // Describe this function...
 function procedure_1($proc_x, $proc_y) {
-  global $test_name, $naked, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $proc_z = $proc_x / $proc_y;
 }
 
 // Describe this function...
 function procedure_2($proc_x) {
-  global $test_name, $naked, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   if ($proc_x) {
     return;
   }
@@ -1521,7 +1443,7 @@ function procedure_2($proc_x) {
 
 // Describe this function...
 function test_function() {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   assertEquals(function_1(2, 3), -1, 'function with arguments');
   assertEquals($func_z, 'side effect', 'function with side effect');
   $func_a = 'unchanged';
@@ -1534,21 +1456,21 @@ function test_function() {
 
 // Describe this function...
 function function_1($func_x, $func_y) {
-  global $test_name, $naked, $proc_x, $proc_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_a, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $func_z = 'side effect';
   return $func_x - $func_y;
 }
 
 // Describe this function...
 function function_2($func_a) {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   $func_a += 1;
   return $func_a . $func_c;
 }
 
 // Describe this function...
 function function_3($func_a) {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $n, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   if ($func_a) {
     return true;
   }
@@ -1557,7 +1479,7 @@ function function_3($func_a) {
 
 // Describe this function...
 function recurse($n) {
-  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $i, $loglist, $changing_list, $list_copy, $unittestResults;
+  global $test_name, $naked, $proc_x, $proc_y, $func_x, $func_y, $func_a, $ok, $log, $count, $varToChange, $rand, $item, $text, $number_of_calls, $list2, $proc_z, $func_z, $x, $proc_w, $func_c, $if2, $loglist, $changing_list, $list_copy, $unittestResults;
   if ($n > 0) {
     $text = implode('', array(recurse($n - 1),$n,recurse($n - 1)));
   } else {
@@ -1640,7 +1562,6 @@ test_trim();
 test_count_text();
 test_text_reverse();
 test_replace();
-test_multiline();
 print(unittest_report());
 $unittestResults = null;
 
@@ -1666,15 +1587,6 @@ test_sort_alphabetic();
 test_sort_ignoreCase();
 test_sort_numeric();
 test_lists_reverse();
-print(unittest_report());
-$unittestResults = null;
-
-$unittestResults = array();
-print("\n====================\n\nRunning suite: Colour\n");
-test_colour_picker();
-test_blend();
-test_rgb();
-test_colour_random();
 print(unittest_report());
 $unittestResults = null;
 

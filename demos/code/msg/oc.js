@@ -19,6 +19,6 @@ var MSG = {
   httpRequestError: "I a agut un problèma amb la demanda.",
   linkAlert: "Partejatz vòstres blòts gràcia a aqueste ligam :\n\n%1",
   hashError: "O planhèm, '%1' correspond pas a un fichièr Blockly salvament.",
-  xmlError: "Impossible de cargar lo fichièr de salvament.  Benlèu qu'es estat creat amb una autra version de Blockly ?",
-  badXml: "Error d’analisi del XML :\n%1\n\nSeleccionar 'D'acòrdi' per abandonar vòstras modificacions o 'Anullar' per modificar encara lo XML."
+  loadError: "Impossible de cargar lo fichièr de salvament.  Benlèu qu'es estat creat amb una autra version de Blockly ?",
+  parseError: "Error d’analisi del %1 :\n%2\n\nSeleccionar 'D'acòrdi' per abandonar vòstras modificacions o 'Anullar' per modificar encara lo %1."
 };

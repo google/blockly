@@ -2,5 +2,5 @@
 
 module.exports = {
   ui: 'tdd',
-  reporter: 'landing'
+  reporter: 'landing',
 };

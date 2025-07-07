@@ -19,6 +19,6 @@ var MSG = {
   httpRequestError: "A-i é staje un problema con l'arcesta.",
   linkAlert: "Ch'a partagia ij sò blòch grassie a sta liura: %1",
   hashError: "An dëspias, '%1 a corëspond a gnun programa salvà.",
-  xmlError: "A l'é nen podusse carié so archivi salvà. Miraco a l'é stàit creà con na version diferenta ëd Blockly?",
-  badXml: "Eror d'anàlisi dl'XML:\n%1\n\nSelessioné 'Va bin' për lassé perde toe modìfiche o 'Anulé' për modifiché ancora l'XML."
+  loadError: "A l'é nen podusse carié so archivi salvà. Miraco a l'é stàit creà con na version diferenta ëd Blockly?",
+  parseError: "Eror d'anàlisi dl'%1:\n%2\n\nSelessioné 'Va bin' për lassé perde toe modìfiche o 'Anulé' për modifiché ancora l'%1."
 };

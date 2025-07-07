@@ -33,6 +33,16 @@ export class Rect {
   ) {}
 
   /**
+   * Converts a DOM or SVG Rect to a Blockly Rect.
+   *
+   * @param rect The rectangle to convert.
+   * @returns A representation of the same rectangle as a Blockly Rect.
+   */
+  static from(rect: DOMRect | SVGRect): Rect {
+    return new Rect(rect.y, rect.y + rect.height, rect.x, rect.x + rect.width);
+  }
+
+  /**
    * Creates a new copy of this rectangle.
    *
    * @returns A copy of this Rect.
@@ -49,6 +59,11 @@ export class Rect {
   /** Returns the width of this rectangle. */
   getWidth(): number {
     return this.right - this.left;
+  }
+
+  /** Returns the top left coordinate of this rectangle. */
+  getOrigin(): Coordinate {
+    return new Coordinate(this.left, this.top);
   }
 
   /**

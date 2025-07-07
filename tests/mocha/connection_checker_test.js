@@ -29,7 +29,10 @@ suite('Connection checker', function () {
     }
 
     test('Target Null', function () {
-      const connection = new Blockly.Connection({}, ConnectionType.INPUT_VALUE);
+      const connection = new Blockly.Connection(
+        {id: 'test'},
+        ConnectionType.INPUT_VALUE,
+      );
       assertReasonHelper(
         this.checker,
         connection,
@@ -38,7 +41,7 @@ suite('Connection checker', function () {
       );
     });
     test('Target Self', function () {
-      const block = {workspace: 1};
+      const block = {id: 'test', workspace: 1};
       const connection1 = new Blockly.Connection(
         block,
         ConnectionType.INPUT_VALUE,
@@ -57,11 +60,11 @@ suite('Connection checker', function () {
     });
     test('Different Workspaces', function () {
       const connection1 = new Blockly.Connection(
-        {workspace: 1},
+        {id: 'test1', workspace: 1},
         ConnectionType.INPUT_VALUE,
       );
       const connection2 = new Blockly.Connection(
-        {workspace: 2},
+        {id: 'test2', workspace: 2},
         ConnectionType.OUTPUT_VALUE,
       );
 
@@ -76,10 +79,10 @@ suite('Connection checker', function () {
       setup(function () {
         // We have to declare each separately so that the connections belong
         // on different blocks.
-        const prevBlock = {isShadow: function () {}};
-        const nextBlock = {isShadow: function () {}};
-        const outBlock = {isShadow: function () {}};
-        const inBlock = {isShadow: function () {}};
+        const prevBlock = {id: 'test1', isShadow: function () {}};
+        const nextBlock = {id: 'test2', isShadow: function () {}};
+        const outBlock = {id: 'test3', isShadow: function () {}};
+        const inBlock = {id: 'test4', isShadow: function () {}};
         this.previous = new Blockly.Connection(
           prevBlock,
           ConnectionType.PREVIOUS_STATEMENT,
@@ -197,11 +200,13 @@ suite('Connection checker', function () {
     suite('Shadows', function () {
       test('Previous Shadow', function () {
         const prevBlock = {
+          id: 'test1',
           isShadow: function () {
             return true;
           },
         };
         const nextBlock = {
+          id: 'test2',
           isShadow: function () {
             return false;
           },
@@ -224,11 +229,13 @@ suite('Connection checker', function () {
       });
       test('Next Shadow', function () {
         const prevBlock = {
+          id: 'test1',
           isShadow: function () {
             return false;
           },
         };
         const nextBlock = {
+          id: 'test2',
           isShadow: function () {
             return true;
           },
@@ -251,11 +258,13 @@ suite('Connection checker', function () {
       });
       test('Prev and Next Shadow', function () {
         const prevBlock = {
+          id: 'test1',
           isShadow: function () {
             return true;
           },
         };
         const nextBlock = {
+          id: 'test2',
           isShadow: function () {
             return true;
           },
@@ -278,11 +287,13 @@ suite('Connection checker', function () {
       });
       test('Output Shadow', function () {
         const outBlock = {
+          id: 'test1',
           isShadow: function () {
             return true;
           },
         };
         const inBlock = {
+          id: 'test2',
           isShadow: function () {
             return false;
           },
@@ -305,11 +316,13 @@ suite('Connection checker', function () {
       });
       test('Input Shadow', function () {
         const outBlock = {
+          id: 'test1',
           isShadow: function () {
             return false;
           },
         };
         const inBlock = {
+          id: 'test2',
           isShadow: function () {
             return true;
           },
@@ -332,11 +345,13 @@ suite('Connection checker', function () {
       });
       test('Output and Input Shadow', function () {
         const outBlock = {
+          id: 'test1',
           isShadow: function () {
             return true;
           },
         };
         const inBlock = {
+          id: 'test2',
           isShadow: function () {
             return true;
           },
@@ -373,9 +388,11 @@ suite('Connection checker', function () {
       };
       test('Output connected, adding previous', function () {
         const outBlock = {
+          id: 'test1',
           isShadow: function () {},
         };
         const inBlock = {
+          id: 'test2',
           isShadow: function () {},
         };
         const outCon = new Blockly.Connection(
@@ -394,6 +411,7 @@ suite('Connection checker', function () {
           ConnectionType.PREVIOUS_STATEMENT,
         );
         const nextBlock = {
+          id: 'test3',
           isShadow: function () {},
         };
         const nextCon = new Blockly.Connection(
@@ -410,9 +428,11 @@ suite('Connection checker', function () {
       });
       test('Previous connected, adding output', function () {
         const prevBlock = {
+          id: 'test1',
           isShadow: function () {},
         };
         const nextBlock = {
+          id: 'test2',
           isShadow: function () {},
         };
         const prevCon = new Blockly.Connection(
@@ -431,6 +451,7 @@ suite('Connection checker', function () {
           ConnectionType.OUTPUT_VALUE,
         );
         const inBlock = {
+          id: 'test3',
           isShadow: function () {},
         };
         const inCon = new Blockly.Connection(
@@ -449,8 +470,14 @@ suite('Connection checker', function () {
   });
   suite('Check Types', function () {
     setup(function () {
-      this.con1 = new Blockly.Connection({}, ConnectionType.PREVIOUS_STATEMENT);
-      this.con2 = new Blockly.Connection({}, ConnectionType.NEXT_STATEMENT);
+      this.con1 = new Blockly.Connection(
+        {id: 'test1'},
+        ConnectionType.PREVIOUS_STATEMENT,
+      );
+      this.con2 = new Blockly.Connection(
+        {id: 'test2'},
+        ConnectionType.NEXT_STATEMENT,
+      );
     });
     function assertCheckTypes(checker, one, two) {
       assert.isTrue(checker.doTypeChecks(one, two));

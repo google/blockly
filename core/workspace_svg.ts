@@ -480,10 +480,7 @@ export class WorkspaceSvg
    * @internal
    */
   getMarker(id: string): Marker | null {
-    if (this.markerManager) {
-      return this.markerManager.getMarker(id);
-    }
-    return null;
+    return this.markerManager.getMarker(id);
   }
 
   /**
@@ -491,11 +488,8 @@ export class WorkspaceSvg
    *
    * @returns The cursor for the workspace.
    */
-  getCursor(): LineCursor | null {
-    if (this.markerManager) {
-      return this.markerManager.getCursor();
-    }
-    return null;
+  getCursor(): LineCursor {
+    return this.markerManager.getCursor();
   }
 
   /**
@@ -899,10 +893,7 @@ export class WorkspaceSvg
     }
 
     this.renderer.dispose();
-
-    if (this.markerManager) {
-      this.markerManager.dispose();
-    }
+    this.markerManager.dispose();
 
     super.dispose();
 

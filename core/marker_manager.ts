@@ -11,7 +11,7 @@
  */
 // Former goog.module ID: Blockly.MarkerManager
 
-import type {LineCursor} from './keyboard_nav/line_cursor.js';
+import {LineCursor} from './keyboard_nav/line_cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -23,7 +23,7 @@ export class MarkerManager {
   static readonly LOCAL_MARKER = 'local_marker_1';
 
   /** The cursor. */
-  private cursor: LineCursor | null = null;
+  private cursor: LineCursor;
 
   /** The map of markers for the workspace. */
   private markers = new Map<string, Marker>();
@@ -32,7 +32,9 @@ export class MarkerManager {
    * @param workspace The workspace for the marker manager.
    * @internal
    */
-  constructor(private readonly workspace: WorkspaceSvg) {}
+  constructor(private readonly workspace: WorkspaceSvg) {
+    this.cursor = new LineCursor(this.workspace);
+  }
 
   /**
    * Register the marker by adding it to the map of markers.
@@ -72,7 +74,7 @@ export class MarkerManager {
    *
    * @returns The cursor for this workspace.
    */
-  getCursor(): LineCursor | null {
+  getCursor(): LineCursor {
     return this.cursor;
   }
 
@@ -109,9 +111,6 @@ export class MarkerManager {
       this.unregisterMarker(markerId);
     }
     this.markers.clear();
-    if (this.cursor) {
-      this.cursor.dispose();
-      this.cursor = null;
-    }
+    this.cursor.dispose();
   }
 }

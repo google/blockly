@@ -401,6 +401,8 @@ export class LineCursor extends Marker {
       block.workspace.scrollBoundsIntoView(
         block.getBoundingRectangleWithoutChildren(),
       );
+    } else if (newNode instanceof RenderedWorkspaceComment) {
+      newNode.workspace.scrollBoundsIntoView(newNode.getBoundingRectangle());
     }
   }
 

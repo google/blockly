@@ -8,25 +8,32 @@
  * @fileoverview Gulp script to build Blockly for Node & NPM.
  */
 
-const gulp = require('gulp');
-gulp.replace = require('gulp-replace');
-gulp.rename = require('gulp-rename');
-gulp.sourcemaps = require('gulp-sourcemaps');
+import * as gulp from 'gulp';
+import replace from 'gulp-replace';
+import rename from 'gulp-rename';
+import sourcemaps from 'gulp-sourcemaps';
 
-const path = require('path');
-const fs = require('fs');
-const fsPromises = require('fs/promises');
-const {exec, execSync} = require('child_process');
+import * as path from 'path';
+import * as fs from 'fs';
+import * as fsPromises from 'fs/promises';
+import {exec, execSync} from 'child_process';
 
-const {globSync} = require('glob');
-const closureCompiler = require('google-closure-compiler').gulp();
-const argv = require('yargs').argv;
-const {rimraf} = require('rimraf');
+import {globSync} from 'glob';
+// For v20250609.0.0 and later:
+// import {gulp as closureCompiler} from 'google-closure-compiler';
+import ClosureCompiler from 'google-closure-compiler';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
+import {rimraf} from 'rimraf';
 
-const {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
-const {getPackageJson} = require('./helper_tasks');
+import {BUILD_DIR, LANG_BUILD_DIR, RELEASE_DIR, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} from './config.mjs';
+import {getPackageJson} from './helper_tasks.mjs';
 
-const {posixPath, quote} = require('../helpers');
+import {posixPath, quote} from '../helpers.js';
+
+const closureCompiler = ClosureCompiler.gulp();
+
+const argv = yargs(hideBin(process.argv)).parse();
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -182,7 +189,7 @@ function stripApacheLicense() {
   // Closure Compiler preserves dozens of Apache licences in the Blockly code.
   // Remove these if they belong to Google or MIT.
   // MIT's permission to do this is logged in Blockly issue #2412.
-  return gulp.replace(new RegExp(licenseRegex, 'g'), '\n\n\n\n');
+  return replace(new RegExp(licenseRegex, 'g'), '\n\n\n\n');
   // Replace with the same number of lines so that source-maps are not affected.
 }
 
@@ -306,7 +313,7 @@ const JSCOMP_OFF = [
  * Builds Blockly as a JS program, by running tsc on all the files in
  * the core directory.
  */
-function buildJavaScript(done) {
+export function tsc(done) {
   execSync(
       `tsc -outDir "${TSC_OUTPUT_DIR}" -declarationDir "${TYPINGS_BUILD_DIR}"`,
       {stdio: 'inherit'});
@@ -318,7 +325,7 @@ function buildJavaScript(done) {
  * This task regenerates msg/json/en.js and msg/json/qqq.js from
  * msg/messages.js.
  */
-function generateMessages(done) {
+export function messages(done) {
   // Run js_to_json.py
   const jsToJsonCmd = `${PYTHON} scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
@@ -573,10 +580,10 @@ function buildCompiled() {
   // Fire up compilation pipline.
   return gulp.src(chunkOptions.js, {base: './'})
       .pipe(stripApacheLicense())
-      .pipe(gulp.sourcemaps.init())
+      .pipe(sourcemaps.init())
       .pipe(compile(options))
-      .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
-      .pipe(gulp.sourcemaps.write('.'))
+      .pipe(rename({suffix: COMPILED_SUFFIX}))
+      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(RELEASE_DIR));
 }
 
@@ -668,7 +675,7 @@ async function buildLangfileShims() {
   // (We have to do it this way because messages.js is a script and
   // not a CJS module with exports.)
   globalThis.Blockly = {Msg: {}};
-  require('../../msg/messages.js');
+  await import('../../msg/messages.js');
   const exportedNames = Object.keys(globalThis.Blockly.Msg);
   delete globalThis.Blockly;
 
@@ -689,12 +696,14 @@ ${exportedNames.map((name) => `  ${name},`).join('\n')}
 }
 
 /**
- * This task builds Blockly core, blocks and generators together and uses
- * Closure Compiler's ADVANCED_COMPILATION mode.
+ * This task uses Closure Compiler's ADVANCED_COMPILATION mode to
+ * compile together Blockly core, blocks and generators with a simple
+ * test app; the purpose is to verify that Blockly is compatible with
+ * the ADVANCED_COMPILATION mode.
  *
  * Prerequisite: buildJavaScript.
  */
-function buildAdvancedCompilationTest() {
+function compileAdvancedCompilationTest() {
   // If main_compressed.js exists (from a previous run) delete it so that
   // a later browser-based test won't check it should the compile fail.
   try {
@@ -718,9 +727,9 @@ function buildAdvancedCompilationTest() {
   };
   return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())
-      .pipe(gulp.sourcemaps.init())
+      .pipe(sourcemaps.init())
       .pipe(compile(options))
-      .pipe(gulp.sourcemaps.write(
+      .pipe(sourcemaps.write(
           '.', {includeContent: false, sourceRoot: '../../'}))
       .pipe(gulp.dest('./tests/compile/'));
 }
@@ -728,7 +737,7 @@ function buildAdvancedCompilationTest() {
 /**
  * This task cleans the build directory (by deleting it).
  */
-function cleanBuildDir() {
+export function cleanBuildDir() {
   // Sanity check.
   if (BUILD_DIR === '.' || BUILD_DIR === '/') {
     return Promise.reject(`Refusing to rm -rf ${BUILD_DIR}`);
@@ -737,16 +746,13 @@ function cleanBuildDir() {
 }
 
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
-exports.cleanBuildDir = cleanBuildDir;
-exports.langfiles = gulp.parallel(buildLangfiles, buildLangfileShims);
-exports.tsc = buildJavaScript;
-exports.minify = gulp.series(exports.tsc, buildCompiled, buildShims);
-exports.build = gulp.parallel(exports.minify, exports.langfiles);
+// function cleanBuildDir, above
+export const langfiles = gulp.parallel(buildLangfiles, buildLangfileShims);
+export const minify = gulp.series(tsc, buildCompiled, buildShims);
+// function tsc, above
+export const build = gulp.parallel(minify, langfiles);
 
 // Manually-invokable targets, with prerequisites where required.
-exports.messages = generateMessages;  // Generate msg/json/en.json et al.
-exports.buildAdvancedCompilationTest =
-    gulp.series(exports.tsc, buildAdvancedCompilationTest);
-
-// Targets intended only for invocation by scripts; may omit prerequisites.
-exports.onlyBuildAdvancedCompilationTest = buildAdvancedCompilationTest;
+// function messages, above
+export const buildAdvancedCompilationTest =
+    gulp.series(tsc, compileAdvancedCompilationTest);

@@ -11,7 +11,6 @@ import * as clipboard from './clipboard.js';
 import {RenderedWorkspaceComment} from './comments.js';
 import * as eventUtils from './events/utils.js';
 import {getFocusManager} from './focus_manager.js';
-import {Gesture} from './gesture.js';
 import {ICopyData, isCopyable as isICopyable} from './interfaces/i_copyable.js';
 import {isDeletable as isIDeletable} from './interfaces/i_deletable.js';
 import {isDraggable} from './interfaces/i_draggable.js';
@@ -67,7 +66,7 @@ export function registerDelete() {
         focused != null &&
         isIDeletable(focused) &&
         focused.isDeletable() &&
-        !Gesture.inProgress() &&
+        !workspace.isDragging() &&
         // Don't delete the block if a field editor is open
         !getFocusManager().ephemeralFocusTaken()
       );
@@ -322,7 +321,7 @@ export function registerUndo() {
     preconditionFn(workspace) {
       return (
         !workspace.isReadOnly() &&
-        !Gesture.inProgress() &&
+        !workspace.isDragging() &&
         !getFocusManager().ephemeralFocusTaken()
       );
     },
@@ -360,7 +359,7 @@ export function registerRedo() {
     name: names.REDO,
     preconditionFn(workspace) {
       return (
-        !Gesture.inProgress() &&
+        !workspace.isDragging() &&
         !workspace.isReadOnly() &&
         !getFocusManager().ephemeralFocusTaken()
       );

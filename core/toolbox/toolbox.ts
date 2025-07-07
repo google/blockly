@@ -1172,6 +1172,7 @@ Css.register(`
 
 /* Category tree in Toolbox. */
 .blocklyToolbox {
+  box-sizing: border-box;
   user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;

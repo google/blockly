@@ -22,6 +22,7 @@ import {FlyoutItem} from './flyout_item.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {FlyoutNavigator} from './flyout_navigator.js';
 import {FlyoutSeparator, SeparatorAxis} from './flyout_separator.js';
+import { getFocusManager } from './focus_manager.js';
 import {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IFlyoutInflater} from './interfaces/i_flyout_inflater.js';
@@ -615,6 +616,10 @@ export abstract class Flyout
    *     toolbox definition, or a string with the name of the dynamic category.
    */
   show(flyoutDef: toolbox.FlyoutDefinition | string) {
+    const previouslyFocusedNode = getFocusManager().getFocusedNode();
+    const hadFocusedItem =
+      this.getContents().some(
+        (item) => item.getElement() === previouslyFocusedNode);
     this.workspace_.setResizesEnabled(false);
     this.hide();
     this.clearOldBlocks();
@@ -655,6 +660,14 @@ export abstract class Flyout
       }
     };
     this.workspace_.addChangeListener(this.reflowWrapper);
+
+    // It's difficult to restore the actual element that was focused since
+    // everything gets recreated (and it may no longer exist). Instead, if the
+    // flyout previously held focus then force it to focus the first element.
+    const contents = this.getContents();
+    if (hadFocusedItem && contents.length > 0) {
+      getFocusManager().focusNode(contents[0].getElement());
+    }
   }
 
   /**

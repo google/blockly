@@ -155,7 +155,7 @@ suite('DropDownDiv', function () {
     });
     test('Escape dismisses DropDownDiv', function () {
       let hidden = false;
-      Blockly.DropDownDiv.show(this, false, 0, 0, 0, 0, false, false, () => {
+      Blockly.DropDownDiv.show(this, false, 0, 0, 0, 0, false, () => {
         hidden = true;
       });
       assert.isFalse(hidden);
@@ -276,7 +276,7 @@ suite('DropDownDiv', function () {
       // Focus an element outside of the drop-down.
       document.getElementById('nonTreeElementForEphemeralFocus').focus();
 
-      // the drop-down should now be hidden since it lost focus.
+      // The drop-down should now be hidden since it lost focus.
       const dropDownDivElem = document.querySelector('.blocklyDropDownDiv');
       assert.strictEqual(dropDownDivElem.style.opacity, '0');
     });

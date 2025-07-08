@@ -444,5 +444,33 @@ suite('WidgetDiv', function () {
       assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
       assert.strictEqual(document.activeElement, blockFocusableElem);
     });
+
+    test('without auto close on lost focus lost focus does not hide widget div', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+      Blockly.WidgetDiv.show(field, false, () => {}, null, true, false);
+
+      // Focus an element outside of the widget.
+      document.getElementById('nonTreeElementForEphemeralFocus').focus();
+
+      // Even though the widget lost focus, it should still be visible.
+      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      assert.strictEqual(widgetDivElem.style.display, 'block');
+    });
+
+    test('with auto close on lost focus lost focus hides widget div', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+      Blockly.WidgetDiv.show(field, false, () => {}, null, true, true);
+
+      // Focus an element outside of the widget.
+      document.getElementById('nonTreeElementForEphemeralFocus').focus();
+
+      // the widget should now be hidden since it lost focus.
+      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      assert.strictEqual(widgetDivElem.style.display, 'none');
+    });
   });
 });

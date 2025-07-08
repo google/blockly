@@ -346,8 +346,8 @@ function showPositionedByRect(
     secondaryX,
     secondaryY,
     manageEphemeralFocus,
-    autoCloseOnLostFocus,
     opt_onHide,
+    autoCloseOnLostFocus,
   );
 }
 
@@ -382,8 +382,8 @@ export function show<T>(
   secondaryX: number,
   secondaryY: number,
   manageEphemeralFocus: boolean,
-  autoCloseOnLostFocus: boolean,
   opt_onHide?: () => void,
+  autoCloseOnLostFocus?: boolean,
 ): boolean {
   owner = newOwner as Field;
   onHide = opt_onHide || null;

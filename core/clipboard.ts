@@ -9,6 +9,7 @@
 import {BlockCopyData, BlockPaster} from './clipboard/block_paster.js';
 import * as registry from './clipboard/registry.js';
 import type {ICopyData, ICopyable} from './interfaces/i_copyable.js';
+import {isSelectable} from './interfaces/i_selectable.js';
 import * as globalRegistry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -18,18 +19,110 @@ let stashedCopyData: ICopyData | null = null;
 
 let stashedWorkspace: WorkspaceSvg | null = null;
 
+let stashedCoordinates: Coordinate | undefined = undefined;
+
 /**
- * Private version of copy for stubbing in tests.
+ * Copy a copyable item, and record its data and the workspace it was
+ * copied from.
+ *
+ * Note that if the copyable item is not an `ISelectable` or its
+ * `workspace` property is not a `WorkspaceSvg`, the copy will be
+ * successful, but there will be no saved workspace data. This will
+ * impact the ability to paste the data unless you explictily pass
+ * a workspace into the paste method.
+ *
+ * @param toCopy item to copy.
+ * @param location location to save as a potential paste location.
+ * @returns the copied data if copy was successful, otherwise null.
  */
-function copyInternal<T extends ICopyData>(toCopy: ICopyable<T>): T | null {
+export function copy<T extends ICopyData>(
+  toCopy: ICopyable<T>,
+  location?: Coordinate,
+): T | null {
   const data = toCopy.toCopyData();
   stashedCopyData = data;
-  stashedWorkspace = (toCopy as any).workspace ?? null;
+  if (isSelectable(toCopy) && toCopy.workspace instanceof WorkspaceSvg) {
+    stashedWorkspace = toCopy.workspace;
+  } else {
+    stashedWorkspace = null;
+  }
+
+  stashedCoordinates = location;
   return data;
 }
 
 /**
- * Paste a pasteable element into the workspace.
+ * Gets the copy data for the last item copied. This is useful if you
+ * are implementing custom copy/paste behavior. If you want the default
+ * behavior, just use the copy and paste methods directly.
+ *
+ * @returns copy data for the last item copied, or null if none set.
+ */
+export function getLastCopiedData() {
+  return stashedCopyData;
+}
+
+/**
+ * Sets the last copied item. You should call this method if you implement
+ * custom copy behavior, so that other callers are working with the correct
+ * data. This method is called automatically if you use the built-in copy
+ * method.
+ *
+ * @param copyData copy data for the last item copied.
+ */
+export function setLastCopiedData(copyData: ICopyData) {
+  stashedCopyData = copyData;
+}
+
+/**
+ * Gets the workspace that was last copied from. This is useful if you
+ * are implementing custom copy/paste behavior and want to paste on the
+ * same workspace that was copied from. If you want the default behavior,
+ * just use the copy and paste methods directly.
+ *
+ * @returns workspace that was last copied from, or null if none set.
+ */
+export function getLastCopiedWorkspace() {
+  return stashedWorkspace;
+}
+
+/**
+ * Sets the workspace that was last copied from. You should call this method
+ * if you implement custom copy behavior, so that other callers are working
+ * with the correct data. This method is called automatically if you use the
+ * built-in copy method.
+ *
+ * @param workspace workspace that was last copied from.
+ */
+export function setLastCopiedWorkspace(workspace: WorkspaceSvg) {
+  stashedWorkspace = workspace;
+}
+
+/**
+ * Gets the location that was last copied from. This is useful if you
+ * are implementing custom copy/paste behavior. If you want the
+ * default behavior, just use the copy and paste methods directly.
+ *
+ * @returns last saved location, or null if none set.
+ */
+export function getLastCopiedLocation() {
+  return stashedCoordinates;
+}
+
+/**
+ * Sets the location that was last copied from. You should call this method
+ * if you implement custom copy behavior, so that other callers are working
+ * with the correct data. This method is called automatically if you use the
+ * built-in copy method.
+ *
+ * @param location last saved location, which can be used to paste at.
+ */
+export function setLastCopiedLocation(location: Coordinate) {
+  stashedCoordinates = location;
+}
+
+/**
+ * Paste a pasteable element into the given workspace.
  *
  * @param copyData The data to paste into the workspace.
  * @param workspace The workspace to paste the data into.
@@ -43,7 +136,7 @@ export function paste<T extends ICopyData>(
 ): ICopyable<T> | null;
 
 /**
- * Pastes the last copied ICopyable into the workspace.
+ * Pastes the last copied ICopyable into the last copied-from workspace.
  *
  * @returns the pasted thing if the paste was successful, null otherwise.
  */
@@ -65,7 +158,7 @@ export function paste<T extends ICopyData>(
 ): ICopyable<ICopyData> | null {
   if (!copyData || !workspace) {
     if (!stashedCopyData || !stashedWorkspace) return null;
-    return pasteFromData(stashedCopyData, stashedWorkspace);
+    return pasteFromData(stashedCopyData, stashedWorkspace, stashedCoordinates);
   }
   return pasteFromData(copyData, workspace, coordinate);
 }
@@ -85,31 +178,11 @@ function pasteFromData<T extends ICopyData>(
 ): ICopyable<T> | null {
   workspace = workspace.isMutator
     ? workspace
-    : (workspace.getRootWorkspace() ?? workspace);
+    : // Use the parent workspace if it exists (e.g. for pasting into flyouts)
+      (workspace.options.parentWorkspace ?? workspace);
   return (globalRegistry
     .getObject(globalRegistry.Type.PASTER, copyData.paster, false)
     ?.paste(copyData, workspace, coordinate) ?? null) as ICopyable<T> | null;
 }
-
-/**
- * Private version of duplicate for stubbing in tests.
- */
-function duplicateInternal<
-  U extends ICopyData,
-  T extends ICopyable<U> & IHasWorkspace,
->(toDuplicate: T): T | null {
-  const data = toDuplicate.toCopyData();
-  if (!data) return null;
-  return paste(data, toDuplicate.workspace) as T;
-}
-
-interface IHasWorkspace {
-  workspace: WorkspaceSvg;
-}
-
-export const TEST_ONLY = {
-  duplicateInternal,
-  copyInternal,
-};
 
 export {BlockCopyData, BlockPaster, registry};

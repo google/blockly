@@ -11,7 +11,7 @@ import * as clipboard from './clipboard.js';
 import {RenderedWorkspaceComment} from './comments.js';
 import * as eventUtils from './events/utils.js';
 import {getFocusManager} from './focus_manager.js';
-import {ICopyData, isCopyable as isICopyable} from './interfaces/i_copyable.js';
+import {isCopyable as isICopyable} from './interfaces/i_copyable.js';
 import {isDeletable as isIDeletable} from './interfaces/i_deletable.js';
 import {isDraggable} from './interfaces/i_draggable.js';
 import {IFocusableNode} from './interfaces/i_focusable_node.js';
@@ -91,9 +91,6 @@ export function registerDelete() {
   };
   ShortcutRegistry.registry.register(deleteShortcut);
 }
-
-let copyData: ICopyData | null = null;
-let copyCoords: Coordinate | null = null;
 
 /**
  * Determine if a focusable node can be copied.
@@ -175,12 +172,12 @@ export function registerCopy() {
       if (!focused.workspace.isFlyout) {
         targetWorkspace.hideChaff();
       }
-      copyData = focused.toCopyData();
-      copyCoords =
+
+      const copyCoords =
         isDraggable(focused) && focused.workspace == targetWorkspace
           ? focused.getRelativeToSurfaceXY()
-          : null;
-      return !!copyData;
+          : undefined;
+      return !!clipboard.copy(focused, copyCoords);
     },
     keyCodes: [ctrlC, metaC],
   };
@@ -215,10 +212,10 @@ export function registerCut() {
       if (!focused || !isCuttable(focused) || !isICopyable(focused)) {
         return false;
       }
-      copyData = focused.toCopyData();
-      copyCoords = isDraggable(focused)
+      const copyCoords = isDraggable(focused)
         ? focused.getRelativeToSurfaceXY()
-        : null;
+        : undefined;
+      const copyData = clipboard.copy(focused, copyCoords);
 
       if (focused instanceof BlockSvg) {
         focused.checkAndDelete();
@@ -246,12 +243,17 @@ export function registerPaste() {
 
   const pasteShortcut: KeyboardShortcut = {
     name: names.PASTE,
-    preconditionFn(workspace) {
+    preconditionFn() {
+      // Regardless of the currently focused workspace, we will only
+      // paste into the last-copied-from workspace.
+      const workspace = clipboard.getLastCopiedWorkspace();
+      // If we don't know where we copied from, we don't know where to paste.
+      if (!workspace) return false;
       const targetWorkspace = workspace.isFlyout
         ? workspace.targetWorkspace
         : workspace;
       return (
-        !!copyData &&
+        !!clipboard.getLastCopiedData &&
         !!targetWorkspace &&
         !targetWorkspace.isReadOnly() &&
         !targetWorkspace.isDragging() &&
@@ -259,10 +261,15 @@ export function registerPaste() {
       );
     },
     callback(workspace: WorkspaceSvg, e: Event) {
+      const copyData = clipboard.getLastCopiedData();
       if (!copyData) return false;
-      const targetWorkspace = workspace.isFlyout
-        ? workspace.targetWorkspace
-        : workspace;
+
+      const copyWorkspace = clipboard.getLastCopiedWorkspace();
+      if (!copyWorkspace) return false;
+
+      const targetWorkspace = copyWorkspace.isFlyout
+        ? copyWorkspace.targetWorkspace
+        : copyWorkspace;
       if (!targetWorkspace || targetWorkspace.isReadOnly()) return false;
 
       if (e instanceof PointerEvent) {
@@ -278,6 +285,7 @@ export function registerPaste() {
         return !!clipboard.paste(copyData, targetWorkspace, mouseCoords);
       }
 
+      const copyCoords = clipboard.getLastCopiedLocation();
       if (!copyCoords) {
         // If we don't have location data about the original copyable, let the
         // paster determine position.

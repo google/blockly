@@ -366,9 +366,9 @@ function showPositionedByRect(
  * @param primaryY Desired origin point y, in absolute px.
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
- * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param manageEphemeralFocus Whether ephemeral focus should be managed
  *     according to the widget div's lifetime.
+ * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
  *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered at the primary origin point.

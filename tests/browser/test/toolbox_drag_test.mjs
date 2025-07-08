@@ -9,6 +9,7 @@
  */
 
 import * as chai from 'chai';
+import {Key} from 'webdriverio';
 import {
   dragBlockTypeFromFlyout,
   getCategory,
@@ -17,7 +18,6 @@ import {
   testFileLocations,
   testSetup,
 } from './test_setup.mjs';
-import {Key} from 'webdriverio';
 
 // Categories in the basic toolbox.
 const basicCategories = [

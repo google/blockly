@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {assert} from '../../node_modules/chai/chai.js';
 import {
   assertEventFired,
   createChangeListenerSpy,
@@ -166,6 +167,16 @@ suite('Workspace comment', function () {
         },
         this.workspace.id,
       );
+    });
+
+    test('focuses the workspace when deleted', function () {
+      const comment = new Blockly.comments.RenderedWorkspaceComment(
+        this.workspace,
+      );
+      Blockly.getFocusManager().focusNode(comment);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), comment);
+      comment.view.getCommentBarButtons()[1].performAction();
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.workspace);
     });
   });
 });

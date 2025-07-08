@@ -172,43 +172,52 @@ export async function getBlockElementById(browser, id) {
  * @return A Promise that resolves when the actions are completed.
  */
 export async function clickBlock(browser, blockId, clickOptions) {
-  const findableId = 'clickTargetElement';
   // In the browser context, find the element that we want and give it a findable ID.
-  await browser.execute(
-    (blockId, newElemId) => {
-      const block = Blockly.getMainWorkspace().getBlockById(blockId);
-      // Ensure the block we want to click is within the viewport.
-      Blockly.getMainWorkspace().scrollBoundsIntoView(
-        block.getBoundingRectangleWithoutChildren(),
-        10,
-      );
+  const elem = await getTargetableBlockElement(browser, blockId, false);
+  await elem.click(clickOptions);
+}
+
+/**
+ * Find an element on the block that is suitable for a click or drag.
+ *
+ * We can't always use the block's SVG root because clicking will always happen
+ * in the middle of the block's bounds (including children) by default, which
+ * causes problems if it has holes (e.g. statement inputs). Instead, this tries
+ * to get the first text field on the block. It falls back on the block's SVG root.
+ * @param browser The active WebdriverIO Browser object.
+ * @param blockId The id of the block to click, as an interactable element.
+ * @param toolbox True if this block is in the toolbox (which must be open already).
+ * @return A Promise that returns an appropriate element.
+ */
+async function getTargetableBlockElement(browser, blockId, toolbox) {
+  const id = await browser.execute(
+    (blockId, toolbox, newElemId) => {
+      const ws = toolbox
+        ? Blockly.getMainWorkspace().getFlyout().getWorkspace()
+        : Blockly.getMainWorkspace();
+      const block = ws.getBlockById(blockId);
+      // Ensure the block we want to click/drag is within the viewport.
+      ws.scrollBoundsIntoView(block.getBoundingRectangleWithoutChildren(), 10);
       if (!block.isCollapsed()) {
         for (const input of block.inputList) {
           for (const field of input.fieldRow) {
             if (field instanceof Blockly.FieldLabel) {
-              field.getSvgRoot().id = newElemId;
-              return;
+              // Expose the id of the element we want to target
+              field.getSvgRoot().setAttribute('data-id', field.id_);
+              return field.getSvgRoot().id;
             }
           }
         }
       }
-      // No label field found. Fall back to the block's SVG root.
-      block.getSvgRoot().id = newElemId;
+      // No label field found. Fall back to the block's SVG root, which should
+      // already use the block id.
+      return block.id;
     },
     blockId,
-    findableId,
+    toolbox,
   );
 
-  // In the test context, get the Webdriverio Element that we've identified.
-  const elem = await browser.$(`#${findableId}`);
-
-  await elem.click(clickOptions);
-
-  // In the browser context, remove the ID.
-  await browser.execute((elemId) => {
-    const clickElem = document.getElementById(elemId);
-    clickElem.removeAttribute('id');
-  }, findableId);
+  return await getBlockElementById(browser, id);
 }
 
 /**
@@ -255,27 +264,14 @@ export async function getCategory(browser, categoryName) {
 }
 
 /**
- * @param browser The active WebdriverIO Browser object.
- * @param categoryName The name of the toolbox category to search.
- * @param n Which block to select, 0-indexed from the top of the category.
- * @return A Promise that resolves to the root element of the nth
- *     block in the given category.
- */
-export async function getNthBlockOfCategory(browser, categoryName, n) {
-  const category = await getCategory(browser, categoryName);
-  await category.click();
-  const block = (
-    await browser.$$(`.blocklyFlyout .blocklyBlockCanvas > .blocklyDraggable`)
-  )[n];
-  return block;
-}
-
-/**
+ * Opens the specified category, finds the first block of the given type,
+ * scrolls it into view, and returns a draggable element on that block.
+ *
  * @param browser The active WebdriverIO Browser object.
  * @param categoryName The name of the toolbox category to search.
  *     Null if the toolbox has no categories (simple).
  * @param blockType The type of the block to search for.
- * @return A Promise that resolves to the root element of the first
+ * @return A Promise that resolves to a draggable element of the first
  *     block with the given type in the given category.
  */
 export async function getBlockTypeFromCategory(
@@ -290,61 +286,12 @@ export async function getBlockTypeFromCategory(
 
   await browser.pause(PAUSE_TIME);
   const id = await browser.execute((blockType) => {
-    return Blockly.getMainWorkspace()
-      .getFlyout()
-      .getWorkspace()
-      .getBlocksByType(blockType)[0].id;
+    const ws = Blockly.getMainWorkspace().getFlyout().getWorkspace();
+    const block = ws.getBlocksByType(blockType)[0];
+    ws.scrollBoundsIntoView(block.getBoundingRectangleWithoutChildren());
+    return block.id;
   }, blockType);
-  return getBlockElementById(browser, id);
-}
-
-/**
- * @param browser The active WebdriverIO Browser object.
- * @param categoryName The name of the toolbox category to search.
- *     Null if the toolbox has no categories (simple).
- * @param blockType The type of the block to search for.
- * @return A Promise that resolves to a reasonable drag target element of the
- *     first block with the given type in the given category.
- */
-export async function getDraggableBlockElementByType(
-  browser,
-  categoryName,
-  blockType,
-) {
-  if (categoryName) {
-    const category = await getCategory(browser, categoryName);
-    await category.click();
-  }
-
-  const findableId = 'dragTargetElement';
-  // In the browser context, find the element that we want and give it a findable ID.
-  await browser.execute(
-    (blockType, newElemId) => {
-      const block = Blockly.getMainWorkspace()
-        .getFlyout()
-        .getWorkspace()
-        .getBlocksByType(blockType)[0];
-      if (!block.isCollapsed()) {
-        for (const input of block.inputList) {
-          for (const field of input.fieldRow) {
-            if (field instanceof Blockly.FieldLabel) {
-              const svgRoot = field.getSvgRoot();
-              if (svgRoot) {
-                svgRoot.id = newElemId;
-                return;
-              }
-            }
-          }
-        }
-      }
-      // No label field found. Fall back to the block's SVG root.
-      block.getSvgRoot().id = newElemId;
-    },
-    blockType,
-    findableId,
-  );
-  // In the test context, get the Webdriverio Element that we've identified.
-  return await browser.$(`#${findableId}`);
+  return getTargetableBlockElement(browser, id, true);
 }
 
 /**
@@ -499,10 +446,16 @@ export async function switchRTL(browser) {
  *     created block.
  */
 export async function dragNthBlockFromFlyout(browser, categoryName, n, x, y) {
-  const flyoutBlock = await getNthBlockOfCategory(browser, categoryName, n);
-  while (!(await elementInBounds(browser, flyoutBlock))) {
-    await scrollFlyout(browser, 0, 50);
-  }
+  const category = await getCategory(browser, categoryName);
+  await category.click();
+
+  await browser.pause(PAUSE_TIME);
+  const id = await browser.execute((n) => {
+    const ws = Blockly.getMainWorkspace().getFlyout().getWorkspace();
+    const block = ws.getTopBlocks(true)[n];
+    return block.id;
+  }, n);
+  const flyoutBlock = await getTargetableBlockElement(browser, id, true);
   await flyoutBlock.dragAndDrop({x: x, y: y});
   return await getSelectedBlockElement(browser);
 }
@@ -529,42 +482,14 @@ export async function dragBlockTypeFromFlyout(
   x,
   y,
 ) {
-  const flyoutBlock = await getDraggableBlockElementByType(
+  const flyoutBlock = await getBlockTypeFromCategory(
     browser,
     categoryName,
     type,
   );
-  while (!(await elementInBounds(browser, flyoutBlock))) {
-    await scrollFlyout(browser, 0, 50);
-  }
   await flyoutBlock.dragAndDrop({x: x, y: y});
   await browser.pause(PAUSE_TIME);
   return await getSelectedBlockElement(browser);
-}
-
-/**
- * Check whether an element is fully inside the bounds of the Blockly div. You can use this
- * to determine whether a block on the workspace or flyout is inside the Blockly div.
- * This does not check whether there are other Blockly elements (such as a toolbox or
- * flyout) on top of the element. A partially visible block is considered out of bounds.
- * @param browser The active WebdriverIO Browser object.
- * @param element The element to look for.
- * @returns A Promise resolving to true if the element is in bounds and false otherwise.
- */
-async function elementInBounds(browser, element) {
-  return await browser.execute((elem) => {
-    const rect = elem.getBoundingClientRect();
-
-    const blocklyDiv = document.getElementsByClassName('blocklySvg')[0];
-    const blocklyRect = blocklyDiv.getBoundingClientRect();
-
-    const vertInView =
-      rect.top >= blocklyRect.top && rect.bottom <= blocklyRect.bottom;
-    const horInView =
-      rect.left >= blocklyRect.left && rect.right <= blocklyRect.right;
-
-    return vertInView && horInView;
-  }, element);
 }
 
 /**
@@ -667,27 +592,4 @@ export async function getAllBlocks(browser) {
         id: block.id,
       }));
   });
-}
-
-/**
- * Find the flyout's scrollbar and scroll by the specified amount.
- * This makes several assumptions:
- *  - A flyout with a valid scrollbar exists, is open, and is in view.
- *  - The workspace has a trash can, which means it has a second (hidden) flyout.
- * @param browser The active WebdriverIO Browser object.
- * @param xDelta How far to drag the flyout in the x direction. Positive is right.
- * @param yDelta How far to drag the flyout in the y direction. Positive is down.
- * @return A Promise that resolves when the actions are completed.
- */
-export async function scrollFlyout(browser, xDelta, yDelta) {
-  // There are two flyouts on the playground workspace: one for the trash can
-  // and one for the toolbox. We want the second one.
-  // This assumes there is only one scrollbar handle in the flyout, but it could
-  // be either horizontal or vertical.
-  await browser.pause(PAUSE_TIME);
-  const scrollbarHandle = await browser
-    .$$(`.blocklyFlyoutScrollbar`)[1]
-    .$(`rect.blocklyScrollbarHandle`);
-  await scrollbarHandle.dragAndDrop({x: xDelta, y: yDelta});
-  await browser.pause(PAUSE_TIME);
 }

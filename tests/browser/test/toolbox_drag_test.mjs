@@ -17,6 +17,7 @@ import {
   testFileLocations,
   testSetup,
 } from './test_setup.mjs';
+import {Key} from 'webdriverio';
 
 // Categories in the basic toolbox.
 const basicCategories = [
@@ -77,7 +78,7 @@ async function getNthBlockType(browser, categoryName, n) {
   }, n);
 
   // Unicode escape to close flyout.
-  await browser.keys(['\uE00C']);
+  await browser.keys([Key.Escape]);
   await browser.pause(PAUSE_TIME);
   return blockType;
 }
@@ -102,7 +103,7 @@ async function getBlockCount(browser, categoryName) {
   });
 
   // Unicode escape to close flyout.
-  await browser.keys(['\uE00C']);
+  await browser.keys([Key.Escape]);
   await browser.pause(PAUSE_TIME);
   return blockCount;
 }
@@ -142,7 +143,7 @@ async function openCategories(browser, categoryList, directionMultiplier) {
         await category.click();
         if (await isBlockDisabled(browser, i)) {
           // Unicode escape to close flyout.
-          await browser.keys(['\uE00C']);
+          await browser.keys([Key.Escape]);
           await browser.pause(PAUSE_TIME);
           continue;
         }

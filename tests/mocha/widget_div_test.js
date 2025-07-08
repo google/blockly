@@ -468,9 +468,47 @@ suite('WidgetDiv', function () {
       // Focus an element outside of the widget.
       document.getElementById('nonTreeElementForEphemeralFocus').focus();
 
-      // the widget should now be hidden since it lost focus.
+      // The widget should now be hidden since it lost focus.
       const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
       assert.strictEqual(widgetDivElem.style.display, 'none');
+    });
+
+    test('with auto close on lost focus lost focus with nested div hides widget div', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+      const nestedDiv = document.createElement('div');
+      nestedDiv.tabIndex = -1;
+      Blockly.WidgetDiv.getDiv().appendChild(nestedDiv);
+      Blockly.WidgetDiv.show(field, false, () => {}, null, true, true);
+      nestedDiv.focus(); // It's valid to focus this during ephemeral focus.
+
+      // Focus an element outside of the widget.
+      document.getElementById('nonTreeElementForEphemeralFocus').focus();
+
+      // The widget should now be hidden since it lost focus.
+      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      assert.strictEqual(widgetDivElem.style.display, 'none');
+    });
+
+    test('with auto close on lost focus lost focus with nested div does not restore DOM focus', function () {
+      const block = this.setUpBlockWithField();
+      const field = Array.from(block.getFields())[0];
+      Blockly.getFocusManager().focusNode(block);
+      const nestedDiv = document.createElement('div');
+      nestedDiv.tabIndex = -1;
+      Blockly.WidgetDiv.getDiv().appendChild(nestedDiv);
+      Blockly.WidgetDiv.show(field, false, () => {}, null, true, true);
+      nestedDiv.focus(); // It's valid to focus this during ephemeral focus.
+
+      // Focus an element outside of the widget.
+      const elem = document.getElementById('nonTreeElementForEphemeralFocus');
+      elem.focus();
+
+      // Auto hiding should not restore focus back to the block since ephemeral
+      // focus was lost before it was returned.
+      assert.isNull(Blockly.getFocusManager().getFocusedNode());
+      assert.strictEqual(document.activeElement, elem);
     });
   });
 });

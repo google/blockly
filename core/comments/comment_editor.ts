@@ -53,6 +53,7 @@ export class CommentEditor implements IFocusableNode {
       'textarea',
     ) as HTMLTextAreaElement;
     this.textArea.setAttribute('tabindex', '-1');
+    this.textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
     dom.addClass(this.textArea, 'blocklyCommentText');
     dom.addClass(this.textArea, 'blocklyTextarea');
     dom.addClass(this.textArea, 'blocklyText');

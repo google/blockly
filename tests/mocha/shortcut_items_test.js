@@ -5,6 +5,7 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
@@ -396,6 +397,19 @@ suite('Keyboard Shortcut Items', function () {
           sinon.assert.calledOnce(this.disposeSpy);
         });
       });
+    });
+  });
+
+  suite('Paste', function () {
+    test('Disabled when nothing has been copied', function () {
+      const pasteShortcut =
+        Blockly.ShortcutRegistry.registry.getRegistry()[
+          Blockly.ShortcutItems.names.PASTE
+        ];
+      Blockly.clipboard.setLastCopiedData(undefined);
+
+      const isPasteEnabled = pasteShortcut.preconditionFn();
+      assert.isFalse(isPasteEnabled);
     });
   });
 

@@ -6055,7 +6055,7 @@ suite('FocusManager', function () {
       assert.isTrue(callback.thirdCall.calledWithExactly(true));
     });
 
-    test('with focus change callback set focus to non-ephemeral element with auto return finishes ephemeral without restore to focused node', function () {
+    test('with focus change callback set focus to non-ephemeral element with auto return finishes ephemeral does not restore to focused node', function () {
       this.focusManager.registerTree(this.testFocusableTree2);
       this.focusManager.registerTree(this.testFocusableGroup2);
       this.focusManager.focusNode(this.testFocusableTree2Node1);

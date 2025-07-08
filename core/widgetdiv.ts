@@ -99,8 +99,8 @@ export function createDom() {
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes. Defaults
  *     to true.
- * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
- *     if it loses DOM focus for any reason.
+ * @param autoCloseOnLostFocus Whether the widget should automatically hide if
+ *     it loses DOM focus for any reason.
  */
 export function show(
   newOwner: unknown,
@@ -136,7 +136,7 @@ export function show(
   if (manageEphemeralFocus) {
     const autoCloseCallback = autoCloseOnLostFocus
       ? (hasFocus: boolean) => {
-          // If focus is ever lost, close the drop-down.
+          // If focus is ever lost, close the widget.
           if (!hasFocus) {
             hide();
           }

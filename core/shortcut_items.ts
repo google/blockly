@@ -255,7 +255,7 @@ export function registerPaste() {
         ? workspace.targetWorkspace
         : workspace;
       return (
-        !!clipboard.getLastCopiedData &&
+        !!clipboard.getLastCopiedData() &&
         !!targetWorkspace &&
         !targetWorkspace.isReadOnly() &&
         !targetWorkspace.isDragging() &&

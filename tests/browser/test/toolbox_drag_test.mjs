@@ -174,8 +174,8 @@ async function openCategories(browser, categoryList, directionMultiplier) {
   chai.assert.equal(failureCount, 0);
 }
 
-// These take too long to run and are very flakey. Need to find a better way to
-// test whatever this is trying to test.
+// TODO (#9217) These take too long to run and are very flakey. Need to find a
+// better way to test whatever this is trying to test.
 suite.skip('Open toolbox categories', function () {
   this.timeout(0);
 

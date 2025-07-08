@@ -25,6 +25,10 @@ let stashedCoordinates: Coordinate | undefined = undefined;
  * Copy a copyable item, and record its data and the workspace it was
  * copied from.
  *
+ * This function does not perform any checks to ensure the copy
+ * should be allowed, e.g. to ensure the block is deletable. Such
+ * checks should be done before calling this function.
+ *
  * Note that if the copyable item is not an `ISelectable` or its
  * `workspace` property is not a `WorkspaceSvg`, the copy will be
  * successful, but there will be no saved workspace data. This will
@@ -123,6 +127,11 @@ export function setLastCopiedLocation(location: Coordinate) {
 
 /**
  * Paste a pasteable element into the given workspace.
+ *
+ * This function does not perform any checks to ensure the paste
+ * is allowed, e.g. that the workspace is rendered or the block
+ * is pasteable. Such checks should be done before calling this
+ * function.
  *
  * @param copyData The data to paste into the workspace.
  * @param workspace The workspace to paste the data into.

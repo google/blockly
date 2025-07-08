@@ -248,7 +248,9 @@ export function registerPaste() {
       // paste into the last-copied-from workspace.
       const workspace = clipboard.getLastCopiedWorkspace();
       // If we don't know where we copied from, we don't know where to paste.
-      if (!workspace) return false;
+      // If the workspace isn't rendered (e.g. closed mutator workspace),
+      // we can't paste into it.
+      if (!workspace || !workspace.rendered) return false;
       const targetWorkspace = workspace.isFlyout
         ? workspace.targetWorkspace
         : workspace;

@@ -10,6 +10,7 @@ import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
 import {RenderedConnection} from '../../rendered_connection.js';
 import type {BlockStyle} from '../../theme.js';
+import {idGenerator} from '../../utils.js';
 import {Coordinate} from '../../utils/coordinate.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
@@ -23,6 +24,8 @@ import type {IPathObject} from './i_path_object.js';
 export class PathObject implements IPathObject {
   svgRoot: SVGElement;
   svgPath: SVGElement;
+  private clip: SVGElement;
+  private clipPath: SVGElement;
 
   constants: ConstantProvider;
   style: BlockStyle;
@@ -50,9 +53,21 @@ export class PathObject implements IPathObject {
     /** The primary path of the block. */
     this.svgPath = dom.createSvgElement(
       Svg.PATH,
-      {'class': 'blocklyPath'},
+      {
+        'class': 'blocklyPath',
+        // The page-wide unique ID of this Block used for focusing.
+        'id': idGenerator.getNextUniqueId(),
+      },
       this.svgRoot,
     );
+    // TODO: Move this to a <def>?
+    this.clip = dom.createSvgElement(
+      Svg.CLIPPATH,
+      {'id': `${this.svgPath.id}_clip`},
+      this.svgRoot,
+    );
+    this.clipPath = dom.createSvgElement(Svg.PATH, {}, this.clip);
+    this.svgPath.setAttribute('clip-path', `url(#${this.clip.id})`);
 
     this.setClass_('blocklyBlock', true);
   }
@@ -64,6 +79,7 @@ export class PathObject implements IPathObject {
    */
   setPath(pathString: string) {
     this.svgPath.setAttribute('d', pathString);
+    this.clipPath.setAttribute('d', pathString);
   }
 
   /**
@@ -82,6 +98,7 @@ export class PathObject implements IPathObject {
    */
   applyColour(block: BlockSvg) {
     this.svgPath.setAttribute('stroke', this.style.colourTertiary);
+    this.svgPath.setAttribute('stroke-width', '2px');
     this.svgPath.setAttribute('fill', this.style.colourPrimary);
 
     this.updateShadow_(block.isShadow());

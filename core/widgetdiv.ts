@@ -146,18 +146,6 @@ export function hide() {
 
   const div = containerDiv;
   if (!div) return;
-
-  (common.getMainWorkspace() as WorkspaceSvg).markFocused();
-
-  if (returnEphemeralFocus) {
-    returnEphemeralFocus();
-    returnEphemeralFocus = null;
-  }
-
-  // Content must be cleared after returning ephemeral focus since otherwise it
-  // may force focus changes which could desynchronize the focus manager and
-  // make it think the user directed focus away from the widget div (which will
-  // then notify it to not restore focus back to any previously focused node).
   div.style.display = 'none';
   div.style.left = '';
   div.style.top = '';
@@ -174,6 +162,12 @@ export function hide() {
   if (themeClassName) {
     dom.removeClass(div, themeClassName);
     themeClassName = '';
+  }
+  (common.getMainWorkspace() as WorkspaceSvg).markFocused();
+
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
   }
 }
 

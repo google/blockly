@@ -423,26 +423,5 @@ suite('WidgetDiv', function () {
       assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
       assert.strictEqual(document.activeElement, blockFocusableElem);
     });
-
-    test('for showing nested div with ephemeral focus restores DOM focus', function () {
-      const block = this.setUpBlockWithField();
-      const field = Array.from(block.getFields())[0];
-      Blockly.getFocusManager().focusNode(block);
-      const nestedDiv = document.createElement('div');
-      nestedDiv.tabIndex = -1;
-      Blockly.WidgetDiv.getDiv().appendChild(nestedDiv);
-      Blockly.WidgetDiv.show(field, false, () => {}, null, true);
-      nestedDiv.focus(); // It's valid to focus this during ephemeral focus.
-
-      // Hiding will cause the now focused child div to be removed, leading to
-      // ephemeral focus being lost if the implementation doesn't handle
-      // returning ephemeral focus correctly.
-      Blockly.WidgetDiv.hide();
-
-      // Hiding the div should restore focus back to the block.
-      const blockFocusableElem = block.getFocusableElement();
-      assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
-      assert.strictEqual(document.activeElement, blockFocusableElem);
-    });
   });
 });

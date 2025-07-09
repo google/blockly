@@ -138,10 +138,10 @@ export class FocusManager {
           element instanceof Node &&
           ephemeralFocusElem.contains(element);
         if (hadFocus !== hasFocus) {
-          this.ephemerallyFocusedElementCurrentlyHasFocus = hasFocus;
           if (this.ephemeralDomFocusChangedCallback) {
             this.ephemeralDomFocusChangedCallback(hasFocus);
           }
+          this.ephemerallyFocusedElementCurrentlyHasFocus = hasFocus;
         }
       }
     };

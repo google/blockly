@@ -8,6 +8,7 @@ import * as chai from 'chai';
 import {Key} from 'webdriverio';
 import {
   clickBlock,
+  clickWorkspace,
   contextMenuSelect,
   getAllBlocks,
   getBlockElementById,
@@ -176,8 +177,7 @@ suite('Delete blocks', function (done) {
     );
   });
 
-  // TODO(#9029) enable this test once deleting a block doesn't lose focus
-  test.skip('Undo block deletion', async function () {
+  test('Undo block deletion', async function () {
     const before = (await getAllBlocks(this.browser)).length;
     // Get first print block, click to select it, and delete it using backspace key.
     await clickBlock(this.browser, this.firstBlock.id, {button: 1});
@@ -204,6 +204,7 @@ suite('Delete blocks', function (done) {
     await this.browser.keys([Key.Ctrl, 'z']);
     await this.browser.pause(PAUSE_TIME);
     // Redo
+    await clickWorkspace(this.browser);
     await this.browser.keys([Key.Ctrl, Key.Shift, 'z']);
     await this.browser.pause(PAUSE_TIME);
     const after = (await getAllBlocks(this.browser)).length;

@@ -21,6 +21,7 @@ import * as common from './common.js';
 import type {ConnectionDB} from './connection_db.js';
 import type {Abstract} from './events/events_abstract.js';
 import * as eventUtils from './events/utils.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import {IProcedureMap} from './interfaces/i_procedure_map.js';
 import type {IVariableMap} from './interfaces/i_variable_map.js';
@@ -35,6 +36,7 @@ import * as arrayUtils from './utils/array.js';
 import * as deprecation from './utils/deprecation.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
+import {Rect} from './utils/rect.js';
 import type * as toolbox from './utils/toolbox.js';
 import {deleteVariable, getVariableUsesById} from './variables.js';
 
@@ -181,10 +183,31 @@ export class Workspace {
     a: Block | WorkspaceComment,
     b: Block | WorkspaceComment,
   ): number {
+    const wrap = (element: Block | WorkspaceComment) => {
+      return {
+        getBoundingRectangle: () => {
+          const xy = element.getRelativeToSurfaceXY();
+          return new Rect(xy.y, xy.y, xy.x, xy.x);
+        },
+        moveBy: () => {},
+      };
+    };
+    return this.sortByOrigin(wrap(a), wrap(b));
+  }
+
+  /**
+   * Sorts bounded elements on the workspace by their relative position, top to
+   * bottom (with slight LTR or RTL bias).
+   *
+   * @param a The first element to sort.
+   * @param b The second elment to sort.
+   * @returns -1, 0 or 1 depending on the sort order.
+   */
+  protected sortByOrigin(a: IBoundedElement, b: IBoundedElement): number {
     const offset =
       Math.sin(math.toRadians(Workspace.SCAN_ANGLE)) * (this.RTL ? -1 : 1);
-    const aXY = a.getRelativeToSurfaceXY();
-    const bXY = b.getRelativeToSurfaceXY();
+    const aXY = a.getBoundingRectangle().getOrigin();
+    const bXY = b.getBoundingRectangle().getOrigin();
     return aXY.y + offset * aXY.x - (bXY.y + offset * bXY.x);
   }
 

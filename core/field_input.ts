@@ -27,6 +27,7 @@ import {
   FieldValidator,
   UnattachedFieldError,
 } from './field.js';
+import {getFocusManager} from './focus_manager.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {Msg} from './msg.js';
 import * as renderManagement from './render_management.js';
@@ -83,8 +84,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   /** Key down event data. */
   private onKeyDownWrapper: browserEvents.Data | null = null;
 
-  /** Key input event data. */
-  private onKeyInputWrapper: browserEvents.Data | null = null;
+  /** Input element input event data. */
+  private onInputWrapper: browserEvents.Data | null = null;
 
   /**
    * Whether the field should consider the whole parent block to be its click
@@ -558,7 +559,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       this.onHtmlInputKeyDown_,
     );
     // Resize after every input change.
-    this.onKeyInputWrapper = browserEvents.conditionalBind(
+    this.onInputWrapper = browserEvents.conditionalBind(
       htmlInput,
       'input',
       this,
@@ -572,9 +573,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       browserEvents.unbind(this.onKeyDownWrapper);
       this.onKeyDownWrapper = null;
     }
-    if (this.onKeyInputWrapper) {
-      browserEvents.unbind(this.onKeyInputWrapper);
-      this.onKeyInputWrapper = null;
+    if (this.onInputWrapper) {
+      browserEvents.unbind(this.onInputWrapper);
+      this.onInputWrapper = null;
     }
   }
 
@@ -614,6 +615,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
       if (target instanceof FieldInput) {
         WidgetDiv.hideIfOwner(this);
         dropDownDiv.hideWithoutAnimation();
+        const targetSourceBlock = target.getSourceBlock();
+        if (
+          target.isFullBlockField() &&
+          targetSourceBlock &&
+          targetSourceBlock instanceof BlockSvg
+        ) {
+          getFocusManager().focusNode(targetSourceBlock);
+        } else getFocusManager().focusNode(target);
         target.showEditor();
       }
     }
@@ -622,7 +631,7 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   /**
    * Handle a change to the editor.
    *
-   * @param _e Keyboard event.
+   * @param _e InputEvent.
    */
   private onHtmlInputChange(_e: Event) {
     // Intermediate value changes from user input are not confirmed until the

@@ -5,6 +5,7 @@
  */
 
 import {ConnectionType} from '../../build/src/core/connection_type.js';
+import * as idGenerator from '../../build/src/core/utils/idgenerator.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {
   sharedTestSetup,
@@ -31,7 +32,7 @@ suite('Connection Database', function () {
       };
       workspace.connectionDBList[type] = opt_database || this.database;
       const connection = new Blockly.RenderedConnection(
-        {workspace: workspace},
+        {id: idGenerator.getNextUniqueId(), workspace: workspace},
         type,
       );
       connection.x = x;

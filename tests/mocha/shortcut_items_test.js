@@ -5,6 +5,7 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
@@ -399,6 +400,19 @@ suite('Keyboard Shortcut Items', function () {
     });
   });
 
+  suite('Paste', function () {
+    test('Disabled when nothing has been copied', function () {
+      const pasteShortcut =
+        Blockly.ShortcutRegistry.registry.getRegistry()[
+          Blockly.ShortcutItems.names.PASTE
+        ];
+      Blockly.clipboard.setLastCopiedData(undefined);
+
+      const isPasteEnabled = pasteShortcut.preconditionFn();
+      assert.isFalse(isPasteEnabled);
+    });
+  });
+
   suite('Undo', function () {
     setup(function () {
       this.undoSpy = sinon.spy(this.workspace, 'undo');
@@ -434,13 +448,13 @@ suite('Keyboard Shortcut Items', function () {
         });
       });
     });
-    // Do not undo if a gesture is in progress.
-    suite('Gesture in progress', function () {
+    // Do not undo if a drag is in progress.
+    suite('Drag in progress', function () {
       testCases.forEach(function (testCase) {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
+          sinon.stub(this.workspace, 'isDragging').returns(true);
           this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.undoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
@@ -494,13 +508,13 @@ suite('Keyboard Shortcut Items', function () {
         });
       });
     });
-    // Do not undo if a gesture is in progress.
-    suite('Gesture in progress', function () {
+    // Do not redo if a drag is in progress.
+    suite('Drag in progress', function () {
       testCases.forEach(function (testCase) {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
+          sinon.stub(this.workspace, 'isDragging').returns(true);
           this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.redoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
@@ -534,8 +548,8 @@ suite('Keyboard Shortcut Items', function () {
       sinon.assert.calledWith(this.undoSpy, true);
       sinon.assert.calledOnce(this.hideChaffSpy);
     });
-    test('Not called when a gesture is in progress', function () {
-      sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
+    test('Not called when a drag is in progress', function () {
+      sinon.stub(this.workspace, 'isDragging').returns(true);
       this.injectionDiv.dispatchEvent(this.ctrlYEvent);
       sinon.assert.notCalled(this.undoSpy);
       sinon.assert.notCalled(this.hideChaffSpy);

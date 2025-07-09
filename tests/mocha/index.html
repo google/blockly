@@ -94,13 +94,7 @@
       </div>
     </div>
     <div id="testUnfocusableElement">Unfocusable element</div>
-    <div id="nonTreeElementForEphemeralFocus" tabindex="-1">
-      <div
-        id="nonTreeElementForEphemeralFocus.child1"
-        tabindex="-1"
-        style="margin-left: 1em"></div>
-    </div>
-    <div id="nonTreeElementForEphemeralFocus2" tabindex="-1"></div>
+    <div id="nonTreeElementForEphemeralFocus" />
     <svg width="250" height="250">
       <g id="testFocusableGroup1">
         <g id="testFocusableGroup1.node1">
@@ -142,7 +136,7 @@
           </text>
         </g>
       </g>
-      <g id="nonTreeGroupForEphemeralFocus" tabindex="-1"></g>
+      <g id="nonTreeGroupForEphemeralFocus"></g>
     </svg>
     <!-- Load mocha et al. before Blockly and the test modules so that
          we can safely import the test modules that make calls

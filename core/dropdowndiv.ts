@@ -213,8 +213,6 @@ export function setColour(backgroundColour: string, borderColour: string) {
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes. Defaults
  *     to true.
- * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
- *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered below block; false if above.
  */
 export function showPositionedByBlock<T>(
@@ -223,13 +221,11 @@ export function showPositionedByBlock<T>(
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
   manageEphemeralFocus: boolean = true,
-  autoCloseOnLostFocus: boolean = true,
 ): boolean {
   return showPositionedByRect(
     getScaledBboxOfBlock(block),
     field as Field,
     manageEphemeralFocus,
-    autoCloseOnLostFocus,
     opt_onHide,
     opt_secondaryYOffset,
   );
@@ -249,8 +245,6 @@ export function showPositionedByBlock<T>(
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes. Defaults
  *     to true.
- * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
- *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered below block; false if above.
  */
 export function showPositionedByField<T>(
@@ -258,14 +252,12 @@ export function showPositionedByField<T>(
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
   manageEphemeralFocus: boolean = true,
-  autoCloseOnLostFocus: boolean = true,
 ): boolean {
   positionToField = true;
   return showPositionedByRect(
     getScaledBboxOfField(field as Field),
     field as Field,
     manageEphemeralFocus,
-    autoCloseOnLostFocus,
     opt_onHide,
     opt_secondaryYOffset,
   );
@@ -310,15 +302,12 @@ function getScaledBboxOfField(field: Field): Rect {
  *     according to the drop-down div's lifetime. Note that if a false value is
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes.
- * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
- *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered below block; false if above.
  */
 function showPositionedByRect(
   bBox: Rect,
   field: Field,
   manageEphemeralFocus: boolean,
-  autoCloseOnLostFocus: boolean,
   opt_onHide?: () => void,
   opt_secondaryYOffset?: number,
 ): boolean {
@@ -347,7 +336,6 @@ function showPositionedByRect(
     secondaryY,
     manageEphemeralFocus,
     opt_onHide,
-    autoCloseOnLostFocus,
   );
 }
 
@@ -366,11 +354,9 @@ function showPositionedByRect(
  * @param primaryY Desired origin point y, in absolute px.
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
+ * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param manageEphemeralFocus Whether ephemeral focus should be managed
  *     according to the widget div's lifetime.
- * @param opt_onHide Optional callback for when the drop-down is hidden.
- * @param autoCloseOnLostFocus Whether the drop-down should automatically hide
- *     if it loses DOM focus for any reason.
  * @returns True if the menu rendered at the primary origin point.
  * @internal
  */
@@ -383,7 +369,6 @@ export function show<T>(
   secondaryY: number,
   manageEphemeralFocus: boolean,
   opt_onHide?: () => void,
-  autoCloseOnLostFocus?: boolean,
 ): boolean {
   owner = newOwner as Field;
   onHide = opt_onHide || null;
@@ -409,18 +394,7 @@ export function show<T>(
   // Ephemeral focus must happen after the div is fully visible in order to
   // ensure that it properly receives focus.
   if (manageEphemeralFocus) {
-    const autoCloseCallback = autoCloseOnLostFocus
-      ? (hasFocus: boolean) => {
-          // If focus is ever lost, close the drop-down.
-          if (!hasFocus) {
-            hide();
-          }
-        }
-      : null;
-    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(
-      div,
-      autoCloseCallback,
-    );
+    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
   }
 
   return atOrigin;
@@ -719,6 +693,7 @@ export function hideWithoutAnimation() {
     onHide();
     onHide = null;
   }
+  clearContent();
   owner = null;
 
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
@@ -727,13 +702,6 @@ export function hideWithoutAnimation() {
     returnEphemeralFocus();
     returnEphemeralFocus = null;
   }
-
-  // Content must be cleared after returning ephemeral focus since otherwise it
-  // may force focus changes which could desynchronize the focus manager and
-  // make it think the user directed focus away from the drop-down div (which
-  // will then notify it to not restore focus back to any previously focused
-  // node).
-  clearContent();
 }
 
 /**

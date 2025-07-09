@@ -99,8 +99,6 @@ export function createDom() {
  *     passed in here then callers should manage ephemeral focus directly
  *     otherwise focus may not properly restore when the widget closes. Defaults
  *     to true.
- * @param autoCloseOnLostFocus Whether the widget should automatically hide if
- *     it loses DOM focus for any reason.
  */
 export function show(
   newOwner: unknown,
@@ -108,7 +106,6 @@ export function show(
   newDispose: () => void,
   workspace?: WorkspaceSvg | null,
   manageEphemeralFocus: boolean = true,
-  autoCloseOnLostFocus: boolean = true,
 ) {
   hide();
   owner = newOwner;
@@ -134,18 +131,7 @@ export function show(
     dom.addClass(div, themeClassName);
   }
   if (manageEphemeralFocus) {
-    const autoCloseCallback = autoCloseOnLostFocus
-      ? (hasFocus: boolean) => {
-          // If focus is ever lost, close the widget.
-          if (!hasFocus) {
-            hide();
-          }
-        }
-      : null;
-    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(
-      div,
-      autoCloseCallback,
-    );
+    returnEphemeralFocus = getFocusManager().takeEphemeralFocus(div);
   }
 }
 
@@ -160,18 +146,6 @@ export function hide() {
 
   const div = containerDiv;
   if (!div) return;
-
-  (common.getMainWorkspace() as WorkspaceSvg).markFocused();
-
-  if (returnEphemeralFocus) {
-    returnEphemeralFocus();
-    returnEphemeralFocus = null;
-  }
-
-  // Content must be cleared after returning ephemeral focus since otherwise it
-  // may force focus changes which could desynchronize the focus manager and
-  // make it think the user directed focus away from the widget div (which will
-  // then notify it to not restore focus back to any previously focused node).
   div.style.display = 'none';
   div.style.left = '';
   div.style.top = '';
@@ -188,6 +162,12 @@ export function hide() {
   if (themeClassName) {
     dom.removeClass(div, themeClassName);
     themeClassName = '';
+  }
+  (common.getMainWorkspace() as WorkspaceSvg).markFocused();
+
+  if (returnEphemeralFocus) {
+    returnEphemeralFocus();
+    returnEphemeralFocus = null;
   }
 }
 

@@ -5624,6 +5624,21 @@ suite('FocusManager', function () {
   /* Ephemeral focus tests. */
 
   suite('takeEphemeralFocus()', function () {
+    setup(function () {
+      // Ensure ephemeral-specific elements are focusable.
+      document.getElementById('nonTreeElementForEphemeralFocus').tabIndex = -1;
+      document.getElementById('nonTreeGroupForEphemeralFocus').tabIndex = -1;
+    });
+    teardown(function () {
+      // Ensure ephemeral-specific elements have their tab indexes reset for a clean state.
+      document
+        .getElementById('nonTreeElementForEphemeralFocus')
+        .removeAttribute('tabindex');
+      document
+        .getElementById('nonTreeGroupForEphemeralFocus')
+        .removeAttribute('tabindex');
+    });
+
     test('with no focused node does not change states', function () {
       this.focusManager.registerTree(this.testFocusableTree2);
       this.focusManager.registerTree(this.testFocusableGroup2);
@@ -5959,177 +5974,6 @@ suite('FocusManager', function () {
         FocusManager.ACTIVE_FOCUS_NODE_CSS_CLASS_NAME,
       );
       assert.strictEqual(document.activeElement, nodeElem);
-    });
-
-    test('with focus change callback initially calls focus change callback with initial state', function () {
-      const callback = sinon.fake();
-      this.focusManager.registerTree(this.testFocusableTree2);
-      this.focusManager.registerTree(this.testFocusableGroup2);
-      const ephemeralElement = document.getElementById(
-        'nonTreeElementForEphemeralFocus',
-      );
-
-      this.focusManager.takeEphemeralFocus(ephemeralElement, callback);
-
-      assert.strictEqual(callback.callCount, 1);
-      assert.isTrue(callback.firstCall.calledWithExactly(true));
-    });
-
-    test('with focus change callback finishes ephemeral does not calls focus change callback again', function () {
-      const callback = sinon.fake();
-      this.focusManager.registerTree(this.testFocusableTree2);
-      this.focusManager.registerTree(this.testFocusableGroup2);
-      const ephemeralElement = document.getElementById(
-        'nonTreeElementForEphemeralFocus',
-      );
-      const finishFocusCallback = this.focusManager.takeEphemeralFocus(
-        ephemeralElement,
-        callback,
-      );
-      callback.resetHistory();
-
-      finishFocusCallback();
-
-      assert.isFalse(callback.called);
-    });
-
-    test('with focus change callback set focus to ephemeral child does not call focus change callback again', function () {
-      const callback = sinon.fake();
-      this.focusManager.registerTree(this.testFocusableTree2);
-      this.focusManager.registerTree(this.testFocusableGroup2);
-      const ephemeralElement = document.getElementById(
-        'nonTreeElementForEphemeralFocus',
-      );
-      const ephemeralElementChild = document.getElementById(
-        'nonTreeElementForEphemeralFocus.child1',
-      );
-      this.focusManager.takeEphemeralFocus(ephemeralElement, callback);
-      callback.resetHistory();
-
-      ephemeralElementChild.focus();
-
-      // Focusing a child element shouldn't invoke the callback since the
-      // ephemeral element's tree still holds focus.
-      assert.isFalse(callback.called);
-    });
-
-    test('with focus change callback set focus to non-ephemeral element calls focus change callback', function () {
-      const callback = sinon.fake();
-      this.focusManager.registerTree(this.testFocusableTree2);
-      this.focusManager.registerTree(this.testFocusableGroup2);
-      const ephemeralElement = document.getElementById(
-        'nonTreeElementForEphemeralFocus',
-      );
-      const ephemeralElement2 = document.getElementById(
-        'nonTreeElementForEphemeralFocus2',
-      );
-      this.focusManager.takeEphemeralFocus(ephemeralElement, callback);
-
-      ephemeralElement2.focus();
-
-      // There should be a second call that indicates focus was lost.
-      assert.strictEqual(callback.callCount, 2);
-      assert.isTrue(callback.secondCall.calledWithExactly(false));
-    });
-
-    test('with focus change callback set focus to non-ephemeral element then back calls focus change callback again', function () {
-      const callback = sinon.fake();
-      this.focusManager.registerTree(this.testFocusableTree2);
-      this.focusManager.registerTree(this.testFocusableGroup2);
-      const ephemeralElement = document.getElementById(
-        'nonTreeElementForEphemeralFocus',
-      );
-      const ephemeralElementChild = document.getElementById(
-        'nonTreeElementForEphemeralFocus.child1',
-      );
-      const ephemeralElement2 = document.getElementById(
-        'nonTreeElementForEphemeralFocus2',
-      );
-      this.focusManager.takeEphemeralFocus(ephemeralElement, callback);
-      ephemeralElement2.focus();
-
-      ephemeralElementChild.focus();
-
-      // The latest call should be returning focus.
-      assert.strictEqual(callback.callCount, 3);
-      assert.isTrue(callback.thirdCall.calledWithExactly(true));
-    });
-
-    test('with focus change callback set focus to non-ephemeral element with auto return finishes ephemeral does not restore to focused node', function () {
-      this.focusManager.registerTree(this.testFocusableTree2);
-      this.focusManager.registerTree(this.testFocusableGroup2);
-      this.focusManager.focusNode(this.testFocusableTree2Node1);
-      const ephemeralElement = document.getElementById(
-        'nonTreeGroupForEphemeralFocus',
-      );
-      const ephemeralElement2 = document.getElementById(
-        'nonTreeElementForEphemeralFocus2',
-      );
-      const finishFocusCallback = this.focusManager.takeEphemeralFocus(
-        ephemeralElement,
-        (hasFocus) => {
-          if (!hasFocus) finishFocusCallback();
-        },
-      );
-
-      // Force focus away, triggering the callback's automatic returning logic.
-      ephemeralElement2.focus();
-
-      // The original node should not be focused since the ephemeral element
-      // lost its own DOM focus while ephemeral focus was active. Instead, the
-      // newly active element should still hold focus.
-      const activeElems = Array.from(
-        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
-      );
-      const passiveElems = Array.from(
-        document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR),
-      );
-      assert.isEmpty(activeElems);
-      assert.strictEqual(passiveElems.length, 1);
-      assert.includesClass(
-        this.testFocusableTree2Node1.getFocusableElement().classList,
-        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
-      );
-      assert.isNull(this.focusManager.getFocusedNode());
-      assert.strictEqual(document.activeElement, ephemeralElement2);
-      assert.isFalse(this.focusManager.ephemeralFocusTaken());
-    });
-
-    test('with focus on non-ephemeral element ephemeral ended does not restore to focused node', function () {
-      this.focusManager.registerTree(this.testFocusableTree2);
-      this.focusManager.registerTree(this.testFocusableGroup2);
-      this.focusManager.focusNode(this.testFocusableTree2Node1);
-      const ephemeralElement = document.getElementById(
-        'nonTreeGroupForEphemeralFocus',
-      );
-      const ephemeralElement2 = document.getElementById(
-        'nonTreeElementForEphemeralFocus2',
-      );
-      const finishFocusCallback =
-        this.focusManager.takeEphemeralFocus(ephemeralElement);
-      // Force focus away, triggering the callback's automatic returning logic.
-      ephemeralElement2.focus();
-
-      finishFocusCallback();
-
-      // The original node should not be focused since the ephemeral element
-      // lost its own DOM focus while ephemeral focus was active. Instead, the
-      // newly active element should still hold focus.
-      const activeElems = Array.from(
-        document.querySelectorAll(ACTIVE_FOCUS_NODE_CSS_SELECTOR),
-      );
-      const passiveElems = Array.from(
-        document.querySelectorAll(PASSIVE_FOCUS_NODE_CSS_SELECTOR),
-      );
-      assert.isEmpty(activeElems);
-      assert.strictEqual(passiveElems.length, 1);
-      assert.includesClass(
-        this.testFocusableTree2Node1.getFocusableElement().classList,
-        FocusManager.PASSIVE_FOCUS_NODE_CSS_CLASS_NAME,
-      );
-      assert.isNull(this.focusManager.getFocusedNode());
-      assert.strictEqual(document.activeElement, ephemeralElement2);
-      assert.isFalse(this.focusManager.ephemeralFocusTaken());
     });
   });
 });

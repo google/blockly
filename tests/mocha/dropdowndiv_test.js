@@ -252,34 +252,6 @@ suite('DropDownDiv', function () {
       assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
       assert.strictEqual(document.activeElement, dropDownDivElem);
     });
-
-    test('without auto close on lost focus lost focus does not hide drop-down div', function () {
-      const block = this.setUpBlockWithField();
-      const field = Array.from(block.getFields())[0];
-      Blockly.getFocusManager().focusNode(block);
-      Blockly.DropDownDiv.showPositionedByField(field, null, null, true, false);
-
-      // Focus an element outside of the drop-down.
-      document.getElementById('nonTreeElementForEphemeralFocus').focus();
-
-      // Even though the drop-down lost focus, it should still be visible.
-      const dropDownDivElem = document.querySelector('.blocklyDropDownDiv');
-      assert.strictEqual(dropDownDivElem.style.opacity, '1');
-    });
-
-    test('with auto close on lost focus lost focus hides drop-down div', function () {
-      const block = this.setUpBlockWithField();
-      const field = Array.from(block.getFields())[0];
-      Blockly.getFocusManager().focusNode(block);
-      Blockly.DropDownDiv.showPositionedByField(field, null, null, true, true);
-
-      // Focus an element outside of the drop-down.
-      document.getElementById('nonTreeElementForEphemeralFocus').focus();
-
-      // The drop-down should now be hidden since it lost focus.
-      const dropDownDivElem = document.querySelector('.blocklyDropDownDiv');
-      assert.strictEqual(dropDownDivElem.style.opacity, '0');
-    });
   });
 
   suite('showPositionedByBlock()', function () {
@@ -352,48 +324,6 @@ suite('DropDownDiv', function () {
       const dropDownDivElem = document.querySelector('.blocklyDropDownDiv');
       assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
       assert.strictEqual(document.activeElement, dropDownDivElem);
-    });
-
-    test('without auto close on lost focus lost focus does not hide drop-down div', function () {
-      const block = this.setUpBlockWithField();
-      const field = Array.from(block.getFields())[0];
-      Blockly.getFocusManager().focusNode(block);
-      Blockly.DropDownDiv.showPositionedByBlock(
-        field,
-        block,
-        null,
-        null,
-        true,
-        false,
-      );
-
-      // Focus an element outside of the drop-down.
-      document.getElementById('nonTreeElementForEphemeralFocus').focus();
-
-      // Even though the drop-down lost focus, it should still be visible.
-      const dropDownDivElem = document.querySelector('.blocklyDropDownDiv');
-      assert.strictEqual(dropDownDivElem.style.opacity, '1');
-    });
-
-    test('with auto close on lost focus lost focus hides drop-down div', function () {
-      const block = this.setUpBlockWithField();
-      const field = Array.from(block.getFields())[0];
-      Blockly.getFocusManager().focusNode(block);
-      Blockly.DropDownDiv.showPositionedByBlock(
-        field,
-        block,
-        null,
-        null,
-        true,
-        true,
-      );
-
-      // Focus an element outside of the drop-down.
-      document.getElementById('nonTreeElementForEphemeralFocus').focus();
-
-      // the drop-down should now be hidden since it lost focus.
-      const dropDownDivElem = document.querySelector('.blocklyDropDownDiv');
-      assert.strictEqual(dropDownDivElem.style.opacity, '0');
     });
   });
 

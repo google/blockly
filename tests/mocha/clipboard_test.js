@@ -76,11 +76,39 @@ suite('Clipboard', function () {
       await mutatorIcon.setBubbleVisible(true);
       const mutatorWorkspace = mutatorIcon.getWorkspace();
       const elseIf = mutatorWorkspace.getBlocksByType('controls_if_elseif')[0];
-      assert.notEqual(elseIf, undefined);
+      assert.isDefined(elseIf);
       assert.lengthOf(mutatorWorkspace.getAllBlocks(), 2);
       assert.lengthOf(this.workspace.getAllBlocks(), 1);
       const data = elseIf.toCopyData();
       Blockly.clipboard.paste(data, mutatorWorkspace);
+      assert.lengthOf(mutatorWorkspace.getAllBlocks(), 3);
+      assert.lengthOf(this.workspace.getAllBlocks(), 1);
+    });
+
+    test('pasting into a mutator flyout pastes into the mutator workspace', async function () {
+      const block = Blockly.serialization.blocks.append(
+        {
+          'type': 'controls_if',
+          'id': 'blockId',
+          'extraState': {
+            'elseIfCount': 1,
+          },
+        },
+        this.workspace,
+      );
+      const mutatorIcon = block.getIcon(Blockly.icons.IconType.MUTATOR);
+      await mutatorIcon.setBubbleVisible(true);
+      const mutatorWorkspace = mutatorIcon.getWorkspace();
+      const mutatorFlyoutWorkspace = mutatorWorkspace
+        .getFlyout()
+        .getWorkspace();
+      const elseIf =
+        mutatorFlyoutWorkspace.getBlocksByType('controls_if_elseif')[0];
+      assert.isDefined(elseIf);
+      assert.lengthOf(mutatorWorkspace.getAllBlocks(), 2);
+      assert.lengthOf(this.workspace.getAllBlocks(), 1);
+      const data = elseIf.toCopyData();
+      Blockly.clipboard.paste(data, mutatorFlyoutWorkspace);
       assert.lengthOf(mutatorWorkspace.getAllBlocks(), 3);
       assert.lengthOf(this.workspace.getAllBlocks(), 1);
     });
@@ -139,8 +167,7 @@ suite('Clipboard', function () {
   });
 
   suite('pasting comments', function () {
-    // TODO: Reenable test when we readd copy-paste.
-    test.skip('pasted comments are bumped to not overlap', function () {
+    test('pasted comments are bumped to not overlap', function () {
       Blockly.Xml.domToWorkspace(
         Blockly.utils.xml.textToDom(
           '<xml><comment id="test" x=10 y=10/></xml>',
@@ -153,7 +180,7 @@ suite('Clipboard', function () {
       const newComment = Blockly.clipboard.paste(data, this.workspace);
       assert.deepEqual(
         newComment.getRelativeToSurfaceXY(),
-        new Blockly.utils.Coordinate(60, 60),
+        new Blockly.utils.Coordinate(40, 40),
       );
     });
   });

@@ -184,7 +184,7 @@ export default [
     files: [
       'eslint.config.mjs',
       '.prettierrc.js',
-      'gulpfile.js',
+      'gulpfile.mjs',
       'scripts/helpers.js',
       'tests/mocha/.mocharc.js',
       'tests/migration/validate-renamings.mjs',

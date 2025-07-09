@@ -5,7 +5,9 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
+import {getFocusManager} from '../focus_manager.js';
 import {Icon} from '../icons/icon.js';
+import {MutatorIcon} from '../icons/mutator_icon.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 import {navigateBlock} from './block_navigation_policy.js';
@@ -17,10 +19,18 @@ export class IconNavigationPolicy implements INavigationPolicy<Icon> {
   /**
    * Returns the first child of the given icon.
    *
-   * @param _current The icon to return the first child of.
+   * @param current The icon to return the first child of.
    * @returns Null.
    */
-  getFirstChild(_current: Icon): IFocusableNode | null {
+  getFirstChild(current: Icon): IFocusableNode | null {
+    if (
+      current instanceof MutatorIcon &&
+      current.bubbleIsVisible() &&
+      getFocusManager().getFocusedNode() === current
+    ) {
+      return current.getBubble()?.getWorkspace() ?? null;
+    }
+
     return null;
   }
 

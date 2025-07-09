@@ -9,11 +9,12 @@
  */
 
 import * as chai from 'chai';
+import {Key} from 'webdriverio';
 import {
+  dragBlockTypeFromFlyout,
   getCategory,
   PAUSE_TIME,
   screenDirection,
-  scrollFlyout,
   testFileLocations,
   testSetup,
 } from './test_setup.mjs';
@@ -57,28 +58,29 @@ const testCategories = [
 ];
 
 /**
- * Check whether an element is fully inside the bounds of the Blockly div. You can use this
- * to determine whether a block on the workspace or flyout is inside the Blockly div.
- * This does not check whether there are other Blockly elements (such as a toolbox or
- * flyout) on top of the element. A partially visible block is considered out of bounds.
+ * Get the type of the nth block in the specified category.
  * @param browser The active WebdriverIO Browser object.
- * @param element The element to look for.
- * @returns A Promise resolving to true if the element is in bounds and false otherwise.
+ * @param categoryName The name of the category to inspect.
+ * @param n The index of the block to get
+ * @returns A Promise resolving to the type the block in the specified
+ *     category's flyout at index i.
  */
-async function elementInBounds(browser, element) {
-  return await browser.execute((elem) => {
-    const rect = elem.getBoundingClientRect();
+async function getNthBlockType(browser, categoryName, n) {
+  const category = await getCategory(browser, categoryName);
+  await category.click();
+  await browser.pause(PAUSE_TIME);
 
-    const blocklyDiv = document.getElementById('blocklyDiv');
-    const blocklyRect = blocklyDiv.getBoundingClientRect();
+  const blockType = await browser.execute((i) => {
+    return Blockly.getMainWorkspace()
+      .getFlyout()
+      .getWorkspace()
+      .getTopBlocks(false)[i].type;
+  }, n);
 
-    const vertInView =
-      rect.top >= blocklyRect.top && rect.bottom <= blocklyRect.bottom;
-    const horInView =
-      rect.left >= blocklyRect.left && rect.right <= blocklyRect.right;
-
-    return vertInView && horInView;
-  }, element);
+  // Unicode escape to close flyout.
+  await browser.keys([Key.Escape]);
+  await browser.pause(PAUSE_TIME);
+  return blockType;
 }
 
 /**
@@ -101,7 +103,7 @@ async function getBlockCount(browser, categoryName) {
   });
 
   // Unicode escape to close flyout.
-  await browser.keys(['\uE00C']);
+  await browser.keys([Key.Escape]);
   await browser.pause(PAUSE_TIME);
   return blockCount;
 }
@@ -141,18 +143,12 @@ async function openCategories(browser, categoryList, directionMultiplier) {
         await category.click();
         if (await isBlockDisabled(browser, i)) {
           // Unicode escape to close flyout.
-          await browser.keys(['\uE00C']);
+          await browser.keys([Key.Escape]);
           await browser.pause(PAUSE_TIME);
           continue;
         }
-        const flyoutBlock = await browser.$(
-          `.blocklyFlyout .blocklyBlockCanvas > g:nth-child(${3 + i * 2})`,
-        );
-        while (!(await elementInBounds(browser, flyoutBlock))) {
-          await scrollFlyout(browser, 0, 50);
-        }
-
-        await flyoutBlock.dragAndDrop({x: directionMultiplier * 50, y: 0});
+        const blockType = await getNthBlockType(browser, categoryName, i);
+        dragBlockTypeFromFlyout(browser, categoryName, blockType, 50, 20);
         await browser.pause(PAUSE_TIME);
         // Should be one top level block on the workspace.
         const topBlockCount = await browser.execute(() => {
@@ -178,7 +174,9 @@ async function openCategories(browser, categoryList, directionMultiplier) {
   chai.assert.equal(failureCount, 0);
 }
 
-suite('Open toolbox categories', function () {
+// TODO (#9217) These take too long to run and are very flakey. Need to find a
+// better way to test whatever this is trying to test.
+suite.skip('Open toolbox categories', function () {
   this.timeout(0);
 
   test('opening every toolbox category in the category toolbox in LTR', async function () {

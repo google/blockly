@@ -7,7 +7,10 @@
 import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {EventType} from '../../build/src/core/events/type.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
+import {IconType} from '../../build/src/core/icons/icon_types.js';
 import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
+import {isCommentIcon} from '../../build/src/core/interfaces/i_comment_icon.js';
+import {Size} from '../../build/src/core/utils/size.js';
 import {assert} from '../../node_modules/chai/chai.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';
 import {
@@ -1426,9 +1429,9 @@ suite('Blocks', function () {
     });
 
     suite('Constructing registered comment classes', function () {
-      class MockComment extends MockIcon {
+      class MockComment extends MockBubbleIcon {
         getType() {
-          return Blockly.icons.IconType.COMMENT;
+          return IconType.COMMENT;
         }
 
         setText() {}
@@ -1440,24 +1443,22 @@ suite('Blocks', function () {
         setBubbleSize() {}
 
         getBubbleSize() {
-          return Blockly.utils.Size(0, 0);
+          return Size(0, 0);
         }
 
         setBubbleLocation() {}
 
         getBubbleLocation() {}
 
-        bubbleIsVisible() {
-          return true;
-        }
-
-        setBubbleVisible() {}
-
         saveState() {
           return {};
         }
 
         loadState() {}
+      }
+
+      if (!isCommentIcon(new MockComment())) {
+        throw new TypeError('MockComment not an ICommentIcon');
       }
 
       setup(function () {

@@ -5,6 +5,7 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
+import {assert} from '../../node_modules/chai/chai.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
@@ -45,6 +46,16 @@ suite('Keyboard Shortcut Items', function () {
     sinon
       .stub(Blockly.getFocusManager(), 'getFocusedNode')
       .returns(block.nextConnection);
+  }
+
+  /**
+   * Creates a workspace comment and set it as the focused node.
+   * @param {Blockly.Workspace} workspace The workspace to create a new comment on.
+   */
+  function setSelectedComment(workspace) {
+    const comment = workspace.newComment();
+    sinon.stub(Blockly.getFocusManager(), 'getFocusedNode').returns(comment);
+    return comment;
   }
 
   /**
@@ -173,12 +184,17 @@ suite('Keyboard Shortcut Items', function () {
         });
       });
     });
-    // Do not copy a block if a workspace is in readonly mode.
-    suite('Not called when readOnly is true', function () {
+    // Allow copying a block if a workspace is in readonly mode.
+    suite('Called when readOnly is true', function () {
       testCases.forEach(function (testCase) {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
-        runReadOnlyTest(keyEvent, testCaseName);
+        test(testCaseName, function () {
+          this.workspace.setIsReadOnly(true);
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.calledOnce(this.copySpy);
+          sinon.assert.calledOnce(this.hideChaffSpy);
+        });
       });
     });
     // Do not copy a block if a drag is in progress.
@@ -236,6 +252,165 @@ suite('Keyboard Shortcut Items', function () {
       sinon.assert.notCalled(this.copySpy);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
+    // Copy a comment.
+    test('Workspace comment', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          Blockly.getFocusManager().getFocusedNode.restore();
+          this.comment = setSelectedComment(this.workspace);
+          this.copySpy = sinon.spy(this.comment, 'toCopyData');
+
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.calledOnce(this.copySpy);
+          sinon.assert.calledOnce(this.hideChaffSpy);
+        });
+      });
+    });
+  });
+
+  suite('Cut', function () {
+    setup(function () {
+      this.block = setSelectedBlock(this.workspace);
+      this.copySpy = sinon.spy(this.block, 'toCopyData');
+      this.disposeSpy = sinon.spy(this.block, 'dispose');
+      this.hideChaffSpy = sinon.spy(
+        Blockly.WorkspaceSvg.prototype,
+        'hideChaff',
+      );
+    });
+    const testCases = [
+      [
+        'Control X',
+        createKeyDownEvent(Blockly.utils.KeyCodes.X, [
+          Blockly.utils.KeyCodes.CTRL,
+        ]),
+      ],
+      [
+        'Meta X',
+        createKeyDownEvent(Blockly.utils.KeyCodes.X, [
+          Blockly.utils.KeyCodes.META,
+        ]),
+      ],
+    ];
+    // Cut a block.
+    suite('Simple', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.calledOnce(this.copySpy);
+          sinon.assert.calledOnce(this.disposeSpy);
+          sinon.assert.calledOnce(this.hideChaffSpy);
+        });
+      });
+    });
+    // Do not cut a block if a workspace is in readonly mode.
+    suite('Not called when readOnly is true', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          this.workspace.setIsReadOnly(true);
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.notCalled(this.copySpy);
+          sinon.assert.notCalled(this.disposeSpy);
+          sinon.assert.notCalled(this.hideChaffSpy);
+        });
+      });
+    });
+    // Do not cut a block if a drag is in progress.
+    suite('Drag in progress', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          sinon.stub(this.workspace, 'isDragging').returns(true);
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.notCalled(this.copySpy);
+          sinon.assert.notCalled(this.disposeSpy);
+          sinon.assert.notCalled(this.hideChaffSpy);
+        });
+      });
+    });
+    // Do not cut a block if is is not deletable.
+    suite('Block is not deletable', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          sinon
+            .stub(Blockly.common.getSelected(), 'isOwnDeletable')
+            .returns(false);
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.notCalled(this.copySpy);
+          sinon.assert.notCalled(this.disposeSpy);
+          sinon.assert.notCalled(this.hideChaffSpy);
+        });
+      });
+    });
+    // Do not cut a block if it is not movable.
+    suite('Block is not movable', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          sinon
+            .stub(Blockly.common.getSelected(), 'isOwnMovable')
+            .returns(false);
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.notCalled(this.copySpy);
+          sinon.assert.notCalled(this.disposeSpy);
+          sinon.assert.notCalled(this.hideChaffSpy);
+        });
+      });
+    });
+    test('Not called when connection is focused', function () {
+      // Restore the stub behavior called during setup
+      Blockly.getFocusManager().getFocusedNode.restore();
+
+      setSelectedConnection(this.workspace);
+      const event = createKeyDownEvent(Blockly.utils.KeyCodes.C, [
+        Blockly.utils.KeyCodes.CTRL,
+      ]);
+      this.injectionDiv.dispatchEvent(event);
+      sinon.assert.notCalled(this.copySpy);
+      sinon.assert.notCalled(this.disposeSpy);
+      sinon.assert.notCalled(this.hideChaffSpy);
+    });
+
+    // Cut a comment.
+    suite('Workspace comment', function () {
+      testCases.forEach(function (testCase) {
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
+        test(testCaseName, function () {
+          Blockly.getFocusManager().getFocusedNode.restore();
+          this.comment = setSelectedComment(this.workspace);
+          this.copySpy = sinon.spy(this.comment, 'toCopyData');
+          this.disposeSpy = sinon.spy(this.comment, 'dispose');
+
+          this.injectionDiv.dispatchEvent(keyEvent);
+          sinon.assert.calledOnce(this.copySpy);
+          sinon.assert.calledOnce(this.disposeSpy);
+        });
+      });
+    });
+  });
+
+  suite('Paste', function () {
+    test('Disabled when nothing has been copied', function () {
+      const pasteShortcut =
+        Blockly.ShortcutRegistry.registry.getRegistry()[
+          Blockly.ShortcutItems.names.PASTE
+        ];
+      Blockly.clipboard.setLastCopiedData(undefined);
+
+      const isPasteEnabled = pasteShortcut.preconditionFn();
+      assert.isFalse(isPasteEnabled);
+    });
   });
 
   suite('Undo', function () {
@@ -273,13 +448,13 @@ suite('Keyboard Shortcut Items', function () {
         });
       });
     });
-    // Do not undo if a gesture is in progress.
-    suite('Gesture in progress', function () {
+    // Do not undo if a drag is in progress.
+    suite('Drag in progress', function () {
       testCases.forEach(function (testCase) {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
+          sinon.stub(this.workspace, 'isDragging').returns(true);
           this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.undoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
@@ -333,13 +508,13 @@ suite('Keyboard Shortcut Items', function () {
         });
       });
     });
-    // Do not undo if a gesture is in progress.
-    suite('Gesture in progress', function () {
+    // Do not redo if a drag is in progress.
+    suite('Drag in progress', function () {
       testCases.forEach(function (testCase) {
         const testCaseName = testCase[0];
         const keyEvent = testCase[1];
         test(testCaseName, function () {
-          sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
+          sinon.stub(this.workspace, 'isDragging').returns(true);
           this.injectionDiv.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.redoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
@@ -373,8 +548,8 @@ suite('Keyboard Shortcut Items', function () {
       sinon.assert.calledWith(this.undoSpy, true);
       sinon.assert.calledOnce(this.hideChaffSpy);
     });
-    test('Not called when a gesture is in progress', function () {
-      sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
+    test('Not called when a drag is in progress', function () {
+      sinon.stub(this.workspace, 'isDragging').returns(true);
       this.injectionDiv.dispatchEvent(this.ctrlYEvent);
       sinon.assert.notCalled(this.undoSpy);
       sinon.assert.notCalled(this.hideChaffSpy);

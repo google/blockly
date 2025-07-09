@@ -15,6 +15,14 @@ export interface ICopyable<T extends ICopyData> extends ISelectable {
    * @returns Copy metadata.
    */
   toCopyData(): T | null;
+
+  /**
+   * Whether this instance is currently copyable. The standard implementation
+   * is to return true if isOwnDeletable and isOwnMovable return true.
+   *
+   * @returns True if it can currently be copied.
+   */
+  isCopyable?(): boolean;
 }
 
 export namespace ICopyable {
@@ -25,7 +33,7 @@ export namespace ICopyable {
 
 export type ICopyData = ICopyable.ICopyData;
 
-/** @returns true if the given object is copyable. */
+/** @returns true if the given object is an ICopyable. */
 export function isCopyable(obj: any): obj is ICopyable<ICopyData> {
-  return obj.toCopyData !== undefined;
+  return obj && typeof obj.toCopyData === 'function';
 }

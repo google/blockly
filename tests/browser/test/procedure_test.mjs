@@ -11,9 +11,8 @@
 import * as chai from 'chai';
 import {
   connect,
-  getBlockTypeFromCategory,
-  getNthBlockOfCategory,
-  getSelectedBlockElement,
+  dragBlockTypeFromFlyout,
+  dragNthBlockFromFlyout,
   PAUSE_TIME,
   testFileLocations,
   testSetup,
@@ -33,43 +32,41 @@ suite('Testing Connecting Blocks', function (done) {
 
   test('Testing Procedure', async function () {
     // Drag out first function
-    let proceduresDefReturn = await getBlockTypeFromCategory(
+    const doSomething = await dragBlockTypeFromFlyout(
       this.browser,
       'Functions',
       'procedures_defreturn',
+      50,
+      20,
     );
-    await proceduresDefReturn.dragAndDrop({x: 50, y: 20});
-    const doSomething = await getSelectedBlockElement(this.browser);
 
-    // Drag out second function.
-    proceduresDefReturn = await getBlockTypeFromCategory(
+    const doSomething2 = await dragBlockTypeFromFlyout(
       this.browser,
       'Functions',
       'procedures_defreturn',
+      50,
+      20,
     );
-    await proceduresDefReturn.dragAndDrop({x: 300, y: 200});
-    const doSomething2 = await getSelectedBlockElement(this.browser);
 
-    // Drag out numeric
-    const mathNumeric = await getBlockTypeFromCategory(
+    const numeric = await dragBlockTypeFromFlyout(
       this.browser,
       'Math',
       'math_number',
+      50,
+      20,
     );
-    await mathNumeric.dragAndDrop({x: 50, y: 20});
-    const numeric = await getSelectedBlockElement(this.browser);
 
     // Connect numeric to first procedure
     await connect(this.browser, numeric, 'OUTPUT', doSomething, 'RETURN');
 
     // Drag out doSomething caller from flyout.
-    const doSomethingFlyout = await getNthBlockOfCategory(
+    const doSomethingCaller = await dragNthBlockFromFlyout(
       this.browser,
       'Functions',
       3,
+      50,
+      20,
     );
-    await doSomethingFlyout.dragAndDrop({x: 50, y: 20});
-    const doSomethingCaller = await getSelectedBlockElement(this.browser);
 
     // Connect the doSomething caller to doSomething2
     await connect(
@@ -81,22 +78,22 @@ suite('Testing Connecting Blocks', function (done) {
     );
 
     // Drag out print from flyout.
-    const printFlyout = await getBlockTypeFromCategory(
+    const print = await dragBlockTypeFromFlyout(
       this.browser,
       'Text',
       'text_print',
+      50,
+      0,
     );
-    await printFlyout.dragAndDrop({x: 50, y: 20});
-    const print = await getSelectedBlockElement(this.browser);
 
     // Drag out doSomething2 caller from flyout.
-    const doSomething2Flyout = await getNthBlockOfCategory(
+    const doSomething2Caller = await dragNthBlockFromFlyout(
       this.browser,
       'Functions',
       4,
+      50,
+      20,
     );
-    await doSomething2Flyout.dragAndDrop({x: 130, y: 20});
-    const doSomething2Caller = await getSelectedBlockElement(this.browser);
 
     // Connect doSomething2 caller with print.
     await connect(this.browser, doSomething2Caller, 'OUTPUT', print, 'TEXT');

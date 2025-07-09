@@ -14,10 +14,10 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
+import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
 import {Field} from '../field.js';
 import {getFocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
-import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {Marker} from './marker.js';
@@ -39,11 +39,11 @@ export class LineCursor extends Marker {
   }
 
   /**
-   * Moves the cursor to the next previous connection, next connection or block
-   * in the pre order traversal. Finds the next node in the pre order traversal.
+   * Moves the cursor to the next block or workspace comment in the pre-order
+   * traversal.
    *
-   * @returns The next node, or null if the current node is
-   *     not set or there is no next value.
+   * @returns The next node, or null if the current node is not set or there is
+   *     no next value.
    */
   next(): IFocusableNode | null {
     const curNode = this.getCurNode();
@@ -54,8 +54,9 @@ export class LineCursor extends Marker {
       curNode,
       (candidate: IFocusableNode | null) => {
         return (
-          candidate instanceof BlockSvg &&
-          !candidate.outputConnection?.targetBlock()
+          (candidate instanceof BlockSvg &&
+            !candidate.outputConnection?.targetBlock()) ||
+          candidate instanceof RenderedWorkspaceComment
         );
       },
       true,
@@ -88,11 +89,11 @@ export class LineCursor extends Marker {
     return newNode;
   }
   /**
-   * Moves the cursor to the previous next connection or previous connection in
-   * the pre order traversal.
+   * Moves the cursor to the previous block or workspace comment in the
+   * pre-order traversal.
    *
-   * @returns The previous node, or null if the current node
-   *     is not set or there is no previous value.
+   * @returns The previous node, or null if the current node is not set or there
+   *     is no previous value.
    */
   prev(): IFocusableNode | null {
     const curNode = this.getCurNode();
@@ -103,8 +104,9 @@ export class LineCursor extends Marker {
       curNode,
       (candidate: IFocusableNode | null) => {
         return (
-          candidate instanceof BlockSvg &&
-          !candidate.outputConnection?.targetBlock()
+          (candidate instanceof BlockSvg &&
+            !candidate.outputConnection?.targetBlock()) ||
+          candidate instanceof RenderedWorkspaceComment
         );
       },
       true,
@@ -374,17 +376,8 @@ export class LineCursor extends Marker {
    *
    * @returns The current field, connection, or block the cursor is on.
    */
-  override getCurNode(): IFocusableNode | null {
-    // Ensure the current node matches what's currently focused.
-    const focused = getFocusManager().getFocusedNode();
-    const block = this.getSourceBlockFromNode(focused);
-    if (block && block.workspace === this.workspace) {
-      // If the current focused node corresponds to a block then ensure that it
-      // belongs to the correct workspace for this cursor.
-      this.setCurNode(focused);
-    }
-
-    return super.getCurNode();
+  getCurNode(): IFocusableNode | null {
+    return getFocusManager().getFocusedNode();
   }
 
   /**
@@ -395,12 +388,8 @@ export class LineCursor extends Marker {
    *
    * @param newNode The new location of the cursor.
    */
-  override setCurNode(newNode: IFocusableNode | null) {
-    super.setCurNode(newNode);
-
-    if (isFocusableNode(newNode)) {
-      getFocusManager().focusNode(newNode);
-    }
+  setCurNode(newNode: IFocusableNode) {
+    getFocusManager().focusNode(newNode);
 
     // Try to scroll cursor into view.
     if (newNode instanceof BlockSvg) {
@@ -412,6 +401,8 @@ export class LineCursor extends Marker {
       block.workspace.scrollBoundsIntoView(
         block.getBoundingRectangleWithoutChildren(),
       );
+    } else if (newNode instanceof RenderedWorkspaceComment) {
+      newNode.workspace.scrollBoundsIntoView(newNode.getBoundingRectangle());
     }
   }
 

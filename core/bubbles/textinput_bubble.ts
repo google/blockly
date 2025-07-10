@@ -6,6 +6,9 @@
 
 import {CommentEditor} from '../comments/comment_editor.js';
 import * as Css from '../css.js';
+import {getFocusManager} from '../focus_manager.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
+import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as touch from '../touch.js';
 import {browserEvents} from '../utils.js';
 import {Coordinate} from '../utils/coordinate.js';
@@ -66,16 +69,19 @@ export class TextInputBubble extends Bubble {
    *     The tail of the bubble will point to this location.
    * @param ownerRect An optional rect we don't want the bubble to overlap with
    *     when automatically positioning.
+   * @param owner The object that owns/hosts this bubble.
    */
   constructor(
     public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
+    protected owner?: IHasBubble & IFocusableNode,
   ) {
-    const commentEditor = new CommentEditor(workspace);
-    super(workspace, anchor, ownerRect, commentEditor.getFocusableElement());
+    super(workspace, anchor, ownerRect, undefined, owner);
     dom.addClass(this.svgRoot, 'blocklyTextInputBubble');
-    this.editor = commentEditor;
+    this.editor = new CommentEditor(workspace, this.id, () => {
+      getFocusManager().focusNode(this);
+    });
     this.contentContainer.appendChild(this.editor.getDom());
     this.resizeGroup = this.createResizeHandle(this.svgRoot, workspace);
     this.setSize(this.DEFAULT_SIZE, true);
@@ -263,6 +269,15 @@ export class TextInputBubble extends Bubble {
     for (const listener of this.locationChangeListeners) {
       listener();
     }
+  }
+
+  /**
+   * Returns the text editor component of this bubble.
+   *
+   * @internal
+   */
+  getEditor() {
+    return this.editor;
   }
 }
 

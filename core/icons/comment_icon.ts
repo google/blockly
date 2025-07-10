@@ -11,7 +11,6 @@ import type {BlockSvg} from '../block_svg.js';
 import {TextInputBubble} from '../bubbles/textinput_bubble.js';
 import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
-import type {IBubble} from '../interfaces/i_bubble.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import type {ISerializable} from '../interfaces/i_serializable.js';
 import * as renderManagement from '../render_management.js';
@@ -62,7 +61,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   /**
    * The visibility of the bubble for this comment.
    *
-   * This is used to track what the visibile state /should/ be, not necessarily
+   * This is used to track what the visible state /should/ be, not necessarily
    * what it currently /is/. E.g. sometimes this will be true, but the block
    * hasn't been rendered yet, so the bubble will not currently be visible.
    */
@@ -340,7 +339,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 
   /** See IHasBubble.getBubble. */
-  getBubble(): IBubble | null {
+  getBubble(): TextInputBubble | null {
     return this.textInputBubble;
   }
 
@@ -365,6 +364,7 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       this.sourceBlock.workspace as WorkspaceSvg,
       this.getAnchorLocation(),
       this.getBubbleOwnerRect(),
+      this,
     );
     this.textInputBubble.setText(this.getText());
     this.textInputBubble.setSize(this.bubbleSize, true);

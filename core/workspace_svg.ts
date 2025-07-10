@@ -22,6 +22,7 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
+import {TextInputBubble} from './bubbles/textinput_bubble.js';
 import {COMMENT_COLLAPSE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/collapse_comment_bar_button.js';
 import {COMMENT_EDITOR_FOCUS_IDENTIFIER} from './comments/comment_editor.js';
 import {COMMENT_DELETE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/delete_comment_bar_button.js';
@@ -2868,6 +2869,11 @@ export class WorkspaceSvg
           bubble.getFocusableElement().id === id
         ) {
           return bubble;
+        } else if (
+          bubble instanceof TextInputBubble &&
+          bubble.getEditor().getFocusableElement().id === id
+        ) {
+          return bubble.getEditor();
         }
       }
     }

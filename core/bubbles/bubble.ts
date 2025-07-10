@@ -11,6 +11,7 @@ import {getFocusManager} from '../focus_manager.js';
 import {IBubble} from '../interfaces/i_bubble.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
@@ -107,6 +108,7 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
     overriddenFocusableElement?: SVGElement | HTMLElement,
+    protected owner?: IHasBubble & IFocusableNode,
   ) {
     this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(
@@ -145,6 +147,13 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
       'pointerdown',
       this,
       this.onMouseDown,
+    );
+
+    browserEvents.conditionalBind(
+      this.focusableElement,
+      'keydown',
+      this,
+      this.onKeyDown,
     );
   }
 
@@ -228,6 +237,19 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
     getFocusManager().focusNode(this);
+  }
+
+  /**
+   * Handles key events when this bubble is focused. By default, closes the
+   * bubble on Escape.
+   *
+   * @param e The keyboard event to handle.
+   */
+  protected onKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape' && this.owner) {
+      this.owner.setBubbleVisible(false);
+      getFocusManager().focusNode(this.owner);
+    }
   }
 
   /** Positions the bubble relative to its anchor. Does not render its tail. */
@@ -694,5 +716,12 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /**
+   * Returns the object that owns/hosts this bubble, if any.
+   */
+  getOwner(): (IHasBubble & IFocusableNode) | undefined {
+    return this.owner;
   }
 }

@@ -356,5 +356,12 @@
 	"WORKSPACE_ARIA_LABEL": "Espaço de trabalho de Blockly",
 	"COLLAPSED_WARNINGS_WARNING": "Os blocos ocultados contêm avisos.",
 	"DIALOG_OK": "OK",
-	"DIALOG_CANCEL": "Cancelar"
+	"DIALOG_CANCEL": "Cancelar",
+	"EDIT_BLOCK_CONTENTS": "Editar conteúdos do Bloco",
+	"MOVE_BLOCK": "Mover Bloco",
+	"CUT_SHORTCUT": "Cortar",
+	"COPY_SHORTCUT": "Copiar",
+	"PASTE_SHORTCUT": "Colar",
+	"KEYBOARD_NAV_COPIED_HINT": "Copiado. Pressione %1 para colar.",
+	"KEYBOARD_NAV_CUT_HINT": "Cortar. Pressione %1 para colar."
 }

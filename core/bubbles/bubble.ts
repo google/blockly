@@ -9,6 +9,7 @@ import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
 import {getFocusManager} from '../focus_manager.js';
 import {IBubble} from '../interfaces/i_bubble.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import {ContainerRegion} from '../metrics_manager.js';
@@ -27,7 +28,7 @@ import {WorkspaceSvg} from '../workspace_svg.js';
  * bubble, where it has a "tail" that points to the block, and a "head" that
  * displays arbitrary svg elements.
  */
-export abstract class Bubble implements IBubble, ISelectable {
+export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
   /** The width of the border around the bubble. */
   static readonly BORDER_WIDTH = 6;
 

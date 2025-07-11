@@ -102,6 +102,7 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
    *     element that's represented by this bubble (as a focusable node). This
    *     element will have its ID overwritten. If not provided, the focusable
    *     element of this node will default to the bubble's SVG root.
+   * @param owner The object responsible for hosting/spawning this bubble.
    */
   constructor(
     public readonly workspace: WorkspaceSvg,

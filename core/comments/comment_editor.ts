@@ -87,6 +87,11 @@ export class CommentEditor implements IFocusableNode {
       },
     );
 
+    // Don't zoom with mousewheel; let it scroll instead.
+    browserEvents.conditionalBind(this.textArea, 'wheel', this, (e: Event) => {
+      e.stopPropagation();
+    });
+
     // Register listener for keydown events that would finish editing.
     browserEvents.conditionalBind(
       this.textArea,

@@ -179,9 +179,9 @@ async function openCategories(browser, categoryList, directionMultiplier) {
   chai.assert.equal(failureCount, 0);
 }
 
-// TODO (#9217) These take too long to run and are very flakey. Need to find a
-// better way to test whatever this is trying to test.
-suite.skip('Open toolbox categories', function () {
+// TODO (#9217) These take too long to run and are very flakey. Need to pull
+// these out into their own test runner.
+suite('Open toolbox categories', function () {
   this.timeout(0);
 
   test('opening every toolbox category in the category toolbox in LTR', async function () {

@@ -2727,6 +2727,19 @@ export class WorkspaceSvg
     previousNode: IFocusableNode | null,
   ): IFocusableNode | null {
     if (!previousNode) {
+      const flyout = this.targetWorkspace?.getFlyout();
+      if (this.isFlyout && flyout) {
+        // Return the first focusable item of the flyout.
+        return (
+          flyout
+            .getContents()
+            .find((flyoutItem) => {
+              const element = flyoutItem.getElement();
+              return isFocusableNode(element) && element.canBeFocused();
+            })
+            ?.getElement() ?? null
+        );
+      }
       return this.getTopBlocks(true)[0] ?? null;
     } else return null;
   }

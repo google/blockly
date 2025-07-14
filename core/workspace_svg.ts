@@ -2729,12 +2729,15 @@ export class WorkspaceSvg
       const flyout = this.targetWorkspace?.getFlyout();
       if (this.isFlyout && flyout) {
         // Return the first focusable item of the flyout.
-        for (const flyoutItem of flyout.getContents()) {
-          const elem = flyoutItem.getElement();
-          if (isFocusableNode(elem) && elem.canBeFocused()) {
-            return elem;
-          }
-        }
+        return (
+          flyout
+            .getContents()
+            .find((flyoutItem) => {
+              const element = flyoutItem.getElement();
+              return isFocusableNode(element) && element.canBeFocused();
+            })
+            ?.getElement() ?? null
+        );
       }
       return this.getTopBlocks(true)[0] ?? null;
     } else return null;

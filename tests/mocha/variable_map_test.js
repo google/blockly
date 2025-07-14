@@ -505,5 +505,26 @@ suite('Variable Map', function () {
         });
       });
     });
+
+    suite('variable type change events', function () {
+      test('are fired when a variable has its type changed', function () {
+        const variable = this.variableMap.createVariable(
+          'name1',
+          'type1',
+          'id1',
+        );
+        this.variableMap.changeVariableType(variable, 'type2');
+        assertEventFired(
+          this.eventSpy,
+          Blockly.Events.VarTypeChange,
+          {
+            oldType: 'type1',
+            newType: 'type2',
+            varId: 'id1',
+          },
+          this.workspace.id,
+        );
+      });
+    });
   });
 });

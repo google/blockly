@@ -103,11 +103,11 @@ export class PathObject extends BasePathObject {
         );
         this.svgPathSelected.removeAttribute('tabindex');
         this.svgPathSelected.removeAttribute('id');
-        this.svgRoot.appendChild(this.svgPathSelected);
+        // this.svgRoot.appendChild(this.svgPathSelected);
       }
     } else {
       if (this.svgPathSelected) {
-        this.svgRoot.removeChild(this.svgPathSelected);
+        // this.svgRoot.removeChild(this.svgPathSelected);
         this.svgPathSelected = null;
       }
     }

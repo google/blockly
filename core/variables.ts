@@ -9,6 +9,7 @@
 import type {Block} from './block.js';
 import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
+import { getFocusManager } from './focus_manager.js';
 import {isLegacyProcedureDefBlock} from './interfaces/i_legacy_procedure_blocks.js';
 import {isVariableBackedParameterModel} from './interfaces/i_variable_backed_parameter_model.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
@@ -519,6 +520,8 @@ export function promptName(
   defaultText: string,
   callback: (p1: string | null) => void,
 ) {
+  const returnEphemeralFocus =
+    getFocusManager().takeEphemeralFocus(document.body);
   dialog.prompt(promptText, defaultText, function (newVar) {
     // Merge runs of whitespace.  Strip leading and trailing whitespace.
     // Beyond this, all names are legal.
@@ -529,6 +532,7 @@ export function promptName(
         newVar = null;
       }
     }
+    returnEphemeralFocus();
     callback(newVar);
   });
 }

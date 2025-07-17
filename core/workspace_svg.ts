@@ -2908,11 +2908,9 @@ export class WorkspaceSvg
       // Only hide the flyout if the flyout's workspace is losing focus and that
       // focus isn't returning to the flyout itself, the toolbox, or ephemeral.
       if (getFocusManager().ephemeralFocusTaken()) return;
-      const flyout = this.targetWorkspace.getFlyout();
       const toolbox = this.targetWorkspace.getToolbox();
       if (toolbox && nextTree === toolbox) return;
-      if (toolbox) toolbox.clearSelection();
-      if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
+      if (isAutoHideable(toolbox)) toolbox.autoHide(false);
     }
   }
 

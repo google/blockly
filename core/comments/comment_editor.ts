@@ -53,6 +53,7 @@ export class CommentEditor implements IFocusableNode {
       'textarea',
     ) as HTMLTextAreaElement;
     this.textArea.setAttribute('tabindex', '-1');
+    this.textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
     dom.addClass(this.textArea, 'blocklyCommentText');
     dom.addClass(this.textArea, 'blocklyTextarea');
     dom.addClass(this.textArea, 'blocklyText');
@@ -85,6 +86,11 @@ export class CommentEditor implements IFocusableNode {
         touch.clearTouchIdentifier();
       },
     );
+
+    // Don't zoom with mousewheel; let it scroll instead.
+    browserEvents.conditionalBind(this.textArea, 'wheel', this, (e: Event) => {
+      e.stopPropagation();
+    });
 
     // Register listener for keydown events that would finish editing.
     browserEvents.conditionalBind(

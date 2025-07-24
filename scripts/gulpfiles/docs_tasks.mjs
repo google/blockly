@@ -2,8 +2,8 @@ import {execSync} from 'child_process';
 import {Extractor} from 'markdown-tables-to-json';
 import * as fs from 'fs';
 import * as gulp from 'gulp';
-import * as header from 'gulp-header';
-import * as replace from 'gulp-replace';
+import header from 'gulp-header';
+import replace from 'gulp-replace';
 
 const DOCS_DIR = 'docs';
 

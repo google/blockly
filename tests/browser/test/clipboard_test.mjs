@@ -9,10 +9,6 @@ import {Key} from 'webdriverio';
 import {
   PAUSE_TIME,
   clickWorkspace,
-  // getBlockElementById,
-  // getSelectedBlockId,
-  // ElementWithId,
-  // tabNavigateToWorkspace,
   focusOnBlock,
   getAllBlocks,
   getBlockTypeFromWorkspace,

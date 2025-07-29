@@ -698,25 +698,30 @@ export class FieldDropdown extends Field<string> {
     prefix?: string;
     suffix?: string;
   } {
-    let hasImages = false;
+    let hasNonTextContent = false;
     const trimmedOptions = options.map((option): MenuOption => {
-      if (option === FieldDropdown.SEPARATOR) return option;
+      if (option === FieldDropdown.SEPARATOR) {
+        hasNonTextContent = true;
+        return option;
+      }
 
       const [label, value] = option;
       if (typeof label === 'string') {
         return [parsing.replaceMessageReferences(label), value];
       }
 
-      hasImages = true;
+      hasNonTextContent = true;
       // Copy the image properties so they're not influenced by the original.
       // NOTE: No need to deep copy since image properties are only 1 level deep.
       const imageLabel = isImageProperties(label)
         ? {...label, alt: parsing.replaceMessageReferences(label.alt)}
-        : {...label};
+        : label;
       return [imageLabel, value];
     });
 
-    if (hasImages || options.length < 2) return {options: trimmedOptions};
+    if (hasNonTextContent || options.length < 2) {
+      return {options: trimmedOptions};
+    }
 
     const stringOptions = trimmedOptions as [string, string][];
     const stringLabels = stringOptions.map(([label]) => label);

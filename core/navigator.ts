@@ -6,8 +6,10 @@
 
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from './interfaces/i_navigation_policy.js';
+import {BlockCommentNavigationPolicy} from './keyboard_nav/block_comment_navigation_policy.js';
 import {BlockNavigationPolicy} from './keyboard_nav/block_navigation_policy.js';
 import {CommentBarButtonNavigationPolicy} from './keyboard_nav/comment_bar_button_navigation_policy.js';
+import {CommentEditorNavigationPolicy} from './keyboard_nav/comment_editor_navigation_policy.js';
 import {ConnectionNavigationPolicy} from './keyboard_nav/connection_navigation_policy.js';
 import {FieldNavigationPolicy} from './keyboard_nav/field_navigation_policy.js';
 import {IconNavigationPolicy} from './keyboard_nav/icon_navigation_policy.js';
@@ -33,6 +35,8 @@ export class Navigator {
     new IconNavigationPolicy(),
     new WorkspaceCommentNavigationPolicy(),
     new CommentBarButtonNavigationPolicy(),
+    new BlockCommentNavigationPolicy(),
+    new CommentEditorNavigationPolicy(),
   ];
 
   /**

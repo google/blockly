@@ -183,6 +183,57 @@ suite('Toolbox', function () {
     });
   });
 
+  suite('focus management', function () {
+    setup(function () {
+      this.toolbox = getInjectedToolbox();
+    });
+    teardown(function () {
+      this.toolbox.dispose();
+    });
+
+    test('Losing focus hides autoclosing flyout', function () {
+      // Focus the toolbox and select a category to open the flyout.
+      const target = this.toolbox.HtmlDiv.querySelector(
+        '.blocklyToolboxCategory',
+      );
+      Blockly.getFocusManager().focusNode(this.toolbox);
+      target.dispatchEvent(
+        new PointerEvent('pointerdown', {
+          target,
+          bubbles: true,
+        }),
+      );
+      assert.isTrue(this.toolbox.getFlyout().isVisible());
+
+      // Focus the workspace to trigger the toolbox to close the flyout.
+      Blockly.getFocusManager().focusNode(this.toolbox.getWorkspace());
+      assert.isFalse(this.toolbox.getFlyout().isVisible());
+    });
+
+    test('Losing focus does not hide non-autoclosing flyout', function () {
+      // Make the toolbox's flyout non-autoclosing.
+      this.toolbox.getFlyout().setAutoClose(false);
+
+      // Focus the toolbox and select a category to open the flyout.
+      const target = this.toolbox.HtmlDiv.querySelector(
+        '.blocklyToolboxCategory',
+      );
+      Blockly.getFocusManager().focusNode(this.toolbox);
+      target.dispatchEvent(
+        new PointerEvent('pointerdown', {
+          target,
+          bubbles: true,
+        }),
+      );
+      assert.isTrue(this.toolbox.getFlyout().isVisible());
+
+      // Focus the workspace; this should *not* trigger the toolbox to close the
+      // flyout, which should remain visible.
+      Blockly.getFocusManager().focusNode(this.toolbox.getWorkspace());
+      assert.isTrue(this.toolbox.getFlyout().isVisible());
+    });
+  });
+
   suite('onClick_', function () {
     setup(function () {
       this.toolbox = getInjectedToolbox();

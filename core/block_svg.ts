@@ -1072,6 +1072,7 @@ export class BlockSvg
       blockState: blocks.save(this, {
         addCoordinates: true,
         addNextBlocks: false,
+        saveIds: false,
       }) as blocks.State,
       typeCounts: common.getBlockTypeCounts(this, true),
     };

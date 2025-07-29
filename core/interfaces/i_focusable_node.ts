@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { aria } from '../utils.js';
 import type {IFocusableTree} from './i_focusable_tree.js';
 
 /** Represents anything that can have input focus. */
@@ -96,6 +97,16 @@ export interface IFocusableNode {
    * @returns Whether this node can be focused by FocusManager.
    */
   canBeFocused(): boolean;
+
+  // TODO:
+  // - Make this v12-compatible.
+  // - Separate it from focusable node (maybe), or better: abstract away the element so that ID, ARIA, etc. can be properly represneted together.
+  // - This will not work reactively. The screen reader can sometimes announce nodes without them being focused (this was noticed for shadow blocks when moving a parent block--it's not entirely clear why it's valid for this to happen).
+  getAriaRole(): aria.Role | null;
+
+  // TODO: This is complicated because it largely depends on the role, and whether there's a label for the element. Also, the contract needs more work. Every focusable element must be auditorially descriptive, but that doesn't necessitate a label.
+  // TODO: Figure out localization for this. A string is probably required since returning a Msg key wouldn't allow for dynamic messages (which will be needed for more complex nodes like blocks).
+  getAriaLabel(): string;
 }
 
 /**

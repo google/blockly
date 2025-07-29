@@ -5,6 +5,7 @@
  */
 
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
+import { aria } from '../utils.js';
 import {Rect} from '../utils/rect.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {RenderedWorkspaceComment} from './rendered_workspace_comment.js';
@@ -101,5 +102,15 @@ export abstract class CommentBarButton implements IFocusableNode {
   /** Returns whether this button can be focused. True if it is visible. */
   canBeFocused() {
     return this.isVisible();
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.BUTTON;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return 'DoNotDefine?';
   }
 }

@@ -25,6 +25,7 @@ import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import * as layers from '../layers.js';
 import * as commentSerialization from '../serialization/workspace_comments.js';
+import { aria } from '../utils.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
@@ -365,5 +366,16 @@ export class RenderedWorkspaceComment
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    // TODO: Probably shouldn't do this since the textarea itself should already have this role implied.
+    return aria.Role.TEXTBOX;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return 'DoNotOverride?';
   }
 }

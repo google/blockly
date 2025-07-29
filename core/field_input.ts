@@ -774,6 +774,16 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
   protected getValueFromEditorText_(text: string): AnyDuringMigration {
     return text;
   }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.TEXTBOX;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return this.name ? `Text ${this.name}` : 'Text';
+  }
 }
 
 /**

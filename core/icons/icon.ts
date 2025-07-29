@@ -11,6 +11,7 @@ import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
 import type {IIcon} from '../interfaces/i_icon.js';
 import * as tooltip from '../tooltip.js';
+import { aria } from '../utils.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as idGenerator from '../utils/idgenerator.js';
@@ -176,6 +177,16 @@ export abstract class Icon implements IIcon {
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.FIGURE;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return 'Icon';
   }
 
   /**

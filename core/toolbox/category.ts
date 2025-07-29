@@ -120,6 +120,7 @@ export class ToolboxCategory
     if (this.toolboxItemDef_['hidden'] === 'true') {
       this.hide();
     }
+    super.initAria();
   }
 
   /**
@@ -189,7 +190,6 @@ export class ToolboxCategory
    */
   protected createDom_(): HTMLDivElement {
     this.htmlDiv_ = this.createContainer_();
-    aria.setRole(this.htmlDiv_, aria.Role.TREEITEM);
     aria.setState(this.htmlDiv_, aria.State.SELECTED, false);
     aria.setState(this.htmlDiv_, aria.State.LEVEL, this.level_ + 1);
 

@@ -14,6 +14,7 @@
 import * as Css from '../css.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import * as registry from '../registry.js';
+import { aria } from '../utils.js';
 import * as dom from '../utils/dom.js';
 import type * as toolbox from '../utils/toolbox.js';
 import {ToolboxItem} from './toolbox_item.js';
@@ -45,6 +46,7 @@ export class ToolboxSeparator extends ToolboxItem {
 
   override init() {
     this.createDom_();
+    super.initAria();
   }
 
   /**
@@ -72,6 +74,10 @@ export class ToolboxSeparator extends ToolboxItem {
 
   override dispose() {
     dom.removeNode(this.htmlDiv as HTMLDivElement);
+  }
+
+  override getAriaRole(): aria.Role | null {
+    return aria.Role.SEPARATOR;
   }
 }
 

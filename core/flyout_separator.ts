@@ -7,6 +7,7 @@
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import { aria } from './utils.js';
 import {Rect} from './utils/rect.js';
 
 /**
@@ -82,6 +83,16 @@ export class FlyoutSeparator implements IBoundedElement, IFocusableNode {
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return false;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.SEPARATOR;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return '';
   }
 }
 

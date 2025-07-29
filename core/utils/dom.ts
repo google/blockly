@@ -6,7 +6,8 @@
 
 // Former goog.module ID: Blockly.utils.dom
 
-import type {Svg} from './svg.js';
+import * as aria from '../utils/aria.js';
+import {Svg} from './svg.js';
 
 /**
  * Required name space for SVG elements.
@@ -54,6 +55,7 @@ export function createSvgElement<T extends SVGElement>(
   name: string | Svg<T>,
   attrs: {[key: string]: string | number},
   opt_parent?: Element | null,
+  ariaRole?: aria.Role
 ): T {
   const e = document.createElementNS(SVG_NS, `${name}`) as T;
   for (const key in attrs) {
@@ -61,6 +63,12 @@ export function createSvgElement<T extends SVGElement>(
   }
   if (opt_parent) {
     opt_parent.appendChild(e);
+  }
+  if (ariaRole) {
+    aria.setRole(e, ariaRole);
+  } else if (name === Svg.G || name === Svg.SVG) {
+    // TODO: Figure out a clean way to do this, this way is a bit ugly. Perhaps createSvgElement() specialization based on type?
+    aria.setRole(e, aria.Role.PRESENTATION);
   }
   return e;
 }

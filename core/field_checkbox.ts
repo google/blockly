@@ -16,6 +16,7 @@ import './events/events_block_change.js';
 
 import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import { aria } from './utils.js';
 import * as dom from './utils/dom.js';
 
 type BoolString = 'TRUE' | 'FALSE';
@@ -197,6 +198,16 @@ export class FieldCheckbox extends Field<CheckboxBool> {
    */
   override getText(): string {
     return String(this.convertValueToBool(this.value_));
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.CHECKBOX;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return this.name ? `Checkbox ${this.name}` : 'Checkbox';
   }
 
   /**

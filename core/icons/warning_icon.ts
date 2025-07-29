@@ -167,6 +167,10 @@ export class WarningIcon extends Icon implements IHasBubble {
     return false;
   }
 
+  override getAriaLabel(): string {
+    return this.bubbleIsVisible() ? 'Close Warning' : 'Open Warning';
+  }
+
   bubbleIsVisible(): boolean {
     return !!this.textBubble;
   }

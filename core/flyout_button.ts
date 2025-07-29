@@ -17,7 +17,7 @@ import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IRenderedElement} from './interfaces/i_rendered_element.js';
-import {idGenerator} from './utils.js';
+import {aria, idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -406,6 +406,16 @@ export class FlyoutButton
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.BUTTON;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return 'Button';
   }
 }
 

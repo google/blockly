@@ -15,9 +15,11 @@ import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import { aria } from '../utils.js';
 import * as idGenerator from '../utils/idgenerator.js';
 import type * as toolbox from '../utils/toolbox.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
+import { Toolbox } from './toolbox.js';
 
 /**
  * Class for an item in the toolbox.
@@ -69,6 +71,12 @@ export class ToolboxItem implements IToolboxItem {
    */
   init() {}
   // No-op by default.
+
+  initAria() {
+    // TODO: Figure out a cleaner way to do this (need to set role ahead of time for tree to behave correctly with readout).
+    aria.setRole(this.getFocusableElement(), this.getAriaRole());
+    (this.parentToolbox_ as Toolbox).recomputeAriaOwners();
+  }
 
   /**
    * Gets the div for the toolbox item.
@@ -176,6 +184,18 @@ export class ToolboxItem implements IToolboxItem {
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    // TODO: Figure out a correct default here.
+    return aria.Role.TREEITEM;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    // TODO: Figure out a correct default here.
+    return '';
   }
 }
 // nop by default

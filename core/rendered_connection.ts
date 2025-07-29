@@ -25,6 +25,7 @@ import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
+import { aria } from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as svgMath from './utils/svg_math.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -654,6 +655,16 @@ export class RenderedConnection
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.FIGURE;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return 'Open connection';
   }
 
   private findHighlightSvg(): SVGElement | null {

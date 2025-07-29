@@ -264,6 +264,10 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
     return false;
   }
 
+  override getAriaLabel(): string {
+    return this.bubbleIsVisible() ? 'Close Comment' : 'Open Comment';
+  }
+
   /**
    * Updates the text of this comment in response to changes in the text of
    * the input bubble.

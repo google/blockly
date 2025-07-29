@@ -54,6 +54,15 @@ export enum Role {
 
   // ARIA role for a live region providing information.
   STATUS = 'status',
+
+  REGION = 'region',
+  IMAGE = 'image',
+  FIGURE = 'figure',
+  BUTTON = 'button',
+  CHECKBOX = 'checkbox',
+  TEXTBOX = 'textbox',
+
+  APPLICATION = 'application',
 }
 
 /**
@@ -121,6 +130,10 @@ export enum State {
   // ARIA property for removing elements from the accessibility tree.
   // Value: one of {true, false, undefined}.
   HIDDEN = 'hidden',
+
+  ROLEDESCRIPTION = 'roledescription',
+
+  ATOMIC = 'atomic',
 }
 
 /**
@@ -128,11 +141,23 @@ export enum State {
  *
  * Similar to Closure's goog.a11y.aria
  *
- * @param element DOM node to set role of.
+ * @param element DOM node to set role of, or null to remove any set role.
  * @param roleName Role name.
  */
-export function setRole(element: Element, roleName: Role) {
-  element.setAttribute(ROLE_ATTRIBUTE, roleName);
+export function setRole(element: Element, roleName: Role | null) {
+  if (roleName) {
+    element.setAttribute(ROLE_ATTRIBUTE, roleName);
+  } else element.removeAttribute(ROLE_ATTRIBUTE);
+}
+
+export function getRole(element: Element): Role | null {
+  // This is an unsafe cast which is why it needs to be checked to ensure that
+  // it references a valid role.
+  const currentRoleName = element.getAttribute(ROLE_ATTRIBUTE) as Role;
+  if (Object.values(Role).includes(currentRoleName)) {
+    return currentRoleName;
+  }
+  return null;
 }
 
 /**
@@ -155,4 +180,9 @@ export function setState(
   }
   const attrStateName = ARIA_PREFIX + stateName;
   element.setAttribute(attrStateName, `${value}`);
+}
+
+export function getState(element: Element, stateName: State): string | null {
+  const attrStateName = ARIA_PREFIX + stateName;
+  return element.getAttribute(attrStateName);
 }

@@ -43,6 +43,7 @@ import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceSvg} from './workspace_svg.js';
+import * as aria from './utils/aria.js';
 
 /**
  * A function that is called to validate changes to the field's value before
@@ -398,6 +399,9 @@ export abstract class Field<T = any>
       },
       this.fieldGroup_,
     );
+    // The text itself is presentation since it's represented through the
+    // block's ARIA label.
+    aria.setState(this.textElement_, aria.State.HIDDEN, true);
     if (this.getConstants()!.FIELD_TEXT_BASELINE_CENTER) {
       this.textElement_.setAttribute('dominant-baseline', 'central');
     }
@@ -1393,6 +1397,12 @@ export abstract class Field<T = any>
   canBeFocused(): boolean {
     return true;
   }
+
+  /** See IFocusableNode.getAriaRole. */
+  abstract getAriaRole(): aria.Role | null;
+
+  /** See IFocusableNode.getAriaLabel. */
+  abstract getAriaLabel(): string;
 
   /**
    * Subclasses should reimplement this method to construct their Field

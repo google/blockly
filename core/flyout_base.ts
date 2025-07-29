@@ -33,6 +33,7 @@ import * as renderManagement from './render_management.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import {SEPARATOR_TYPE} from './separator_flyout_inflater.js';
 import * as blocks from './serialization/blocks.js';
+import { aria } from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
@@ -993,6 +994,16 @@ export abstract class Flyout
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return false;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    throw new Error('Flyouts are not directly focusable.');
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    throw new Error('Flyouts are not directly focusable.');
   }
 
   /**

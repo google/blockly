@@ -13,6 +13,7 @@
 
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import { aria } from './utils.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
@@ -252,6 +253,17 @@ export class FieldImage extends Field<string> {
    */
   protected override getText_(): string | null {
     return this.altText;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.IMAGE;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    // TODO: This one is used unexpectedly (such as for string input). May need special casing.
+    return this.name ? `Image ${this.name}` : 'Image';
   }
 
   /**

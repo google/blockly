@@ -1065,6 +1065,8 @@ export class Gesture {
     }
   }
 
+  getTargetBlock(): BlockSvg | null { return this.targetBlock; }
+
   /**
    * Record the workspace that a gesture started on.
    *

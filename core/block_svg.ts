@@ -55,7 +55,7 @@ import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
-import {idGenerator} from './utils.js';
+import {aria, idGenerator} from './utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
@@ -213,9 +213,18 @@ export class BlockSvg
     this.svgGroup.setAttribute('data-id', this.id);
 
     // The page-wide unique ID of this Block used for focusing.
+    this.svgGroup.id = idGenerator.getNextUniqueId();
     svgPath.id = idGenerator.getNextUniqueId();
 
+    // TODO: Figure out how to make this work better with trying to reduce redundant announcements.
+    // aria.setState(svgPath, aria.State.LIVE, 'off');
+    // aria.setState(svgPath, aria.State.ATOMIC, true);
+    aria.setState(svgPath, aria.State.ROLEDESCRIPTION, 'block');
+    aria.setRole(svgPath, this.getAriaRole());
+    svgPath.tabIndex = -1;
+
     this.doInit_();
+    aria.setState(this.getFocusableElement(), aria.State.LABEL, this.getAriaLabel());
   }
 
   /**
@@ -274,6 +283,75 @@ export class BlockSvg
     common.fireSelectedEvent(null);
   }
 
+  private getParentAriaGroup(): Element {
+    const surroundingParent = this.getSurroundParent();
+    if (surroundingParent) {
+      surroundingParent.ensureAriaConnectionToParent();
+
+      const parentGroupElem = surroundingParent.svgGroup;
+      if (aria.getRole(parentGroupElem) !== aria.Role.GROUP) {
+        aria.setRole(parentGroupElem, aria.Role.GROUP);
+        // If the parent isn't already a group, set it up as one and add it to
+        // its parent.
+        BlockSvg.addAriaOwner(surroundingParent.getFocusableElement(), parentGroupElem);
+      }
+      return parentGroupElem;
+    } else return this.workspace.getFocusableElement();
+  }
+
+  private ensureAriaConnectionToParent() {
+    // TODO: This needs to be centrally managed and set up to work across all types of workspace mutations.
+    // TODO: Figure out if we ever need to set aria-owns for the groups for the tree items, or just the groups themselves.
+    //  It seems that https://www.w3.org/WAI/ARIA/apg/patterns/treeview/examples/treeview-navigation/ only does the latter.
+    BlockSvg.addAriaOwner(this.getParentAriaGroup(), this.getFocusableElement());
+  }
+
+  // TODO: Support deregistering.
+  private static addAriaOwner(treeItemElement: Element, groupElement: Element) {
+    const ariaChildren = treeItemElement.getAttribute('aria-owns')?.split(' ') ?? [];
+    ariaChildren.push(groupElement.id);
+    treeItemElement.setAttribute('aria-owns', [... new Set(ariaChildren)].join(' '));
+  }
+
+  // TODO: Do this efficiently (probably centrally).
+  private recomputeAriaTreeItemDetailsRecursively() {
+    const elem = this.getFocusableElement();
+    const connection = this.currentConnectionCandidate;
+    let childPosition: number;
+    let parentsChildCount: number;
+    let hierarchyDepth: number;
+    if (connection) {
+      // If the block is being inserted into a new location, the position is hypothetical.
+      // TODO: Figure out how to deal with output connections.
+      let surroundParent: BlockSvg | null;
+      let siblingBlocks: BlockSvg[];
+      if (connection.type === ConnectionType.INPUT_VALUE) {
+        surroundParent = connection.sourceBlock_;
+        siblingBlocks = this.collectSiblingBlocks(surroundParent);
+        // The block is being added as a child since it's input.
+        // TODO: Figure out how to compute the correct position.
+        childPosition = 1;
+      } else {
+        surroundParent = connection.sourceBlock_.getSurroundParent();
+        siblingBlocks = this.collectSiblingBlocks(surroundParent);
+        // The block is being added after the connected block.
+        childPosition = siblingBlocks.indexOf(connection.sourceBlock_) + 2;
+      }
+      parentsChildCount = siblingBlocks.length + 1;
+      hierarchyDepth = surroundParent ? surroundParent.computeLevelInWorkspace() + 1 : 1;
+    } else {
+      const surroundParent = this.getSurroundParent();
+      const siblingBlocks = this.collectSiblingBlocks(surroundParent);
+      childPosition = siblingBlocks.indexOf(this) + 1;
+      parentsChildCount = siblingBlocks.length;
+      hierarchyDepth = this.computeLevelInWorkspace() + 1;
+    }
+    elem.setAttribute('aria-posinset', `${childPosition}`);
+    elem.setAttribute('aria-setsize', `${parentsChildCount}`);
+    elem.setAttribute('aria-level', `${hierarchyDepth}`);
+    this.getChildren(false).forEach((block) => block.recomputeAriaTreeItemDetailsRecursively());
+  }
+
   /**
    * Sets the parent of this block to be a new block or null.
    *
@@ -289,6 +367,35 @@ export class BlockSvg
     dom.startTextWidthCache();
     super.setParent(newParent);
     dom.stopTextWidthCache();
+
+    // ATTEMPT 3
+    // this.ensureAriaConnectionToParent();
+
+    // ATTEMPT 2 of tree item
+    // const surroundingParent = this.getSurroundParent();
+    // if (surroundingParent) {
+    //   const elem = surroundingParent.getFocusableElement();
+    //   const parentGroupElem = surroundingParent.svgGroup;
+    //   if (aria.getRole(parentGroupElem) !== aria.Role.GROUP) {
+    //     // If the parent isn't already a group, then it needs to be set up as
+    //     // one.
+    //     aria.setRole(parentGroupElem, aria.Role.GROUP);
+    //     const grandparent = surroundingParent.getSurroundParent();
+    //     if (grandparent) {
+    //       // Update the grandparent to own this group.
+    //     } else {
+    //       // Update the workspace to own this group since it's top-level.
+    //       const workspaceRoot = this.workspace.getFocusableElement();
+    //       const ariaChildren = elem.getAttribute('aria-owns')?.split(' ') ?? [];
+    //       ariaChildren.push(elem.id);
+    //       elem.setAttribute('aria-owns', [... new Set(ariaChildren)].join(' '));
+    //     }
+    //   }
+
+    //   const ariaChildren = workspaceRoot.getAttribute('aria-owns')?.split(' ') ?? [];
+    //   ariaChildren.push(this.getFocusableElement().id);
+    //   elem.setAttribute('aria-owns', [... new Set(ariaChildren)].join(' '));
+    // }
 
     const svgRoot = this.getSvgRoot();
 
@@ -342,6 +449,9 @@ export class BlockSvg
     }
 
     this.applyColour();
+
+    // ATTEMPT 4 (full cheating without custom English gen).
+    this.workspace.getTopBlocks(false).forEach((block) => (block as BlockSvg).recomputeAriaTreeItemDetailsRecursively());
   }
 
   /**
@@ -1772,21 +1882,31 @@ export class BlockSvg
   /** Starts a drag on the block. */
   startDrag(e?: PointerEvent): void {
     this.dragStrategy.startDrag(e);
+    this.currentConnectionCandidate = (this.dragStrategy as BlockDragStrategy).connectionCandidate?.neighbour ?? null;
+    this.announceDynamicAriaState(true, false);
   }
+
+  // TODO: Since it's event-driven, this can probably be replaced with just locals.
+  private currentConnectionCandidate: RenderedConnection | null = null;
 
   /** Drags the block to the given location. */
   drag(newLoc: Coordinate, e?: PointerEvent): void {
     this.dragStrategy.drag(newLoc, e);
+    this.currentConnectionCandidate = (this.dragStrategy as BlockDragStrategy).connectionCandidate?.neighbour ?? null;
+    this.announceDynamicAriaState(true, false, newLoc);
   }
 
   /** Ends the drag on the block. */
   endDrag(e?: PointerEvent): void {
     this.dragStrategy.endDrag(e);
+    this.currentConnectionCandidate = null;
+    this.announceDynamicAriaState(false, false);
   }
 
   /** Moves the block back to where it was at the start of a drag. */
   revertDrag(): void {
     this.dragStrategy.revertDrag();
+    this.announceDynamicAriaState(false, true);
   }
 
   /**
@@ -1840,15 +1960,120 @@ export class BlockSvg
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
     this.select();
+    aria.setState(this.pathObject.svgPath, aria.State.SELECTED, true);
   }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {
+    aria.setState(this.pathObject.svgPath, aria.State.SELECTED, false);
     this.unselect();
   }
 
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    return aria.Role.TREEITEM;
+  }
+
+  private announceDynamicAriaState(isMoving: boolean, isCanceled: boolean, newLoc?: Coordinate) {
+    // this.recomputeAriaTreeItemDetailsRecursively();
+    // const label = this.getAriaLabel();
+    // aria.setState(this.getFocusableElement(), aria.State.LABEL, label);
+    const connection = this.currentConnectionCandidate;
+    const ariaAnnouncementSpan = document.getElementById('blocklyAriaAnnounce');
+    if (!ariaAnnouncementSpan) return;
+    if (isCanceled) {
+      ariaAnnouncementSpan.innerHTML = 'Canceled movement';
+      return;
+    }
+    if (!isMoving) return;
+    if (connection) {
+      // const newParentBlock = newConnection?.sourceBlock_ as BlockSvg | undefined;
+      // const newSurroundBlock = newParentBlock?.getSurroundParent();
+      // console.log('@@@@@ drag: go after:',newParentBlock?.getAriaLabel(), 'go under:',newSurroundBlock?.getAriaLabel());
+
+      // TODO: Figure out general detachment.
+      // TODO: Figure out how to deal with output connections.
+      let surroundParent: BlockSvg | null = connection.sourceBlock_;
+      const announcementContext = [];
+      announcementContext.push('Moving'); // TODO: Specialize for inserting?
+      // NB: Old code here doesn't seem to handle parents correctly.
+      if (connection.type === ConnectionType.INPUT_VALUE) {
+        // surroundParent = connection.sourceBlock_;
+        announcementContext.push('to','input','of');
+      } else {
+      //   surroundParent = connection.sourceBlock_.getSurroundParent();
+      announcementContext.push('to','child','of');
+      }
+      announcementContext.push(surroundParent.getAriaLabel());
+
+      // if (this.workspace.getMovingBlock() === this) {
+      //   fieldLabels.push('Moving');
+      // }
+
+      // If the block is currently being moved, announce the new block label so that the user understands where it is now.
+      // TODO: Figure out how much recomputeAriaTreeItemDetailsRecursively needs to anticipate position if it won't be reannounced, and how much of that context should be included in the liveannouncement.
+      ariaAnnouncementSpan.innerHTML = announcementContext.join(' ');
+    } else if (newLoc) {
+      // The block is being freely dragged.
+      ariaAnnouncementSpan.innerHTML = `Moving unconstrained to coordinate x ${Math.round(newLoc.x)} and y ${Math.round(newLoc.y)}.`;
+    }
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    // TODO: Blocks probably need to define their aria label as part of their block definition, but
+    // it can be guessed based on its field labels.
+
+    if (this.isShadow()) {
+      // Shadow blocks are best represented directly by their field since they
+      // effectively operate like a field does for keyboard navigation purposes.
+      const field = Array.from(this.getFields())[0];
+      return field.getAriaLabel();
+    }
+
+    // TODO: Localize this (is it even possible?).
+    const fieldLabels = [];
+    for (const field of this.getFields()) {
+      if (field instanceof FieldLabel) {
+        fieldLabels.push(field.getText());
+      }
+    }
+    // const siblingBlocks = this.collectSiblingBlocks();
+    // fieldLabels.push('Block');
+    // fieldLabels.push(`${siblingBlocks.indexOf(this) + 1}`);
+    // fieldLabels.push('of');
+    // fieldLabels.push(`${siblingBlocks.length}`);
+    // fieldLabels.push('Level');
+    // fieldLabels.push(`${this.computeLevelInWorkspace() + 1}`);
+    return fieldLabels.join(' ');
+  }
+
+  private collectSiblingBlocks(surroundParent: BlockSvg | null): BlockSvg[] {
+    // NOTE TO DEVELOPERS: it's very important that these are NOT sorted. The
+    // returned list needs to be relatively stable for consistency block indexes
+    // read out to users via screen readers.
+    if (surroundParent) {
+      // Start from the first sibling and iterate in navigation order.
+      const firstSibling: BlockSvg = surroundParent.getChildren(false)[0];
+      const siblings: BlockSvg[] = [firstSibling];
+      let nextSibling: BlockSvg | null = firstSibling;
+      while (nextSibling = nextSibling.getNextBlock()) {
+        siblings.push(nextSibling);
+      }
+      return siblings;
+    } else {
+      // For top-level blocks, simply return those from the workspace.
+      return this.workspace.getTopBlocks(false);
+    }
+  }
+
+  private computeLevelInWorkspace(): number {
+    const surroundParent = this.getSurroundParent();
+    return surroundParent ? surroundParent.computeLevelInWorkspace() + 1 : 0;
   }
 }

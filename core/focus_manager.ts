@@ -6,6 +6,7 @@
 
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
+import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {FocusableTreeTraverser} from './utils/focusable_tree_traverser.js';
 
@@ -573,7 +574,18 @@ export class FocusManager {
       if (!elem.hasAttribute('tabindex')) elem.tabIndex = -1;
     }
 
+    // Ensure the node's role and label are up-to-date.
+    const nodeRole = node.getAriaRole();
+    const nodeLabel = node.getAriaLabel();
+    if (aria.getRole(elem) !== nodeRole) {
+      aria.setRole(elem, nodeRole);
+    }
+    if (aria.getState(elem, aria.State.LABEL) !== nodeLabel) {
+      aria.setState(elem, aria.State.LABEL, nodeLabel);
+    }
+
     this.setNodeToVisualActiveFocus(node);
+    console.log('@@@@@@ focus element', elem.id);
     elem.focus();
   }
 

@@ -161,6 +161,10 @@ export class MutatorIcon extends Icon implements IHasBubble {
     return false;
   }
 
+  override getAriaLabel(): string {
+    return this.bubbleIsVisible() ? 'Close Mutator' : 'Open Mutator';
+  }
+
   bubbleIsVisible(): boolean {
     return !!this.miniWorkspaceBubble;
   }

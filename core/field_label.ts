@@ -14,6 +14,7 @@
 
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import { aria } from './utils.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 
@@ -109,6 +110,18 @@ export class FieldLabel extends Field<string> {
       }
     }
     this.class = cssClass;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    // There's no additional semantic meaning needed for a label; the aria-label
+    // should be sufficient for context.
+    return null;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return this.getText();
   }
 
   /**

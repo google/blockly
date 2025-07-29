@@ -93,6 +93,7 @@ import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
 import {ZoomControls} from './zoom_controls.js';
+import { IDraggable, ISelectable } from './blockly.js';
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
 const ZOOM_TO_FIT_MARGIN = 20;
@@ -762,13 +763,7 @@ export class WorkspaceSvg
       'class': 'blocklyWorkspace',
       'id': this.id,
     });
-    if (injectionDiv) {
-      aria.setState(
-        this.svgGroup_,
-        aria.State.LABEL,
-        Msg['WORKSPACE_ARIA_LABEL'],
-      );
-    }
+    aria.setRole(this.svgGroup_, this.getAriaRole());
 
     // Note that a <g> alone does not receive mouse events--it must have a
     // valid target inside it.  If no background class is specified, as in the
@@ -1510,6 +1505,11 @@ export class WorkspaceSvg
       (this.currentGesture_ !== null && this.currentGesture_.isDragging())
     );
   }
+
+  private movingBlock_: (IDraggable & IFocusableNode & IBoundedElement & ISelectable) | null = null;
+
+  setMovingBlock(movingBlock: (IDraggable & IFocusableNode & IBoundedElement & ISelectable) | null) { this.movingBlock_ = movingBlock; }
+  getMovingBlock(): (IDraggable & IFocusableNode & IBoundedElement & ISelectable) | null { return this.movingBlock_; }
 
   /**
    * Is this workspace draggable?
@@ -2716,6 +2716,25 @@ export class WorkspaceSvg
     return true;
   }
 
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    // return aria.Role.REGION;
+    return aria.Role.TREE;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    if (this.injectionDiv) {
+      return Msg['WORKSPACE_ARIA_LABEL'];
+    } else if (this.isFlyout) {
+      return 'Flyout';
+    } else if (this.isMutator) {
+      return 'Mutator';
+    } else {
+      throw new Error('Cannot determine ARIA label for workspace.');
+    }
+  }
+
   /** See IFocusableTree.getRootFocusableNode. */
   getRootFocusableNode(): IFocusableNode {
     return this;
@@ -2893,7 +2912,7 @@ export class WorkspaceSvg
       const toolbox = this.targetWorkspace.getToolbox();
       if (toolbox && nextTree === toolbox) return;
       if (toolbox) toolbox.clearSelection();
-      if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
+      // if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
     }
   }
 

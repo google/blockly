@@ -9,6 +9,7 @@ import {getFocusManager} from '../focus_manager.js';
 import {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import * as touch from '../touch.js';
+import { aria } from '../utils.js';
 import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
@@ -179,13 +180,28 @@ export class CommentEditor implements IFocusableNode {
   getFocusableElement(): HTMLElement | SVGElement {
     return this.textArea;
   }
+
   getFocusableTree(): IFocusableTree {
     return this.workspace;
   }
+
   onNodeFocus(): void {}
+
   onNodeBlur(): void {}
+
   canBeFocused(): boolean {
     if (this.id) return true;
     return false;
+  }
+
+  /** See IFocusableNode.getAriaRole. */
+  getAriaRole(): aria.Role | null {
+    // TODO: Probably shouldn't do this since the textarea itself should already have this role implied.
+    return aria.Role.TEXTBOX;
+  }
+
+  /** See IFocusableNode.getAriaLabel. */
+  getAriaLabel(): string {
+    return 'DoNotOverride?';
   }
 }

@@ -14,6 +14,7 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
+import {CommentBarButton} from '../comments/comment_bar_button.js';
 import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
 import {Field} from '../field.js';
 import {getFocusManager} from '../focus_manager.js';
@@ -403,6 +404,9 @@ export class LineCursor extends Marker {
       );
     } else if (newNode instanceof RenderedWorkspaceComment) {
       newNode.workspace.scrollBoundsIntoView(newNode.getBoundingRectangle());
+    } else if (newNode instanceof CommentBarButton) {
+      const comment = newNode.getParentComment();
+      comment.workspace.scrollBoundsIntoView(comment.getBoundingRectangle());
     }
   }
 

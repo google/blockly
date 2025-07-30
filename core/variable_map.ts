@@ -255,9 +255,9 @@ export class VariableMap
     }
     const id = opt_id || idGenerator.genUid();
     const type = opt_type || '';
-    const VariableModel = registry.getObject(
+    const VariableModel = registry.getClassFromOptions(
       registry.Type.VARIABLE_MODEL,
-      registry.DEFAULT,
+      this.workspace.options,
       true,
     );
     if (!VariableModel) {

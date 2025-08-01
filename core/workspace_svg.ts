@@ -1674,7 +1674,10 @@ export class WorkspaceSvg
   /** Clean up the workspace by ordering all the blocks in a column such that none overlap. */
   cleanUp() {
     this.setResizesEnabled(false);
-    eventUtils.setGroup(true);
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
 
     const topBlocks = this.getTopBlocks(true);
     const movableBlocks = topBlocks.filter((block) => block.isMovable());
@@ -1722,7 +1725,7 @@ export class WorkspaceSvg
         block.getHeightWidth().height +
         minBlockHeight;
     }
-    eventUtils.setGroup(false);
+    eventUtils.setGroup(existingGroup);
     this.setResizesEnabled(true);
   }
 

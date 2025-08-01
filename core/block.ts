@@ -1118,7 +1118,7 @@ export class Block {
    *
    * @yields A generator that can be used to iterate the fields on the block.
    */
-  *getFields(): Generator<Field> {
+  *getFields(): Generator<Field, undefined, void> {
     for (const input of this.inputList) {
       for (const field of input.fieldRow) {
         yield field;

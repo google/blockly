@@ -20,6 +20,7 @@ import {Field} from '../field.js';
 import {getFocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
+import {Rect} from '../utils/rect.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 import {Marker} from './marker.js';
 
@@ -405,8 +406,16 @@ export class LineCursor extends Marker {
     } else if (newNode instanceof RenderedWorkspaceComment) {
       newNode.workspace.scrollBoundsIntoView(newNode.getBoundingRectangle());
     } else if (newNode instanceof CommentBarButton) {
-      const comment = newNode.getParentComment();
-      comment.workspace.scrollBoundsIntoView(comment.getBoundingRectangle());
+      const commentView = newNode.getCommentView();
+      const xy = commentView.getRelativeToSurfaceXY();
+      const size = commentView.getSize();
+      const bounds = new Rect(
+        xy.y,
+        xy.y + size.height,
+        xy.x,
+        xy.x + size.width,
+      );
+      commentView.workspace.scrollBoundsIntoView(bounds);
     }
   }
 

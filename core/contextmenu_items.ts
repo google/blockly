@@ -368,14 +368,15 @@ export function registerComment() {
     preconditionFn(scope: Scope) {
       const block = scope.block;
       if (
-        !block!.isInFlyout &&
-        block!.workspace.options.comments &&
-        !block!.isCollapsed() &&
-        block!.isEditable() &&
+        block &&
+        !block.isInFlyout &&
+        block.workspace.options.comments &&
+        !block.isCollapsed() &&
+        block.isEditable() &&
         // Either block already has a comment so let us remove it,
         // or the block isn't just one full-block field block, which
         // shouldn't be allowed to have comments as there's no way to read them.
-        (block!.hasIcon(CommentIcon.TYPE) || !isFullBlockField(block))
+        (block.hasIcon(CommentIcon.TYPE) || !isFullBlockField(block))
       ) {
         return 'enabled';
       }
@@ -383,8 +384,8 @@ export function registerComment() {
     },
     callback(scope: Scope) {
       const block = scope.block;
-      if (block!.hasIcon(CommentIcon.TYPE)) {
-        block!.setCommentText(null);
+      if (block && block.hasIcon(CommentIcon.TYPE)) {
+        block.setCommentText(null);
       } else {
         block!.setCommentText('');
       }

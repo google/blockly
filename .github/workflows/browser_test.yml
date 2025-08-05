@@ -35,15 +35,14 @@ jobs:
       - name: Checkout core Blockly
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          ref: 'develop'
           path: core-blockly
 
       - name: Checkout samples plugin
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
           repository: 'google/blockly-samples'
-          ref: 'main'
+          ref: 'master'
           path: blockly-samples
 
       - name: Use Node.js 20.x

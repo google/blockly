@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: 'develop'
-          path: core-blockly
+          path: blockly-core
 
       - name: Checkout samples plugin
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
 
       - name: NPM install
         run: |
-          cd core-blockly
+          cd blockly-core
           npm install
           cd ..
           cd blockly-samples
@@ -70,10 +70,9 @@ jobs:
           cd ..
 
       - name: Run Test
+        env:
+          CI: true
         run: |
           cd blockly-core
           npm run test:browser
           cd ..
-
-        env:
-          CI: true

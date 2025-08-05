@@ -27,7 +27,7 @@ jobs:
       - name: Checkout core Blockly
         uses: actions/checkout@v4
         with:
-          path: core-blockly
+          path: blockly-core
 
       - name: Checkout keyboard navigation plugin
         uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
 
       - name: NPM install
         run: |
-          cd core-blockly
+          cd blockly-core
           npm install
           cd ..
           cd blockly-keyboard-experimentation
@@ -52,7 +52,7 @@ jobs:
 
       - name: Link latest core develop with plugin
         run: |
-          cd core-blockly
+          cd blockly-core
           npm run package
           cd dist
           npm link

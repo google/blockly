@@ -41,6 +41,7 @@ jobs:
       - name: Checkout samples plugin
         uses: actions/checkout@v4
         with:
+          persist-credentials: false
           repository: 'google/blockly-samples'
           ref: 'main'
           path: blockly-samples

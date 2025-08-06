@@ -7,7 +7,7 @@ on:
   pull_request:
   push:
     branches:
-      - develop
+      - add-screen-reader-support-experimental
 
 permissions:
   contents: read
@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'google/blockly-keyboard-experimentation'
-          ref: 'main'
+          ref: 'add-screen-reader-support-experimental'
           path: blockly-keyboard-experimentation
 
       - name: Use Node.js 20.x

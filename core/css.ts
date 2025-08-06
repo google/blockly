@@ -241,7 +241,7 @@ let content = `
   cursor: default;
 }
 
-.blocklyIconGroup:not(:hover),
+.blocklyIconGroup:not(:hover):not(:focus),
 .blocklyIconGroupReadonly {
   opacity: .6;
 }

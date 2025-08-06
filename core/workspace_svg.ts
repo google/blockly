@@ -1674,7 +1674,10 @@ export class WorkspaceSvg
   /** Clean up the workspace by ordering all the blocks in a column such that none overlap. */
   cleanUp() {
     this.setResizesEnabled(false);
-    eventUtils.setGroup(true);
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
 
     const topBlocks = this.getTopBlocks(true);
     const movableBlocks = topBlocks.filter((block) => block.isMovable());
@@ -1722,7 +1725,7 @@ export class WorkspaceSvg
         block.getHeightWidth().height +
         minBlockHeight;
     }
-    eventUtils.setGroup(false);
+    eventUtils.setGroup(existingGroup);
     this.setResizesEnabled(true);
   }
 
@@ -2908,11 +2911,9 @@ export class WorkspaceSvg
       // Only hide the flyout if the flyout's workspace is losing focus and that
       // focus isn't returning to the flyout itself, the toolbox, or ephemeral.
       if (getFocusManager().ephemeralFocusTaken()) return;
-      const flyout = this.targetWorkspace.getFlyout();
       const toolbox = this.targetWorkspace.getToolbox();
       if (toolbox && nextTree === toolbox) return;
-      if (toolbox) toolbox.clearSelection();
-      if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
+      if (isAutoHideable(toolbox)) toolbox.autoHide(false);
     }
   }
 

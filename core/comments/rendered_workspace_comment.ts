@@ -280,6 +280,7 @@ export class RenderedWorkspaceComment
       paster: WorkspaceCommentPaster.TYPE,
       commentState: commentSerialization.save(this, {
         addCoordinates: true,
+        saveIds: false,
       }),
     };
   }

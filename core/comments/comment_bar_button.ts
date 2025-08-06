@@ -52,6 +52,8 @@ export abstract class CommentBarButton implements IFocusableNode {
     return comment;
   }
 
+  abstract initAria(): void;
+
   /** Adjusts the position of this button within its parent container. */
   abstract reposition(): void;
 

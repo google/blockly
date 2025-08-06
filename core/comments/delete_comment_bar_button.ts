@@ -11,6 +11,7 @@ import * as dom from '../utils/dom.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentBarButton} from './comment_bar_button.js';
+import * as aria from '../utils/aria.js';
 
 /**
  * Magic string appended to the comment ID to create a unique ID for this button.
@@ -67,6 +68,11 @@ export class DeleteCommentBarButton extends CommentBarButton {
    */
   dispose() {
     browserEvents.unbind(this.bindId);
+  }
+
+  override initAria(): void {
+    aria.setRole(this.icon, aria.Role.BUTTON);
+    aria.setState(this.icon, aria.State.LABEL, 'DoNotDefine?');
   }
 
   /**

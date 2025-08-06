@@ -23,6 +23,7 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
+import * as aria from '../utils/aria.js';
 
 /**
  * The abstract pop-up bubble class. This creates a UI that looks like a speech
@@ -142,6 +143,8 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
 
     this.focusableElement = overriddenFocusableElement ?? this.svgRoot;
     this.focusableElement.setAttribute('id', this.id);
+    aria.setRole(this.focusableElement, aria.Role.GROUP);
+    aria.setState(this.focusableElement, aria.State.LABEL, 'Bubble');
 
     browserEvents.conditionalBind(
       this.background,

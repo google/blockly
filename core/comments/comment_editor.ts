@@ -13,6 +13,7 @@ import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
+import * as aria from '../utils/aria.js';
 
 /**
  * String added to the ID of a workspace comment to identify
@@ -54,6 +55,8 @@ export class CommentEditor implements IFocusableNode {
     ) as HTMLTextAreaElement;
     this.textArea.setAttribute('tabindex', '-1');
     this.textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
+    aria.setRole(this.textArea, aria.Role.TEXTBOX);
+    aria.setState(this.textArea, aria.State.LABEL, 'DoNotDefine?');
     dom.addClass(this.textArea, 'blocklyCommentText');
     dom.addClass(this.textArea, 'blocklyTextarea');
     dom.addClass(this.textArea, 'blocklyText');

@@ -11,6 +11,7 @@ import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import {hasBubble} from '../interfaces/i_has_bubble.js';
 import type {IIcon} from '../interfaces/i_icon.js';
 import * as tooltip from '../tooltip.js';
+import * as aria from '../utils/aria.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as idGenerator from '../utils/idgenerator.js';
@@ -71,6 +72,9 @@ export abstract class Icon implements IIcon {
     );
     (this.svgRoot as any).tooltip = this;
     tooltip.bindMouseEvents(this.svgRoot);
+
+    aria.setRole(this.svgRoot, aria.Role.FIGURE);
+    aria.setState(this.svgRoot, aria.State.LABEL, 'Icon');
   }
 
   dispose(): void {

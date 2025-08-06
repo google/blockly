@@ -56,6 +56,7 @@ import * as blocks from './serialization/blocks.js';
 import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
 import {idGenerator} from './utils.js';
+import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
@@ -168,6 +169,8 @@ export class BlockSvg
   /** Whether this block is currently being dragged. */
   private dragging = false;
 
+  public currentConnectionCandidate: RenderedConnection | null = null;
+
   /**
    * The location of the top left of this block (in workspace coordinates)
    * relative to either its parent block, or the workspace origin if it has no
@@ -215,7 +218,67 @@ export class BlockSvg
     // The page-wide unique ID of this Block used for focusing.
     svgPath.id = idGenerator.getNextUniqueId();
 
+    aria.setState(svgPath, aria.State.ROLEDESCRIPTION, 'block');
+    aria.setRole(svgPath, aria.Role.TREEITEM);
+    this.recomputeAriaLabel();
+    svgPath.tabIndex = -1;
+    this.currentConnectionCandidate = null;
+
     this.doInit_();
+  }
+
+  private recomputeAriaLabel() {
+    aria.setState(
+      this.getFocusableElement(),
+      aria.State.LABEL,
+      this.computeAriaLabel(),
+    );
+  }
+
+  private computeAriaLabel(): string {
+    // Guess the block's aria label based on its field labels.
+    if (this.isShadow()) {
+      // TODO: Shadows may have more than one field.
+      // Shadow blocks are best represented directly by their field since they
+      // effectively operate like a field does for keyboard navigation purposes.
+      const field = Array.from(this.getFields())[0];
+      return (
+        aria.getState(field.getFocusableElement(), aria.State.LABEL) ??
+        'Unknown?'
+      );
+    }
+
+    const fieldLabels = [];
+    for (const field of this.getFields()) {
+      if (field instanceof FieldLabel) {
+        fieldLabels.push(field.getText());
+      }
+    }
+    return fieldLabels.join(' ');
+  }
+
+  collectSiblingBlocks(surroundParent: BlockSvg | null): BlockSvg[] {
+    // NOTE TO DEVELOPERS: it's very important that these are NOT sorted. The
+    // returned list needs to be relatively stable for consistency block indexes
+    // read out to users via screen readers.
+    if (surroundParent) {
+      // Start from the first sibling and iterate in navigation order.
+      const firstSibling: BlockSvg = surroundParent.getChildren(false)[0];
+      const siblings: BlockSvg[] = [firstSibling];
+      let nextSibling: BlockSvg | null = firstSibling;
+      while ((nextSibling = nextSibling.getNextBlock())) {
+        siblings.push(nextSibling);
+      }
+      return siblings;
+    } else {
+      // For top-level blocks, simply return those from the workspace.
+      return this.workspace.getTopBlocks(false);
+    }
+  }
+
+  computeLevelInWorkspace(): number {
+    const surroundParent = this.getSurroundParent();
+    return surroundParent ? surroundParent.computeLevelInWorkspace() + 1 : 0;
   }
 
   /**
@@ -266,12 +329,14 @@ export class BlockSvg
   select() {
     this.addSelect();
     common.fireSelectedEvent(this);
+    aria.setState(this.getFocusableElement(), aria.State.SELECTED, true);
   }
 
   /** Unselects this block. Unhighlights the block visually. */
   unselect() {
     this.removeSelect();
     common.fireSelectedEvent(null);
+    aria.setState(this.getFocusableElement(), aria.State.SELECTED, false);
   }
 
   /**
@@ -342,6 +407,8 @@ export class BlockSvg
     }
 
     this.applyColour();
+
+    this.workspace.recomputeAriaTree();
   }
 
   /**
@@ -1773,21 +1840,32 @@ export class BlockSvg
   /** Starts a drag on the block. */
   startDrag(e?: PointerEvent): void {
     this.dragStrategy.startDrag(e);
+    const dragStrategy = this.dragStrategy as BlockDragStrategy;
+    const candidate = dragStrategy.connectionCandidate?.neighbour ?? null;
+    this.currentConnectionCandidate = candidate;
+    this.announceDynamicAriaState(true, false);
   }
 
   /** Drags the block to the given location. */
   drag(newLoc: Coordinate, e?: PointerEvent): void {
     this.dragStrategy.drag(newLoc, e);
+    const dragStrategy = this.dragStrategy as BlockDragStrategy;
+    const candidate = dragStrategy.connectionCandidate?.neighbour ?? null;
+    this.currentConnectionCandidate = candidate;
+    this.announceDynamicAriaState(true, false, newLoc);
   }
 
   /** Ends the drag on the block. */
   endDrag(e?: PointerEvent): void {
     this.dragStrategy.endDrag(e);
+    this.currentConnectionCandidate = null;
+    this.announceDynamicAriaState(false, false);
   }
 
   /** Moves the block back to where it was at the start of a drag. */
   revertDrag(): void {
     this.dragStrategy.revertDrag();
+    this.announceDynamicAriaState(false, true);
   }
 
   /**
@@ -1851,5 +1929,55 @@ export class BlockSvg
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /**
+   * Announces the current dynamic state of the specified block, if any.
+   *
+   * An example of dynamic state is whether the block is currently being moved,
+   * and in what way. These states aren't represented through ARIA directly, so
+   * they need to be determined and announced using an ARIA live region
+   * (see aria.announceDynamicAriaState).
+   *
+   * @param block The block whose dynamic state should maybe be announced.
+   * @param isMoving Whether the specified block is currently being moved.
+   * @param isCanceled Whether the previous movement operation has been canceled.
+   * @param newLoc The new location the block is moving to (if unconstrained).
+   */
+  private announceDynamicAriaState(
+    isMoving: boolean,
+    isCanceled: boolean,
+    newLoc?: Coordinate,
+  ) {
+    if (isCanceled) {
+      aria.announceDynamicAriaState('Canceled movement');
+      return;
+    }
+    if (!isMoving) return;
+    if (this.currentConnectionCandidate) {
+      // TODO: Figure out general detachment.
+      // TODO: Figure out how to deal with output connections.
+      const surroundParent = this.currentConnectionCandidate.sourceBlock_;
+      const announcementContext = [];
+      announcementContext.push('Moving'); // TODO: Specialize for inserting?
+      // NB: Old code here doesn't seem to handle parents correctly.
+      if (this.currentConnectionCandidate.type === ConnectionType.INPUT_VALUE) {
+        announcementContext.push('to', 'input');
+      } else {
+        announcementContext.push('to', 'child');
+      }
+      if (surroundParent) {
+        announcementContext.push('of', surroundParent.computeAriaLabel());
+      }
+
+      // If the block is currently being moved, announce the new block label so that the user understands where it is now.
+      // TODO: Figure out how much recomputeAriaTreeItemDetailsRecursively needs to anticipate position if it won't be reannounced, and how much of that context should be included in the liveannouncement.
+      aria.announceDynamicAriaState(announcementContext.join(' '));
+    } else if (newLoc) {
+      // The block is being freely dragged.
+      aria.announceDynamicAriaState(
+        `Moving unconstrained to coordinate x ${Math.round(newLoc.x)} and y ${Math.round(newLoc.y)}.`,
+      );
+    }
   }
 }

@@ -196,6 +196,14 @@ export class FieldDropdown extends Field<string> {
       dom.addClass(this.fieldGroup_, 'blocklyField');
       dom.addClass(this.fieldGroup_, 'blocklyDropdownField');
     }
+
+    const element = this.getFocusableElement();
+    aria.setRole(element, aria.Role.LISTBOX);
+    aria.setState(
+      element,
+      aria.State.LABEL,
+      this.name ? `Item ${this.name}` : 'Item',
+    );
   }
 
   /**

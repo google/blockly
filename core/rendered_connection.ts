@@ -25,6 +25,7 @@ import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
+import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as svgMath from './utils/svg_math.js';
 import {WorkspaceSvg} from './workspace_svg.js';
@@ -332,6 +333,8 @@ export class RenderedConnection
     const highlightSvg = this.findHighlightSvg();
     if (highlightSvg) {
       highlightSvg.style.display = '';
+      aria.setRole(highlightSvg, aria.Role.FIGURE);
+      aria.setState(highlightSvg, aria.State.LABEL, 'Open connection');
     }
   }
 

@@ -10,6 +10,7 @@ import type {IFocusableNode} from '../interfaces/i_focusable_node';
 import {IRenderedElement} from '../interfaces/i_rendered_element.js';
 import * as layers from '../layers.js';
 import * as touch from '../touch.js';
+import * as aria from '../utils/aria.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as drag from '../utils/drag.js';
@@ -107,6 +108,9 @@ export class CommentView implements IRenderedElement {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable blocklyDraggable',
     });
+
+    aria.setRole(this.svgRoot, aria.Role.TEXTBOX);
+    aria.setState(this.svgRoot, aria.State.LABEL, 'DoNotOverride?');
 
     this.highlightRect = this.createHighlightRect(this.svgRoot);
 

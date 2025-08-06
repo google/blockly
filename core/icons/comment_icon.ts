@@ -15,6 +15,7 @@ import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import type {ISerializable} from '../interfaces/i_serializable.js';
 import * as renderManagement from '../render_management.js';
 import {Coordinate} from '../utils.js';
+import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
@@ -112,6 +113,16 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
       this.svgRoot,
     );
     dom.addClass(this.svgRoot!, 'blocklyCommentIcon');
+
+    this.recomputeAriaLabel();
+  }
+
+  private recomputeAriaLabel() {
+    aria.setState(
+      this.svgRoot!,
+      aria.State.LABEL,
+      this.bubbleIsVisible() ? 'Close Comment' : 'Open Comment',
+    );
   }
 
   override dispose() {
@@ -336,6 +347,8 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
         'comment',
       ),
     );
+
+    this.recomputeAriaLabel();
   }
 
   /** See IHasBubble.getBubble. */

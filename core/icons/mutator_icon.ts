@@ -16,6 +16,7 @@ import {EventType} from '../events/type.js';
 import * as eventUtils from '../events/utils.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
+import * as aria from '../utils/aria.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
@@ -119,6 +120,16 @@ export class MutatorIcon extends Icon implements IHasBubble {
       this.svgRoot,
     );
     dom.addClass(this.svgRoot!, 'blocklyMutatorIcon');
+
+    this.recomputeAriaLabel();
+  }
+
+  private recomputeAriaLabel() {
+    aria.setState(
+      this.svgRoot!,
+      aria.State.LABEL,
+      this.bubbleIsVisible() ? 'Close Mutator' : 'Open Mutator',
+    );
   }
 
   override dispose(): void {
@@ -201,6 +212,8 @@ export class MutatorIcon extends Icon implements IHasBubble {
         'mutator',
       ),
     );
+
+    this.recomputeAriaLabel();
   }
 
   /** See IHasBubble.getBubble. */

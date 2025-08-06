@@ -14,6 +14,7 @@
 
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 
@@ -77,6 +78,12 @@ export class FieldLabel extends Field<string> {
     if (this.fieldGroup_) {
       dom.addClass(this.fieldGroup_, 'blocklyLabelField');
     }
+
+    this.recomputeAriaLabel();
+  }
+
+  private recomputeAriaLabel() {
+    aria.setState(this.getFocusableElement(), aria.State.LABEL, this.getText());
   }
 
   /**
@@ -109,6 +116,13 @@ export class FieldLabel extends Field<string> {
       }
     }
     this.class = cssClass;
+  }
+
+  override setValue(newValue: any, fireChangeEvent?: boolean): void {
+    super.setValue(newValue, fireChangeEvent);
+    if (this.fieldGroup_) {
+      this.recomputeAriaLabel();
+    }
   }
 
   /**

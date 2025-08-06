@@ -50,7 +50,7 @@ export class BlockDragStrategy implements IDragStrategy {
 
   private startLoc: Coordinate | null = null;
 
-  private connectionCandidate: ConnectionCandidate | null = null;
+  public connectionCandidate: ConnectionCandidate | null = null;
 
   private connectionPreviewer: IConnectionPreviewer | null = null;
 

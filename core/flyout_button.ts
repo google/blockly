@@ -18,6 +18,7 @@ import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import type {IRenderedElement} from './interfaces/i_rendered_element.js';
 import {idGenerator} from './utils.js';
+import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -116,6 +117,9 @@ export class FlyoutButton
       {'id': this.id, 'class': cssClass},
       this.workspace.getCanvas(),
     );
+
+    aria.setRole(this.svgGroup, aria.Role.BUTTON);
+    aria.setState(this.svgGroup, aria.State.LABEL, 'Button');
 
     let shadow;
     if (!this.isFlyoutLabel) {

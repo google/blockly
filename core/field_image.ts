@@ -13,6 +13,7 @@
 
 import {Field, FieldConfig} from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
@@ -157,6 +158,14 @@ export class FieldImage extends Field<string> {
     if (this.clickHandler) {
       this.imageElement.style.cursor = 'pointer';
     }
+
+    const element = this.getFocusableElement();
+    aria.setRole(element, aria.Role.IMAGE);
+    aria.setState(
+      element,
+      aria.State.LABEL,
+      this.name ? `Image ${this.name}` : 'Image',
+    );
   }
 
   override updateSize_() {}

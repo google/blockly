@@ -16,6 +16,7 @@ import './events/events_block_change.js';
 
 import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
+import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 
 type BoolString = 'TRUE' | 'FALSE';
@@ -111,6 +112,14 @@ export class FieldCheckbox extends Field<CheckboxBool> {
     const textElement = this.getTextElement();
     dom.addClass(this.fieldGroup_!, 'blocklyCheckboxField');
     textElement.style.display = this.value_ ? 'block' : 'none';
+
+    const element = this.getFocusableElement();
+    aria.setRole(element, aria.Role.CHECKBOX);
+    aria.setState(
+      element,
+      aria.State.LABEL,
+      this.name ? `Checkbox ${this.name}` : 'Checkbox',
+    );
   }
 
   override render_() {

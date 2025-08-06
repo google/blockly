@@ -507,4 +507,12 @@ input[type=number] {
 ) {
   outline: none;
 }
+
+#blocklyAriaAnnounce {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: px;
+  overflow: hidden;
+}
 `;

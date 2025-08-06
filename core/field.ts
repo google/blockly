@@ -31,6 +31,7 @@ import {ISerializable} from './interfaces/i_serializable.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
 import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
+import * as aria from './utils/aria.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
@@ -403,6 +404,7 @@ export abstract class Field<T = any>
     }
     this.textContent_ = document.createTextNode('');
     this.textElement_.appendChild(this.textContent_);
+    aria.setState(this.textElement_, aria.State.HIDDEN, true);
   }
 
   /**

@@ -14,8 +14,10 @@
 import * as Css from '../css.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import * as registry from '../registry.js';
+import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
 import type * as toolbox from '../utils/toolbox.js';
+import {Toolbox} from './toolbox.js';
 import {ToolboxItem} from './toolbox_item.js';
 
 /**
@@ -63,6 +65,10 @@ export class ToolboxSeparator extends ToolboxItem {
       dom.addClass(container, className);
     }
     this.htmlDiv = container;
+
+    aria.setRole(this.htmlDiv, aria.Role.SEPARATOR);
+    (this.parentToolbox_ as Toolbox).recomputeAriaOwners();
+
     return container;
   }
 

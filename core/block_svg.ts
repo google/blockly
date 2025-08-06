@@ -220,11 +220,13 @@ export class BlockSvg
 
     aria.setState(svgPath, aria.State.ROLEDESCRIPTION, 'block');
     aria.setRole(svgPath, aria.Role.TREEITEM);
-    this.recomputeAriaLabel();
     svgPath.tabIndex = -1;
     this.currentConnectionCandidate = null;
 
     this.doInit_();
+
+    // Note: This must be done after initialization of the block's fields.
+    this.recomputeAriaLabel();
   }
 
   private recomputeAriaLabel() {

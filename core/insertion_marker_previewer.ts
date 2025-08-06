@@ -150,8 +150,17 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
     return markerConn;
   }
 
-  private createInsertionMarker(origBlock: BlockSvg) {
-    const blockJson = blocks.save(origBlock, {
+  /**
+   * Transforms the given block into a JSON representation used to construct an
+   * insertion marker.
+   *
+   * @param block The block to serialize and use as an insertion marker.
+   * @returns A JSON-formatted string corresponding to a serialized
+   *     representation of the given block suitable for use as an insertion
+   *     marker.
+   */
+  protected serializeBlockToInsertionMarker(block: BlockSvg) {
+    const blockJson = blocks.save(block, {
       addCoordinates: false,
       addInputBlocks: false,
       addNextBlocks: false,
@@ -160,10 +169,15 @@ export class InsertionMarkerPreviewer implements IConnectionPreviewer {
 
     if (!blockJson) {
       throw new Error(
-        `Failed to serialize source block. ${origBlock.toDevString()}`,
+        `Failed to serialize source block. ${block.toDevString()}`,
       );
     }
 
+    return blockJson;
+  }
+
+  private createInsertionMarker(origBlock: BlockSvg) {
+    const blockJson = this.serializeBlockToInsertionMarker(origBlock);
     const result = blocks.append(blockJson, this.workspace) as BlockSvg;
 
     // Turn shadow blocks that are created programmatically during

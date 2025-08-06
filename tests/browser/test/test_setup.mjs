@@ -128,6 +128,23 @@ export const screenDirection = {
 };
 
 /**
+ * Focuses and selects a block with the provided ID.
+ *
+ * This throws an error if no block exists for the specified ID.
+ *
+ * @param browser The active WebdriverIO Browser object.
+ * @param blockId The ID of the block to select.
+ */
+export async function focusOnBlock(browser, blockId) {
+  return await browser.execute((blockId) => {
+    const workspaceSvg = Blockly.getMainWorkspace();
+    const block = workspaceSvg.getBlockById(blockId);
+    if (!block) throw new Error(`No block found with ID: ${blockId}.`);
+    Blockly.getFocusManager().focusNode(block);
+  }, blockId);
+}
+
+/**
  * @param browser The active WebdriverIO Browser object.
  * @return A Promise that resolves to the ID of the currently selected block.
  */
@@ -135,6 +152,17 @@ export async function getSelectedBlockId(browser) {
   return await browser.execute(() => {
     // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
     return Blockly.common.getSelected()?.id;
+  });
+}
+
+/**
+ * @param browser The active WebdriverIO Browser object.
+ * @return A Promise that resolves to the ID of the currently selected block.
+ */
+export async function getSelectedBlockType(browser) {
+  return await browser.execute(() => {
+    // Note: selected is an ICopyable and I am assuming that it is a BlockSvg.
+    return Blockly.common.getSelected()?.type;
   });
 }
 

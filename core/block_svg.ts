@@ -1941,7 +1941,6 @@ export class BlockSvg
    * they need to be determined and announced using an ARIA live region
    * (see aria.announceDynamicAriaState).
    *
-   * @param block The block whose dynamic state should maybe be announced.
    * @param isMoving Whether the specified block is currently being moved.
    * @param isCanceled Whether the previous movement operation has been canceled.
    * @param newLoc The new location the block is moving to (if unconstrained).

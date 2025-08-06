@@ -7,11 +7,11 @@
 import * as browserEvents from '../browser_events.js';
 import {getFocusManager} from '../focus_manager.js';
 import * as touch from '../touch.js';
+import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import {CommentBarButton} from './comment_bar_button.js';
-import * as aria from '../utils/aria.js';
 
 /**
  * Magic string appended to the comment ID to create a unique ID for this button.

@@ -9,11 +9,11 @@ import {getFocusManager} from '../focus_manager.js';
 import {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import * as touch from '../touch.js';
+import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import * as aria from '../utils/aria.js';
 
 /**
  * String added to the ID of a workspace comment to identify

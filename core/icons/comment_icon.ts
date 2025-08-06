@@ -118,11 +118,13 @@ export class CommentIcon extends Icon implements IHasBubble, ISerializable {
   }
 
   private recomputeAriaLabel() {
-    aria.setState(
-      this.svgRoot!,
-      aria.State.LABEL,
-      this.bubbleIsVisible() ? 'Close Comment' : 'Open Comment',
-    );
+    if (this.svgRoot) {
+      aria.setState(
+        this.svgRoot,
+        aria.State.LABEL,
+        this.bubbleIsVisible() ? 'Close Comment' : 'Open Comment',
+      );
+    }
   }
 
   override dispose() {

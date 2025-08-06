@@ -15,6 +15,7 @@ import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
+import * as aria from '../utils/aria.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as idGenerator from '../utils/idgenerator.js';
@@ -23,7 +24,6 @@ import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
-import * as aria from '../utils/aria.js';
 
 /**
  * The abstract pop-up bubble class. This creates a UI that looks like a speech

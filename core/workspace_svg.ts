@@ -773,7 +773,9 @@ export class WorkspaceSvg
     } else if (this.isMutator) {
       ariaLabel = 'Mutator';
     } else {
-      throw new Error('Cannot determine ARIA label for workspace.');
+      // This case can happen in some test scenarios.
+      // TODO: Figure out when this can happen in non-test scenarios (if ever).
+      ariaLabel = 'Workspace';
     }
     aria.setState(this.svgGroup_, aria.State.LABEL, ariaLabel);
     aria.setRole(this.svgGroup_, aria.Role.TREE);

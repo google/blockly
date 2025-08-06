@@ -15,6 +15,7 @@ import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
+import * as aria from '../utils/aria.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as idGenerator from '../utils/idgenerator.js';
@@ -142,6 +143,8 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
 
     this.focusableElement = overriddenFocusableElement ?? this.svgRoot;
     this.focusableElement.setAttribute('id', this.id);
+    aria.setRole(this.focusableElement, aria.Role.GROUP);
+    aria.setState(this.focusableElement, aria.State.LABEL, 'Bubble');
 
     browserEvents.conditionalBind(
       this.background,

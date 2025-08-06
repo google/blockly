@@ -14,6 +14,7 @@ import type {IBubble} from '../interfaces/i_bubble.js';
 import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as renderManagement from '../render_management.js';
 import {Size} from '../utils.js';
+import * as aria from '../utils/aria.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import {Rect} from '../utils/rect.js';
@@ -92,6 +93,16 @@ export class WarningIcon extends Icon implements IHasBubble {
       this.svgRoot,
     );
     dom.addClass(this.svgRoot!, 'blocklyWarningIcon');
+
+    this.recomputeAriaLabel();
+  }
+
+  private recomputeAriaLabel() {
+    aria.setState(
+      this.svgRoot!,
+      aria.State.LABEL,
+      this.bubbleIsVisible() ? 'Close Warning' : 'Open Warning',
+    );
   }
 
   override dispose() {
@@ -196,6 +207,8 @@ export class WarningIcon extends Icon implements IHasBubble {
         'warning',
       ),
     );
+
+    this.recomputeAriaLabel();
   }
 
   /** See IHasBubble.getBubble. */

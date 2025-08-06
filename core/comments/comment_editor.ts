@@ -9,6 +9,7 @@ import {getFocusManager} from '../focus_manager.js';
 import {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {IFocusableTree} from '../interfaces/i_focusable_tree.js';
 import * as touch from '../touch.js';
+import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
@@ -54,6 +55,8 @@ export class CommentEditor implements IFocusableNode {
     ) as HTMLTextAreaElement;
     this.textArea.setAttribute('tabindex', '-1');
     this.textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
+    aria.setRole(this.textArea, aria.Role.TEXTBOX);
+    aria.setState(this.textArea, aria.State.LABEL, 'DoNotDefine?');
     dom.addClass(this.textArea, 'blocklyCommentText');
     dom.addClass(this.textArea, 'blocklyTextarea');
     dom.addClass(this.textArea, 'blocklyText');

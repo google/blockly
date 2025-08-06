@@ -172,6 +172,14 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     if (this.fieldGroup_) {
       dom.addClass(this.fieldGroup_, 'blocklyInputField');
     }
+
+    const element = this.getFocusableElement();
+    aria.setRole(element, aria.Role.TEXTBOX);
+    aria.setState(
+      element,
+      aria.State.LABEL,
+      this.name ? `Text ${this.name}` : 'Text',
+    );
   }
 
   override isFullBlockField(): boolean {

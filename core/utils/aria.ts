@@ -17,11 +17,6 @@ const ROLE_ATTRIBUTE = 'role';
  * Copied from Closure's goog.a11y.aria.Role
  */
 export enum Role {
-  // ARIA role for an interactive control of tabular data.
-  GRID = 'grid',
-
-  // ARIA role for a cell in a grid.
-  GRIDCELL = 'gridcell',
   // ARIA role for a group of related elements like tree item siblings.
   GROUP = 'group',
 
@@ -33,16 +28,12 @@ export enum Role {
 
   // ARIA role for menu item elements.
   MENUITEM = 'menuitem',
-  // ARIA role for a checkbox box element inside a menu.
-  MENUITEMCHECKBOX = 'menuitemcheckbox',
   // ARIA role for option items that are  children of combobox, listbox, menu,
   // radiogroup, or tree elements.
   OPTION = 'option',
   // ARIA role for ignorable cosmetic elements with no semantic significance.
   PRESENTATION = 'presentation',
 
-  // ARIA role for a row of cells in a grid.
-  ROW = 'row',
   // ARIA role for a tree.
   TREE = 'tree',
 
@@ -54,6 +45,12 @@ export enum Role {
 
   // ARIA role for a live region providing information.
   STATUS = 'status',
+
+  IMAGE = 'image',
+  FIGURE = 'figure',
+  BUTTON = 'button',
+  CHECKBOX = 'checkbox',
+  TEXTBOX = 'textbox',
 }
 
 /**
@@ -64,10 +61,6 @@ export enum State {
   // ARIA property for setting the currently active descendant of an element,
   // for example the selected item in a list box. Value: ID of an element.
   ACTIVEDESCENDANT = 'activedescendant',
-  // ARIA property defines the total number of columns in a table, grid, or
-  // treegrid.
-  // Value: integer.
-  COLCOUNT = 'colcount',
   // ARIA state for a disabled item. Value: one of {true, false}.
   DISABLED = 'disabled',
 
@@ -89,18 +82,10 @@ export enum State {
   // ARIA property for setting the level of an element in the hierarchy.
   // Value: integer.
   LEVEL = 'level',
-  // ARIA property indicating if the element is horizontal or vertical.
-  // Value: one of {'vertical', 'horizontal'}.
-  ORIENTATION = 'orientation',
 
   // ARIA property that defines an element's number of position in a list.
   // Value: integer.
   POSINSET = 'posinset',
-
-  // ARIA property defines the total number of rows in a table, grid, or
-  // treegrid.
-  // Value: integer.
-  ROWCOUNT = 'rowcount',
 
   // ARIA state for setting the currently selected item in the list.
   // Value: one of {true, false, undefined}.
@@ -121,29 +106,52 @@ export enum State {
   // ARIA property for removing elements from the accessibility tree.
   // Value: one of {true, false, undefined}.
   HIDDEN = 'hidden',
+
+  ROLEDESCRIPTION = 'roledescription',
+  OWNS = 'owns',
 }
 
 /**
- * Sets the role of an element.
+ * Updates the specific role for the specified element.
  *
- * Similar to Closure's goog.a11y.aria
- *
- * @param element DOM node to set role of.
- * @param roleName Role name.
+ * @param element The element whose ARIA role should be changed.
+ * @param roleName The new role for the specified element, or null if its role
+ *     should be cleared.
  */
-export function setRole(element: Element, roleName: Role) {
-  element.setAttribute(ROLE_ATTRIBUTE, roleName);
+export function setRole(element: Element, roleName: Role | null) {
+  if (roleName) {
+    element.setAttribute(ROLE_ATTRIBUTE, roleName);
+  } else element.removeAttribute(ROLE_ATTRIBUTE);
 }
 
 /**
- * Sets the state or property of an element.
- * Copied from Closure's goog.a11y.aria
+ * Returns the ARIA role of the specified element, or null if it either doesn't
+ * have a designated role or if that role is unknown.
  *
- * @param element DOM node where we set state.
- * @param stateName State attribute being set.
- *     Automatically adds prefix 'aria-' to the state name if the attribute is
- * not an extra attribute.
- * @param value Value for the state attribute.
+ * @param element The element from which to retrieve its ARIA role.
+ * @returns The ARIA role of the element, or null if undefined or unknown.
+ */
+export function getRole(element: Element): Role | null {
+  // This is an unsafe cast which is why it needs to be checked to ensure that
+  // it references a valid role.
+  const currentRoleName = element.getAttribute(ROLE_ATTRIBUTE) as Role;
+  if (Object.values(Role).includes(currentRoleName)) {
+    return currentRoleName;
+  }
+  return null;
+}
+
+/**
+ * Sets the specified ARIA state by its name and value for the specified
+ * element.
+ *
+ * Note that the type of value is not validated against the specific type of
+ * state being changed, so it's up to callers to ensure the correct value is
+ * used for the given state.
+ *
+ * @param element The element whose ARIA state may be changed.
+ * @param stateName The state to change.
+ * @param value The new value to specify for the provided state.
  */
 export function setState(
   element: Element,
@@ -155,4 +163,45 @@ export function setState(
   }
   const attrStateName = ARIA_PREFIX + stateName;
   element.setAttribute(attrStateName, `${value}`);
+}
+
+/**
+ * Returns a string representation of the specified state for the specified
+ * element, or null if it's not defined or specified.
+ *
+ * Note that an explicit set state of 'null' will return the 'null' string, not
+ * the value null.
+ *
+ * @param element The element whose state is being retrieved.
+ * @param stateName The state to retrieve.
+ * @returns The string representation of the requested state for the specified
+ *     element, or null if not defined.
+ */
+export function getState(element: Element, stateName: State): string | null {
+  const attrStateName = ARIA_PREFIX + stateName;
+  return element.getAttribute(attrStateName);
+}
+
+/**
+ * Softly requests that the specified text be read to the user if a screen
+ * reader is currently active.
+ *
+ * This relies on a centrally managed ARIA live region that should not interrupt
+ * existing announcements (that is, this is what's considered a polite
+ * announcement).
+ *
+ * Callers should use this judiciously. It's often considered bad practice to
+ * over announce information that can be inferred from other sources on the
+ * page, so this ought to only be used when certain context cannot be easily
+ * determined (such as dynamic states that may not have perfect ARIA
+ * representations or indications).
+ *
+ * @param text The text to politely read to the user.
+ */
+export function announceDynamicAriaState(text: string) {
+  const ariaAnnouncementSpan = document.getElementById('blocklyAriaAnnounce');
+  if (!ariaAnnouncementSpan) {
+    throw new Error('Expected element with id blocklyAriaAnnounce to exist.');
+  }
+  ariaAnnouncementSpan.innerHTML = text;
 }

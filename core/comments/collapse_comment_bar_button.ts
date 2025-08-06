@@ -6,6 +6,7 @@
 
 import * as browserEvents from '../browser_events.js';
 import * as touch from '../touch.js';
+import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -67,6 +68,11 @@ export class CollapseCommentBarButton extends CommentBarButton {
    */
   dispose() {
     browserEvents.unbind(this.bindId);
+  }
+
+  override initAria(): void {
+    aria.setRole(this.icon, aria.Role.BUTTON);
+    aria.setState(this.icon, aria.State.LABEL, 'DoNotDefine?');
   }
 
   /**

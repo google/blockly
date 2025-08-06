@@ -17,6 +17,7 @@ import {Options} from './options.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
+import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as WidgetDiv from './widgetdiv.js';
@@ -77,6 +78,12 @@ export function inject(
     null,
     common.globalShortcutHandler,
   );
+
+  // See: https://stackoverflow.com/a/48590836 for a reference.
+  const ariaAnnouncementSpan = document.createElement('span');
+  ariaAnnouncementSpan.id = 'blocklyAriaAnnounce';
+  aria.setState(ariaAnnouncementSpan, aria.State.LIVE, 'polite');
+  subContainer.appendChild(ariaAnnouncementSpan);
 
   return workspace;
 }

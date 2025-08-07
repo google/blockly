@@ -376,7 +376,15 @@
 	"DIALOG_CANCEL": "取消",
 	"EDIT_BLOCK_CONTENTS": "编辑块内容",
 	"MOVE_BLOCK": "移动块",
+	"WINDOWS": "Windows",
+	"MAC_OS": "macOS",
+	"CHROME_OS": "ChromeOS",
+	"LINUX": "Linux",
 	"UNKNOWN": "未知",
+	"CONTROL_KEY": "Ctrl",
+	"COMMAND_KEY": "⌘ Command",
+	"OPTION_KEY": "⌥ Option",
+	"ALT_KEY": "Alt",
 	"CUT_SHORTCUT": "剪切",
 	"COPY_SHORTCUT": "复制",
 	"PASTE_SHORTCUT": "粘贴",
@@ -384,5 +392,8 @@
 	"SHORTCUTS_GENERAL": "常规",
 	"SHORTCUTS_EDITING": "编辑",
 	"SHORTCUTS_CODE_NAVIGATION": "代码导航",
-	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "使用箭头键移动，然后按%1接受位置"
+	"KEYBOARD_NAV_UNCONSTRAINED_MOVE_HINT": "壓住 %1 並使用箭頭鍵來自由移動，然後按下 %2 接受位置",
+	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "使用箭头键移动，然后按%1接受位置",
+	"KEYBOARD_NAV_COPIED_HINT": "已拷貝。按下 %1 貼上。",
+	"KEYBOARD_NAV_CUT_HINT": "已剪下。按下 %1 貼上。"
 }

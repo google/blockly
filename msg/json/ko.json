@@ -383,5 +383,9 @@
 	"UNKNOWN": "알 수 없음",
 	"CONTROL_KEY": "Ctrl",
 	"COMMAND_KEY": "⌘ 명령",
-	"OPTION_KEY": "⌥ 옵션"
+	"OPTION_KEY": "⌥ 옵션",
+	"COPY_SHORTCUT": "복사",
+	"PASTE_SHORTCUT": "붙여넣기",
+	"SHORTCUTS_GENERAL": "일반",
+	"SHORTCUTS_EDITING": "편집"
 }

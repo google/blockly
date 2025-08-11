@@ -707,6 +707,10 @@ export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
   onNodeFocus(): void {
     this.select();
     this.bringToFront();
+    const xy = this.getRelativeToSurfaceXY();
+    const size = this.getSize();
+    const bounds = new Rect(xy.y, xy.y + size.height, xy.x, xy.x + size.width);
+    this.workspace.scrollBoundsIntoView(bounds);
   }
 
   /** See IFocusableNode.onNodeBlur. */

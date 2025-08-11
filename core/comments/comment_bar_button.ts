@@ -87,7 +87,13 @@ export abstract class CommentBarButton implements IFocusableNode {
   }
 
   /** Called when this button's focusable DOM element gains focus. */
-  onNodeFocus() {}
+  onNodeFocus() {
+    const commentView = this.getCommentView();
+    const xy = commentView.getRelativeToSurfaceXY();
+    const size = commentView.getSize();
+    const bounds = new Rect(xy.y, xy.y + size.height, xy.x, xy.x + size.width);
+    commentView.workspace.scrollBoundsIntoView(bounds);
+  }
 
   /** Called when this button's focusable DOM element loses focus. */
   onNodeBlur() {}

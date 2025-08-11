@@ -26,6 +26,7 @@ import type {IFocusableTree} from './interfaces/i_focusable_tree.js';
 import {hasBubble} from './interfaces/i_has_bubble.js';
 import * as internalConstants from './internal_constants.js';
 import {Coordinate} from './utils/coordinate.js';
+import {Rect} from './utils/rect.js';
 import * as svgMath from './utils/svg_math.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
@@ -644,6 +645,14 @@ export class RenderedConnection
   /** See IFocusableNode.onNodeFocus. */
   onNodeFocus(): void {
     this.highlight();
+    const highlight = this.findHighlightSvg();
+    if (!highlight) return;
+    const bbox = highlight.getBBox();
+    // Y coordinate appears to be the middle of the connection.
+    const y = this.y - bbox.height / 2;
+    const bounds = new Rect(y, y + bbox.height, this.x, this.x + bbox.width);
+
+    this.getSourceBlock().workspace.scrollBoundsIntoView(bounds);
   }
 
   /** See IFocusableNode.onNodeBlur. */
@@ -656,12 +665,12 @@ export class RenderedConnection
     return true;
   }
 
-  private findHighlightSvg(): SVGElement | null {
+  private findHighlightSvg(): SVGPathElement | null {
     // This cast is valid as TypeScript's definition is wrong. See:
     // https://github.com/microsoft/TypeScript/issues/60996.
     return document.getElementById(this.id) as
       | unknown
-      | null as SVGElement | null;
+      | null as SVGPathElement | null;
   }
 }
 

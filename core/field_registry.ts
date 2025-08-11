@@ -56,11 +56,11 @@ export interface RegistrableField {
  * @param type The field type name as used in the JSON definition.
  * @param fieldClass The field class containing a fromJson function that can
  *     construct an instance of the field.
- * @throws {Error} if the type name is empty, the field is already registered,
- *     or the fieldClass is not an object containing a fromJson function.
+ * @throws {Error} if the type name is empty or the fieldClass is not an object
+ *     containing a fromJson function.
  */
 export function register(type: string, fieldClass: RegistrableField) {
-  registry.register(registry.Type.FIELD, type, fieldClass);
+  registry.register(registry.Type.FIELD, type, fieldClass, true);
 }
 
 /**

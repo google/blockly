@@ -67,16 +67,16 @@ jobs:
           npm link
           cd ../../../../blockly-core
           npm link block-test
-          cd ..
+#          cd ..
 
       - name: Linux Test Setup
         if: runner.os == 'Linux'
         run: source ./tests/scripts/setup_linux_env.sh
 
-      - name: Run Build
-        run: |
-          cd blockly-core
-          npm run build
+#      - name: Run Build
+#        run: |
+#          cd blockly-core
+#          npm run build
 
       - name: Run Test
         run: npm run test:browser

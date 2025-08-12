@@ -67,7 +67,6 @@ jobs:
           npm link
           cd ../../../../blockly-core
           npm link block-test
-          cd ..
 
       - name: Linux Test Setup
         if: runner.os == 'Linux'

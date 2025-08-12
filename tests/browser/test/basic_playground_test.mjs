@@ -101,6 +101,24 @@ suite('Right Clicking on Blocks', function () {
     await contextMenuSelect(this.browser, this.block, 'Remove Comment');
     chai.assert.isNull(await getCommentText(this.browser, this.block.id));
   });
+
+  test.only('does not scroll the page', async function () {
+    const initialScroll = await this.browser.execute(() => {
+      return window.scrollY;
+    });
+    // This left-right-left sequence was necessary to reproduce unintended
+    // scrolling; regardless of the number of clicks/context menu activations,
+    // the page should not scroll.
+    this.block.click({button: 2});
+    this.block.click({button: 0});
+    this.block.click({button: 2});
+    await this.browser.pause(250);
+    const finalScroll = await this.browser.execute(() => {
+      return window.scrollY;
+    });
+
+    chai.assert.equal(initialScroll, finalScroll);
+  });
 });
 
 suite('Disabling', function () {

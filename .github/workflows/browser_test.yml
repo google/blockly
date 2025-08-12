@@ -79,4 +79,6 @@ jobs:
 #          npm run build
 
       - name: Run Test
-        run: npm run test:browser
+        run: |
+          pwd
+          npm run test:browser

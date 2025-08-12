@@ -426,7 +426,7 @@ export class FocusManager {
    * can be active at any given time (attempting to activate more than one
    * simultaneously will result in an error being thrown).
    *
-   * This method does not scroll the ephemerally focused node into view.
+   * This method does not scroll the ephemerally focused element into view.
    */
   takeEphemeralFocus(
     focusableElement: HTMLElement | SVGElement,

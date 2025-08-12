@@ -60,8 +60,8 @@ export interface IFocusableNode {
    * - Creating or removing DOM elements (including via the renderer or drawer).
    * - Affecting focus via DOM focus() calls or the FocusManager.
    *
-   * Implementations should consider scrolling themselves into view here; that
-   * is not handled by the focus manager.
+   * Implementations may consider scrolling themselves into view here; that is
+   * not handled by the focus manager.
    */
   onNodeFocus(): void;
 

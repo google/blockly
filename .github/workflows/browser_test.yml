@@ -27,11 +27,6 @@ jobs:
         # https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://github.com/".insteadOf
-          ssh://git@github.com/
-
       - name: Checkout core Blockly
         uses: actions/checkout@v4
         with:
@@ -44,6 +39,11 @@ jobs:
           repository: 'google/blockly-samples'
           ref: 'master'
           path: blockly-samples
+
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf
+          ssh://git@github.com/
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
@@ -69,10 +69,12 @@ jobs:
           npm link block-test
           cd ..
 
+      - name: Linux Test Setup
+        if: runner.os == 'Linux'
+        run: source ./tests/scripts/setup_linux_env.sh
+
+      - name: Run Build
+        run: npm run build
+
       - name: Run Test
-        env:
-          CI: true
-        run: |
-          cd blockly-core
-          npm run test:browser
-          cd ..
+        run: npm run test:browser

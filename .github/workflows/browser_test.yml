@@ -5,6 +5,8 @@ name: Run browser manually
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1' # Runs every Monday at 06:00 UTC
 
 permissions:
   contents: read

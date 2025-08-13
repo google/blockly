@@ -23,6 +23,7 @@ import {CommentIcon} from './icons/comment_icon.js';
 import {Msg} from './msg.js';
 import {StatementInput} from './renderers/zelos/zelos.js';
 import {Coordinate} from './utils/coordinate.js';
+import * as svgMath from './utils/svg_math.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 function isFullBlockField(block?: BlockSvg) {
@@ -637,9 +638,9 @@ export function registerCommentCreate() {
       const comment = new RenderedWorkspaceComment(workspace);
       comment.setPlaceholderText(Msg['WORKSPACE_COMMENT_DEFAULT_TEXT']);
       comment.moveTo(
-        pixelsToWorkspaceCoords(
-          new Coordinate(location.x, location.y),
+        svgMath.screenToWsCoordinates(
           workspace,
+          new Coordinate(location.x, location.y),
         ),
       );
       getFocusManager().focusNode(comment);
@@ -650,40 +651,6 @@ export function registerCommentCreate() {
     weight: 8,
   };
   ContextMenuRegistry.registry.register(createOption);
-}
-
-/**
- * Converts pixel coordinates (relative to the window) to workspace coordinates.
- */
-function pixelsToWorkspaceCoords(
-  pixelCoord: Coordinate,
-  workspace: WorkspaceSvg,
-): Coordinate {
-  const injectionDiv = workspace.getInjectionDiv();
-  // Bounding rect coordinates are in client coordinates, meaning that they
-  // are in pixels relative to the upper left corner of the visible browser
-  // window.  These coordinates change when you scroll the browser window.
-  const boundingRect = injectionDiv.getBoundingClientRect();
-
-  // The client coordinates offset by the injection div's upper left corner.
-  const clientOffsetPixels = new Coordinate(
-    pixelCoord.x - boundingRect.left,
-    pixelCoord.y - boundingRect.top,
-  );
-
-  // The offset in pixels between the main workspace's origin and the upper
-  // left corner of the injection div.
-  const mainOffsetPixels = workspace.getOriginOffsetInPixels();
-
-  // The position of the new comment in pixels relative to the origin of the
-  // main workspace.
-  const finalOffset = Coordinate.difference(
-    clientOffsetPixels,
-    mainOffsetPixels,
-  );
-  // The position of the new comment in main workspace coordinates.
-  finalOffset.scale(1 / workspace.scale);
-  return finalOffset;
 }
 
 /** Registers all block-scoped context menu items. */

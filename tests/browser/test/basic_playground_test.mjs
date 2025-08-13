@@ -102,7 +102,7 @@ suite('Right Clicking on Blocks', function () {
     chai.assert.isNull(await getCommentText(this.browser, this.block.id));
   });
 
-  test.only('does not scroll the page', async function () {
+  test('does not scroll the page', async function () {
     const initialScroll = await this.browser.execute(() => {
       return window.scrollY;
     });

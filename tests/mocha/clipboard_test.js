@@ -14,7 +14,7 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 
-suite('Clipboard', function () {
+suite.only('Clipboard', function () {
   setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     this.workspace = Blockly.inject('blocklyDiv');
@@ -179,6 +179,10 @@ suite('Clipboard', function () {
             oldBlockXY.y + Blockly.config.snapRadius * 2,
           ),
         );
+
+        // Restore an LTR workspace.
+        this.workspace.dispose();
+        this.workspace = Blockly.inject('blocklyDiv');
       });
 
       test('pasted blocks are bumped to be outside the connection snap radius', function () {

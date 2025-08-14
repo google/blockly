@@ -14,7 +14,7 @@ import {
   sharedTestTeardown,
 } from './test_helpers/setup_teardown.js';
 
-suite.only('Clipboard', function () {
+suite('Clipboard', function () {
   setup(function () {
     this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
     this.workspace = Blockly.inject('blocklyDiv');

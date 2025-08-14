@@ -157,6 +157,30 @@ suite('Clipboard', function () {
         );
       });
 
+      test('pasted blocks are bumped to not overlap in RTL', function () {
+        this.workspace.dispose();
+        this.workspace = Blockly.inject('blocklyDiv', {rtl: true});
+        const block = Blockly.serialization.blocks.append(
+          {
+            'type': 'controls_if',
+            'x': 38,
+            'y': 13,
+          },
+          this.workspace,
+        );
+        const data = block.toCopyData();
+
+        const newBlock = Blockly.clipboard.paste(data, this.workspace);
+        const oldBlockXY = block.getRelativeToSurfaceXY();
+        assert.deepEqual(
+          newBlock.getRelativeToSurfaceXY(),
+          new Blockly.utils.Coordinate(
+            oldBlockXY.x - Blockly.config.snapRadius,
+            oldBlockXY.y + Blockly.config.snapRadius * 2,
+          ),
+        );
+      });
+
       test('pasted blocks are bumped to be outside the connection snap radius', function () {
         Blockly.serialization.workspaces.load(
           {

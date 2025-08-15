@@ -200,7 +200,7 @@ suite('Disabling', function () {
   );
 });
 
-suite.only('Focused nodes are scrolled into bounds', function () {
+suite('Focused nodes are scrolled into bounds', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time to run
   // than most mocha tests.
   this.timeout(0);

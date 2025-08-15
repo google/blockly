@@ -61,7 +61,7 @@ suite('Testing Connecting Blocks', function () {
  * These tests have to run together. Each test acts on the state left by the
  * previous test, and each test has a single assertion.
  */
-suite.only('Right Clicking on Blocks', function () {
+suite('Right Clicking on Blocks', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 

@@ -236,5 +236,28 @@ suite('Clipboard', function () {
         new Blockly.utils.Coordinate(40, 40),
       );
     });
+
+    test('pasted comments are bumped to not overlap in RTL', function () {
+      this.workspace.dispose();
+      this.workspace = Blockly.inject('blocklyDiv', {rtl: true});
+      Blockly.Xml.domToWorkspace(
+        Blockly.utils.xml.textToDom(
+          '<xml><comment id="test" x=10 y=10/></xml>',
+        ),
+        this.workspace,
+      );
+      const comment = this.workspace.getTopComments(false)[0];
+      const data = comment.toCopyData();
+
+      const newComment = Blockly.clipboard.paste(data, this.workspace);
+      const oldCommentXY = comment.getRelativeToSurfaceXY();
+      assert.deepEqual(
+        newComment.getRelativeToSurfaceXY(),
+        new Blockly.utils.Coordinate(oldCommentXY.x - 30, oldCommentXY.y + 30),
+      );
+      // Restore an LTR workspace.
+      this.workspace.dispose();
+      this.workspace = Blockly.inject('blocklyDiv');
+    });
   });
 });

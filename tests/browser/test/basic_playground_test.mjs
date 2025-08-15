@@ -61,7 +61,7 @@ suite('Testing Connecting Blocks', function () {
  * These tests have to run together. Each test acts on the state left by the
  * previous test, and each test has a single assertion.
  */
-suite('Right Clicking on Blocks', function () {
+suite.only('Right Clicking on Blocks', function () {
   // Setting timeout to unlimited as the webdriver takes a longer time to run than most mocha test
   this.timeout(0);
 
@@ -102,7 +102,7 @@ suite('Right Clicking on Blocks', function () {
     chai.assert.isNull(await getCommentText(this.browser, this.block.id));
   });
 
-  test('does not scroll the page', async function () {
+  test('does not scroll the page when node is ephemerally focused', async function () {
     const initialScroll = await this.browser.execute(() => {
       return window.scrollY;
     });
@@ -118,6 +118,27 @@ suite('Right Clicking on Blocks', function () {
     });
 
     chai.assert.equal(initialScroll, finalScroll);
+  });
+
+  test('does not scroll the page when node is actively focused', async function () {
+    await this.browser.setWindowSize(500, 300);
+    await this.browser.setViewport({width: 500, height: 300});
+    const initialScroll = await this.browser.execute((blockId) => {
+      window.scrollTo(0, document.body.scrollHeight);
+      return window.scrollY;
+    }, this.block.id);
+    await this.browser.execute(() => {
+      Blockly.getFocusManager().focusNode(
+        Blockly.getMainWorkspace().getToolbox(),
+      );
+    });
+    const finalScroll = await this.browser.execute(() => {
+      return window.scrollY;
+    });
+
+    chai.assert.equal(initialScroll, finalScroll);
+    await this.browser.setWindowSize(800, 600);
+    await this.browser.setViewport({width: 800, height: 600});
   });
 });
 

@@ -66,6 +66,7 @@
 	"MATH_TRIG_HELPURL": "https://ky.wikipedia.org/wiki/Тригонометриялык_функциялар",
 	"TEXT_ISEMPTY_TITLE": "%1 бош",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "тизме",
+	"LISTS_GET_INDEX_RANDOM": "туш келди",
 	"DIALOG_OK": "Макул",
 	"DIALOG_CANCEL": "Жокко чыгаруу"
 }

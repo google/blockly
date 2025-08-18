@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Andreyyshore",
+			"Dimitrie569",
 			"Ely en",
 			"Hugbear",
 			"MSClaudiu",
@@ -12,6 +13,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"UNNAMED_KEY": "fără nume",
 	"TODAY": "Astăzi",
 	"DUPLICATE_BLOCK": "Duplicate",
 	"ADD_COMMENT": "Adaugă un comentariu",

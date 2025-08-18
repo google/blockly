@@ -29,8 +29,8 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
    * @param _current The flyout item to navigate from.
    * @returns Null to prevent navigating into flyout items.
    */
-  getFirstChild(_current: T): IFocusableNode | null {
-    return null;
+  getFirstChild(current: T): IFocusableNode | null {
+    return this.policy.getFirstChild(current);
   }
 
   /**
@@ -57,10 +57,10 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
       (flyoutItem) => flyoutItem.getElement() === current,
     );
 
-    if (index === -1) return null;
+    if (index === -1) return this.policy.getNextSibling(current);
     index++;
     if (index >= flyoutContents.length) {
-      index = 0;
+      return null;
     }
 
     return flyoutContents[index].getElement();
@@ -80,10 +80,10 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
       (flyoutItem) => flyoutItem.getElement() === current,
     );
 
-    if (index === -1) return null;
+    if (index === -1) return this.policy.getPreviousSibling(current);
     index--;
     if (index < 0) {
-      index = flyoutContents.length - 1;
+      return null;
     }
 
     return flyoutContents[index].getElement();

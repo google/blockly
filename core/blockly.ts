@@ -171,7 +171,7 @@ import {
 import {IVariableMap} from './interfaces/i_variable_map.js';
 import {IVariableModel, IVariableState} from './interfaces/i_variable_model.js';
 import * as internalConstants from './internal_constants.js';
-import {LineCursor} from './keyboard_nav/line_cursor.js';
+import {LineCursor, NavigationDirection} from './keyboard_nav/line_cursor.js';
 import {Marker} from './keyboard_nav/marker.js';
 import {
   KeyboardNavigationController,
@@ -466,6 +466,7 @@ export {
   Events,
   Extensions,
   LineCursor,
+  NavigationDirection,
   Procedures,
   ShortcutItems,
   Themes,

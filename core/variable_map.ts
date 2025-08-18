@@ -109,6 +109,9 @@ export class VariableMap
     variable: IVariableModel<IVariableState>,
     newType: string,
   ): IVariableModel<IVariableState> {
+    const oldType = variable.getType();
+    if (oldType === newType) return variable;
+
     this.variableMap.get(variable.getType())?.delete(variable.getId());
     variable.setType(newType);
     const newTypeVariables =
@@ -118,6 +121,13 @@ export class VariableMap
     if (!this.variableMap.has(newType)) {
       this.variableMap.set(newType, newTypeVariables);
     }
+    eventUtils.fire(
+      new (eventUtils.get(EventType.VAR_TYPE_CHANGE))(
+        variable,
+        oldType,
+        newType,
+      ),
+    );
     return variable;
   }
 
@@ -245,9 +255,9 @@ export class VariableMap
     }
     const id = opt_id || idGenerator.genUid();
     const type = opt_type || '';
-    const VariableModel = registry.getObject(
+    const VariableModel = registry.getClassFromOptions(
       registry.Type.VARIABLE_MODEL,
-      registry.DEFAULT,
+      this.workspace.options,
       true,
     );
     if (!VariableModel) {

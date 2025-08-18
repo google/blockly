@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {CommentEditor} from '../comments/comment_editor.js';
 import * as Css from '../css.js';
+import {getFocusManager} from '../focus_manager.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
+import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import * as touch from '../touch.js';
 import {browserEvents} from '../utils.js';
 import {Coordinate} from '../utils/coordinate.js';
@@ -21,12 +25,6 @@ import {Bubble} from './bubble.js';
  * Used by the comment icon.
  */
 export class TextInputBubble extends Bubble {
-  /** The root of the elements specific to the text element. */
-  private inputRoot: SVGForeignObjectElement;
-
-  /** The text input area element. */
-  private textArea: HTMLTextAreaElement;
-
   /** The group containing the lines indicating the bubble is resizable. */
   private resizeGroup: SVGGElement;
 
@@ -42,17 +40,11 @@ export class TextInputBubble extends Bubble {
    */
   private resizePointerMoveListener: browserEvents.Data | null = null;
 
-  /** Functions listening for changes to the text of this bubble. */
-  private textChangeListeners: (() => void)[] = [];
-
   /** Functions listening for changes to the size of this bubble. */
   private sizeChangeListeners: (() => void)[] = [];
 
   /** Functions listening for changes to the location of this bubble. */
   private locationChangeListeners: (() => void)[] = [];
-
-  /** The text of this bubble. */
-  private text = '';
 
   /** The default size of this bubble, including borders. */
   private readonly DEFAULT_SIZE = new Size(
@@ -68,46 +60,47 @@ export class TextInputBubble extends Bubble {
 
   private editable = true;
 
+  /** View responsible for supporting text editing. */
+  private editor: CommentEditor;
+
   /**
    * @param workspace The workspace this bubble belongs to.
    * @param anchor The anchor location of the thing this bubble is attached to.
    *     The tail of the bubble will point to this location.
    * @param ownerRect An optional rect we don't want the bubble to overlap with
    *     when automatically positioning.
+   * @param owner The object that owns/hosts this bubble.
    */
   constructor(
     public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
+    protected owner?: IHasBubble & IFocusableNode,
   ) {
-    super(workspace, anchor, ownerRect, TextInputBubble.createTextArea());
+    super(workspace, anchor, ownerRect, undefined, owner);
     dom.addClass(this.svgRoot, 'blocklyTextInputBubble');
-    this.textArea = this.getFocusableElement() as HTMLTextAreaElement;
-    this.inputRoot = this.createEditor(this.contentContainer, this.textArea);
+    this.editor = new CommentEditor(workspace, this.id, () => {
+      getFocusManager().focusNode(this);
+    });
+    this.contentContainer.appendChild(this.editor.getDom());
     this.resizeGroup = this.createResizeHandle(this.svgRoot, workspace);
     this.setSize(this.DEFAULT_SIZE, true);
   }
 
   /** @returns the text of this bubble. */
   getText(): string {
-    return this.text;
+    return this.editor.getText();
   }
 
   /** Sets the text of this bubble. Calls change listeners. */
   setText(text: string) {
-    this.text = text;
-    this.textArea.value = text;
-    this.onTextChange();
+    this.editor.setText(text);
   }
 
   /** Sets whether or not the text in the bubble is editable. */
   setEditable(editable: boolean) {
     this.editable = editable;
-    if (this.editable) {
-      this.textArea.removeAttribute('readonly');
-    } else {
-      this.textArea.setAttribute('readonly', '');
-    }
+    this.editor.setEditable(editable);
   }
 
   /** Returns whether or not the text in the bubble is editable. */
@@ -117,7 +110,7 @@ export class TextInputBubble extends Bubble {
 
   /** Adds a change listener to be notified when this bubble's text changes. */
   addTextChangeListener(listener: () => void) {
-    this.textChangeListeners.push(listener);
+    this.editor.addTextChangeListener(listener);
   }
 
   /** Adds a change listener to be notified when this bubble's size changes. */
@@ -128,58 +121,6 @@ export class TextInputBubble extends Bubble {
   /** Adds a change listener to be notified when this bubble's location changes. */
   addLocationChangeListener(listener: () => void) {
     this.locationChangeListeners.push(listener);
-  }
-
-  /** Creates and returns the editable text area for this bubble's editor. */
-  private static createTextArea(): HTMLTextAreaElement {
-    const textArea = document.createElementNS(
-      dom.HTML_NS,
-      'textarea',
-    ) as HTMLTextAreaElement;
-    textArea.className = 'blocklyTextarea blocklyText';
-    return textArea;
-  }
-
-  /** Creates and returns the UI container element for this bubble's editor. */
-  private createEditor(
-    container: SVGGElement,
-    textArea: HTMLTextAreaElement,
-  ): SVGForeignObjectElement {
-    const inputRoot = dom.createSvgElement(
-      Svg.FOREIGNOBJECT,
-      {
-        'x': Bubble.BORDER_WIDTH,
-        'y': Bubble.BORDER_WIDTH,
-      },
-      container,
-    );
-
-    const body = document.createElementNS(dom.HTML_NS, 'body');
-    body.setAttribute('xmlns', dom.HTML_NS);
-    body.className = 'blocklyMinimalBody';
-
-    textArea.setAttribute('dir', this.workspace.RTL ? 'RTL' : 'LTR');
-    body.appendChild(textArea);
-    inputRoot.appendChild(body);
-
-    this.bindTextAreaEvents(textArea);
-
-    return inputRoot;
-  }
-
-  /** Binds events to the text area element. */
-  private bindTextAreaEvents(textArea: HTMLTextAreaElement) {
-    // Don't zoom with mousewheel; let it scroll instead.
-    browserEvents.conditionalBind(textArea, 'wheel', this, (e: Event) => {
-      e.stopPropagation();
-    });
-    // Don't let the pointerdown event get to the workspace.
-    browserEvents.conditionalBind(textArea, 'pointerdown', this, (e: Event) => {
-      e.stopPropagation();
-      touch.clearTouchIdentifier();
-    });
-
-    browserEvents.conditionalBind(textArea, 'change', this, this.onTextChange);
   }
 
   /** Creates the resize handler elements and binds events to them. */
@@ -220,8 +161,12 @@ export class TextInputBubble extends Bubble {
 
     const widthMinusBorder = size.width - Bubble.DOUBLE_BORDER;
     const heightMinusBorder = size.height - Bubble.DOUBLE_BORDER;
-    this.inputRoot.setAttribute('width', `${widthMinusBorder}`);
-    this.inputRoot.setAttribute('height', `${heightMinusBorder}`);
+    this.editor.updateSize(
+      new Size(widthMinusBorder, heightMinusBorder),
+      new Size(0, 0),
+    );
+    this.editor.getDom().setAttribute('x', `${Bubble.DOUBLE_BORDER / 2}`);
+    this.editor.getDom().setAttribute('y', `${Bubble.DOUBLE_BORDER / 2}`);
 
     this.resizeGroup.setAttribute('y', `${heightMinusBorder}`);
     if (this.workspace.RTL) {
@@ -312,14 +257,6 @@ export class TextInputBubble extends Bubble {
     this.onSizeChange();
   }
 
-  /** Handles a text change event for the text area. Calls event listeners. */
-  private onTextChange() {
-    this.text = this.textArea.value;
-    for (const listener of this.textChangeListeners) {
-      listener();
-    }
-  }
-
   /** Handles a size change event for the text area. Calls event listeners. */
   private onSizeChange() {
     for (const listener of this.sizeChangeListeners) {
@@ -332,6 +269,15 @@ export class TextInputBubble extends Bubble {
     for (const listener of this.locationChangeListeners) {
       listener();
     }
+  }
+
+  /**
+   * Returns the text editor component of this bubble.
+   *
+   * @internal
+   */
+  getEditor() {
+    return this.editor;
   }
 }
 

@@ -501,22 +501,32 @@ export class Block {
       // Detach this block from the parent's tree.
       this.previousConnection.disconnect();
     }
-    const nextBlock = this.getNextBlock();
-    if (opt_healStack && nextBlock && !nextBlock.isShadow()) {
-      // Disconnect the next statement.
-      const nextTarget = this.nextConnection?.targetConnection ?? null;
-      nextTarget?.disconnect();
-      if (
-        previousTarget &&
-        this.workspace.connectionChecker.canConnect(
-          previousTarget,
-          nextTarget,
-          false,
-        )
-      ) {
-        // Attach the next statement to the previous statement.
-        previousTarget.connect(nextTarget!);
-      }
+
+    if (!opt_healStack) return;
+
+    // Immovable or shadow next blocks need to move along with the block; keep
+    // going until we encounter a normal block or run off the end of the stack.
+    let nextBlock = this.getNextBlock();
+    while (nextBlock && (nextBlock.isShadow() || !nextBlock.isMovable())) {
+      nextBlock = nextBlock.getNextBlock();
+    }
+    if (!nextBlock) return;
+
+    // Disconnect the next statement.
+    const nextTarget =
+      nextBlock.previousConnection?.targetBlock()?.nextConnection
+        ?.targetConnection ?? null;
+    nextTarget?.disconnect();
+    if (
+      previousTarget &&
+      this.workspace.connectionChecker.canConnect(
+        previousTarget,
+        nextTarget,
+        false,
+      )
+    ) {
+      // Attach the next statement to the previous statement.
+      previousTarget.connect(nextTarget!);
     }
   }
 
@@ -1118,7 +1128,7 @@ export class Block {
    *
    * @yields A generator that can be used to iterate the fields on the block.
    */
-  *getFields(): Generator<Field> {
+  *getFields(): Generator<Field, undefined, void> {
     for (const input of this.inputList) {
       for (const field of input.fieldRow) {
         yield field;

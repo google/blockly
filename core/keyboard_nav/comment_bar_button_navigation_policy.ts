@@ -31,7 +31,9 @@ export class CommentBarButtonNavigationPolicy
    * @returns The parent comment of the given CommentBarButton.
    */
   getParent(current: CommentBarButton): IFocusableNode | null {
-    return current.getParentComment();
+    return current
+      .getCommentView()
+      .workspace.getCommentById(current.getCommentView().commentId);
   }
 
   /**
@@ -41,7 +43,7 @@ export class CommentBarButtonNavigationPolicy
    * @returns The next CommentBarButton, if any.
    */
   getNextSibling(current: CommentBarButton): IFocusableNode | null {
-    const children = current.getParentComment().view.getCommentBarButtons();
+    const children = current.getCommentView().getCommentBarButtons();
     const currentIndex = children.indexOf(current);
     if (currentIndex >= 0 && currentIndex + 1 < children.length) {
       return children[currentIndex + 1];
@@ -56,7 +58,7 @@ export class CommentBarButtonNavigationPolicy
    * @returns The CommentBarButton's previous CommentBarButton, if any.
    */
   getPreviousSibling(current: CommentBarButton): IFocusableNode | null {
-    const children = current.getParentComment().view.getCommentBarButtons();
+    const children = current.getCommentView().getCommentBarButtons();
     const currentIndex = children.indexOf(current);
     if (currentIndex > 0) {
       return children[currentIndex - 1];

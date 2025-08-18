@@ -1,8 +1,8 @@
 diff --git a/node_modules/@microsoft/api-documenter/lib/documenters/MarkdownDocumenter.js b/node_modules/@microsoft/api-documenter/lib/documenters/MarkdownDocumenter.js
-index 0f4e2ba..3af2014 100644
+index 5284d10..4f8b439 100644
 --- a/node_modules/@microsoft/api-documenter/lib/documenters/MarkdownDocumenter.js
 +++ b/node_modules/@microsoft/api-documenter/lib/documenters/MarkdownDocumenter.js
-@@ -893,12 +893,15 @@ class MarkdownDocumenter {
+@@ -877,12 +877,14 @@ class MarkdownDocumenter {
      }
      _writeBreadcrumb(output, apiItem) {
          const configuration = this._tsdocConfiguration;
@@ -19,28 +19,23 @@ index 0f4e2ba..3af2014 100644
 +        //     linkText: 'Home',
 +        //     urlDestination: this._getLinkFilenameForApiItem(this._apiModel)
 +        // }));
-+
 +        let first = true;
          for (const hierarchyItem of apiItem.getHierarchy()) {
              switch (hierarchyItem.kind) {
                  case api_extractor_model_1.ApiItemKind.Model:
-@@ -908,18 +911,24 @@ class MarkdownDocumenter {
+@@ -892,18 +894,23 @@ class MarkdownDocumenter {
                      // this may change in the future.
                      break;
                  default:
 -                    output.appendNodesInParagraph([
--                        new tsdoc_1.DocPlainText({
--                            configuration,
--                            text: ' > '
--                        }),
 +                    if (!first) {
 +                        // Only print the breadcrumb separator if it's not the first item we're printing.
 +                        output.appendNodeInParagraph(
-+                            new tsdoc_1.DocPlainText({
-+                                configuration,
-+                                text: ' > '
-+                            })
-+                        );
+                         new tsdoc_1.DocPlainText({
+                             configuration,
+                             text: ' > '
+-                        }),
++                        }));
 +                    }
 +                    first = false;
 +                    output.appendNodeInParagraph(
@@ -55,7 +50,7 @@ index 0f4e2ba..3af2014 100644
              }
          }
      }
-@@ -992,11 +1001,8 @@ class MarkdownDocumenter {
+@@ -968,11 +975,8 @@ class MarkdownDocumenter {
              // For overloaded methods, add a suffix such as "MyClass.myMethod_2".
              let qualifiedName = Utilities_1.Utilities.getSafeFilenameForName(hierarchyItem.displayName);
              if (api_extractor_model_1.ApiParameterListMixin.isBaseClassOf(hierarchyItem)) {
@@ -69,7 +64,7 @@ index 0f4e2ba..3af2014 100644
              }
              switch (hierarchyItem.kind) {
                  case api_extractor_model_1.ApiItemKind.Model:
-@@ -1007,7 +1013,8 @@ class MarkdownDocumenter {
+@@ -983,7 +987,8 @@ class MarkdownDocumenter {
                      baseName = Utilities_1.Utilities.getSafeFilenameForName(node_core_library_1.PackageName.getUnscopedName(hierarchyItem.displayName));
                      break;
                  default:

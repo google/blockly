@@ -951,9 +951,12 @@ export class BlockSvg
   /**
    * Encode a block for copying.
    *
+   * @param addNextBlocks If true, copy subsequent blocks attached to this one
+   *     as well.
+   *
    * @returns Copy metadata, or null if the block is an insertion marker.
    */
-  toCopyData(): BlockCopyData | null {
+  toCopyData(addNextBlocks = false): BlockCopyData | null {
     if (this.isInsertionMarker_) {
       return null;
     }
@@ -961,7 +964,8 @@ export class BlockSvg
       paster: BlockPaster.TYPE,
       blockState: blocks.save(this, {
         addCoordinates: true,
-        addNextBlocks: false,
+        addNextBlocks,
+        saveIds: false,
       }) as blocks.State,
       typeCounts: common.getBlockTypeCounts(this, true),
     };

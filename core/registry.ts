@@ -119,9 +119,9 @@ export class Type<_T> {
   /** @internal */
   static PASTER = new Type<IPaster<ICopyData, ICopyable<ICopyData>>>('paster');
 
-  static VARIABLE_MODEL = new Type<IVariableModelStatic<IVariableState>>(
-    'variableModel',
-  );
+  static VARIABLE_MODEL = new Type<
+    IVariableModelStatic<IVariableState> & IVariableModel<IVariableState>
+  >('variableModel');
 
   static VARIABLE_MAP = new Type<IVariableMap<IVariableModel<IVariableState>>>(
     'variableMap',

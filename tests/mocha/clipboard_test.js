@@ -61,6 +61,31 @@ suite('Clipboard', function () {
       );
     });
 
+    test('pasting blocks includes next blocks if requested', function () {
+      const block = Blockly.serialization.blocks.append(
+        {
+          'type': 'controls_if',
+          'id': 'blockId',
+          'next': {
+            'block': {
+              'type': 'controls_if',
+              'id': 'blockId2',
+            },
+          },
+        },
+        this.workspace,
+      );
+      assert.equal(this.workspace.getBlocksByType('controls_if').length, 2);
+      // Both blocks should be copied
+      const data = block.toCopyData(true);
+      this.clock.runAll();
+
+      Blockly.clipboard.paste(data, this.workspace);
+      this.clock.runAll();
+      // After pasting, we should have gone from 2 to 4 blocks.
+      assert.equal(this.workspace.getBlocksByType('controls_if').length, 4);
+    });
+
     test('copied from a mutator pastes them into the mutator', async function () {
       const block = Blockly.serialization.blocks.append(
         {

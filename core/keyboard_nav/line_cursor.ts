@@ -181,10 +181,10 @@ export class LineCursor extends Marker {
    * Returns whether or not navigation should loop around when reaching the end/
    * beginning of navigable items.
    *
-   * @param direction The direction in which the user is navigating.
+   * @param _direction The direction in which the user is navigating.
    * @returns True if navigation should be allowed to loop, otherwise false.
    */
-  shouldLoop(direction: NavigationDirection): boolean {
+  shouldLoop(_direction: NavigationDirection): boolean {
     return true;
   }
 

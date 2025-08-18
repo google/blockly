@@ -26,7 +26,7 @@ export class FlyoutNavigationPolicy<T> implements INavigationPolicy<T> {
   /**
    * Returns null to prevent navigating into flyout items.
    *
-   * @param _current The flyout item to navigate from.
+   * @param current The flyout item to navigate from.
    * @returns Null to prevent navigating into flyout items.
    */
   getFirstChild(current: T): IFocusableNode | null {

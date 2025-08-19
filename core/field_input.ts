@@ -102,11 +102,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   override SERIALIZABLE = true;
 
-  /**
-   * Sets the size of this field. Although this appears to be a no-op, it must
-   * exist since the getter is overridden below.
-   */
   protected override set size_(newValue: Size) {
+    // Although this appears to be a no-op, it must exist since the getter is
+    // overridden below.
     super.size_ = newValue;
   }
 

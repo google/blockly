@@ -368,7 +368,10 @@ export class CommentView implements IRenderedElement {
 
     const textPreviewWidth =
       size.width - foldoutSize.getWidth() - deleteSize.getWidth();
-    this.textPreview.setAttribute('x', `${foldoutSize.getWidth()}`);
+    this.textPreview.setAttribute(
+      'x',
+      `${(this.workspace.RTL ? -1 : 1) * foldoutSize.getWidth()}`,
+    );
     this.textPreview.setAttribute(
       'y',
       `${textPreviewMargin + textPreviewSize.height / 2}`,

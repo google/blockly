@@ -157,6 +157,34 @@ suite('Clipboard', function () {
         );
       });
 
+      test('pasted blocks are bumped to not overlap in RTL', function () {
+        this.workspace.dispose();
+        this.workspace = Blockly.inject('blocklyDiv', {rtl: true});
+        const block = Blockly.serialization.blocks.append(
+          {
+            'type': 'controls_if',
+            'x': 38,
+            'y': 13,
+          },
+          this.workspace,
+        );
+        const data = block.toCopyData();
+
+        const newBlock = Blockly.clipboard.paste(data, this.workspace);
+        const oldBlockXY = block.getRelativeToSurfaceXY();
+        assert.deepEqual(
+          newBlock.getRelativeToSurfaceXY(),
+          new Blockly.utils.Coordinate(
+            oldBlockXY.x - Blockly.config.snapRadius,
+            oldBlockXY.y + Blockly.config.snapRadius * 2,
+          ),
+        );
+
+        // Restore an LTR workspace.
+        this.workspace.dispose();
+        this.workspace = Blockly.inject('blocklyDiv');
+      });
+
       test('pasted blocks are bumped to be outside the connection snap radius', function () {
         Blockly.serialization.workspaces.load(
           {
@@ -207,6 +235,29 @@ suite('Clipboard', function () {
         newComment.getRelativeToSurfaceXY(),
         new Blockly.utils.Coordinate(40, 40),
       );
+    });
+
+    test('pasted comments are bumped to not overlap in RTL', function () {
+      this.workspace.dispose();
+      this.workspace = Blockly.inject('blocklyDiv', {rtl: true});
+      Blockly.Xml.domToWorkspace(
+        Blockly.utils.xml.textToDom(
+          '<xml><comment id="test" x=10 y=10/></xml>',
+        ),
+        this.workspace,
+      );
+      const comment = this.workspace.getTopComments(false)[0];
+      const data = comment.toCopyData();
+
+      const newComment = Blockly.clipboard.paste(data, this.workspace);
+      const oldCommentXY = comment.getRelativeToSurfaceXY();
+      assert.deepEqual(
+        newComment.getRelativeToSurfaceXY(),
+        new Blockly.utils.Coordinate(oldCommentXY.x - 30, oldCommentXY.y + 30),
+      );
+      // Restore an LTR workspace.
+      this.workspace.dispose();
+      this.workspace = Blockly.inject('blocklyDiv');
     });
   });
 });

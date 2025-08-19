@@ -1126,7 +1126,7 @@ export class Block {
   /**
    * Returns a generator that provides every field on the block.
    *
-   * @yields A generator that can be used to iterate the fields on the block.
+   * @returns A generator that can be used to iterate the fields on the block.
    */
   *getFields(): Generator<Field, undefined, void> {
     for (const input of this.inputList) {

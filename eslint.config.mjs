@@ -89,7 +89,8 @@ function buildTSOverride({files, tsconfig}) {
       '@typescript-eslint/no-explicit-any': ['off'],
       // We use this pattern extensively for block (e.g. controls_if) interfaces.
       '@typescript-eslint/no-empty-object-type': ['off'],
-
+      // TSDoc doesn't support @yields, so don't require that we use it.
+      'jsdoc/require-yields': ['off'],
       // params and returns docs are optional.
       'jsdoc/require-param-description': ['off'],
       'jsdoc/require-returns': ['off'],

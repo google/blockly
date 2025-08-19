@@ -119,9 +119,6 @@ export abstract class Field<T = any>
     return this.size;
   }
 
-  /**
-   * Sets the size of this field.
-   */
   protected set size_(newValue: Size) {
     this.size = newValue;
   }

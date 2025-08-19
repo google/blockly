@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import googleStyle from 'eslint-config-google';
 import jsdoc from 'eslint-plugin-jsdoc';
+import mochaPlugin from 'eslint-plugin-mocha';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -200,6 +201,9 @@ export default [
   },
   {
     files: ['tests/**'],
+    plugins: {
+      mocha: mochaPlugin,
+    },
     languageOptions: {
       globals: {
         'Blockly': true,
@@ -219,6 +223,7 @@ export default [
       'jsdoc/check-tag-names': ['warn', {'definedTags': ['record']}],
       'jsdoc/tag-lines': ['off'],
       'jsdoc/no-defaults': ['off'],
+      'mocha/no-exclusive-tests': 'error',
     },
   },
   {

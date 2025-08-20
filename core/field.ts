@@ -852,8 +852,7 @@ export abstract class Field<T = any>
       totalHeight = Math.max(totalHeight, constants!.FIELD_BORDER_RECT_HEIGHT);
     }
 
-    this.size_.height = totalHeight;
-    this.size_.width = totalWidth;
+    this.size_ = new Size(totalWidth, totalHeight);
 
     this.positionTextElement_(xOffset, contentWidth);
     this.positionBorderRect_();

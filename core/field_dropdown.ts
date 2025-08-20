@@ -29,6 +29,7 @@ import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
+import {Size} from './utils/size.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
 
@@ -553,8 +554,7 @@ export class FieldDropdown extends Field<string> {
     } else {
       arrowWidth = dom.getTextWidth(this.arrow as SVGTSpanElement);
     }
-    this.size_.width = imageWidth + arrowWidth + xPadding * 2;
-    this.size_.height = height;
+    this.size_ = new Size(imageWidth + arrowWidth + xPadding * 2, height);
 
     let arrowX = 0;
     if (block.RTL) {
@@ -595,8 +595,7 @@ export class FieldDropdown extends Field<string> {
         height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2,
       );
     }
-    this.size_.width = textWidth + arrowWidth + xPadding * 2;
-    this.size_.height = height;
+    this.size_ = new Size(textWidth + arrowWidth + xPadding * 2, height);
 
     this.positionTextElement_(xPadding, textWidth);
   }

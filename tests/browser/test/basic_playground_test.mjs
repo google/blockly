@@ -101,6 +101,45 @@ suite('Right Clicking on Blocks', function () {
     await contextMenuSelect(this.browser, this.block, 'Remove Comment');
     chai.assert.isNull(await getCommentText(this.browser, this.block.id));
   });
+
+  test('does not scroll the page when node is ephemerally focused', async function () {
+    const initialScroll = await this.browser.execute(() => {
+      return window.scrollY;
+    });
+    // This left-right-left sequence was necessary to reproduce unintended
+    // scrolling; regardless of the number of clicks/context menu activations,
+    // the page should not scroll.
+    this.block.click({button: 2});
+    this.block.click({button: 0});
+    this.block.click({button: 2});
+    await this.browser.pause(250);
+    const finalScroll = await this.browser.execute(() => {
+      return window.scrollY;
+    });
+
+    chai.assert.equal(initialScroll, finalScroll);
+  });
+
+  test('does not scroll the page when node is actively focused', async function () {
+    await this.browser.setWindowSize(500, 300);
+    await this.browser.setViewport({width: 500, height: 300});
+    const initialScroll = await this.browser.execute((blockId) => {
+      window.scrollTo(0, document.body.scrollHeight);
+      return window.scrollY;
+    }, this.block.id);
+    await this.browser.execute(() => {
+      Blockly.getFocusManager().focusNode(
+        Blockly.getMainWorkspace().getToolbox(),
+      );
+    });
+    const finalScroll = await this.browser.execute(() => {
+      return window.scrollY;
+    });
+
+    chai.assert.equal(initialScroll, finalScroll);
+    await this.browser.setWindowSize(800, 600);
+    await this.browser.setViewport({width: 800, height: 600});
+  });
 });
 
 suite('Disabling', function () {

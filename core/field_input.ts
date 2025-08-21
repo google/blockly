@@ -741,17 +741,17 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    * Position a field's text element after a size change.  This handles both LTR
    * and RTL positioning.
    *
-   * @param xOffset x offset to use when positioning the text element.
+   * @param xMargin x offset to use when positioning the text element.
    * @param contentWidth The content width.
    */
   protected override positionTextElement_(
-    xOffset: number,
+    xMargin: number,
     contentWidth: number,
   ) {
-    const effectiveWidth = xOffset * 2 + contentWidth;
+    const effectiveWidth = xMargin * 2 + contentWidth;
     const delta =
       effectiveWidth < MINIMUM_WIDTH ? (MINIMUM_WIDTH - effectiveWidth) / 2 : 0;
-    super.positionTextElement_(xOffset + delta, contentWidth);
+    super.positionTextElement_(xMargin + delta, contentWidth);
   }
 
   /**

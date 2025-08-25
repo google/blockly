@@ -11,7 +11,7 @@ import {IconType} from '../../build/src/core/icons/icon_types.js';
 import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
 import {isCommentIcon} from '../../build/src/core/interfaces/i_comment_icon.js';
 import {Size} from '../../build/src/core/utils/size.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';
 import {
   createChangeListenerSpy,

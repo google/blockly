@@ -6,7 +6,7 @@
 
 import * as Blockly from '../../build/src/core/blockly.js';
 import * as eventUtils from '../../build/src/core/events/utils.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {
   assertEventEquals,
   assertNthCallEventArgEquals,

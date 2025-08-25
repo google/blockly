@@ -10,7 +10,7 @@ import {JavascriptGenerator} from '../../build/src/generators/javascript/javascr
 import {LuaGenerator} from '../../build/src/generators/lua/lua_generator.js';
 import {PhpGenerator} from '../../build/src/generators/php/php_generator.js';
 import {PythonGenerator} from '../../build/src/generators/python/python_generator.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,

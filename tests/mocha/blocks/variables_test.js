@@ -5,7 +5,7 @@
  */
 
 import {nameUsedWithConflictingParam} from '../../../build/src/core/variables.js';
-import {assert} from '../../../node_modules/chai/chai.js';
+import {assert} from '../../../node_modules/chai/index.js';
 import {
   MockParameterModelWithVar,
   MockProcedureModel,

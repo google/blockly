@@ -5,7 +5,7 @@
  */
 
 import * as Blockly from '../../build/src/core/blockly.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {
   assertFieldValue,

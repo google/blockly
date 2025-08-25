@@ -6,7 +6,7 @@
 
 import {callbackFactory} from '../../build/src/core/contextmenu.js';
 import * as xmlUtils from '../../build/src/core/utils/xml.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,

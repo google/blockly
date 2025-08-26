@@ -138,6 +138,7 @@
     "patch-package": "^8.0.0",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.0.0",
+    "puppeteer-core": "^24.17.0",
     "readline-sync": "^1.4.10",
     "rimraf": "^5.0.0",
     "typescript": "^5.3.3",

@@ -6,7 +6,7 @@
 
 import {FocusManager} from '../../build/src/core/focus_manager.js';
 import {FocusableTreeTraverser} from '../../build/src/core/utils/focusable_tree_traverser.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,

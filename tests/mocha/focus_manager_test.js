@@ -8,7 +8,7 @@ import {
   FocusManager,
   getFocusManager,
 } from '../../build/src/core/focus_manager.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {
   sharedTestSetup,
   sharedTestTeardown,

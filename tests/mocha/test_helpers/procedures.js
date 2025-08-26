@@ -6,7 +6,7 @@
 
 import {ConnectionType} from '../../../build/src/core/connection_type.js';
 import {VariableModel} from '../../../build/src/core/variable_model.js';
-import {assert} from '../../../node_modules/chai/chai.js';
+import {assert} from '../../../node_modules/chai/index.js';
 
 /**
  * Asserts that the procedure definition or call block has the expected var

@@ -15,9 +15,12 @@ const {posixPath} = require('../../scripts/helpers');
  * Runs the Mocha tests in this directory in Chrome. It uses webdriverio to
  * launch Chrome and load index.html. Outputs a summary of the test results
  * to the console.
+ *
+ * @param {boolean} exitOnCompletetion True if the browser should automatically
+ *     quit after tests have finished running.
  * @return {number} 0 on success, 1 on failure.
  */
-async function runMochaTestsInBrowser() {
+async function runMochaTestsInBrowser(exitOnCompletion = true) {
   const options = {
     capabilities: {
       browserName: 'chrome',
@@ -85,7 +88,7 @@ async function runMochaTestsInBrowser() {
   if (parseInt(numOfFailure) !== 0) {
     return 1;
   }
-  await browser.deleteSession();
+  if (exitOnCompletion) await browser.deleteSession();
   return 0;
 }
 

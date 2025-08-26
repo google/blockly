@@ -257,9 +257,9 @@ async function metadata() {
  * Run Mocha tests inside a browser.
  * @return {Promise} Asynchronous result.
  */
-async function mocha() {
+async function mocha(exitOnCompletion = true) {
   return runTestTask('mocha', async () => {
-    const result = await runMochaTestsInBrowser().catch(e => {
+    const result = await runMochaTestsInBrowser(exitOnCompletion).catch(e => {
       throw e;
     });
     if (result) {
@@ -267,6 +267,14 @@ async function mocha() {
     }
     console.log('Mocha tests passed');
   });
+}
+
+/**
+ * Run Mocha tests inside a browser and keep the browser open upon completion.
+ * @return {Promise} Asynchronous result.
+ */
+export async function interactiveMocha() {
+  return mocha(false);
 }
 
 /**

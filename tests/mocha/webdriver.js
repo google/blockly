@@ -45,6 +45,17 @@ async function runMochaTestsInBrowser() {
   console.log('Loading URL: ' + url);
   await browser.url(url);
 
+  // Toggle the devtools setting to emulate focus, so that the window will
+  // always act as if it has focus regardless of the state of the window manager
+  // or operating system. This improves the reliability of FocusManager-related
+  // tests.
+  const puppeteer = await browser.getPuppeteer();
+  await browser.call(async () => {
+    const page = (await puppeteer.pages())[0];
+    const session = await page.createCDPSession();
+    await session.send('Emulation.setFocusEmulationEnabled', { enabled: true });
+  });
+
   await browser.waitUntil(async() => {
     const elem = await browser.$('#failureCount');
     const text = await elem.getAttribute('tests_failed');

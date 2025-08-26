@@ -109,7 +109,7 @@
     "@microsoft/api-extractor": "^7.29.5",
     "ajv": "^8.17.1",
     "async-done": "^2.0.0",
-    "chai": "^5.1.1",
+    "chai": "^6.0.1",
     "concurrently": "^9.0.1",
     "eslint": "^9.15.0",
     "eslint-config-google": "^0.14.0",

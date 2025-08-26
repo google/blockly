@@ -5,7 +5,7 @@
  */
 
 import * as eventUtils from '../../../build/src/core/events/utils.js';
-import {assert} from '../../../node_modules/chai/chai.js';
+import {assert} from '../../../node_modules/chai/index.js';
 import {workspaceTeardown} from './setup_teardown.js';
 import {assertVariableValues} from './variables.js';
 import {assertWarnings} from './warnings.js';

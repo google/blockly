@@ -5,7 +5,7 @@
  */
 
 import {EventType} from '../../build/src/core/events/type.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import {
   sharedTestSetup,

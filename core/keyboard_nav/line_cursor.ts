@@ -14,14 +14,11 @@
  */
 
 import {BlockSvg} from '../block_svg.js';
-import {CommentBarButton} from '../comments/comment_bar_button.js';
 import {RenderedWorkspaceComment} from '../comments/rendered_workspace_comment.js';
-import {Field} from '../field.js';
 import {getFocusManager} from '../focus_manager.js';
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import * as registry from '../registry.js';
-import {Rect} from '../utils/rect.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 import {Marker} from './marker.js';
 
 /**
@@ -392,31 +389,6 @@ export class LineCursor extends Marker {
    */
   setCurNode(newNode: IFocusableNode) {
     getFocusManager().focusNode(newNode);
-
-    // Try to scroll cursor into view.
-    if (newNode instanceof BlockSvg) {
-      newNode.workspace.scrollBoundsIntoView(
-        newNode.getBoundingRectangleWithoutChildren(),
-      );
-    } else if (newNode instanceof Field) {
-      const block = newNode.getSourceBlock() as BlockSvg;
-      block.workspace.scrollBoundsIntoView(
-        block.getBoundingRectangleWithoutChildren(),
-      );
-    } else if (newNode instanceof RenderedWorkspaceComment) {
-      newNode.workspace.scrollBoundsIntoView(newNode.getBoundingRectangle());
-    } else if (newNode instanceof CommentBarButton) {
-      const commentView = newNode.getCommentView();
-      const xy = commentView.getRelativeToSurfaceXY();
-      const size = commentView.getSize();
-      const bounds = new Rect(
-        xy.y,
-        xy.y + size.height,
-        xy.x,
-        xy.x + size.width,
-      );
-      commentView.workspace.scrollBoundsIntoView(bounds);
-    }
   }
 
   /**

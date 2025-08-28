@@ -347,6 +347,7 @@ export class RenderedWorkspaceComment
     this.select();
     // Ensure that the comment is always at the top when focused.
     this.workspace.getLayerManager()?.append(this, layers.BLOCK);
+    this.workspace.scrollBoundsIntoView(this.getBoundingRectangle());
   }
 
   /** See IFocusableNode.onNodeBlur. */

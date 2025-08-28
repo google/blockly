@@ -398,7 +398,11 @@ export class FlyoutButton
   }
 
   /** See IFocusableNode.onNodeFocus. */
-  onNodeFocus(): void {}
+  onNodeFocus(): void {
+    const xy = this.getPosition();
+    const bounds = new Rect(xy.y, xy.y + this.height, xy.x, xy.x + this.width);
+    this.workspace.scrollBoundsIntoView(bounds);
+  }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}

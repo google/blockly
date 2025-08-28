@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {
   assertEventFired,
   assertEventNotFired,
@@ -503,6 +503,27 @@ suite('Variable Map', function () {
             this.variableMap.renameVariableById('test id', 'test name');
           }, `Tried to rename a variable that didn't exist`);
         });
+      });
+    });
+
+    suite('variable type change events', function () {
+      test('are fired when a variable has its type changed', function () {
+        const variable = this.variableMap.createVariable(
+          'name1',
+          'type1',
+          'id1',
+        );
+        this.variableMap.changeVariableType(variable, 'type2');
+        assertEventFired(
+          this.eventSpy,
+          Blockly.Events.VarTypeChange,
+          {
+            oldType: 'type1',
+            newType: 'type2',
+            varId: 'id1',
+          },
+          this.workspace.id,
+        );
       });
     });
   });

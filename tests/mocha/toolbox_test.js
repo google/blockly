@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   sharedTestSetup,
@@ -180,6 +180,57 @@ suite('Toolbox', function () {
         this.toolbox.render(jsonDef);
       });
       assert.equal(this.toolbox.contents.size, 1);
+    });
+  });
+
+  suite('focus management', function () {
+    setup(function () {
+      this.toolbox = getInjectedToolbox();
+    });
+    teardown(function () {
+      this.toolbox.dispose();
+    });
+
+    test('Losing focus hides autoclosing flyout', function () {
+      // Focus the toolbox and select a category to open the flyout.
+      const target = this.toolbox.HtmlDiv.querySelector(
+        '.blocklyToolboxCategory',
+      );
+      Blockly.getFocusManager().focusNode(this.toolbox);
+      target.dispatchEvent(
+        new PointerEvent('pointerdown', {
+          target,
+          bubbles: true,
+        }),
+      );
+      assert.isTrue(this.toolbox.getFlyout().isVisible());
+
+      // Focus the workspace to trigger the toolbox to close the flyout.
+      Blockly.getFocusManager().focusNode(this.toolbox.getWorkspace());
+      assert.isFalse(this.toolbox.getFlyout().isVisible());
+    });
+
+    test('Losing focus does not hide non-autoclosing flyout', function () {
+      // Make the toolbox's flyout non-autoclosing.
+      this.toolbox.getFlyout().setAutoClose(false);
+
+      // Focus the toolbox and select a category to open the flyout.
+      const target = this.toolbox.HtmlDiv.querySelector(
+        '.blocklyToolboxCategory',
+      );
+      Blockly.getFocusManager().focusNode(this.toolbox);
+      target.dispatchEvent(
+        new PointerEvent('pointerdown', {
+          target,
+          bubbles: true,
+        }),
+      );
+      assert.isTrue(this.toolbox.getFlyout().isVisible());
+
+      // Focus the workspace; this should *not* trigger the toolbox to close the
+      // flyout, which should remain visible.
+      Blockly.getFocusManager().focusNode(this.toolbox.getWorkspace());
+      assert.isTrue(this.toolbox.getFlyout().isVisible());
     });
   });
 

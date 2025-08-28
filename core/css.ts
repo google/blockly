@@ -181,7 +181,8 @@ let content = `
   cursor: -webkit-grabbing;
 }
 
-.blocklyDragging.blocklyDraggingDelete {
+.blocklyDragging.blocklyDraggingDelete,
+.blocklyDragging.blocklyDraggingDelete .blocklyField {
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
 }
 
@@ -241,7 +242,7 @@ let content = `
   cursor: default;
 }
 
-.blocklyIconGroup:not(:hover),
+.blocklyIconGroup:not(:hover):not(:focus),
 .blocklyIconGroupReadonly {
   opacity: .6;
 }

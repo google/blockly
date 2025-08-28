@@ -9,7 +9,9 @@ import * as common from '../common.js';
 import {BubbleDragStrategy} from '../dragging/bubble_drag_strategy.js';
 import {getFocusManager} from '../focus_manager.js';
 import {IBubble} from '../interfaces/i_bubble.js';
+import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {IFocusableTree} from '../interfaces/i_focusable_tree.js';
+import type {IHasBubble} from '../interfaces/i_has_bubble.js';
 import {ISelectable} from '../interfaces/i_selectable.js';
 import {ContainerRegion} from '../metrics_manager.js';
 import {Scrollbar} from '../scrollbar.js';
@@ -27,7 +29,7 @@ import {WorkspaceSvg} from '../workspace_svg.js';
  * bubble, where it has a "tail" that points to the block, and a "head" that
  * displays arbitrary svg elements.
  */
-export abstract class Bubble implements IBubble, ISelectable {
+export abstract class Bubble implements IBubble, ISelectable, IFocusableNode {
   /** The width of the border around the bubble. */
   static readonly BORDER_WIDTH = 6;
 
@@ -100,12 +102,14 @@ export abstract class Bubble implements IBubble, ISelectable {
    *     element that's represented by this bubble (as a focusable node). This
    *     element will have its ID overwritten. If not provided, the focusable
    *     element of this node will default to the bubble's SVG root.
+   * @param owner The object responsible for hosting/spawning this bubble.
    */
   constructor(
     public readonly workspace: WorkspaceSvg,
     protected anchor: Coordinate,
     protected ownerRect?: Rect,
     overriddenFocusableElement?: SVGElement | HTMLElement,
+    protected owner?: IHasBubble & IFocusableNode,
   ) {
     this.id = idGenerator.getNextUniqueId();
     this.svgRoot = dom.createSvgElement(
@@ -144,6 +148,13 @@ export abstract class Bubble implements IBubble, ISelectable {
       'pointerdown',
       this,
       this.onMouseDown,
+    );
+
+    browserEvents.conditionalBind(
+      this.focusableElement,
+      'keydown',
+      this,
+      this.onKeyDown,
     );
   }
 
@@ -227,6 +238,19 @@ export abstract class Bubble implements IBubble, ISelectable {
   private onMouseDown(e: PointerEvent) {
     this.workspace.getGesture(e)?.handleBubbleStart(e, this);
     getFocusManager().focusNode(this);
+  }
+
+  /**
+   * Handles key events when this bubble is focused. By default, closes the
+   * bubble on Escape.
+   *
+   * @param e The keyboard event to handle.
+   */
+  protected onKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape' && this.owner) {
+      this.owner.setBubbleVisible(false);
+      getFocusManager().focusNode(this.owner);
+    }
   }
 
   /** Positions the bubble relative to its anchor. Does not render its tail. */
@@ -683,6 +707,10 @@ export abstract class Bubble implements IBubble, ISelectable {
   onNodeFocus(): void {
     this.select();
     this.bringToFront();
+    const xy = this.getRelativeToSurfaceXY();
+    const size = this.getSize();
+    const bounds = new Rect(xy.y, xy.y + size.height, xy.x, xy.x + size.width);
+    this.workspace.scrollBoundsIntoView(bounds);
   }
 
   /** See IFocusableNode.onNodeBlur. */
@@ -693,5 +721,12 @@ export abstract class Bubble implements IBubble, ISelectable {
   /** See IFocusableNode.canBeFocused. */
   canBeFocused(): boolean {
     return true;
+  }
+
+  /**
+   * Returns the object that owns/hosts this bubble, if any.
+   */
+  getOwner(): (IHasBubble & IFocusableNode) | undefined {
+    return this.owner;
   }
 }

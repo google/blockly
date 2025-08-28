@@ -11,7 +11,7 @@
 import * as chai from 'chai';
 import {Key} from 'webdriverio';
 import {
-  dragBlockTypeFromFlyout,
+  getBlockTypeFromCategory,
   getCategory,
   PAUSE_TIME,
   screenDirection,
@@ -148,7 +148,12 @@ async function openCategories(browser, categoryList, directionMultiplier) {
           continue;
         }
         const blockType = await getNthBlockType(browser, categoryName, i);
-        dragBlockTypeFromFlyout(browser, categoryName, blockType, 50, 20);
+        const blockElem = await getBlockTypeFromCategory(
+          browser,
+          categoryName,
+          blockType,
+        );
+        await blockElem.dragAndDrop({x: 50 * directionMultiplier, y: 20});
         await browser.pause(PAUSE_TIME);
         // Should be one top level block on the workspace.
         const topBlockCount = await browser.execute(() => {
@@ -174,9 +179,9 @@ async function openCategories(browser, categoryList, directionMultiplier) {
   chai.assert.equal(failureCount, 0);
 }
 
-// TODO (#9217) These take too long to run and are very flakey. Need to find a
-// better way to test whatever this is trying to test.
-suite.skip('Open toolbox categories', function () {
+// TODO (#9217) These take too long to run and are very flakey. Need to pull
+// these out into their own test runner.
+suite('Open toolbox categories', function () {
   this.timeout(0);
 
   test('opening every toolbox category in the category toolbox in LTR', async function () {

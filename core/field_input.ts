@@ -46,6 +46,11 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 type InputTypes = string | number;
 
 /**
+ * The minimum width of an input field.
+ */
+const MINIMUM_WIDTH = 14;
+
+/**
  * Abstract class for an editable input field.
  *
  * @typeParam T - The value stored on the field.
@@ -102,11 +107,9 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   override SERIALIZABLE = true;
 
-  /**
-   * Sets the size of this field. Although this appears to be a no-op, it must
-   * exist since the getter is overridden below.
-   */
   protected override set size_(newValue: Size) {
+    // Although this appears to be a no-op, it must exist since the getter is
+    // overridden below.
     super.size_ = newValue;
   }
 
@@ -115,8 +118,8 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
    */
   protected override get size_() {
     const s = super.size_;
-    if (s.width < 14) {
-      s.width = 14;
+    if (s.width < MINIMUM_WIDTH) {
+      s.width = MINIMUM_WIDTH;
     }
 
     return s;
@@ -730,6 +733,23 @@ export abstract class FieldInput<T extends InputTypes> extends Field<
     if (!bumped) this.resizeEditor_();
 
     return true;
+  }
+
+  /**
+   * Position a field's text element after a size change.  This handles both LTR
+   * and RTL positioning.
+   *
+   * @param xMargin x offset to use when positioning the text element.
+   * @param contentWidth The content width.
+   */
+  protected override positionTextElement_(
+    xMargin: number,
+    contentWidth: number,
+  ) {
+    const effectiveWidth = xMargin * 2 + contentWidth;
+    const delta =
+      effectiveWidth < MINIMUM_WIDTH ? (MINIMUM_WIDTH - effectiveWidth) / 2 : 0;
+    super.positionTextElement_(xMargin + delta, contentWidth);
   }
 
   /**

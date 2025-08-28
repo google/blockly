@@ -7,7 +7,7 @@
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
 import {Rect} from '../utils/rect.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
-import type {RenderedWorkspaceComment} from './rendered_workspace_comment.js';
+import type {CommentView} from './comment_view.js';
 
 /**
  * Button displayed on a comment's top bar.
@@ -29,6 +29,7 @@ export abstract class CommentBarButton implements IFocusableNode {
     protected readonly id: string,
     protected readonly workspace: WorkspaceSvg,
     protected readonly container: SVGGElement,
+    protected readonly commentView: CommentView,
   ) {}
 
   /**
@@ -39,17 +40,10 @@ export abstract class CommentBarButton implements IFocusableNode {
   }
 
   /**
-   * Returns the parent comment of this comment bar button.
+   * Returns the parent comment view of this comment bar button.
    */
-  getParentComment(): RenderedWorkspaceComment {
-    const comment = this.workspace.getCommentById(this.id);
-    if (!comment) {
-      throw new Error(
-        `Comment bar button ${this.id} has no corresponding comment`,
-      );
-    }
-
-    return comment;
+  getCommentView(): CommentView {
+    return this.commentView;
   }
 
   /** Adjusts the position of this button within its parent container. */
@@ -93,7 +87,13 @@ export abstract class CommentBarButton implements IFocusableNode {
   }
 
   /** Called when this button's focusable DOM element gains focus. */
-  onNodeFocus() {}
+  onNodeFocus() {
+    const commentView = this.getCommentView();
+    const xy = commentView.getRelativeToSurfaceXY();
+    const size = commentView.getSize();
+    const bounds = new Rect(xy.y, xy.y + size.height, xy.x, xy.x + size.width);
+    commentView.workspace.scrollBoundsIntoView(bounds);
+  }
 
   /** Called when this button's focusable DOM element loses focus. */
   onNodeBlur() {}

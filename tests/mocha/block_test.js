@@ -11,7 +11,7 @@ import {IconType} from '../../build/src/core/icons/icon_types.js';
 import {EndRowInput} from '../../build/src/core/inputs/end_row_input.js';
 import {isCommentIcon} from '../../build/src/core/interfaces/i_comment_icon.js';
 import {Size} from '../../build/src/core/utils/size.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';
 import {
   createChangeListenerSpy,
@@ -200,6 +200,35 @@ suite('Blocks', function () {
         blocks.B.unplug(true);
 
         assertUnpluggedHealFailed(blocks);
+      });
+      test('Disconnect top of stack with immovable sibling', function () {
+        this.blocks.B.setMovable(false);
+        this.blocks.A.unplug(true);
+        assert.equal(this.blocks.A.nextConnection.targetBlock(), this.blocks.B);
+        assert.isNull(this.blocks.B.nextConnection.targetBlock());
+        assert.isNull(this.blocks.C.previousConnection.targetBlock());
+      });
+      test('Heal with immovable sibling mid-stack', function () {
+        const blockD = this.workspace.newBlock('stack_block', 'd');
+        this.blocks.C.nextConnection.connect(blockD.previousConnection);
+        this.blocks.C.setMovable(false);
+        this.blocks.B.unplug(true);
+        assert.equal(this.blocks.A.nextConnection.targetBlock(), blockD);
+        assert.equal(this.blocks.B.nextConnection.targetBlock(), this.blocks.C);
+        assert.isNull(this.blocks.C.nextConnection.targetBlock());
+      });
+      test('Heal with immovable sibling and shadow sibling mid-stack', function () {
+        const blockD = this.workspace.newBlock('stack_block', 'd');
+        const blockE = this.workspace.newBlock('stack_block', 'e');
+        this.blocks.C.nextConnection.connect(blockD.previousConnection);
+        blockD.nextConnection.connect(blockE.previousConnection);
+        this.blocks.C.setMovable(false);
+        blockD.setShadow(true);
+        this.blocks.B.unplug(true);
+        assert.equal(this.blocks.A.nextConnection.targetBlock(), blockE);
+        assert.equal(this.blocks.B.nextConnection.targetBlock(), this.blocks.C);
+        assert.equal(this.blocks.C.nextConnection.targetBlock(), blockD);
+        assert.isNull(blockD.nextConnection.targetBlock());
       });
       test('Child is shadow', function () {
         const blocks = this.blocks;

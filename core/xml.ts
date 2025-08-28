@@ -68,7 +68,7 @@ export function saveWorkspaceComment(
   if (!skipId) elem.setAttribute('id', comment.id);
 
   const workspace = comment.workspace;
-  const loc = comment.getRelativeToSurfaceXY();
+  const loc = comment.getRelativeToSurfaceXY().clone();
   loc.x = workspace.RTL ? workspace.getWidth() - loc.x : loc.x;
   elem.setAttribute('x', `${loc.x}`);
   elem.setAttribute('y', `${loc.y}`);

@@ -74,15 +74,6 @@ export class RenderedWorkspaceComment
       this,
       this.startGesture,
     );
-    // Don't zoom with mousewheel; let it scroll instead.
-    browserEvents.conditionalBind(
-      this.view.getSvgRoot(),
-      'wheel',
-      this,
-      (e: Event) => {
-        e.stopPropagation();
-      },
-    );
   }
 
   /**
@@ -289,6 +280,7 @@ export class RenderedWorkspaceComment
       paster: WorkspaceCommentPaster.TYPE,
       commentState: commentSerialization.save(this, {
         addCoordinates: true,
+        saveIds: false,
       }),
     };
   }
@@ -355,6 +347,7 @@ export class RenderedWorkspaceComment
     this.select();
     // Ensure that the comment is always at the top when focused.
     this.workspace.getLayerManager()?.append(this, layers.BLOCK);
+    this.workspace.scrollBoundsIntoView(this.getBoundingRectangle());
   }
 
   /** See IFocusableNode.onNodeBlur. */

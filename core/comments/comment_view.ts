@@ -102,7 +102,7 @@ export class CommentView implements IRenderedElement {
 
   constructor(
     readonly workspace: WorkspaceSvg,
-    private commentId: string,
+    readonly commentId: string,
   ) {
     this.svgRoot = dom.createSvgElement(Svg.G, {
       'class': 'blocklyComment blocklyEditable blocklyDraggable',
@@ -176,12 +176,18 @@ export class CommentView implements IRenderedElement {
       this.commentId,
       this.workspace,
       topBarGroup,
+      this,
     );
     const foldoutButton = new CollapseCommentBarButton(
       this.commentId,
       this.workspace,
       topBarGroup,
+      this,
     );
+    this.addDisposeListener(() => {
+      deleteButton.dispose();
+      foldoutButton.dispose();
+    });
     const textPreview = dom.createSvgElement(
       Svg.TEXT,
       {
@@ -362,7 +368,10 @@ export class CommentView implements IRenderedElement {
 
     const textPreviewWidth =
       size.width - foldoutSize.getWidth() - deleteSize.getWidth();
-    this.textPreview.setAttribute('x', `${foldoutSize.getWidth()}`);
+    this.textPreview.setAttribute(
+      'x',
+      `${(this.workspace.RTL ? -1 : 1) * foldoutSize.getWidth()}`,
+    );
     this.textPreview.setAttribute(
       'y',
       `${textPreviewMargin + textPreviewSize.height / 2}`,
@@ -612,13 +621,12 @@ export class CommentView implements IRenderedElement {
   /** Disposes of this comment view. */
   dispose() {
     this.disposing = true;
-    this.foldoutButton.dispose();
-    this.deleteButton.dispose();
     dom.removeNode(this.svgRoot);
     // Loop through listeners backwards in case they remove themselves.
     for (let i = this.disposeListeners.length - 1; i >= 0; i--) {
       this.disposeListeners[i]();
     }
+    this.disposeListeners.length = 0;
     this.disposed = true;
   }
 

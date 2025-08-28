@@ -22,6 +22,7 @@ import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
+import {TextInputBubble} from './bubbles/textinput_bubble.js';
 import {COMMENT_COLLAPSE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/collapse_comment_bar_button.js';
 import {COMMENT_EDITOR_FOCUS_IDENTIFIER} from './comments/comment_editor.js';
 import {COMMENT_DELETE_BAR_BUTTON_FOCUS_IDENTIFIER} from './comments/delete_comment_bar_button.js';
@@ -1673,7 +1674,10 @@ export class WorkspaceSvg
   /** Clean up the workspace by ordering all the blocks in a column such that none overlap. */
   cleanUp() {
     this.setResizesEnabled(false);
-    eventUtils.setGroup(true);
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
 
     const topBlocks = this.getTopBlocks(true);
     const movableBlocks = topBlocks.filter((block) => block.isMovable());
@@ -1721,7 +1725,7 @@ export class WorkspaceSvg
         block.getHeightWidth().height +
         minBlockHeight;
     }
-    eventUtils.setGroup(false);
+    eventUtils.setGroup(existingGroup);
     this.setResizesEnabled(true);
   }
 
@@ -2726,6 +2730,19 @@ export class WorkspaceSvg
     previousNode: IFocusableNode | null,
   ): IFocusableNode | null {
     if (!previousNode) {
+      const flyout = this.targetWorkspace?.getFlyout();
+      if (this.isFlyout && flyout) {
+        // Return the first focusable item of the flyout.
+        return (
+          flyout
+            .getContents()
+            .find((flyoutItem) => {
+              const element = flyoutItem.getElement();
+              return isFocusableNode(element) && element.canBeFocused();
+            })
+            ?.getElement() ?? null
+        );
+      }
       return this.getTopBlocks(true)[0] ?? null;
     } else return null;
   }
@@ -2868,6 +2885,11 @@ export class WorkspaceSvg
           bubble.getFocusableElement().id === id
         ) {
           return bubble;
+        } else if (
+          bubble instanceof TextInputBubble &&
+          bubble.getEditor().getFocusableElement().id === id
+        ) {
+          return bubble.getEditor();
         }
       }
     }
@@ -2889,11 +2911,9 @@ export class WorkspaceSvg
       // Only hide the flyout if the flyout's workspace is losing focus and that
       // focus isn't returning to the flyout itself, the toolbox, or ephemeral.
       if (getFocusManager().ephemeralFocusTaken()) return;
-      const flyout = this.targetWorkspace.getFlyout();
       const toolbox = this.targetWorkspace.getToolbox();
       if (toolbox && nextTree === toolbox) return;
-      if (toolbox) toolbox.clearSelection();
-      if (flyout && isAutoHideable(flyout)) flyout.autoHide(false);
+      if (isAutoHideable(toolbox)) toolbox.autoHide(false);
     }
   }
 

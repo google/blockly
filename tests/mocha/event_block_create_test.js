@@ -5,7 +5,7 @@
  */
 
 import {EventType} from '../../build/src/core/events/type.js';
-import {assert} from '../../node_modules/chai/chai.js';
+import {assert} from '../../node_modules/chai/index.js';
 import {defineRowBlock} from './test_helpers/block_definitions.js';
 import {assertEventFired} from './test_helpers/events.js';
 import {

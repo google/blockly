@@ -309,6 +309,8 @@ export class FocusManager {
    * Note that this may update the specified node's element's tabindex to ensure
    * that it can be properly read out by screenreaders while focused.
    *
+   * The focused node will not be automatically scrolled into view.
+   *
    * @param focusableNode The node that should receive active focus.
    */
   focusNode(focusableNode: IFocusableNode): void {
@@ -423,6 +425,8 @@ export class FocusManager {
    * the returned lambda is called. Additionally, only 1 ephemeral focus context
    * can be active at any given time (attempting to activate more than one
    * simultaneously will result in an error being thrown).
+   *
+   * This method does not scroll the ephemerally focused element into view.
    */
   takeEphemeralFocus(
     focusableElement: HTMLElement | SVGElement,
@@ -439,7 +443,7 @@ export class FocusManager {
     if (this.focusedNode) {
       this.passivelyFocusNode(this.focusedNode, null);
     }
-    focusableElement.focus();
+    focusableElement.focus({preventScroll: true});
 
     let hasFinishedEphemeralFocus = false;
     return () => {
@@ -574,7 +578,7 @@ export class FocusManager {
     }
 
     this.setNodeToVisualActiveFocus(node);
-    elem.focus();
+    elem.focus({preventScroll: true});
   }
 
   /**

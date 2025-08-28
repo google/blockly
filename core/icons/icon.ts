@@ -14,6 +14,7 @@ import * as tooltip from '../tooltip.js';
 import {Coordinate} from '../utils/coordinate.js';
 import * as dom from '../utils/dom.js';
 import * as idGenerator from '../utils/idgenerator.js';
+import {Rect} from '../utils/rect.js';
 import {Size} from '../utils/size.js';
 import {Svg} from '../utils/svg.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
@@ -168,7 +169,16 @@ export abstract class Icon implements IIcon {
   }
 
   /** See IFocusableNode.onNodeFocus. */
-  onNodeFocus(): void {}
+  onNodeFocus(): void {
+    const blockBounds = (this.sourceBlock as BlockSvg).getBoundingRectangle();
+    const bounds = new Rect(
+      blockBounds.top + this.offsetInBlock.y,
+      blockBounds.top + this.offsetInBlock.y + this.getSize().height,
+      blockBounds.left + this.offsetInBlock.x,
+      blockBounds.left + this.offsetInBlock.x + this.getSize().width,
+    );
+    (this.sourceBlock as BlockSvg).workspace.scrollBoundsIntoView(bounds);
+  }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}

@@ -83,6 +83,9 @@ export function moveBlockToNotConflict(
   block: BlockSvg,
   originalPosition: Coordinate,
 ) {
+  if (block.workspace.RTL) {
+    originalPosition.x = block.workspace.getWidth() - originalPosition.x;
+  }
   const workspace = block.workspace;
   const snapRadius = config.snapRadius;
   const bumpOffset = Coordinate.difference(

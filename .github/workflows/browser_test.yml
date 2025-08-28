@@ -5,13 +5,15 @@ name: Run browser manually
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1' # Runs every Monday at 06:00 UTC
 
 permissions:
   contents: read
 
 jobs:
   build:
-    timeout-minutes: 10
+    timeout-minutes: 120
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -24,7 +26,7 @@ jobs:
         # https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
 

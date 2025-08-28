@@ -43,7 +43,7 @@ export interface IVariableMap<T extends IVariableModel<IVariableState>> {
    * Creates a new variable with the given name. If ID is not specified, the
    * variable map should create one. Returns the new variable.
    */
-  createVariable(name: string, id?: string, type?: string | null): T;
+  createVariable(name: string, type?: string, id?: string | null): T;
 
   /* Adds a variable to this variable map. */
   addVariable(variable: T): void;

@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import googleStyle from 'eslint-config-google';
 import jsdoc from 'eslint-plugin-jsdoc';
+import mochaPlugin from 'eslint-plugin-mocha';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -88,7 +89,8 @@ function buildTSOverride({files, tsconfig}) {
       '@typescript-eslint/no-explicit-any': ['off'],
       // We use this pattern extensively for block (e.g. controls_if) interfaces.
       '@typescript-eslint/no-empty-object-type': ['off'],
-
+      // TSDoc doesn't support @yields, so don't require that we use it.
+      'jsdoc/require-yields': ['off'],
       // params and returns docs are optional.
       'jsdoc/require-param-description': ['off'],
       'jsdoc/require-returns': ['off'],
@@ -200,6 +202,9 @@ export default [
   },
   {
     files: ['tests/**'],
+    plugins: {
+      mocha: mochaPlugin,
+    },
     languageOptions: {
       globals: {
         'Blockly': true,
@@ -219,6 +224,7 @@ export default [
       'jsdoc/check-tag-names': ['warn', {'definedTags': ['record']}],
       'jsdoc/tag-lines': ['off'],
       'jsdoc/no-defaults': ['off'],
+      'mocha/no-exclusive-tests': 'error',
     },
   },
   {

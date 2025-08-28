@@ -119,9 +119,6 @@ export abstract class Field<T = any>
     return this.size;
   }
 
-  /**
-   * Sets the size of this field.
-   */
   protected set size_(newValue: Size) {
     this.size = newValue;
   }
@@ -852,8 +849,7 @@ export abstract class Field<T = any>
       totalHeight = Math.max(totalHeight, constants!.FIELD_BORDER_RECT_HEIGHT);
     }
 
-    this.size_.height = totalHeight;
-    this.size_.width = totalWidth;
+    this.size_ = new Size(totalWidth, totalHeight);
 
     this.positionTextElement_(xOffset, contentWidth);
     this.positionBorderRect_();
@@ -1384,7 +1380,12 @@ export abstract class Field<T = any>
   }
 
   /** See IFocusableNode.onNodeFocus. */
-  onNodeFocus(): void {}
+  onNodeFocus(): void {
+    const block = this.getSourceBlock() as BlockSvg;
+    block.workspace.scrollBoundsIntoView(
+      block.getBoundingRectangleWithoutChildren(),
+    );
+  }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}

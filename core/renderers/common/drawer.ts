@@ -122,9 +122,12 @@ export class Drawer {
       } else if (Types.isSpacer(elem)) {
         this.outlinePath_ += svgPaths.lineOnAxis('h', elem.width);
       }
+      // No branch for a square corner, because it's a no-op.
     }
-    // No branch for a square corner, because it's a no-op.
-    this.outlinePath_ += svgPaths.lineOnAxis('v', topRow.height);
+    this.outlinePath_ += svgPaths.lineOnAxis(
+      'v',
+      topRow.height - topRow.ascenderHeight,
+    );
   }
 
   /**

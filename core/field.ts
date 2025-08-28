@@ -1380,7 +1380,12 @@ export abstract class Field<T = any>
   }
 
   /** See IFocusableNode.onNodeFocus. */
-  onNodeFocus(): void {}
+  onNodeFocus(): void {
+    const block = this.getSourceBlock() as BlockSvg;
+    block.workspace.scrollBoundsIntoView(
+      block.getBoundingRectangleWithoutChildren(),
+    );
+  }
 
   /** See IFocusableNode.onNodeBlur. */
   onNodeBlur(): void {}

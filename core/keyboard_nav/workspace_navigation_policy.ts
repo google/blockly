@@ -5,6 +5,7 @@
  */
 
 import type {IFocusableNode} from '../interfaces/i_focusable_node.js';
+import {isFocusableNode} from '../interfaces/i_focusable_node.js';
 import type {INavigationPolicy} from '../interfaces/i_navigation_policy.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
@@ -21,6 +22,15 @@ export class WorkspaceNavigationPolicy
    * @returns The top block of the first block stack, if any.
    */
   getFirstChild(current: WorkspaceSvg): IFocusableNode | null {
+    if (current.isFlyout) {
+      for (const item of current.targetWorkspace?.getFlyout()?.getContents() ??
+        []) {
+        const element = item.getElement();
+        if (isFocusableNode(element) && element.canBeFocused()) {
+          return element;
+        }
+      }
+    }
     const blocks = current.getTopBlocks(true);
     return blocks.length ? blocks[0] : null;
   }

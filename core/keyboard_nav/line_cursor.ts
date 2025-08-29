@@ -22,6 +22,16 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 import {Marker} from './marker.js';
 
 /**
+ * Representation of the direction of travel within a navigation context.
+ */
+export enum NavigationDirection {
+  NEXT,
+  PREVIOUS,
+  IN,
+  OUT,
+}
+
+/**
  * Class for a line cursor.
  */
 export class LineCursor extends Marker {
@@ -51,14 +61,8 @@ export class LineCursor extends Marker {
     }
     const newNode = this.getNextNode(
       curNode,
-      (candidate: IFocusableNode | null) => {
-        return (
-          (candidate instanceof BlockSvg &&
-            !candidate.outputConnection?.targetBlock()) ||
-          candidate instanceof RenderedWorkspaceComment
-        );
-      },
-      true,
+      this.getValidationFunction(NavigationDirection.NEXT),
+      this.shouldLoop(NavigationDirection.NEXT),
     );
 
     if (newNode) {
@@ -80,7 +84,11 @@ export class LineCursor extends Marker {
       return null;
     }
 
-    const newNode = this.getNextNode(curNode, () => true, true);
+    const newNode = this.getNextNode(
+      curNode,
+      this.getValidationFunction(NavigationDirection.IN),
+      this.shouldLoop(NavigationDirection.IN),
+    );
 
     if (newNode) {
       this.setCurNode(newNode);
@@ -101,14 +109,8 @@ export class LineCursor extends Marker {
     }
     const newNode = this.getPreviousNode(
       curNode,
-      (candidate: IFocusableNode | null) => {
-        return (
-          (candidate instanceof BlockSvg &&
-            !candidate.outputConnection?.targetBlock()) ||
-          candidate instanceof RenderedWorkspaceComment
-        );
-      },
-      true,
+      this.getValidationFunction(NavigationDirection.PREVIOUS),
+      this.shouldLoop(NavigationDirection.PREVIOUS),
     );
 
     if (newNode) {
@@ -130,12 +132,57 @@ export class LineCursor extends Marker {
       return null;
     }
 
-    const newNode = this.getPreviousNode(curNode, () => true, true);
+    const newNode = this.getPreviousNode(
+      curNode,
+      this.getValidationFunction(NavigationDirection.OUT),
+      this.shouldLoop(NavigationDirection.OUT),
+    );
 
     if (newNode) {
       this.setCurNode(newNode);
     }
     return newNode;
+  }
+
+  /**
+   * Returns a function that will be used to determine whether a candidate for
+   * navigation is valid.
+   *
+   * @param direction The direction in which the user is navigating.
+   * @returns A function that takes a proposed navigation candidate and returns
+   *     true if navigation should be allowed to proceed to it, or false to find
+   *     a different candidate.
+   */
+  getValidationFunction(
+    direction: NavigationDirection,
+  ): (node: IFocusableNode | null) => boolean {
+    switch (direction) {
+      case NavigationDirection.IN:
+      case NavigationDirection.OUT:
+        return () => true;
+      case NavigationDirection.NEXT:
+      case NavigationDirection.PREVIOUS:
+        return (candidate: IFocusableNode | null) => {
+          return (
+            (candidate instanceof BlockSvg &&
+              !candidate.outputConnection?.targetBlock()) ||
+            (!!candidate &&
+              this.workspace.getNavigator().getParent(candidate) ===
+                this.workspace)
+          );
+        };
+    }
+  }
+
+  /**
+   * Returns whether or not navigation should loop around when reaching the end/
+   * beginning of navigable items.
+   *
+   * @param _direction The direction in which the user is navigating.
+   * @returns True if navigation should be allowed to loop, otherwise false.
+   */
+  shouldLoop(_direction: NavigationDirection): boolean {
+    return true;
   }
 
   /**

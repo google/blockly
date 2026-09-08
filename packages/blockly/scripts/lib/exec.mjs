@@ -34,6 +34,30 @@ export function capture(command) {
 }
 
 /**
+ * Run one of this package's npm scripts in a subprocess, forwarding its
+ * output to this process's stdio.
+ *
+ * @param {string} script The name of the npm script to run.
+ * @param {Array<string>=} args Arguments to pass to the script.
+ * @param {object=} options Options for child_process.spawn.
+ * @returns {Promise<void>} Promise resolved when the script succeeds,
+ *     and rejected if it fails.
+ */
+export function runNpmScript(script, args = [], options = {}) {
+  return spawnAsync(
+    'npm',
+    args.length ? ['run', script, '--', ...args] : ['run', script],
+    {
+      label: `npm run ${script}`,
+      // On Windows npm is a .cmd file, which spawn can only run via a
+      // shell.
+      shell: process.platform === 'win32',
+      ...options,
+    },
+  );
+}
+
+/**
  * Run a command in a subprocess without a shell, forwarding its output
  * to this process's stdio.
  *

@@ -20,7 +20,6 @@ import * as path from 'path';
 
 import {globSync} from 'glob';
 import {gulp as closureCompiler} from 'google-closure-compiler';
-import {rimraf} from 'rimraf';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
@@ -877,19 +876,7 @@ function compileAdvancedCompilationTest() {
     .pipe(gulp.dest('./tests/compile/'));
 }
 
-/**
- * This task cleans the build directory (by deleting it).
- */
-export function cleanBuildDir() {
-  // Sanity check.
-  if (BUILD_DIR === '.' || BUILD_DIR === '/') {
-    return Promise.reject(`Refusing to rm -rf ${BUILD_DIR}`);
-  }
-  return rimraf(BUILD_DIR);
-}
-
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
-// function cleanBuildDir, above
 export const langfiles = gulp.parallel(buildLangfiles, buildLangfileShims);
 // function tsc, above
 export const minify = gulp.series(

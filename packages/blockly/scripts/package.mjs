@@ -11,11 +11,11 @@
  *   node scripts/package.mjs
  *       # build Blockly and assemble the complete npm package in the
  *       # release directory
- *   node scripts/package.mjs typings
- *       # assemble only the .d.ts files, which is all that is needed
- *       # to generate the reference documentation
  *   node scripts/package.mjs --verbose --debug
- *       # as above, but with the build's compiler checks turned up
+ *       # the same, but with the build's compiler checks turned up
+ *   node scripts/package.mjs typings
+ *       # assemble only the .d.ts files, which are all that is needed
+ *       # to generate the reference documentation.
  */
 
 import * as fs from 'node:fs/promises';
@@ -26,10 +26,16 @@ import {
   RELEASE_DIR,
   TYPINGS_BUILD_DIR,
 } from './gulpfiles/config.mjs';
-import {copyFiles, fromRoot, writeFile} from './lib/fs_utils.mjs';
+import {runNpmScript} from './lib/exec.mjs';
+import {
+  PACKAGE_ROOT,
+  cleanBuildDir,
+  cleanReleaseDir,
+  copyFiles,
+  fromRoot,
+  writeFile,
+} from './lib/fs_utils.mjs';
 import {getPackageJson} from './lib/package_json.mjs';
-import {cleanReleaseDir} from './lib/release_dir.mjs';
-import {runGulpTask} from './lib/run_gulp.mjs';
 import {wrapUmd} from './lib/umd.mjs';
 
 /** Directory containing the files to be copied into the package as-is. */
@@ -282,12 +288,9 @@ async function packageDTS() {
 
 /**
  * Clean the build and release directories, ready for a fresh build.
- *
- * TODO: Call cleanBuildDir directly once the build tasks have been
- * converted to plain node scripts.
  */
 async function clean() {
-  await Promise.all([cleanReleaseDir(), runGulpTask('cleanBuildDir')]);
+  await Promise.all([cleanBuildDir(), cleanReleaseDir()]);
 }
 
 /**
@@ -298,7 +301,7 @@ async function clean() {
  */
 async function pack(buildFlags) {
   await clean();
-  await runGulpTask('build', buildFlags);
+  await runNpmScript('build', buildFlags, {cwd: PACKAGE_ROOT});
   await Promise.all([
     packageIndex(),
     packageCoreNode(),
@@ -314,13 +317,11 @@ async function pack(buildFlags) {
 /**
  * Assemble just the .d.ts files in the release directory.  This is all
  * that is needed in order to generate the reference documentation, and
- * is much quicker than a full pack.
- *
- * @param {Array<string>} buildFlags Flags to pass to the build.
+ * is quicker than a full pack.
  */
-async function typings(buildFlags) {
+async function typings() {
   await clean();
-  await runGulpTask('tsc', buildFlags);
+  await runNpmScript('tsc', [], {cwd: PACKAGE_ROOT});
   await packageDTS();
 }
 
@@ -342,10 +343,14 @@ Commands:
   pack       Build Blockly and assemble the complete package (default)
   typings    Build and assemble only the .d.ts files
 
-Options:
+Options for pack, which control how strictly the Closure Compiler
+checks the code.  They have no effect on typings, which does not run
+Closure Compiler:
   --verbose  Report all Closure Compiler warnings during the build
   --debug    Treat Closure Compiler warnings as errors
   --strict   As --debug, and also check types strictly
+
+Other options:
   --help     Show this message`;
 
 try {

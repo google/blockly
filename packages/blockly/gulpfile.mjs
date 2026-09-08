@@ -25,7 +25,6 @@ import {
 import {
   build,
   buildAdvancedCompilationTest,
-  cleanBuildDir,
   langfiles,
   messages,
   minify,
@@ -33,7 +32,7 @@ import {
 } from './scripts/gulpfiles/build_tasks.mjs';
 import {docs} from './scripts/gulpfiles/docs_tasks.mjs';
 import {generators, test} from './scripts/gulpfiles/test_tasks.mjs';
-import {cleanReleaseDir} from './scripts/lib/release_dir.mjs';
+import {cleanBuildDir, cleanReleaseDir} from './scripts/lib/fs_utils.mjs';
 
 const clean = parallel(cleanBuildDir, cleanReleaseDir);
 
@@ -61,7 +60,6 @@ export {
 // prettier-ignore
 export {
   messages, // Generate msg/json/en.json et al.
-  cleanBuildDir,
   clean,
   test,
   generators as testGenerators,

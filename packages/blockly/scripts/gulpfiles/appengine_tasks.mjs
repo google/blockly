@@ -11,11 +11,10 @@
 import * as gulp from 'gulp';
 
 import * as fs from 'fs';
-import * as path from 'path';
 import {execSync} from 'child_process';
 import * as buildTasks from './build_tasks.mjs';
 import {getPackageJson} from '../lib/package_json.mjs';
-import {cleanReleaseDir} from '../lib/release_dir.mjs';
+import {cleanBuildDir, cleanReleaseDir} from '../lib/fs_utils.mjs';
 import {rimraf} from 'rimraf';
 
 const demoTmpDir = '../_deploy';
@@ -170,7 +169,7 @@ export const prepareDemos = gulp.series(
             copyStaticSrc,
             copyAppengineSrc),
         gulp.series(
-            gulp.parallel(buildTasks.cleanBuildDir,
+            gulp.parallel(cleanBuildDir,
                           cleanReleaseDir),
             buildTasks.build,
             gulp.parallel(copyBuilt,

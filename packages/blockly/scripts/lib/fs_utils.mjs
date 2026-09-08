@@ -11,6 +11,7 @@
 import {globSync} from 'glob';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
+import {BUILD_DIR, RELEASE_DIR} from '../gulpfiles/config.mjs';
 
 /**
  * Maximum number of file operations to have in flight at once, across
@@ -126,4 +127,30 @@ export async function copyFiles({from, patterns, to, ignore = [], transform}) {
       }),
     ),
   );
+}
+
+/**
+ * Clean the build directory (by deleting it).
+ *
+ * @returns {Promise<void>} Promise resolved once the directory is gone.
+ */
+export async function cleanBuildDir() {
+  // Sanity check.
+  if (BUILD_DIR === '.' || BUILD_DIR === '/') {
+    throw new Error(`Refusing to rm -rf ${BUILD_DIR}`);
+  }
+  await fs.rm(fromRoot(BUILD_DIR), {force: true, recursive: true});
+}
+
+/**
+ * Clean the release directory (by deleting it).
+ *
+ * @returns {Promise<void>} Promise resolved once the directory is gone.
+ */
+export async function cleanReleaseDir() {
+  // Sanity check.
+  if (RELEASE_DIR === '.' || RELEASE_DIR === '/') {
+    throw new Error(`Refusing to rm -rf ${RELEASE_DIR}`);
+  }
+  await fs.rm(fromRoot(RELEASE_DIR), {force: true, recursive: true});
 }

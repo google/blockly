@@ -2309,7 +2309,9 @@ suite('Keyboard Shortcut Items', function () {
     test('CtrlEnd focuses last focusable node in workspace if block is focused', function () {
       const inListBlock = this.workspace.getBlockById('lists_getIndex_1');
       Blockly.getFocusManager().focusNode(inListBlock);
-      const expectedFocus = this.workspace.getBlockById('text_2');
+      const expectedFocus = this.workspace
+        .getBlockById('text_2')
+        .getField('TEXT');
       this.injectionDiv.dispatchEvent(
         createKeyDownEvent(Blockly.utils.KeyCodes.END, [
           Blockly.utils.KeyCodes.CTRL_CMD,
@@ -2322,7 +2324,9 @@ suite('Keyboard Shortcut Items', function () {
       const inListBlock = this.workspace.getBlockById('lists_getIndex_1');
       const fieldToFocus = inListBlock.getField('MODE');
       Blockly.getFocusManager().focusNode(fieldToFocus);
-      const expectedFocus = this.workspace.getBlockById('text_2');
+      const expectedFocus = this.workspace
+        .getBlockById('text_2')
+        .getField('TEXT');
       this.injectionDiv.dispatchEvent(
         createKeyDownEvent(Blockly.utils.KeyCodes.END, [
           Blockly.utils.KeyCodes.CTRL_CMD,
@@ -2333,7 +2337,9 @@ suite('Keyboard Shortcut Items', function () {
 
     test('CtrlEnd focuses last focusable node in workspace if workspace is focused', function () {
       Blockly.getFocusManager().focusNode(this.workspace);
-      const expectedFocus = this.workspace.getBlockById('text_2');
+      const expectedFocus = this.workspace
+        .getBlockById('text_2')
+        .getField('TEXT');
       this.injectionDiv.dispatchEvent(
         createKeyDownEvent(Blockly.utils.KeyCodes.END, [
           Blockly.utils.KeyCodes.CTRL_CMD,
@@ -2420,7 +2426,9 @@ suite('Keyboard Shortcut Items', function () {
         this.workspace.internalIsFlyout = true;
         const inListBlock = this.workspace.getBlockById('lists_getIndex_1');
         Blockly.getFocusManager().focusNode(inListBlock);
-        const expectedFocus = this.workspace.getBlockById('text_2');
+        const expectedFocus = this.workspace
+          .getBlockById('text_2')
+          .getField('TEXT');
         this.injectionDiv.dispatchEvent(
           createKeyDownEvent(Blockly.utils.KeyCodes.END, [
             Blockly.utils.KeyCodes.CTRL_CMD,

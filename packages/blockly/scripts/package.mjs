@@ -13,9 +13,6 @@
  *       # release directory
  *   node scripts/package.mjs --verbose --debug
  *       # the same, but with the build's compiler checks turned up
- *   node scripts/package.mjs typings
- *       # assemble only the .d.ts files, which are all that is needed
- *       # to generate the reference documentation.
  */
 
 import * as fs from 'node:fs/promises';
@@ -315,37 +312,18 @@ async function pack(buildFlags) {
 }
 
 /**
- * Assemble just the .d.ts files in the release directory.  This is all
- * that is needed in order to generate the reference documentation, and
- * is quicker than a full pack.
- */
-async function typings() {
-  await clean();
-  await runNpmScript('tsc', [], {cwd: PACKAGE_ROOT});
-  await packageDTS();
-}
-
-/** The commands this script accepts, as its first argument. */
-const COMMANDS = {pack, typings};
-
-/**
  * Options that are not handled here but passed straight through to the
  * build, which uses them to decide how strictly the Closure Compiler
  * checks the code.  See compile() in build_tasks.mjs.
  */
 const BUILD_FLAGS = ['verbose', 'debug', 'strict'];
 
-const USAGE = `Usage: node scripts/package.mjs [command] [options]
+const USAGE = `Usage: node scripts/package.mjs [options]
 
-Packages Blockly for distribution on NPM.
+Builds Blockly and assembles the npm package in the release directory.
 
-Commands:
-  pack       Build Blockly and assemble the complete package (default)
-  typings    Build and assemble only the .d.ts files
-
-Options for pack, which control how strictly the Closure Compiler
-checks the code.  They have no effect on typings, which does not run
-Closure Compiler:
+Options, which control how strictly the Closure Compiler checks the
+code as it builds:
   --verbose  Report all Closure Compiler warnings during the build
   --debug    Treat Closure Compiler warnings as errors
   --strict   As --debug, and also check types strictly
@@ -354,8 +332,7 @@ Other options:
   --help     Show this message`;
 
 try {
-  const {positionals, values} = parseArgs({
-    allowPositionals: true,
+  const {values} = parseArgs({
     options: {
       'help': {type: 'boolean'},
       ...Object.fromEntries(
@@ -366,16 +343,11 @@ try {
   if (values.help) {
     console.log(USAGE);
   } else {
-    const [command = 'pack'] = positionals;
-    if (!Object.hasOwn(COMMANDS, command)) {
-      throw new Error(`Unknown command '${command}'.\n${USAGE}`);
-    }
     // Any build flags given are not acted on here, but passed on to
     // the build.
-    const buildFlags = BUILD_FLAGS.filter((flag) => values[flag]).map(
-      (flag) => `--${flag}`,
+    await pack(
+      BUILD_FLAGS.filter((flag) => values[flag]).map((flag) => `--${flag}`),
     );
-    await COMMANDS[command](buildFlags);
   }
 } catch (e) {
   console.error(e.message);

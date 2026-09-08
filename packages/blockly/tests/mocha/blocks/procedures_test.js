@@ -615,12 +615,6 @@ suite('Procedures', function () {
       );
     });
 
-    test.skip(
-      'renaming a variable such that you get a parameter ' +
-        'conflict does... something!',
-      function () {},
-    );
-
     test('undoing renaming a procedure parameter reverts the change', async function () {
       // Create a stack of container, parameter.
       const defBlock = createProcDefBlock(this.workspace);
@@ -701,6 +695,8 @@ suite('Procedures', function () {
         .connection.connect(paramBlock1.previousConnection);
       paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
       this.clock.runAll();
+      await Blockly.renderManagement.finishQueuedRenders();
+      this.clock.runAll();
 
       // Reorder the parameters.
       paramBlock2.previousConnection.disconnect();
@@ -710,13 +706,16 @@ suite('Procedures', function () {
         .connection.connect(paramBlock2.previousConnection);
       paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
       this.clock.runAll();
+      await Blockly.renderManagement.finishQueuedRenders();
+      this.clock.runAll();
 
       assert.isNotNull(
         defBlock.getField('PARAMS'),
         'Expected the params field to exist',
       );
-      assert.isTrue(
-        defBlock.getFieldValue('PARAMS').includes('param2, param1'),
+      assert.include(
+        defBlock.getFieldValue('PARAMS'),
+        'param2, param1',
         'Expected the params field order to match the parameter order',
       );
     });
@@ -738,6 +737,8 @@ suite('Procedures', function () {
         .connection.connect(paramBlock1.previousConnection);
       paramBlock1.nextConnection.connect(paramBlock2.previousConnection);
       this.clock.runAll();
+      await Blockly.renderManagement.finishQueuedRenders();
+      this.clock.runAll();
 
       // Reorder the parameters.
       paramBlock2.previousConnection.disconnect();
@@ -746,6 +747,8 @@ suite('Procedures', function () {
         .getInput('STACK')
         .connection.connect(paramBlock2.previousConnection);
       paramBlock2.nextConnection.connect(paramBlock1.previousConnection);
+      this.clock.runAll();
+      await Blockly.renderManagement.finishQueuedRenders();
       this.clock.runAll();
 
       assert.isNotNull(
@@ -1046,10 +1049,13 @@ suite('Procedures', function () {
         );
       });
 
-      test.skip('callers whose defs are deserialized later do not create defs', function () {
+      test('callers whose defs are deserialized later do not create defs', function () {
         Blockly.Xml.domToWorkspace(
           Blockly.utils.xml.textToDom(`
                 <xml>
+                  <variables>
+                    <variable id="arg">x</variable>
+                  </variables>
                   <block type="procedures_callreturn">
                     <mutation name="do something">
                       <arg name="x"></arg>
@@ -1072,8 +1078,6 @@ suite('Procedures', function () {
         const callBlock = this.workspace.getBlocksByType(
           'procedures_callreturn',
         )[0];
-        // TODO: Currently the callers are creating variables with different
-        //   IDs than those serialized to XML, so these assertions fail.
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
         assertCallBlockStructure(callBlock, ['x'], ['arg'], 'do something');
       });
@@ -1188,7 +1192,7 @@ suite('Procedures', function () {
         );
       });
 
-      test.skip('callers whose defs are deserialized later do not create defs', function () {
+      test('callers whose defs are deserialized later do not create defs', function () {
         Blockly.serialization.workspaces.load(
           {
             'blocks': {
@@ -1197,6 +1201,7 @@ suite('Procedures', function () {
                 {
                   'type': 'procedures_callreturn',
                   'extraState': {
+                    'name': 'do something',
                     'params': ['x'],
                   },
                 },
@@ -1216,6 +1221,12 @@ suite('Procedures', function () {
                 },
               ],
             },
+            'variables': [
+              {
+                'name': 'x',
+                'id': 'arg',
+              },
+            ],
           },
           this.workspace,
         );
@@ -1226,8 +1237,6 @@ suite('Procedures', function () {
         const callBlock = this.workspace.getBlocksByType(
           'procedures_callreturn',
         )[0];
-        // TODO: Currently the callers are creating variables with different
-        //   IDs than those serialized to JSON, so these assertions fail.
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
         assertCallBlockStructure(callBlock, ['x'], ['arg'], 'do something');
       });

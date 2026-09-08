@@ -24,6 +24,7 @@ suite('Keyboard Shortcut Registry Test', function () {
     this.registry.reset();
     Blockly.ShortcutItems.registerDefaultShortcuts();
     Blockly.ShortcutItems.registerKeyboardNavigationShortcuts();
+    Blockly.ShortcutItems.registerScreenReaderShortcuts();
   });
 
   suite('Registering', function () {
@@ -93,6 +94,23 @@ suite('Keyboard Shortcut Registry Test', function () {
         registry.register(duplicateShortcut);
       };
       assert.doesNotThrow(shouldNotThrow);
+    });
+    test('Registering a shortcut multiple times under the same keycode is idempotent', function () {
+      const testShortcut = {
+        'name': 'test_shortcut',
+        'keyCodes': ['65', '65', '65'],
+        allowCollision: true,
+      };
+
+      this.registry.register(testShortcut, true);
+      this.registry.register(testShortcut, true);
+      this.registry.register(testShortcut, true);
+
+      assert.lengthOf(this.registry.getKeyMap()['65'], 1);
+
+      this.registry.unregister('test_shortcut');
+
+      assert.isUndefined(this.registry.getKeyMap()['65']);
     });
   });
 

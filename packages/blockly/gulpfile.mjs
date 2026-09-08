@@ -30,7 +30,6 @@ import {
   minify,
   tsc,
 } from './scripts/gulpfiles/build_tasks.mjs';
-import {docs} from './scripts/gulpfiles/docs_tasks.mjs';
 import {generators, test} from './scripts/gulpfiles/test_tasks.mjs';
 import {cleanBuildDir, cleanReleaseDir} from './scripts/lib/fs_utils.mjs';
 
@@ -64,5 +63,4 @@ export {
   test,
   generators as testGenerators,
   buildAdvancedCompilationTest,
-  docs,
 }

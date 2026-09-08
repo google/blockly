@@ -385,94 +385,27 @@ export class Navigator {
   }
 
   /**
-   * Returns the first node in the same row as the given node, i.e. the node
-   * reached by repeatedly navigating out (left in LTR).
+   * Walks from `start` by repeatedly applying `step` until `stay` rejects the
+   * next candidate, a cycle is detected, or there is no next node.
    *
-   * @param node The node to find the first in-row peer of.
-   * @returns The first node in the same row as the given node, or null if none
-   *     was provided.
+   * @param start The node to begin walking from.
+   * @param step Returns the next candidate from the current node.
+   * @param stay If provided, walking stops before a candidate that fails this
+   *     check.
+   * @returns The last accepted node in the walk.
    */
-  getFirstNodeInRow(node: IFocusableNode | null): IFocusableNode | null {
-    if (!node) return null;
-
-    let left = node;
-    let temp;
-    while (
-      (temp = this.getPreviousNodeImpl(left, left, NavigationDirection.OUT))
-    ) {
-      left = temp;
-    }
-
-    return left;
-  }
-
-  /**
-   * Returns the last node in the same row as the given node, i.e. the node
-   * reached by repeatedly navigating in (right in LTR).
-   *
-   * @param node The node to find the last in-row peer of.
-   * @returns The last node in the same row as the given node, or null if none
-   *     was provided.
-   */
-  getLastNodeInRow(node: IFocusableNode | null): IFocusableNode | null {
-    if (!node) return null;
-
+  private walkAlong(
+    start: IFocusableNode,
+    step: (node: IFocusableNode) => IFocusableNode | null,
+    stay?: (candidate: IFocusableNode) => boolean,
+  ): IFocusableNode {
     const visited = new Set<IFocusableNode>();
-    let right = node;
-    let temp;
-    while ((temp = this.getInNode(right)) && !visited.has(temp)) {
-      visited.add(right);
-      right = temp;
-    }
-
-    return right;
-  }
-
-  /**
-   * Returns the first focusable node in the current block reachable by
-   * repeatedly navigating out, without leaving that block.
-   *
-   * Typically this is the owning block itself. Full-block field blocks are
-   * treated as fields of their parent.
-   *
-   * @param node The node to navigate relative to.
-   * @returns The first in-block node, or the given node if none exists.
-   */
-  getFirstNodeInBlock(node: IFocusableNode): IFocusableNode {
-    const owner = this.getOwningBlock(node);
-    if (!owner) return this.getFirstNodeInRow(node) ?? node;
-
-    let current = node;
-    let next;
+    let current = start;
+    let next: IFocusableNode | null;
     while (
-      (next = this.getOutNode(current)) &&
-      this.isUnderOwningBlock(next, owner)
-    ) {
-      current = next;
-    }
-    return current;
-  }
-
-  /**
-   * Returns the last focusable node in the current block reachable by
-   * repeatedly navigating in, without leaving that block or its current row.
-   *
-   * Full-block field blocks are treated as fields of their parent.
-   *
-   * @param node The node to navigate relative to.
-   * @returns The last in-block node, or the given node if none exists.
-   */
-  getLastNodeInBlock(node: IFocusableNode): IFocusableNode {
-    const owner = this.getOwningBlock(node);
-    if (!owner) return this.getLastNodeInRow(node) ?? node;
-
-    const visited = new Set<IFocusableNode>();
-    let current = node;
-    let next;
-    while (
-      (next = this.getInNode(current)) &&
+      (next = step(current)) &&
       !visited.has(next) &&
-      this.isUnderOwningBlock(next, owner)
+      (stay?.(next) ?? true)
     ) {
       visited.add(current);
       current = next;
@@ -481,68 +414,20 @@ export class Navigator {
   }
 
   /**
-   * Returns the block that Home/End should be scoped to for the given node.
+   * Returns the first node in the same row as the given node, i.e. the node
+   * reached by repeatedly navigating out (left in LTR).
    *
-   * Full-block field blocks look like fields, so the parent block is used.
-   *
-   * @param node The focused node.
-   * @returns The owning block, or null if the node is not part of a block.
+   * @param node The node to find the first in-row peer of.
+   * @returns The first node in the same row as the given node, or null if none
+   *     was provided.
    */
-  private getOwningBlock(node: IFocusableNode): BlockSvg | null {
-    const block = this.getSourceBlockFromNode(node);
-    if (block?.getFullBlockField() && block.getParent()) {
-      return block.getParent() as BlockSvg;
-    }
-    return block;
-  }
-
-  /**
-   * Returns whether the given node belongs to `owner` or one of its
-   * descendants (including nested value blocks).
-   *
-   * @param node The node to check.
-   * @param owner The block that defines the Home/End scope.
-   * @returns True if `node` is `owner` or is nested under it.
-   */
-  private isUnderOwningBlock(node: IFocusableNode, owner: BlockSvg): boolean {
-    if (node === owner) return true;
-    let block = this.getSourceBlockFromNode(node);
-    while (block) {
-      if (block === owner) return true;
-      block = block.getParent() as BlockSvg | null;
-    }
-    return false;
-  }
-
-  /**
-   * Returns the last node in the stack containing the given node that is
-   * reachable by repeatedly navigating down, without leaving the stack.
-   *
-   * @param node A node in the stack to find the last down-reachable node of.
-   * @returns The last down-reachable node in the same stack as the given node.
-   */
-  getLastNodeInStack(node: IFocusableNode): IFocusableNode {
-    const root = this.getSourceBlockFromNode(node)?.getRootBlock() ?? node;
-    return this.walkToLastNodeInStack(root);
-  }
-
-  /**
-   * Returns the last focusable node on the given node's focusable tree, i.e.
-   * the node reached by navigating to the last top-level stack, then down to
-   * the end of that stack, then in to the end of that row.
-   *
-   * @param from A node whose tree should be searched; defaults to the currently
-   *     focused tree's root.
-   * @returns The last focusable node on the tree, or null if none exist.
-   */
-  getLastFocusableNode(from?: IFocusableNode | null): IFocusableNode | null {
-    const root =
-      from ?? getFocusManager().getFocusedTree()?.getRootFocusableNode();
-    if (!root) return null;
-
-    const lastTop = this.getTopLevelItems(root).slice(-1)[0];
-    if (!lastTop) return null;
-    return this.getLastNodeInRow(this.getLastNodeInStack(lastTop));
+  private getFirstNodeInRow(
+    node: IFocusableNode | null,
+  ): IFocusableNode | null {
+    if (!node) return null;
+    return this.walkAlong(node, (current) =>
+      this.getPreviousNodeImpl(current, current, NavigationDirection.OUT),
+    );
   }
 
   /**
@@ -558,16 +443,12 @@ export class Navigator {
     stackRoot: IFocusableNode,
     stopIfFound?: IFocusableNode,
   ) {
-    let target = stackRoot;
-    let temp;
-    while (
-      (temp = this.getNextNodeImpl(target, target, NavigationDirection.NEXT)) &&
-      temp !== stopIfFound
-    ) {
-      target = temp;
-    }
-
-    return target;
+    return this.walkAlong(
+      stackRoot,
+      (current) =>
+        this.getNextNodeImpl(current, current, NavigationDirection.NEXT),
+      (candidate) => candidate !== stopIfFound,
+    );
   }
 
   private getRowId(node: IFocusableNode) {

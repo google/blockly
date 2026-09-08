@@ -30,6 +30,7 @@ import {type IFlyout} from './interfaces/i_flyout.js';
 import {type IFocusableNode} from './interfaces/i_focusable_node.js';
 import {isSelectable} from './interfaces/i_selectable.js';
 import {Direction, KeyboardMover} from './keyboard_nav/keyboard_mover.js';
+import type {Navigator} from './keyboard_nav/navigators/navigator.js';
 import {keyboardNavigationController} from './keyboard_navigation_controller.js';
 import {Msg} from './msg.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
@@ -1373,6 +1374,132 @@ function jumpFocus(
 }
 
 /**
+ * Walks from `start` by repeatedly applying `step` until `stay` rejects the
+ * next candidate, a cycle is detected, or there is no next node.
+ */
+function walkFocusableNodes(
+  start: IFocusableNode,
+  step: (node: IFocusableNode) => IFocusableNode | null,
+  stay: (candidate: IFocusableNode) => boolean = () => true,
+): IFocusableNode {
+  const visited = new Set<IFocusableNode>();
+  let current = start;
+  let next: IFocusableNode | null;
+  while ((next = step(current)) && !visited.has(next) && stay(next)) {
+    visited.add(current);
+    current = next;
+  }
+  return current;
+}
+
+/**
+ * Returns the block that Home/End should be scoped to for the given node.
+ *
+ * Full-block field blocks look like fields, so the parent block is used.
+ */
+function getOwningBlock(
+  navigator: Navigator,
+  node: IFocusableNode,
+): BlockSvg | null {
+  const block = navigator.getSourceBlockFromNode(node);
+  if (block?.getFullBlockField() && block.getParent()) {
+    return block.getParent() as BlockSvg;
+  }
+  return block;
+}
+
+/**
+ * Returns whether the given node belongs to `owner` or one of its
+ * descendants (including nested value blocks).
+ */
+function isUnderOwningBlock(
+  navigator: Navigator,
+  node: IFocusableNode,
+  owner: BlockSvg,
+): boolean {
+  if (node === owner) return true;
+  let block = navigator.getSourceBlockFromNode(node);
+  while (block) {
+    if (block === owner) return true;
+    block = block.getParent() as BlockSvg | null;
+  }
+  return false;
+}
+
+/**
+ * Returns whether `node` is in the same top-level stack as `stackRoot`.
+ */
+function isInSameStack(
+  navigator: Navigator,
+  node: IFocusableNode,
+  stackRoot: IFocusableNode,
+): boolean {
+  if (node === stackRoot) return true;
+  return navigator.getSourceBlockFromNode(node)?.getRootBlock() === stackRoot;
+}
+
+/**
+ * First focusable node in the current block reachable by repeatedly
+ * navigating out, without leaving that block.
+ */
+function getFirstNodeInBlock(
+  navigator: Navigator,
+  node: IFocusableNode,
+): IFocusableNode {
+  const owner = getOwningBlock(navigator, node);
+  if (!owner) return node;
+  return walkFocusableNodes(
+    node,
+    (current) => navigator.getOutNode(current),
+    (candidate) => isUnderOwningBlock(navigator, candidate, owner),
+  );
+}
+
+/**
+ * Last focusable node on the current block's row reachable by repeatedly
+ * navigating in, without leaving that block.
+ */
+function getLastNodeInBlock(
+  navigator: Navigator,
+  node: IFocusableNode,
+): IFocusableNode {
+  const owner = getOwningBlock(navigator, node);
+  if (!owner) return node;
+  return walkFocusableNodes(
+    node,
+    (current) => navigator.getInNode(current),
+    (candidate) => isUnderOwningBlock(navigator, candidate, owner),
+  );
+}
+
+/**
+ * Last node in the current stack reachable by repeatedly navigating down.
+ */
+function getLastNodeInStack(
+  navigator: Navigator,
+  node: IFocusableNode,
+): IFocusableNode {
+  const root = navigator.getSourceBlockFromNode(node)?.getRootBlock() ?? node;
+  return walkFocusableNodes(
+    root,
+    (current) => navigator.getNextNode(current),
+    (candidate) => isInSameStack(navigator, candidate, root),
+  );
+}
+
+/**
+ * Last focusable node on the workspace: last top-level stack, then down to
+ * the end of that stack, then in to the end of that row.
+ */
+function getLastFocusableNode(navigator: Navigator): IFocusableNode | null {
+  const lastTop = navigator.getLastNode();
+  if (!lastTop) return null;
+  return walkFocusableNodes(getLastNodeInStack(navigator, lastTop), (current) =>
+    navigator.getInNode(current),
+  );
+}
+
+/**
  * Registers a keyboard shortcut that sets the focus to the first
  * focusable node in the current block, typically the owning block.
  */
@@ -1385,7 +1512,7 @@ export function registerJumpBlockStart() {
       return jumpFocus(
         e,
         scope.focusedNode,
-        workspace.getNavigator().getFirstNodeInBlock(scope.focusedNode),
+        getFirstNodeInBlock(workspace.getNavigator(), scope.focusedNode),
       );
     },
     keyCodes: [KeyCodes.HOME],
@@ -1407,7 +1534,7 @@ export function registerJumpBlockEnd() {
       return jumpFocus(
         e,
         scope.focusedNode,
-        workspace.getNavigator().getLastNodeInBlock(scope.focusedNode),
+        getLastNodeInBlock(workspace.getNavigator(), scope.focusedNode),
       );
     },
     keyCodes: [KeyCodes.END],
@@ -1451,7 +1578,7 @@ export function registerJumpBottomStack() {
       return jumpFocus(
         e,
         scope.focusedNode,
-        workspace.getNavigator().getLastNodeInStack(scope.focusedNode),
+        getLastNodeInStack(workspace.getNavigator(), scope.focusedNode),
       );
     },
     keyCodes: [KeyCodes.PAGE_DOWN],
@@ -1507,7 +1634,7 @@ export function registerJumpLastBlock() {
       return jumpFocus(
         e,
         scope.focusedNode,
-        workspace.getNavigator().getLastFocusableNode(workspace),
+        getLastFocusableNode(workspace.getNavigator()),
       );
     },
     keyCodes: [ctrlCmdEnd],

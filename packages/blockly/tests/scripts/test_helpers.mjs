@@ -68,7 +68,7 @@ export async function runTestCommand(id, command) {
     }
     if (result.status !== 0) {
       throw new Error(
-          `Command failed with exit code ${result.status}: ${command}`,
+        `Command failed with exit code ${result.status}: ${command}`,
       );
     }
   });

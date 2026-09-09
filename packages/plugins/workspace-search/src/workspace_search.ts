@@ -499,8 +499,6 @@ export class WorkspaceSearch
         this.returnEphemeralFocus = focusManager.takeEphemeralFocus(
           this.inputElement,
         );
-      } else {
-        this.inputElement.focus();
       }
       this.inputElement.select();
     }

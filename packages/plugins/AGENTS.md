@@ -4,7 +4,11 @@ Most subdirectories here are self-contained plugins published to npm — fields,
 and workspace add-ons that an app developer loads into a Blockly workspace. Most are
 TypeScript, and new ones must be; the remaining JavaScript plugins are legacy.
 
-The rest are tooling, test fixtures, and example apps that happen to live alongside them.
+This fork keeps a curated subset of upstream's plugins: the build tooling core needs
+plus the fields, themes, and workspace add-ons useful to a Scratch-like 3D game
+engine. See the plugin list in the root `README.md`.
+
+The rest are tooling and test fixtures that happen to live alongside them.
 Check the table below before assuming a directory is a plugin.
 
 Repo-wide conventions (commits, licence headers, naming) are in the
@@ -32,14 +36,11 @@ packages/plugins/<name>/
 Several packages live here for convenience but are not plugins you load into a workspace.
 Don't treat them as examples of how a plugin should look:
 
-| Directory                       | Package                   | What it actually is                                                     |
-| ------------------------------- | ------------------------- | ----------------------------------------------------------------------- |
-| `dev-scripts/`                  | `@blockly/dev-scripts`    | The `blockly-scripts` CLI that every plugin's npm scripts call          |
-| `dev-tools/`                    | `@blockly/dev-tools`      | Shared playground and test helpers that plugins import                  |
-| `dev-create/`                   | `@blockly/create-package` | The scaffolding generator for new plugins                               |
-| `block-test/`                   | `@blockly/block-test`     | Test blocks used by our own test suites — not blocks for app developers |
-| `migration/`                    | `@blockly/migrate`        | A CLI that migrates apps to newer versions of Blockly                   |
-| `sample-app/`, `sample-app-ts/` | private, unpublished      | Example applications                                                    |
+| Directory      | Package                | What it actually is                                                     |
+| -------------- | ---------------------- | ----------------------------------------------------------------------- |
+| `dev-scripts/` | `@blockly/dev-scripts` | The `blockly-scripts` CLI that every plugin's npm scripts call          |
+| `dev-tools/`   | `@blockly/dev-tools`   | Shared playground and test helpers that plugins import                  |
+| `block-test/`  | `@blockly/block-test`  | Test blocks used by our own test suites — not blocks for app developers |
 
 `block-test` deserves particular care: `packages/blockly` takes it as a devDependency and
 loads it from the Mocha setup, so editing those blocks can break the **core** test suite,
@@ -64,8 +65,8 @@ default.
 
 To run a target from the repo root instead, use Nx. **The Nx project name is the `name`
 field in the plugin's `package.json`, which is often not the directory name.** Package
-names follow a type-based convention, so a generic plugin in `modal/` publishes as
-`@blockly/plugin-modal`:
+names follow a type-based convention, so a generic plugin in `workspace-search/`
+publishes as `@blockly/plugin-workspace-search`:
 
 | Plugin type     | Package name                              |
 | --------------- | ----------------------------------------- |
@@ -84,7 +85,7 @@ npx nx run @blockly/field-slider:test
 ```
 
 The full convention, including the tags to put in `package.json`, is in
-[the plugin naming guide](../docs/docs/guides/contribute/core/plugins/naming.mdx).
+[the upstream plugin naming guide](https://docs.blockly.com/guides/contribute/core/plugins/naming/).
 
 ## Plugin-specific conventions
 
@@ -139,24 +140,19 @@ be missing is dead code that silently defeats translation if it ever does run.
 
 ## Adding a new plugin
 
-Scaffold from a template rather than copying an existing plugin by hand. **New plugins
-must be written in TypeScript**, and the generator defaults to JavaScript, so pass
-`--typescript` explicitly — it selects the `typescript-*` template and adds the
-TypeScript devDependency and `tsconfig.json`:
-
-```bash
-npx @blockly/create-package plugin my-plugin --type plugin --typescript
-```
-
-Available types are `field`, `block`, `theme`, and `plugin` (the default). The generator
-lives in `dev-create/templates/`.
+The upstream scaffolding generator (`@blockly/create-package`) was removed from this
+fork. Scaffold a new plugin by copying the closest existing **TypeScript** plugin of the
+same type (`field-*`, `theme-*`, `workspace-*`, \u2026), then renaming the package and
+trimming its `src/` and `test/` directories. **New plugins must be written in
+TypeScript.**
 
 The remaining JavaScript plugins are legacy. Don't use one as the model for a new plugin,
 and don't convert one to TypeScript as a drive-by change — that churns the public type
 surface and belongs in its own pull request.
 
-See [Add a plugin](../docs/docs/guides/contribute/core/plugins/add_a_plugin.mdx) for the
-full process, including what to put in the README and how the plugin gets published.
+See [Add a plugin](https://docs.blockly.com/guides/contribute/core/plugins/add_a_plugin/)
+upstream for the full process, including what to put in the README and how the plugin
+gets published.
 
 ## Versioning
 

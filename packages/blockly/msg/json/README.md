@@ -1,5 +1,9 @@
 # Blockly
 
+> **BlockThreed fork note:** translation sync is currently frozen. These
+> files were forked as-is from upstream Blockly; PRs touching them will not be
+> merged until we set up our own translation workflow.
+
 ## Messages
 
 This directory contains "messages" files, which are JSON-format files

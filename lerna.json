@@ -7,10 +7,10 @@
   "ignoreChanges": ["**/package-lock.json"],
   "command": {
     "version": {
-      "tagVersionPrefix": "blockly-v"
+      "tagVersionPrefix": "blockthreed-v"
     },
     "publish": {
-      "tagVersionPrefix": "blockly-v"
+      "tagVersionPrefix": "blockthreed-v"
     }
   },
   "packages": ["packages/blockly", "packages/plugins/*"],

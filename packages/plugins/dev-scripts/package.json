@@ -11,13 +11,13 @@
     "dev",
     "scripts"
   ],
-  "homepage": "https://github.com/RaspberryPiFoundation/blockly/tree/main/packages/plugins/dev-scripts#readme",
+  "homepage": "https://github.com/Flakween/BlockThreed/tree/main/packages/plugins/dev-scripts#readme",
   "bugs": {
-    "url": "https://github.com/RaspberryPiFoundation/blockly/issues"
+    "url": "https://github.com/Flakween/BlockThreed/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RaspberryPiFoundation/blockly.git",
+    "url": "https://github.com/Flakween/BlockThreed.git",
     "directory": "packages/plugins/dev-scripts"
   },
   "license": "Apache-2.0",

@@ -2,45 +2,46 @@
 
 ## Project ownership
 
-Blockly is maintained by the **Raspberry Pi Foundation**.
-`RaspberryPiFoundation/blockly` is the canonical upstream. It is **not** a fork of
-`google/blockly`, and there is no separate Google-maintained version that this one
-tracks or defers to.
+This is **BlockThreed** (`Flakween/BlockThreed`): a Scratch-like 3D game engine
+with block coding, built as a fork of Blockly. The block coding core in this repo
+originated upstream and is being repurposed as the foundation for the engine.
 
-Blockly was originally developed at Google, so a lot of legacy remains and it is easy to
-conclude otherwise. Two things in particular are not evidence of ownership:
+`RaspberryPiFoundation/blockly` is the canonical **upstream**, maintained by the
+Raspberry Pi Foundation. It is **not** a fork of `google/blockly`, and there is no
+separate Google-maintained version. Blockly was originally developed at Google, so
+a lot of legacy remains:
 
 - Most existing files carry a `Copyright <year> Google LLC` header. **Leave them alone.**
-  Only new files get the Raspberry Pi Foundation copyright.
+  Only new files get the BlockThreed copyright (see below).
 - Several hundred links to `developers.google.com/blockly` are still embedded in TSDoc
   and comments. They are stale. Do not add new ones.
 
 When adding a reference or link, use the current locations:
 
-| For               | Use                                                       |
-| ----------------- | --------------------------------------------------------- |
-| Source repository | `https://github.com/RaspberryPiFoundation/blockly`        |
-| Issues            | `https://github.com/RaspberryPiFoundation/blockly/issues` |
-| Documentation     | `https://docs.blockly.com`                                |
-| Project home      | `https://blockly.com`                                     |
+| For               | Use                                                |
+| ----------------- | -------------------------------------------------- |
+| Source repository | `https://github.com/Flakween/BlockThreed`          |
+| Issues            | `https://github.com/Flakween/BlockThreed/issues`   |
+| Upstream Blockly  | `https://github.com/RaspberryPiFoundation/blockly` |
+| Blockly docs      | `https://docs.blockly.com`                         |
 
-The npm package name is unchanged: the core library is still published as `blockly`.
+The npm package name is unchanged for now: the core library is still `blockly`
+(and plugins still `@blockly/*`). The rename to the BlockThreed scope happens
+when the engine API stabilizes \u2014 see the roadmap in the root `README.md`.
 
 ## Repository structure
 
 This is an npm + Nx monorepo. Workspaces are `packages/*` and `packages/plugins/*`.
 
-| Path                 | Package name   | What it is                                                                      |
-| -------------------- | -------------- | ------------------------------------------------------------------------------- |
-| `packages/blockly/`  | `blockly`      | The core library                                                                |
-| `packages/plugins/*` | `@blockly/*`   | First-party plugins (fields, themes, workspace add-ons) and their build tooling |
-| `packages/docs/`     | `blockly-docs` | The Docusaurus developer documentation site                                     |
+| Path                 | Package name | What it is                                                                                                                     |
+| -------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `packages/blockly/`  | `blockly`    | The block coding library (editor core, standard blocks, generators, translations, tests)                                       |
+| `packages/plugins/*` | `@blockly/*` | Curated plugins (fields, themes, workspace add-ons) and their build tooling \u2014 see the plugin list in the root `README.md` |
 
 Detailed guidance lives next to the code it describes. Read the relevant one before working in that area, rather than loading all of them:
 
 - [`packages/blockly/AGENTS.md`](packages/blockly/AGENTS.md) — core library
 - [`packages/plugins/AGENTS.md`](packages/plugins/AGENTS.md) — plugins
-- [`packages/docs/AGENTS.md`](packages/docs/AGENTS.md) — documentation site
 
 ## Commands
 
@@ -49,9 +50,7 @@ Run these from the repo root. Root scripts fan out across workspaces via Nx.
 ```bash
 npm ci                 # Install. Re-run after any pull that changes package-lock.json.
 
-npm run build          # Build every package except the docs site
-npm run build-all      # Build everything, including the docs site
-npm run build-docs     # Docs site only
+npm run build          # Build every package
 
 npm run test           # Full test suite across all packages. Slow.
 
@@ -89,7 +88,7 @@ Tooling is configured once at the root and covers every package. Do not add per-
 copies of these:
 
 - `eslint.config.mjs` — a single flat config with per-package `files` sections
-- `.prettierrc.js` — shared base plus `overrides` for core, plugins, and docs, which
+- `.prettierrc.js` — shared base plus `overrides` for core and plugins, which
   each use different settings
 - `nx.json` — target defaults and caching
 - `lerna.json` — versioning and publishing
@@ -169,7 +168,7 @@ instead, where it will still be there in a year.
 
 All packages share a single version line, managed by Lerna from the root
 (`.github/workflows/publish.yml`). A release bumps only the packages that actually
-changed, but they all move to the same version number. Git tags use the `blockly-v`
+changed, but they all move to the same version number. Git tags use the `blockthreed-v`
 prefix.
 
 Never hand-edit a `version` field in a `package.json`.
@@ -188,12 +187,12 @@ Naming and public API conventions are the exception. There, matching the establi
 pattern _is_ encouraged, even where you would have chosen differently, because an
 inconsistent API is a cost paid by every consumer.
 
-- **New files** get the Apache-2.0 header with a Raspberry Pi Foundation copyright:
+- **New files** get the Apache-2.0 header with a BlockThreed copyright:
 
   ```ts
   /**
    * @license
-   * Copyright 2026 Raspberry Pi Foundation
+   * Copyright 2026 BlockThreed Contributors
    * SPDX-License-Identifier: Apache-2.0
    */
   ```
@@ -239,10 +238,9 @@ a property CSS named is `color`. CSS is always American — `color`, `background
 
 ## Further reading
 
-The contributor documentation is in this repository under
-[`packages/docs/docs/guides/contribute/`](packages/docs/docs/guides/contribute/). Read
-those files directly rather than following links out to the published site. Most useful:
+The upstream contributor documentation was removed from this repo along with the docs
+site. Use the published upstream guides instead:
 
-- [Style guide](packages/docs/docs/guides/contribute/core/style_guide.mdx)
-- [Commit messages](packages/docs/docs/guides/contribute/get-started/commits.mdx)
-- [Writing a good PR](packages/docs/docs/guides/contribute/get-started/write_a_good_pr.mdx)
+- [Style guide](https://docs.blockly.com/guides/contribute/core/style_guide/)
+- [Commit messages](https://docs.blockly.com/guides/contribute/get-started/commits/)
+- [Writing a good PR](https://docs.blockly.com/guides/contribute/get-started/write_a_good_pr/)

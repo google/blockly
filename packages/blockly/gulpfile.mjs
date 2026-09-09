@@ -18,11 +18,6 @@
 
 import {parallel} from 'gulp';
 import {
-  deployDemos,
-  deployDemosBeta,
-  prepareDemos,
-} from './scripts/gulpfiles/appengine_tasks.mjs';
-import {
   build,
   buildAdvancedCompilationTest,
   cleanBuildDir,
@@ -54,9 +49,6 @@ export {
   minify,
   build,
   pack,  // Formerly package.
-  prepareDemos,
-  deployDemosBeta,
-  deployDemos,
 }
 
 // Manually-invokable targets that also invoke prerequisites where

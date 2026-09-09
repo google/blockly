@@ -26,10 +26,6 @@
       "outputs": ["{projectRoot}/dist"],
       "cache": true
     },
-    "docs": {
-      "outputs": ["{projectRoot}/../docs/docs/reference"],
-      "cache": true
-    },
     "messages": {
       "outputs": ["{projectRoot}/msg/json"],
       "cache": true
@@ -44,10 +40,6 @@
     },
     "package": {
       "outputs": ["{projectRoot}/dist"],
-      "cache": true
-    },
-    "prepareDemos": {
-      "outputs": ["{projectRoot}/../_deploy"],
       "cache": true
     },
     "tsc": {

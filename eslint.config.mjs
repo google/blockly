@@ -1,7 +1,6 @@
 import eslint from '@eslint/js';
 import googleStyle from 'eslint-config-google';
 import jsdoc from 'eslint-plugin-jsdoc';
-import * as mdx from 'eslint-plugin-mdx';
 import mochaPlugin from 'eslint-plugin-mocha';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import {defineConfig} from 'eslint/config';
@@ -165,16 +164,11 @@ export default defineConfig(
       'packages/blockly/tests/workspace_svg/*',
       // Core Demos, scripts, misc
       'packages/blockly/generators/*',
-      'packages/blockly/demos/*',
-      'packages/blockly/appengine/*',
       'packages/blockly/externs/*',
       'packages/blockly/closure/*',
       'packages/blockly/scripts/gulpfiles/*',
       'packages/blockly/CHANGELOG.md',
       'packages/blockly/PULL_REQUEST_TEMPLATE.md',
-      // Docs
-      'packages/docs/docs/reference/**',
-      'packages/docs/.docusaurus/**',
       // Plugins
       'packages/plugins/dev-tools/src/index.d.ts',
       'packages/plugins/**/golden/*',
@@ -310,24 +304,6 @@ export default defineConfig(
       'jsdoc/check-values': ['off'],
       'jsdoc/require-returns': ['off'],
       'jsdoc/tag-lines': ['off'],
-    },
-  },
-  {
-    ...mdx.flat,
-    files: ['packages/docs/**/*.mdx'],
-    rules: {
-      ...mdx.flat.rules,
-      'mdx/remark': 'off',
-    },
-  },
-  {
-    ...mdx.flat,
-    files: ['packages/docs/**/*.md'],
-    ...mdx.flatCodeBlocks,
-    rules: {
-      ...mdx.flat.rules,
-      ...mdx.flatCodeBlocks.rules,
-      'mdx/remark': 'off',
     },
   },
   {

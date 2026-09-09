@@ -20,13 +20,13 @@
     "blockly-plugin",
     "continuous-toolbox"
   ],
-  "homepage": "https://github.com/RaspberryPiFoundation/blockly/tree/main/packages/plugins/continuous-toolbox#readme",
+  "homepage": "https://github.com/Flakween/BlockThreed/tree/main/packages/plugins/continuous-toolbox#readme",
   "bugs": {
-    "url": "https://github.com/RaspberryPiFoundation/blockly/issues"
+    "url": "https://github.com/Flakween/BlockThreed/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RaspberryPiFoundation/blockly.git",
+    "url": "https://github.com/Flakween/BlockThreed.git",
     "directory": "packages/plugins/continuous-toolbox"
   },
   "license": "Apache-2.0",

@@ -63,14 +63,15 @@ Both are covered in the [root conventions](../../AGENTS.md#code-conventions).
 
 ## Further reading
 
-In-repo contributor documentation, which is more detailed than this file:
+The in-repo contributor documentation was removed from this fork along with the docs
+site. Use the published upstream guides instead, which are more detailed than this file:
 
-- [A tour of core](../docs/docs/guides/contribute/core/core-architecture/core-tour.mdx)
-- [Render management](../docs/docs/guides/contribute/core/core-architecture/render-management.mdx)
-- [Style guide](../docs/docs/guides/contribute/core/style_guide.mdx)
-- [Unit testing](../docs/docs/guides/contribute/core/testing/unit_testing.mdx)
-- [Building and compilation](../docs/docs/guides/contribute/core/building_and_compilation/building.mdx)
-- [Localization and translation](../docs/docs/guides/contribute/core/localization_and_translation.mdx)
+- [A tour of core](https://docs.blockly.com/guides/contribute/core/core-architecture/core-tour/)
+- [Render management](https://docs.blockly.com/guides/contribute/core/core-architecture/render-management/)
+- [Style guide](https://docs.blockly.com/guides/contribute/core/style_guide/)
+- [Unit testing](https://docs.blockly.com/guides/contribute/core/testing/unit_testing/)
+- [Building and compilation](https://docs.blockly.com/guides/contribute/core/building_and_compilation/building/)
+- [Localization and translation](https://docs.blockly.com/guides/contribute/core/localization_and_translation/)
 
 ## Architecture
 
@@ -104,8 +105,9 @@ Never hand-edit files in `msg/json/` — they are generated, and your changes wi
 overwritten. A pull request that adds a string will legitimately contain changes to all
 three files.
 
-Do not add translations for non-English locales directly. Those come in through
-TranslateWiki.
+Do not add translations for non-English locales directly. Upstream those come in through
+TranslateWiki; in this fork translation sync is currently frozen, so non-English
+locales stay as they were forked until we set up our own workflow.
 
 ## DOM and accessibility
 
@@ -119,12 +121,12 @@ Use [`core/utils/aria.ts`](core/utils/aria.ts) for roles and ARIA state — `set
 hand. Keyboard behavior belongs in `core/keyboard_nav/`; new interactive UI needs a
 navigation policy, not just a click handler.
 
-The relevant guides:
+The relevant upstream guides:
 
-- [Accessibility best practices](../docs/docs/guides/app-integration/accessibility/best-practices.mdx)
-- [Screen readers](../docs/docs/guides/configure/screen-reader.mdx)
-- [Keyboard navigation](../docs/docs/guides/configure/keyboard-nav.mdx)
-- [Focus](../docs/docs/guides/configure/focus.mdx)
+- [Accessibility best practices](https://docs.blockly.com/guides/app-integration/accessibility/best-practices/)
+- [Screen readers](https://docs.blockly.com/guides/configure/screen-reader/)
+- [Keyboard navigation](https://docs.blockly.com/guides/configure/keyboard-nav/)
+- [Focus](https://docs.blockly.com/guides/configure/focus/)
 
 This applies to plugins as well as core. The utilities live here, but plugin UI has the
 same obligations — see [`packages/plugins/AGENTS.md`](../plugins/AGENTS.md).

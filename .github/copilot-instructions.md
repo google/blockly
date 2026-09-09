@@ -37,14 +37,14 @@ can exist in more than one package.
 
 ## Project ownership
 
-`RaspberryPiFoundation/blockly` is the canonical upstream, maintained by the Raspberry
-Pi Foundation. It is not a fork of `google/blockly`. Do not suggest changes on the basis
-that this is a fork, that upstream should be consulted, or that a change belongs in a
-Google-maintained repository.
+This is **BlockThreed** (`Flakween/BlockThreed`), a fork of Blockly being repurposed
+as a Scratch-like 3D game engine. `RaspberryPiFoundation/blockly` is the canonical
+**upstream**, maintained by the Raspberry Pi Foundation; it is not a fork of
+`google/blockly`.
 
 `Copyright <year> Google LLC` headers on existing files are correct and historical —
-never ask for them to be changed. Only new files use the Raspberry Pi Foundation
-copyright. See [`AGENTS.md`](../AGENTS.md#project-ownership).
+never ask for them to be changed. Only new files use the BlockThreed copyright.
+See [`AGENTS.md`](../AGENTS.md#project-ownership).
 
 ## Pull request descriptions
 
@@ -75,22 +75,21 @@ pull request at all, and does it look regenerated rather than hand-edited?"**
 
 Do not nitpick their contents. **Do** flag them if they look hand-edited rather than
 regenerated — for example `msg/json/en.json` changing without a corresponding change to
-`packages/blockly/msg/messages.js`, an edit to a non-English locale file (those come from
-TranslateWiki), or a lockfile change in a PR that touches no dependencies. In those cases
-ask for the file to be regenerated, not patched.
+`packages/blockly/msg/messages.js`, an edit to a non-English locale file (translation
+sync is frozen in this fork), or a lockfile change in a PR that touches no dependencies.
+In those cases ask for the file to be regenerated, not patched.
 
 ### Should not appear at all — flag if present
 
-| File                            | Why                                                     |
-| ------------------------------- | ------------------------------------------------------- |
-| `**/CHANGELOG.md`               | Written by Lerna at release time, not in feature PRs     |
-| `packages/docs/docs/reference/**` | Generated from core TSDoc; gitignored                 |
-| `**/dist/**`, `**/build/**`     | Build output; gitignored                                |
+| File                        | Why                                                  |
+| --------------------------- | ---------------------------------------------------- |
+| `**/CHANGELOG.md`           | Written by Lerna at release time, not in feature PRs |
+| `**/dist/**`, `**/build/**` | Build output; gitignored                             |
 
 A change to any of these in a normal pull request means something has gone wrong, and is
 worth a comment. A hand-written `CHANGELOG.md` entry in particular should be flagged:
 release notes come from conventional commit messages, so the fix is to write a good
-commit message rather than to edit the changelog. The last three are gitignored
+commit message rather than to edit the changelog. The last two are gitignored
 entirely, so their presence means they were force-added.
 
 The exception is a release pull request, where these files changing is the whole point.
@@ -110,25 +109,26 @@ The exception is a release pull request, where these files changing is the whole
   `npm run messages`; if they were edited by hand, ask for them to be regenerated
   instead.
 - Link the
-  [localization guide](../packages/docs/docs/guides/contribute/core/localization_and_translation.mdx)
+  [upstream localization guide](https://docs.blockly.com/guides/contribute/core/localization_and_translation/)
   if strings are missing or misplaced.
-- PRs that attempt to add translations for non-English strings should be redirected to
-  TranslateWiki, using the same guide.
+- Translation sync is currently frozen in this fork (no TranslateWiki). Flag PRs that
+  hand-edit non-English locale files — only `en.json`/`qqq.json` regenerate from
+  `msg/messages.js`.
 
 ## Plugins (`packages/plugins/*`)
 
 - **Test files must be named `*.mocha.js`.** The plugin test runner silently finds no
   tests and exits successfully if they are named anything else, so a green CI run does
   not prove the tests ran. Flag any new plugin test file that does not use this suffix.
-- **New plugins must be TypeScript.** Flag a newly added plugin written in JavaScript;
-  the scaffolding generator defaults to JS, so this is an easy one to miss
-  (`npx @blockly/create-package plugin <name> --typescript`). Existing JavaScript plugins
+- **New plugins must be TypeScript.** Flag a newly added plugin written in JavaScript.
+  New plugins are scaffolded by copying an existing TypeScript plugin (the upstream
+  generator was removed from this fork). Existing JavaScript plugins
   are legacy — do not ask for them to be converted.
 - `blockly` must be a **peer** dependency, never a direct dependency. Flag imports that
   reach into deep paths inside the core package rather than its public entry points.
 - Package names follow the type-based convention in
-  [the plugin naming guide](../packages/docs/docs/guides/contribute/core/plugins/naming.mdx). Flag new packages that do not
-  follow it.
+  [the upstream plugin naming guide](https://docs.blockly.com/guides/contribute/core/plugins/naming/).
+  Flag new packages that do not follow it.
 - Hand-edited `version` fields or `CHANGELOG.md` entries should be flagged; both are
   managed by Lerna.
 

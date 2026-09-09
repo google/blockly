@@ -1,7 +1,6 @@
-# Blockly
+# Blockly (BlockThreed fork)
 
-Blockly is a web-based visual programming editor maintained by the
-[Raspberry Pi Foundation](https://www.raspberrypi.org). The Blockly editor uses
+Blockly is a web-based visual programming editor. The Blockly editor uses
 interlocking graphical blocks to represent code concepts like variables,
 logical expressions, loops, and more. It allows users to apply programming
 principles without having to worry about syntax or the intimidation of a
@@ -9,8 +8,10 @@ blinking cursor on the command line, and can automatically translate block-based
 programs into a variety of text-based programming languages like Python,
 Javascript and Lua. All code is free and open source.
 
-[Try a live demo](https://raspberrypifoundation.github.io/blockly/packages/blockly/demos/code/index.html),
-or browse the source code in the [Blockly repo](http://github.com/RaspberryPiFoundation/blockly).
+This copy is maintained as part of
+[BlockThreed](https://github.com/Flakween/BlockThreed), a Scratch-like 3D game
+engine built on block coding. The canonical upstream is the
+[Blockly repo](https://github.com/RaspberryPiFoundation/blockly).
 
 ## Example Usage
 
@@ -23,16 +24,14 @@ Blockly.inject('blocklyDiv', {
 
 ## Plugins
 
-A [wide variety of plugins](https://raspberrypifoundation.github.io/blockly-samples/)
-that add additional features and functionality to Blockly are available. All
-plugins are distributed via NPM; source code can be found in the
-[Blockly repo](http://github.com/RaspberryPiFoundation/blockly).
+A curated set of plugins (fields, themes, and workspace add-ons) lives in this
+repo under `packages/plugins/`. Upstream publishes a wider variety via npm;
+source code can be found in the
+[Blockly repo](https://github.com/RaspberryPiFoundation/blockly).
 
 ## Installation
 
-You can install Blockly either via `npm` or `unpkg`. Or, if you're starting an
-entirely new project that uses Blockly, you can bootstrap it using our
-`create-package` tool:
+You can install Blockly either via `npm` or `unpkg`:
 
 ### npm
 
@@ -55,12 +54,6 @@ Blockly.thing;
 Blockly.Blocks['block_type'];
 // Access the javascript generator.
 javascript.javascriptGenerator;
-```
-
-### create-package
-
-```bash
-npx @blockly/create-package app my-cool-blockly-app --typescript
 ```
 
 ## Imports
@@ -94,7 +87,7 @@ const En = require('blockly/msg/en');
 
 ## Loading messages
 
-Blockly is translated into [more than 100 different languages](https://github.com/RaspberryPiFoundation/blockly/tree/main/packages/blockly/msg/json).
+Blockly is translated into [more than 100 different languages](https://github.com/Flakween/BlockThreed/tree/main/packages/blockly/msg/json).
 Once you've imported or required the message file for the language you want to
 use as shown above, it needs to be applied:
 

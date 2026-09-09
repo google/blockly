@@ -1,24 +1,25 @@
-# Contributing to Blockly
+# Contributing to BlockThreed
 
-Want to contribute? Great! The full contributor documentation lives on the
-[Blockly docs site](https://docs.blockly.com/guides/contribute/).
+Want to contribute? Great! Start with the orientation docs in this repo:
 
-That documentation is generated from this repository, so you can also read the source
-directly under [`packages/docs/docs/guides/contribute/`](../packages/docs/docs/guides/contribute/).
-The pages you are most likely to need:
+- [`README.md`](../README.md) — what BlockThreed is and where it's headed.
+- [`AGENTS.md`](../AGENTS.md) — repository layout, commands, and conventions.
+  Per-package details live in `packages/blockly/AGENTS.md` and
+  `packages/plugins/AGENTS.md`.
 
-| Topic                    | Source file                                                                                                              |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| Style guide              | [`core/style_guide.mdx`](../packages/docs/docs/guides/contribute/core/style_guide.mdx)                                     |
-| Commit messages          | [`get-started/commits.mdx`](../packages/docs/docs/guides/contribute/get-started/commits.mdx)                               |
-| Writing a good PR        | [`get-started/write_a_good_pr.mdx`](../packages/docs/docs/guides/contribute/get-started/write_a_good_pr.mdx)               |
-| Writing a good issue     | [`get-started/write_a_good_issue.mdx`](../packages/docs/docs/guides/contribute/get-started/write_a_good_issue.mdx)         |
-| Building and compiling   | [`core/building_and_compilation/building.mdx`](../packages/docs/docs/guides/contribute/core/building_and_compilation/building.mdx) |
-| Unit testing             | [`core/testing/unit_testing.mdx`](../packages/docs/docs/guides/contribute/core/testing/unit_testing.mdx)                   |
-| Localization             | [`core/localization_and_translation.mdx`](../packages/docs/docs/guides/contribute/core/localization_and_translation.mdx)   |
-| A tour of core           | [`core/core-architecture/core-tour.mdx`](../packages/docs/docs/guides/contribute/core/core-architecture/core-tour.mdx)     |
-| Adding a plugin          | [`core/plugins/add_a_plugin.mdx`](../packages/docs/docs/guides/contribute/core/plugins/add_a_plugin.mdx)                   |
-| Plugin naming            | [`core/plugins/naming.mdx`](../packages/docs/docs/guides/contribute/core/plugins/naming.mdx)                               |
+The short version:
 
-For a short orientation to the repository layout, commands, and conventions, see
-[`AGENTS.md`](../AGENTS.md).
+- Keep changes small and focused; one concern per pull request.
+- Use [conventional commits](https://www.conventionalcommits.org/) (`feat:`,
+  `fix:`, `docs:`, …) — they generate the changelog and drive versioning.
+- Run `npm run format` from the repo root and `npm run lint-fix` in the
+  package you touched before pushing.
+- New block-coding behavior needs unit tests (`packages/blockly/tests/mocha/`).
+
+Since the block editor core is forked from Blockly, the upstream contributor
+guides are still useful background reading:
+
+- [Style guide](https://docs.blockly.com/guides/contribute/core/style_guide/)
+- [Commit messages](https://docs.blockly.com/guides/contribute/get-started/commits/)
+- [Writing a good PR](https://docs.blockly.com/guides/contribute/get-started/write_a_good_pr/)
+- [Writing a good issue](https://docs.blockly.com/guides/contribute/get-started/write_a_good_issue/)

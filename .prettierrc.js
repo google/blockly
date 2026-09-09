@@ -8,13 +8,6 @@ module.exports = {
   // Organise imports using a plugin.
   overrides: [
     {
-      files: 'packages/docs/**/*',
-      options: {
-        // Keep the existing wrapping in markdown text as-is.
-        proseWrap: 'preserve'
-      }
-    },
-    {
       files: 'packages/blockly/**/*',
       options: {
         // Some properties must be quoted to preserve closure compiler behavior.

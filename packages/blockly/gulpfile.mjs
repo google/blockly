@@ -36,7 +36,6 @@ import {
   pack,
   typings,
 } from './scripts/gulpfiles/package_tasks.mjs';
-import {generators, test} from './scripts/gulpfiles/test_tasks.mjs';
 
 const clean = parallel(cleanBuildDir, cleanReleaseDir);
 
@@ -66,8 +65,6 @@ export {
 export {
   messages, // Generate msg/json/en.json et al.
   clean,
-  test,
-  generators as testGenerators,
   buildAdvancedCompilationTest,
   typings,
 }

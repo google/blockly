@@ -19,9 +19,14 @@ npm run lint:fix
 
 ## Things to know
 
-- **`docs/reference/` is generated** from the core library's TSDoc by
-  `npx nx run blockly:docs`, and is gitignored. Never edit those files directly — fix the
-  TSDoc in `packages/blockly/core/` instead.
+- **`docs/reference/` is generated** by TypeDoc during the Docusaurus build, and is
+  gitignored. Never edit those files directly — fix the TSDoc in `packages/blockly/core/`
+  instead.
+- **The reference is built from `blockly_api.json`, not from the current source.** That
+  file is a snapshot of the core library's API committed during a release, so the site
+  documents the released API rather than whatever is on `main`. To preview your own TSDoc
+  changes, run `npm run reference:refresh` to regenerate it locally — then leave it out of
+  your commit, since only a release should update it.
 - **Markdown and MDX here are linted, not Prettier-formatted.** `packages/docs/**/*.md`
   and `*.mdx` are listed in `.prettierignore` and handled by ESLint with
   `eslint-plugin-mdx` instead, so `npm run format` will not touch them.

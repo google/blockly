@@ -57,3 +57,12 @@ ESlint is used for linting `.md` and `.mdx` files due to poor support for these 
 The API reference pages are auto-generated from the Blockly TypeScript source 
 using [TypeDoc](https://www.npmjs.com/package/typedoc). Typedoc automatically 
 generates MDX files into `/docs/reference/` when Docusaurus starts.
+
+TypeDoc generates the API docs based on the latest Blockly release, not the 
+current code. If you would like to see unreleased or beta changes reflected 
+in your local docs site, run `npm run reference:refresh`. This will overwrite a 
+file called `blockly_api.json` which TypeDoc uses to generate the docs. Then, 
+you can run docs again to see updates to the API docs. 
+
+If you regenerate `blockly_api.json`, please do not commit it in a PR. This 
+file is committed automatically as part of our release process. 

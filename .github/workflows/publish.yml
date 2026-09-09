@@ -98,6 +98,7 @@ jobs:
             fi
           else
             VERSION_COMMAND="${VERSION_COMMAND} --conventional-prerelease --preid beta"
+            export npm_config_ignore_scripts=true
           fi
           VERSION_COMMAND="${VERSION_COMMAND} --force-publish --conventional-commits --yes"
           if [ "${DRY_RUN}" = "true" ]; then

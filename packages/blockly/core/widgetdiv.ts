@@ -9,7 +9,8 @@
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {Field} from './field.js';
-import {ReturnEphemeralFocus, getFocusManager} from './focus_manager.js';
+import type {ReturnEphemeralFocus} from './focus_manager.js';
+import {getFocusManager} from './focus_manager.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';

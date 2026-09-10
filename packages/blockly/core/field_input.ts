@@ -19,12 +19,8 @@ import * as dialog from './dialog.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {EventType} from './events/type.js';
 import * as eventUtils from './events/utils.js';
-import {
-  Field,
-  FieldConfig,
-  FieldValidator,
-  UnattachedFieldError,
-} from './field.js';
+import type {FieldConfig, FieldValidator} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import {getFocusManager} from './focus_manager.js';
 import type {IFocusableNode} from './interfaces/i_focusable_node.js';
 import {Msg} from './msg.js';
@@ -33,7 +29,7 @@ import * as aria from './utils/aria.js';
 import {Verbosity} from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
-import {Size} from './utils/size.js';
+import type {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import * as userAgent from './utils/useragent.js';

@@ -13,22 +13,19 @@ import {spawnSync} from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import {rimraf} from 'rimraf';
-import {
-  ANSI_RESET,
-  BOLD_GREEN,
-  BOLD_RED,
-  runTestFunction,
-} from '../scripts/test_helpers.mjs';
 
-export const OUTPUT_DIR = 'build/generators';
-export const GOLDEN_DIR = 'tests/generators/golden';
+const OUTPUT_DIR = 'build/generators';
+const GOLDEN_DIR = 'tests/generators/golden';
+const BOLD_GREEN = '\x1b[1;32m';
+const BOLD_RED = '\x1b[1;31m';
+const ANSI_RESET = '\x1b[0m';
 
 /**
  * Helper method for checking the result of generator.
  * @param {string} suffix Target suffix.
  * @return {number} Check result (0: success / 1: failed).
  */
-export function checkResult(suffix) {
+function checkResult(suffix) {
   const fileName = `generated.${suffix}`;
   const resultFileName = path.posix.join(OUTPUT_DIR, fileName);
 
@@ -78,8 +75,7 @@ function compareFile(file1, file2) {
  * Run generator tests inside a browser and check the results.
  * @return {Promise} Asynchronous result.
  */
-export async function generators() {
-  return runTestFunction('generators', async () => {
+async function generators() {
     // Clean up.
     rimraf.sync(OUTPUT_DIR);
     fs.mkdirSync(OUTPUT_DIR);
@@ -113,7 +109,6 @@ export async function generators() {
       );
       throw new Error('Generator tests failed.');
     }
-  });
 }
 
 await generators();

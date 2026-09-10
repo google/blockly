@@ -24,7 +24,7 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "reference:refresh": "typedoc --options ./typedoc.json --entryPointStrategy resolve --entryPoints ../blockly/core/blockly.ts --includeVersion --json ./blockly_api.json",
+    "reference-refresh": "typedoc --options ./typedoc.json --entryPointStrategy resolve --entryPoints ../blockly/core/blockly.ts --includeVersion --json ./blockly_api.json",
     "lint": "eslint 'docs/**/*.mdx'",
     "lint-fix": "eslint 'docs/**/*.mdx' --fix"
   },

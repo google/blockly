@@ -97,8 +97,8 @@ jobs:
               VERSION_COMMAND="${VERSION_COMMAND} --conventional-graduate"
             fi
           else
-            VERSION_COMMAND="${VERSION_COMMAND} --conventional-prerelease --preid beta"
-            export npm_config_ignore_scripts=true
+            # --ignore-scripts skips the "version" lifecycle script during beta release to skip generating docs
+            VERSION_COMMAND="${VERSION_COMMAND} --conventional-prerelease --preid beta --ignore-scripts"
           fi
           VERSION_COMMAND="${VERSION_COMMAND} --force-publish --conventional-commits --yes"
           if [ "${DRY_RUN}" = "true" ]; then

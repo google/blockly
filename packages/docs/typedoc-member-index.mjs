@@ -108,8 +108,8 @@ class NamespaceDirRouter extends MemberRouter {
   }
 }
 
-// The markdown plugin's locale files. Needed to register translations due to 
-// https://github.com/typedoc2md/typedoc-plugin-markdown/issues/900. 
+// The markdown plugin's locale files. Needed to register translations due to
+// https://github.com/typedoc2md/typedoc-plugin-markdown/issues/900.
 // Remove once that issue is fixed.
 const pluginLocales = await import(
   new URL(

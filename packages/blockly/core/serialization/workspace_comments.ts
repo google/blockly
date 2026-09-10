@@ -70,7 +70,6 @@ export function append(
 
   const comment = workspace.newComment(state.id);
 
-  if (state.text !== undefined) comment.setText(state.text);
   if (state.x !== undefined || state.y !== undefined) {
     const defaultLoc = comment.getRelativeToSurfaceXY();
     let x = state.x ?? defaultLoc.x;
@@ -87,6 +86,7 @@ export function append(
       ),
     );
   }
+  if (state.text !== undefined) comment.setText(state.text);
   if (state.collapsed !== undefined) comment.setCollapsed(state.collapsed);
   if (state.editable !== undefined) comment.setEditable(state.editable);
   if (state.movable !== undefined) comment.setMovable(state.movable);

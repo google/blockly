@@ -193,10 +193,10 @@ export function createProcCallBlock(
   );
 }
 
-export class MockProcedureModel implements Blockly.IProcedureModel {
+export class MockProcedureModel implements Blockly.procedures.IProcedureModel {
   private readonly id = Blockly.utils.idGenerator.genUid();
   private name: string;
-  private readonly parameters: Blockly.IParameterModel[] = [];
+  private readonly parameters: Blockly.procedures.IParameterModel[] = [];
   private returnTypes: string[] | null = null;
   private enabled = true;
   constructor(name = '') {
@@ -216,7 +216,10 @@ export class MockProcedureModel implements Blockly.IProcedureModel {
     return this;
   }
 
-  insertParameter(parameterModel: Blockly.IParameterModel, index: number) {
+  insertParameter(
+    parameterModel: Blockly.procedures.IParameterModel,
+    index: number,
+  ) {
     this.parameters.splice(index, 0, parameterModel);
     return this;
   }
@@ -265,7 +268,7 @@ export class MockProcedureModel implements Blockly.IProcedureModel {
   stopPublishing() {}
 }
 
-export class MockParameterModel implements Blockly.IParameterModel {
+export class MockParameterModel implements Blockly.procedures.IParameterModel {
   private readonly id = Blockly.utils.idGenerator.genUid();
   private types: string[] = [];
   private name: string;
@@ -277,7 +280,7 @@ export class MockParameterModel implements Blockly.IParameterModel {
     return new MockParameterModel('test');
   }
 
-  setProcedureModel(_model: Blockly.IProcedureModel) {
+  setProcedureModel(_model: Blockly.procedures.IProcedureModel) {
     return this;
   }
 

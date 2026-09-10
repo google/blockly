@@ -3,7 +3,7 @@
  * Copyright 2024 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
 import {
   assertEventFired,
@@ -16,182 +16,149 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('Workspace comment', function () {
-  setup(function () {
-    this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
-    this.workspace = new Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
+  let clock: sinon.SinonFakeTimers;
+  let workspace: Blockly.WorkspaceSvg;
+
+  setup(function (this: Mocha.Context) {
+    ({clock} = sharedTestSetup.call(this, {fireEventsNow: false}));
+    workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
   });
 
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
   });
 
   suite('Events', function () {
-    test('create events are fired when a comment is constructed', function () {
-      const spy = createChangeListenerSpy(this.workspace);
+    let renderedComment: Blockly.comments.RenderedWorkspaceComment;
+    let spy: sinon.SinonSpy;
 
-      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
+    setup(function () {
+      renderedComment = new Blockly.comments.RenderedWorkspaceComment(
+        workspace,
       );
+      spy = createChangeListenerSpy(workspace);
+    });
 
-      this.clock.runAll();
+    test('create events are fired when a comment is constructed', function () {
+      clock.runAll();
 
       assertEventFired(
         spy,
         Blockly.Events.CommentCreate,
-        {commentId: this.renderedComment.id},
-        this.workspace.id,
+        {commentId: renderedComment.id},
+        workspace.id,
       );
     });
 
     test('delete events are fired when a comment is disposed', function () {
-      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
-      const spy = createChangeListenerSpy(this.workspace);
-
-      this.renderedComment.dispose();
-
-      this.clock.runAll();
+      renderedComment.dispose();
+      clock.runAll();
 
       assertEventFired(
         spy,
         Blockly.Events.CommentDelete,
-        {commentId: this.renderedComment.id},
-        this.workspace.id,
+        {commentId: renderedComment.id},
+        workspace.id,
       );
     });
 
     test('move events are fired when a comment is moved', function () {
-      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
-      const spy = createChangeListenerSpy(this.workspace);
-
-      this.renderedComment.moveTo(new Blockly.utils.Coordinate(42, 42));
-
-      this.clock.runAll();
+      renderedComment.moveTo(new Blockly.utils.Coordinate(42, 42));
+      clock.runAll();
 
       assertEventFired(
         spy,
         Blockly.Events.CommentMove,
         {
-          commentId: this.renderedComment.id,
+          commentId: renderedComment.id,
           oldCoordinate_: {x: 0, y: 0},
           newCoordinate_: {x: 42, y: 42},
         },
-        this.workspace.id,
+        workspace.id,
       );
     });
 
     test('resize events are fired when a comment is resized', function () {
-      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
-      const spy = createChangeListenerSpy(this.workspace);
-
-      this.renderedComment.setSize(new Blockly.utils.Size(300, 200));
-
-      this.clock.runAll();
+      renderedComment.setSize(new Blockly.utils.Size(300, 200));
+      clock.runAll();
 
       assertEventFired(
         spy,
         Blockly.Events.CommentResize,
         {
-          commentId: this.renderedComment.id,
+          commentId: renderedComment.id,
           oldSize: {width: 120, height: 100},
           newSize: {width: 300, height: 200},
         },
-        this.workspace.id,
+        workspace.id,
       );
     });
 
     test('change events are fired when a comments text is edited', function () {
-      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
-      const spy = createChangeListenerSpy(this.workspace);
-
-      this.renderedComment.setText('test text');
-
-      this.clock.runAll();
+      renderedComment.setText('test text');
+      clock.runAll();
 
       assertEventFired(
         spy,
         Blockly.Events.CommentChange,
         {
-          commentId: this.renderedComment.id,
+          commentId: renderedComment.id,
           oldContents_: '',
           newContents_: 'test text',
         },
-        this.workspace.id,
+        workspace.id,
       );
     });
 
     test('collapse events are fired when a comment is collapsed', function () {
-      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
-      const spy = createChangeListenerSpy(this.workspace);
-
-      this.renderedComment.setCollapsed(true);
-
-      this.clock.runAll();
+      renderedComment.setCollapsed(true);
+      clock.runAll();
 
       assertEventFired(
         spy,
         Blockly.Events.CommentCollapse,
         {
-          commentId: this.renderedComment.id,
+          commentId: renderedComment.id,
           newCollapsed: true,
         },
-        this.workspace.id,
+        workspace.id,
       );
     });
 
     test('collapse events are fired when a comment is uncollapsed', function () {
-      this.renderedComment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
-      this.renderedComment.setCollapsed(true);
-      const spy = createChangeListenerSpy(this.workspace);
-
-      this.renderedComment.setCollapsed(false);
-
-      this.clock.runAll();
+      renderedComment.setCollapsed(true);
+      renderedComment.setCollapsed(false);
+      clock.runAll();
 
       assertEventFired(
         spy,
         Blockly.Events.CommentCollapse,
         {
-          commentId: this.renderedComment.id,
+          commentId: renderedComment.id,
           newCollapsed: false,
         },
-        this.workspace.id,
+        workspace.id,
       );
     });
   });
 
   suite('Focus', function () {
     test('moves to the workspace when deleted', function () {
-      const comment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
+      const comment = new Blockly.comments.RenderedWorkspaceComment(workspace);
       Blockly.getFocusManager().focusNode(comment);
       assert.equal(Blockly.getFocusManager().getFocusedNode(), comment);
       comment.view.getCommentBarButtons()[1].performAction();
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.workspace);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), workspace);
     });
 
     test('does not change the layer', function () {
-      const comment = new Blockly.comments.RenderedWorkspaceComment(
-        this.workspace,
-      );
+      const comment = new Blockly.comments.RenderedWorkspaceComment(workspace);
 
-      this.workspace.getLayerManager()?.moveToDragLayer(comment);
+      workspace.getLayerManager()?.moveToDragLayer(comment);
       Blockly.getFocusManager().focusNode(comment);
       assert.equal(
         comment.getSvgRoot().parentElement,
-        this.workspace.getLayerManager()?.getDragLayer(),
+        workspace.getLayerManager()?.getDragLayer() as Element,
       );
     });
   });

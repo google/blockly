@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
+import sinon from 'sinon';
 import {
   DEFAULT_INJECT_OPTIONS,
   sharedTestSetup,
@@ -12,74 +14,81 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('WidgetDiv', function () {
-  setup(function () {
+  let workspace: Blockly.WorkspaceSvg;
+
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
-    Blockly.common.setParentContainer(document.firstElementChild);
-    this.workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
-    this.setUpBlockWithField = function () {
-      const blockJson = {
-        'type': 'text',
-        'id': 'block_id',
-        'x': 10,
-        'y': 20,
-        'fields': {
-          'TEXT': '',
-        },
-      };
-      Blockly.serialization.blocks.append(blockJson, this.workspace);
-      return this.workspace.getBlockById('block_id');
-    };
+    const container = document.firstElementChild;
+    assert.isNotNull(container);
+    Blockly.common.setParentContainer(container);
+    workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
     // The workspace needs to be visible for focus-specific tests.
-    document.getElementById('blocklyDiv').style.visibility = 'visible';
+    const injectionDiv = document.getElementById('blocklyDiv');
+    assert.isNotNull(injectionDiv);
+    injectionDiv.style.visibility = 'visible';
   });
-  teardown(function () {
-    sharedTestTeardown.call(this);
-    document.getElementById('blocklyDiv').style.visibility = 'hidden';
-    Blockly.common.setParentContainer(null);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
+    const injectionDiv = document.getElementById('blocklyDiv');
+    assert.isNotNull(injectionDiv);
+    injectionDiv.style.visibility = 'hidden';
+    Blockly.common.setParentContainer(null as any);
   });
 
+  function setUpBlockWithField() {
+    const blockJson = {
+      'type': 'text',
+      'id': 'block_id',
+      'x': 10,
+      'y': 20,
+      'fields': {
+        'TEXT': '',
+      },
+    };
+    Blockly.serialization.blocks.append(blockJson, workspace);
+    const block = workspace.getBlockById('block_id');
+    assert.isNotNull(block);
+    return block;
+  }
+
   suite('positionWithAnchor', function () {
-    function makeBBox(left, top, width, height) {
-      return {
-        left: left,
-        right: left + width,
-        top: top,
-        bottom: top + height,
-        width: width,
-        height: height,
-      };
+    let anchorSize: Blockly.utils.Size;
+    let widgetSize: Blockly.utils.Size;
+    let viewportBBox: Blockly.utils.Rect;
+
+    function makeBBox(
+      left: number,
+      top: number,
+      width: number,
+      height: number,
+    ) {
+      return new Blockly.utils.Rect(top, top + height, left, left + width);
+    }
+
+    function testWidgetPosition(
+      anchorBBox: Blockly.utils.Rect,
+      rtl: boolean,
+      expectedX: number,
+      expectedY: number,
+      expectedHeight: number,
+    ) {
+      Blockly.WidgetDiv.positionWithAnchor(
+        viewportBBox,
+        anchorBBox,
+        widgetSize,
+        rtl,
+      );
+      const style = Blockly.WidgetDiv.getDiv()?.style;
+      assert.equal(style?.left, expectedX + 'px', 'Left');
+      assert.equal(style?.top, expectedY + 'px', 'Top');
+      assert.equal(style?.height, expectedHeight + 'px', 'Height');
     }
 
     setup(function () {
       Blockly.WidgetDiv.createDom();
-      this.viewportBBox = makeBBox(0, 0, 1000, 1003);
-      this.widgetSize = {
-        width: 100,
-        height: 102,
-      };
-      this.anchorSize = {
-        width: 90,
-        height: 91,
-      };
-
-      this.testWidgetPosition = function (
-        anchorBBox,
-        rtl,
-        expectedX,
-        expectedY,
-        expectedHeight,
-      ) {
-        Blockly.WidgetDiv.positionWithAnchor(
-          this.viewportBBox,
-          anchorBBox,
-          this.widgetSize,
-          rtl,
-        );
-        const style = Blockly.WidgetDiv.getDiv().style;
-        assert.equal(style.left, expectedX + 'px', 'Left');
-        assert.equal(style.top, expectedY + 'px', 'Top');
-        assert.equal(style.height, expectedHeight + 'px', 'Height');
-      };
+      viewportBBox = makeBBox(0, 0, 1000, 1003);
+      widgetSize = new Blockly.utils.Size(100, 102);
+      anchorSize = new Blockly.utils.Size(90, 91);
     });
 
     suite('LTR', function () {
@@ -88,19 +97,19 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           500,
           500,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed just below at the left side of the
         // anchor.
         const expectedX = anchorBBox.left;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -109,18 +118,18 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           500,
           50,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed just below the anchor.
         const expectedX = anchorBBox.left;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -129,18 +138,18 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           500,
           900,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed just above the anchor.
         const expectedX = anchorBBox.left;
-        const expectedY = anchorBBox.top - this.widgetSize.height;
-        this.testWidgetPosition(
+        const expectedY = anchorBBox.top - widgetSize.height;
+        testWidgetPosition(
           anchorBBox,
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -149,18 +158,18 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           50,
           500,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed at the anchor.
         const expectedX = anchorBBox.left;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -169,19 +178,19 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           950,
           500,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed as far right as possible--at the edge of
         // the screen.
-        const expectedX = this.viewportBBox.width - this.widgetSize.width;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedX = viewportBBox.getWidth() - widgetSize.width;
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           false,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
     });
@@ -191,18 +200,18 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           500,
           500,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed at the right side of the anchor.
-        const expectedX = anchorBBox.right - this.widgetSize.width;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedX = anchorBBox.right - widgetSize.width;
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -211,18 +220,18 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           500,
           50,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed just below the anchor.
-        const expectedX = anchorBBox.right - this.widgetSize.width;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedX = anchorBBox.right - widgetSize.width;
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -231,18 +240,18 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           500,
           900,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed just above the anchor.
-        const expectedX = anchorBBox.right - this.widgetSize.width;
-        const expectedY = anchorBBox.top - this.widgetSize.height;
-        this.testWidgetPosition(
+        const expectedX = anchorBBox.right - widgetSize.width;
+        const expectedY = anchorBBox.top - widgetSize.height;
+        testWidgetPosition(
           anchorBBox,
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -251,19 +260,19 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           10,
           500,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed as far left as possible--at the edge of
         // the screen.
         const expectedX = 0;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
 
@@ -272,26 +281,26 @@ suite('WidgetDiv', function () {
         const anchorBBox = makeBBox(
           950,
           500,
-          this.anchorSize.width,
-          this.anchorSize.height,
+          anchorSize.width,
+          anchorSize.height,
         );
         // The widget div should be placed as far right as possible--at the edge of
         // the screen.
-        const expectedX = this.viewportBBox.width - this.widgetSize.width;
-        const expectedY = anchorBBox.top + this.anchorSize.height;
-        this.testWidgetPosition(
+        const expectedX = viewportBBox.getWidth() - widgetSize.width;
+        const expectedY = anchorBBox.top + anchorSize.height;
+        testWidgetPosition(
           anchorBBox,
           true,
           expectedX,
           expectedY,
-          this.widgetSize.height,
+          widgetSize.height,
         );
       });
     });
   });
 
   suite('Keyboard Shortcuts', function () {
-    test('Escape dismisses WidgetDiv', function () {
+    test('Escape dismisses WidgetDiv', function (this: Mocha.Context) {
       let hidden = false;
       Blockly.WidgetDiv.show(
         this,
@@ -299,11 +308,11 @@ suite('WidgetDiv', function () {
         () => {
           hidden = true;
         },
-        this.workspace,
+        workspace,
         false,
       );
       assert.isFalse(hidden);
-      Blockly.WidgetDiv.getDiv().dispatchEvent(
+      Blockly.WidgetDiv.getDiv()?.dispatchEvent(
         new KeyboardEvent('keydown', {
           key: 'Escape',
           keyCode: 27, // example values.
@@ -315,20 +324,20 @@ suite('WidgetDiv', function () {
 
   suite('show()', function () {
     test('shows nowhere', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
 
       Blockly.WidgetDiv.show(field, false, () => {});
 
       // By default the div will not have a position.
-      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
-      assert.strictEqual(widgetDivElem.style.display, 'block');
-      assert.strictEqual(widgetDivElem.style.left, '');
-      assert.strictEqual(widgetDivElem.style.top, '');
+      const widgetDivElem = Blockly.WidgetDiv.getDiv();
+      assert.strictEqual(widgetDivElem?.style.display, 'block');
+      assert.strictEqual(widgetDivElem?.style.left, '');
+      assert.strictEqual(widgetDivElem?.style.top, '');
     });
 
     test('with hide callback does not call callback', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       const onHideCallback = sinon.stub();
 
@@ -339,7 +348,7 @@ suite('WidgetDiv', function () {
     });
 
     test('without managed ephemeral focus does not change focused node', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       Blockly.getFocusManager().focusNode(block);
 
@@ -352,7 +361,7 @@ suite('WidgetDiv', function () {
     });
 
     test('with managed ephemeral focus focuses widget div', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       Blockly.getFocusManager().focusNode(block);
 
@@ -360,26 +369,26 @@ suite('WidgetDiv', function () {
 
       // Managing ephemeral focus won't change getFocusedNode() but will change the actual element
       // with DOM focus.
-      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
+      const widgetDivElem = Blockly.WidgetDiv.getDiv();
       assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
       assert.strictEqual(document.activeElement, widgetDivElem);
     });
 
     test('makes the widget div owned by the workspace', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       Blockly.getFocusManager().focusNode(block);
 
       Blockly.WidgetDiv.show(field, false, () => {}, null, true);
       assert.equal(
         Blockly.utils.aria.getState(
-          Blockly.getMainWorkspace().getFocusableElement(),
+          workspace.getFocusableElement(),
           Blockly.utils.aria.State.OWNS,
         ),
-        Blockly.WidgetDiv.getDiv().id,
+        Blockly.WidgetDiv.getDiv()?.id,
       );
       assert.isTrue(
-        Blockly.getMainWorkspace()
+        workspace
           .getFocusableElement()
           .classList.contains('blocklyShowingWidgetDiv'),
       );
@@ -391,24 +400,24 @@ suite('WidgetDiv', function () {
       Blockly.WidgetDiv.hide();
 
       // The display property starts as empty and stays that way until an owner is attached.
-      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
-      assert.strictEqual(widgetDivElem.style.display, '');
+      const widgetDivElem = Blockly.WidgetDiv.getDiv();
+      assert.strictEqual(widgetDivElem?.style.display, '');
     });
 
     test('for showing div hides div', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       Blockly.WidgetDiv.show(field, false, () => {});
 
       Blockly.WidgetDiv.hide();
 
       // Technically this will trigger a CSS animation, but the property is still set to 0.
-      const widgetDivElem = document.querySelector('.blocklyWidgetDiv');
-      assert.strictEqual(widgetDivElem.style.display, 'none');
+      const widgetDivElem = Blockly.WidgetDiv.getDiv();
+      assert.strictEqual(widgetDivElem?.style.display, 'none');
     });
 
     test('for showing div and hide callback calls callback', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       const onHideCallback = sinon.stub();
       Blockly.WidgetDiv.show(field, false, onHideCallback);
@@ -420,7 +429,7 @@ suite('WidgetDiv', function () {
     });
 
     test('for showing div without ephemeral focus does not change focus', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       Blockly.getFocusManager().focusNode(block);
       Blockly.WidgetDiv.show(field, false, () => {}, null, false);
@@ -434,7 +443,7 @@ suite('WidgetDiv', function () {
     });
 
     test('for showing div with ephemeral focus restores DOM focus', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       Blockly.getFocusManager().focusNode(block);
       Blockly.WidgetDiv.show(field, false, () => {}, null, true);
@@ -448,7 +457,7 @@ suite('WidgetDiv', function () {
     });
 
     test('clears ownership of the widget div by the workspace', function () {
-      const block = this.setUpBlockWithField();
+      const block = setUpBlockWithField();
       const field = Array.from(block.getFields())[0];
       Blockly.getFocusManager().focusNode(block);
       Blockly.WidgetDiv.show(field, false, () => {}, null, true);
@@ -457,12 +466,12 @@ suite('WidgetDiv', function () {
 
       assert.isNull(
         Blockly.utils.aria.getState(
-          Blockly.getMainWorkspace().getFocusableElement(),
+          workspace.getFocusableElement(),
           Blockly.utils.aria.State.OWNS,
         ),
       );
       assert.isFalse(
-        Blockly.getMainWorkspace()
+        workspace
           .getFocusableElement()
           .classList.contains('blocklyShowingWidgetDiv'),
       );

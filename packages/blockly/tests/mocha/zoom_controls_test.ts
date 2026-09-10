@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {EventType} from '#core/events/type.js';
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
+import sinon from 'sinon';
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import {
   DEFAULT_INJECT_OPTIONS,
@@ -15,86 +16,88 @@ import {
 import {simulateClick} from './test_helpers/user_input.js';
 
 suite('Zoom Controls', function () {
-  setup(function () {
-    sharedTestSetup.call(this);
-    this.workspace = Blockly.inject('blocklyDiv', {
+  let workspace: Blockly.WorkspaceSvg;
+  let eventsFireStub: sinon.SinonStub;
+
+  setup(function (this: Mocha.Context) {
+    ({eventsFireStub} = sharedTestSetup.call(this));
+    workspace = Blockly.inject('blocklyDiv', {
       ...DEFAULT_INJECT_OPTIONS,
       'zoom': {'controls': true},
     });
-    this.zoomControls = this.workspace.zoomControls_;
   });
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
   });
 
   suite('Events', function () {
-    function closeToMatcher(expectedValue, delta) {
-      return sinon.match(function (value) {
-        return Math.abs(value - expectedValue) <= delta;
-      });
-    }
     test('Zoom in', function () {
-      simulateClick(document.querySelector('.blocklyZoomIn'));
+      const control = workspace.getSvgGroup().querySelector('.blocklyZoomIn');
+      assert.isNotNull(control);
+      simulateClick(control);
 
       assertEventFired(
-        this.eventsFireStub,
+        eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'zoom_controls', type: EventType.CLICK},
-        this.workspace.id,
+        {targetType: 'zoom_controls', type: Blockly.Events.CLICK},
+        workspace.id,
         undefined,
       );
-      assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
+      assertEventNotFired(eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
-        type: EventType.CLICK,
+        type: Blockly.Events.CLICK,
       });
-      assert.closeTo(this.workspace.getScale(), 1.2, 0.05);
+      assert.closeTo(workspace.getScale(), 1.2, 0.05);
     });
     test('Zoom out', function () {
-      simulateClick(document.querySelector('.blocklyZoomOut'));
+      const control = workspace.getSvgGroup().querySelector('.blocklyZoomOut');
+      assert.isNotNull(control);
+      simulateClick(control);
 
       assertEventFired(
-        this.eventsFireStub,
+        eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'zoom_controls', type: EventType.CLICK},
-        this.workspace.id,
+        {targetType: 'zoom_controls', type: Blockly.Events.CLICK},
+        workspace.id,
         undefined,
       );
-      assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
+      assertEventNotFired(eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
-        type: EventType.CLICK,
+        type: Blockly.Events.CLICK,
       });
-      assert.closeTo(this.workspace.getScale(), 0.8, 0.05);
+      assert.closeTo(workspace.getScale(), 0.8, 0.05);
     });
     test('Reset zoom', function () {
-      simulateClick(document.querySelector('.blocklyZoomReset'));
+      const control = workspace
+        .getSvgGroup()
+        .querySelector('.blocklyZoomReset');
+      assert.isNotNull(control);
+      simulateClick(control);
 
       assertEventFired(
-        this.eventsFireStub,
+        eventsFireStub,
         Blockly.Events.Click,
-        {targetType: 'zoom_controls', type: EventType.CLICK},
-        this.workspace.id,
+        {targetType: 'zoom_controls', type: Blockly.Events.CLICK},
+        workspace.id,
         undefined,
       );
-      assertEventNotFired(this.eventsFireStub, Blockly.Events.Click, {
+      assertEventNotFired(eventsFireStub, Blockly.Events.Click, {
         targetType: 'workspace',
-        type: EventType.CLICK,
+        type: Blockly.Events.CLICK,
       });
-      assert.equal(this.workspace.getScale(), 1);
+      assert.equal(workspace.getScale(), 1);
     });
   });
 
   suite('Focus', function () {
     test('is not claimed as a workspace focus node', function () {
-      const zoomIn = this.workspace
+      const zoomIn = workspace
         .getParentSvg()
-        .querySelector('.blocklyZoomIn');
+        .querySelector<HTMLElement>('.blocklyZoomIn');
       assert.isNotNull(zoomIn);
       assert.strictEqual(zoomIn.getAttribute('tabindex'), '0');
       assert.isNull(
-        Blockly.FocusableTreeTraverser.findFocusableNodeFor(
-          zoomIn,
-          this.workspace,
-        ),
+        Blockly.FocusableTreeTraverser.findFocusableNodeFor(zoomIn, workspace),
       );
     });
   });

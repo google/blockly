@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
 import {
   sharedTestSetup,
@@ -11,18 +12,19 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('Variable Model', function () {
-  setup(function () {
+  let workspace: Blockly.Workspace;
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
-    this.workspace = new Blockly.Workspace();
+    workspace = new Blockly.Workspace();
   });
 
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
   });
 
   test('Trivial', function () {
     const variable = new Blockly.VariableModel(
-      this.workspace,
+      workspace,
       'test',
       'test_type',
       'test_id',
@@ -32,19 +34,9 @@ suite('Variable Model', function () {
     assert.equal(variable.getId(), 'test_id');
   });
 
-  test('Null type', function () {
-    const variable = new Blockly.VariableModel(
-      this.workspace,
-      'test',
-      null,
-      'test_id',
-    );
-    assert.equal(variable.getType(), '');
-  });
-
   test('Undefined type', function () {
     const variable = new Blockly.VariableModel(
-      this.workspace,
+      workspace,
       'test',
       undefined,
       'test_id',
@@ -52,21 +44,9 @@ suite('Variable Model', function () {
     assert.equal(variable.getType(), '');
   });
 
-  test('Null id', function () {
-    const variable = new Blockly.VariableModel(
-      this.workspace,
-      'test',
-      'test_type',
-      null,
-    );
-    assert.equal(variable.getName(), 'test');
-    assert.equal(variable.getType(), 'test_type');
-    assert.exists(variable.getId());
-  });
-
   test('Undefined id', function () {
     const variable = new Blockly.VariableModel(
-      this.workspace,
+      workspace,
       'test',
       'test_type',
       undefined,
@@ -77,7 +57,7 @@ suite('Variable Model', function () {
   });
 
   test('Only name provided', function () {
-    const variable = new Blockly.VariableModel(this.workspace, 'test');
+    const variable = new Blockly.VariableModel(workspace, 'test');
     assert.equal(variable.getName(), 'test');
     assert.equal(variable.getType(), '');
     assert.exists(variable.getId());

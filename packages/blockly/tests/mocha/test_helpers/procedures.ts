@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {ConnectionType} from '#core/connection_type.js';
-import {VariableModel} from '#core/variable_model.js';
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
 
 /**
  * Asserts that the procedure definition or call block has the expected var
  * models.
- * @param {!Blockly.Block} block The procedure definition or call block to
- *    check.
- * @param {!Array<string>} varIds An array of variable ids.
+ *
+ * @param block The procedure definition or call block to check.
+ * @param varIds An array of variable ids.
  */
-function assertBlockVarModels(block, varIds) {
+function assertBlockVarModels(block: Blockly.Block, varIds: string[]) {
   const expectedVarModels = [];
   for (let i = 0; i < varIds.length; i++) {
     expectedVarModels.push(
@@ -27,10 +26,14 @@ function assertBlockVarModels(block, varIds) {
 
 /**
  * Asserts that the procedure call block has the expected arguments.
- * @param {!Blockly.Block} callBlock The procedure definition block.
- * @param {Array<string>=} args An array of argument names.
+ *
+ * @param callBlock The procedure definition block.
+ * @param args An array of argument names.
  */
-function assertCallBlockArgsStructure(callBlock, args) {
+function assertCallBlockArgsStructure(
+  callBlock: Blockly.Block,
+  args: string[],
+) {
   // inputList also contains "TOPROW"
   assert.equal(
     callBlock.inputList.length - 1,
@@ -41,7 +44,7 @@ function assertCallBlockArgsStructure(callBlock, args) {
   for (let i = 0; i < args.length; i++) {
     const expectedName = args[i];
     const callInput = callBlock.inputList[i + 1];
-    assert.equal(callInput.type, ConnectionType.INPUT_VALUE);
+    assert.equal(callInput.type, Blockly.inputs.inputTypes.VALUE);
     assert.equal(callInput.name, 'ARG' + i);
     assert.equal(
       callInput.fieldRow[0].getValue(),
@@ -58,19 +61,20 @@ function assertCallBlockArgsStructure(callBlock, args) {
 /**
  * Asserts that the procedure definition block has the expected inputs and
  *    fields.
- * @param {!Blockly.Block} defBlock The procedure definition block.
- * @param {boolean=} hasReturn If we expect the procedure def to have a return
+ *
+ * @param defBlock The procedure definition block.
+ * @param hasReturn If we expect the procedure def to have a return input or
+ *     not.
+ * @param args An array of argument names.
+ * @param varIds An array of variable ids.
+ * @param hasStatements If we expect the procedure def to have a statement
  *     input or not.
- * @param {Array<string>=} args An array of argument names.
- * @param {Array<string>=} varIds An array of variable ids.
- * @param {boolean=} hasStatements If we expect the procedure def to have a
- *     statement input or not.
  */
 export function assertDefBlockStructure(
-  defBlock,
+  defBlock: Blockly.Block,
   hasReturn = false,
-  args = [],
-  varIds = [],
+  args: string[] = [],
+  varIds: string[] = [],
   hasStatements = true,
 ) {
   if (hasStatements) {
@@ -117,18 +121,18 @@ export function assertDefBlockStructure(
 }
 
 /**
- * Asserts that the procedure call block has the expected inputs and
- *    fields.
- * @param {!Blockly.Block} callBlock The procedure call block.
- * @param {Array<string>=} args An array of argument names.
- * @param {Array<string>=} varIds An array of variable ids.
- * @param {string=} name The name we expect the caller to have.
+ * Asserts that the procedure call block has the expected inputs and fields.
+ *
+ * @param callBlock The procedure call block.
+ * @param args An array of argument names.
+ * @param varIds An array of variable ids.
+ * @param name The name we expect the caller to have.
  */
 export function assertCallBlockStructure(
-  callBlock,
-  args = [],
-  varIds = [],
-  name = undefined,
+  callBlock: Blockly.Block,
+  args: string[] = [],
+  varIds: string[] = [],
+  name?: string,
 ) {
   if (args.length) {
     assert.include(callBlock.toString(), 'with');
@@ -145,17 +149,17 @@ export function assertCallBlockStructure(
 
 /**
  * Creates procedure definition block using domToBlock call.
- * @param {!Blockly.Workspace} workspace The Blockly workspace.
- * @param {boolean=} hasReturn Whether the procedure definition should have
- *    return.
- * @param {Array<string>=} args An array of argument names.
- * @param {string=} name The name of the def block (defaults to 'proc name').
- * @return {Blockly.Block} The created block.
+ *
+ * @param workspace The Blockly workspace.
+ * @param hasReturn Whether the procedure definition should have return.
+ * @param args An array of argument names.
+ * @param name The name of the def block (defaults to 'proc name').
+ * @return The created block.
  */
 export function createProcDefBlock(
-  workspace,
+  workspace: Blockly.Workspace,
   hasReturn = false,
-  args = [],
+  args: string[] = [],
   name = 'proc name',
 ) {
   const type = hasReturn ? 'procedures_defreturn' : 'procedures_defnoreturn';
@@ -169,14 +173,14 @@ export function createProcDefBlock(
 
 /**
  * Creates procedure call block using domToBlock call.
- * @param {!Blockly.Workspace} workspace The Blockly workspace.
- * @param {boolean=} hasReturn Whether the corresponding procedure definition
- *    has return.
- * @param {string=} name The name of the caller block (defaults to 'proc name').
- * @return {Blockly.Block} The created block.
+ *
+ * @param workspace The Blockly workspace.
+ * @param hasReturn Whether the corresponding procedure definition has return.
+ * @param name The name of the caller block (defaults to 'proc name').
+ * @return The created block.
  */
 export function createProcCallBlock(
-  workspace,
+  workspace: Blockly.Workspace,
   hasReturn = false,
   name = 'proc name',
 ) {
@@ -189,44 +193,45 @@ export function createProcCallBlock(
   );
 }
 
-export class MockProcedureModel {
+export class MockProcedureModel implements Blockly.IProcedureModel {
+  private readonly id = Blockly.utils.idGenerator.genUid();
+  private name: string;
+  private readonly parameters: Blockly.IParameterModel[] = [];
+  private returnTypes: string[] | null = null;
+  private enabled = true;
   constructor(name = '') {
-    this.id = Blockly.utils.idGenerator.genUid();
     this.name = name;
-    this.parameters = [];
-    this.returnTypes = null;
-    this.enabled = true;
   }
 
-  static loadState(state, workspace) {
+  static loadState(_state: object, _workspace: Blockly.Workspace) {
     return new MockProcedureModel();
   }
 
   saveState() {
-    return {};
+    return {id: this.id, name: this.name, returnTypes: this.returnTypes};
   }
 
-  setName(name) {
+  setName(name: string) {
     this.name = name;
     return this;
   }
 
-  insertParameter(parameterModel, index) {
+  insertParameter(parameterModel: Blockly.IParameterModel, index: number) {
     this.parameters.splice(index, 0, parameterModel);
     return this;
   }
 
-  deleteParameter(index) {
+  deleteParameter(index: number) {
     this.parameters.splice(index, 1);
     return this;
   }
 
-  setReturnTypes(types) {
+  setReturnTypes(types: string[]) {
     this.returnTypes = types;
     return this;
   }
 
-  setEnabled(enabled) {
+  setEnabled(enabled: boolean) {
     this.enabled = enabled;
     return this;
   }
@@ -239,7 +244,7 @@ export class MockProcedureModel {
     return this.name;
   }
 
-  getParameter(index) {
+  getParameter(index: number) {
     return this.parameters[index];
   }
 
@@ -260,27 +265,32 @@ export class MockProcedureModel {
   stopPublishing() {}
 }
 
-export class MockParameterModel {
-  constructor(name) {
-    this.id = Blockly.utils.idGenerator.genUid();
+export class MockParameterModel implements Blockly.IParameterModel {
+  private readonly id = Blockly.utils.idGenerator.genUid();
+  private types: string[] = [];
+  private name: string;
+  constructor(name: string) {
     this.name = name;
-    this.types = [];
   }
 
-  static loadState(state, workspace) {
+  static loadState(_state: object, _workspace: Blockly.Workspace) {
     return new MockParameterModel('test');
   }
 
-  saveState() {
-    return {};
+  setProcedureModel(_model: Blockly.IProcedureModel) {
+    return this;
   }
 
-  setName(name) {
+  saveState() {
+    return {id: this.id, name: this.name};
+  }
+
+  setName(name: string) {
     this.name = name;
     return this;
   }
 
-  setTypes(types) {
+  setTypes(types: string[]) {
     this.types = types;
     return this;
   }
@@ -299,9 +309,11 @@ export class MockParameterModel {
 }
 
 export class MockParameterModelWithVar extends MockParameterModel {
-  constructor(name, workspace) {
+  private variable: Blockly.VariableModel;
+
+  constructor(name: string, workspace: Blockly.Workspace) {
     super(name);
-    this.variable = new VariableModel(workspace, name);
+    this.variable = new Blockly.VariableModel(workspace, name);
   }
 
   getVariableModel() {

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
 import {
   DEFAULT_INJECT_OPTIONS,
@@ -12,26 +13,27 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('Toasts', function () {
-  setup(function () {
-    sharedTestSetup.call(this);
-    this.workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
-    this.liveRegion = document.getElementById('blocklyAriaAnnounce');
-    this.toastIsVisible = (message) => {
-      const toast = this.workspace
-        .getInjectionDiv()
-        .querySelector('.blocklyToast');
-      return !!(toast && toast.textContent === message);
-    };
+  let workspace: Blockly.WorkspaceSvg;
+  let clock: sinon.SinonFakeTimers;
+
+  setup(function (this: Mocha.Context) {
+    ({clock} = sharedTestSetup.call(this));
+    workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
   });
 
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
   });
+
+  function toastIsVisible(message: string) {
+    const toast = workspace.getInjectionDiv().querySelector('.blocklyToast');
+    return !!(toast && toast.textContent === message);
+  }
 
   test('can be shown', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {message});
-    assert.isTrue(this.toastIsVisible(message));
+    Blockly.Toast.show(workspace, {message});
+    assert.isTrue(toastIsVisible(message));
   });
 
   test('can be shown only once per session', function () {
@@ -40,11 +42,11 @@ suite('Toasts', function () {
       id: 'test',
       oncePerSession: true,
     };
-    Blockly.Toast.show(this.workspace, options);
-    assert.isTrue(this.toastIsVisible(options.message));
-    Blockly.Toast.hide(this.workspace);
-    Blockly.Toast.show(this.workspace, options);
-    assert.isFalse(this.toastIsVisible(options.message));
+    Blockly.Toast.show(workspace, options);
+    assert.isTrue(toastIsVisible(options.message));
+    Blockly.Toast.hide(workspace);
+    Blockly.Toast.show(workspace, options);
+    assert.isFalse(toastIsVisible(options.message));
   });
 
   test('oncePerSession is ignored when false', function () {
@@ -53,122 +55,125 @@ suite('Toasts', function () {
       id: 'some id',
       oncePerSession: true,
     };
-    Blockly.Toast.show(this.workspace, options);
-    assert.isTrue(this.toastIsVisible(options.message));
-    Blockly.Toast.hide(this.workspace);
+    Blockly.Toast.show(workspace, options);
+    assert.isTrue(toastIsVisible(options.message));
+    Blockly.Toast.hide(workspace);
     options.oncePerSession = false;
-    Blockly.Toast.show(this.workspace, options);
-    assert.isTrue(this.toastIsVisible(options.message));
+    Blockly.Toast.show(workspace, options);
+    assert.isTrue(toastIsVisible(options.message));
   });
 
   test('can be hidden', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {message});
-    assert.isTrue(this.toastIsVisible(message));
-    Blockly.Toast.hide(this.workspace);
-    assert.isFalse(this.toastIsVisible(message));
+    Blockly.Toast.show(workspace, {message});
+    assert.isTrue(toastIsVisible(message));
+    Blockly.Toast.hide(workspace);
+    assert.isFalse(toastIsVisible(message));
   });
 
   test('can be hidden by ID', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {message, id: 'test'});
-    assert.isTrue(this.toastIsVisible(message));
-    Blockly.Toast.hide(this.workspace, 'test');
-    assert.isFalse(this.toastIsVisible(message));
+    Blockly.Toast.show(workspace, {message, id: 'test'});
+    assert.isTrue(toastIsVisible(message));
+    Blockly.Toast.hide(workspace, 'test');
+    assert.isFalse(toastIsVisible(message));
   });
 
   test('hide does not hide toasts with different ID', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {message, id: 'test'});
-    assert.isTrue(this.toastIsVisible(message));
-    Blockly.Toast.hide(this.workspace, 'test2');
-    assert.isTrue(this.toastIsVisible(message));
+    Blockly.Toast.show(workspace, {message, id: 'test'});
+    assert.isTrue(toastIsVisible(message));
+    Blockly.Toast.hide(workspace, 'test2');
+    assert.isTrue(toastIsVisible(message));
   });
 
   test('are shown for the designated duration', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {message, duration: 3});
+    Blockly.Toast.show(workspace, {message, duration: 3});
     for (let i = 0; i < 3; i++) {
-      assert.isTrue(this.toastIsVisible(message));
-      this.clock.tick(1000);
+      assert.isTrue(toastIsVisible(message));
+      clock.tick(1000);
     }
-    assert.isFalse(this.toastIsVisible(message));
+    assert.isFalse(toastIsVisible(message));
   });
 
   test('toast announces message with status role and polite assertiveness', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {message, id: 'test'});
+    Blockly.Toast.show(workspace, {message, id: 'test'});
 
-    this.clock.tick(11);
+    clock.tick(11);
 
-    assert.include(this.liveRegion.textContent, message);
+    const liveRegion = document.getElementById('blocklyAriaAnnounce');
+    assert.include(liveRegion?.textContent, message);
     assert.equal(
-      this.liveRegion.getAttribute('role'),
+      liveRegion?.getAttribute('role'),
       Blockly.utils.aria.Role.STATUS,
     );
     assert.equal(
-      this.liveRegion.getAttribute('aria-live'),
+      liveRegion?.getAttribute('aria-live'),
       Blockly.utils.aria.LiveRegionAssertiveness.POLITE,
     );
   });
 
   test('respects assertiveness option', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {
+    Blockly.Toast.show(workspace, {
       message,
       id: 'test',
       assertiveness: Blockly.utils.aria.LiveRegionAssertiveness.ASSERTIVE,
     });
 
-    this.clock.tick(11);
+    clock.tick(11);
 
+    const liveRegion = document.getElementById('blocklyAriaAnnounce');
     assert.equal(
-      this.liveRegion.getAttribute('aria-live'),
+      liveRegion?.getAttribute('aria-live'),
       Blockly.utils.aria.LiveRegionAssertiveness.ASSERTIVE,
     );
   });
 
   test('toast is not itself a live region', function () {
     const message = 'texas toast';
-    Blockly.Toast.show(this.workspace, {message, id: 'test'});
+    Blockly.Toast.show(workspace, {message, id: 'test'});
 
-    const toast = this.workspace
-      .getInjectionDiv()
-      .querySelector('.blocklyToast');
+    const toast = workspace.getInjectionDiv().querySelector('.blocklyToast');
 
-    assert.isNull(toast.getAttribute('aria-live'));
-    assert.notEqual(toast.getAttribute('role'), Blockly.utils.aria.Role.STATUS);
+    assert.isNull(toast?.getAttribute('aria-live'));
+    assert.notEqual(
+      toast?.getAttribute('role'),
+      Blockly.utils.aria.Role.STATUS,
+    );
   });
 
   suite('dismiss focus', function () {
-    function closeToast(workspace) {
+    function closeToast(workspace: Blockly.WorkspaceSvg) {
       const closeButton = workspace
         .getInjectionDiv()
-        .querySelector('.blocklyToastCloseButton');
-      closeButton.focus();
-      closeButton.click();
+        .querySelector<HTMLElement>('.blocklyToastCloseButton');
+      closeButton?.focus();
+      closeButton?.click();
     }
 
     test('restores previously focused node on click', function () {
-      const block = this.workspace.newBlock('text_print');
+      const block = workspace.newBlock('text_print');
       block.initSvg();
       block.render();
       Blockly.getFocusManager().focusNode(block);
-      Blockly.Toast.show(this.workspace, {message: 'texas toast'});
+      Blockly.Toast.show(workspace, {message: 'texas toast'});
 
-      closeToast(this.workspace);
-      assert.isFalse(this.toastIsVisible('texas toast'));
+      closeToast(workspace);
+      assert.isFalse(toastIsVisible('texas toast'));
       assert.strictEqual(Blockly.getFocusManager().getFocusedNode(), block);
     });
 
     test('falls back to workspace focus when nothing was previously focused', function () {
-      Blockly.Toast.show(this.workspace, {message: 'texas toast'});
+      Blockly.Toast.show(workspace, {message: 'texas toast'});
 
-      closeToast(this.workspace);
-      assert.isFalse(this.toastIsVisible('texas toast'));
+      closeToast(workspace);
+      assert.isFalse(toastIsVisible('texas toast'));
       assert.strictEqual(
         Blockly.getFocusManager().getFocusedNode(),
-        this.workspace.getWorkspaceFocusTarget(),
+        workspace.getWorkspaceFocusTarget(),
       );
     });
   });

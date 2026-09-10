@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
 import {
   sharedTestSetup,
@@ -11,15 +12,15 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('Utils', function () {
-  setup(function () {
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
   });
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     sharedTestTeardown.call(this);
   });
 
   test('genUid', function () {
-    const uuids = {};
+    const uuids: {[key: string]: boolean} = {};
     assert.equal([1, 2, 3].indexOf(4), -1);
     for (let i = 0; i < 1000; i++) {
       const uuid = Blockly.utils.idGenerator.genUid();
@@ -305,25 +306,29 @@ suite('Utils', function () {
     assert.isNull(m);
 
     m = 'translate(10)'.match(regex);
-    assert.equal(m[1], '10', 'translate(10), x');
-    assert.isUndefined(m[3], 'translate(10), y');
+    assert.equal(m?.[1], '10', 'translate(10), x');
+    assert.isUndefined(m?.[3], 'translate(10), y');
 
     m = 'translate(11, 12)'.match(regex);
-    assert.equal(m[1], '11', 'translate(11, 12), x');
-    assert.equal(m[3], '12', 'translate(11, 12), y');
+    assert.equal(m?.[1], '11', 'translate(11, 12), x');
+    assert.equal(m?.[3], '12', 'translate(11, 12), y');
 
     m = 'translate(13,14)'.match(regex);
-    assert.equal(m[1], '13', 'translate(13,14), x');
-    assert.equal(m[3], '14', 'translate(13,14), y');
+    assert.equal(m?.[1], '13', 'translate(13,14), x');
+    assert.equal(m?.[3], '14', 'translate(13,14), y');
 
     m = 'translate(15 16)'.match(regex);
-    assert.equal(m[1], '15', 'translate(15 16), x');
-    assert.equal(m[3], '16', 'translate(15 16), y');
+    assert.equal(m?.[1], '15', 'translate(15 16), x');
+    assert.equal(m?.[3], '16', 'translate(15 16), y');
 
     m = 'translate(1.23456e+42 0.123456e-42)'.match(regex);
-    assert.equal(m[1], '1.23456e+42', 'translate(1.23456e+42 0.123456e-42), x');
     assert.equal(
-      m[3],
+      m?.[1],
+      '1.23456e+42',
+      'translate(1.23456e+42 0.123456e-42), x',
+    );
+    assert.equal(
+      m?.[3],
       '0.123456e-42',
       'translate(1.23456e+42 0.123456e-42), y',
     );
@@ -336,57 +341,57 @@ suite('Utils', function () {
     assert.isNull(m);
 
     m = 'transform:translate(9px)'.match(regex);
-    assert.equal(m[1], '9', 'transform:translate(9px), x');
-    assert.isUndefined(m[3], 'transform:translate(9px), y');
+    assert.equal(m?.[1], '9', 'transform:translate(9px), x');
+    assert.isUndefined(m?.[3], 'transform:translate(9px), y');
 
     m = 'transform:translate3d(10px)'.match(regex);
-    assert.equal(m[1], '10', 'transform:translate3d(10px), x');
-    assert.isUndefined(m[3], 'transform:translate(10px), y');
+    assert.equal(m?.[1], '10', 'transform:translate3d(10px), x');
+    assert.isUndefined(m?.[3], 'transform:translate(10px), y');
 
     m = 'transform: translate(11px, 12px)'.match(regex);
-    assert.equal(m[1], '11', 'transform: translate(11px, 12px), x');
-    assert.equal(m[3], '12', 'transform: translate(11px, 12px), y');
+    assert.equal(m?.[1], '11', 'transform: translate(11px, 12px), x');
+    assert.equal(m?.[3], '12', 'transform: translate(11px, 12px), y');
 
     m = 'transform: translate(13px,14px)'.match(regex);
-    assert.equal(m[1], '13', 'transform: translate(13px,14px), x');
-    assert.equal(m[3], '14', 'transform: translate(13px,14px), y');
+    assert.equal(m?.[1], '13', 'transform: translate(13px,14px), x');
+    assert.equal(m?.[3], '14', 'transform: translate(13px,14px), y');
 
     m = 'transform: translate(15px 16px)'.match(regex);
-    assert.equal(m[1], '15', 'transform: translate(15px 16px), x');
-    assert.equal(m[3], '16', 'transform: translate(15px 16px), y');
+    assert.equal(m?.[1], '15', 'transform: translate(15px 16px), x');
+    assert.equal(m?.[3], '16', 'transform: translate(15px 16px), y');
 
     m = 'transform: translate(1.23456e+42px 0.123456e-42px)'.match(regex);
     assert.equal(
-      m[1],
+      m?.[1],
       '1.23456e+42',
       'transform: translate(1.23456e+42px 0.123456e-42px), x',
     );
     assert.equal(
-      m[3],
+      m?.[3],
       '0.123456e-42',
       'transform: translate(1.23456e+42px 0.123456e-42px), y',
     );
 
     m = 'transform:translate3d(20px, 21px, 22px)'.match(regex);
-    assert.equal(m[1], '20', 'transform:translate3d(20px, 21px, 22px), x');
-    assert.equal(m[3], '21', 'transform:translate3d(20px, 21px, 22px), y');
+    assert.equal(m?.[1], '20', 'transform:translate3d(20px, 21px, 22px), x');
+    assert.equal(m?.[3], '21', 'transform:translate3d(20px, 21px, 22px), y');
 
     m = 'transform:translate3d(23px,24px,25px)'.match(regex);
-    assert.equal(m[1], '23', 'transform:translate3d(23px,24px,25px), x');
-    assert.equal(m[3], '24', 'transform:translate3d(23px,24px,25px), y');
+    assert.equal(m?.[1], '23', 'transform:translate3d(23px,24px,25px), x');
+    assert.equal(m?.[3], '24', 'transform:translate3d(23px,24px,25px), y');
 
     m = 'transform:translate3d(26px 27px 28px)'.match(regex);
-    assert.equal(m[1], '26', 'transform:translate3d(26px 27px 28px), x');
-    assert.equal(m[3], '27', 'transform:translate3d(26px 27px 28px), y');
+    assert.equal(m?.[1], '26', 'transform:translate3d(26px 27px 28px), x');
+    assert.equal(m?.[3], '27', 'transform:translate3d(26px 27px 28px), y');
 
     m = 'transform:translate3d(1.23456e+42px 0.123456e-42px 42px)'.match(regex);
     assert.equal(
-      m[1],
+      m?.[1],
       '1.23456e+42',
       'transform:translate3d(1.23456e+42px 0.123456e-42px 42px), x',
     );
     assert.equal(
-      m[3],
+      m?.[3],
       '0.123456e-42',
       'transform:translate3d(1.23456e+42px 0.123456e-42px 42px), y',
     );

@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
+import sinon from 'sinon';
 import {
   DEFAULT_INJECT_OPTIONS,
   sharedTestSetup,
@@ -12,10 +14,15 @@ import {
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
 
+type Tooltipable = Blockly.Block | Blockly.Field;
+
 suite('Tooltip', function () {
-  setup(function () {
-    sharedTestSetup.call(this);
-    this.workspace = new Blockly.Workspace();
+  let workspace: Blockly.Workspace;
+  let clock: sinon.SinonFakeTimers;
+
+  setup(function (this: Mocha.Context) {
+    ({clock} = sharedTestSetup.call(this));
+    workspace = new Blockly.Workspace();
 
     Blockly.defineBlocksWithJsonArray([
       {
@@ -31,22 +38,20 @@ suite('Tooltip', function () {
     ]);
   });
 
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     delete Blockly.Blocks['test_block'];
-    sharedTestTeardown.call(this);
+    sharedTestTeardown.call(this, workspace);
   });
 
   suite('Custom Tooltip', function () {
+    let renderedWorkspace: Blockly.WorkspaceSvg;
+
     setup(function () {
-      this.renderedWorkspace = Blockly.inject(
-        'blocklyDiv',
-        DEFAULT_INJECT_OPTIONS,
-      );
+      renderedWorkspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
     });
 
-    teardown(function () {
-      Blockly.Tooltip.setCustomTooltip(undefined);
-      workspaceTeardown.call(this, this.renderedWorkspace);
+    teardown(function (this: Mocha.Context) {
+      workspaceTeardown.call(this, renderedWorkspace);
     });
 
     test('Custom function is called', function () {
@@ -58,17 +63,13 @@ suite('Tooltip', function () {
       };
       Blockly.Tooltip.setCustomTooltip(customFn);
 
-      this.block = this.renderedWorkspace.newBlock('test_block');
-      this.block.setTooltip('Test Tooltip');
+      const block = renderedWorkspace.newBlock('test_block');
+      block.setTooltip('Test Tooltip');
 
       // Fire pointer events directly on the relevant SVG.
-      this.block.pathObject.svgPath.dispatchEvent(
-        new PointerEvent('pointerover'),
-      );
-      this.block.pathObject.svgPath.dispatchEvent(
-        new PointerEvent('pointermove'),
-      );
-      this.clock.runAll();
+      block.pathObject.svgPath.dispatchEvent(new PointerEvent('pointerover'));
+      block.pathObject.svgPath.dispatchEvent(new PointerEvent('pointermove'));
+      clock.runAll();
 
       assert.isTrue(
         wasCalled,
@@ -80,20 +81,23 @@ suite('Tooltip', function () {
   suite('set/getTooltip', function () {
     const tooltipText = 'testTooltip';
 
-    function assertTooltip(obj) {
+    function assertTooltip(obj: Tooltipable) {
       assert.equal(obj.getTooltip(), tooltipText);
     }
 
-    function setStringTooltip(obj) {
+    function setStringTooltip(obj: Tooltipable) {
       obj.setTooltip(tooltipText);
     }
 
-    function setFunctionTooltip(obj) {
+    function setFunctionTooltip(obj: Tooltipable) {
       obj.setTooltip(() => tooltipText);
     }
 
-    function setNestedFunctionTooltip(obj) {
-      function nestFunction(fn, count) {
+    function setNestedFunctionTooltip(obj: Tooltipable) {
+      function nestFunction(
+        fn: () => string,
+        count: number,
+      ): Blockly.Tooltip.TipInfo {
         if (!count) {
           return fn;
         }
@@ -102,7 +106,7 @@ suite('Tooltip', function () {
       obj.setTooltip(nestFunction(() => tooltipText, 5));
     }
 
-    function setFunctionReturningObjectTooltip(obj) {
+    function setFunctionReturningObjectTooltip(obj: Tooltipable) {
       obj.setTooltip(() => {
         return {
           tooltip: tooltipText,
@@ -110,177 +114,193 @@ suite('Tooltip', function () {
       });
     }
 
-    function setObjectTooltip(obj) {
+    function setObjectTooltip(obj: Tooltipable) {
       obj.setTooltip({tooltip: tooltipText});
     }
 
     suite('Headless Blocks', function () {
+      let block: Blockly.Block;
+
       setup(function () {
-        this.block = this.workspace.newBlock('test_block');
+        block = workspace.newBlock('test_block');
       });
 
       test('String', function () {
-        setStringTooltip(this.block);
-        assertTooltip(this.block);
+        setStringTooltip(block);
+        assertTooltip(block);
       });
 
       test('Function', function () {
-        setFunctionTooltip(this.block);
-        assertTooltip(this.block);
+        setFunctionTooltip(block);
+        assertTooltip(block);
       });
 
       test('Nested Function', function () {
-        setNestedFunctionTooltip(this.block);
-        assertTooltip(this.block);
+        setNestedFunctionTooltip(block);
+        assertTooltip(block);
       });
 
       test('Function returning object', function () {
-        setFunctionReturningObjectTooltip(this.block);
+        setFunctionReturningObjectTooltip(block);
         assert.throws(
-          this.block.getTooltip.bind(this.block),
+          block.getTooltip.bind(block),
           'Tooltip function must return a string.',
         );
       });
 
       test('Object', function () {
-        setObjectTooltip(this.block);
-        assertTooltip(this.block);
+        setObjectTooltip(block);
+        assertTooltip(block);
       });
     });
 
     suite('Rendered Blocks', function () {
+      let renderedWorkspace: Blockly.WorkspaceSvg;
+      let block: Blockly.BlockSvg;
+
       setup(function () {
-        this.renderedWorkspace = Blockly.inject(
+        renderedWorkspace = Blockly.inject(
           'blocklyDiv',
           DEFAULT_INJECT_OPTIONS,
         );
-        this.block = this.renderedWorkspace.newBlock('test_block');
-        this.block.initSvg();
-        this.block.render();
+        block = renderedWorkspace.newBlock('test_block');
+        block.initSvg();
+        block.render();
       });
 
-      teardown(function () {
-        workspaceTeardown.call(this, this.renderedWorkspace);
+      teardown(function (this: Mocha.Context) {
+        workspaceTeardown.call(this, renderedWorkspace);
       });
 
       test('String', function () {
-        setStringTooltip(this.block);
-        assertTooltip(this.block);
+        setStringTooltip(block);
+        assertTooltip(block);
       });
 
       test('Function', function () {
-        setFunctionTooltip(this.block);
-        assertTooltip(this.block);
+        setFunctionTooltip(block);
+        assertTooltip(block);
       });
 
       test('Nested Function', function () {
-        setNestedFunctionTooltip(this.block);
-        assertTooltip(this.block);
+        setNestedFunctionTooltip(block);
+        assertTooltip(block);
       });
 
       test('Function returning object', function () {
-        setFunctionReturningObjectTooltip(this.block);
+        setFunctionReturningObjectTooltip(block);
         assert.throws(
-          this.block.getTooltip.bind(this.block),
+          block.getTooltip.bind(block),
           'Tooltip function must return a string.',
         );
       });
 
       test('Object', function () {
-        setObjectTooltip(this.block);
-        assertTooltip(this.block);
+        setObjectTooltip(block);
+        assertTooltip(block);
       });
     });
 
     suite('Headless Fields', function () {
+      let block: Blockly.Block;
+      let field: Blockly.Field<any>;
+
       setup(function () {
-        this.block = this.workspace.newBlock('test_block');
-        this.field = this.block.getField('FIELD');
+        block = workspace.newBlock('test_block');
+        const field_ = block.getField('FIELD');
+        assert.isNotNull(field_);
+        field = field_;
       });
 
       test('String', function () {
-        setStringTooltip(this.field);
-        assertTooltip(this.field);
+        setStringTooltip(field);
+        assertTooltip(field);
       });
 
       test('Function', function () {
-        setFunctionTooltip(this.field);
-        assertTooltip(this.field);
+        setFunctionTooltip(field);
+        assertTooltip(field);
       });
 
       test('Nested Function', function () {
-        setNestedFunctionTooltip(this.field);
-        assertTooltip(this.field);
+        setNestedFunctionTooltip(field);
+        assertTooltip(field);
       });
 
       test('Function returning object', function () {
-        setFunctionReturningObjectTooltip(this.field);
+        setFunctionReturningObjectTooltip(field);
         assert.throws(
-          this.field.getTooltip.bind(this.field),
+          field.getTooltip.bind(field),
           'Tooltip function must return a string.',
         );
       });
 
       test('Object', function () {
-        setObjectTooltip(this.field);
-        assertTooltip(this.field);
+        setObjectTooltip(field);
+        assertTooltip(field);
       });
 
       test('Null', function () {
-        setStringTooltip(this.block);
-        this.field.setTooltip(null);
-        assertTooltip(this.field);
+        setStringTooltip(block);
+        field.setTooltip(null);
+        assertTooltip(field);
       });
     });
 
     suite('Rendered Fields', function () {
+      let renderedWorkspace: Blockly.WorkspaceSvg;
+      let block: Blockly.BlockSvg;
+      let field: Blockly.Field<any>;
+
       setup(function () {
-        this.renderedWorkspace = Blockly.inject(
+        renderedWorkspace = Blockly.inject(
           'blocklyDiv',
           DEFAULT_INJECT_OPTIONS,
         );
-        this.block = this.renderedWorkspace.newBlock('test_block');
-        this.block.initSvg();
-        this.block.render();
-        this.field = this.block.getField('FIELD');
+        block = renderedWorkspace.newBlock('test_block');
+        block.initSvg();
+        block.render();
+        const field_ = block.getField('FIELD');
+        assert.isNotNull(field_);
+        field = field_;
       });
 
-      teardown(function () {
-        workspaceTeardown.call(this, this.renderedWorkspace);
+      teardown(function (this: Mocha.Context) {
+        workspaceTeardown.call(this, renderedWorkspace);
       });
 
       test('String', function () {
-        setStringTooltip(this.field);
-        assertTooltip(this.field);
+        setStringTooltip(field);
+        assertTooltip(field);
       });
 
       test('Function', function () {
-        setFunctionTooltip(this.field);
-        assertTooltip(this.field);
+        setFunctionTooltip(field);
+        assertTooltip(field);
       });
 
       test('Nested Function', function () {
-        setNestedFunctionTooltip(this.field);
-        assertTooltip(this.field);
+        setNestedFunctionTooltip(field);
+        assertTooltip(field);
       });
 
       test('Function returning object', function () {
-        setFunctionReturningObjectTooltip(this.field);
+        setFunctionReturningObjectTooltip(field);
         assert.throws(
-          this.field.getTooltip.bind(this.field),
+          field.getTooltip.bind(field),
           'Tooltip function must return a string.',
         );
       });
 
       test('Object', function () {
-        setObjectTooltip(this.field);
-        assertTooltip(this.field);
+        setObjectTooltip(field);
+        assertTooltip(field);
       });
 
       test('Null', function () {
-        setStringTooltip(this.block);
-        this.field.setTooltip(null);
-        assertTooltip(this.field);
+        setStringTooltip(block);
+        field.setTooltip(null);
+        assertTooltip(field);
       });
     });
   });

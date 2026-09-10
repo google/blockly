@@ -4,13 +4,27 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as eventUtils from '#core/events/utils.js';
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
+import sinon from 'sinon';
 import {workspaceTeardown} from './setup_teardown.js';
-import {assertVariableValues} from './variables.js';
+import {assertVariableValues} from './variables.ts';
 
-export function testAWorkspace() {
+/**
+ * Function that runs a suite of tests against a given workspace.
+ */
+export function testAWorkspace(wrapper: {
+  workspace?: Blockly.Workspace;
+  clock?: sinon.SinonFakeTimers;
+}) {
+  let workspace: Blockly.Workspace;
+  let clock: sinon.SinonFakeTimers;
+
   setup(function () {
+    assert.isDefined(wrapper.workspace);
+    assert.isDefined(wrapper.clock);
+    workspace = wrapper.workspace;
+    clock = wrapper.clock;
     Blockly.defineBlocksWithJsonArray([
       {
         'type': 'get_var_block',
@@ -24,19 +38,21 @@ export function testAWorkspace() {
         ],
       },
     ]);
-    this.variableMap = this.workspace.getVariableMap();
   });
 
   teardown(function () {
     // Clear Blockly.Event state.
-    eventUtils.setGroup(false);
-    while (!eventUtils.isEnabled()) {
-      eventUtils.enable();
+    Blockly.Events.setGroup(false);
+    while (!Blockly.Events.isEnabled()) {
+      Blockly.Events.enable();
     }
-    sinon.restore();
   });
 
-  function assertBlockVarModelName(workspace, blockIndex, name) {
+  function assertBlockVarModelName(
+    workspace: Blockly.Workspace,
+    blockIndex: number,
+    name: string,
+  ) {
     const block = workspace.getTopBlocks(false)[blockIndex];
     assert.exists(block, 'Block at topBlocks[' + blockIndex + ']');
     const varModel = block.getVarModels()[0];
@@ -44,7 +60,7 @@ export function testAWorkspace() {
       varModel,
       'VariableModel for block at topBlocks[' + blockIndex + ']',
     );
-    const blockVarName = varModel.name;
+    const blockVarName = varModel.getName();
     assert.equal(
       blockVarName,
       name,
@@ -52,39 +68,40 @@ export function testAWorkspace() {
     );
   }
 
-  function createVarBlocksNoEvents(workspace, ids) {
+  function createVarBlocksNoEvents(
+    workspace: Blockly.Workspace,
+    ids: string[],
+  ) {
     const blocks = [];
     // Turn off events to avoid testing XML at the same time.
-    eventUtils.disable();
+    Blockly.Events.disable();
     for (let i = 0, id; (id = ids[i]); i++) {
       const block = new Blockly.Block(workspace, 'get_var_block');
       block.inputList[0].fieldRow[0].setValue(id);
       blocks.push(block);
     }
-    eventUtils.enable();
+    Blockly.Events.enable();
     return blocks;
   }
 
   suite('clear', function () {
     test('Trivial', function () {
-      sinon.stub(eventUtils.TEST_ONLY, 'setGroupInternal').returns(null);
-      this.variableMap.createVariable('name1', 'type1', 'id1');
-      this.variableMap.createVariable('name2', 'type2', 'id2');
-      this.workspace.newBlock('');
+      workspace.getVariableMap().createVariable('name1', 'type1', 'id1');
+      workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
+      workspace.newBlock('controls_if');
 
-      this.workspace.clear();
-      assert.equal(this.workspace.getTopBlocks(false).length, 0);
-      const varMapLength = this.variableMap.variableMap.size;
+      workspace.clear();
+      assert.equal(workspace.getTopBlocks(false).length, 0);
+      const varMapLength = workspace.getVariableMap().getAllVariables().length;
       assert.equal(varMapLength, 0);
     });
 
     test('No variables', function () {
-      sinon.stub(eventUtils.TEST_ONLY, 'setGroupInternal').returns(null);
-      this.workspace.newBlock('');
+      workspace.newBlock('controls_if');
 
-      this.workspace.clear();
-      assert.equal(this.workspace.getTopBlocks(false).length, 0);
-      const varMapLength = this.variableMap.variableMap.size;
+      workspace.clear();
+      assert.equal(workspace.getTopBlocks(false).length, 0);
+      const varMapLength = workspace.getVariableMap().getAllVariables().length;
       assert.equal(varMapLength, 0);
     });
   });
@@ -92,10 +109,10 @@ export function testAWorkspace() {
   suite('deleteVariable', function () {
     setup(function () {
       // Create two variables of different types.
-      this.var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
-      this.var2 = this.variableMap.createVariable('name2', 'type2', 'id2');
+      workspace.getVariableMap().createVariable('name1', 'type1', 'id1');
+      workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
       // Create blocks to refer to both of them.
-      createVarBlocksNoEvents(this.workspace, ['id1', 'id1', 'id2']);
+      createVarBlocksNoEvents(workspace, ['id1', 'id1', 'id2']);
     });
 
     test('deleteVariableById(id2) one usage', function () {
@@ -105,14 +122,15 @@ export function testAWorkspace() {
         callCount++;
         callback(true);
       });
-      const id2 = this.variableMap.getVariableById('id2');
-      Blockly.Variables.deleteVariable(this.workspace, id2);
+      const id2 = workspace.getVariableMap().getVariableById('id2');
+      assert.isNotNull(id2);
+      Blockly.Variables.deleteVariable(workspace, id2);
 
       assert.equal(callCount, 0);
-      const variable = this.variableMap.getVariableById('id2');
+      const variable = workspace.getVariableMap().getVariableById('id2');
       assert.isNull(variable);
-      assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-      assertBlockVarModelName(this.workspace, 0, 'name1');
+      assertVariableValues(workspace.getVariableMap(), 'name1', 'type1', 'id1');
+      assertBlockVarModelName(workspace, 0, 'name1');
 
       Blockly.dialog.setConfirm();
     });
@@ -124,14 +142,15 @@ export function testAWorkspace() {
         callCount++;
         callback(true);
       });
-      const id1 = this.variableMap.getVariableById('id1');
-      Blockly.Variables.deleteVariable(this.workspace, id1);
+      const id1 = workspace.getVariableMap().getVariableById('id1');
+      assert.isNotNull(id1);
+      Blockly.Variables.deleteVariable(workspace, id1);
 
       assert.equal(callCount, 1);
-      const variable = this.variableMap.getVariableById('id1');
+      const variable = workspace.getVariableMap().getVariableById('id1');
       assert.isNull(variable);
-      assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
-      assertBlockVarModelName(this.workspace, 0, 'name2');
+      assertVariableValues(workspace.getVariableMap(), 'name2', 'type2', 'id2');
+      assertBlockVarModelName(workspace, 0, 'name2');
 
       Blockly.dialog.setConfirm();
     });
@@ -143,15 +162,16 @@ export function testAWorkspace() {
         callCount++;
         callback(false);
       });
-      const id1 = this.variableMap.getVariableById('id1');
-      Blockly.Variables.deleteVariable(this.workspace, id1);
+      const id1 = workspace.getVariableMap().getVariableById('id1');
+      assert.isNotNull(id1);
+      Blockly.Variables.deleteVariable(workspace, id1);
 
       assert.equal(callCount, 1);
-      assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-      assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
-      assertBlockVarModelName(this.workspace, 0, 'name1');
-      assertBlockVarModelName(this.workspace, 1, 'name1');
-      assertBlockVarModelName(this.workspace, 2, 'name2');
+      assertVariableValues(workspace.getVariableMap(), 'name1', 'type1', 'id1');
+      assertVariableValues(workspace.getVariableMap(), 'name2', 'type2', 'id2');
+      assertBlockVarModelName(workspace, 0, 'name1');
+      assertBlockVarModelName(workspace, 1, 'name1');
+      assertBlockVarModelName(workspace, 2, 'name2');
 
       Blockly.dialog.setConfirm();
     });
@@ -159,384 +179,416 @@ export function testAWorkspace() {
 
   suite('renameVariable', function () {
     setup(function () {
-      this.variableMap.createVariable('name1', 'type1', 'id1');
+      workspace.getVariableMap().createVariable('name1', 'type1', 'id1');
     });
 
     test('No references rename to name2', function () {
-      const id1 = this.variableMap.getVariableById('id1');
-      this.variableMap.renameVariable(id1, 'name2');
-      assertVariableValues(this.variableMap, 'name2', 'type1', 'id1');
+      const id1 = workspace.getVariableMap().getVariableById('id1');
+      assert.isNotNull(id1);
+      workspace.getVariableMap().renameVariable(id1, 'name2');
+      assertVariableValues(workspace.getVariableMap(), 'name2', 'type1', 'id1');
       // Renaming should not have created a new variable.
-      assert.equal(this.variableMap.getAllVariables().length, 1);
+      assert.equal(workspace.getVariableMap().getAllVariables().length, 1);
     });
 
     test('Reference exists rename to name2', function () {
-      createVarBlocksNoEvents(this.workspace, ['id1']);
+      createVarBlocksNoEvents(workspace, ['id1']);
 
-      const id1 = this.variableMap.getVariableById('id1');
-      this.variableMap.renameVariable(id1, 'name2');
-      assertVariableValues(this.variableMap, 'name2', 'type1', 'id1');
+      const id1 = workspace.getVariableMap().getVariableById('id1');
+      assert.isNotNull(id1);
+      workspace.getVariableMap().renameVariable(id1, 'name2');
+      assertVariableValues(workspace.getVariableMap(), 'name2', 'type1', 'id1');
       // Renaming should not have created a new variable.
-      assert.equal(this.variableMap.getAllVariables().length, 1);
-      assertBlockVarModelName(this.workspace, 0, 'name2');
+      assert.equal(workspace.getVariableMap().getAllVariables().length, 1);
+      assertBlockVarModelName(workspace, 0, 'name2');
     });
 
     test('Reference exists different capitalization rename to Name1', function () {
-      createVarBlocksNoEvents(this.workspace, ['id1']);
+      createVarBlocksNoEvents(workspace, ['id1']);
 
-      const id1 = this.variableMap.getVariableById('id1');
-      this.variableMap.renameVariable(id1, 'Name1');
-      assertVariableValues(this.variableMap, 'Name1', 'type1', 'id1');
+      const id1 = workspace.getVariableMap().getVariableById('id1');
+      assert.isNotNull(id1);
+      workspace.getVariableMap().renameVariable(id1, 'Name1');
+      assertVariableValues(workspace.getVariableMap(), 'Name1', 'type1', 'id1');
       // Renaming should not have created a new variable.
-      assert.equal(this.variableMap.getAllVariables().length, 1);
-      assertBlockVarModelName(this.workspace, 0, 'Name1');
+      assert.equal(workspace.getVariableMap().getAllVariables().length, 1);
+      assertBlockVarModelName(workspace, 0, 'Name1');
     });
 
     suite('Two variables rename overlap', function () {
       test('Same type rename variable with id1 to name2', function () {
-        this.variableMap.createVariable('name2', 'type1', 'id2');
-        createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+        workspace.getVariableMap().createVariable('name2', 'type1', 'id2');
+        createVarBlocksNoEvents(workspace, ['id1', 'id2']);
 
-        const id1 = this.variableMap.getVariableById('id1');
-        this.variableMap.renameVariable(id1, 'name2');
+        const id1 = workspace.getVariableMap().getVariableById('id1');
+        assert.isNotNull(id1);
+        workspace.getVariableMap().renameVariable(id1, 'name2');
 
         // The second variable should remain unchanged.
-        assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
+        assertVariableValues(workspace, 'name2', 'type1', 'id2');
         // The first variable should have been deleted.
-        const variable = this.variableMap.getVariableById('id1');
+        const variable = workspace.getVariableMap().getVariableById('id1');
         assert.isNull(variable);
         // There should only be one variable left.
-        assert.equal(this.variableMap.getAllVariables().length, 1);
+        assert.equal(workspace.getVariableMap().getAllVariables().length, 1);
 
         // Both blocks should now reference variable with name2.
-        assertBlockVarModelName(this.workspace, 0, 'name2');
-        assertBlockVarModelName(this.workspace, 1, 'name2');
+        assertBlockVarModelName(workspace, 0, 'name2');
+        assertBlockVarModelName(workspace, 1, 'name2');
       });
 
       test('Different type rename variable with id1 to name2', function () {
-        this.variableMap.createVariable('name2', 'type2', 'id2');
-        createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+        workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
+        createVarBlocksNoEvents(workspace, ['id1', 'id2']);
 
-        const id1 = this.variableMap.getVariableById('id1');
-        this.variableMap.renameVariable(id1, 'name2');
+        const id1 = workspace.getVariableMap().getVariableById('id1');
+        assert.isNotNull(id1);
+        workspace.getVariableMap().renameVariable(id1, 'name2');
 
         // Variables with different type are allowed to have the same name.
-        assertVariableValues(this.variableMap, 'name2', 'type1', 'id1');
-        assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
+        assertVariableValues(
+          workspace.getVariableMap(),
+          'name2',
+          'type1',
+          'id1',
+        );
+        assertVariableValues(
+          workspace.getVariableMap(),
+          'name2',
+          'type2',
+          'id2',
+        );
 
         // Both blocks should now reference variable with name2.
-        assertBlockVarModelName(this.workspace, 0, 'name2');
-        assertBlockVarModelName(this.workspace, 1, 'name2');
+        assertBlockVarModelName(workspace, 0, 'name2');
+        assertBlockVarModelName(workspace, 1, 'name2');
       });
 
       test('Same type different capitalization rename variable with id1 to Name2', function () {
-        this.variableMap.createVariable('name2', 'type1', 'id2');
-        createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+        workspace.getVariableMap().createVariable('name2', 'type1', 'id2');
+        createVarBlocksNoEvents(workspace, ['id1', 'id2']);
 
-        const id1 = this.variableMap.getVariableById('id1');
-        this.variableMap.renameVariable(id1, 'Name2');
+        const id1 = workspace.getVariableMap().getVariableById('id1');
+        assert.isNotNull(id1);
+        workspace.getVariableMap().renameVariable(id1, 'Name2');
 
         // The second variable should be updated.
-        assertVariableValues(this.variableMap, 'Name2', 'type1', 'id2');
+        assertVariableValues(
+          workspace.getVariableMap(),
+          'Name2',
+          'type1',
+          'id2',
+        );
         // The first variable should have been deleted.
-        const variable = this.variableMap.getVariableById('id1');
+        const variable = workspace.getVariableMap().getVariableById('id1');
         assert.isNull(variable);
         // There should only be one variable left.
-        assert.equal(this.variableMap.getAllVariables().length, 1);
+        assert.equal(workspace.getVariableMap().getAllVariables().length, 1);
 
         // Both blocks should now reference variable with Name2.
-        assertBlockVarModelName(this.workspace, 0, 'Name2');
-        assertBlockVarModelName(this.workspace, 1, 'Name2');
+        assertBlockVarModelName(workspace, 0, 'Name2');
+        assertBlockVarModelName(workspace, 1, 'Name2');
       });
 
       test('Different type different capitalization rename variable with id1 to Name2', function () {
-        this.variableMap.createVariable('name2', 'type2', 'id2');
-        createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
+        workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
+        createVarBlocksNoEvents(workspace, ['id1', 'id2']);
 
-        const id1 = this.variableMap.getVariableById('id1');
-        this.variableMap.renameVariable(id1, 'Name2');
+        const id1 = workspace.getVariableMap().getVariableById('id1');
+        assert.isNotNull(id1);
+        workspace.getVariableMap().renameVariable(id1, 'Name2');
 
         // Variables with different type are allowed to have the same name.
-        assertVariableValues(this.variableMap, 'Name2', 'type1', 'id1');
+        assertVariableValues(
+          workspace.getVariableMap(),
+          'Name2',
+          'type1',
+          'id1',
+        );
         // Second variable should remain unchanged.
-        assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
+        assertVariableValues(
+          workspace.getVariableMap(),
+          'name2',
+          'type2',
+          'id2',
+        );
 
         // Only first block should use new capitalization.
-        assertBlockVarModelName(this.workspace, 0, 'Name2');
-        assertBlockVarModelName(this.workspace, 1, 'name2');
+        assertBlockVarModelName(workspace, 0, 'Name2');
+        assertBlockVarModelName(workspace, 1, 'name2');
       });
     });
   });
 
   suite('getTopBlocks(ordered=true)', function () {
     test('Empty workspace', function () {
-      assert.equal(this.workspace.getTopBlocks(true).length, 0);
+      assert.equal(workspace.getTopBlocks(true).length, 0);
     });
 
     test('Flat workspace one block', function () {
-      this.workspace.newBlock('');
-      assert.equal(this.workspace.getTopBlocks(true).length, 1);
+      workspace.newBlock('');
+      assert.equal(workspace.getTopBlocks(true).length, 1);
     });
 
     test('Flat workspace one block after dispose', function () {
-      const blockA = this.workspace.newBlock('');
-      this.workspace.newBlock('');
+      const blockA = workspace.newBlock('');
+      workspace.newBlock('');
       blockA.dispose();
-      assert.equal(this.workspace.getTopBlocks(true).length, 1);
+      assert.equal(workspace.getTopBlocks(true).length, 1);
     });
 
     test('Flat workspace two blocks', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      assert.equal(this.workspace.getTopBlocks(true).length, 2);
+      workspace.newBlock('');
+      workspace.newBlock('');
+      assert.equal(workspace.getTopBlocks(true).length, 2);
     });
 
     test('Clear', function () {
-      this.workspace.clear();
+      workspace.clear();
       assert.equal(
-        this.workspace.getTopBlocks(true).length,
+        workspace.getTopBlocks(true).length,
         0,
         'Clear empty workspace',
       );
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.clear();
-      assert.equal(this.workspace.getTopBlocks(true).length, 0);
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.clear();
+      assert.equal(workspace.getTopBlocks(true).length, 0);
     });
   });
 
   suite('getTopBlocks(ordered=false)', function () {
     test('Empty workspace', function () {
-      assert.equal(this.workspace.getTopBlocks(false).length, 0);
+      assert.equal(workspace.getTopBlocks(false).length, 0);
     });
 
     test('Flat workspace one block', function () {
-      this.workspace.newBlock('');
-      assert.equal(this.workspace.getTopBlocks(false).length, 1);
+      workspace.newBlock('');
+      assert.equal(workspace.getTopBlocks(false).length, 1);
     });
 
     test('Flat workspace one block after dispose', function () {
-      const blockA = this.workspace.newBlock('');
-      this.workspace.newBlock('');
+      const blockA = workspace.newBlock('');
+      workspace.newBlock('');
       blockA.dispose();
-      assert.equal(this.workspace.getTopBlocks(false).length, 1);
+      assert.equal(workspace.getTopBlocks(false).length, 1);
     });
 
     test('Flat workspace two blocks', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      assert.equal(this.workspace.getTopBlocks(false).length, 2);
+      workspace.newBlock('');
+      workspace.newBlock('');
+      assert.equal(workspace.getTopBlocks(false).length, 2);
     });
 
     test('Clear empty workspace', function () {
-      this.workspace.clear();
-      assert.equal(this.workspace.getTopBlocks(false).length, 0);
+      workspace.clear();
+      assert.equal(workspace.getTopBlocks(false).length, 0);
     });
 
     test('Clear non-empty workspace', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.clear();
-      assert.equal(this.workspace.getTopBlocks(false).length, 0);
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.clear();
+      assert.equal(workspace.getTopBlocks(false).length, 0);
     });
   });
 
   suite('getAllBlocks', function () {
     test('Empty workspace', function () {
-      assert.equal(this.workspace.getAllBlocks(true).length, 0);
+      assert.equal(workspace.getAllBlocks(true).length, 0);
     });
 
     test('Flat workspace one block', function () {
-      this.workspace.newBlock('');
-      assert.equal(this.workspace.getAllBlocks(true).length, 1);
+      workspace.newBlock('');
+      assert.equal(workspace.getAllBlocks(true).length, 1);
     });
 
     test('Flat workspace one block after dispose', function () {
-      const blockA = this.workspace.newBlock('');
-      this.workspace.newBlock('');
+      const blockA = workspace.newBlock('');
+      workspace.newBlock('');
       blockA.dispose();
-      assert.equal(this.workspace.getAllBlocks(true).length, 1);
+      assert.equal(workspace.getAllBlocks(true).length, 1);
     });
 
     test('Flat workspace two blocks', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      assert.equal(this.workspace.getAllBlocks(true).length, 2);
+      workspace.newBlock('');
+      workspace.newBlock('');
+      assert.equal(workspace.getAllBlocks(true).length, 2);
     });
 
     test('Clear', function () {
-      this.workspace.clear();
+      workspace.clear();
       assert.equal(
-        this.workspace.getAllBlocks(true).length,
+        workspace.getAllBlocks(true).length,
         0,
         'Clear empty workspace',
       );
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.clear();
-      assert.equal(this.workspace.getAllBlocks(true).length, 0);
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.clear();
+      assert.equal(workspace.getAllBlocks(true).length, 0);
     });
   });
 
   suite('remainingCapacity', function () {
     setup(function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.newBlock('');
     });
 
     test('No block limit', function () {
-      assert.equal(this.workspace.remainingCapacity(), Infinity);
+      assert.equal(workspace.remainingCapacity(), Infinity);
     });
 
     test('Under block limit', function () {
-      this.workspace.options.maxBlocks = 3;
-      assert.equal(this.workspace.remainingCapacity(), 1);
-      this.workspace.options.maxBlocks = 4;
-      assert.equal(this.workspace.remainingCapacity(), 2);
+      workspace.options.maxBlocks = 3;
+      assert.equal(workspace.remainingCapacity(), 1);
+      workspace.options.maxBlocks = 4;
+      assert.equal(workspace.remainingCapacity(), 2);
     });
 
     test('At block limit', function () {
-      this.workspace.options.maxBlocks = 2;
-      assert.equal(this.workspace.remainingCapacity(), 0);
+      workspace.options.maxBlocks = 2;
+      assert.equal(workspace.remainingCapacity(), 0);
     });
 
     test('At block limit of 0 after clear', function () {
-      this.workspace.options.maxBlocks = 0;
-      this.workspace.clear();
-      assert.equal(this.workspace.remainingCapacity(), 0);
+      workspace.options.maxBlocks = 0;
+      workspace.clear();
+      assert.equal(workspace.remainingCapacity(), 0);
     });
 
     test('Over block limit', function () {
-      this.workspace.options.maxBlocks = 1;
-      assert.equal(this.workspace.remainingCapacity(), -1);
+      workspace.options.maxBlocks = 1;
+      assert.equal(workspace.remainingCapacity(), -1);
     });
 
     test('Over block limit of 0', function () {
-      this.workspace.options.maxBlocks = 0;
-      assert.equal(this.workspace.remainingCapacity(), -2);
+      workspace.options.maxBlocks = 0;
+      assert.equal(workspace.remainingCapacity(), -2);
     });
   });
 
   suite('remainingCapacityOfType', function () {
     setup(function () {
-      this.workspace.newBlock('get_var_block');
-      this.workspace.newBlock('get_var_block');
-      this.workspace.options.maxInstances = {};
+      workspace.newBlock('get_var_block');
+      workspace.newBlock('get_var_block');
+      workspace.options.maxInstances! = {};
     });
 
     test('No instance limit', function () {
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         Infinity,
       );
     });
 
     test('Under instance limit', function () {
-      this.workspace.options.maxInstances['get_var_block'] = 3;
+      workspace.options.maxInstances!['get_var_block'] = 3;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         1,
         'With maxInstances limit 3',
       );
-      this.workspace.options.maxInstances['get_var_block'] = 4;
+      workspace.options.maxInstances!['get_var_block'] = 4;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         2,
         'With maxInstances limit 4',
       );
     });
 
     test('Under instance limit with multiple block types', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.options.maxInstances['get_var_block'] = 3;
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.options.maxInstances!['get_var_block'] = 3;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         1,
         'With maxInstances limit 3',
       );
-      this.workspace.options.maxInstances['get_var_block'] = 4;
+      workspace.options.maxInstances!['get_var_block'] = 4;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         2,
         'With maxInstances limit 4',
       );
     });
 
     test('At instance limit', function () {
-      this.workspace.options.maxInstances['get_var_block'] = 2;
+      workspace.options.maxInstances!['get_var_block'] = 2;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         0,
         'With maxInstances limit 2',
       );
     });
 
     test('At instance limit of 0 after clear', function () {
-      this.workspace.clear();
-      this.workspace.options.maxInstances['get_var_block'] = 0;
-      assert.equal(this.workspace.remainingCapacityOfType('get_var_block'), 0);
+      workspace.clear();
+      workspace.options.maxInstances!['get_var_block'] = 0;
+      assert.equal(workspace.remainingCapacityOfType('get_var_block'), 0);
     });
 
     test('At instance limit with multiple block types', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.options.maxInstances['get_var_block'] = 2;
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.options.maxInstances!['get_var_block'] = 2;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         0,
         'With maxInstances limit 2',
       );
     });
 
     test('At instance limit of 0 with multiple block types', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.options.maxInstances['get_var_block'] = 0;
-      this.workspace.clear();
-      assert.equal(this.workspace.remainingCapacityOfType('get_var_block'), 0);
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.options.maxInstances!['get_var_block'] = 0;
+      workspace.clear();
+      assert.equal(workspace.remainingCapacityOfType('get_var_block'), 0);
     });
 
     test('Over instance limit', function () {
-      this.workspace.options.maxInstances['get_var_block'] = 1;
+      workspace.options.maxInstances!['get_var_block'] = 1;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         -1,
         'With maxInstances limit 1',
       );
     });
 
     test('Over instance limit of 0', function () {
-      this.workspace.options.maxInstances['get_var_block'] = 0;
+      workspace.options.maxInstances!['get_var_block'] = 0;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         -2,
         'With maxInstances limit 0',
       );
     });
 
     test('Over instance limit with multiple block types', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.options.maxInstances['get_var_block'] = 1;
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.options.maxInstances!['get_var_block'] = 1;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         -1,
         'With maxInstances limit 1',
       );
     });
 
     test('Over instance limit of 0 with multiple block types', function () {
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.newBlock('');
-      this.workspace.options.maxInstances['get_var_block'] = 0;
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.newBlock('');
+      workspace.options.maxInstances!['get_var_block'] = 0;
       assert.equal(
-        this.workspace.remainingCapacityOfType('get_var_block'),
+        workspace.remainingCapacityOfType('get_var_block'),
         -2,
         'With maxInstances limit 0',
       );
@@ -545,125 +597,127 @@ export function testAWorkspace() {
 
   suite('isCapacityAvailable', function () {
     setup(function () {
-      this.workspace.newBlock('get_var_block');
-      this.workspace.newBlock('get_var_block');
-      this.workspace.options.maxInstances = {};
+      workspace.newBlock('get_var_block');
+      workspace.newBlock('get_var_block');
+      workspace.options.maxInstances! = {};
     });
 
     test('Under block limit and no instance limit', function () {
-      this.workspace.options.maxBlocks = 3;
+      workspace.options.maxBlocks = 3;
       const typeCountsMap = {'get_var_block': 1};
-      assert.isTrue(this.workspace.isCapacityAvailable(typeCountsMap));
+      assert.isTrue(workspace.isCapacityAvailable(typeCountsMap));
     });
 
     test('At block limit and no instance limit', function () {
-      this.workspace.options.maxBlocks = 2;
+      workspace.options.maxBlocks = 2;
       const typeCountsMap = {'get_var_block': 1};
-      assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
+      assert.isFalse(workspace.isCapacityAvailable(typeCountsMap));
     });
 
     test('Over block limit of 0 and no instance limit', function () {
-      this.workspace.options.maxBlocks = 0;
+      workspace.options.maxBlocks = 0;
       const typeCountsMap = {'get_var_block': 1};
-      assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
+      assert.isFalse(workspace.isCapacityAvailable(typeCountsMap));
     });
 
     test('Over block limit but under instance limit', function () {
-      this.workspace.options.maxBlocks = 1;
-      this.workspace.options.maxInstances['get_var_block'] = 3;
+      workspace.options.maxBlocks = 1;
+      workspace.options.maxInstances!['get_var_block'] = 3;
       const typeCountsMap = {'get_var_block': 1};
       assert.isFalse(
-        this.workspace.isCapacityAvailable(typeCountsMap),
+        workspace.isCapacityAvailable(typeCountsMap),
         'With maxBlocks limit 1 and maxInstances limit 3',
       );
     });
 
     test('Over block limit of 0 but under instance limit', function () {
-      this.workspace.options.maxBlocks = 0;
-      this.workspace.options.maxInstances['get_var_block'] = 3;
+      workspace.options.maxBlocks = 0;
+      workspace.options.maxInstances!['get_var_block'] = 3;
       const typeCountsMap = {'get_var_block': 1};
       assert.isFalse(
-        this.workspace.isCapacityAvailable(typeCountsMap),
+        workspace.isCapacityAvailable(typeCountsMap),
         'With maxBlocks limit 0 and maxInstances limit 3',
       );
     });
 
     test('Over block limit but at instance limit', function () {
-      this.workspace.options.maxBlocks = 1;
-      this.workspace.options.maxInstances['get_var_block'] = 2;
+      workspace.options.maxBlocks = 1;
+      workspace.options.maxInstances!['get_var_block'] = 2;
       const typeCountsMap = {'get_var_block': 1};
       assert.isFalse(
-        this.workspace.isCapacityAvailable(typeCountsMap),
+        workspace.isCapacityAvailable(typeCountsMap),
         'With maxBlocks limit 1 and maxInstances limit 2',
       );
     });
 
     test('Over block limit and over instance limit', function () {
-      this.workspace.options.maxBlocks = 1;
-      this.workspace.options.maxInstances['get_var_block'] = 1;
+      workspace.options.maxBlocks = 1;
+      workspace.options.maxInstances!['get_var_block'] = 1;
       const typeCountsMap = {'get_var_block': 1};
       assert.isFalse(
-        this.workspace.isCapacityAvailable(typeCountsMap),
+        workspace.isCapacityAvailable(typeCountsMap),
         'With maxBlocks limit 1 and maxInstances limit 1',
       );
     });
 
     test('Over block limit of 0 and over instance limit', function () {
-      this.workspace.options.maxBlocks = 0;
-      this.workspace.options.maxInstances['get_var_block'] = 1;
+      workspace.options.maxBlocks = 0;
+      workspace.options.maxInstances!['get_var_block'] = 1;
       const typeCountsMap = {'get_var_block': 1};
       assert.isFalse(
-        this.workspace.isCapacityAvailable(typeCountsMap),
+        workspace.isCapacityAvailable(typeCountsMap),
         'With maxBlocks limit 0 and maxInstances limit 1',
       );
     });
 
     test('Over block limit and over instance limit of 0', function () {
-      this.workspace.options.maxBlocks = 1;
-      this.workspace.options.maxInstances['get_var_block'] = 0;
+      workspace.options.maxBlocks = 1;
+      workspace.options.maxInstances!['get_var_block'] = 0;
       const typeCountsMap = {'get_var_block': 1};
       assert.isFalse(
-        this.workspace.isCapacityAvailable(typeCountsMap),
+        workspace.isCapacityAvailable(typeCountsMap),
         'With maxBlocks limit 1 and maxInstances limit 0',
       );
     });
 
     test('Over block limit of 0 and over instance limit of 0', function () {
-      this.workspace.options.maxBlocks = 0;
-      this.workspace.options.maxInstances['get_var_block'] = 0;
+      workspace.options.maxBlocks = 0;
+      workspace.options.maxInstances!['get_var_block'] = 0;
       const typeCountsMap = {'get_var_block': 1};
-      assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
+      assert.isFalse(workspace.isCapacityAvailable(typeCountsMap));
     });
   });
 
   suite('getById', function () {
+    let workspaceB: Blockly.Workspace | undefined;
     setup(function () {
-      this.workspaceB = this.workspace.rendered
+      workspaceB = workspace.rendered
         ? new Blockly.WorkspaceSvg(new Blockly.Options({}))
         : new Blockly.Workspace();
     });
 
-    teardown(function () {
-      if (this.workspaceB) {
-        workspaceTeardown.call(this, this.workspaceB);
+    teardown(function (this: Mocha.Context) {
+      if (workspaceB) {
+        workspaceTeardown.call(this, workspaceB);
       }
     });
 
     test('Trivial', function () {
       assert.equal(
-        Blockly.Workspace.getById(this.workspace.id),
-        this.workspace,
+        Blockly.Workspace.getById(workspace.id),
+        workspace,
         'Find workspace',
       );
+      assert.isDefined(workspaceB);
       assert.equal(
-        Blockly.Workspace.getById(this.workspaceB.id),
-        this.workspaceB,
+        Blockly.Workspace.getById(workspaceB.id),
+        workspaceB,
         'Find workspaceB',
       );
     });
 
-    test('Null id', function () {
-      assert.isNull(Blockly.Workspace.getById(null));
+    test('Empty ID', function () {
+      assert.isNull(Blockly.Workspace.getById(''));
     });
 
     test('Non-existent id', function () {
@@ -671,58 +725,64 @@ export function testAWorkspace() {
     });
 
     test('After dispose', function () {
-      this.workspaceB.dispose();
-      assert.isNull(Blockly.Workspace.getById(this.workspaceB.id));
-      this.workspaceB = null;
+      assert.isDefined(workspaceB);
+      workspaceB.dispose();
+      assert.isNull(Blockly.Workspace.getById(workspaceB.id));
+      workspaceB = undefined;
     });
   });
 
   suite('getBlockById', function () {
+    let blockA: Blockly.Block;
+    let blockB: Blockly.Block;
+    let workspaceB: Blockly.Workspace;
+
     setup(function () {
-      this.blockA = this.workspace.newBlock('');
-      this.blockB = this.workspace.newBlock('');
-      this.workspaceB = this.workspace.rendered
+      blockA = workspace.newBlock('');
+      blockB = workspace.newBlock('');
+      workspaceB = workspace.rendered
         ? new Blockly.WorkspaceSvg(new Blockly.Options({}))
         : new Blockly.Workspace();
     });
 
-    teardown(function () {
-      workspaceTeardown.call(this, this.workspaceB);
+    teardown(function (this: Mocha.Context) {
+      workspaceTeardown.call(this, workspaceB);
     });
 
     test('Trivial', function () {
-      assert.equal(this.workspace.getBlockById(this.blockA.id), this.blockA);
-      assert.equal(this.workspace.getBlockById(this.blockB.id), this.blockB);
+      assert.equal(workspace.getBlockById(blockA.id), blockA);
+      assert.equal(workspace.getBlockById(blockB.id), blockB);
     });
 
-    test('Null id', function () {
-      assert.isNull(this.workspace.getBlockById(null));
+    test('Empty id', function () {
+      assert.isNull(workspace.getBlockById(''));
     });
 
     test('Non-existent id', function () {
-      assert.isNull(this.workspace.getBlockById('badId'));
+      assert.isNull(workspace.getBlockById('badId'));
     });
 
     test('After dispose', function () {
-      this.blockA.dispose();
-      assert.isNull(this.workspace.getBlockById(this.blockA.id));
-      assert.equal(this.workspace.getBlockById(this.blockB.id), this.blockB);
+      blockA.dispose();
+      assert.isNull(workspace.getBlockById(blockA.id));
+      assert.equal(workspace.getBlockById(blockB.id), blockB);
     });
 
     test('After clear', function () {
-      this.workspace.clear();
-      assert.isNull(this.workspace.getBlockById(this.blockA.id));
-      assert.isNull(this.workspace.getBlockById(this.blockB.id));
+      workspace.clear();
+      assert.isNull(workspace.getBlockById(blockA.id));
+      assert.isNull(workspace.getBlockById(blockB.id));
     });
   });
 
   suite('Undo/Redo', function () {
     /**
      * Assert that two nodes are equal.
-     * @param {!Element} actual the actual node.
-     * @param {!Element} expected the expected node.
+     *
+     * @param actual the actual node.
+     * @param expected the expected node.
      */
-    function assertNodesEqual(actual, expected) {
+    function assertNodesEqual(actual: Element, expected: Element) {
       const actualString = '\n' + Blockly.Xml.domToPrettyText(actual) + '\n';
       const expectedString =
         '\n' + Blockly.Xml.domToPrettyText(expected) + '\n';
@@ -788,32 +848,33 @@ export function testAWorkspace() {
         delete Blockly.Blocks['statement_block'];
       });
 
-      function testUndoDelete(xmlText) {
+      function testUndoDelete(xmlText: string) {
         const xml = Blockly.utils.xml.textToDom(xmlText);
-        Blockly.Xml.domToBlock(xml, this.workspace);
-        this.workspace.getTopBlocks()[0].dispose(false);
-        this.clock.runAll();
-        this.workspace.undo();
-        this.clock.runAll();
-        const newXml = Blockly.Xml.workspaceToDom(this.workspace);
-        assertNodesEqual(newXml.firstChild, xml);
+        Blockly.Xml.domToBlock(xml, workspace);
+        workspace.getTopBlocks()[0].dispose(false);
+        clock.runAll();
+        workspace.undo();
+        clock.runAll();
+        const newXml = Blockly.Xml.workspaceToDom(workspace);
+        const child = newXml.firstElementChild;
+        assert.isNotNull(child);
+        assertNodesEqual(child, xml);
       }
 
       test('Stack', function () {
-        testUndoDelete.call(this, '<block type="stack_block" id="1"/>');
+        testUndoDelete('<block type="stack_block" id="1"/>');
       });
 
       test('Row', function () {
-        testUndoDelete.call(this, '<block type="row_block" id="1"/>');
+        testUndoDelete('<block type="row_block" id="1"/>');
       });
 
       test('Statement', function () {
-        testUndoDelete.call(this, '<block type="statement_block" id="1"/>');
+        testUndoDelete('<block type="statement_block" id="1"/>');
       });
 
       test('Stack w/ child', function () {
-        testUndoDelete.call(
-          this,
+        testUndoDelete(
           '<block type="stack_block" id="1">' +
             '  <next>' +
             '    <block type="stack_block" id="2"></block>' +
@@ -823,8 +884,7 @@ export function testAWorkspace() {
       });
 
       test('Row w/ child', function () {
-        testUndoDelete.call(
-          this,
+        testUndoDelete(
           '<block type="row_block" id="1">' +
             '  <value name="INPUT">' +
             '    <block type="row_block" id="2"></block>' +
@@ -834,8 +894,7 @@ export function testAWorkspace() {
       });
 
       test('Statement w/ child', function () {
-        testUndoDelete.call(
-          this,
+        testUndoDelete(
           '<block type="statement_block" id="1">' +
             '  <statement name="STATEMENT">' +
             '    <block type="stack_block" id="2"></block>' +
@@ -845,8 +904,7 @@ export function testAWorkspace() {
       });
 
       test('Stack w/ shadow', function () {
-        testUndoDelete.call(
-          this,
+        testUndoDelete(
           '<block type="stack_block" id="1">' +
             '  <next>' +
             '    <shadow type="stack_block" id="2"></shadow>' +
@@ -856,8 +914,7 @@ export function testAWorkspace() {
       });
 
       test('Row w/ shadow', function () {
-        testUndoDelete.call(
-          this,
+        testUndoDelete(
           '<block type="row_block" id="1">' +
             '  <value name="INPUT">' +
             '    <shadow type="row_block" id="2"></shadow>' +
@@ -867,8 +924,7 @@ export function testAWorkspace() {
       });
 
       test('Statement w/ shadow', function () {
-        testUndoDelete.call(
-          this,
+        testUndoDelete(
           '<block type="statement_block" id="1">' +
             '  <statement name="STATEMENT">' +
             '    <shadow type="stack_block" id="2"></shadow>' +
@@ -919,19 +975,26 @@ export function testAWorkspace() {
         delete Blockly.Blocks['statement_block'];
       });
 
-      function testUndoConnect(xmlText, parentId, childId, func) {
+      function testUndoConnect(
+        xmlText: string,
+        parentId: string,
+        childId: string,
+        func: (parent: Blockly.Block, child: Blockly.Block) => void,
+      ) {
         const xml = Blockly.utils.xml.textToDom(xmlText);
-        Blockly.Xml.domToWorkspace(xml, this.workspace);
-        this.clock.runAll();
+        Blockly.Xml.domToWorkspace(xml, workspace);
+        clock.runAll();
 
-        const parent = this.workspace.getBlockById(parentId);
-        const child = this.workspace.getBlockById(childId);
-        func.call(this, parent, child);
-        this.clock.runAll();
-        this.workspace.undo();
-        this.clock.runAll();
+        const parent = workspace.getBlockById(parentId);
+        assert.isNotNull(parent);
+        const child = workspace.getBlockById(childId);
+        assert.isNotNull(child);
+        func(parent, child);
+        clock.runAll();
+        workspace.undo();
+        clock.runAll();
 
-        const newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        const newXml = Blockly.Xml.workspaceToDom(workspace);
         assertNodesEqual(newXml, xml);
       }
 
@@ -942,8 +1005,10 @@ export function testAWorkspace() {
           '  <block type="stack_block" id="2" x="50" y="50"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent.nextConnection.connect(child.previousConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.previousConnection;
+          assert.isNotNull(targetConnection);
+          parent.nextConnection?.connect(targetConnection);
         });
       });
 
@@ -954,8 +1019,10 @@ export function testAWorkspace() {
           '  <block type="row_block" id="2" x="50" y="50"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent.getInput('INPUT').connection.connect(child.outputConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.outputConnection;
+          assert.isNotNull(targetConnection);
+          parent.getInput('INPUT')?.connection?.connect(targetConnection);
         });
       });
 
@@ -966,10 +1033,10 @@ export function testAWorkspace() {
           '  <block type="stack_block" id="2" x="50" y="50"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent
-            .getInput('STATEMENT')
-            .connection.connect(child.previousConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.previousConnection;
+          assert.isNotNull(targetConnection);
+          parent.getInput('STATEMENT')?.connection?.connect(targetConnection);
         });
       });
 
@@ -984,8 +1051,10 @@ export function testAWorkspace() {
           '  <block type="stack_block" id="2" x="50" y="50"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent.nextConnection.connect(child.previousConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.previousConnection;
+          assert.isNotNull(targetConnection);
+          parent.nextConnection?.connect(targetConnection);
         });
       });
 
@@ -1000,8 +1069,10 @@ export function testAWorkspace() {
           '  <block type="row_block" id="2" x="50" y="50"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent.getInput('INPUT').connection.connect(child.outputConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.outputConnection;
+          assert.isNotNull(targetConnection);
+          parent.getInput('INPUT')?.connection?.connect(targetConnection);
         });
       });
 
@@ -1016,10 +1087,10 @@ export function testAWorkspace() {
           '  <block type="stack_block" id="2" x="100" y="100"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent
-            .getInput('STATEMENT')
-            .connection.connect(child.previousConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.previousConnection;
+          assert.isNotNull(targetConnection);
+          parent.getInput('STATEMENT')?.connection?.connect(targetConnection);
         });
       });
 
@@ -1034,8 +1105,10 @@ export function testAWorkspace() {
           '  <block type="stack_block" id="2" x="50" y="50"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent.nextConnection.connect(child.previousConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.previousConnection;
+          assert.isNotNull(targetConnection);
+          parent.nextConnection?.connect(targetConnection);
         });
       });
 
@@ -1050,8 +1123,10 @@ export function testAWorkspace() {
           '  <block type="row_block" id="2" x="50" y="50"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent.getInput('INPUT').connection.connect(child.outputConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.outputConnection;
+          assert.isNotNull(targetConnection);
+          parent.getInput('INPUT')?.connection?.connect(targetConnection);
         });
       });
 
@@ -1066,10 +1141,10 @@ export function testAWorkspace() {
           '  <block type="stack_block" id="2" x="100" y="100"></block>' +
           '</xml>';
 
-        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
-          parent
-            .getInput('STATEMENT')
-            .connection.connect(child.previousConnection);
+        testUndoConnect(xml, '1', '2', (parent, child) => {
+          const targetConnection = child.previousConnection;
+          assert.isNotNull(targetConnection);
+          parent.getInput('STATEMENT')?.connection?.connect(targetConnection);
         });
       });
     });
@@ -1115,22 +1190,22 @@ export function testAWorkspace() {
         delete Blockly.Blocks['statement_block'];
       });
 
-      function testUndoDisconnect(xmlText, childId) {
+      function testUndoDisconnect(xmlText: string, childId: string) {
         const xml = Blockly.utils.xml.textToDom(xmlText);
-        Blockly.Xml.domToWorkspace(xml, this.workspace);
-        this.clock.runAll();
+        Blockly.Xml.domToWorkspace(xml, workspace);
+        clock.runAll();
 
-        const child = this.workspace.getBlockById(childId);
-        if (child.outputConnection) {
+        const child = workspace.getBlockById(childId);
+        if (child?.outputConnection) {
           child.outputConnection.disconnect();
         } else {
-          child.previousConnection.disconnect();
+          child?.previousConnection?.disconnect();
         }
-        this.clock.runAll();
-        this.workspace.undo();
-        this.clock.runAll();
+        clock.runAll();
+        workspace.undo();
+        clock.runAll();
 
-        const newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        const newXml = Blockly.Xml.workspaceToDom(workspace);
         assertNodesEqual(newXml, xml);
       }
 
@@ -1143,7 +1218,7 @@ export function testAWorkspace() {
           '    </next>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
       });
 
       test('Row', function () {
@@ -1155,7 +1230,7 @@ export function testAWorkspace() {
           '    </value>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
       });
 
       test('Statement', function () {
@@ -1167,7 +1242,7 @@ export function testAWorkspace() {
           '    </statement>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
       });
 
       test('Stack w/ child', function () {
@@ -1183,7 +1258,7 @@ export function testAWorkspace() {
           '    </next>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
       });
 
       test('Row w/ child', function () {
@@ -1199,7 +1274,7 @@ export function testAWorkspace() {
           '    </value>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
       });
 
       test('Statement w/ child', function () {
@@ -1215,7 +1290,7 @@ export function testAWorkspace() {
           '    </statement>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
       });
 
       test('Stack w/ shadow', function () {
@@ -1230,9 +1305,9 @@ export function testAWorkspace() {
           '    </next>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
         assert.equal(
-          this.workspace.getAllBlocks().length,
+          workspace.getAllBlocks().length,
           2,
           'expected there to only be 2 blocks on the workspace ' +
             '(check for shadows)',
@@ -1249,9 +1324,9 @@ export function testAWorkspace() {
           '    </value>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
         assert.equal(
-          this.workspace.getAllBlocks().length,
+          workspace.getAllBlocks().length,
           2,
           'expected there to only be 2 blocks on the workspace ' +
             '(check for shadows)',
@@ -1268,405 +1343,591 @@ export function testAWorkspace() {
           '    </statement>' +
           '  </block>' +
           '</xml>';
-        testUndoDisconnect.call(this, xml, '2');
+        testUndoDisconnect(xml, '2');
       });
     });
 
     suite('Variables', function () {
-      function createTwoVarsDifferentTypes(workspace) {
+      function createTwoVarsDifferentTypes(workspace: Blockly.Workspace) {
         workspace.getVariableMap().createVariable('name1', 'type1', 'id1');
         workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
       }
 
       suite('createVariable', function () {
         test('Undo only', function () {
-          createTwoVarsDifferentTypes(this.workspace);
-          this.clock.runAll();
+          createTwoVarsDifferentTypes(workspace);
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assert.isNull(this.variableMap.getVariableById('id2'));
+          workspace.undo();
+          clock.runAll();
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assert.isNull(workspace.getVariableMap().getVariableById('id2'));
 
-          this.workspace.undo();
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assert.isNull(this.variableMap.getVariableById('id2'));
+          workspace.undo();
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assert.isNull(workspace.getVariableMap().getVariableById('id2'));
         });
 
         test('Undo and redo', function () {
-          createTwoVarsDifferentTypes(this.workspace);
-          this.clock.runAll();
+          createTwoVarsDifferentTypes(workspace);
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assert.isNull(this.variableMap.getVariableById('id2'));
+          workspace.undo();
+          clock.runAll();
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assert.isNull(workspace.getVariableMap().getVariableById('id2'));
 
-          this.workspace.redo();
+          workspace.redo();
 
           // Expect that variable 'id2' is recreated
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-          this.workspace.undo();
-          this.workspace.undo();
+          workspace.undo();
+          workspace.undo();
 
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assert.isNull(this.variableMap.getVariableById('id2'));
-          this.workspace.redo();
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assert.isNull(workspace.getVariableMap().getVariableById('id2'));
+          workspace.redo();
 
           // Expect that variable 'id1' is recreated
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assert.isNull(this.variableMap.getVariableById('id2'));
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assert.isNull(workspace.getVariableMap().getVariableById('id2'));
         });
       });
 
       suite('deleteVariableById', function () {
         test('Undo only no usages', function () {
-          createTwoVarsDifferentTypes(this.workspace);
-          this.clock.runAll();
-          const id1 = this.variableMap.getVariableById('id1');
-          Blockly.Variables.deleteVariable(this.workspace, id1);
-          const id2 = this.variableMap.getVariableById('id2');
-          Blockly.Variables.deleteVariable(this.workspace, id2);
-          this.clock.runAll();
+          createTwoVarsDifferentTypes(workspace);
+          clock.runAll();
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          Blockly.Variables.deleteVariable(workspace, id1);
+          const id2 = workspace.getVariableMap().getVariableById('id2');
+          assert.isNotNull(id2);
+          Blockly.Variables.deleteVariable(workspace, id2);
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
         });
 
         test('Undo only with usages', function () {
-          createTwoVarsDifferentTypes(this.workspace);
+          createTwoVarsDifferentTypes(workspace);
           // Create blocks to refer to both of them.
-          createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-          this.clock.runAll();
-          const id1 = this.variableMap.getVariableById('id1');
-          Blockly.Variables.deleteVariable(this.workspace, id1);
-          const id2 = this.variableMap.getVariableById('id2');
-          Blockly.Variables.deleteVariable(this.workspace, id2);
-          this.clock.runAll();
+          createVarBlocksNoEvents(workspace, ['id1', 'id2']);
+          clock.runAll();
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          Blockly.Variables.deleteVariable(workspace, id1);
+          const id2 = workspace.getVariableMap().getVariableById('id2');
+          assert.isNotNull(id2);
+          Blockly.Variables.deleteVariable(workspace, id2);
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'name2');
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'name2');
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'name2');
-          assertBlockVarModelName(this.workspace, 1, 'name1');
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'name2');
+          assertBlockVarModelName(workspace, 1, 'name1');
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
         });
 
         test('Reference exists no usages', function () {
-          createTwoVarsDifferentTypes(this.workspace);
-          this.clock.runAll();
-          const id1 = this.variableMap.getVariableById('id1');
-          Blockly.Variables.deleteVariable(this.workspace, id1);
-          const id2 = this.variableMap.getVariableById('id2');
-          Blockly.Variables.deleteVariable(this.workspace, id2);
-          this.clock.runAll();
+          createTwoVarsDifferentTypes(workspace);
+          clock.runAll();
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          Blockly.Variables.deleteVariable(workspace, id1);
+          const id2 = workspace.getVariableMap().getVariableById('id2');
+          assert.isNotNull(id2);
+          Blockly.Variables.deleteVariable(workspace, id2);
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-          this.workspace.redo();
-          this.clock.runAll();
+          workspace.redo();
+          clock.runAll();
           // Expect that both variables are deleted
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assert.isNull(this.variableMap.getVariableById('id2'));
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assert.isNull(workspace.getVariableMap().getVariableById('id2'));
 
-          this.workspace.undo();
-          this.clock.runAll();
-          this.workspace.undo();
-          this.clock.runAll();
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          workspace.undo();
+          clock.runAll();
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-          this.workspace.redo();
-          this.clock.runAll();
+          workspace.redo();
+          clock.runAll();
           // Expect that variable 'id2' is recreated
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
         });
 
         test('Reference exists with usages', function () {
-          createTwoVarsDifferentTypes(this.workspace);
+          createTwoVarsDifferentTypes(workspace);
           // Create blocks to refer to both of them.
-          createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-          this.clock.runAll();
-          const id1 = this.variableMap.getVariableById('id1');
-          Blockly.Variables.deleteVariable(this.workspace, id1);
-          const id2 = this.variableMap.getVariableById('id2');
-          Blockly.Variables.deleteVariable(this.workspace, id2);
-          this.clock.runAll();
+          createVarBlocksNoEvents(workspace, ['id1', 'id2']);
+          clock.runAll();
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          Blockly.Variables.deleteVariable(workspace, id1);
+          const id2 = workspace.getVariableMap().getVariableById('id2');
+          assert.isNotNull(id2);
+          Blockly.Variables.deleteVariable(workspace, id2);
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'name2');
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'name2');
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-          this.workspace.redo();
-          this.clock.runAll();
+          workspace.redo();
+          clock.runAll();
           // Expect that both variables are deleted
-          assert.equal(this.workspace.getTopBlocks(false).length, 0);
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assert.isNull(this.variableMap.getVariableById('id2'));
+          assert.equal(workspace.getTopBlocks(false).length, 0);
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assert.isNull(workspace.getVariableMap().getVariableById('id2'));
 
-          this.workspace.undo();
-          this.clock.runAll();
-          this.workspace.undo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'name2');
-          assertBlockVarModelName(this.workspace, 1, 'name1');
-          assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          workspace.undo();
+          clock.runAll();
+          workspace.undo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'name2');
+          assertBlockVarModelName(workspace, 1, 'name1');
+          assertVariableValues(workspace, 'name1', 'type1', 'id1');
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-          this.workspace.redo();
-          this.clock.runAll();
+          workspace.redo();
+          clock.runAll();
           // Expect that variable 'id2' is recreated
-          assertBlockVarModelName(this.workspace, 0, 'name2');
-          assert.isNull(this.variableMap.getVariableById('id1'));
-          assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+          assertBlockVarModelName(workspace, 0, 'name2');
+          assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          assertVariableValues(workspace, 'name2', 'type2', 'id2');
         });
       });
 
       suite('renameVariable', function () {
         setup(function () {
-          this.variableMap.createVariable('name1', 'type1', 'id1');
+          workspace.getVariableMap().createVariable('name1', 'type1', 'id1');
         });
 
         test('Reference exists no usages rename to name2', function () {
-          const id1 = this.variableMap.getVariableById('id1');
-          this.variableMap.renameVariable(id1, 'name2');
-          this.clock.runAll();
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          workspace.getVariableMap().renameVariable(id1, 'name2');
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
+          workspace.undo();
+          clock.runAll();
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'name1',
+            'type1',
+            'id1',
+          );
 
-          this.workspace.redo();
-          this.clock.runAll();
-          assertVariableValues(this.variableMap, 'name2', 'type1', 'id1');
+          workspace.redo();
+          clock.runAll();
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'name2',
+            'type1',
+            'id1',
+          );
         });
 
         test('Reference exists with usages rename to name2', function () {
-          createVarBlocksNoEvents(this.workspace, ['id1']);
-          const id1 = this.variableMap.getVariableById('id1');
-          this.variableMap.renameVariable(id1, 'name2');
-          this.clock.runAll();
+          createVarBlocksNoEvents(workspace, ['id1']);
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          workspace.getVariableMap().renameVariable(id1, 'name2');
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'name1');
-          assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
+          workspace.undo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'name1');
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'name1',
+            'type1',
+            'id1',
+          );
 
-          this.workspace.redo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'name2');
-          assertVariableValues(this.variableMap, 'name2', 'type1', 'id1');
+          workspace.redo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'name2');
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'name2',
+            'type1',
+            'id1',
+          );
         });
 
         test('Reference exists different capitalization no usages rename to Name1', function () {
-          const id1 = this.variableMap.getVariableById('id1');
-          this.variableMap.renameVariable(id1, 'Name1');
-          this.clock.runAll();
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          workspace.getVariableMap().renameVariable(id1, 'Name1');
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
+          workspace.undo();
+          clock.runAll();
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'name1',
+            'type1',
+            'id1',
+          );
 
-          this.workspace.redo();
-          this.clock.runAll();
-          assertVariableValues(this.variableMap, 'Name1', 'type1', 'id1');
+          workspace.redo();
+          clock.runAll();
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'Name1',
+            'type1',
+            'id1',
+          );
         });
 
         test('Reference exists different capitalization with usages rename to Name1', function () {
-          createVarBlocksNoEvents(this.workspace, ['id1']);
-          const id1 = this.variableMap.getVariableById('id1');
-          this.variableMap.renameVariable(id1, 'Name1');
-          this.clock.runAll();
+          createVarBlocksNoEvents(workspace, ['id1']);
+          const id1 = workspace.getVariableMap().getVariableById('id1');
+          assert.isNotNull(id1);
+          workspace.getVariableMap().renameVariable(id1, 'Name1');
+          clock.runAll();
 
-          this.workspace.undo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'name1');
-          assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
+          workspace.undo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'name1');
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'name1',
+            'type1',
+            'id1',
+          );
 
-          this.workspace.redo();
-          this.clock.runAll();
-          assertBlockVarModelName(this.workspace, 0, 'Name1');
-          assertVariableValues(this.variableMap, 'Name1', 'type1', 'id1');
+          workspace.redo();
+          clock.runAll();
+          assertBlockVarModelName(workspace, 0, 'Name1');
+          assertVariableValues(
+            workspace.getVariableMap(),
+            'Name1',
+            'type1',
+            'id1',
+          );
         });
 
         suite('Two variables rename overlap', function () {
           test('Same type no usages rename variable with id1 to name2', function () {
-            this.variableMap.createVariable('name2', 'type1', 'id2');
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'name2');
-            this.clock.runAll();
+            workspace.getVariableMap().createVariable('name2', 'type1', 'id2');
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'name2');
+            clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id2');
-
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id2');
-            assert.isNull(this.variableMap.getVariableById('id1'));
-          });
-
-          test('Same type with usages rename variable with id1 to name2', function () {
-            const variable = this.variableMap.createVariable(
+            workspace.undo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name1',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
               'name2',
               'type1',
               'id2',
             );
-            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'name2');
-            this.clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertBlockVarModelName(this.workspace, 0, 'name1');
-            assertBlockVarModelName(this.workspace, 1, 'name2');
-            assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id2');
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type1',
+              'id2',
+            );
+            assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+          });
 
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id2');
-            assert.isNull(this.variableMap.getVariableById('id1'));
+          test('Same type with usages rename variable with id1 to name2', function () {
+            workspace.getVariableMap().createVariable('name2', 'type1', 'id2');
+            createVarBlocksNoEvents(workspace, ['id1', 'id2']);
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'name2');
+            clock.runAll();
+
+            workspace.undo();
+            clock.runAll();
+            assertBlockVarModelName(workspace, 0, 'name1');
+            assertBlockVarModelName(workspace, 1, 'name2');
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name1',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type1',
+              'id2',
+            );
+
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type1',
+              'id2',
+            );
+            assert.isNull(workspace.getVariableMap().getVariableById('id1'));
           });
 
           test('Same type different capitalization no usages rename variable with id1 to Name2', function () {
-            this.variableMap.createVariable('name2', 'type1', 'id2');
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'Name2');
-            this.clock.runAll();
+            workspace.getVariableMap().createVariable('name2', 'type1', 'id2');
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'Name2');
+            clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id2');
+            workspace.undo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name1',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type1',
+              'id2',
+            );
 
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'Name2', 'type1', 'id2');
-            assert.isNull(this.variableMap.getVariable('name1'));
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'Name2',
+              'type1',
+              'id2',
+            );
+            assert.isNull(workspace.getVariableMap().getVariable('name1'));
           });
 
           test('Same type different capitalization with usages rename variable with id1 to Name2', function () {
-            this.variableMap.createVariable('name2', 'type1', 'id2');
-            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'Name2');
-            this.clock.runAll();
+            workspace.getVariableMap().createVariable('name2', 'type1', 'id2');
+            createVarBlocksNoEvents(workspace, ['id1', 'id2']);
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'Name2');
+            clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertBlockVarModelName(this.workspace, 0, 'name1');
-            assertBlockVarModelName(this.workspace, 1, 'name2');
-            assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id2');
+            workspace.undo();
+            clock.runAll();
+            assertBlockVarModelName(workspace, 0, 'name1');
+            assertBlockVarModelName(workspace, 1, 'name2');
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name1',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type1',
+              'id2',
+            );
 
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'Name2', 'type1', 'id2');
-            assert.isNull(this.variableMap.getVariableById('id1'));
-            assertBlockVarModelName(this.workspace, 0, 'Name2');
-            assertBlockVarModelName(this.workspace, 1, 'Name2');
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'Name2',
+              'type1',
+              'id2',
+            );
+            assert.isNull(workspace.getVariableMap().getVariableById('id1'));
+            assertBlockVarModelName(workspace, 0, 'Name2');
+            assertBlockVarModelName(workspace, 1, 'Name2');
           });
 
           test('Different type no usages rename variable with id1 to name2', function () {
-            this.variableMap.createVariable('name2', 'type2', 'id2');
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'name2');
-            this.clock.runAll();
+            workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'name2');
+            clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
+            workspace.undo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name1',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type2',
+              'id2',
+            );
 
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type2',
+              'id2',
+            );
           });
 
           test('Different type with usages rename variable with id1 to name2', function () {
-            this.variableMap.createVariable('name2', 'type2', 'id2');
-            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'name2');
-            this.clock.runAll();
+            workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
+            createVarBlocksNoEvents(workspace, ['id1', 'id2']);
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'name2');
+            clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
-            assertBlockVarModelName(this.workspace, 0, 'name1');
-            assertBlockVarModelName(this.workspace, 1, 'name2');
+            workspace.undo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name1',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type2',
+              'id2',
+            );
+            assertBlockVarModelName(workspace, 0, 'name1');
+            assertBlockVarModelName(workspace, 1, 'name2');
 
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name2', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
-            assertBlockVarModelName(this.workspace, 0, 'name2');
-            assertBlockVarModelName(this.workspace, 1, 'name2');
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type2',
+              'id2',
+            );
+            assertBlockVarModelName(workspace, 0, 'name2');
+            assertBlockVarModelName(workspace, 1, 'name2');
           });
 
           test('Different type different capitalization no usages rename variable with id1 to Name2', function () {
-            this.variableMap.createVariable('name2', 'type2', 'id2');
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'Name2');
-            this.clock.runAll();
+            workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'Name2');
+            clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
-            assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
+            workspace.undo();
+            clock.runAll();
+            assertVariableValues(workspace, 'name1', 'type1', 'id1');
+            assertVariableValues(workspace, 'name2', 'type2', 'id2');
 
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'Name2', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'Name2',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type2',
+              'id2',
+            );
           });
 
           test('Different type different capitalization with usages rename variable with id1 to Name2', function () {
-            this.variableMap.createVariable('name2', 'type2', 'id2');
-            createVarBlocksNoEvents(this.workspace, ['id1', 'id2']);
-            const id1 = this.variableMap.getVariableById('id1');
-            this.variableMap.renameVariable(id1, 'Name2');
-            this.clock.runAll();
+            workspace.getVariableMap().createVariable('name2', 'type2', 'id2');
+            createVarBlocksNoEvents(workspace, ['id1', 'id2']);
+            const id1 = workspace.getVariableMap().getVariableById('id1');
+            assert.isNotNull(id1);
+            workspace.getVariableMap().renameVariable(id1, 'Name2');
+            clock.runAll();
 
-            this.workspace.undo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
-            assertBlockVarModelName(this.workspace, 0, 'name1');
-            assertBlockVarModelName(this.workspace, 1, 'name2');
+            workspace.undo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name1',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type2',
+              'id2',
+            );
+            assertBlockVarModelName(workspace, 0, 'name1');
+            assertBlockVarModelName(workspace, 1, 'name2');
 
-            this.workspace.redo();
-            this.clock.runAll();
-            assertVariableValues(this.variableMap, 'Name2', 'type1', 'id1');
-            assertVariableValues(this.variableMap, 'name2', 'type2', 'id2');
-            assertBlockVarModelName(this.workspace, 0, 'Name2');
-            assertBlockVarModelName(this.workspace, 1, 'name2');
+            workspace.redo();
+            clock.runAll();
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'Name2',
+              'type1',
+              'id1',
+            );
+            assertVariableValues(
+              workspace.getVariableMap(),
+              'name2',
+              'type2',
+              'id2',
+            );
+            assertBlockVarModelName(workspace, 0, 'Name2');
+            assertBlockVarModelName(workspace, 1, 'name2');
           });
         });
       });

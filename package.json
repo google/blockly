@@ -26,7 +26,7 @@
     "@eslint/js": "^10.0.1",
     "@nx/js": "23.1.1",
     "conventional-changelog-conventionalcommits": "^10.4.0",
-    "eslint": "10.5.0",
+    "eslint": "10.10.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^64.2.1",
@@ -36,7 +36,6 @@
     "globals": "^17.6.0",
     "lerna": "^10.0.1",
     "nx": "23.1.1",
-    "patch-package": "^8.0.1",
     "prettier": "3.9.6",
     "prettier-plugin-organize-imports": "^4.3.0",
     "typescript-eslint": "^8.66.0"
@@ -44,13 +43,12 @@
   "scripts": {
     "test": "npx nx run-many -t test --exclude=blockly && npx nx run blockly:test",
     "lint": "npm run lint --ws --if-present",
-    "lint:fix": "npm run lint:fix --ws --if-present",
+    "lint-fix": "npm run lint-fix --ws --if-present",
     "build": "npx nx run-many -t build --exclude=blockly-docs",
-    "build:docs": "npx nx run blockly-docs:build",
-    "build:all": "npx nx run-many -t build",
+    "build-docs": "npx nx run blockly-docs:build",
+    "build-all": "npx nx run-many -t build",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "postinstall": "patch-package",
+    "format-check": "prettier --check .",
     "clean": "npx nx reset && npm run clean --ws --if-present"
   },
   "dependencies": {}

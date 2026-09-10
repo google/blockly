@@ -2236,9 +2236,12 @@ export class WorkspaceSvg
    *
    * @param x Target X to scroll to.
    * @param y Target Y to scroll to.
+   * @param shouldHidePopups Whether to hide popups. Defaults to true.
    */
-  scroll(x: number, y: number) {
-    this.hideChaff(/* opt_onlyClosePopups= */ true);
+  scroll(x: number, y: number, shouldHidePopups = true) {
+    if (shouldHidePopups) {
+      this.hideChaff(/* opt_onlyClosePopups= */ true);
+    }
 
     // Keep scrolling within the bounds of the content.
     const metrics = this.getMetrics();
@@ -2770,7 +2773,7 @@ export class WorkspaceSvg
 
     deltaX *= scale;
     deltaY *= scale;
-    this.scroll(this.scrollX + deltaX, this.scrollY + deltaY);
+    this.scroll(this.scrollX + deltaX, this.scrollY + deltaY, false);
   }
 
   /** See IFocusableNode.getFocusableElement. */
@@ -3046,15 +3049,26 @@ export class WorkspaceSvg
 
   /** See IFocusableTree.onTreeBlur. */
   onTreeBlur(nextTree: IFocusableTree | null): void {
-    // If the flyout loses focus, make sure to close it unless focus is being
-    // lost to the toolbox or ephemeral focus.
-    if (this.isFlyout && this.targetWorkspace) {
-      // Only hide the flyout if the flyout's workspace is losing focus and that
-      // focus isn't returning to the flyout itself, the toolbox, or ephemeral.
-      if (getFocusManager().ephemeralFocusTaken()) return;
-      const toolbox = this.targetWorkspace.getToolbox();
-      if (toolbox && nextTree === toolbox) return;
-      if (isAutoHideable(toolbox)) toolbox.autoHide(false);
+    // Close the flyout when it loses focus, except for the toolbox or while
+    // overlay UI is open (dropdowns, dialogs).
+    if (!this.isFlyout || !this.targetWorkspace) return;
+
+    const toolbox = this.targetWorkspace.getToolbox();
+
+    // Keep the flyout open when focus moves to the toolbox.
+    if (toolbox && nextTree === toolbox) return;
+
+    // Keep it open for overlay UI, but not when the user is going to the
+    // workspace (for example dragging a block from the flyout).
+    if (
+      getFocusManager().ephemeralFocusTaken() &&
+      nextTree !== this.targetWorkspace
+    ) {
+      return;
+    }
+
+    if (isAutoHideable(toolbox)) {
+      toolbox.autoHide(false);
     }
   }
 

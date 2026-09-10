@@ -52,6 +52,9 @@ suite('Keyboard-driven movement', function () {
 
   teardown(function () {
     Blockly.KeyboardMover.mover.setMoveDistance(20);
+    for (const block of Object.keys(p5blocks)) {
+      delete Blockly.Blocks[block];
+    }
     sharedTestTeardown.call(this);
   });
 

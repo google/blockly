@@ -148,6 +148,9 @@ suite('Keyboard navigation on Blocks', function () {
   });
 
   teardown(function () {
+    for (const block of Object.keys(p5blocks)) {
+      delete Blockly.Blocks[block];
+    }
     sharedTestTeardown.call(this);
   });
 
@@ -420,6 +423,9 @@ suite('Keyboard navigation on Fields', function () {
   });
 
   teardown(function () {
+    for (const block of Object.keys(p5blocks)) {
+      delete Blockly.Blocks[block];
+    }
     sharedTestTeardown.call(this);
   });
 
@@ -500,6 +506,9 @@ suite('Workspace comment navigation', function () {
   });
 
   teardown(function () {
+    for (const block of Object.keys(p5blocks)) {
+      delete Blockly.Blocks[block];
+    }
     sharedTestTeardown.call(this);
   });
 

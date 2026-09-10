@@ -96,7 +96,7 @@ immediately (will stub by default).
     (i.e. you did not define it in the outermost suite), you must manually
     dispose of it by calling `workspaceTeardown.call(this, this.workspace)`
     in the teardown of that suite.
-  - If you define `this.workpace` in the outermost suite, but then redefine
+  - If you define `this.workspace` in the outermost suite, but then redefine
     it in an inner test suite, you must first call
     `workspaceTeardown.call(this, this.workspace)` **before redefining it**
     to tear down the original workspace defined in the top level suite. You

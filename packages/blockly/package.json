@@ -175,7 +175,7 @@
     "concurrently": "^10.0.4",
     "esbuild": "^0.28.2",
     "glob": "^13.0.6",
-    "google-closure-compiler": "^20260819.0.0",
+    "google-closure-compiler": "^20260907.0.0",
     "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^2.1.0",

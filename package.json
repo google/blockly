@@ -44,7 +44,7 @@
     "conventional-changelog-conventionalcommits": "9.3.1"
   },
   "scripts": {
-    "test": "npx nx run-many -t test --exclude=blockly && npx nx run blockly:test",
+    "test": "npx nx run-many -t test",
     "lint": "npm run lint --ws --if-present",
     "lint-fix": "npm run lint-fix --ws --if-present",
     "build": "npx nx run-many -t build --exclude=blockly-docs",

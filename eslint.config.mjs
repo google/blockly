@@ -81,6 +81,10 @@ function buildTSOverride({files, tsconfig}) {
       // TS rules
       // Blockly uses namespaces to do declaration merging in some cases.
       '@typescript-eslint/no-namespace': ['off'],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {fixStyle: 'separate-type-imports'},
+      ],
       // Use the updated TypeScript-specific rule.
       'no-invalid-this': ['off'],
       '@typescript-eslint/no-invalid-this': ['error'],
@@ -494,6 +498,10 @@ export default defineConfig(
         },
       ],
       '@typescript-eslint/consistent-type-assertions': 'error',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {fixStyle: 'separate-type-imports'},
+      ],
 
       'no-array-constructor': 'off',
       '@typescript-eslint/no-array-constructor': 'error',

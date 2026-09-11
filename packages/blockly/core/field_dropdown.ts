@@ -15,12 +15,8 @@
 
 import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {
-  Field,
-  FieldConfig,
-  FieldValidator,
-  UnattachedFieldError,
-} from './field.js';
+import type {FieldConfig, FieldValidator} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuSeparator} from './menu_separator.js';

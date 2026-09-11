@@ -25,18 +25,13 @@ import {
 import {
   build,
   buildAdvancedCompilationTest,
-  cleanBuildDir,
   langfiles,
   messages,
   minify,
   tsc,
 } from './scripts/gulpfiles/build_tasks.mjs';
-import {
-  cleanReleaseDir,
-  pack,
-  typings,
-} from './scripts/gulpfiles/package_tasks.mjs';
 import {generators, test} from './scripts/gulpfiles/test_tasks.mjs';
+import {cleanBuildDir, cleanReleaseDir} from './scripts/lib/fs_utils.mjs';
 
 const clean = parallel(cleanBuildDir, cleanReleaseDir);
 
@@ -53,7 +48,6 @@ export {
   tsc,
   minify,
   build,
-  pack,  // Formerly package.
   prepareDemos,
   deployDemosBeta,
   deployDemos,
@@ -69,5 +63,4 @@ export {
   test,
   generators as testGenerators,
   buildAdvancedCompilationTest,
-  typings,
 }

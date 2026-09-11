@@ -2219,6 +2219,10 @@ suite('Keyboard Shortcut Items', function () {
 
   suite('Jump shortcuts', function () {
     setup(function () {
+      // jsdom does not provide CSS.escape; connection focus checks use it.
+      if (typeof globalThis.CSS === 'undefined') {
+        globalThis.CSS = {escape: (value) => String(value)};
+      }
       Blockly.serialization.workspaces.load(blockJson, this.workspace);
     });
 

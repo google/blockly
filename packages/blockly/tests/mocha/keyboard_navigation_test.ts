@@ -6,9 +6,10 @@
 
 import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
+import sinon from 'sinon';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
-import {navigationTestBlocks} from './test_helpers/navigation_test_blocks.js';
-import {p5blocks} from './test_helpers/p5_blocks.js';
+import {navigationTestBlocks} from './test_helpers/navigation_test_blocks.ts';
+import {p5blocks} from './test_helpers/p5_blocks.ts';
 import {
   DEFAULT_INJECT_OPTIONS,
   sharedTestSetup,
@@ -21,11 +22,15 @@ import {createKeyDownEvent} from './test_helpers/user_input.js';
  * Dispatches a keydown event with the given keycode on the workspace injection
  * div.
  *
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to dispatch on.
- * @param {number} keyCode The key code to dispatch.
- * @param {!Array<number>=} modifiers Optional modifier key codes.
+ * @param workspace The workspace to dispatch on.
+ * @param keyCode The key code to dispatch.
+ * @param modifiers Optional modifier key codes.
  */
-function pressKey(workspace, keyCode, modifiers) {
+function pressKey(
+  workspace: Blockly.WorkspaceSvg,
+  keyCode: number,
+  modifiers?: number[],
+) {
   const event = createKeyDownEvent(keyCode, modifiers);
   workspace.getInjectionDiv().dispatchEvent(event);
 }
@@ -33,12 +38,17 @@ function pressKey(workspace, keyCode, modifiers) {
 /**
  * Dispatches a keydown event with the given keycode multiple times.
  *
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to dispatch on.
- * @param {number} keyCode The key code to dispatch.
- * @param {number} times The number of times to press the key.
- * @param {!Array<number>=} modifiers Optional modifier key codes.
+ * @param workspace The workspace to dispatch on.
+ * @param keyCode The key code to dispatch.
+ * @param times The number of times to press the key.
+ * @param modifiers Optional modifier key codes.
  */
-function pressKeyN(workspace, keyCode, times, modifiers) {
+function pressKeyN(
+  workspace: Blockly.WorkspaceSvg,
+  keyCode: number,
+  times: number,
+  modifiers?: number[],
+) {
   for (let i = 0; i < times; i++) {
     pressKey(workspace, keyCode, modifiers);
   }
@@ -47,10 +57,10 @@ function pressKeyN(workspace, keyCode, times, modifiers) {
 /**
  * Focuses the block with the given ID on the given workspace.
  *
- * @param {!Blockly.WorkspaceSvg} workspace The workspace containing the block.
- * @param {string} blockId The ID of the block to focus.
+ * @param workspace The workspace containing the block.
+ * @param blockId The ID of the block to focus.
  */
-function focusBlock(workspace, blockId) {
+function focusBlock(workspace: Blockly.WorkspaceSvg, blockId: string) {
   const block = workspace.getBlockById(blockId);
   if (!block) throw new Error(`No block found with ID: ${blockId}`);
   Blockly.getFocusManager().focusNode(block);
@@ -59,11 +69,15 @@ function focusBlock(workspace, blockId) {
 /**
  * Focuses the named field on a block.
  *
- * @param {!Blockly.WorkspaceSvg} workspace The workspace containing the block.
- * @param {string} blockId The ID of the block.
- * @param {string} fieldName The name of the field to focus.
+ * @param workspace The workspace containing the block.
+ * @param blockId The ID of the block.
+ * @param fieldName The name of the field to focus.
  */
-function focusBlockField(workspace, blockId, fieldName) {
+function focusBlockField(
+  workspace: Blockly.WorkspaceSvg,
+  blockId: string,
+  fieldName: string,
+) {
   const block = workspace.getBlockById(blockId);
   if (!block) throw new Error(`No block found with ID: ${blockId}`);
   const field = block.getField(fieldName);
@@ -77,7 +91,7 @@ function focusBlockField(workspace, blockId, fieldName) {
  * Returns the block ID of the currently focused node, or undefined if the
  * focused node is not a block.
  *
- * @returns {string|undefined} ID of the focused block, if any.
+ * @returns ID of the focused block, if any.
  */
 function getFocusedBlockId() {
   const node = Blockly.getFocusManager().getFocusedNode();
@@ -88,7 +102,7 @@ function getFocusedBlockId() {
 /**
  * Returns the DOM element ID of the currently focused node's focusable element.
  *
- * @returns {string|undefined} ID of the focused node, if any.
+ * @returns ID of the focused node, if any.
  */
 function getFocusNodeId() {
   return Blockly.getFocusManager().getFocusedNode()?.getFocusableElement()?.id;
@@ -98,17 +112,21 @@ function getFocusNodeId() {
  * Returns the name of the currently focused field, or undefined if the focused
  * node is not a field.
  *
- * @returns {string|undefined} Name of the focused field, if any.
+ * @returns Name of the focused field, if any.
  */
 function getFocusedFieldName() {
-  return Blockly.getFocusManager().getFocusedNode()?.name;
+  const focusedNode = Blockly.getFocusManager().getFocusedNode();
+  if (focusedNode instanceof Blockly.Field) {
+    return focusedNode.name;
+  }
+  return undefined;
 }
 
 /**
  * Returns the block type of the currently focused node, or undefined if the
  * focused node is not a block.
  *
- * @returns {string|undefined} Type of the focused block, if any.
+ * @returns Type of the focused block, if any.
  */
 function getFocusedBlockType() {
   const node = Blockly.getFocusManager().getFocusedNode();
@@ -119,10 +137,13 @@ function getFocusedBlockType() {
 /**
  * Focuses the workspace comment with the given ID.
  *
- * @param {!Blockly.WorkspaceSvg} workspace The workspace containing the comment.
- * @param {string} commentId The ID of the workspace comment to focus.
+ * @param workspace The workspace containing the comment.
+ * @param commentId The ID of the workspace comment to focus.
  */
-function focusWorkspaceComment(workspace, commentId) {
+function focusWorkspaceComment(
+  workspace: Blockly.WorkspaceSvg,
+  commentId: string,
+) {
   const comment = workspace.getCommentById(commentId);
   if (!comment) {
     throw new Error(`No workspace comment found with ID: ${commentId}`);
@@ -131,98 +152,105 @@ function focusWorkspaceComment(workspace, commentId) {
 }
 
 suite('Keyboard navigation on Blocks', function () {
-  setup(async function () {
-    sharedTestSetup.call(this);
+  let workspace: Blockly.WorkspaceSvg;
+  let clock: sinon.SinonFakeTimers;
+
+  setup(async function (this: Mocha.Context) {
+    ({clock} = sharedTestSetup.call(this));
     const toolbox = document.getElementById('toolbox-simple');
-    this.workspace = Blockly.inject('blocklyDiv', {
+    assert.isNotNull(toolbox);
+    workspace = Blockly.inject('blocklyDiv', {
       ...DEFAULT_INJECT_OPTIONS,
       toolbox: toolbox,
       renderer: 'zelos',
     });
     Blockly.common.defineBlocks(p5blocks);
-    Blockly.serialization.workspaces.load(navigationTestBlocks, this.workspace);
-    for (const block of this.workspace.getAllBlocks()) {
+    Blockly.serialization.workspaces.load(navigationTestBlocks, workspace);
+    for (const block of workspace.getAllBlocks()) {
       block.initSvg();
       block.render();
     }
   });
 
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     for (const block of Object.keys(p5blocks)) {
       delete Blockly.Blocks[block];
     }
-    sharedTestTeardown.call(this);
+    sharedTestTeardown.call(this, workspace);
   });
 
   test('Default workspace', function () {
-    const blockCount = this.workspace.getAllBlocks(false).length;
+    const blockCount = workspace.getAllBlocks(false).length;
     assert.equal(blockCount, 16);
   });
 
   test('Selected block', function () {
     // first block in workspace
-    focusBlock(this.workspace, 'p5_setup_1');
-    pressKeyN(this.workspace, Blockly.utils.KeyCodes.DOWN, 13);
+    focusBlock(workspace, 'p5_setup_1');
+    pressKeyN(workspace, Blockly.utils.KeyCodes.DOWN, 13);
     assert.equal(getFocusedBlockId(), 'controls_repeat_ext_1');
   });
 
   test('Down from statement block selects next block across stacks', function () {
-    focusBlock(this.workspace, 'p5_canvas_1');
+    focusBlock(workspace, 'p5_canvas_1');
     // The first down moves to the next connection on the selected block.
-    pressKeyN(this.workspace, Blockly.utils.KeyCodes.DOWN, 2);
+    pressKeyN(workspace, Blockly.utils.KeyCodes.DOWN, 2);
     assert.equal(getFocusedBlockId(), 'p5_draw_1');
   });
 
   test('Up from statement block selects previous block', function () {
-    focusBlock(this.workspace, 'simple_circle_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
+    focusBlock(workspace, 'simple_circle_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
     assert.equal(getFocusedBlockId(), 'draw_emoji_1');
   });
 
   test('Down from parent block selects first child block', function () {
-    focusBlock(this.workspace, 'p5_setup_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.DOWN);
+    focusBlock(workspace, 'p5_setup_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.DOWN);
     assert.equal(getFocusedBlockId(), 'p5_canvas_1');
   });
 
   test('Up from child block selects parent block', function () {
-    focusBlock(this.workspace, 'p5_canvas_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
+    focusBlock(workspace, 'p5_canvas_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
     assert.equal(getFocusedBlockId(), 'p5_setup_1');
   });
 
   test('Right from block selects first icon', function () {
-    this.workspace.getBlockById('p5_canvas_1').setCommentText('hello');
-    focusBlock(this.workspace, 'p5_canvas_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    workspace.getBlockById('p5_canvas_1')?.setCommentText('hello');
+    focusBlock(workspace, 'p5_canvas_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
-      this.workspace
+      workspace
         .getBlockById('p5_canvas_1')
-        .getIcon(Blockly.icons.IconType.COMMENT),
+        ?.getIcon(Blockly.icons.IconType.COMMENT),
     );
   });
 
   test('Right from icon selects next icon', function () {
-    const block = this.workspace.getBlockById('p5_canvas_1');
+    const block = workspace.getBlockById('p5_canvas_1');
+    assert.isNotNull(block);
     block.setCommentText('hello');
     block.setWarningText('danger!');
     const commentIcon = block.getIcon(Blockly.icons.IconType.COMMENT);
     const warningIcon = block.getIcon(Blockly.icons.IconType.WARNING);
-
+    assert.isDefined(warningIcon);
     Blockly.getFocusManager().focusNode(warningIcon);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), commentIcon);
   });
 
   test('Right from icon selects bubble', async function () {
-    const block = this.workspace.getBlockById('p5_canvas_1');
+    const block = workspace.getBlockById('p5_canvas_1');
+    assert.isNotNull(block);
     block.setCommentText('hello');
     const commentIcon = block.getIcon(Blockly.icons.IconType.COMMENT);
+    assert.isDefined(commentIcon);
     await commentIcon.setBubbleVisible(true);
 
     Blockly.getFocusManager().focusNode(commentIcon);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
       commentIcon.getBubble(),
@@ -230,90 +258,96 @@ suite('Keyboard navigation on Blocks', function () {
   });
 
   test('Right from last icon selects field', function () {
-    this.workspace.getBlockById('p5_canvas_1').setCommentText('hello');
-    const icon = this.workspace
+    workspace.getBlockById('p5_canvas_1')?.setCommentText('hello');
+    const icon = workspace
       .getBlockById('p5_canvas_1')
-      .getIcon(Blockly.icons.IconType.COMMENT);
+      ?.getIcon(Blockly.icons.IconType.COMMENT);
+    assert.isDefined(icon);
     Blockly.getFocusManager().focusNode(icon);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.include(getFocusNodeId(), 'p5_canvas_1_field_');
     assert.equal(getFocusedFieldName(), 'WIDTH');
   });
 
   test('Right from block selects first field', function () {
-    focusBlock(this.workspace, 'p5_canvas_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    focusBlock(workspace, 'p5_canvas_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.include(getFocusNodeId(), 'p5_canvas_1_field_');
     assert.equal(getFocusedFieldName(), 'WIDTH');
   });
 
   test('Right from block selects first inline input', function () {
-    focusBlock(this.workspace, 'simple_circle_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    focusBlock(workspace, 'simple_circle_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(getFocusedBlockId(), 'colour_picker_1');
   });
 
   test('Up from inline input selects statement block', function () {
-    focusBlock(this.workspace, 'math_number_2');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
+    focusBlock(workspace, 'math_number_2');
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
-      this.workspace.getBlockById('simple_circle_1').nextConnection,
+      workspace.getBlockById('simple_circle_1')?.nextConnection,
     );
   });
 
   test('Left from first inline input selects block', function () {
-    focusBlock(this.workspace, 'math_number_2');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    focusBlock(workspace, 'math_number_2');
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(getFocusedBlockId(), 'math_modulo_1');
   });
 
   test('Right from first inline input selects second inline input', function () {
-    focusBlock(this.workspace, 'math_number_2');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    focusBlock(workspace, 'math_number_2');
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(getFocusedBlockId(), 'math_number_3');
   });
 
   test('Left from second inline input selects first inline input', function () {
-    focusBlock(this.workspace, 'math_number_3');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    focusBlock(workspace, 'math_number_3');
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(getFocusedBlockId(), 'math_number_2');
   });
 
   test('Left from icon selects block', function () {
-    const block = this.workspace.getBlockById('p5_canvas_1');
+    const block = workspace.getBlockById('p5_canvas_1');
+    assert.isNotNull(block);
     block.setCommentText('hello');
-    Blockly.getFocusManager().focusNode(
-      block.getIcon(Blockly.icons.IconType.COMMENT),
-    );
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    const icon = block.getIcon(Blockly.icons.IconType.COMMENT);
+    assert.isDefined(icon);
+    Blockly.getFocusManager().focusNode(icon);
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), block);
   });
 
   test('Left from icon selects previous icon', function () {
-    const block = this.workspace.getBlockById('p5_canvas_1');
+    const block = workspace.getBlockById('p5_canvas_1');
+    assert.isNotNull(block);
     block.setCommentText('hello');
     block.setWarningText('danger!');
     const commentIcon = block.getIcon(Blockly.icons.IconType.COMMENT);
     const warningIcon = block.getIcon(Blockly.icons.IconType.WARNING);
-
+    assert.isDefined(commentIcon);
     Blockly.getFocusManager().focusNode(commentIcon);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), warningIcon);
   });
 
   test('Left from icon selects bubble', async function () {
-    const block = this.workspace.getBlockById('p5_canvas_1');
+    const block = workspace.getBlockById('p5_canvas_1');
+    assert.isNotNull(block);
     block.setCommentText('hello');
     block.setWarningText('danger!');
     const commentIcon = block.getIcon(Blockly.icons.IconType.COMMENT);
     const warningIcon = block.getIcon(Blockly.icons.IconType.WARNING);
+    assert.isDefined(commentIcon);
+    assert.isDefined(warningIcon);
     const bubbleVisible = warningIcon.setBubbleVisible(true);
-    this.clock.runAll();
+    clock.runAll();
     await bubbleVisible;
 
     Blockly.getFocusManager().focusNode(commentIcon);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
       warningIcon.getBubble(),
@@ -321,244 +355,251 @@ suite('Keyboard navigation on Blocks', function () {
   });
 
   test('Left from field selects icon', function () {
-    this.workspace.getBlockById('p5_canvas_1').setCommentText('hello');
-    const commentIcon = this.workspace
+    workspace.getBlockById('p5_canvas_1')?.setCommentText('hello');
+    const commentIcon = workspace
       .getBlockById('p5_canvas_1')
-      .getIcon(Blockly.icons.IconType.COMMENT);
-    focusBlockField(this.workspace, 'p5_canvas_1', 'WIDTH');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+      ?.getIcon(Blockly.icons.IconType.COMMENT);
+    focusBlockField(workspace, 'p5_canvas_1', 'WIDTH');
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), commentIcon);
   });
 
   test('Left from field selects bubble', async function () {
-    this.workspace.getBlockById('p5_canvas_1').setCommentText('hello');
-    const commentIcon = this.workspace
+    workspace.getBlockById('p5_canvas_1')?.setCommentText('hello');
+    const commentIcon = workspace
       .getBlockById('p5_canvas_1')
-      .getIcon(Blockly.icons.IconType.COMMENT);
-    await commentIcon.setBubbleVisible(true);
-    focusBlockField(this.workspace, 'p5_canvas_1', 'WIDTH');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+      ?.getIcon(Blockly.icons.IconType.COMMENT);
+    await commentIcon?.setBubbleVisible(true);
+    focusBlockField(workspace, 'p5_canvas_1', 'WIDTH');
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
-      commentIcon.getBubble(),
+      commentIcon?.getBubble(),
     );
   });
 
   test('Right from last inline input block selects next child field', function () {
-    focusBlock(this.workspace, 'colour_picker_1');
+    focusBlock(workspace, 'colour_picker_1');
     // Go right twice; should not wrap to next row.
-    pressKeyN(this.workspace, Blockly.utils.KeyCodes.RIGHT, 2);
+    pressKeyN(workspace, Blockly.utils.KeyCodes.RIGHT, 2);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
-      this.workspace.getBlockById('colour_picker_1').getField('TEXT'),
+      workspace.getBlockById('colour_picker_1')?.getField('TEXT'),
     );
   });
 
   test('Down from inline input selects next block', function () {
-    focusBlock(this.workspace, 'colour_picker_1');
+    focusBlock(workspace, 'colour_picker_1');
     // Go down twice; first one selects the next connection on the colour
     // picker's parent block.
-    pressKeyN(this.workspace, Blockly.utils.KeyCodes.DOWN, 2);
+    pressKeyN(workspace, Blockly.utils.KeyCodes.DOWN, 2);
     assert.equal(getFocusedBlockId(), 'controls_repeat_ext_1');
   });
 
   test("Down from inline input selects block's child block", function () {
-    focusBlock(this.workspace, 'logic_boolean_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.DOWN);
+    focusBlock(workspace, 'logic_boolean_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.DOWN);
     assert.equal(getFocusedBlockId(), 'text_print_1');
   });
 
   test('Right from text block selects shadow block then field', function () {
-    focusBlock(this.workspace, 'text_print_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    focusBlock(workspace, 'text_print_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(getFocusedBlockId(), 'text_1');
 
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.include(getFocusNodeId(), 'text_1_field_');
   });
 
   test('Is inhibited when widgetdiv is visible', function () {
-    focusBlock(this.workspace, 'text_print_1');
-    this.workspace.getBlockById('text_print_1').showContextMenu();
+    focusBlock(workspace, 'text_print_1');
+    workspace
+      .getBlockById('text_print_1')
+      ?.showContextMenu(new MouseEvent('click'));
     assert.isTrue(Blockly.WidgetDiv.isVisible());
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(getFocusedBlockId(), 'text_print_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(getFocusedBlockId(), 'text_print_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
     assert.equal(getFocusedBlockId(), 'text_print_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.DOWN);
+    pressKey(workspace, Blockly.utils.KeyCodes.DOWN);
     assert.equal(getFocusedBlockId(), 'text_print_1');
   });
 
   test('Is inhibited when dropdowndiv is visible', function () {
-    focusBlock(this.workspace, 'logic_boolean_1');
-    this.workspace
-      .getBlockById('logic_boolean_1')
-      .getField('BOOL')
-      .showEditor();
+    focusBlock(workspace, 'logic_boolean_1');
+    workspace.getBlockById('logic_boolean_1')?.getField('BOOL')?.showEditor();
     assert.isTrue(Blockly.DropDownDiv.isVisible());
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(getFocusedBlockId(), 'logic_boolean_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(getFocusedBlockId(), 'logic_boolean_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
     assert.equal(getFocusedBlockId(), 'logic_boolean_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.DOWN);
+    pressKey(workspace, Blockly.utils.KeyCodes.DOWN);
     assert.equal(getFocusedBlockId(), 'logic_boolean_1');
   });
 });
 
 suite('Keyboard navigation on Fields', function () {
-  setup(function () {
+  let workspace: Blockly.WorkspaceSvg;
+
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
     const toolbox = document.getElementById('toolbox-simple');
-    this.workspace = Blockly.inject('blocklyDiv', {
+    assert.isNotNull(toolbox);
+    workspace = Blockly.inject('blocklyDiv', {
       ...DEFAULT_INJECT_OPTIONS,
       toolbox: toolbox,
       renderer: 'zelos',
     });
     Blockly.common.defineBlocks(p5blocks);
-    Blockly.serialization.workspaces.load(navigationTestBlocks, this.workspace);
+    Blockly.serialization.workspaces.load(navigationTestBlocks, workspace);
   });
 
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     for (const block of Object.keys(p5blocks)) {
       delete Blockly.Blocks[block];
     }
-    sharedTestTeardown.call(this);
+    sharedTestTeardown.call(this, workspace);
   });
 
   test('Up from first field selects previous block', function () {
-    focusBlockField(this.workspace, 'p5_canvas_1', 'WIDTH');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
+    focusBlockField(workspace, 'p5_canvas_1', 'WIDTH');
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
     assert.equal(getFocusedBlockId(), 'p5_setup_1');
   });
 
   test('Left from first field selects block', function () {
-    focusBlockField(this.workspace, 'p5_canvas_1', 'WIDTH');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    focusBlockField(workspace, 'p5_canvas_1', 'WIDTH');
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.equal(getFocusedBlockId(), 'p5_canvas_1');
   });
 
   test('Right from first field selects second field', function () {
-    focusBlockField(this.workspace, 'p5_canvas_1', 'WIDTH');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    focusBlockField(workspace, 'p5_canvas_1', 'WIDTH');
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.include(getFocusNodeId(), 'p5_canvas_1_field_');
     assert.equal(getFocusedFieldName(), 'HEIGHT');
   });
 
   test('Left from second field selects first field', function () {
-    focusBlockField(this.workspace, 'p5_canvas_1', 'HEIGHT');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
+    focusBlockField(workspace, 'p5_canvas_1', 'HEIGHT');
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
     assert.include(getFocusNodeId(), 'p5_canvas_1_field_');
     assert.equal(getFocusedFieldName(), 'WIDTH');
   });
 
   test('Right from second field selects does not change focus', function () {
-    focusBlockField(this.workspace, 'p5_canvas_1', 'HEIGHT');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
+    focusBlockField(workspace, 'p5_canvas_1', 'HEIGHT');
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
-      this.workspace.getBlockById('p5_canvas_1').getField('HEIGHT'),
+      workspace.getBlockById('p5_canvas_1')?.getField('HEIGHT'),
     );
   });
 
   test('Down from field selects next block', function () {
-    focusBlockField(this.workspace, 'p5_canvas_1', 'WIDTH');
+    focusBlockField(workspace, 'p5_canvas_1', 'WIDTH');
     // Go down twice; first one selects the next connection on the create
     // canvas block.
-    pressKeyN(this.workspace, Blockly.utils.KeyCodes.DOWN, 2);
+    pressKeyN(workspace, Blockly.utils.KeyCodes.DOWN, 2);
     assert.equal(getFocusedBlockId(), 'p5_draw_1');
   });
 
   test("Down from field selects block's child block", function () {
-    focusBlockField(this.workspace, 'controls_repeat_1', 'TIMES');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.DOWN);
+    focusBlockField(workspace, 'controls_repeat_1', 'TIMES');
+    pressKey(workspace, Blockly.utils.KeyCodes.DOWN);
     assert.equal(getFocusedBlockId(), 'draw_emoji_1');
   });
 });
 
 suite('Workspace comment navigation', function () {
-  setup(async function () {
+  let workspace: Blockly.WorkspaceSvg;
+  let commentId1: string;
+  let commentId2: string;
+
+  setup(async function (this: Mocha.Context) {
     sharedTestSetup.call(this);
     const toolbox = document.getElementById('toolbox-simple');
-    this.workspace = Blockly.inject('blocklyDiv', {
+    assert.isNotNull(toolbox);
+    workspace = Blockly.inject('blocklyDiv', {
       ...DEFAULT_INJECT_OPTIONS,
       toolbox: toolbox,
       renderer: 'zelos',
     });
     Blockly.common.defineBlocks(p5blocks);
-    Blockly.serialization.workspaces.load(navigationTestBlocks, this.workspace);
-    this.workspace.getTopBlocks(false).forEach((b) => b.queueRender());
-    Blockly.renderManagement.triggerQueuedRenders(this.workspace);
+    Blockly.serialization.workspaces.load(navigationTestBlocks, workspace);
+    workspace.getTopBlocks(false).forEach((b) => b.queueRender());
+    Blockly.renderManagement.triggerQueuedRenders(workspace);
 
     const comment1 = Blockly.serialization.workspaceComments.append(
       {text: 'Comment one', x: 200, y: 200},
-      this.workspace,
+      workspace,
     );
     const comment2 = Blockly.serialization.workspaceComments.append(
       {text: 'Comment two', x: 300, y: 300},
-      this.workspace,
+      workspace,
     );
-    this.commentId1 = comment1.id;
-    this.commentId2 = comment2.id;
+    commentId1 = comment1.id;
+    commentId2 = comment2.id;
   });
 
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     for (const block of Object.keys(p5blocks)) {
       delete Blockly.Blocks[block];
     }
-    sharedTestTeardown.call(this);
+    sharedTestTeardown.call(this, workspace);
   });
 
   test('Navigate forward from block to workspace comment', function () {
-    focusBlock(this.workspace, 'p5_canvas_1');
-    pressKeyN(this.workspace, Blockly.utils.KeyCodes.DOWN, 2);
-    assert.equal(getFocusNodeId(), this.commentId1);
+    focusBlock(workspace, 'p5_canvas_1');
+    pressKeyN(workspace, Blockly.utils.KeyCodes.DOWN, 2);
+    assert.equal(getFocusNodeId(), commentId1);
   });
 
   test('Navigate forward from workspace comment to block', function () {
-    focusWorkspaceComment(this.workspace, this.commentId2);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.DOWN);
+    focusWorkspaceComment(workspace, commentId2);
+    pressKey(workspace, Blockly.utils.KeyCodes.DOWN);
     assert.equal(getFocusedBlockType(), 'p5_draw');
   });
 
   test('Navigate backward from block to workspace comment', function () {
-    focusBlock(this.workspace, 'p5_draw_1');
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
-    assert.equal(getFocusNodeId(), this.commentId2);
+    focusBlock(workspace, 'p5_draw_1');
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
+    assert.equal(getFocusNodeId(), commentId2);
   });
 
   test('Navigate backward from workspace comment to block', function () {
-    focusWorkspaceComment(this.workspace, this.commentId1);
-    pressKeyN(this.workspace, Blockly.utils.KeyCodes.UP, 2);
+    focusWorkspaceComment(workspace, commentId1);
+    pressKeyN(workspace, Blockly.utils.KeyCodes.UP, 2);
     assert.equal(getFocusedBlockType(), 'p5_canvas');
   });
 
   test('Navigate forward from workspace comment to workspace comment', function () {
-    focusWorkspaceComment(this.workspace, this.commentId1);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.DOWN);
-    assert.equal(getFocusNodeId(), this.commentId2);
+    focusWorkspaceComment(workspace, commentId1);
+    pressKey(workspace, Blockly.utils.KeyCodes.DOWN);
+    assert.equal(getFocusNodeId(), commentId2);
   });
 
   test('Navigate backward from workspace comment to workspace comment', function () {
-    focusWorkspaceComment(this.workspace, this.commentId2);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.UP);
-    assert.equal(getFocusNodeId(), this.commentId1);
+    focusWorkspaceComment(workspace, commentId2);
+    pressKey(workspace, Blockly.utils.KeyCodes.UP);
+    assert.equal(getFocusNodeId(), commentId1);
   });
 
   test('Navigate forward from workspace comment to workspace comment button', function () {
-    focusWorkspaceComment(this.workspace, this.commentId1);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
-    assert.equal(getFocusNodeId(), `${this.commentId1}_collapse_bar_button`);
+    focusWorkspaceComment(workspace, commentId1);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
+    assert.equal(getFocusNodeId(), `${commentId1}_collapse_bar_button`);
   });
 
   test('Navigate backward from workspace comment button to workspace comment', function () {
-    focusWorkspaceComment(this.workspace, this.commentId1);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.RIGHT);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.LEFT);
-    assert.equal(getFocusNodeId(), this.commentId1);
+    focusWorkspaceComment(workspace, commentId1);
+    pressKey(workspace, Blockly.utils.KeyCodes.RIGHT);
+    pressKey(workspace, Blockly.utils.KeyCodes.LEFT);
+    assert.equal(getFocusNodeId(), commentId1);
   });
 });
 
@@ -655,7 +696,12 @@ const TOOLBOX_FLYOUT_LAYOUTS = [
 suite('Toolbox and flyout arrow navigation by layout', function () {
   for (const layout of TOOLBOX_FLYOUT_LAYOUTS) {
     suite(layout.id, function () {
-      setup(function () {
+      let workspace: Blockly.WorkspaceSvg;
+      let keys: (typeof TOOLBOX_FLYOUT_LAYOUTS)[0];
+      let firstToolboxItem: Blockly.IToolboxItem;
+      let lastToolboxItem: Blockly.IToolboxItem;
+
+      setup(function (this: Mocha.Context) {
         sharedTestSetup.call(this);
         Blockly.defineBlocksWithJsonArray([
           {
@@ -671,7 +717,8 @@ suite('Toolbox and flyout arrow navigation by layout', function () {
           },
         ]);
         const toolbox = document.getElementById('toolbox-categories');
-        this.workspace = Blockly.inject('blocklyDiv', {
+        assert.isNotNull(toolbox);
+        workspace = Blockly.inject('blocklyDiv', {
           ...DEFAULT_INJECT_OPTIONS,
           toolbox,
           rtl: layout.rtl,
@@ -679,206 +726,208 @@ suite('Toolbox and flyout arrow navigation by layout', function () {
           toolboxPosition: layout.toolboxPosition,
           renderer: 'zelos',
         });
-        this.keys = layout;
-        this.firstToolboxItem = this.workspace
-          .getToolbox()
-          .getToolboxItems()[0];
-        this.lastToolboxItem = this.workspace.getToolbox().getToolboxItems()[1];
+        keys = layout;
+        const firstToolboxItem_ = workspace.getToolbox()?.getToolboxItems()[0];
+        assert.isDefined(firstToolboxItem_);
+        firstToolboxItem = firstToolboxItem_;
+        const lastToolboxItem_ = workspace.getToolbox()?.getToolboxItems()[1];
+        assert.isDefined(lastToolboxItem_);
+        lastToolboxItem = lastToolboxItem_;
       });
 
-      teardown(function () {
-        sharedTestTeardown.call(this);
+      teardown(function (this: Mocha.Context) {
+        sharedTestTeardown.call(this, workspace);
       });
 
       test('Previous toolbox item from first is no-op', function () {
-        this.workspace.getToolbox().getNavigator().setNavigationLoops(false);
-        Blockly.getFocusManager().focusNode(this.firstToolboxItem);
-        pressKey(this.workspace, this.keys.previousItem);
+        workspace.getToolbox()?.getNavigator().setNavigationLoops(false);
+        Blockly.getFocusManager().focusNode(firstToolboxItem);
+        pressKey(workspace, keys.previousItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.firstToolboxItem,
+          firstToolboxItem,
         );
       });
 
       test('Previous toolbox item from first loops to last', function () {
-        this.workspace.getToolbox().getNavigator().setNavigationLoops(true);
-        Blockly.getFocusManager().focusNode(this.firstToolboxItem);
-        pressKey(this.workspace, this.keys.previousItem);
+        workspace.getToolbox()?.getNavigator().setNavigationLoops(true);
+        Blockly.getFocusManager().focusNode(firstToolboxItem);
+        pressKey(workspace, keys.previousItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.lastToolboxItem,
+          lastToolboxItem,
         );
       });
 
       test('Previous toolbox item', function () {
-        Blockly.getFocusManager().focusNode(this.lastToolboxItem);
-        pressKey(this.workspace, this.keys.previousItem);
+        Blockly.getFocusManager().focusNode(lastToolboxItem);
+        pressKey(workspace, keys.previousItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.firstToolboxItem,
+          firstToolboxItem,
         );
       });
 
       test('Next toolbox item from last is no-op', function () {
-        this.workspace.getToolbox().getNavigator().setNavigationLoops(false);
-        Blockly.getFocusManager().focusNode(this.lastToolboxItem);
-        pressKey(this.workspace, this.keys.nextItem);
+        workspace.getToolbox()?.getNavigator().setNavigationLoops(false);
+        Blockly.getFocusManager().focusNode(lastToolboxItem);
+        pressKey(workspace, keys.nextItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.lastToolboxItem,
+          lastToolboxItem,
         );
       });
 
       test('Next toolbox item from last loops', function () {
-        this.workspace.getToolbox().getNavigator().setNavigationLoops(true);
-        Blockly.getFocusManager().focusNode(this.lastToolboxItem);
-        pressKey(this.workspace, this.keys.nextItem);
+        workspace.getToolbox()?.getNavigator().setNavigationLoops(true);
+        Blockly.getFocusManager().focusNode(lastToolboxItem);
+        pressKey(workspace, keys.nextItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.firstToolboxItem,
+          firstToolboxItem,
         );
       });
 
       test('Next toolbox item', function () {
-        Blockly.getFocusManager().focusNode(this.firstToolboxItem);
-        pressKey(this.workspace, this.keys.nextItem);
+        Blockly.getFocusManager().focusNode(firstToolboxItem);
+        pressKey(workspace, keys.nextItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.lastToolboxItem,
+          lastToolboxItem,
         );
       });
 
       test('Out from toolbox item is no-op', function () {
-        Blockly.getFocusManager().focusNode(this.firstToolboxItem);
-        pressKey(this.workspace, this.keys.out);
+        Blockly.getFocusManager().focusNode(firstToolboxItem);
+        pressKey(workspace, keys.out);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.firstToolboxItem,
+          firstToolboxItem,
         );
       });
 
       test('In from toolbox item focuses first flyout item', function () {
-        Blockly.getFocusManager().focusNode(this.firstToolboxItem);
-        pressKey(this.workspace, this.keys.in);
+        Blockly.getFocusManager().focusNode(firstToolboxItem);
+        pressKey(workspace, keys.in);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[0],
         );
       });
 
       test('Previous flyout item from first is no-op', function () {
-        this.workspace
+        workspace
           .getFlyout()
-          .getWorkspace()
+          ?.getWorkspace()
           .getNavigator()
           .setNavigationLoops(false);
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
-        );
-        pressKey(this.workspace, this.keys.previousItem);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.previousItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[0],
         );
       });
 
       test('Previous flyout item from first loops', function () {
-        this.workspace
+        workspace
           .getFlyout()
-          .getWorkspace()
+          ?.getWorkspace()
           .getNavigator()
           .setNavigationLoops(true);
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
-        );
-        pressKey(this.workspace, this.keys.previousItem);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.previousItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[1],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[1],
         );
       });
 
       test('Previous flyout item', function () {
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[1],
-        );
-        pressKey(this.workspace, this.keys.previousItem);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[1];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.previousItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[0],
         );
       });
 
       test('Next flyout item from last is no-op', function () {
-        this.workspace
+        workspace
           .getFlyout()
-          .getWorkspace()
+          ?.getWorkspace()
           .getNavigator()
           .setNavigationLoops(false);
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[1],
-        );
-        pressKey(this.workspace, this.keys.nextItem);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[1];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.nextItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[1],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[1],
         );
       });
 
       test('Next flyout item from last loops', function () {
-        this.workspace
+        workspace
           .getFlyout()
-          .getWorkspace()
+          ?.getWorkspace()
           .getNavigator()
           .setNavigationLoops(true);
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[1],
-        );
-        pressKey(this.workspace, this.keys.nextItem);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[1];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.nextItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[0],
         );
       });
 
       test('Next flyout item', function () {
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
-        );
-        pressKey(this.workspace, this.keys.nextItem);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.nextItem);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[1],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[1],
         );
       });
 
       test('Out from flyout item focuses toolbox item', function () {
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
-        );
-        pressKey(this.workspace, this.keys.out);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.out);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.firstToolboxItem,
+          firstToolboxItem,
         );
       });
 
       test('In from flyout item is no-op', function () {
-        pressKey(this.workspace, Blockly.utils.KeyCodes.T);
-        Blockly.getFocusManager().focusNode(
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
-        );
-        pressKey(this.workspace, this.keys.in);
+        pressKey(workspace, Blockly.utils.KeyCodes.T);
+        const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+        assert.isDefined(target);
+        Blockly.getFocusManager().focusNode(target);
+        pressKey(workspace, keys.in);
         assert.equal(
           Blockly.getFocusManager().getFocusedNode(),
-          this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
+          workspace.getFlyout()?.getWorkspace().getTopBlocks()[0],
         );
       });
     });
@@ -886,7 +935,9 @@ suite('Toolbox and flyout arrow navigation by layout', function () {
 });
 
 suite('Flyout heading navigation (H / Shift+H)', function () {
-  setup(function () {
+  let workspace: Blockly.WorkspaceSvg;
+
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
@@ -903,7 +954,7 @@ suite('Flyout heading navigation (H / Shift+H)', function () {
     ]);
     // Build a flyout toolbox that mixes blocks and headings (labels) so we
     // can verify that the H shortcut jumps over non-heading items.
-    this.workspace = Blockly.inject('blocklyDiv', {
+    workspace = Blockly.inject('blocklyDiv', {
       ...DEFAULT_INJECT_OPTIONS,
       toolbox: {
         kind: 'flyoutToolbox',
@@ -920,73 +971,74 @@ suite('Flyout heading navigation (H / Shift+H)', function () {
     });
   });
 
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
   });
 
   /**
    * Returns all FlyoutButton labels (headings) currently in the flyout.
    *
-   * @param {!Blockly.WorkspaceSvg} workspace The main workspace owning the
-   *     flyout.
-   * @returns {!Array<!Blockly.FlyoutButton>} The labels in flyout order.
+   * @param workspace The main workspace owning the flyout.
+   * @returns The labels in flyout order.
    */
-  function getHeadings(workspace) {
-    return workspace
-      .getFlyout()
-      .getContents()
-      .map((item) => item.getElement())
-      .filter(
-        (element) =>
-          element instanceof Blockly.FlyoutButton && element.isLabel(),
-      );
+  function getHeadings(workspace: Blockly.WorkspaceSvg) {
+    return (
+      workspace
+        .getFlyout()
+        ?.getContents()
+        .map((item) => item.getElement())
+        .filter(
+          (element) =>
+            element instanceof Blockly.FlyoutButton && element.isLabel(),
+        ) ?? []
+    );
   }
 
   test('Shortcut is a no-op when focus is on the main workspace', function () {
-    Blockly.getFocusManager().focusTree(this.workspace);
+    Blockly.getFocusManager().focusTree(workspace);
     const before = Blockly.getFocusManager().getFocusedNode();
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H);
+    pressKey(workspace, Blockly.utils.KeyCodes.H);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), before);
   });
 
   test('Shortcut is a no-op when focus is on a workspace block', function () {
-    const block = this.workspace.newBlock('basic_block');
+    const block = workspace.newBlock('basic_block');
     block.initSvg();
     block.render();
     Blockly.getFocusManager().focusNode(block);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H);
+    pressKey(workspace, Blockly.utils.KeyCodes.H);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), block);
   });
 
   test('H from flyout workspace focuses the first heading', function () {
-    Blockly.getFocusManager().focusNode(
-      this.workspace.getFlyout().getWorkspace(),
-    );
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H);
-    const headings = getHeadings(this.workspace);
+    const flyoutWorkspace = workspace.getFlyout()?.getWorkspace();
+    assert.isDefined(flyoutWorkspace);
+    Blockly.getFocusManager().focusNode(flyoutWorkspace);
+    pressKey(workspace, Blockly.utils.KeyCodes.H);
+    const headings = getHeadings(workspace);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), headings[0]);
   });
 
   test('H from a block in the flyout focuses the next heading', function () {
-    Blockly.getFocusManager().focusNode(
-      this.workspace.getFlyout().getWorkspace().getTopBlocks()[0],
-    );
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H);
-    const headings = getHeadings(this.workspace);
+    const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+    assert.isDefined(target);
+    Blockly.getFocusManager().focusNode(target);
+    pressKey(workspace, Blockly.utils.KeyCodes.H);
+    const headings = getHeadings(workspace);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), headings[1]);
   });
 
   test('H from a heading focuses the next heading', function () {
-    const headings = getHeadings(this.workspace);
+    const headings = getHeadings(workspace);
     Blockly.getFocusManager().focusNode(headings[0]);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H);
+    pressKey(workspace, Blockly.utils.KeyCodes.H);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), headings[1]);
   });
 
   test('H from the last heading does nothing', function () {
-    const headings = getHeadings(this.workspace);
+    const headings = getHeadings(workspace);
     Blockly.getFocusManager().focusNode(headings[headings.length - 1]);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H);
+    pressKey(workspace, Blockly.utils.KeyCodes.H);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
       headings[headings.length - 1],
@@ -994,13 +1046,13 @@ suite('Flyout heading navigation (H / Shift+H)', function () {
   });
 
   test('Shift+H from flyout workspace focuses the last heading', function () {
-    Blockly.getFocusManager().focusNode(
-      this.workspace.getFlyout().getWorkspace(),
-    );
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H, [
+    const flyoutWorkspace = workspace.getFlyout()?.getWorkspace();
+    assert.isDefined(flyoutWorkspace);
+    Blockly.getFocusManager().focusNode(flyoutWorkspace);
+    pressKey(workspace, Blockly.utils.KeyCodes.H, [
       Blockly.utils.KeyCodes.SHIFT,
     ]);
-    const headings = getHeadings(this.workspace);
+    const headings = getHeadings(workspace);
     assert.equal(
       Blockly.getFocusManager().getFocusedNode(),
       headings[headings.length - 1],
@@ -1008,29 +1060,29 @@ suite('Flyout heading navigation (H / Shift+H)', function () {
   });
 
   test('Shift+H from a heading focuses the previous heading', function () {
-    const headings = getHeadings(this.workspace);
+    const headings = getHeadings(workspace);
     Blockly.getFocusManager().focusNode(headings[2]);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H, [
+    pressKey(workspace, Blockly.utils.KeyCodes.H, [
       Blockly.utils.KeyCodes.SHIFT,
     ]);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), headings[1]);
   });
 
   test('Shift+H from a block focuses the previous heading', function () {
-    Blockly.getFocusManager().focusNode(
-      this.workspace.getFlyout().getWorkspace().getTopBlocks()[2],
-    );
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H, [
+    const target = workspace.getFlyout()?.getWorkspace().getTopBlocks()[2];
+    assert.isDefined(target);
+    Blockly.getFocusManager().focusNode(target);
+    pressKey(workspace, Blockly.utils.KeyCodes.H, [
       Blockly.utils.KeyCodes.SHIFT,
     ]);
-    const headings = getHeadings(this.workspace);
+    const headings = getHeadings(workspace);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), headings[1]);
   });
 
   test('Shift+H from the first heading does nothing', function () {
-    const headings = getHeadings(this.workspace);
+    const headings = getHeadings(workspace);
     Blockly.getFocusManager().focusNode(headings[0]);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H, [
+    pressKey(workspace, Blockly.utils.KeyCodes.H, [
       Blockly.utils.KeyCodes.SHIFT,
     ]);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), headings[0]);
@@ -1038,7 +1090,9 @@ suite('Flyout heading navigation (H / Shift+H)', function () {
 });
 
 suite('Flyout heading navigation with no headings', function () {
-  setup(function () {
+  let workspace: Blockly.WorkspaceSvg;
+
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
@@ -1053,7 +1107,7 @@ suite('Flyout heading navigation with no headings', function () {
         ],
       },
     ]);
-    this.workspace = Blockly.inject('blocklyDiv', {
+    workspace = Blockly.inject('blocklyDiv', {
       ...DEFAULT_INJECT_OPTIONS,
       toolbox: {
         kind: 'flyoutToolbox',
@@ -1065,27 +1119,23 @@ suite('Flyout heading navigation with no headings', function () {
     });
   });
 
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
   });
 
   test('H does nothing when the flyout has no headings', function () {
-    const firstBlock = this.workspace
-      .getFlyout()
-      .getWorkspace()
-      .getTopBlocks()[0];
+    const firstBlock = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+    assert.isDefined(firstBlock);
     Blockly.getFocusManager().focusNode(firstBlock);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H);
+    pressKey(workspace, Blockly.utils.KeyCodes.H);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), firstBlock);
   });
 
   test('Shift+H does nothing when the flyout has no headings', function () {
-    const firstBlock = this.workspace
-      .getFlyout()
-      .getWorkspace()
-      .getTopBlocks()[0];
+    const firstBlock = workspace.getFlyout()?.getWorkspace().getTopBlocks()[0];
+    assert.isDefined(firstBlock);
     Blockly.getFocusManager().focusNode(firstBlock);
-    pressKey(this.workspace, Blockly.utils.KeyCodes.H, [
+    pressKey(workspace, Blockly.utils.KeyCodes.H, [
       Blockly.utils.KeyCodes.SHIFT,
     ]);
     assert.equal(Blockly.getFocusManager().getFocusedNode(), firstBlock);
@@ -1116,7 +1166,7 @@ suite('Toolbox and flyout jump shortcuts (Ctrl/Cmd + Home / End)', function () {
     }
   });
 
-  setup(function () {
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
@@ -1128,81 +1178,94 @@ suite('Toolbox and flyout jump shortcuts (Ctrl/Cmd + Home / End)', function () {
     defineStackBlock();
   });
 
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     sharedTestTeardown.call(this);
   });
 
   /**
    * Presses Home or End with the platform's control key held down.
    *
-   * @param {!Blockly.WorkspaceSvg} workspace The workspace to dispatch on.
-   * @param {number} keyCode Either KeyCodes.HOME or KeyCodes.END.
+   * @param workspace The workspace to dispatch on.
+   * @param keyCode Either KeyCodes.HOME or KeyCodes.END.
    */
-  function pressCtrlKey(workspace, keyCode) {
+  function pressCtrlKey(workspace: Blockly.WorkspaceSvg, keyCode: number) {
     pressKey(workspace, keyCode, [Blockly.utils.KeyCodes.CTRL_CMD]);
   }
 
   suite('in the toolbox', function () {
+    let toolbox: Blockly.IToolbox;
+    let firstItem: Blockly.IToolboxItem;
+    let lastItem: Blockly.IToolboxItem;
+    let workspace: Blockly.WorkspaceSvg;
+
     setup(function () {
-      this.workspace = Blockly.inject('blocklyDiv', {
-        toolbox: document.getElementById('toolbox-test'),
+      const toolboxElement = document.getElementById('toolbox-test');
+      assert.isNotNull(toolboxElement);
+      workspace = Blockly.inject('blocklyDiv', {
+        toolbox: toolboxElement,
       });
-      this.toolbox = this.workspace.getToolbox();
+      const toolbox_ = workspace.getToolbox();
+      assert.isNotNull(toolbox_);
+      toolbox = toolbox_;
       // toolbox-test starts and ends with a category, with a non-focusable
       // separator in between.
-      const allItems = this.toolbox.getToolboxItems();
-      this.firstItem = allItems[0];
-      this.lastItem = allItems[allItems.length - 1];
+      const allItems = toolbox.getToolboxItems();
+      firstItem = allItems[0];
+      lastItem = allItems[allItems.length - 1];
     });
 
-    teardown(function () {
-      workspaceTeardown.call(this, this.workspace);
+    teardown(function (this: Mocha.Context) {
+      workspaceTeardown.call(this, workspace);
     });
 
     test('Navigable items exclude the separator', function () {
-      const navigable = this.toolbox
+      const navigable = toolbox
         .getNavigator()
-        .getNavigableItems(this.toolbox.getRootFocusableNode());
-      assert.isAbove(this.toolbox.getToolboxItems().length, navigable.length);
+        .getNavigableItems(toolbox.getRootFocusableNode());
+      assert.isAbove(toolbox.getToolboxItems().length, navigable.length);
       assert.isFalse(
         navigable.some((item) => item instanceof Blockly.ToolboxSeparator),
       );
     });
 
     test('CtrlHome focuses the first toolbox item', function () {
-      Blockly.getFocusManager().focusNode(this.lastItem);
-      pressCtrlKey(this.workspace, Blockly.utils.KeyCodes.HOME);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.firstItem);
+      Blockly.getFocusManager().focusNode(lastItem);
+      pressCtrlKey(workspace, Blockly.utils.KeyCodes.HOME);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), firstItem);
     });
 
     test('CtrlEnd focuses the last toolbox item', function () {
-      Blockly.getFocusManager().focusNode(this.firstItem);
-      pressCtrlKey(this.workspace, Blockly.utils.KeyCodes.END);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.lastItem);
+      Blockly.getFocusManager().focusNode(firstItem);
+      pressCtrlKey(workspace, Blockly.utils.KeyCodes.END);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), lastItem);
     });
 
     test('CtrlHome does not move focus out of the toolbox', function () {
-      const block = this.workspace.newBlock('basic_block');
+      const block = workspace.newBlock('basic_block');
       block.initSvg();
       block.render();
-      Blockly.getFocusManager().focusNode(this.lastItem);
-      pressCtrlKey(this.workspace, Blockly.utils.KeyCodes.HOME);
+      Blockly.getFocusManager().focusNode(lastItem);
+      pressCtrlKey(workspace, Blockly.utils.KeyCodes.HOME);
       assert.notEqual(Blockly.getFocusManager().getFocusedNode(), block);
     });
 
     test('CtrlHome still focuses the first block when the workspace has focus', function () {
-      const block = this.workspace.newBlock('basic_block');
+      const block = workspace.newBlock('basic_block');
       block.initSvg();
       block.render();
       Blockly.getFocusManager().focusNode(block);
-      pressCtrlKey(this.workspace, Blockly.utils.KeyCodes.HOME);
+      pressCtrlKey(workspace, Blockly.utils.KeyCodes.HOME);
       assert.equal(Blockly.getFocusManager().getFocusedNode(), block);
     });
   });
 
   suite('in the flyout', function () {
+    let workspace: Blockly.WorkspaceSvg;
+    let flyoutWorkspace: Blockly.WorkspaceSvg;
+    let labels: Blockly.FlyoutButton[];
+
     setup(function () {
-      this.workspace = Blockly.inject('blocklyDiv', {
+      workspace = Blockly.inject('blocklyDiv', {
         toolbox: {
           kind: 'flyoutToolbox',
           contents: [
@@ -1213,45 +1276,41 @@ suite('Toolbox and flyout jump shortcuts (Ctrl/Cmd + Home / End)', function () {
           ],
         },
       });
-      this.flyoutWorkspace = this.workspace.getFlyout().getWorkspace();
+      const flyoutWorkspace_ = workspace.getFlyout()?.getWorkspace();
+      assert.isDefined(flyoutWorkspace_);
+      flyoutWorkspace = flyoutWorkspace_;
       // The flyout opens and closes with a label, so the first and last
       // navigable items are not blocks. A trailing separator is appended to
       // the contents but cannot be focused.
-      this.labels = this.workspace
-        .getFlyout()
-        .getContents()
-        .map((item) => item.getElement())
-        .filter(
-          (element) =>
-            element instanceof Blockly.FlyoutButton && element.isLabel(),
-        );
+      labels =
+        workspace
+          .getFlyout()
+          ?.getContents()
+          .map((item) => item.getElement())
+          .filter(
+            (element): element is Blockly.FlyoutButton =>
+              element instanceof Blockly.FlyoutButton && element.isLabel(),
+          ) ?? [];
     });
 
-    teardown(function () {
-      workspaceTeardown.call(this, this.workspace);
+    teardown(function (this: Mocha.Context) {
+      workspaceTeardown.call(this, workspace);
     });
 
     test('CtrlHome focuses the first item, which is a label rather than a block', function () {
-      Blockly.getFocusManager().focusNode(
-        this.flyoutWorkspace.getTopBlocks()[1],
-      );
-      pressCtrlKey(this.workspace, Blockly.utils.KeyCodes.HOME);
+      Blockly.getFocusManager().focusNode(flyoutWorkspace.getTopBlocks()[1]);
+      pressCtrlKey(workspace, Blockly.utils.KeyCodes.HOME);
       const focused = Blockly.getFocusManager().getFocusedNode();
-      assert.equal(focused, this.labels[0]);
-      assert.notEqual(focused, this.flyoutWorkspace.getTopBlocks()[0]);
+      assert.equal(focused, labels[0]);
+      assert.notEqual(focused, flyoutWorkspace.getTopBlocks()[0]);
     });
 
     test('CtrlEnd focuses the last item, which is a label rather than a block', function () {
-      Blockly.getFocusManager().focusNode(
-        this.flyoutWorkspace.getTopBlocks()[0],
-      );
-      pressCtrlKey(this.workspace, Blockly.utils.KeyCodes.END);
+      Blockly.getFocusManager().focusNode(flyoutWorkspace.getTopBlocks()[0]);
+      pressCtrlKey(workspace, Blockly.utils.KeyCodes.END);
       const focused = Blockly.getFocusManager().getFocusedNode();
-      assert.equal(focused, this.labels[this.labels.length - 1]);
-      assert.notEqual(
-        focused,
-        this.flyoutWorkspace.getTopBlocks().slice(-1)[0],
-      );
+      assert.equal(focused, labels[labels.length - 1]);
+      assert.notEqual(focused, flyoutWorkspace.getTopBlocks().slice(-1)[0]);
     });
   });
 });
@@ -1280,7 +1339,7 @@ suite('Toolbox and flyout paging shortcuts (Page Up / Page Down)', function () {
     }
   });
 
-  setup(function () {
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
       {
@@ -1292,7 +1351,7 @@ suite('Toolbox and flyout paging shortcuts (Page Up / Page Down)', function () {
     defineStackBlock();
   });
 
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     sharedTestTeardown.call(this);
   });
 
@@ -1303,113 +1362,125 @@ suite('Toolbox and flyout paging shortcuts (Page Up / Page Down)', function () {
   const VIEWPORT_LENGTH = 100;
 
   suite('in the flyout', function () {
+    let blocks: Blockly.BlockSvg[];
+    let workspace: Blockly.WorkspaceSvg;
+    let flyoutWorkspace: Blockly.WorkspaceSvg;
+
+    /**
+     * Lays the flyout's blocks out at a known pitch and puts the viewport at
+     * the given offset, so that paging can be asserted exactly.
+     *
+     * @param viewportTop Offset of the top of the viewport.
+     */
+    function layOutFlyout(viewportTop: number) {
+      blocks.forEach((block, i) => {
+        sinon
+          .stub(block, 'getBoundingRectangle')
+          .returns(
+            new Blockly.utils.Rect(
+              i * ITEM_PITCH,
+              i * ITEM_PITCH + ITEM_LENGTH,
+              0,
+              50,
+            ),
+          );
+      });
+      sinon
+        .stub(flyoutWorkspace.getMetricsManager(), 'getViewMetrics')
+        .returns({
+          top: viewportTop,
+          left: 0,
+          width: 50,
+          height: VIEWPORT_LENGTH,
+        });
+    }
+
     setup(function () {
-      this.workspace = Blockly.inject('blocklyDiv', {
+      workspace = Blockly.inject('blocklyDiv', {
         toolbox: {
           kind: 'flyoutToolbox',
           contents: new Array(6).fill({kind: 'block', type: 'basic_block'}),
         },
       });
-      this.flyoutWorkspace = this.workspace.getFlyout().getWorkspace();
-      this.blocks = this.flyoutWorkspace.getTopBlocks(true);
+      const flyoutWorkspace_ = workspace.getFlyout()?.getWorkspace();
+      assert.isDefined(flyoutWorkspace_);
+      flyoutWorkspace = flyoutWorkspace_;
+      blocks = flyoutWorkspace.getTopBlocks(true);
       // Focusing a block scrolls it into view; stub that out so the layout set
       // up below stays valid for the whole test.
-      sinon.stub(this.flyoutWorkspace, 'scroll');
-      sinon.stub(this.flyoutWorkspace, 'getScale').returns(1);
-
-      /**
-       * Lays the flyout's blocks out at a known pitch and puts the viewport at
-       * the given offset, so that paging can be asserted exactly.
-       *
-       * @param {number} viewportTop Offset of the top of the viewport.
-       */
-      this.layOutFlyout = (viewportTop) => {
-        this.blocks.forEach((block, i) => {
-          sinon
-            .stub(block, 'getBoundingRectangle')
-            .returns(
-              new Blockly.utils.Rect(
-                i * ITEM_PITCH,
-                i * ITEM_PITCH + ITEM_LENGTH,
-                0,
-                50,
-              ),
-            );
-        });
-        sinon
-          .stub(this.flyoutWorkspace.getMetricsManager(), 'getViewMetrics')
-          .returns({
-            top: viewportTop,
-            left: 0,
-            width: 50,
-            height: VIEWPORT_LENGTH,
-          });
-      };
+      sinon.stub(flyoutWorkspace, 'scroll');
+      sinon.stub(flyoutWorkspace, 'getScale').returns(1);
     });
 
-    teardown(function () {
-      workspaceTeardown.call(this, this.workspace);
+    teardown(function (this: Mocha.Context) {
+      workspaceTeardown.call(this, workspace);
     });
 
     test('PageDown focuses the last visible block', function () {
-      this.layOutFlyout(0);
-      Blockly.getFocusManager().focusNode(this.blocks[0]);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.blocks[2]);
+      layOutFlyout(0);
+      Blockly.getFocusManager().focusNode(blocks[0]);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), blocks[2]);
     });
 
     test('A second PageDown advances by another page', function () {
-      this.layOutFlyout(0);
-      Blockly.getFocusManager().focusNode(this.blocks[0]);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.blocks[4]);
+      layOutFlyout(0);
+      Blockly.getFocusManager().focusNode(blocks[0]);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), blocks[4]);
     });
 
     test('PageUp focuses the first visible block', function () {
       // Viewport spans [150, 250], holding blocks 4 and 5 plus the tail of 3.
-      this.layOutFlyout(150);
-      Blockly.getFocusManager().focusNode(this.blocks[5]);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_UP);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.blocks[3]);
+      layOutFlyout(150);
+      Blockly.getFocusManager().focusNode(blocks[5]);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_UP);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), blocks[3]);
     });
 
     test('PageDown from the last block does nothing', function () {
-      this.layOutFlyout(200);
-      const last = this.blocks[this.blocks.length - 1];
+      layOutFlyout(200);
+      const last = blocks[blocks.length - 1];
       Blockly.getFocusManager().focusNode(last);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
       assert.equal(Blockly.getFocusManager().getFocusedNode(), last);
     });
 
     test('PageUp from the first block does nothing', function () {
-      this.layOutFlyout(0);
-      Blockly.getFocusManager().focusNode(this.blocks[0]);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_UP);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.blocks[0]);
+      layOutFlyout(0);
+      Blockly.getFocusManager().focusNode(blocks[0]);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_UP);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), blocks[0]);
     });
   });
 
   suite('in the toolbox', function () {
-    setup(function () {
-      this.workspace = Blockly.inject('blocklyDiv', {
-        toolbox: document.getElementById('toolbox-test'),
-      });
-      this.toolbox = this.workspace.getToolbox();
-      this.items = this.toolbox
-        .getNavigator()
-        .getNavigableItems(this.toolbox.getRootFocusableNode());
+    let items: Blockly.IFocusableNode[];
+    let workspace: Blockly.WorkspaceSvg;
+    let toolbox: Blockly.IToolbox;
 
-      this.container = this.toolbox
-        .getRootFocusableNode()
-        .getFocusableElement();
-      sinon.stub(this.container, 'getBoundingClientRect').returns({
+    setup(function () {
+      const toolboxElement = document.getElementById('toolbox-test');
+      assert.isNotNull(toolboxElement);
+      workspace = Blockly.inject('blocklyDiv', {
+        toolbox: toolboxElement,
+      });
+      const toolbox_ = workspace.getToolbox();
+      assert.isNotNull(toolbox_);
+      toolbox = toolbox_;
+      items = toolbox
+        .getNavigator()
+        .getNavigableItems(toolbox.getRootFocusableNode());
+
+      const container = toolbox.getRootFocusableNode().getFocusableElement();
+      sinon.stub(container, 'getBoundingClientRect').returns({
         top: 0,
         bottom: VIEWPORT_LENGTH,
         left: 0,
         right: 200,
-      });
-      this.items.forEach((item, i) => {
+      } as DOMRect);
+      items.forEach((item, i) => {
         sinon
           .stub(item.getFocusableElement(), 'getBoundingClientRect')
           .returns({
@@ -1417,27 +1488,27 @@ suite('Toolbox and flyout paging shortcuts (Page Up / Page Down)', function () {
             bottom: i * ITEM_PITCH + ITEM_LENGTH,
             left: 0,
             right: 200,
-          });
+          } as DOMRect);
       });
     });
 
-    teardown(function () {
-      workspaceTeardown.call(this, this.workspace);
+    teardown(function (this: Mocha.Context) {
+      workspaceTeardown.call(this, workspace);
     });
 
     test('PageDown focuses the last visible category', function () {
-      Blockly.getFocusManager().focusNode(this.items[0]);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.items[2]);
+      Blockly.getFocusManager().focusNode(items[0]);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), items[2]);
     });
 
     test('PageDown scrolls the newly focused category into view', function () {
-      Blockly.getFocusManager().focusNode(this.items[0]);
+      Blockly.getFocusManager().focusNode(items[0]);
       const scrollIntoView = sinon.spy(
-        this.items[2].getFocusableElement(),
+        items[2].getFocusableElement(),
         'scrollIntoView',
       );
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_DOWN);
       sinon.assert.calledWith(scrollIntoView, {
         block: 'nearest',
         inline: 'nearest',
@@ -1445,9 +1516,9 @@ suite('Toolbox and flyout paging shortcuts (Page Up / Page Down)', function () {
     });
 
     test('PageUp focuses the first visible category', function () {
-      Blockly.getFocusManager().focusNode(this.items[2]);
-      pressKey(this.workspace, Blockly.utils.KeyCodes.PAGE_UP);
-      assert.equal(Blockly.getFocusManager().getFocusedNode(), this.items[0]);
+      Blockly.getFocusManager().focusNode(items[2]);
+      pressKey(workspace, Blockly.utils.KeyCodes.PAGE_UP);
+      assert.equal(Blockly.getFocusManager().getFocusedNode(), items[0]);
     });
   });
 });

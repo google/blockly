@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
 import {
   sharedTestSetup,
@@ -11,17 +12,26 @@ import {
 } from './test_helpers/setup_teardown.js';
 import {assertWarnings} from './test_helpers/warnings.js';
 
-suite('Registry', function () {
-  const TestClass = function () {};
-  TestClass.prototype.testMethod = function () {
+class TestClass {
+  testMethod() {
     return 'something';
-  };
+  }
+}
 
-  setup(function () {
+class DefaultClass {
+  testMethod() {
+    return 'default';
+  }
+}
+
+const TEST_TYPE = new Blockly.registry.Type('test');
+
+suite('Registry', function () {
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
   });
 
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     sharedTestTeardown.call(this);
     if (Blockly.registry.hasItem('test', 'test_name')) {
       Blockly.registry.unregister('test', 'test_name');
@@ -41,7 +51,7 @@ suite('Registry', function () {
 
     test('Class as Key', function () {
       assert.throws(function () {
-        Blockly.registry.register('test', TestClass, '');
+        Blockly.registry.register('test', TestClass as any, '');
       }, 'Invalid name');
     });
 
@@ -225,55 +235,55 @@ suite('Registry', function () {
   });
 
   suite('getClassFromOptions', function () {
+    const options = new Blockly.Options({
+      'plugins': {
+        'test': 'test_name',
+      },
+    });
+
     setup(function () {
-      this.defaultClass = function () {};
-      this.defaultClass.prototype.testMethod = function () {
-        return 'default';
-      };
-      this.options = {
-        'plugins': {
-          'test': 'test_name',
-        },
-      };
-      Blockly.registry.register('test', 'test_name', TestClass);
-      Blockly.registry.register('test', 'default', this.defaultClass);
+      Blockly.registry.register(TEST_TYPE, 'test_name', TestClass);
+      Blockly.registry.register(TEST_TYPE, 'default', DefaultClass);
     });
 
     teardown(function () {
-      Blockly.registry.unregister('test', 'default');
+      Blockly.registry.unregister(TEST_TYPE, 'default');
     });
 
     test('Simple - Plugin name given', function () {
       const testClass = Blockly.registry.getClassFromOptions(
-        'test',
-        this.options,
+        TEST_TYPE,
+        options,
       );
+      assert.isNotNull(testClass);
       assert.instanceOf(new testClass(), TestClass);
     });
 
     test('Simple - Plugin class given', function () {
-      this.options.plugins['test'] = TestClass;
+      options.plugins['test'] = TestClass;
       const testClass = Blockly.registry.getClassFromOptions(
-        'test',
-        this.options,
+        TEST_TYPE,
+        options,
       );
+      assert.isNotNull(testClass);
       assert.instanceOf(new testClass(), TestClass);
     });
 
     test('No Plugin Name Given', function () {
-      delete this.options['plugins']['test'];
+      delete options['plugins']['test'];
       const testClass = Blockly.registry.getClassFromOptions(
-        'test',
-        this.options,
+        TEST_TYPE,
+        options,
       );
-      assert.instanceOf(new testClass(), this.defaultClass);
+      assert.isNotNull(testClass);
+      assert.instanceOf(new testClass(), DefaultClass);
     });
 
     test('Incorrect Plugin Name', function () {
-      this.options['plugins']['test'] = 'random';
+      options['plugins']['test'] = 'random';
       let testClass;
       assertWarnings(() => {
-        testClass = Blockly.registry.getClassFromOptions('test', this.options);
+        testClass = Blockly.registry.getClassFromOptions(TEST_TYPE, options);
       }, /Unable to find/);
       assert.isNull(testClass);
     });

@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {EventType} from '#core/events/type.js';
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
+import sinon from 'sinon';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {
   assertEventFired,
@@ -19,16 +20,26 @@ import {
   workspaceTeardown,
 } from './test_helpers/setup_teardown.js';
 import {dispatchPointerEvent} from './test_helpers/user_input.js';
-import {testAWorkspace} from './test_helpers/workspace.js';
+import {testAWorkspace} from './test_helpers/workspace.ts';
 
 suite('WorkspaceSvg', function () {
-  setup(function () {
-    this.clock = sharedTestSetup.call(this, {fireEventsNow: false}).clock;
+  let workspace: Blockly.WorkspaceSvg;
+  let clock: sinon.SinonFakeTimers;
+  const wrapper: {
+    workspace?: Blockly.WorkspaceSvg;
+    clock?: sinon.SinonFakeTimers;
+  } = {};
+
+  setup(function (this: Mocha.Context) {
+    ({clock} = sharedTestSetup.call(this, {fireEventsNow: false}));
     const toolbox = document.getElementById('toolbox-categories');
-    this.workspace = Blockly.inject('blocklyDiv', {
+    assert.isNotNull(toolbox);
+    workspace = Blockly.inject('blocklyDiv', {
       ...DEFAULT_INJECT_OPTIONS,
       toolbox: toolbox,
     });
+    wrapper.clock = clock;
+    wrapper.workspace = workspace;
     Blockly.defineBlocksWithJsonArray([
       {
         'type': 'simple_test_block',
@@ -48,8 +59,8 @@ suite('WorkspaceSvg', function () {
     ]);
   });
 
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, wrapper.workspace);
   });
 
   test('dispose of WorkspaceSvg without dom throws no error', function () {
@@ -64,11 +75,11 @@ suite('WorkspaceSvg', function () {
         '  </block>' +
         '</xml>',
     );
-    Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    assert.equal(this.workspace.getAllBlocks(false).length, 1, 'Block count');
-    Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    assert.equal(this.workspace.getAllBlocks(false).length, 2, 'Block count');
-    const blocks = this.workspace.getAllBlocks(false);
+    Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    assert.equal(workspace.getAllBlocks(false).length, 1, 'Block count');
+    Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    assert.equal(workspace.getAllBlocks(false).length, 2, 'Block count');
+    const blocks = workspace.getAllBlocks(false);
     assert.equal(
       blocks[0].getRelativeToSurfaceXY().x,
       21,
@@ -103,73 +114,75 @@ suite('WorkspaceSvg', function () {
         '</xml>',
     );
 
-    Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    const blocks = this.workspace.getAllBlocks(false);
+    Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    const blocks = workspace.getAllBlocks(false);
     assert.equal(blocks.length, 2, 'Block count');
     const shadowBlock = blocks[1];
     assert.equal(false, shadowBlock.isDeadOrDying());
 
-    const block = this.workspace.newBlock('simple_test_block');
+    const block = workspace.newBlock('simple_test_block');
     block.initSvg();
 
-    const inputConnection = this.workspace
+    const inputConnection = workspace
       .getTopBlocks()[0]
-      .getInput('NAME').connection;
-    inputConnection.connect(block.outputConnection);
+      .getInput('NAME')?.connection;
+    const outputConnection = block.outputConnection;
+    assert.isNotNull(outputConnection);
+    inputConnection?.connect(outputConnection);
     assert.equal(false, block.isDeadOrDying());
     assert.equal(true, shadowBlock.isDeadOrDying());
   });
 
   test('getGesture returns null when no gesture is in progress', function () {
-    const gesture = this.workspace.getGesture();
+    const gesture = workspace.getGesture();
     assert.isNull(gesture);
   });
 
   test('getGesture returns the current gesture when one is in progress', function () {
-    dispatchPointerEvent(this.workspace.getSvgGroup(), 'pointerdown');
-    const gesture = this.workspace.getGesture();
+    dispatchPointerEvent(workspace.getSvgGroup(), 'pointerdown');
+    const gesture = workspace.getGesture();
     assert.isNotNull(gesture);
   });
 
   test('Announces a screenreader hint on first focus', function () {
-    document.getElementById('blocklyAriaAnnounce').textContent = '';
-    Blockly.WorkspaceSvg.everFocused = false;
-    Blockly.getFocusManager().focusNode(this.workspace);
-    this.clock.runAll();
-    assert.include(
-      document.getElementById('blocklyAriaAnnounce').textContent,
-      'Use the arrow keys to navigate',
-    );
+    const liveRegion = document.getElementById('blocklyAriaAnnounce');
+    assert.isNotNull(liveRegion);
+    liveRegion.textContent = '';
+    (Blockly.WorkspaceSvg as any).everFocused = false;
+    Blockly.getFocusManager().focusNode(workspace);
+    clock.runAll();
+    assert.include(liveRegion.textContent, 'Use the arrow keys to navigate');
   });
 
   test('Nested workspaces do not announce screenreader hints', function () {
-    document.getElementById('blocklyAriaAnnounce').textContent = '';
-    Blockly.getFocusManager().focusNode(
-      this.workspace.getFlyout().getWorkspace(),
-    );
-    this.clock.runAll();
-    assert.notInclude(
-      document.getElementById('blocklyAriaAnnounce').textContent,
-      'Use the arrow keys to navigate',
-    );
+    const liveRegion = document.getElementById('blocklyAriaAnnounce');
+    assert.isNotNull(liveRegion);
+    liveRegion.textContent = '';
+    const flyoutWorkspace = workspace.getFlyout()?.getWorkspace();
+    assert.isDefined(flyoutWorkspace);
+    Blockly.getFocusManager().focusNode(flyoutWorkspace);
+    clock.runAll();
+    assert.notInclude(liveRegion.textContent, 'Use the arrow keys to navigate');
   });
 
   suite('Focus Management', function () {
     test('restores focus to the workspace focus target for a non-mutator non-flyout workspace', function () {
-      Blockly.getFocusManager().focusTree(this.workspace);
+      Blockly.getFocusManager().focusTree(workspace);
       assert.strictEqual(
         Blockly.getFocusManager().getFocusedNode(),
-        this.workspace.getWorkspaceFocusTarget(),
+        workspace.getWorkspaceFocusTarget(),
       );
     });
 
     test('restores focus to the first block for a mutator workspace', async function () {
-      const block = this.workspace.newBlock('controls_if');
+      const block = workspace.newBlock('controls_if');
       block.initSvg();
       block.render();
       const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      assert.isDefined(icon);
       await icon.setBubbleVisible(true);
       const mutatorWorkspace = icon.getWorkspace();
+      assert.isDefined(mutatorWorkspace);
       const firstBlock = mutatorWorkspace.getTopBlocks(true)[0];
 
       assert.strictEqual(
@@ -184,81 +197,75 @@ suite('WorkspaceSvg', function () {
     });
 
     test('includes mutators in nested trees', async function () {
-      const block = this.workspace.newBlock('controls_if');
+      const block = workspace.newBlock('controls_if');
       block.initSvg();
       block.render();
       const icon = block.getIcon(Blockly.icons.MutatorIcon.TYPE);
+      assert.isDefined(icon);
       await icon.setBubbleVisible(true);
       const mutatorWorkspace = icon.getWorkspace();
 
-      const nestedTrees = this.workspace.getNestedTrees();
+      const nestedTrees = workspace.getNestedTrees();
       assert.sameMembers(nestedTrees, [mutatorWorkspace]);
     });
 
-    test('includes flyouts in nested trees', async function () {
+    test('includes flyouts in nested trees', async function (this: Mocha.Context) {
+      const simpleToolbox = document.getElementById('toolbox-simple');
+      assert.isNotNull(simpleToolbox);
       const workspace = Blockly.inject('blocklyDiv', {
         ...DEFAULT_INJECT_OPTIONS,
-        toolbox: document.getElementById('toolbox-simple'),
+        toolbox: simpleToolbox,
       });
 
       const nestedTrees = workspace.getNestedTrees();
       assert.isNotNull(workspace.getFlyout());
-      assert.sameMembers(nestedTrees, [workspace.getFlyout().getWorkspace()]);
+      assert.sameMembers(nestedTrees, [workspace.getFlyout()?.getWorkspace()]);
       workspaceTeardown.call(this, workspace);
     });
   });
 
   suite('updateToolbox', function () {
     test('Passes in null when toolbox exists', function () {
-      assert.throws(
-        function () {
-          this.workspace.updateToolbox(null);
-        }.bind(this),
-        "Can't nullify an existing toolbox.",
-      );
+      assert.throws(function () {
+        workspace.updateToolbox(null);
+      }, "Can't nullify an existing toolbox.");
     });
     test('Passes in toolbox def when current toolbox is null', function () {
-      this.workspace.options.languageTree = null;
-      assert.throws(
-        function () {
-          this.workspace.updateToolbox({'contents': []});
-        }.bind(this),
-        "Existing toolbox is null.  Can't create new toolbox.",
-      );
+      workspace.options.languageTree = null;
+      assert.throws(function () {
+        workspace.updateToolbox({'contents': []});
+      }, "Existing toolbox is null.  Can't create new toolbox.");
     });
-    test('Existing toolbox has no categories', function () {
-      sinon
-        .stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
-        .returns(true);
-      const originalToolbox = this.workspace.toolbox;
-      this.workspace.toolbox = null;
-      assert.throws(
-        function () {
-          this.workspace.updateToolbox({'contents': []});
-        }.bind(this),
-        "Existing toolbox has no categories.  Can't change mode.",
-      );
-      this.workspace.toolbox = originalToolbox;
+    test('Existing toolbox has no categories', function (this: Mocha.Context) {
+      const simpleToolbox = document.getElementById('toolbox-simple');
+      assert.isNotNull(simpleToolbox);
+      const workspace = Blockly.inject('blocklyDiv', {
+        ...DEFAULT_INJECT_OPTIONS,
+        toolbox: simpleToolbox,
+      });
+      assert.throws(function () {
+        workspace.updateToolbox({
+          'contents': [{kind: 'category', name: 'Test'}],
+        });
+      }, "Existing toolbox has no categories.  Can't change mode.");
+      workspaceTeardown.call(this, workspace);
     });
     test('Existing toolbox has categories', function () {
-      sinon
-        .stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal')
-        .returns(false);
-      this.workspace.flyout_ = null;
-      assert.throws(
-        function () {
-          this.workspace.updateToolbox({'contents': []});
-        }.bind(this),
-        "Existing toolbox has categories.  Can't change mode.",
-      );
+      assert.throws(function () {
+        workspace.updateToolbox({'contents': []});
+      }, "Existing toolbox has categories.  Can't change mode.");
     });
   });
 
   suite('Viewport change events', function () {
-    function resetEventHistory(changeListenerSpy) {
+    function resetEventHistory(changeListenerSpy: sinon.SinonSpy) {
       changeListenerSpy.resetHistory();
     }
-    function assertSpyFiredViewportEvent(spy, workspace, expectedProperties) {
+    function assertSpyFiredViewportEvent(
+      spy: sinon.SinonSpy,
+      workspace: Blockly.WorkspaceSvg,
+      expectedProperties: {[key: string]: any},
+    ) {
       assertEventFired(
         spy,
         Blockly.Events.ViewportChange,
@@ -267,8 +274,8 @@ suite('WorkspaceSvg', function () {
       );
     }
     function assertViewportEventFired(
-      changeListenerSpy,
-      workspace,
+      changeListenerSpy: sinon.SinonSpy,
+      workspace: Blockly.WorkspaceSvg,
       expectedEventCount = 1,
     ) {
       const metrics = workspace.getMetrics();
@@ -277,7 +284,7 @@ suite('WorkspaceSvg', function () {
         oldScale: 1,
         viewTop: metrics.viewTop,
         viewLeft: metrics.viewLeft,
-        type: EventType.VIEWPORT_CHANGE,
+        type: Blockly.Events.VIEWPORT_CHANGE,
       };
       assertSpyFiredViewportEvent(
         changeListenerSpy,
@@ -287,10 +294,10 @@ suite('WorkspaceSvg', function () {
       sinon.assert.callCount(changeListenerSpy, expectedEventCount);
     }
     function runViewportEventTest(
-      eventTriggerFunc,
-      changeListenerSpy,
-      workspace,
-      clock,
+      eventTriggerFunc: () => void,
+      changeListenerSpy: sinon.SinonSpy,
+      workspace: Blockly.WorkspaceSvg,
+      clock: sinon.SinonFakeTimers,
       expectedEventCount = 1,
     ) {
       clock.runAll();
@@ -303,9 +310,10 @@ suite('WorkspaceSvg', function () {
         expectedEventCount,
       );
     }
+    let changeListenerSpy: sinon.SinonSpy;
     setup(function () {
       defineStackBlock();
-      this.changeListenerSpy = createChangeListenerSpy(this.workspace);
+      changeListenerSpy = createChangeListenerSpy(workspace);
     });
     teardown(function () {
       delete Blockly.Blocks['stack_block'];
@@ -314,100 +322,100 @@ suite('WorkspaceSvg', function () {
     suite('zoom', function () {
       test('setScale', function () {
         runViewportEventTest(
-          () => this.workspace.setScale(2),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.setScale(2),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
       test('zoom(50, 50, 1)', function () {
         runViewportEventTest(
-          () => this.workspace.zoom(50, 50, 1),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.zoom(50, 50, 1),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
       test('zoom(50, 50, -1)', function () {
         runViewportEventTest(
-          () => this.workspace.zoom(50, 50, -1),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.zoom(50, 50, -1),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
       test('zoomCenter(1)', function () {
         runViewportEventTest(
-          () => this.workspace.zoomCenter(1),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.zoomCenter(1),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
       test('zoomCenter(-1)', function () {
         runViewportEventTest(
-          () => this.workspace.zoomCenter(-1),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.zoomCenter(-1),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
       test('zoomToFit', function () {
-        const block = this.workspace.newBlock('stack_block');
+        const block = workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
         runViewportEventTest(
-          () => this.workspace.zoomToFit(),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.zoomToFit(),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
     });
     suite('scroll', function () {
       test('centerOnBlock', function () {
-        const block = this.workspace.newBlock('stack_block');
+        const block = workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
         runViewportEventTest(
-          () => this.workspace.centerOnBlock(block.id),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.centerOnBlock(block.id),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
       test('scroll', function () {
         runViewportEventTest(
-          () => this.workspace.scroll(50, 50),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.scroll(50, 50),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
       test('scrollCenter', function () {
         runViewportEventTest(
-          () => this.workspace.scrollCenter(),
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          () => workspace.scrollCenter(),
+          changeListenerSpy,
+          workspace,
+          clock,
         );
       });
     });
     suite('Blocks triggering viewport changes', function () {
       test('block move that triggers scroll', function () {
-        const block = this.workspace.newBlock('stack_block');
+        const block = workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
-        this.clock.runAll();
-        resetEventHistory(this.changeListenerSpy);
+        clock.runAll();
+        resetEventHistory(changeListenerSpy);
         // Expect 2 events, 1 move, 1 viewport
         runViewportEventTest(
           () => {
             block.moveBy(1000, 1000);
           },
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          changeListenerSpy,
+          workspace,
+          clock,
           2,
         );
       });
@@ -422,26 +430,21 @@ suite('WorkspaceSvg', function () {
               '<block type="controls_if" x="288" y="238"></block>' +
               '</xml>',
           ),
-          this.workspace,
+          workspace,
         );
-        const xmlDom = Blockly.utils.xml.textToDom(
-          '<block type="controls_if" x="188" y="163"></block>',
-        );
-        this.clock.runAll();
-        resetEventHistory(this.changeListenerSpy);
+        clock.runAll();
+        resetEventHistory(changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
         Blockly.Xml.domToWorkspace(
           Blockly.utils.xml.textToDom(
             '<block type="controls_if" x="188" y="163"></block>',
           ),
-          this.workspace,
+          workspace,
         );
-        this.clock.runAll();
-        assertEventNotFired(
-          this.changeListenerSpy,
-          Blockly.Events.ViewportChange,
-          {type: EventType.VIEWPORT_CHANGE},
-        );
+        clock.runAll();
+        assertEventNotFired(changeListenerSpy, Blockly.Events.ViewportChange, {
+          type: Blockly.Events.VIEWPORT_CHANGE,
+        });
       });
       test("domToWorkspace at 0,0 that doesn't trigger scroll", function () {
         // 4 blocks with space in center.
@@ -454,21 +457,19 @@ suite('WorkspaceSvg', function () {
               '<block type="controls_if" x="75" y="75"></block>' +
               '</xml>',
           ),
-          this.workspace,
+          workspace,
         );
         const xmlDom = Blockly.utils.xml.textToDom(
           '<block type="controls_if" x="0" y="0"></block>',
         );
-        this.clock.runAll();
-        resetEventHistory(this.changeListenerSpy);
+        clock.runAll();
+        resetEventHistory(changeListenerSpy);
         // Add block in center of other blocks, not triggering scroll.
-        Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
-        this.clock.runAll();
-        assertEventNotFired(
-          this.changeListenerSpy,
-          Blockly.Events.ViewportChange,
-          {type: EventType.VIEWPORT_CHANGE},
-        );
+        Blockly.Xml.domToWorkspace(xmlDom, workspace);
+        clock.runAll();
+        assertEventNotFired(changeListenerSpy, Blockly.Events.ViewportChange, {
+          type: Blockly.Events.VIEWPORT_CHANGE,
+        });
       });
       test('domToWorkspace multiple blocks triggers one viewport event', function () {
         const addingMultipleBlocks = () => {
@@ -481,15 +482,15 @@ suite('WorkspaceSvg', function () {
                 '<block type="controls_if" x="-2088" y="238"></block>' +
                 '</xml>',
             ),
-            this.workspace,
+            workspace,
           );
         };
         // Expect 10 events, 4 create, 4 move, 1 viewport, 1 finished loading
         runViewportEventTest(
           addingMultipleBlocks,
-          this.changeListenerSpy,
-          this.workspace,
-          this.clock,
+          changeListenerSpy,
+          workspace,
+          clock,
           10,
         );
       });
@@ -497,57 +498,82 @@ suite('WorkspaceSvg', function () {
   });
 
   suite('cleanUp', function () {
-    assert.blockIsAtOrigin = function (actual, message) {
-      assert.blockHasPosition(actual, 0, 0, message || 'block is at origin');
-    };
+    function blockIsAtOrigin(actual: Blockly.BlockSvg, message?: string) {
+      blockHasPosition(actual, 0, 0, message || 'block is at origin');
+    }
 
-    assert.blockHasPositionX = function (actual, expectedX, message) {
+    function blockHasPositionX(
+      actual: Blockly.BlockSvg,
+      expectedX: number,
+      message?: string,
+    ) {
       const position = actual.getRelativeToSurfaceXY();
       message = message || 'block has x value of ' + expectedX;
       assert.equal(position.x, expectedX, message);
-    };
+    }
 
-    assert.blockHasPositionY = function (actual, expectedY, message) {
+    function blockHasPositionY(
+      actual: Blockly.BlockSvg,
+      expectedY: number,
+      message?: string,
+    ) {
       const position = actual.getRelativeToSurfaceXY();
       message = message || 'block has y value of ' + expectedY;
       assert.equal(position.y, expectedY, message);
-    };
+    }
 
-    assert.blockHasPosition = function (actual, expectedX, expectedY, message) {
-      assert.blockHasPositionX(actual, expectedX, message);
-      assert.blockHasPositionY(actual, expectedY, message);
-    };
+    function blockHasPosition(
+      actual: Blockly.BlockSvg,
+      expectedX: number,
+      expectedY: number,
+      message?: string,
+    ) {
+      blockHasPositionX(actual, expectedX, message);
+      blockHasPositionY(actual, expectedY, message);
+    }
 
-    assert.blockIsAtNotOrigin = function (actual, message) {
+    function blockIsAtNotOrigin(actual: Blockly.BlockSvg, message?: string) {
       const position = actual.getRelativeToSurfaceXY();
       message = message || 'block is not at origin';
       assert.isTrue(position.x != 0 || position.y != 0, message);
-    };
+    }
 
-    assert.blocksDoNotIntersect = function (a, b, message) {
+    function blocksDoNotIntersect(
+      a: Blockly.BlockSvg,
+      b: Blockly.BlockSvg,
+      message?: string,
+    ) {
       const rectA = a.getBoundingRectangle();
       const rectB = b.getBoundingRectangle();
       assert.isFalse(rectA.intersects(rectB), message || "a,b don't intersect");
-    };
+    }
 
-    assert.blockIsAbove = function (a, b, message) {
+    function blockIsAbove(
+      a: Blockly.BlockSvg,
+      b: Blockly.BlockSvg,
+      message?: string,
+    ) {
       // Block a is above b iff a's bottom extreme is < b's top extreme.
       const rectA = a.getBoundingRectangle();
       const rectB = b.getBoundingRectangle();
       assert.isBelow(rectA.bottom, rectB.top, message || 'a is above b');
-    };
+    }
 
-    assert.blockIsBelow = function (a, b, message) {
+    function blockIsBelow(
+      a: Blockly.BlockSvg,
+      b: Blockly.BlockSvg,
+      message?: string,
+    ) {
       // Block a is below b iff a's top extreme is > b's bottom extreme.
       const rectA = a.getBoundingRectangle();
       const rectB = b.getBoundingRectangle();
       assert.isAbove(rectA.top, rectB.bottom, message || 'a is below b');
-    };
+    }
 
     test('empty workspace does not change', function () {
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const blocks = this.workspace.getTopBlocks(true);
+      const blocks = workspace.getTopBlocks(true);
       assert.equal(blocks.length, 0, 'workspace is empty');
     });
 
@@ -560,13 +586,13 @@ suite('WorkspaceSvg', function () {
           'NUM': 123,
         },
       };
-      Blockly.serialization.blocks.append(blockJson, this.workspace);
+      Blockly.serialization.blocks.append(blockJson, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const blocks = this.workspace.getTopBlocks(true);
+      const blocks = workspace.getTopBlocks(true);
       assert.equal(blocks.length, 1, 'workspace has one top-level block');
-      assert.blockIsAtOrigin(blocks[0]);
+      blockIsAtOrigin(blocks[0]);
     });
 
     test('single block at (10, 15) is moved to (0, 0)', function () {
@@ -578,15 +604,15 @@ suite('WorkspaceSvg', function () {
           'NUM': 123,
         },
       };
-      Blockly.serialization.blocks.append(blockJson, this.workspace);
+      Blockly.serialization.blocks.append(blockJson, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const allBlocks = this.workspace.getAllBlocks(false);
+      const topBlocks = workspace.getTopBlocks(true);
+      const allBlocks = workspace.getAllBlocks(false);
       assert.equal(topBlocks.length, 1, 'workspace has one top-level block');
       assert.equal(allBlocks.length, 1, 'workspace has one block overall');
-      assert.blockIsAtOrigin(topBlocks[0]);
+      blockIsAtOrigin(topBlocks[0]);
     });
 
     test('single block at (10, 15) with child is moved as unit to (0, 0)', function () {
@@ -607,16 +633,16 @@ suite('WorkspaceSvg', function () {
           },
         },
       };
-      Blockly.serialization.blocks.append(blockJson, this.workspace);
+      Blockly.serialization.blocks.append(blockJson, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const allBlocks = this.workspace.getAllBlocks(false);
+      const topBlocks = workspace.getTopBlocks(true);
+      const allBlocks = workspace.getAllBlocks(false);
       assert.equal(topBlocks.length, 1, 'workspace has one top-level block');
       assert.equal(allBlocks.length, 2, 'workspace has two blocks overall');
-      assert.blockIsAtOrigin(topBlocks[0]); // Parent block.
-      assert.blockIsAtNotOrigin(allBlocks[1]); // Child block.
+      blockIsAtOrigin(topBlocks[0]); // Parent block.
+      blockIsAtNotOrigin(allBlocks[1]); // Child block.
     });
 
     test('two blocks first at (10, 15) second at (0, 0) do not switch places', function () {
@@ -630,19 +656,21 @@ suite('WorkspaceSvg', function () {
         },
       };
       const blockJson2 = {...blockJson1, 'id': 'block2', 'x': 0, 'y': 0};
-      Blockly.serialization.blocks.append(blockJson1, this.workspace);
-      Blockly.serialization.blocks.append(blockJson2, this.workspace);
+      Blockly.serialization.blocks.append(blockJson1, workspace);
+      Blockly.serialization.blocks.append(blockJson2, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
       // block1 and block2 do not switch places since blocks are pre-sorted by their position before
       // being tidied up, so the order they were added to the workspace doesn't matter.
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const block1 = this.workspace.getBlockById('block1');
-      const block2 = this.workspace.getBlockById('block2');
+      const topBlocks = workspace.getTopBlocks(true);
+      const block1 = workspace.getBlockById('block1');
+      assert.isNotNull(block1);
+      const block2 = workspace.getBlockById('block2');
+      assert.isNotNull(block2);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.blockIsAtOrigin(block2);
-      assert.blockIsBelow(block1, block2);
+      blockIsAtOrigin(block2);
+      blockIsBelow(block1, block2);
     });
 
     test('two overlapping blocks are moved to origin and below', function () {
@@ -661,17 +689,19 @@ suite('WorkspaceSvg', function () {
         'x': 15.25,
         'y': 20.25,
       };
-      Blockly.serialization.blocks.append(blockJson1, this.workspace);
-      Blockly.serialization.blocks.append(blockJson2, this.workspace);
+      Blockly.serialization.blocks.append(blockJson1, workspace);
+      Blockly.serialization.blocks.append(blockJson2, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const block1 = this.workspace.getBlockById('block1');
-      const block2 = this.workspace.getBlockById('block2');
+      const topBlocks = workspace.getTopBlocks(true);
+      const block1 = workspace.getBlockById('block1');
+      assert.isNotNull(block1);
+      const block2 = workspace.getBlockById('block2');
+      assert.isNotNull(block2);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.blockIsAtOrigin(block1);
-      assert.blockIsBelow(block2, block1);
+      blockIsAtOrigin(block1);
+      blockIsBelow(block2, block1);
     });
 
     test('two overlapping blocks with snapping are moved to grid-aligned positions', function () {
@@ -690,19 +720,21 @@ suite('WorkspaceSvg', function () {
         'x': 15.25,
         'y': 20.25,
       };
-      Blockly.serialization.blocks.append(blockJson1, this.workspace);
-      Blockly.serialization.blocks.append(blockJson2, this.workspace);
-      this.workspace.getGrid().setSpacing(20);
-      this.workspace.getGrid().setSnapToGrid(true);
+      Blockly.serialization.blocks.append(blockJson1, workspace);
+      Blockly.serialization.blocks.append(blockJson2, workspace);
+      workspace.getGrid()?.setSpacing(20);
+      workspace.getGrid()?.setSnapToGrid(true);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const block1 = this.workspace.getBlockById('block1');
-      const block2 = this.workspace.getBlockById('block2');
+      const topBlocks = workspace.getTopBlocks(true);
+      const block1 = workspace.getBlockById('block1');
+      assert.isNotNull(block1);
+      const block2 = workspace.getBlockById('block2');
+      assert.isNotNull(block2);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.blockHasPosition(block1, 10, 10, 'block1 is at snapped origin');
-      assert.blockIsBelow(block2, block1);
+      blockHasPosition(block1, 10, 10, 'block1 is at snapped origin');
+      blockIsBelow(block2, block1);
     });
 
     test('two overlapping blocks are moved to origin and below including children', function () {
@@ -728,37 +760,39 @@ suite('WorkspaceSvg', function () {
         'x': 15.25,
         'y': 20.25,
       };
-      Blockly.serialization.blocks.append(blockJson1, this.workspace);
-      Blockly.serialization.blocks.append(blockJson2, this.workspace);
+      Blockly.serialization.blocks.append(blockJson1, workspace);
+      Blockly.serialization.blocks.append(blockJson2, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const allBlocks = this.workspace.getAllBlocks(false);
-      const block1 = this.workspace.getBlockById('block1');
-      const block2 = this.workspace.getBlockById('block2');
-      const block1Child = block1.getChildren()[0];
-      const block2Child = block2.getChildren()[0];
+      const topBlocks = workspace.getTopBlocks(true);
+      const allBlocks = workspace.getAllBlocks(false);
+      const block1 = workspace.getBlockById('block1');
+      assert.isNotNull(block1);
+      const block2 = workspace.getBlockById('block2');
+      assert.isNotNull(block2);
+      const block1Child = block1.getChildren(false)[0];
+      const block2Child = block2.getChildren(false)[0];
 
       // Note that the x position tests below are verifying that each block's
       // child isn't exactly aligned with it (however, they does overlap since
       // the child block has an input connection with its parent).
       assert.equal(topBlocks.length, 2, 'workspace has two top-level block2');
       assert.equal(allBlocks.length, 4, 'workspace has four blocks overall');
-      assert.blockIsAtOrigin(block1);
-      assert.blockIsBelow(block2, block1);
+      blockIsAtOrigin(block1);
+      blockIsBelow(block2, block1);
       assert.isAbove(
-        block1.getChildren()[0].getRelativeToSurfaceXY().x,
+        block1.getChildren(false)[0].getRelativeToSurfaceXY().x,
         block1.getRelativeToSurfaceXY().x,
         "block1's child is right of its start",
       );
-      assert.blockIsAbove(block1Child, block2);
+      blockIsAbove(block1Child, block2);
       assert.isAbove(
-        block2.getChildren()[0].getRelativeToSurfaceXY().x,
+        block2.getChildren(false)[0].getRelativeToSurfaceXY().x,
         block2.getRelativeToSurfaceXY().x,
         "block2's child is right of its start",
       );
-      assert.blockIsBelow(block2Child, block1);
+      blockIsBelow(block2Child, block1);
     });
 
     test('two large overlapping blocks are moved to origin and below', function () {
@@ -809,17 +843,19 @@ suite('WorkspaceSvg', function () {
         },
       };
       const blockJson2 = {...blockJson1, 'id': 'block2', 'x': 20, 'y': 30};
-      Blockly.serialization.blocks.append(blockJson1, this.workspace);
-      Blockly.serialization.blocks.append(blockJson2, this.workspace);
+      Blockly.serialization.blocks.append(blockJson1, workspace);
+      Blockly.serialization.blocks.append(blockJson2, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const block1 = this.workspace.getBlockById('block1');
-      const block2 = this.workspace.getBlockById('block2');
+      const topBlocks = workspace.getTopBlocks(true);
+      const block1 = workspace.getBlockById('block1');
+      assert.isNotNull(block1);
+      const block2 = workspace.getBlockById('block2');
+      assert.isNotNull(block2);
       assert.equal(topBlocks.length, 2, 'workspace has two top-level blocks');
-      assert.blockIsAtOrigin(block1);
-      assert.blockIsBelow(block2, block1);
+      blockIsAtOrigin(block1);
+      blockIsBelow(block2, block1);
     });
 
     test('five overlapping blocks are moved in-order as one column', function () {
@@ -836,30 +872,35 @@ suite('WorkspaceSvg', function () {
       const blockJson3 = {...blockJson1, 'id': 'block3', 'x': 5, 'y': 6};
       const blockJson4 = {...blockJson1, 'id': 'block4', 'x': 7, 'y': 8};
       const blockJson5 = {...blockJson1, 'id': 'block5', 'x': 9, 'y': 10};
-      Blockly.serialization.blocks.append(blockJson1, this.workspace);
-      Blockly.serialization.blocks.append(blockJson2, this.workspace);
-      Blockly.serialization.blocks.append(blockJson3, this.workspace);
-      Blockly.serialization.blocks.append(blockJson4, this.workspace);
-      Blockly.serialization.blocks.append(blockJson5, this.workspace);
+      Blockly.serialization.blocks.append(blockJson1, workspace);
+      Blockly.serialization.blocks.append(blockJson2, workspace);
+      Blockly.serialization.blocks.append(blockJson3, workspace);
+      Blockly.serialization.blocks.append(blockJson4, workspace);
+      Blockly.serialization.blocks.append(blockJson5, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const block1 = this.workspace.getBlockById('block1');
-      const block2 = this.workspace.getBlockById('block2');
-      const block3 = this.workspace.getBlockById('block3');
-      const block4 = this.workspace.getBlockById('block4');
-      const block5 = this.workspace.getBlockById('block5');
+      const topBlocks = workspace.getTopBlocks(true);
+      const block1 = workspace.getBlockById('block1');
+      assert.isNotNull(block1);
+      const block2 = workspace.getBlockById('block2');
+      assert.isNotNull(block2);
+      const block3 = workspace.getBlockById('block3');
+      assert.isNotNull(block3);
+      const block4 = workspace.getBlockById('block4');
+      assert.isNotNull(block4);
+      const block5 = workspace.getBlockById('block5');
+      assert.isNotNull(block5);
       assert.equal(topBlocks.length, 5, 'workspace has five top-level blocks');
-      assert.blockIsAtOrigin(block1);
-      assert.blockHasPositionX(block2, 0);
-      assert.blockHasPositionX(block3, 0);
-      assert.blockHasPositionX(block4, 0);
-      assert.blockHasPositionX(block5, 0);
-      assert.blockIsBelow(block2, block1);
-      assert.blockIsBelow(block3, block2);
-      assert.blockIsBelow(block4, block3);
-      assert.blockIsBelow(block5, block4);
+      blockIsAtOrigin(block1);
+      blockHasPositionX(block2, 0);
+      blockHasPositionX(block3, 0);
+      blockHasPositionX(block4, 0);
+      blockHasPositionX(block5, 0);
+      blockIsBelow(block2, block1);
+      blockIsBelow(block3, block2);
+      blockIsBelow(block4, block3);
+      blockIsBelow(block5, block4);
     });
 
     test('single immovable block at (10, 15) is not moved', function () {
@@ -872,15 +913,15 @@ suite('WorkspaceSvg', function () {
           'NUM': 123,
         },
       };
-      Blockly.serialization.blocks.append(blockJson, this.workspace);
+      Blockly.serialization.blocks.append(blockJson, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const allBlocks = this.workspace.getAllBlocks(false);
+      const topBlocks = workspace.getTopBlocks(true);
+      const allBlocks = workspace.getAllBlocks(false);
       assert.equal(topBlocks.length, 1, 'workspace has one top-level block');
       assert.equal(allBlocks.length, 1, 'workspace has one block overall');
-      assert.blockHasPosition(topBlocks[0], 10, 15);
+      blockHasPosition(topBlocks[0], 10, 15);
     });
 
     test('multiple block types immovable blocks are not moved', function () {
@@ -954,42 +995,47 @@ suite('WorkspaceSvg', function () {
         'y': 200,
         'movable': false,
       };
-      Blockly.serialization.blocks.append(blockJson1, this.workspace);
-      Blockly.serialization.blocks.append(blockJson2, this.workspace);
-      Blockly.serialization.blocks.append(blockJson3, this.workspace);
-      Blockly.serialization.blocks.append(blockJson4, this.workspace);
-      Blockly.serialization.blocks.append(blockJson5, this.workspace);
+      Blockly.serialization.blocks.append(blockJson1, workspace);
+      Blockly.serialization.blocks.append(blockJson2, workspace);
+      Blockly.serialization.blocks.append(blockJson3, workspace);
+      Blockly.serialization.blocks.append(blockJson4, workspace);
+      Blockly.serialization.blocks.append(blockJson5, workspace);
 
-      this.workspace.cleanUp();
+      workspace.cleanUp();
 
-      const topBlocks = this.workspace.getTopBlocks(true);
-      const block1 = this.workspace.getBlockById('block1');
-      const block2 = this.workspace.getBlockById('block2');
-      const block3 = this.workspace.getBlockById('block3');
-      const block4 = this.workspace.getBlockById('block4');
-      const block5 = this.workspace.getBlockById('block5');
+      const topBlocks = workspace.getTopBlocks(true);
+      const block1 = workspace.getBlockById('block1');
+      assert.isNotNull(block1);
+      const block2 = workspace.getBlockById('block2');
+      assert.isNotNull(block2);
+      const block3 = workspace.getBlockById('block3');
+      assert.isNotNull(block3);
+      const block4 = workspace.getBlockById('block4');
+      assert.isNotNull(block4);
+      const block5 = workspace.getBlockById('block5');
+      assert.isNotNull(block5);
       assert.equal(topBlocks.length, 5, 'workspace has five top-level blocks');
       // Check that immovable blocks haven't moved.
-      assert.blockHasPosition(block2, 10, 20);
-      assert.blockHasPosition(block5, 20, 200);
+      blockHasPosition(block2, 10, 20);
+      blockHasPosition(block5, 20, 200);
       // Check that movable positions have correctly been left-aligned.
-      assert.blockHasPositionX(block1, 0);
-      assert.blockHasPositionX(block3, 0);
-      assert.blockHasPositionX(block4, 0);
+      blockHasPositionX(block1, 0);
+      blockHasPositionX(block3, 0);
+      blockHasPositionX(block4, 0);
       // Block order should be: 2, 1, 3, 5, 4 since 2 and 5 are immovable.
-      assert.blockIsBelow(block1, block2);
-      assert.blockIsBelow(block3, block1);
-      assert.blockIsBelow(block5, block3);
-      assert.blockIsBelow(block4, block5);
+      blockIsBelow(block1, block2);
+      blockIsBelow(block3, block1);
+      blockIsBelow(block5, block3);
+      blockIsBelow(block4, block5);
       // Ensure no blocks intersect (can check in order due to the position verification above).
-      assert.blocksDoNotIntersect(block2, block1);
-      assert.blocksDoNotIntersect(block1, block3);
-      assert.blocksDoNotIntersect(block3, block5);
-      assert.blocksDoNotIntersect(block5, block4);
+      blocksDoNotIntersect(block2, block1);
+      blocksDoNotIntersect(block1, block3);
+      blocksDoNotIntersect(block3, block5);
+      blocksDoNotIntersect(block5, block4);
     });
   });
 
   suite('Workspace Base class', function () {
-    testAWorkspace();
+    testAWorkspace(wrapper);
   });
 });

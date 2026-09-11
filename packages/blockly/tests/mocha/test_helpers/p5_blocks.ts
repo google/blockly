@@ -24,7 +24,7 @@ const p5SetupJson = {
 };
 
 const p5Setup = {
-  init: function () {
+  init: function (this: Blockly.Block) {
     this.jsonInit(p5SetupJson);
     // The setup block can't be removed.
     this.setDeletable(false);
@@ -46,7 +46,7 @@ const p5DrawJson = {
 };
 
 const p5Draw = {
-  init: function () {
+  init: function (this: Blockly.Block) {
     this.jsonInit(p5DrawJson);
     // The draw block can't be removed.
     this.setDeletable(false);
@@ -80,7 +80,7 @@ const p5CanvasJson = {
 };
 
 const p5Canvas = {
-  init: function () {
+  init: function (this: Blockly.Block) {
     this.jsonInit(p5CanvasJson);
     // The canvas block can't be moved or disconnected from its parent.
     this.setMovable(false);
@@ -145,14 +145,20 @@ const buttonsJson = {
 };
 
 const buttonsBlock = {
-  init: function () {
+  init: function (this: Blockly.Block) {
     this.jsonInit(buttonsJson);
     const clickHandler = function () {
       console.log('clicking a button!');
     };
-    this.getField('BUTTON1').setOnClickHandler(clickHandler);
-    this.getField('BUTTON2').setOnClickHandler(clickHandler);
-    this.getField('BUTTON3').setOnClickHandler(clickHandler);
+    (this.getField('BUTTON1') as Blockly.FieldImage).setOnClickHandler(
+      clickHandler,
+    );
+    (this.getField('BUTTON2') as Blockly.FieldImage).setOnClickHandler(
+      clickHandler,
+    );
+    (this.getField('BUTTON3') as Blockly.FieldImage).setOnClickHandler(
+      clickHandler,
+    );
   },
 };
 

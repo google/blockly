@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
 import {
   DEFAULT_INJECT_OPTIONS,
@@ -12,32 +13,34 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('Keyboard Navigation Controller', function () {
-  setup(function () {
+  let workspace: Blockly.WorkspaceSvg;
+
+  setup(function (this: Mocha.Context) {
     sharedTestSetup.call(this);
-    this.workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
+    workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
     Blockly.keyboardNavigationController.setIsActive(false);
   });
 
-  teardown(function () {
-    sharedTestTeardown.call(this);
+  teardown(function (this: Mocha.Context) {
+    sharedTestTeardown.call(this, workspace);
     Blockly.keyboardNavigationController.setIsActive(false);
   });
 
   test('Setting active keyboard navigation adds css class', function () {
     Blockly.keyboardNavigationController.setIsActive(true);
     assert.isTrue(
-      Blockly.getMainWorkspace()
+      workspace
         .getInjectionDiv()
-        .parentElement.classList.contains('blocklyKeyboardNavigation'),
+        .parentElement?.classList.contains('blocklyKeyboardNavigation'),
     );
   });
 
   test('Disabling active keyboard navigation removes css class', function () {
     Blockly.keyboardNavigationController.setIsActive(false);
     assert.isFalse(
-      Blockly.getMainWorkspace()
+      workspace
         .getInjectionDiv()
-        .parentElement.classList.contains('blocklyKeyboardNavigation'),
+        .parentElement?.classList.contains('blocklyKeyboardNavigation'),
     );
   });
 });

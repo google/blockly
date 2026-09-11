@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {EventType} from '#core/events/type.js';
+import * as Blockly from '#core/blockly.js';
 import {assert} from 'chai';
+import sinon from 'sinon';
 import {assertEventFired} from './test_helpers/events.js';
 import {
   DEFAULT_INJECT_OPTIONS,
@@ -15,13 +16,19 @@ import {
 } from './test_helpers/setup_teardown.js';
 
 suite('Theme', function () {
-  setup(function () {
-    sharedTestSetup.call(this);
+  let eventsFireStub: sinon.SinonStub;
+
+  setup(function (this: Mocha.Context) {
+    ({eventsFireStub} = sharedTestSetup.call(this));
   });
-  teardown(function () {
+  teardown(function (this: Mocha.Context) {
     sharedTestTeardown.call(this);
     // Clear all registered themes.
-    Blockly.registry.TEST_ONLY.typeMap['theme'] = {};
+    const themes = Blockly.registry.getAllItems(Blockly.registry.Type.THEME);
+    if (!themes) return;
+    for (const theme of Object.keys(themes)) {
+      Blockly.registry.unregister(Blockly.registry.Type.THEME, theme);
+    }
   });
 
   function defineThemeTestBlocks() {
@@ -46,7 +53,7 @@ suite('Theme', function () {
     ]);
   }
 
-  function createBlockStyles() {
+  function createBlockStyles(): {[key: string]: Blockly.Theme.BlockStyle} {
     return {
       'styleOne': {
         'colourPrimary': '#aaaaaa',
@@ -57,7 +64,9 @@ suite('Theme', function () {
     };
   }
 
-  function createMultipleBlockStyles() {
+  function createMultipleBlockStyles(): {
+    [key: string]: Blockly.Theme.BlockStyle;
+  } {
     return {
       'styleOne': {
         'colourPrimary': '#aaaaaa',
@@ -74,7 +83,7 @@ suite('Theme', function () {
     };
   }
 
-  function stringifyAndCompare(val1, val2) {
+  function stringifyAndCompare(val1: object, val2: object) {
     const stringVal1 = JSON.stringify(val1);
     const stringVal2 = JSON.stringify(val2);
     assert.equal(stringVal1, stringVal2);
@@ -122,63 +131,60 @@ suite('Theme', function () {
     stringifyAndCompare(theme.blockStyles, blockStyle);
   });
 
-  test('Set Theme', function () {
+  test('Set Theme', function (this: Mocha.Context) {
     defineThemeTestBlocks();
-    let workspace;
-    try {
-      const blockStyles = createBlockStyles();
-      const theme = new Blockly.Theme('themeName', blockStyles);
-      workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
-      const blockA = workspace.newBlock('stack_block');
 
-      blockA.setStyle = function () {
-        this.styleName_ = 'styleTwo';
-      };
-      const refreshToolboxSelectionStub = sinon.stub(
-        workspace,
-        'refreshToolboxSelection',
-      );
-      blockA.styleName_ = 'styleOne';
+    const blockStyles = createBlockStyles();
+    const theme = new Blockly.Theme('themeName', blockStyles);
+    const workspace = Blockly.inject('blocklyDiv', DEFAULT_INJECT_OPTIONS);
+    const blockA = workspace.newBlock('stack_block');
 
-      workspace.setTheme(theme);
+    blockA.setStyle = function () {
+      this.styleName_ = 'styleTwo';
+    };
+    const refreshToolboxSelectionStub = sinon.stub(
+      workspace,
+      'refreshToolboxSelection',
+    );
+    blockA.setStyle('styleOne');
 
-      // Checks that the theme was set correctly on Blockly namespace
-      stringifyAndCompare(workspace.getTheme(), theme);
+    workspace.setTheme(theme);
 
-      // Checks that the setTheme function was called on the block
-      assert.equal(blockA.getStyleName(), 'styleTwo');
+    // Checks that the theme was set correctly on Blockly namespace
+    stringifyAndCompare(workspace.getTheme(), theme);
 
-      // Checks that the toolbox refreshed method was called
-      sinon.assert.calledOnce(refreshToolboxSelectionStub);
+    // Checks that the setTheme function was called on the block
+    assert.equal(blockA.getStyleName(), 'styleTwo');
 
-      assertEventFired(
-        this.eventsFireStub,
-        Blockly.Events.ThemeChange,
-        {themeName: 'themeName', type: EventType.THEME_CHANGE},
-        workspace.id,
-      );
-    } finally {
-      workspaceTeardown.call(this, workspace);
-    }
+    // Checks that the toolbox refreshed method was called
+    sinon.assert.calledOnce(refreshToolboxSelectionStub);
+
+    assertEventFired(
+      eventsFireStub,
+      Blockly.Events.ThemeChange,
+      {themeName: 'themeName', type: Blockly.Events.THEME_CHANGE},
+      workspace.id,
+    );
+
+    workspaceTeardown.call(this, workspace);
   });
 
   suite('Validate block styles', function () {
+    let constants: Blockly.blockRendering.ConstantProvider;
     setup(function () {
-      this.constants = new Blockly.blockRendering.ConstantProvider();
+      constants = new Blockly.blockRendering.ConstantProvider();
     });
 
     test('Null', function () {
-      const inputStyle = null;
       const expectedOutput = {
         'colourPrimary': '#000000',
         'colourSecondary': '#999999',
         'colourTertiary': '#4d4d4d',
         'hat': '',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test');
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
 
     test('Empty', function () {
@@ -189,10 +195,9 @@ suite('Theme', function () {
         'colourTertiary': '#4d4d4d',
         'hat': '',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test', {test: inputStyle});
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
 
     test('Incomplete hex', function () {
@@ -205,10 +210,9 @@ suite('Theme', function () {
         'colourTertiary': '#4d657d',
         'hat': '',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test', {test: inputStyle});
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
 
     test('Complete hex', function () {
@@ -224,10 +228,9 @@ suite('Theme', function () {
         'colourTertiary': '#cccccc',
         'hat': 'cap',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test', {test: inputStyle});
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
 
     test('Complete hue', function () {
@@ -242,10 +245,9 @@ suite('Theme', function () {
         'colourTertiary': '#a5a55b',
         'hat': '',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test', {test: inputStyle});
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
 
     test('Incomplete hue', function () {
@@ -258,10 +260,9 @@ suite('Theme', function () {
         'colourTertiary': '#c09e8c',
         'hat': '',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test', {test: inputStyle});
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
 
     test('Complete css colour name', function () {
@@ -276,10 +277,9 @@ suite('Theme', function () {
         'colourTertiary': '#0000ff',
         'hat': '',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test', {test: inputStyle});
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
 
     test('Incomplete css colour name', function () {
@@ -292,16 +292,15 @@ suite('Theme', function () {
         'colourTertiary': '#4d4d4d',
         'hat': '',
       };
-      stringifyAndCompare(
-        this.constants.validatedBlockStyle_(inputStyle),
-        expectedOutput,
-      );
+      const theme = new Blockly.Theme('test', {test: inputStyle});
+      constants.setTheme(theme);
+      stringifyAndCompare(constants.getBlockStyle('test'), expectedOutput);
     });
   });
 
   suite('defineTheme', function () {
     test('Normalizes to lowercase', function () {
-      const theme = Blockly.Theme.defineTheme('TEST', {});
+      const theme = Blockly.Theme.defineTheme('TEST', {name: 'TEST'});
       assert.equal(theme.name, 'test');
     });
   });

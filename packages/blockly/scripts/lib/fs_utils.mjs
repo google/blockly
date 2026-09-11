@@ -76,7 +76,7 @@ async function withOpenFile(operation) {
 }
 
 /**
- * Write a text file, creating its parent directories if needed.
+ * Write a UTF-8 encoded file, creating its parent directories if needed.
  *
  * @param {string} file Path of the file to write, relative to the
  *     package root.

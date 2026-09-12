@@ -25,7 +25,7 @@
     "@commitlint/config-conventional": "21.0.0",
     "@eslint/js": "^10.0.1",
     "@nx/js": "23.2.0",
-    "conventional-changelog-conventionalcommits": "9.3.1",
+    "conventional-changelog-conventionalcommits": "10.4.0",
     "eslint": "10.10.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^10.1.8",
@@ -41,7 +41,7 @@
     "typescript-eslint": "^8.66.0"
   },
   "overrides": {
-    "conventional-changelog-conventionalcommits": "9.3.1"
+    "conventional-changelog-conventionalcommits": "10.4.0"
   },
   "scripts": {
     "test": "npx nx run-many -t test",

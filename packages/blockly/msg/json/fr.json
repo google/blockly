@@ -489,7 +489,7 @@
 	"KEYBOARD_NAV_CONSTRAINED_MOVE_HINT": "Utilisez les touches fléchées pour déplacer, puis %1 pour valider la position.",
 	"KEYBOARD_NAV_COPIED_HINT": "Copié. Appuyez sur %1 pour coller.",
 	"KEYBOARD_NAV_CUT_HINT": "Coupé. Appuyez sur %1 pour coller.",
-	"WORKSPACE_LABEL_PLAIN": "Blocks d'espaces de travails",
+	"WORKSPACE_LABEL_PLAIN": "Blocks de l'espace de travail",
 	"WORKSPACE_ROLEDESCRIPTION": "espace de travail",
 	"WORKSPACE_LABEL_1_STACK": "1 pile de blocs",
 	"WORKSPACE_LABEL_MANY_STACKS": "%1 piles de blocs",

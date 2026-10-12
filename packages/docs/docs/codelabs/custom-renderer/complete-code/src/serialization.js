@@ -6,7 +6,7 @@
 
 import * as Blockly from 'blockly/core';
 
-const storageKey = 'customRenderersWorkspace';
+const storageKey = 'customRendererWorkspace';
 
 /**
  * Saves the state of the workspace to browser's local storage.

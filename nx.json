@@ -38,10 +38,6 @@
       "outputs": ["{projectRoot}/build/msg"],
       "cache": true
     },
-    "minify": {
-      "outputs": ["{projectRoot}/dist"],
-      "cache": true
-    },
     "package": {
       "outputs": ["{projectRoot}/dist"],
       "cache": true

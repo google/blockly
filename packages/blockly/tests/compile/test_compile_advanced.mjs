@@ -1,3 +1,13 @@
+/**
+ * @license
+ * Copyright 2026 Raspberry Pi Foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Test compile for closure compiler's advanced optimizations.
+ */
+
 import {
   appendFile,
   readFile,
@@ -74,4 +84,4 @@ async function compileAdvancedCompilationTest() {
   );
 }
 
-compileAdvancedCompilationTest();
+await compileAdvancedCompilationTest();

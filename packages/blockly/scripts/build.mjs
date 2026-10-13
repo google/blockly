@@ -1,3 +1,13 @@
+/**
+ * @license
+ * Copyright 2026 Raspberry Pi Foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Script to build the blockly package.
+ */
+
 import {execSync} from 'child_process';
 import {mkdirSync, readdirSync} from 'node:fs';
 import {
@@ -20,25 +30,15 @@ import {hideBin} from 'yargs/helpers';
 import {
   BUILD_DIR,
   LANG_BUILD_DIR,
+  PYTHON,
   RELEASE_DIR,
   TSC_OUTPUT_DIR,
+  TSC_OUTPUT_DIR_POSIX,
 } from './build_constants.mjs';
 import {posixPath, quote} from './helpers.js';
 import {getPackageJson} from './lib/package_json.mjs';
 
 const argv = yargs(hideBin(process.argv)).parse();
-
-/**
- * Path to the python runtime.
- * This will normalize the command across platforms (e.g. python3 on Linux and
- * Mac, python on Windows).
- */
-const PYTHON = process.platform === 'win32' ? 'python' : 'python3';
-
-/**
- * Posix version of TSC_OUTPUT_DIR
- */
-const TSC_OUTPUT_DIR_POSIX = posixPath(TSC_OUTPUT_DIR);
 
 /**
  * Suffix to add to compiled output files.
@@ -205,9 +205,10 @@ async function stripApacheLicenses(filePaths) {
   await Promise.all(
     filePaths.map(async (filePath) => {
       const source = await readFile(filePath, 'utf8');
-      // Strip out Google's and MIT's Apache licences.
-      // Closure Compiler preserves dozens of Apache licences in the Blockly code.
-      // Remove these if they belong to Google or MIT.
+      // Strip out Google's, MIT's, and Raspberry Pi Foundation's Apache
+      // licences. Closure Compiler preserves dozens of Apache licences in the
+      // Blockly code. Remove these if they belong to Google, MIT, or Raspberry
+      // Pi Foundation.
       // MIT's permission to do this is logged in Blockly issue #2412.
       const stripped = source.replace(
         new RegExp(licenseRegex, 'g'),
@@ -332,7 +333,7 @@ const JSCOMP_OFF = [
   'visibility',
 ];
 
-var languages = null;
+let languages = null;
 
 /**
  * Get list of languages to build langfiles and/or shims for, based on .json
@@ -508,7 +509,7 @@ function chunkWrapper(chunk) {
   const scriptExportStatements = [
     `root.${chunk.scriptExport} = factory(${scriptDepsExpr});`,
   ];
-  for (var location in chunk.scriptNamedExports) {
+  for (let location in chunk.scriptNamedExports) {
     const namedExport = chunk.scriptNamedExports[location];
     scriptExportStatements.push(
       `root.${location} = root.${chunk.scriptExport}.${namedExport};`,
@@ -726,9 +727,8 @@ async function buildCompiled() {
     const outputPath = path.join(RELEASE_DIR, outputName);
 
     // Closure's --chunk_output_path_prefix write path appends one extra
-    // trailing blank line beyond what's in chunk_wrapper; the JSON-streams
-    // protocol gulp used didn't do this. Trim it here so the .js and its
-    // .map stay consistent with each other and match the old gulp output.
+    // trailing blank line beyond what's in chunk_wrapper. Trim it here so the
+    // .js and its .map stay consistent with each other.
     let code = await readFile(compiledPath, 'utf8');
     if (code.endsWith('\n\n')) {
       code = code.slice(0, -1);
@@ -902,4 +902,4 @@ async function build() {
   await buildLangfileShims();
 }
 
-build();
+await build();

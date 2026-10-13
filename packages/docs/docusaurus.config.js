@@ -206,12 +206,6 @@ const config = {
         contextualSearch: true,
         searchParameters: {},
         searchPagePath: 'search',
-        askAi: {
-          indexName: 'markdown-index',
-          apiKey: '9a6e9f24a807a1571990048ef66c9438',
-          appId: 'JOPASJ603L',
-          assistantId: '0JvuvoDNFavC',
-        },
       },
       docs: {
         sidebar: {

@@ -19,7 +19,7 @@ import globStream from 'glob-stream';
 import * as path from 'path';
 
 import {posixPath} from '../../scripts/helpers.js';
-import {compile} from '../../scripts/build.mjs';
+import {compile} from '../../scripts/lib/build_utils.mjs';
 import {TSC_OUTPUT_DIR_POSIX} from '../../scripts/build_constants.mjs';
 
 /**

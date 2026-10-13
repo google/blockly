@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.4.0](https://github.com/RaspberryPiFoundation/blockly/compare/blockly-v13.3.0...blockly-v13.4.0) (2026-10-13)
+
+### Features
+
+* **field-bitmap:** Relax access restrictions on some FieldBitmap methods ([#10525](https://github.com/RaspberryPiFoundation/blockly/issues/10525)) ([3e64190](https://github.com/RaspberryPiFoundation/blockly/commit/3e641904ff17c99b34b2c7ae428490dc73cd01ab))
+
+
 ## [13.3.0](https://github.com/RaspberryPiFoundation/blockly/compare/blockly-v13.2.1...blockly-v13.3.0) (2026-09-10)
 
 **Note:** Version bump only for package @blockly/field-bitmap

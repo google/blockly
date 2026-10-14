@@ -4,12 +4,6 @@ import {posixPath} from './helpers.js';
 
 // Paths are all relative to the repository root.  Do not include
 // trailing slash.
-//
-// TODO(#5007): If you modify these values, you must also modify the
-// corresponding values in the following files:
-//
-// - tests/scripts/check_metadata.sh
-// - tests/scripts/update_metadata.sh
 
 // Directory to write compiled output to.
 export const BUILD_DIR = 'build';

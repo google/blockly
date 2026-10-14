@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [13.4.0](https://github.com/RaspberryPiFoundation/blockly/compare/blockly-v13.3.0...blockly-v13.4.0) (2026-10-13)
+
+### Bug Fixes
+
+* Don&#x27;t label image fields as &quot;empty&quot; when alt text not set ([#10502](https://github.com/RaspberryPiFoundation/blockly/issues/10502)) ([c11ea11](https://github.com/RaspberryPiFoundation/blockly/commit/c11ea118e60ad04524a6c9e88b904a1d4a6bedfb))
+* Fix bug that could cause unneeded scrollbars to appear when deserializing workspace comments ([#10424](https://github.com/RaspberryPiFoundation/blockly/issues/10424)) ([673eddb](https://github.com/RaspberryPiFoundation/blockly/commit/673eddbcf2658f33b57bbd679b61e208c811fdf6))
+* Fix bugs that caused inaccurate counts of flyout items with Zelos in Safari ([#10500](https://github.com/RaspberryPiFoundation/blockly/issues/10500)) ([8a35b96](https://github.com/RaspberryPiFoundation/blockly/commit/8a35b967274a76bb13ee393411a0a5ffaa04727f))
+* Fix positioning of dropdown/widgetdivs in a bordered injection div ([#10509](https://github.com/RaspberryPiFoundation/blockly/issues/10509)) ([5801dc1](https://github.com/RaspberryPiFoundation/blockly/commit/5801dc1ad48b5491662aa9ef91a74b61bf3d28b1))
+* Improve keyboard-driven display of workspace context menus ([#10505](https://github.com/RaspberryPiFoundation/blockly/issues/10505)) ([9343766](https://github.com/RaspberryPiFoundation/blockly/commit/934376630558e089f6b6638e2f7ac51f807ad4ba))
+* Improve the display of comment focus rings ([#10533](https://github.com/RaspberryPiFoundation/blockly/issues/10533)) ([2786e21](https://github.com/RaspberryPiFoundation/blockly/commit/2786e21a61ad703fdc7710c7f8ed3133d76f0bb2))
+* Make all toolbox blocks searchable ([#10508](https://github.com/RaspberryPiFoundation/blockly/issues/10508)) ([264cca3](https://github.com/RaspberryPiFoundation/blockly/commit/264cca37fde129dcf59330c9309c87898a16a6c3))
+* Restore auto-close behavior for standalone flyouts ([#10506](https://github.com/RaspberryPiFoundation/blockly/issues/10506)) ([059e16d](https://github.com/RaspberryPiFoundation/blockly/commit/059e16d786cba8e1debb776a47c0bab5b2635e69))
+
+
 ## [13.3.0](https://github.com/RaspberryPiFoundation/blockly/compare/blockly-v13.2.1...blockly-v13.3.0) (2026-09-10)
 
 ### Features

@@ -16,8 +16,8 @@ import {getPackageJson} from '../lib/package_json.mjs';
 import {cleanBuildDir, cleanReleaseDir} from '../lib/fs_utils.mjs';
 import {rimraf} from 'rimraf';
 
-const demoTmpDir = '../_deploy';
-const demoStaticTmpDir = '../_deploy/static';
+const demoTmpDir = '_deploy';
+const demoStaticTmpDir = '_deploy/static';
 
 /**
  * Cleans and creates the tmp directory used for deploying.
@@ -82,8 +82,8 @@ function copyMessagesToOldLocation(done) {
  */
 function copyAppengineSrc() {
   const appengineSrc = [
-      `${demoStaticTmpDir}/appengine/**/*`,
-      `${demoStaticTmpDir}/appengine/.gcloudignore`,
+      `${demoStaticTmpDir}/packages/blockly/appengine/**/*`,
+      `${demoStaticTmpDir}/packages/blockly/appengine/.gcloudignore`,
   ];
   return gulp.src(appengineSrc).pipe(gulp.dest(demoTmpDir));
 }
@@ -93,10 +93,9 @@ function copyAppengineSrc() {
  */
 function copyPlaygroundDeps() {
   const playgroundDeps = [
-      './node_modules/@blockly/dev-tools/dist/index.js',
-      './node_modules/@blockly/theme-modern/dist/index.js',
-      './node_modules/@blockly/block-test/dist/index.js',
-      './node_modules/@blockly/keyboard-navigation/dist/index.js',
+      '../../node_modules/@blockly/dev-tools/dist/index.js',
+      '../../node_modules/@blockly/theme-modern/dist/index.js',
+      '../../node_modules/@blockly/block-test/dist/index.js',
   ];
   return gulp.src(playgroundDeps, {base: '.'}).pipe(gulp.dest(demoStaticTmpDir));
 }
@@ -159,8 +158,9 @@ function deployBetaAndClean(done) {
 /**
  * Executes the build command.
  */
-function execBuild() {
+function execBuild(done) {
   execSync('npm run build', {stdio: 'inherit'});
+  done()
 }
 
 /**

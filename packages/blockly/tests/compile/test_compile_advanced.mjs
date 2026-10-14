@@ -23,7 +23,7 @@ import {compile} from '../../scripts/lib/build_utils.mjs';
 import {TSC_OUTPUT_DIR_POSIX} from '../../scripts/build_constants.mjs';
 
 /**
- * Resolve glob patterns to file paths using glob-stream
+ * Resolve glob patterns to file paths using globSync
  */
 function globToArray(patterns) {
   return globSync(patterns, {absolute: true})

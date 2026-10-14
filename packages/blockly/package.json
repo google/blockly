@@ -72,10 +72,10 @@
       },
       "test-compile-advanced-browser": {
         "dependsOn": [
-          "test-build-compile-advanced"
+          "test-compile-advanced"
         ]
       },
-      "test-build-compile-advanced": {
+      "test-compile-advanced": {
         "dependsOn": [
           "tsc"
         ]

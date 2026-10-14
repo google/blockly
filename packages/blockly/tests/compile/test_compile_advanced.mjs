@@ -15,7 +15,7 @@ import {
   writeFile,
 } from 'node:fs/promises';
 
-import globStream from 'glob-stream';
+import {globSync} from 'glob';
 import * as path from 'path';
 
 import {posixPath} from '../../scripts/helpers.js';
@@ -25,14 +25,10 @@ import {TSC_OUTPUT_DIR_POSIX} from '../../scripts/build_constants.mjs';
 /**
  * Resolve glob patterns to file paths using glob-stream
  */
-function globStreamToArray(patterns) {
-  return new Promise((resolve, reject) => {
-    const paths = [];
-    globStream(patterns)
-      .on('data', (file) => paths.push(posixPath(path.relative(process.cwd(), file.path))))
-      .on('error', reject)
-      .on('end', () => resolve(paths));
-  });
+function globToArray(patterns) {
+  return globSync(patterns, {absolute: true})
+    .map((file) => posixPath(path.relative(process.cwd(), file)))
+    .sort();
 }
 /**
  * This task uses Closure Compiler's ADVANCED_OPTIMIZATIONS mode to
@@ -56,7 +52,7 @@ async function compileAdvancedCompilationTest() {
 
   const mainPath = 'tests/compile/main.js';
   const srcs = [
-    ...(await globStreamToArray(TSC_OUTPUT_DIR_POSIX + '/**/*.js')),
+    ...(globToArray(TSC_OUTPUT_DIR_POSIX + '/**/*.js')),
     mainPath,
     'tests/compile/test_blocks.js',
   ];

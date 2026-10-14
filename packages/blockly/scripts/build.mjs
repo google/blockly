@@ -612,6 +612,9 @@ ${exportedNames.map((name) => `  ${name},`).join('\n')}
   await rm(TMP_PACKAGE_JSON);
 }
 
+/**
+ * Executes the langfiles command.
+ */
 function execLangFiles() {
   execSync('npm run langfiles', {stdio: 'inherit'});
 }

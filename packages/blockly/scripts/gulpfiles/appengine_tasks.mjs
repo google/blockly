@@ -12,7 +12,6 @@ import * as gulp from 'gulp';
 
 import * as fs from 'fs';
 import {execSync} from 'child_process';
-import * as buildTasks from './build_tasks.mjs';
 import {getPackageJson} from '../lib/package_json.mjs';
 import {cleanBuildDir, cleanReleaseDir} from '../lib/fs_utils.mjs';
 import {rimraf} from 'rimraf';
@@ -158,6 +157,13 @@ function deployBetaAndClean(done) {
 }
 
 /**
+ * Executes the build command.
+ */
+function execBuild() {
+  execSync('npm run build', {stdio: 'inherit'});
+}
+
+/**
  * Prepares demos.
  *
  * Prerequisites (invoked): clean, build
@@ -171,7 +177,7 @@ export const prepareDemos = gulp.series(
         gulp.series(
             gulp.parallel(cleanBuildDir,
                           cleanReleaseDir),
-            buildTasks.build,
+            execBuild,
             gulp.parallel(copyBuilt,
                           copyCompressedToOldLocation,
                           copyMessagesToOldLocation)),

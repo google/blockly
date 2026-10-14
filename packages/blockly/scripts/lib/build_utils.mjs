@@ -125,7 +125,7 @@ const JSCOMP_OFF = [
 
 /**
  * Helper method for fetching the default closure compiler options.
- * 
+ *
  * @param {string[]} argv The arguments passed in from the command line.
  */
 function getDefaultCompileOptions(argv) {

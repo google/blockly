@@ -125,6 +125,8 @@ const JSCOMP_OFF = [
 
 /**
  * Helper method for fetching the default closure compiler options.
+ * 
+ * @param {string[]} argv The arguments passed in from the command line.
  */
 function getDefaultCompileOptions(argv) {
   const defaultOptions = {
@@ -157,6 +159,7 @@ function getDefaultCompileOptions(argv) {
  *
  * @param {{[flag: string]: string|boolean|!Array<string>}} options
  *     Caller-supplied options that will override the defaultOptions.
+ * @param {string[]} argv The arguments passed in from the command line.
  * @return {!Promise<string>} Resolves with the compiler's stdout once
  *     it exits successfully; rejects if it exits non-zero.
  */

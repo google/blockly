@@ -31,8 +31,8 @@ import {
   TSC_OUTPUT_DIR_POSIX,
 } from './build_constants.mjs';
 import {posixPath, quote} from './helpers.js';
-import {getPackageJson} from './lib/package_json.mjs';
 import {compile} from './lib/build_utils.mjs';
+import {getPackageJson} from './lib/package_json.mjs';
 
 const argv = yargs(hideBin(process.argv)).parse();
 

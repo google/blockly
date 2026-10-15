@@ -191,6 +191,7 @@ export class MiniWorkspaceBubble extends Bubble {
   /**
    * Updates the size of this bubble to account for the size of the
    * mini workspace.
+   *
    * @internal
    */
   updateBubbleSize() {

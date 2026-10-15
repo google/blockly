@@ -534,7 +534,7 @@ export class WorkspaceSvg
     const stylishBlocks: BlockSvg[] = [];
 
     this.getAllBlocks(false).forEach((block) => {
-      if (!!block.getStyleName()) {
+      if (block.getStyleName()) {
         stylishBlocks.push(block);
       }
       // Clear cached field sizes and rerender the block.

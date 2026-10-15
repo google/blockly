@@ -103,6 +103,7 @@ export class TextBubble extends Bubble {
 
   /**
    * Updates the size of this bubble to account for the size of the text.
+   *
    * @internal
    */
   updateBubbleSize() {

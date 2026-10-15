@@ -1,0 +1,69 @@
+---
+description: Steps and guidelines for adding to Blockly's documentation.
+title: Contributing to docs
+image: images/blockly_banner.png
+---
+
+# Contributing to docs 
+
+Whenever making a contribution to Blockly, consider whether the documentation 
+should also be updated. For instance, a new Blockly feature might need to be 
+described in the guides with an example of how to use it. 
+
+## Writing style 
+
+
+
+## Adding a new document
+
+Occasionally, you may need to add a new document. Find the appropriate folder 
+
+Be sure to include a header with the description, title, and blockly banner image. 
+For example, here's the header for this page:
+```
+---
+description: Steps and guidelines for adding to Blockly's documentation.
+title: Contributing to docs
+image: images/blockly_banner.png
+---
+```
+
+Add an entry to `sidebars.js` with the document. This will make your new document
+findable in the left hand sidebar. You can also add subfolders in `sidebars.js`. 
+
+For example, here's the `sidebars.js` entry for this document:
+```
+    {
+        type: 'doc',
+        label: 'Contributing to the docs',
+        id: 'guides/contribute/core/documentation/contributing_to_docs', 
+    },
+```
+
+## Testing docs locally
+
+Whenever you make a change to Blockly's documentation, you should run the docs 
+site locally to verify your changes. Running the docs locally will help ensure 
+that you do not have any errors in your markdown. It will also help you catch 
+any errors or typos. 
+
+In your terminal, navigate to the `packages/docs` and run `npm run start`. This 
+will run the Docusaurus server, allowing you to view any changes you've made
+
+## Refreshing API docs
+
+The [API reference docs](https://docs.blockly.com/reference/) are based on the 
+latest release of Blockly rather than any local changes to the codebase. The API
+is converted into JSON format in a file called `blockly_api.json` and this file 
+is updated only on release. 
+
+
+If you would like to confirm that your local API changes will show up properly in the 
+reference docs, run 
+`npm run reference:refresh` in the `packages/docs` folder. 
+
+This will refresh the
+`blockly_api.json` to reflect local changes.  
+
+Take care to *not* commit `the file name`. This file should only be committed automatically 
+during the release process, and never by anyone contribuiting to Blockly. 

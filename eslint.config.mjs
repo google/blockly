@@ -149,7 +149,6 @@ export default defineConfig(
       'packages/**/build/',
       'packages/**/dist/',
       // Core Build artifacts
-      // Core Build artifacts
       'packages/blockly/msg/*',
       'packages/blockly/typings/*',
       'packages/blockly/docs/*',

@@ -622,7 +622,7 @@ function execLangFiles() {
 /**
  * Build all chunks, compressed files, sourcemaps, shims, and langfiles.
  *
- * Prerequisite: tsc (handled by nx).
+ * Prerequisite: tsc.
  */
 async function build() {
   await buildChunkExporters();

@@ -22,6 +22,8 @@ import {posixPath} from '../../scripts/helpers.js';
 import {compile} from '../../scripts/lib/build_utils.mjs';
 import {TSC_OUTPUT_DIR_POSIX} from '../../scripts/build_constants.mjs';
 
+const argv = yargs(hideBin(process.argv)).parse();
+
 /**
  * Resolve glob patterns to file paths using globSync
  */
@@ -66,7 +68,7 @@ async function compileAdvancedCompilationTest() {
     create_source_map: mapPath,
   };
 
-  await compile(options);
+  await compile(options, argv);
 
   const sourceMap = JSON.parse(await readFile(mapPath, 'utf8'));
   sourceMap.file = path.basename(outputPath);

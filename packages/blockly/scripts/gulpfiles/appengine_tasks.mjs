@@ -63,7 +63,7 @@ function copyBuilt(done) {
  */
 function copyCompressedToOldLocation(done) {
   return gulp.src(['dist/*_compressed.js*'])
-      .pipe(gulp.dest(demoStaticBlocklyDir));
+      .pipe(gulp.dest(demoStaticTmpDir));
 }
 
 /**
@@ -75,7 +75,7 @@ function copyCompressedToOldLocation(done) {
  */
 function copyMessagesToOldLocation(done) {
   return gulp.src(['build/msg/*'])
-      .pipe(gulp.dest(`${demoStaticBlocklyDir}/msg/js`));
+      .pipe(gulp.dest(`${demoStaticTmpDir}/msg/js`));
 }
 
 /**

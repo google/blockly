@@ -42,7 +42,7 @@
       "cache": true
     },
     "prepareDemos": {
-      "outputs": ["{projectRoot}/../_deploy"],
+      "outputs": ["{projectRoot}/_deploy"],
       "cache": true
     },
     "tsc": {

@@ -18,6 +18,7 @@ import {rimraf} from 'rimraf';
 
 const demoTmpDir = '_deploy';
 const demoStaticTmpDir = '_deploy/static';
+const demoStaticBlocklyDir = '_deploy/static/packages/blockly';
 
 /**
  * Cleans and creates the tmp directory used for deploying.
@@ -49,8 +50,8 @@ function copyStaticSrc(done) {
  * Prerequisite: clean, build.
  */
 function copyBuilt(done) {
-  return gulp.src(['build/msg/*', 'dist/*_compressed.js*', 'build/*.loader.mjs'], {base: '.'})
-      .pipe(gulp.dest(demoStaticTmpDir));
+  return gulp.src(['build/src/**/*', 'build/msg/*', 'dist/*_compressed.js*', 'build/*.loader.mjs'], {base: '.'})
+      .pipe(gulp.dest(demoStaticBlocklyDir));
 }
 
 /**
@@ -62,7 +63,7 @@ function copyBuilt(done) {
  */
 function copyCompressedToOldLocation(done) {
   return gulp.src(['dist/*_compressed.js*'])
-      .pipe(gulp.dest(demoStaticTmpDir));
+      .pipe(gulp.dest(demoStaticBlocklyDir));
 }
 
 /**
@@ -74,7 +75,7 @@ function copyCompressedToOldLocation(done) {
  */
 function copyMessagesToOldLocation(done) {
   return gulp.src(['build/msg/*'])
-      .pipe(gulp.dest(demoStaticTmpDir + '/msg/js'));
+      .pipe(gulp.dest(`${demoStaticBlocklyDir}/msg/js`));
 }
 
 /**
@@ -82,8 +83,8 @@ function copyMessagesToOldLocation(done) {
  */
 function copyAppengineSrc() {
   const appengineSrc = [
-      `${demoStaticTmpDir}/packages/blockly/appengine/**/*`,
-      `${demoStaticTmpDir}/packages/blockly/appengine/.gcloudignore`,
+      `${demoStaticBlocklyDir}/appengine/**/*`,
+      `${demoStaticBlocklyDir}/appengine/.gcloudignore`,
   ];
   return gulp.src(appengineSrc).pipe(gulp.dest(demoTmpDir));
 }
@@ -97,7 +98,7 @@ function copyPlaygroundDeps() {
       '../../node_modules/@blockly/theme-modern/dist/index.js',
       '../../node_modules/@blockly/block-test/dist/index.js',
   ];
-  return gulp.src(playgroundDeps, {base: '.'}).pipe(gulp.dest(demoStaticTmpDir));
+  return gulp.src(playgroundDeps, {base: '../..'}).pipe(gulp.dest(demoStaticBlocklyDir));
 }
 
 /**

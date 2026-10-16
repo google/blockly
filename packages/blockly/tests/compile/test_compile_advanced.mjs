@@ -17,6 +17,8 @@ import {
 
 import {globSync} from 'glob';
 import * as path from 'path';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
 import {posixPath} from '../../scripts/helpers.js';
 import {compile} from '../../scripts/lib/build_utils.mjs';

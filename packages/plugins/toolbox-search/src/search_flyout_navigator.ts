@@ -6,6 +6,7 @@
 
 import * as Blockly from 'blockly/core';
 import type {SearchFieldNode} from './search_field_node';
+import {SearchFieldNavigationPolicy} from './search_field_navigation_policy';
 
 /**
  * Makes the search field the flyout's entry point, so that moving in from
@@ -17,6 +18,8 @@ import type {SearchFieldNode} from './search_field_node';
  * for the field's cursor. The match results can be reached with enter instead.
  */
 export class SearchFlyoutNavigator extends Blockly.FlyoutNavigator {
+  private readonly policy: SearchFieldNavigationPolicy;
+
   /**
    * @param flyout The flyout being navigated.
    * @param searchNode The search field's focusable node.
@@ -26,55 +29,80 @@ export class SearchFlyoutNavigator extends Blockly.FlyoutNavigator {
     private readonly searchNode: SearchFieldNode,
   ) {
     super(flyout);
+    this.policy = new SearchFieldNavigationPolicy(flyout);
+    this.addNavigationPolicy(this.policy);
   }
 
-  /**
-   * @returns Whether the search field takes part in arrow-key navigation.
-   */
-  private cyclesThroughSearchField(): boolean {
-    return !this.flyout.horizontalLayout && this.searchNode.canBeFocused();
-  }
-
-  /** @returns The flyout's items, not counting the search field. */
-  private getFlyoutItems(): Blockly.IFocusableNode[] {
-    return super.getTopLevelItems();
-  }
-
-  /** @returns The first result, or null if the search matched nothing. */
-  getFirstItem(): Blockly.IFocusableNode | null {
-    return this.getFlyoutItems()[0] ?? null;
-  }
-
-  /** @returns The last result, or null if the search matched nothing. */
-  getLastItem(): Blockly.IFocusableNode | null {
-    const items = this.getFlyoutItems();
-    return items[items.length - 1] ?? null;
-  }
-
-  /** @returns The items to cycle through with the arrow keys. */
+  /** Returns a list of top-level navigable flyout items, plus the search field. */
   protected override getTopLevelItems(): Blockly.IFocusableNode[] {
-    const items = this.getFlyoutItems();
-    return this.cyclesThroughSearchField()
+    const items = super.getTopLevelItems();
+    return this.policy.isNavigable(this.searchNode)
       ? [this.searchNode, ...items]
       : items;
   }
 
   /**
-   * @param node The node to check.
-   * @returns Whether the node can be navigated to. The base implementation
-   *     only admits the flyout's own contents.
+   * Returns whether or not the given node is navigable.
+   *
+   * @param node A focusable node to check the navigability of.
+   * @returns True if the node is navigable, otherwise false.
    */
   protected override isNavigable(node: Blockly.IFocusableNode) {
-    if (node === this.searchNode) return this.cyclesThroughSearchField();
+    // The field is never a flyout item, so we check its own policy.
+    if (node === this.searchNode) {
+      return this.policy.isNavigable(this.searchNode);
+    }
+    // The placeholder text label is not navigable.
+    if (node instanceof Blockly.FlyoutButton && node.isLabel()) return false;
     return super.isNavigable(node);
   }
 
   /**
-   * @returns The search field, so that arrowing in from the toolbox lands
-   *     there whichever way the flyout is laid out.
+   * Returns whether the search field is where arrowing in from the toolbox
+   * should land, for whichever of the two methods below is asking.
+   *
+   * @param requestLastEntry Whether the caller is asking for the last entry
+   *     point (true) or the first (false).
+   * @returns Whether that caller should return the search field. False
+   *     whenever the field is hidden, since this navigator serves every
+   *     category's flyout, not just the search category's.
+   */
+  private isHorizontalEntryPoint(requestLastEntry: boolean): boolean {
+    // A vertical flyout puts the field first in getTopLevelItems(), so the
+    // inherited getFirstNode() returns it already, and getLastNode() keeps
+    // its ordinary meaning, which is what vertical ArrowUp relies on to reach
+    // the last result.
+    if (!this.flyout.horizontalLayout) return false;
+    if (!this.searchNode.canBeFocused()) return false;
+
+    // getInNode() takes the flyout's last node in an RTL horizontal toolbox
+    // and its first node otherwise.
+    const entryPointIsLast = !!this.flyout.targetWorkspace?.RTL;
+    return requestLastEntry === entryPointIsLast;
+  }
+
+  /**
+   * Gets the first navigable node on the flyout, or null if none exist.
+   *
+   * @returns The search field in an LTR horizontal flyout, where it is the
+   *     entry point but not part of the arrow-key cycle; otherwise the first
+   *     item, which in a vertical flyout is the field itself.
    */
   override getFirstNode(): Blockly.IFocusableNode | null {
-    if (this.searchNode.canBeFocused()) return this.searchNode;
-    return super.getFirstNode();
+    return this.isHorizontalEntryPoint(false)
+      ? this.searchNode
+      : super.getFirstNode();
+  }
+
+  /**
+   * Gets the last navigable node on the flyout, or null if none exist.
+   *
+   * @returns The search field in an RTL horizontal flyout, which is the entry
+   *     point getInNode() asks for there; otherwise the last item.
+   */
+  override getLastNode(): Blockly.IFocusableNode | null {
+    return this.isHorizontalEntryPoint(true)
+      ? this.searchNode
+      : super.getLastNode();
   }
 }

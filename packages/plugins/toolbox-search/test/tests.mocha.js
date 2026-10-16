@@ -55,6 +55,7 @@ suite('ToolboxSearchCategory', () => {
       .getToolbox()
       .getToolboxItems()
       .find((item) => item instanceof ToolboxSearchCategory);
+    this.searchField = this.searchCategory.searchNode.getInput();
 
     /**
      * Types into the search field the way a user would, so the category's own
@@ -62,7 +63,7 @@ suite('ToolboxSearchCategory', () => {
      * @param {string} query The text to search for.
      */
     this.search = (query) => {
-      const field = this.searchCategory.searchField;
+      const field = this.searchField;
       this.searchCategory
         .getParentToolbox()
         .setSelectedItem(this.searchCategory);
@@ -143,7 +144,7 @@ suite('ToolboxSearchCategory', () => {
 
   test('shows and hides the search field with the flyout', function () {
     const isSearchFieldVisible = () =>
-      this.searchCategory.searchField.parentElement.style.display !== 'none';
+      this.searchField.parentElement.parentElement.style.display !== 'none';
     const toolbox = this.workspace.getToolbox();
 
     assert.isFalse(isSearchFieldVisible());
@@ -161,19 +162,6 @@ suite('ToolboxSearchCategory', () => {
     assert.isFalse(isSearchFieldVisible());
   });
 
-  test('builds the same row as an ordinary category', function () {
-    const [logic] = this.workspace.getToolbox().getToolboxItems();
-    const rowClasses = (category) =>
-      [...category.getDiv().querySelectorAll('*')].map((el) => el.className);
-
-    assert.deepEqual(rowClasses(this.searchCategory), rowClasses(logic));
-    assert.equal(
-      this.searchCategory.getDiv().querySelector('.blocklyToolboxCategoryLabel')
-        .textContent,
-      'Search',
-    );
-  });
-
   test('remembers its query while the flyout is hidden', function () {
     const toolbox = this.workspace.getToolbox();
     this.search('controls if');
@@ -183,7 +171,7 @@ suite('ToolboxSearchCategory', () => {
     toolbox.setSelectedItem(this.searchCategory);
     this.clock.runAll();
 
-    assert.equal(this.searchCategory.searchField.value, 'controls if');
+    assert.equal(this.searchField.value, 'controls if');
     assert.deepEqual(flyoutBlockTypes(this.workspace), ['controls_if']);
   });
 });

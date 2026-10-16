@@ -81,8 +81,7 @@
 
 # Default pages for directories
 /guides/   /guides/get-started/what-is-blockly/   301
-/reference/   /reference/blockly/   301
-/reference/overview   /reference/blockly/   301
+/reference/overview   /reference/   301
 
 # Begin - Site refactoring - 2025
 

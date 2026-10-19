@@ -1491,22 +1491,6 @@ const sidebars = {
               ],
             },
             {
-              type: 'category',
-              label: 'Documentation',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Contributing to the docs',
-                  id: 'guides/contribute/core/documentation/contributing_to_docs',
-                },
-                {
-                  type: 'doc',
-                  label: 'Write a codelab',
-                  id: 'guides/contribute/core/documentation/write_a_codelab',
-                }, 
-              ],
-            },
-            {
               type: 'doc',
               label: 'AI policy',
               id: 'guides/contribute/core/ai_policy',
@@ -1541,6 +1525,22 @@ const sidebars = {
                   id: 'guides/contribute/core/plugins/block_factory',
                 },
               ],
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Contribute to docs',
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'guides/contribute/docs/contribute_to_docs',
+            },
+            {
+              type: 'doc',
+              label: 'Write a codelab',
+              id: 'guides/contribute/docs/write_a_codelab',
             },
           ],
         },

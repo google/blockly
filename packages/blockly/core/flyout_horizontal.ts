@@ -249,6 +249,20 @@ export class HorizontalFlyout extends Flyout {
   }
 
   /**
+   * Sets the items that will be displayed in this flyout.
+   *
+   * @param contents The new items to display in the flyout.
+   */
+  override setContents(contents: FlyoutItem[]): void {
+    let newContents = [...contents];
+    if (this.RTL) {
+      newContents.reverse();
+    }
+
+    super.setContents(newContents);
+  }
+
+  /**
    * Lay out the blocks in the flyout.
    *
    * @param contents The flyout items to lay out.
@@ -258,9 +272,6 @@ export class HorizontalFlyout extends Flyout {
     const margin = this.MARGIN;
     let cursorX = margin + this.tabWidth_;
     const cursorY = margin;
-    if (this.RTL) {
-      contents = [...contents].reverse();
-    }
 
     for (const item of contents) {
       const origin = item.getElement().getBoundingRectangle();

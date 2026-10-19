@@ -259,16 +259,12 @@ export class HorizontalFlyout extends Flyout {
     let cursorX = margin + this.tabWidth_;
     const cursorY = margin;
     if (this.RTL) {
-      contents = contents.reverse();
+      contents = [...contents].reverse();
     }
 
     for (const item of contents) {
-      const rect = item.getElement().getBoundingRectangle();
-      const moveX = this.RTL ? cursorX + rect.getWidth() : cursorX;
       const origin = item.getElement().getBoundingRectangle();
-      const deltaX = moveX - origin.left;
-      const deltaY = cursorY - origin.top;
-      item.getElement().moveBy(deltaX, deltaY);
+      item.getElement().moveBy(cursorX - origin.left, cursorY - origin.top);
       cursorX += item.getElement().getBoundingRectangle().getWidth();
     }
   }

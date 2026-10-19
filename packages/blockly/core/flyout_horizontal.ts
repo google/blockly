@@ -254,7 +254,7 @@ export class HorizontalFlyout extends Flyout {
    * @param contents The new items to display in the flyout.
    */
   override setContents(contents: FlyoutItem[]): void {
-    let newContents = [...contents];
+    const newContents = [...contents];
     if (this.RTL) {
       newContents.reverse();
     }

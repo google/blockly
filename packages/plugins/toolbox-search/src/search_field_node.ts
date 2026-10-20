@@ -96,7 +96,7 @@ export class SearchFieldNode
   }
 
   /**
-   * Scrolls the flyout on if a newly focused item would sit under the field.
+   * Scrolls the flyout if a newly focused item would sit under the field.
    *
    * Blockly scrolls a focused item just far enough to reach the edge of the
    * viewport, which in a horizontal flyout is the edge the field covers.

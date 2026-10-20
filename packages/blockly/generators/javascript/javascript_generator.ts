@@ -172,9 +172,7 @@ export class JavascriptGenerator extends CodeGenerator {
     // Add user variables, but only ones that are being used.
     const variables = Variables.allUsedVarModels(workspace);
     for (let i = 0; i < variables.length; i++) {
-      defvars.push(
-        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE),
-      );
+      defvars.push(this.getVariableName(variables[i].getId()));
     }
 
     // Declare all of the variables.

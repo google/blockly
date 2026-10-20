@@ -229,5 +229,70 @@ suite('Generator', function () {
         assert.equal(this.generator.getProcedureName('foo'), 'foo');
       });
     });
+
+    suite('getVariableName in init', function () {
+      setup(function () {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': 'get_var_block',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'field_variable',
+                'name': 'VAR',
+              },
+            ],
+            'output': null,
+          },
+        ]);
+        const block = this.workspace.newBlock('get_var_block');
+        const variable = this.workspace
+          .getVariableMap()
+          .createVariable('my_var', '', 'var_id');
+        block.getField('VAR').setValue(variable.getId());
+      });
+
+      test('JavascriptGenerator uses getVariableName in init', function () {
+        class CustomJavascriptGenerator extends JavascriptGenerator {
+          getVariableName(name) {
+            return 'custom_' + super.getVariableName(name);
+          }
+        }
+        const generator = new CustomJavascriptGenerator();
+        generator.init(this.workspace);
+        assert.include(
+          generator.definitions_['variables'],
+          'var custom_my_var;',
+        );
+      });
+
+      test('DartGenerator uses getVariableName in init', function () {
+        class CustomDartGenerator extends DartGenerator {
+          getVariableName(name) {
+            return 'custom_' + super.getVariableName(name);
+          }
+        }
+        const generator = new CustomDartGenerator();
+        generator.init(this.workspace);
+        assert.include(
+          generator.definitions_['variables'],
+          'var custom_my_var;',
+        );
+      });
+
+      test('PythonGenerator uses getVariableName in init', function () {
+        class CustomPythonGenerator extends PythonGenerator {
+          getVariableName(name) {
+            return 'custom_' + super.getVariableName(name);
+          }
+        }
+        const generator = new CustomPythonGenerator();
+        generator.init(this.workspace);
+        assert.include(
+          generator.definitions_['variables'],
+          'custom_my_var = None',
+        );
+      });
+    });
   });
 });

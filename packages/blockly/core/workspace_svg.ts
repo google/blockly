@@ -1162,6 +1162,8 @@ export class WorkspaceSvg
       this.flyout.position();
     }
 
+    this.getFlyout()?.getWorkspace().resize();
+
     const positionables = this.componentManager.getComponents(
       ComponentManager.Capability.POSITIONABLE,
       true,

@@ -13,6 +13,13 @@ const FIELD_HEIGHT = 24;
 const FIELD_WIDTH = 150;
 
 /**
+ * Fallback padding between a flyout's scrollbar and the edge of the flyout,
+ * for a flyout that implements IFlyout without extending Flyout. Flyout
+ * declares its own SCROLLBAR_MARGIN, which a subclass may override.
+ */
+const DEFAULT_SCROLLBAR_MARGIN = 2.5;
+
+/**
  * The search field that a search category pins to the top of its flyout.
  *
  * The field is deliberately not a flyout item. Typing into it rebuilds the
@@ -41,7 +48,7 @@ export class SearchFieldNode
   constructor(
     readonly id: string,
     private readonly workspace: Blockly.WorkspaceSvg,
-    private readonly flyout: Blockly.Flyout,
+    private readonly flyout: Blockly.IFlyout,
     private readonly category: Blockly.ISelectableToolboxItem,
   ) {
     const html = Blockly.utils.dom.HTML_NS;
@@ -214,8 +221,12 @@ export class SearchFieldNode
       if (this.workspace.RTL) left = flyout.getWidth() - margin - width;
     } else {
       // Fit the search field within the flyout, accounting for the scrollbar.
+      const scrollbarMargin =
+        flyout instanceof Blockly.Flyout
+          ? flyout.SCROLLBAR_MARGIN
+          : DEFAULT_SCROLLBAR_MARGIN;
       const scrollbarInset =
-        Blockly.Scrollbar.scrollbarThickness + flyout.SCROLLBAR_MARGIN;
+        Blockly.Scrollbar.scrollbarThickness + scrollbarMargin;
       if (this.workspace.RTL) left += scrollbarInset;
       width = Math.max(flyout.getWidth() - 2 * margin - scrollbarInset, 0);
     }

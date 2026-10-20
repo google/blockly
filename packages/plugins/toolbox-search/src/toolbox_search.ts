@@ -25,7 +25,7 @@ export class ToolboxSearchCategory extends Blockly.ToolboxCategory {
   private searchNode?: SearchFieldNode;
   private flyoutNavigator?: SearchFlyoutNavigator;
   /** The flyout this category searches into. */
-  private readonly flyout: Blockly.Flyout;
+  private readonly flyout: Blockly.IFlyout;
   private blockSearcher: BlockSearcher;
   private onChangeWrapper?: (event: Blockly.Events.Abstract) => void;
   private indexedBlocks = '';
@@ -48,7 +48,7 @@ export class ToolboxSearchCategory extends Blockly.ToolboxCategory {
   ) {
     super(categoryDef, parentToolbox, opt_parent);
     const flyout = parentToolbox.getFlyout();
-    if (!(flyout instanceof Blockly.Flyout)) {
+    if (!flyout) {
       throw Error('A search category needs a toolbox that has a flyout.');
     }
     this.flyout = flyout;

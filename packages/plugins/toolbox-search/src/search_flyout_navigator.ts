@@ -29,16 +29,13 @@ export class SearchFlyoutNavigator extends Blockly.FlyoutNavigator {
     private readonly searchNode: SearchFieldNode,
   ) {
     super(flyout);
-    this.policy = new SearchFieldNavigationPolicy(flyout);
+    this.policy = new SearchFieldNavigationPolicy();
     this.addNavigationPolicy(this.policy);
   }
 
   /** Returns a list of top-level navigable flyout items, plus the search field. */
   protected override getTopLevelItems(): Blockly.IFocusableNode[] {
-    const items = super.getTopLevelItems();
-    return this.isNavigable(this.searchNode)
-      ? [this.searchNode, ...items]
-      : items;
+    return [this.searchNode, ...super.getTopLevelItems()];
   }
 
   /**

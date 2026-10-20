@@ -17,11 +17,6 @@ import {SearchFieldNode} from './search_field_node';
  */
 export class SearchFieldNavigationPolicy implements Blockly.INavigationPolicy<SearchFieldNode> {
   /**
-   * @param flyout The flyout the field belongs to.
-   */
-  constructor(private readonly flyout: Blockly.IFlyout) {}
-
-  /**
    * Returns the first child of the given search field.
    *
    * @returns Null.
@@ -33,10 +28,11 @@ export class SearchFieldNavigationPolicy implements Blockly.INavigationPolicy<Se
   /**
    * Returns the parent of the given search field.
    *
+   * @param current The search field to return the parent of.
    * @returns The flyout's workspace.
    */
-  getParent(): Blockly.IFocusableNode | null {
-    return this.flyout.getWorkspace();
+  getParent(current: SearchFieldNode): Blockly.IFocusableNode | null {
+    return current.getFlyout().getWorkspace();
   }
 
   /**
@@ -76,7 +72,7 @@ export class SearchFieldNavigationPolicy implements Blockly.INavigationPolicy<Se
    *     explicitly instead.
    */
   isNavigable(current: SearchFieldNode): boolean {
-    return current.canBeFocused() && !this.flyout.horizontalLayout;
+    return current.canBeFocused() && !current.getFlyout().horizontalLayout;
   }
 
   /**

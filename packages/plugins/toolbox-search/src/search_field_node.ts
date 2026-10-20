@@ -41,7 +41,8 @@ export class SearchFieldNode
    * @param id The DOM ID of the input, which the flyout's workspace matches
    *     against to resolve focus back to this node. IComponent requires this
    *     exact name.
-   * @param workspace The workspace whose injection div the field is added to.
+   * @param workspace The workspace the flyout belongs to, used to read its
+   *     direction and selected category.
    * @param flyout The flyout the field sits above.
    * @param category The category the field belongs to.
    */
@@ -75,18 +76,13 @@ export class SearchFieldNode
     const flyoutWorkspace = flyout.getWorkspace();
     flyoutWorkspace.getSvgGroup().appendChild(this.foreignObject);
 
-    // The main workspace's component manager handles positioning, and the flyout's
-    // handles focus. Only resize() handles positionables, and it never runs on a
-    // flyout's workspace.
-    workspace.getComponentManager().addComponent({
-      component: this,
-      weight: 0,
-      capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE],
-    });
     flyoutWorkspace.getComponentManager().addComponent({
       component: this,
       weight: 0,
-      capabilities: [Blockly.ComponentManager.Capability.FOCUSABLE],
+      capabilities: [
+        Blockly.ComponentManager.Capability.FOCUSABLE,
+        Blockly.ComponentManager.Capability.POSITIONABLE,
+      ],
     });
 
     this.boundEvents.push(
@@ -148,6 +144,11 @@ export class SearchFieldNode
   /** @returns The search input, which the category binds its listeners to. */
   getInput(): HTMLInputElement {
     return this.input;
+  }
+
+  /** @returns The flyout the field sits above. */
+  getFlyout(): Blockly.IFlyout {
+    return this.flyout;
   }
 
   /** See IFocusableNode.getFocusableElement. */
@@ -260,7 +261,6 @@ export class SearchFieldNode
       Blockly.browserEvents.unbind(event);
     }
     this.boundEvents.length = 0;
-    this.workspace.getComponentManager().removeComponent(this.id);
     this.flyout.getWorkspace().getComponentManager().removeComponent(this.id);
     this.foreignObject.remove();
   }

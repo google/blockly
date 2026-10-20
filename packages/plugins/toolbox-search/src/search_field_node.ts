@@ -65,22 +65,22 @@ export class SearchFieldNode
     body.appendChild(this.input);
     this.foreignObject.appendChild(body);
     this.setVisible(false);
+    const flyoutWorkspace = flyout.getWorkspace();
+    flyoutWorkspace.getSvgGroup().appendChild(this.foreignObject);
 
-    flyout.getWorkspace().getSvgGroup().appendChild(this.foreignObject);
-
+    // The main workspace's component manager handles positioning, and the flyout's
+    // handles focus. Only resize() handles positionables, and it never runs on a
+    // flyout's workspace.
     workspace.getComponentManager().addComponent({
       component: this,
       weight: 0,
       capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE],
     });
-    flyout
-      .getWorkspace()
-      .getComponentManager()
-      .addComponent({
-        component: this,
-        weight: 0,
-        capabilities: [Blockly.ComponentManager.Capability.FOCUSABLE],
-      });
+    flyoutWorkspace.getComponentManager().addComponent({
+      component: this,
+      weight: 0,
+      capabilities: [Blockly.ComponentManager.Capability.FOCUSABLE],
+    });
 
     this.boundEvents.push(
       Blockly.browserEvents.conditionalBind(

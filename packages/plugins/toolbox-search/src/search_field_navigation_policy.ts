@@ -33,10 +33,10 @@ export class SearchFieldNavigationPolicy implements Blockly.INavigationPolicy<Se
   /**
    * Returns the parent of the given search field.
    *
-   * @returns Null; SearchFlyoutNavigator places the field itself.
+   * @returns The flyout's workspace.
    */
   getParent(): Blockly.IFocusableNode | null {
-    return null;
+    return this.flyout.getWorkspace();
   }
 
   /**

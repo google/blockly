@@ -36,7 +36,7 @@ export class SearchFlyoutNavigator extends Blockly.FlyoutNavigator {
   /** Returns a list of top-level navigable flyout items, plus the search field. */
   protected override getTopLevelItems(): Blockly.IFocusableNode[] {
     const items = super.getTopLevelItems();
-    return this.policy.isNavigable(this.searchNode)
+    return this.isNavigable(this.searchNode)
       ? [this.searchNode, ...items]
       : items;
   }
@@ -52,8 +52,16 @@ export class SearchFlyoutNavigator extends Blockly.FlyoutNavigator {
     if (node === this.searchNode) {
       return this.policy.isNavigable(this.searchNode);
     }
-    // The placeholder text label is not navigable.
-    if (node instanceof Blockly.FlyoutButton && node.isLabel()) return false;
+    // The placeholder text label is not navigable, but this navigator
+    // is used for every category's flyout. The canBeFocused() check is
+    // only true in the search category's flyout.
+    if (
+      this.searchNode.canBeFocused() &&
+      node instanceof Blockly.FlyoutButton &&
+      node.isLabel()
+    ) {
+      return false;
+    }
     return super.isNavigable(node);
   }
 

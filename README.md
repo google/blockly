@@ -13,7 +13,7 @@ Blockly has many resources for learning how to use the library. You can [try a l
 - [More codelabs](https://docs.blockly.com/codelabs/)
 - [Demos and plugins](https://raspberrypifoundation.github.io/blockly-samples/)
 
-Tell us what you're building with Blockly in a brief [developer survey](https://forms.gle/pdvS57Va4a8xZDAp8). This helps us focus our development efforts!
+Help us focus our development efforts by filling out a brief [developer survey](https://forms.gle/pdvS57Va4a8xZDAp8) about what you're building with Blockly. 
 
 ### Installing Blockly
 

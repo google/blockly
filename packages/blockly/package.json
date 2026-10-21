@@ -203,7 +203,7 @@
     "yargs": "^18.2.0"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "peerDependencies": {
     "jsdom": ">=27.4.0 <31.0.0"

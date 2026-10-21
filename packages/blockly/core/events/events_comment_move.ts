@@ -12,6 +12,7 @@
 // Former goog.module ID: Blockly.Events.CommentMove
 
 import type {WorkspaceComment} from '../comments/workspace_comment.js';
+import * as common from '../common.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {Workspace} from '../workspace.js';
@@ -24,9 +25,6 @@ import {EventType} from './type.js';
  */
 export class CommentMove extends CommentBase {
   override type = EventType.COMMENT_MOVE;
-
-  /** The comment that is being moved. */
-  comment_?: WorkspaceComment;
 
   // TODO(#6774): We should remove underscores.
   /** The location of the comment before the move, in workspace coordinates. */
@@ -57,7 +55,6 @@ export class CommentMove extends CommentBase {
       return; // Blank event to be populated by fromJson.
     }
 
-    this.comment_ = opt_comment;
     this.oldCoordinate_ = opt_comment.getRelativeToSurfaceXY();
   }
 
@@ -72,13 +69,17 @@ export class CommentMove extends CommentBase {
           'same event twice.',
       );
     }
-    if (!this.comment_) {
-      throw new Error(
-        'The comment is undefined. Pass a comment to ' +
-          'the constructor if you want to use the record functionality',
+
+    if (!this.workspaceId || !this.commentId) {
+      throw Error(
+        'Tried to record the new position of a comment on an uninitialized event.',
       );
     }
-    this.newCoordinate_ = this.comment_.getRelativeToSurfaceXY();
+
+    this.newCoordinate_ = common
+      .getWorkspaceById(this.workspaceId)
+      ?.getCommentById(this.commentId)
+      ?.getRelativeToSurfaceXY();
   }
 
   /**

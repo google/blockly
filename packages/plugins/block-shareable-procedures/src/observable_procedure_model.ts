@@ -5,9 +5,12 @@
  */
 
 import * as Blockly from 'blockly/core';
-import type {ObservableParameterModel} from './observable_parameter_model';
+import {ObservableParameterModel} from './observable_parameter_model';
 import {ProcedureChangeReturn} from './events_procedure_change_return';
-import {ProcedureCreate} from './events_procedure_create';
+import {
+  ProcedureCreate,
+  setProcedureModelClasses,
+} from './events_procedure_create';
 import {ProcedureDelete} from './events_procedure_delete';
 import {ProcedureEnable} from './events_procedure_enable';
 import {ProcedureParameterCreate} from './events_procedure_parameter_create';
@@ -303,3 +306,7 @@ export class ObservableProcedureModel
     ).setReturnTypes(state.returnTypes);
   }
 }
+
+// ProcedureCreate.fromJson needs these classes but can't import them without
+// creating a circular dependency, so they are injected here.
+setProcedureModelClasses(ObservableProcedureModel, ObservableParameterModel);

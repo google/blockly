@@ -972,12 +972,10 @@ export abstract class Field<T = any>
 
     let contentWidth = 0;
     if (this.textElement_) {
-      contentWidth = dom.getTextWidth(this.textElement_);
+      const textSize = dom.getTextSize(this.textElement_);
+      contentWidth = textSize.width;
       totalWidth += contentWidth;
-      totalHeight = Math.max(
-        totalHeight,
-        this.textElement_.getBoundingClientRect().height,
-      );
+      totalHeight = Math.max(totalHeight, textSize.height);
     }
     if (this.borderRect_) {
       totalHeight = Math.max(totalHeight, constants!.FIELD_BORDER_RECT_HEIGHT);

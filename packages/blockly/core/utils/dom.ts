@@ -34,13 +34,13 @@ export enum NodeType {
   COMMENT_NODE = 8,
 }
 
-/** Temporary cache of text widths. */
-let cacheWidths: {[key: string]: number} | null = null;
+/** Temporary cache of text sizes. */
+let cacheSizes: {[key: string]: {width: number; height: number}} | null = null;
 
 /** Number of current references to cache. */
 let cacheReference = 0;
 
-/** A HTML canvas context used for computing text width. */
+/** A HTML canvas context used for computing text size. */
 let canvasContext: CanvasRenderingContext2D | null = null;
 
 /**
@@ -187,8 +187,8 @@ export function setCssTransform(
  */
 export function startTextWidthCache() {
   cacheReference++;
-  if (!cacheWidths) {
-    cacheWidths = Object.create(null);
+  if (!cacheSizes) {
+    cacheSizes = Object.create(null);
   }
 }
 
@@ -199,7 +199,7 @@ export function startTextWidthCache() {
 export function stopTextWidthCache() {
   cacheReference--;
   if (!cacheReference) {
-    cacheWidths = null;
+    cacheSizes = null;
   }
 }
 
@@ -210,19 +210,22 @@ export function stopTextWidthCache() {
  * @returns Width of element.
  */
 export function getTextWidth(textElement: SVGTextElement): number {
-  const key = textElement.textContent + '\n' + textElement.className.baseVal;
-  let width;
-  // Return the cached width if it exists.
-  if (cacheWidths) {
-    width = cacheWidths[key];
-    if (width) {
-      return width;
-    }
-  }
+  return getTextSize(textElement).width;
+}
 
-  // Compute the width of the SVG text element.
+/**
+ * Gets the size of a text element, caching it in the process.
+ *
+ * @internal
+ * @param textElement An SVG 'text' element.
+ * @returns Height and width of the element.
+ */
+export function getTextSize(textElement: SVGTextElement): {
+  width: number;
+  height: number;
+} {
   const style = window.getComputedStyle(textElement);
-  width = getFastTextWidthWithSizeString(
+  return getTextSizeWithAttributes(
     textElement,
     style.fontSize,
     style.fontWeight,
@@ -230,12 +233,6 @@ export function getTextWidth(textElement: SVGTextElement): number {
     style.letterSpacing,
     style.wordSpacing,
   );
-
-  // Cache the computed width and return.
-  if (cacheWidths) {
-    cacheWidths[key] = width;
-  }
-  return width;
 }
 
 /**
@@ -292,18 +289,48 @@ export function getFastTextWidthWithSizeString(
   letterSpacing?: string,
   wordSpacing?: string,
 ): number {
+  return getTextSizeWithAttributes(
+    textElement,
+    fontSize,
+    fontWeight,
+    fontFamily,
+    letterSpacing,
+    wordSpacing,
+  ).width;
+}
+
+/**
+ * Gets the size of a text element.
+ *
+ * @internal
+ * @param textElement An SVG 'text' element.
+ * @param fontSize The font size to use.
+ * @param fontWeight The font weight to use.
+ * @param fontFamily The font family to use.
+ * @param letterSpacing The letter spacing to use.
+ * @param wordSpacing The word spacing to use.
+ * @returns Width of element.
+ */
+function getTextSizeWithAttributes(
+  textElement: SVGTextElement,
+  fontSize: string,
+  fontWeight: string,
+  fontFamily: string,
+  letterSpacing?: string,
+  wordSpacing?: string,
+) {
   const text = textElement.textContent;
   const key =
     text +
     '\n' +
     `${fontSize}-${fontWeight}-${fontFamily}-${letterSpacing}-${wordSpacing}`;
-  let width;
+  let size;
 
-  // Return the cached width if it exists.
-  if (cacheWidths) {
-    width = cacheWidths[key];
-    if (width) {
-      return width;
+  // Return the cached size if it exists.
+  if (cacheSizes) {
+    size = cacheSizes[key];
+    if (size) {
+      return size;
     }
   }
 
@@ -319,7 +346,7 @@ export function getFastTextWidthWithSizeString(
     canvasContext = computeCanvas.getContext('2d');
   }
 
-  // Measure the text width using the helper canvas context.
+  // Measure the text size using the helper canvas context.
   if (text && canvasContext) {
     // Set the desired font size and family.
     canvasContext.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
@@ -328,16 +355,22 @@ export function getFastTextWidthWithSizeString(
       letterSpacing && letterSpacing !== 'normal' ? letterSpacing : '0px';
     canvasContext.wordSpacing =
       wordSpacing && wordSpacing !== 'normal' ? wordSpacing : '0px';
-    width = Math.ceil(canvasContext.measureText(text).width);
+    const rawSize = canvasContext.measureText(text);
+    size = {
+      width: Math.ceil(rawSize.width),
+      height: Math.ceil(
+        rawSize.fontBoundingBoxAscent + rawSize.fontBoundingBoxDescent,
+      ),
+    };
   } else {
-    width = 0;
+    size = {width: 0, height: 0};
   }
 
-  // Cache the computed width and return.
-  if (cacheWidths) {
-    cacheWidths[key] = width;
+  // Cache the computed size and return.
+  if (cacheSizes) {
+    cacheSizes[key] = size;
   }
-  return width;
+  return size;
 }
 
 /**

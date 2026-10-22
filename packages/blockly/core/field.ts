@@ -1430,8 +1430,9 @@ export abstract class Field<T = any>
   }
 
   /**
-   * Whether this field references any Blockly variables.  If true it may need
-   * to be handled differently during serialization and deserialization.
+   * Whether this field references any Blockly variables. If true it may need
+   * to be handled differently during serialization and deserialization, and
+   * this field's value must correspond to the ID of an existing variable.
    * Subclasses may override this.
    *
    * @returns True if this field has any variable references.

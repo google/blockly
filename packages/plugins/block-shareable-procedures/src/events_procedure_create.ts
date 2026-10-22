@@ -7,8 +7,28 @@
 import * as Blockly from 'blockly/core';
 import type {ProcedureBaseJson} from './events_procedure_base';
 import {ProcedureBase} from './events_procedure_base';
-import {ObservableParameterModel} from './observable_parameter_model';
-import {ObservableProcedureModel} from './observable_procedure_model';
+import type {ObservableParameterModel} from './observable_parameter_model';
+import type {ObservableProcedureModel} from './observable_procedure_model';
+
+let procedureModelClass: typeof ObservableProcedureModel | undefined;
+let parameterModelClass: typeof ObservableParameterModel | undefined;
+
+/**
+ * Sets the model classes that `ProcedureCreate.fromJson` uses to deserialize
+ * procedures. This is called by ObservableProcedureModel, which passes in the
+ * classes. This avoids a circular dependency.
+ *
+ * @internal
+ * @param procedureModel The class used to create procedure models.
+ * @param parameterModel The class used to create parameter models.
+ */
+export function setProcedureModelClasses(
+  procedureModel: typeof ObservableProcedureModel,
+  parameterModel: typeof ObservableParameterModel,
+) {
+  procedureModelClass = procedureModel;
+  parameterModelClass = parameterModel;
+}
 
 /**
  * Notifies listeners that a procedure data model has been created.
@@ -62,11 +82,17 @@ export class ProcedureCreate extends ProcedureBase {
     json: ProcedureCreateJson,
     workspace: Blockly.Workspace,
   ): ProcedureCreate {
+    if (!procedureModelClass || !parameterModelClass) {
+      throw new Error(
+        'Cannot deserialize procedure create event because the procedure ' +
+          'model classes have not been set.',
+      );
+    }
     return new ProcedureCreate(
       workspace,
       Blockly.serialization.procedures.loadProcedure(
-        ObservableProcedureModel,
-        ObservableParameterModel,
+        procedureModelClass,
+        parameterModelClass,
         json['procedure'],
         workspace,
       ),

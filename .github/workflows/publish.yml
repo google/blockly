@@ -121,6 +121,10 @@ jobs:
             | jq -r --arg r "$RANGE" \
                 'to_entries[] | select((.value | type) == "string" and .value != $r) | .key')
 
+          if [ -z "$WORKSPACES" ]; then
+            exit 0
+          fi
+
           for ws in $WORKSPACES; do
             echo "$ws: peerDependencies.blockly -> $RANGE"
             npm pkg set "peerDependencies.blockly=$RANGE" --workspace "$ws"

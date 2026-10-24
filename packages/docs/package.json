@@ -45,7 +45,7 @@
     "typedoc": "^0.28.20",
     "typedoc-docusaurus-theme": "^1.4.3",
     "typedoc-plugin-frontmatter": "^1.3.3",
-    "typedoc-plugin-markdown": "^4.13.1"
+    "typedoc-plugin-markdown": "^4.14.1"
   },
   "browserslist": {
     "production": [
